@@ -1,0 +1,39 @@
+#-----------------------------
+# Prerequisite
+#-----------------------------
+
+FUSE IS DESIGNED AND TESTED TO RUN ON LINUX-BASED SYSTEMS
+
+ALL CODES TO BE COUPLED MUST BE INSTALLED BEFOREHAND. 
+
+For example, Serpent, BISON, TRACE, SCALE, etc. must be installed for FUSE to proceed in coupling 
+
+For TRACE and RELAP5, external postprocessor, PYPOST, should be installed, too. In future versions of FUSE, external dependency on pypost will be resolved. 
+
+#-----------------------------------------
+Working directly from terminal (for developers)
+#-----------------------------------------
+go to examples, copy one of the tests into the fuse.py directory, and then run using the following command:
+
+python fuse.py -i FUSE_INPUT
+
+e.g.
+python fuse.py -i toy_inp.inp
+
+
+#-------------------------------------------------
+# Building from the source and generating exectable (for users)
+#-------------------------------------------------
+1- install pyinstaller (python compiler) by
+
+pip install pyinstaller
+
+2- use the make file "fuse.spec" and execute pyinstaller with --onefile option to generate a single binary file
+
+pyinstaller --onefile fuse.spec
+
+3- and then run the exe/binary file using 
+ 
+fuse -i FUSE_INPUT 
+
+fuse.py -i toy_inp.inp
