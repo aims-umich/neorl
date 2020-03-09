@@ -1,0 +1,110 @@
+# test input for neorl
+
+READ GENERAL
+ 
+env= casmo10x10:casmo10x10-v0                  
+exepath= /home/majdi/casmo4/bin/casmo4e      
+maxcores= 16                       
+nactions = 19
+xsize = 51
+xsize_plot = 102
+ysize = 6
+#psutil.cpu_count(logical = True)
+#multiprocessing.cpu_count()
+
+END GENERAL
+
+
+READ DQN 
+
+casename=dqn
+mode=train
+ncores=1
+gamma=0.95
+learning_rate=1e-3
+exploration_fraction=0.1
+exploration_initial_eps=1.0
+exploration_final_eps=0.04
+train_freq=1
+batch_size=64
+double_q=True
+learning_starts=10
+target_network_update_freq=500
+model_load_path=/home/redo/
+time_steps=30000
+check_freq=1000
+avg_episodes=10
+
+END DQN 
+
+
+# PPO Category
+#self.ppo_dict={
+#'flag': [False, 'ppo', 'bool'],
+#'casename': ['ppo', 'ppo', 'str'],
+#'mode': ['train', 'ppo', 'str'],
+#'ncores': [4,'ppo','int'],
+#'n_steps': [128,'ppo','int'],
+#'gamma': [0.99, 'ppo', 'float'],
+#'learning_rate': [0.00025, 'ppo', 'float'],
+#'vf_coef': [0.5, 'ppo', 'float'],
+#'max_grad_norm': [0.5, 'ppo', 'float'],
+#'lam': [0.95, 'ppo', 'float'],
+#'nminibatches': [4, 'ppo', 'int'],
+#'noptepochs': [4, 'ppo', 'int'],
+#'cliprange': [0.2, 'ppo', 'float'],
+#'model_load_path': ['/home/majdi/','ppo', 'str'],
+#'time_steps': [50000,'ppo','int']
+#}
+
+
+READ A2C
+
+casename=a2c
+mode=test
+ncores=6
+n_steps=5 
+gamma=0.99
+learning_rate=0.0007
+vf_coef=0.25
+max_grad_norm=0.5
+ent_coef=0.01
+alpha=0.99
+epsilon=1e-5
+lr_schedule=constant
+time_steps=50000
+check_freq=1000
+avg_episodes=10
+model_load_path=./a2c_bestmodel.pkl
+render=True
+n_eval_episodes=2
+
+END A2C
+
+READ GA
+
+casename=ga
+indpb=0.05
+cxpb=0.5
+mutpb=0.2 
+pop=4
+ngen=300
+
+END GA
+
+##Testing parameters
+#'model_load_path': ['./base.pkl','a2c', 'str'],
+#'render': ['video','a2c', 'str'],
+#'video_length': [200,'a2c', 'int'],        
+#}
+
+#self.ga_dict={
+#'flag': [False, 'ga', 'bool'],
+#'casename': ['ga', 'ga', 'str'],
+#'ncores': [1,'ga','int'],  # is not working
+#'indpb': [0.05,'ga','float'],
+#'cxpb': [0.99, 'ga', 'float'],
+#'mutpb': [0.0007, 'ga', 'float'],
+#'pop': [30, 'ga', 'int'],
+#'ngen': [400, 'ga', 'int'],
+#}

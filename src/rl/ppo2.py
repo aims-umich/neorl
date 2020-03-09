@@ -19,6 +19,7 @@ from stable_baselines.common.policies import MlpPolicy
 from stable_baselines import PPO2
 from stable_baselines.common import set_global_seeds
 from stable_baselines.common.vec_env import SubprocVecEnv, VecVideoRecorder
+from test_policy import evaluate_policy
 
 # import input parameters from the user 
 from ParamList import InputParam
@@ -30,8 +31,9 @@ for env in list(gym.envs.registry.env_specs):
 
 
 class PPOAgent(InputParam):
-    def __init__ (self, inp):
-        self.inp = inp                 
+    def __init__ (self, inp, callback):
+        self.inp=inp    
+        self.callback=callback                   
         self.mode=self.inp.ppo_dict['mode'][0]
             
     def make_env(self, env_id, rank, seed=0):
@@ -74,33 +76,23 @@ class PPOAgent(InputParam):
                         noptepochs=self.inp.ppo_dict['noptepochs'][0], 
                         cliprange=self.inp.ppo_dict['cliprange'][0],
                         verbose=1)
-            model.learn(total_timesteps=self.inp.ppo_dict['time_steps'][0], callback=None)
-            model.save("last_model.pkl")
-            model.save('./master_log/'+self.inp.ppo_dict['casename'][0]+'_model_last.pkl')
+            model.learn(total_timesteps=self.inp.ppo_dict['time_steps'][0], callback=self.callback)
+            model.save('./master_log/'+self.inp.ppo_dict['casename'][0]+'_lastmodel.pkl')
         
         if self.mode=='continue':
             
             model = PPO2.load(self.inp.ppo_dict['model_load_path'][0], env=self.env)
-            model.learn(total_timesteps=self.inp.ppo_dict['time_steps'][0], callback=None)
-            model.save('./master_log/'+self.inp.ppo_dict['casename'][0]+'_model_last.pkl')
+            model.learn(total_timesteps=self.inp.ppo_dict['time_steps'][0], callback=self.callback)
+            model.save('./master_log/'+self.inp.ppo_dict['casename'][0]+'_lastmodel.pkl')
             
         if self.mode=='test':
-     
+            
+            print('debug: ppo is running in test mode, single core is used to test the policy')
+            env = gym.make(self.inp.gen_dict['env'][0], casename=self.inp.ppo_dict['casename'][0])
             model = PPO2.load(self.inp.ppo_dict['model_load_path'][0])
-            #mean_reward, n_steps = evaluate_policy(model, model.get_env(), n_eval_episodes=10)
-    
-            self.env.reset()
-            obs=self.env.reset()
-            test_eps=10
-            for i in range (test_eps):
-                for j in range (21):
-                    action, _states = model.predict(obs)
-                    obs, rewards, dones, info = self.env.step(action)
-                    # print(obs, rewards, dones, action)
-                    if (j==20):
-                        self.env.render()
-                    if dones:
-                        self.env.reset()
+            evaluate_policy(model, env, log_dir='./master_log/ppo', 
+                            n_eval_episodes=self.inp.ppo_dict["n_eval_episodes"][0], render=self.inp.ppo_dict["render"][0], 
+                            video_record=self.inp.ppo_dict["video_record"][0], fps=self.inp.ppo_dict["fps"][0])
                         
                         
 # if __name__ =='__main__':

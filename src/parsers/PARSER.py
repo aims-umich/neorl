@@ -1,161 +1,186 @@
-import numpy as np
-from ParamList import VarNames
-#--------------------------------------------------------------------------------------------------
-# Class 1: The master class that has intilization of all global variables for all modules 
-# It reads all inputs from the master input file, all other classes depend on this master class
-#--------------------------------------------------------------------------------------------------     
-        
-class PARSER:
+"""
+This class parses the master input file provided by the user
+""" 
+
+class InputParser():
     def __init__(self, input_file_path):
-        self.input_file_path=input_file_path
-        self.CaseName=self.input_file_path.split(".inp")[0]
-        self.MainOutName=self.CaseName + '.txt'
+        self.MainCaseName=input_file_path.split(".inp")[0]
         #Read the lines of the input file into the attribute input_file
         #Remove first line, empty lines and "\n" from every line
-        # code flags 
-        self.ScaleFlag=0
-        self.TraceFlag=0
-        self.Relap5Flag=0
-        self.BisonFlag=0
-        self.UqFlag=0
+        
+        # method flags 
+        self.dqn_flag=False
+        self.ga_flag=False
+        self.a2c_flag=False
+        self.ppo_flag=False
+        
+        
+        #input blocks 
+        self.dqn_block=[]
+        self.ppo_block=[]
+        self.a2c_block=[]
+        self.ga_block=[]
         
         with open(input_file_path) as input_file_text:
             self.input_file = [parameter.replace("\n","").strip() for parameter in input_file_text.readlines() if not parameter.isspace() or parameter[0] != "%"]
-
-        # Decide the Module 
-        for item in self.input_file:
-            if item[0] == "=":
-                self.ModuleType=item.replace("=","")
-            break
-        
-        #------------------------------------
-        # a special exit block if ML is identified, other types of parsers are used to process ML input
-        if (self.ModuleType=='ML'): 
-            return 
-        #-------------------------------------
+                
+        # remove empty strings 
+        self.input_file=[item for item in self.input_file if item != '']
+        # remove comments  #----
+        self.input_file=[item for item in self.input_file if item[0] != '#']
         
         #Setting attributes for each block
-        self.gen_block = self.input_file[self.input_file.index("READ GEN") + 1 : self.input_file.index("END GEN")]
-        self.gen_block = [item for item in self.gen_block if item[0] != "%"]
-        if ("READ SCALE" in self.input_file):
-            self.scale_block = self.input_file[self.input_file.index("READ SCALE") + 1 : self.input_file.index("END SCALE")]
-            self.scale_block = [item for item in self.scale_block if item[0] != "%"]
-            self.ScaleFlag=1
-        if ("READ TRACE" in self.input_file):
-            self.trace_block = self.input_file[self.input_file.index("READ TRACE") + 1 : self.input_file.index("END TRACE")]
-            self.trace_block = [item for item in self.trace_block if item[0] != "%"]
-            self.TraceFlag=1
-        if ("READ RELAP5" in self.input_file):
-            self.r5_block = self.input_file[self.input_file.index("READ RELAP5") + 1 : self.input_file.index("END RELAP5")]
-            self.r5_block = [item for item in self.r5_block if item[0] != "%"]
-            self.Relap5Flag=1
-        if ("READ BISON" in self.input_file):
-            self.bison_block = self.input_file[self.input_file.index("READ BISON") + 1 : self.input_file.index("END BISON")]
-            self.bison_block = [item for item in self.bison_block if item[0] != "%"]
-            self.BisonFlag=1
-        if ("READ UQ" in self.input_file):
-            self.uq_block = self.input_file[self.input_file.index("READ UQ") + 1 : self.input_file.index("END UQ")]
-            self.uq_block = [item for item in self.uq_block if item[0] != "%"]
-            self.UqFlag=1
-            
-        #Read the lines of the parameter list file to know what parameters self.a has
-        self.g = {}
-        self.s = {}
-        self.t = {}
-        self.r5 = {}
-        self.bs = {}
+        try:
+            self.gen_block = self.input_file[self.input_file.index("READ GENERAL") + 1 : self.input_file.index("END GENERAL")]
+            print ('--debug: General block is identified')
+        except:
+            raise('ERR: The general block is required but not found in the input --> READ GENERAL ... END GENERAL is missing')
         
-        #generating the parameters and distributions for the UQ block all else handled in NTuq
-        if self.UqFlag == 1:
-            self.uq = {}
-            for i_line in self.uq_block:
-                if i_line.split("=")[0] not in ["n_samples","perturb_xs","perturb_yield","perturb_decay"]:
-                    self.uq[i_line.split("=")[0]] = i_line.split("=")[1].split(",")
-            
-        p_list=VarNames() # import the parameter list from /src/ParamList.py 
-        for p_line in p_list:
-                #finds name and type of all possible parameters
-                name, card, typ = p_line[0], p_line[1], p_line[2]
-
-                if (card in ['general','scale','trace','relap5','bison']):
-                    #goes into a particular block and finds the value associated with that name
-                    #then alias the attribute dictionary to the general dictionary "a"
-                    if card == "general":
-                        value = [i_line.split("=")[1] for i_line in self.gen_block if name in i_line]
-                        a = self.g
-                        
-                    elif (card == "scale" and self.ScaleFlag==1):
-                        value = [i_line.split("=")[1] for i_line in self.scale_block if name in i_line]
-                        a = self.s
-                        
-                    elif (card == "trace" and self.TraceFlag==1):
-                        value = [i_line.split("=")[1] for i_line in self.trace_block if name in i_line]
-                        a = self.t
-                    
-                    elif (card == "relap5" and self.Relap5Flag==1):
-                        value = [i_line.split("=")[1] for i_line in self.r5_block if name in i_line]
-                        a = self.r5
-                    
-                    elif (card == "bison" and self.BisonFlag==1):
-                        value = [i_line.split("=")[1] for i_line in self.bison_block if name in i_line]
-                        a = self.bs
-                    else:
-                        continue   # skip the unactivated codes 
-                        
-                else:
-                    raise Exception("extension is not correct for '{n}' in parameter_list.csv".format(n = name))
+        self.gen_block=[item.split("=") for item in self.gen_block] # split the = sign
+        self.gen_block = [[element.strip() for element in item] for item in self.gen_block] #strip all white spaces
                 
-                #places value into the self.a dict with type conversion based on "typ"
-                if not value:
-                    a[name.strip()] = None
-                elif typ == "str":
-                    a[name.strip()] = str(value[0]).strip()
-                elif typ == "int":
-                    a[name.strip()] = int(value[0])
-                elif typ == "float":
-                    a[name.strip()] = float(value[0])
-                elif typ == "vec":
-                    a[name.strip()] = np.array([float(num.strip()) for num in value[0].split(",")])
-                elif typ == "ivec":
-                    a[name.strip()] = np.array([int(num.strip()) for num in value[0].split(",")])
-                elif typ == "strvec":
-                    a[name.strip()] = np.array([str(num.strip()) for num in value[0].split(",")])
-                elif typ == "sp1":
-                    # data type with "[]" characters used to define material ID with same properties 
-                    if '[' in value[0] or ']' in value[0]:
-                        parsed_list=[]
-                        for num in value[0].split(","):
-                            if ('[' in num or ']' in num):
-                                num=num.strip('[ ]').split()
-                                num=[int(i) for i in num]
-                                parsed_list.append(num)
-                            else:
-                                parsed_list.append(int(num))
-                                
-                        a[name.strip()]=parsed_list
-                    else:
-                        a[name.strip()] = np.array([int(num.strip()) for num in value[0].split(",")])
+        if ("READ DQN" in self.input_file and "END DQN" in self.input_file):
+            print ('--debug: DQN block is identified')
+            self.dqn_block = self.input_file[self.input_file.index("READ DQN") + 1 : self.input_file.index("END DQN")]
+            self.dqn_block = [item for item in self.dqn_block if item[0] != "#"]   # dobule check if there is any comments
+            self.dqn_block = [item.split("=") for item in self.dqn_block] # split by = sign
+            self.dqn_block = [[element.strip() for element in item] for item in self.dqn_block] #strip all white spaces
+            self.dqn_flag=True
 
-        #Check to make sure vectors inside SCALE, TRACE, BISON, etc. match the others in that doctionary
-#        if self.ScaleFlag==1:
-#            for parameter, value in self.s.items():
-#                if not np.isscalar(value):
-#                    if not value.size == self.s["NodeID"].size:
-#                        raise Exception("The size of {parm} in SCALE block does not match size of NodeID".format(parm = parameter))
-#        if self.TraceFlag==1:
-#            for parameter, value in self.t.items():
-#                if not np.isscalar(value):
-#                    if not value.size == self.t["NodeID"].size:
-#                        raise Exception("The size of {parm} in TRACE block does not match size of NodeID".format(parm = parameter))
-#        if self.Relap5Flag==1:
-#            for parameter, value in self.r5.items():
-#                if not np.isscalar(value):
-#                    if not value.size == self.r5["NodeID"].size:
-#                        raise Exception("The size of {parm} in RELAP5 block does not match size of NodeID".format(parm = parameter))
-#                        
-#        if self.BisonFlag==1:
-#            for parameter, value in self.bs.items():
-#                if not np.isscalar(value):
-#                    if not value.size == self.bs["NodeID"].size:
-#                        raise Exception("The size of {parm} in BISON block does not match size of NodeID".format(parm = parameter))
-                        
+        if ("READ PPO" in self.input_file and "END PPO" in self.input_file):
+            print ('--debug: PPO block is identified')
+            self.ppo_block = self.input_file[self.input_file.index("READ PPO") + 1 : self.input_file.index("END PPO")]
+            self.ppo_block = [item for item in self.ppo_block if item[0] != "#"]   # dobule check if there is any comments
+            self.ppo_block = [item.split("=") for item in self.ppo_block]
+            self.ppo_block = [[element.strip() for element in item] for item in self.ppo_block] #strip all white spaces
+            self.ppo_flag=True
+            
+        if ("READ A2C" in self.input_file and "END A2C" in self.input_file):
+            print ('--debug: A2C block is identified')
+            self.a2c_block = self.input_file[self.input_file.index("READ A2C") + 1 : self.input_file.index("END A2C")]
+            self.a2c_block = [item for item in self.a2c_block if item[0] != "#"]   # dobule check if there is any comments
+            self.a2c_block = [item.split("=") for item in self.a2c_block]
+            self.a2c_block = [[element.strip() for element in item] for item in self.a2c_block] #strip all white spaces
+            self.a2c_flag=True
+
+        if ("READ GA" in self.input_file and "END GA" in self.input_file):
+            print ('--debug: GA block is identified')
+            self.ga_block = self.input_file[self.input_file.index("READ GA") + 1 : self.input_file.index("END GA")]
+            self.ga_block = [item for item in self.ga_block if item[0] != "#"]   # dobule check if there is any comments
+            self.ga_block = [item.split("=") for item in self.ga_block]
+            self.ga_block = [[element.strip() for element in item] for item in self.ga_block] #strip all white spaces
+            self.ga_flag=True
+
+"""
+This checks the input for any errors/typos and then overwrites the default input provided by the developer
+""" 
+
+class InputChecker(InputParser):
+    def __init__(self, master_parser, master_paramdict):
+        self.paramdict=master_paramdict
+        self.parser=master_parser
+        #check that all data structures are correct
+        
+        self.gen_dict=self.paramdict.gen_dict
+        self.dqn_dict=self.paramdict.dqn_dict
+        self.a2c_dict=self.paramdict.a2c_dict
+        self.ppo_dict=self.paramdict.ppo_dict
+        self.ga_dict=self.paramdict.ga_dict
+    
+    def check_input (self, parser, paramdict):
+        # this function loops through any data list and check if data structure and types are correct
+        
+        for item in parser:
+            if item[0] not in paramdict:
+                print('--error: {} is NOT found in neorl input syntax '.format(item[0]))
+                raise(ValueError)
+                
+            #assert type(item[1]) == paramdict[item[0]][2], 'user input for {} is {}, but {} should be used'.format(item[1], type(item[1]), paramdict[item[0]][2])
+            
+            try: 
+                if paramdict[item[0]][2] == "str":
+                    item[1] = str(item[1]).strip()
+                elif paramdict[item[0]][2] == "int":
+                    item[1] = int(item[1])
+                elif paramdict[item[0]][2] == "float":
+                    item[1] = float(item[1])
+                elif paramdict[item[0]][2] == "bool":
+                    item[1] = bool(item[1])
+            except:
+                print('--error: the data structure for parameter {} must be {}, but something else is used'.format(item[0], paramdict[item[0]][2]))
+                raise(ValueError)
+        
+        #print(self.gen_block, self.a2c_block, self.dqn_block)
+            
+            
+    def setup_input(self):
+        
+        # check the strucutre and syntax first, then overwrite the default dictionary in paramdict.
+        self.methods=[]
+        for item in self.parser.gen_block:
+            self.check_input(self.parser.gen_block,self.gen_dict)
+            self.gen_dict[item[0].strip()][0] = item[1]
+                
+        if self.parser.dqn_flag:
+            
+            self.check_input(self.parser.dqn_block,self.dqn_dict)
+            self.dqn_dict['flag'][0] = True
+            for item in self.parser.dqn_block:
+                self.dqn_dict[item[0].strip()][0] = item[1]
+            
+            self.methods.append(self.dqn_dict['casename'][0])
+
+        if self.parser.ppo_flag:
+            self.check_input(self.parser.ppo_block,self.ppo_dict)
+            self.ppo_dict['flag'][0] = True
+            for item in self.parser.ppo_block:
+                self.ppo_dict[item[0].strip()][0] = item[1]
+            
+            # adjust number of steps for parallel
+            if self.ppo_dict["ncores"][0] > 1:
+                if self.ppo_dict["check_freq"][0] % self.ppo_dict["ncores"][0] != 0:
+                    mod=self.ppo_dict["check_freq"][0] % self.ppo_dict["ncores"][0]
+                    print('warning: the check_freq parameter {} for ppo is not multiple of number of cores {}'.format(self.ppo_dict["check_freq"][0], self.ppo_dict["ncores"][0]))
+                    self.ppo_dict["check_freq"][0] = (self.ppo_dict["check_freq"][0] + self.ppo_dict["ncores"][0] - mod)
+                    assert (self.ppo_dict["check_freq"][0] % self.ppo_dict["ncores"][0]) == 0
+                    print('warning: the check_freq parameter is adjusted to {} for ppo'.format(self.ppo_dict["check_freq"][0]))
+            
+            self.methods.append(self.ppo_dict['casename'][0])
+                
+        if self.parser.a2c_flag:
+            self.check_input(self.parser.a2c_block,self.a2c_dict)
+            self.a2c_dict['flag'][0] = True
+            for item in self.parser.a2c_block:
+                self.a2c_dict[item[0].strip()][0] = item[1]
+                
+            self.methods.append(self.a2c_dict['casename'][0])
+            
+            # adjust number of steps for parallel
+            if self.a2c_dict["ncores"][0] > 1:
+                if self.a2c_dict["check_freq"][0] % self.a2c_dict["ncores"][0] != 0:
+                    mod=self.a2c_dict["check_freq"][0] % self.a2c_dict["ncores"][0]
+                    print('warning: the check_freq parameter {} for a2c is not multiple of number of cores {}'.format(self.a2c_dict["check_freq"][0], self.a2c_dict["ncores"][0]))
+                    self.a2c_dict["check_freq"][0] = (self.a2c_dict["check_freq"][0] + self.a2c_dict["ncores"][0] - mod)
+                    assert (self.a2c_dict["check_freq"][0] % self.a2c_dict["ncores"][0]) == 0
+                    print('warning: the check_freq parameter is adjusted to {} for a2c'.format(self.a2c_dict["check_freq"][0]))
+                
+        if self.parser.ga_flag:
+            self.check_input(self.parser.ga_block,self.ga_dict)
+            self.ga_dict['flag'][0] = True
+            for item in self.parser.ga_block:
+                self.ga_dict[item[0].strip()][0] = item[1]
+            
+            self.methods.append(self.ga_dict['casename'][0])
+                
+        print('--debug: Input check is completed successfully, no major error is found')
+                
+        #print(self.dqn_dict)
+        #print(self.a2c_dict)
+        #print(self.gen_dict)
+                
+#if __name__=='__main__':
+#    input_file_path='../../test.inp'
+#    pars=InputParser(input_file_path)
+#    paramdict=InputParam()
+#    inp=InputChecker(pars,paramdict).setup_input()
+        

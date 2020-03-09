@@ -1,14 +1,11 @@
 #-----------------------------
 # Prerequisite
 #-----------------------------
+#Build stable-baselines 
+git clone https://github.com/hill-a/stable-baselines.git
+cd stable-baselines
+python3 setup.py install --user
 
-FUSE IS DESIGNED AND TESTED TO RUN ON LINUX-BASED SYSTEMS
-
-ALL CODES TO BE COUPLED MUST BE INSTALLED BEFOREHAND. 
-
-For example, Serpent, BISON, TRACE, SCALE, etc. must be installed for FUSE to proceed in coupling 
-
-For TRACE and RELAP5, external postprocessor, PYPOST, should be installed, too. In future versions of FUSE, external dependency on pypost will be resolved. 
 
 #-----------------------------------------
 Working directly from terminal (for developers)

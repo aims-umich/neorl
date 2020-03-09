@@ -9,6 +9,8 @@ Created on Tue Feb 25 14:42:24 2020
 
 import random
 import gym
+import pandas as pd
+import numpy as np
 import multiprocessing
 from deap import algorithms, base, creator, tools
 # import input parameters from the user
@@ -20,6 +22,7 @@ class GAAgent(InputParam):
     
         self.inp= inp 
         self.env = gym.make(self.inp.gen_dict['env'][0], casename='ga')
+        self.log_dir='./master_log/'+self.inp.ga_dict["casename"][0]
         
     def build(self):
     
@@ -59,15 +62,41 @@ class GAAgent(InputParam):
         NGEN=self.inp.ga_dict["ngen"][0]
         for gen in range(NGEN):
             fit_lst=[]
-            print('gen= ' + str(gen))
+            #print('gen= ' + str(gen))
             offspring = algorithms.varAnd(population, toolbox, cxpb=self.inp.ga_dict["cxpb"][0], mutpb=self.inp.ga_dict["mutpb"][0])
             fits = toolbox.map(toolbox.evaluate, offspring)
             for fit, ind in zip(fits, offspring):
                 ind.fitness.values = fit
                 fit_lst.append(fit)
             population = toolbox.select(offspring, k=len(population))
-            best_sol=tools.selBest(population, k=1)
-            print('Best Solution Generation ' + str(gen) + ':', max(fit_lst))
-            print(best_sol[0])
-        top10 = tools.selBest(population, k=10)
-        print(top10)
+            #best_sol=tools.selBest(population, k=1)
+            #print('Best Solution Generation ' + str(gen) + ':', max(fit_lst))
+            #print(best_sol[0])
+            
+            out_data=pd.read_csv(self.log_dir+'_out.csv')
+            inp_data=pd.read_csv(self.log_dir+'_inp.csv')
+            sorted_out=out_data.sort_values(by=['reward'],ascending=False)   
+            sorted_inp=inp_data.sort_values(by=['reward'],ascending=False)   
+            
+            with open (self.log_dir + '_summary.txt', 'a') as fin:
+                fin.write('*****************************************************\n')
+                fin.write('Summary data for generation {}/{} \n'.format(gen+1, NGEN))
+                fin.write('*****************************************************\n')
+                fin.write('Max Reward: {0:.2f} \n'.format(np.max(fit_lst)))
+                fin.write('Mean Reward: {0:.2f} \n'.format(np.mean(fit_lst)))
+                fin.write('Std Reward: {0:.2f} \n'.format(np.std(fit_lst)))
+                fin.write('Min Reward: {0:.2f} \n'.format(np.min(fit_lst)))
+                
+                fin.write ('--------------------------------------------------------------------------------------\n')
+                fin.write ('Best output for this generation \n')
+                fin.write(sorted_out.iloc[0,:].to_string())
+                fin.write('\n')
+                fin.write ('-------------------------------------------------------------------------------------- \n')
+                fin.write ('Best corresponding input for this generation \n')
+                fin.write(sorted_inp.iloc[0,:].to_string())
+                fin.write('\n')
+                fin.write ('-------------------------------------------------------------------------------------- \n')
+                fin.write('\n\n')
+            
+        #top10 = tools.selBest(population, k=10)
+        #print(top10)
