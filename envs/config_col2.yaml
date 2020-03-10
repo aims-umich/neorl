@@ -1,0 +1,10 @@
+gym:
+    numlocs: 55
+    max_episode: 10
+    run_number: 12 # --- because the initial file start from cycle 12. !!!!!! Change later
+    initial_file: 2Deq.inp
+    swap_type: 1 # --- means  2 * swap swaps at the same time
+    ordered_placement : False # --- keep it false
+    disable_checking : True
+    flatten : True
+

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Created on Mon Jan 28 08:09:18 2019
 
@@ -13,9 +12,9 @@ sys.path.insert(0, './src/utils')
 sys.path.insert(0, './src/evolu')
 sys.path.insert(0, './src/parsers')
 
-from PARSER import InputParser, InputChecker
-from ParamList import InputParam
-from multiproc import MultiProc
+from src.parsers.PARSER import InputParser, InputChecker
+from src.parsers.ParamList import InputParam
+from src.utils.multiproc import MultiProc
 
 
 def init_files(methods, nx, ny):
@@ -63,18 +62,11 @@ def init_files(methods, nx, ny):
             
     print('--debug: All logging files are created')
 
-#if len(sys.argv) < 3:
-#    raise Exception ("No input file after -i is passed, try --> python fuse.py -i NEORL_INPUT ")
-#else:
-#    print ("""---------------------------------------------------------------
-#The input file \"%s\" is passed"
-##---------------------------------------------------------------"""%(sys.argv[2]))
-#ms_input=sys.argv[2]
 
-# Uncomment these if you work directly from spyder!!!!
 
         
 if __name__ == '__main__':
+    
     
     logo="""
                  NEORL: Nuclear Engineering Optimisation with Reinforcement Learning
@@ -98,18 +90,28 @@ if __name__ == '__main__':
                            \n"""
                            
     print(logo)
+    
+    if len(sys.argv) < 3:
+        raise Exception ("NO input file after -i is passed, try --> python fuse.py -i FUSE_INPUT ")
+    else:
+        print ("""---------------------------------------------------------------
+    The input file \"%s\" is passed"
+    #---------------------------------------------------------------"""%(sys.argv[2]))
+    input_file_path=sys.argv[2]
+    
+    # Uncomment these if you work directly from IDE (e.g. spyder)!!!!
+    
     print("--debug: All modules are imported sucessfully")
-        
-    # Intialize the all loggers
-    input_file_path='test'
+    #input_file_path='test'    
     
     parser=InputParser(input_file_path)
     paramdict=InputParam()
     inp=InputChecker(parser,paramdict)
     inp.setup_input()
-    init_files(inp.methods, inp.gen_dict['xsize_plot'][0], inp.gen_dict['ysize'][0]) 
+    init_files(inp.methods, inp.gen_dict['xsize_plot'][0], inp.gen_dict['ysize'][0])  # Intialize the all loggers
     
     master=MultiProc(inp)
     master.run_all()
+
 
 

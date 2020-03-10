@@ -14,9 +14,9 @@ import numpy as np
 import multiprocessing
 from deap import algorithms, base, creator, tools
 # import input parameters from the user
-from ParamList import InputParam
+from src.parsers.PARSER import InputChecker
 
-class GAAgent(InputParam):
+class GAAgent(InputChecker):
     
     def __init__ (self, inp):    
     

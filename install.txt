@@ -6,31 +6,40 @@ git clone https://github.com/hill-a/stable-baselines.git
 cd stable-baselines
 python3 setup.py install --user
 
+# others can be installed through 
+pip install -r requirements.txt
 
 #-----------------------------------------
-Working directly from terminal (for developers)
+#Register the enviroments
 #-----------------------------------------
-go to examples, copy one of the tests into the fuse.py directory, and then run using the following command:
+# go to envs and run 
+./install_env.sh
 
-python fuse.py -i FUSE_INPUT
+#-----------------------------------------
+Add to your path and create alias
+#-----------------------------------------
 
-e.g.
-python fuse.py -i toy_inp.inp
+# open your bashrc
+nano ~/.bashrc
 
+# add one of the two following lines to the end of your bashrc (example from my computer)
 
-#-------------------------------------------------
-# Building from the source and generating exectable (for users)
-#-------------------------------------------------
-1- install pyinstaller (python compiler) by
+alias neorl="python3 /home/majdi/mit/drl/neorl/neorl.py"
 
-pip install pyinstaller
+#or if you don't want to type -i every time
 
-2- use the make file "fuse.spec" and execute pyinstaller with --onefile option to generate a single binary file
+alias neorl="python3 /home/majdi/mit/drl/neorl/neorl.py -i"
 
-pyinstaller --onefile fuse.spec
+# update your bashrc or simply open a new terminal
 
-3- and then run the exe/binary file using 
- 
-fuse -i FUSE_INPUT 
+#-----------------------------------------
+Usage
+#-----------------------------------------
+# go to the directory where your neorl input file exists and type 
 
-fuse.py -i toy_inp.inp
+neorl -i input_name
+
+#or for second alias option 
+
+neorl input_name
+

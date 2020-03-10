@@ -19,10 +19,10 @@ from stable_baselines.common.policies import MlpPolicy
 from stable_baselines import PPO2
 from stable_baselines.common import set_global_seeds
 from stable_baselines.common.vec_env import SubprocVecEnv, VecVideoRecorder
-from test_policy import evaluate_policy
+from src.utils.test_policy import evaluate_policy
 
 # import input parameters from the user 
-from ParamList import InputParam
+from src.parsers.PARSER import InputChecker
 
 for env in list(gym.envs.registry.env_specs):
       if 'casmo6x6' in env:
@@ -30,7 +30,7 @@ for env in list(gym.envs.registry.env_specs):
           del gym.envs.registry.env_specs[env]
 
 
-class PPOAgent(InputParam):
+class PPOAgent(InputChecker):
     def __init__ (self, inp, callback):
         self.inp=inp    
         self.callback=callback                   

@@ -20,20 +20,16 @@ from stable_baselines.common.policies import MlpPolicy
 from stable_baselines import A2C
 from stable_baselines.common import set_global_seeds
 from stable_baselines.common.vec_env import SubprocVecEnv
-from test_policy import evaluate_policy
-#from stable_baselines.common.callbacks import BaseCallback
-#from src.utils.neorlcalls import SavePlotCallback
-
-#from logger import plot_print, calc_cumavg
+from src.utils.test_policy import evaluate_policy
 # import input parameters from the user 
-from ParamList import InputParam
+from src.parsers.PARSER import InputChecker
         
 for env in list(gym.envs.registry.env_specs):
       if 'casmo6x6' in env:
           print("Remove {} from registry".format(env))
           del gym.envs.registry.env_specs[env]
 
-class A2CAgent(InputParam):
+class A2CAgent(InputChecker):
     def __init__ (self, inp, callback):
         self.inp=inp    
         self.callback=callback             

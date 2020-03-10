@@ -19,13 +19,14 @@ import gym
 from stable_baselines.deepq.policies import MlpPolicy
 from stable_baselines import DQN
 from stable_baselines.common.vec_env import VecVideoRecorder
-from test_policy import evaluate_policy
+from src.utils.test_policy import evaluate_policy
 
 
 # import input parameters from the user 
-from ParamList import InputParam
+from src.parsers.PARSER import InputChecker
 
-class DQNAgent(InputParam):
+
+class DQNAgent(InputChecker):
     def __init__ (self, inp, callback):
         self.inp=inp    
         self.callback=callback 

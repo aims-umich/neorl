@@ -7,12 +7,12 @@ Created on Wed Feb 26 09:33:45 2020
 """
 
 # import input parameters from the user 
-from PARSER import InputChecker
-from dqn import DQNAgent
-from ppo2 import PPOAgent
-from a2c import A2CAgent
+from src.parsers.PARSER import InputChecker
+from src.rl.dqn import DQNAgent
+from src.rl.ppo2 import PPOAgent
+from src.rl.a2c import A2CAgent
 from multiprocessing import Process
-from ga import GAAgent
+from src.evolu.ga import GAAgent
 from src.utils.neorlcalls import SavePlotCallback
 from stable_baselines.common.callbacks import BaseCallback
 

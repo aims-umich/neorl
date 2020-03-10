@@ -1,0 +1,37 @@
+# test input for neorl
+# simulate3 core case 
+
+READ GENERAL
+ 
+env= simulate3pwr:simulate3pwr-v0                  
+exepath= /home/majdi/simulate3/bin      
+maxcores= 16                       
+nactions = 19
+xsize = 51
+xsize_plot = 102
+ysize = 6
+
+END GENERAL
+
+
+READ DQN 
+
+casename=dqn
+mode=train
+ncores=1
+gamma=0.95
+learning_rate=1e-3
+exploration_fraction=0.1
+exploration_initial_eps=1.0
+exploration_final_eps=0.04
+train_freq=1
+batch_size=64
+double_q=True
+learning_starts=10
+target_network_update_freq=500
+model_load_path=/home/blah/
+time_steps=30000
+check_freq=1000
+avg_episodes=10
+
+END DQN 

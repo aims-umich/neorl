@@ -111,9 +111,7 @@ class Casmo4Env(gym.Env):
     def __init__ (self, mode='opt', casename='method', log_dir='./master_log/'):
         
         self.log_dir=log_dir
-        os.makedirs(self.log_dir,exist_ok=True)
         self.casename=casename
-        print(self.casename)
         # Misc parameters for this assembly case
         self.mode=mode
         self.numlocs=51 #see assembly board

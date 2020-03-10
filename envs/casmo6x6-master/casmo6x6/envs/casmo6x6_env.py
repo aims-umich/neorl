@@ -84,16 +84,18 @@ def get_string (filename,s1,s2):
 
 class Casmo4Env(gym.Env):
     
-    def __init__ (self, bu=0.0):
+    def __init__ (self, bu=0.0, casename='method', log_dir='./master_log/'):
         
+        self.casename=casename
+        self.log_dir=log_dir
         # Misc parameters for this assembly case
         self.numlocs=21 #see assembly board
         self.n=6   #6x6 
         self.fueltypes=2  #1.87 and 2.53
         
-        self.fileindex=1 # to track casmo input/output names
+        self.fileindex=np.random.randint(1,1e6) # to track casmo input/output names
+        self.file=self.casename+'_case'+str(self.fileindex)
         self.flatten=1   # to flatten arrays and return vector state (better to stay as 1 for keras NN)
-        self.reward_hist=[]   # this list to register reward history for plotting purposes
         
         #*******************
         # Action/State Space
@@ -145,9 +147,200 @@ STA
 END""".format(bu=bu)
     #--------------------------------------------------------------------------
     
-    '''
+        
+    def step(self, action):
+        
+        """
+        VERY IMPORTANT 
+        This function steps in the enviorment by executing RunCasmo4 and computes the reward based on the observed state
+        Takes input as an action
+        Retruns next state, rewards, termination_flag
+        """
+        action = action + 1 # action goes from 0 to num_colors-1 so we need to add one to get the actual color
 
-    '''
+        self.file=self.casename+'_case'+str(self.fileindex)
+        
+        #*********************************************************************************
+        # mir: Cheating actions, only for debugging (replace what comes from the network)
+        #*********************************************************************************
+        if (0):
+            # These are some high quality patterns taken from brute-force search
+            cheat_action=[1,2,2,1,2,1,2,2,2,2,2,2,2,1,2,2,1,1,1,2,1]
+            cheat_action=[1,1,2,2,2,1,2,2,2,2,2,1,1,2,1,2,1,2,2,1,2]
+            action=cheat_action[self.counter]
+        
+        #*********************************************************************************      
+        # Sanity checks
+        #*********************************************************************************
+        if (action > self.fueltypes or action <= 0):
+            print("Illegal action (fuel type): {} attempted.".format(action))
+            raise('error')
+            return [self.GetStateView(), -1, self.done, {}]
+
+        if self.done:
+            print("Game is over, all trials are done")
+            return [self.GetStateView(), 0, self.done, {}]
+        #*********************************************************************************
+        # Convert the integer data to float enrichment (this is done to fit Gym data structures)
+        #*********************************************************************************
+        if action==1:
+            self.enrichvec[self.current_loc]=1.87
+        elif action==2:
+            self.enrichvec[self.current_loc]=2.53
+        else:
+            raise ("illegal action is given")
+        #*********************************************************************************
+        #-----------------------------------
+        #execute casmo4 and compute rewards 
+        #-----------------------------------
+        if self.counter==self.numlocs-1:   
+            self.RunCasmo4()
+            self.compute_rewards()
+            self.monitor()
+            # print('casmo reward:', self.reward)
+        else:
+            # print('No casmo run')
+            self.reward=0
+        
+        #*********************************************************************************
+        #update the assembly state and counter 
+        #*********************************************************************************
+        self.counter += 1
+        if self.ordered_placement:
+            self.state = self.enrichvec  #!!! depricated
+        else:
+            self.state[:,0] = self.enrichvec
+        #*********************************************************************************
+        # check if game is over
+        #*********************************************************************************
+        if self.counter == self.numlocs:
+            self.done = True
+            
+            self.placevec[self.current_loc]=0   #convert the placment vector to all zeros for a new episode
+            if not self.ordered_placement:
+                self.state[:,1]=self.placevec  #initialize the placment array again for a new episode
+            # self.render()      # uncomment to plot the assembly at end of episode     
+        else:
+            self.GetNextLocation()  #if episode does not end, get the next position to visit
+        #*********************************************************************************
+        self.fileindex+=1    #update file index for casmo4
+
+        return [self.GetStateView(), self.reward, self.done, {}]    #these must be returned by the step function
+    
+    def render(self, mode='human'):
+        
+        """
+        Render (optional): plot the assembly and the enrichments for each pin
+        """
+        uo2=self.ConstructAssembly(self.enrichvec)
+        # Make the mesh plot
+        plt.figure()
+        plt.imshow(uo2); plt.set_cmap('summer'); plt.axis('off')
+                
+        # Loop over data dimensions and create text annotations.
+        for i in range(uo2.shape[0]):
+            for j in range(uo2.shape[1]):
+                plt.text(j, i, uo2[i, j], ha="center", va="center", color="k", fontsize=13)
+                
+
+        if (self.reward > 0):
+            plt.title('Step '+str(self.counter)+'/'+str(self.numlocs)+ ', Reward='+ str(np.round(self.reward,2)) +'\n $k_{\infty}^0$=' + str(self.kinf0)+ ', PPF=' + str(self.maxpppf) + ', U-235 wt%=' + str(np.round(self.avgenrich,2)))
+        else:
+            plt.title('Step '+str(self.counter)+'/'+str(self.numlocs)+ ', Reward=NA \n $k_{\infty}^0$= NA, PPF= NA, U-235 wt%=NA')
+  
+        plt.tight_layout()
+        plt.savefig(self.log_dir+self.file+'.png',format='png', dpi=300, bbox_inches="tight")
+        plt.show()
+        
+    def reset(self):
+        """
+        Important: Reset the enviroment after termination is reached
+        """        
+        self.locs=list(range(0,self.numlocs))  # generate a list of locations from 0 to numlocs-1
+        self.enrichvec=[1.5]*self.numlocs  # this vector contains the enrichment in each rod, fixed to 1.5
+        self.placevec=[0]*self.numlocs # intialize the pointer vector to zero
+        
+        if self.ordered_placement:
+            self.state=self.enrichvec # !!!depericated
+        else:
+             self.state = np.zeros((self.numlocs,2))  # initialize the assembly state
+        
+        
+        if self.ordered_placement:
+            self.current_loc=0 # !!!depericated
+        else:
+            self.current_loc=np.random.randint(self.numlocs) # sample random location 
+            self.locs.remove(self.current_loc) # remove new location from the list
+            self.placevec[self.current_loc]=1   # update the pointer 
+            self.state[:,0]=self.enrichvec # update the state array
+            self.state[:,1]=self.placevec # update the state array
+        
+        self.counter = 0  # time step counter
+        self.done = 0   # termination flag
+        self.clean()    # clean the directory 
+
+        return self.GetStateView()  # the reset function MUST return the initial state 
+    
+    def fit(self, x):
+        """
+        This objective function is special for GA, SA, PSO, and other classical optimistion methods
+        It recieves x enrichmet as input and returns objective function as output
+        """
+        self.enrichvec=x
+        
+        self.fileindex=np.random.randint(1,1e6) # to track casmo input/output names
+        self.file=self.casename+'_case'+str(self.fileindex)
+        self.reward=0
+        #-----------------------------------
+        #execute casmo4 and compute rewards 
+        #-----------------------------------
+        self.RunCasmo4()
+        self.compute_rewards()
+        self.monitor()
+        self.clean()
+        
+        if (1):
+          return self.reward,
+        else:
+          return self.reward
+
+    def monitor(self):
+        """
+        This function is to dump data to csv file, print data to screen, needed only if you activate on-the-fly plotting/logging options. 
+        """     
+        
+        # Y-output file logger
+        with open (self.log_dir+self.casename+'_out.csv','a') as fin:
+            fin.write(str(np.round(self.fileindex)) + ', ' + str(np.round(self.reward,3)) + ', '+ str(self.kinf0) + ', '+ str(self.avgenrich) + ', ' + str(self.maxpppf)  + '\n')
+        
+        # X-input file logger
+        with open (self.log_dir+self.casename+'_inp.csv','a') as fin:
+            fin.write(str(self.fileindex) +','+ str(np.round(self.reward,3)) + ',')
+            for j in range (len(self.enrichvec)):
+                if j==len(self.enrichvec)-1:
+                  fin.write(str(self.enrichvec[j])+'\n')
+                else:
+                  fin.write(str(self.enrichvec[j])+',')
+            
+                
+        # Save good patterns 
+        if (self.reward > 6000):
+            print('GOOD Pattern:', self.enrichvec)
+            print('GOOD Pattern:', self.reward, self.kinf0, self.maxpppf, self.avgenrich)
+            self.render() 
+            
+        #Print to screen (debugging)
+        print('Method:', self.casename)
+        print('CaseID:', self.file)
+        print('Reward:', self.reward)
+        print('Enrich:', self.enrichvec)
+        
+    #*************************************************************
+    #*************************************************************
+    # Auxiliary Functions       
+    #*************************************************************
+    #*************************************************************
+        
     def GetStateView(self):
         """
         returns the view the agent gets of the state, which is either identical to the the internal
@@ -165,10 +358,7 @@ END""".format(bu=bu)
         CASMO requires manual permission to overwrite files so always better to clean the directory first
         to avoid internal failure in python
         """
-        os.system('find . -type f -name case\* -exec rm {} \;')
-        os.system('find . -type f -name tmp\* -exec rm {} \;')
-        os.system('find . -type f -name fort\* -exec rm {} \;')
-        os.system('find . -type f -name tmpout\* -exec rm {} \;')
+        os.system('rm -Rf {file}.inp {file}.log {file}.out {file}.cax'.format(file=self.file))
         
     
     def ConstructAssembly(self,x):
@@ -285,198 +475,5 @@ END""".format(bu=bu)
         else:
             we=2.0
         
-        self.of=wk * (1.25-self.kinf0) + wp*(1.35-self.maxpppf) + we * (2.3-self.avgenrich)
-        self.of_list.append(-self.of) #update the objective function list
-        
-        if self.counter==self.numlocs-1:
-            self.reward=100*1/self.of
-        else:
-            self.reward=0
-                
-        
-        self.creward+=self.reward
-        
-        # mir: debugging line  
-        # print(str(self.counter)+', kinf='+str(self.kinf0), 'enrich='+str(self.avgenrich), 'ppf=' + str(self.maxpppf), 'obj='+str(np.round(self.of,3)), 'reward='+str(np.round(self.creward,3)))
-        
-    def step(self, action):
-        
-        """
-        VERY IMPORTANT 
-        This function steps in the enviorment by executing RunCasmo4 and computes the reward based on the observed state
-        Takes input as an action
-        Retruns next state, rewards, termination_flag
-        """
-        action = action + 1 # action goes from 0 to num_colors-1 so we need to add one to get the actual color
-
-        self.file='case'+str(self.fileindex)
-        
-        #*********************************************************************************
-        # mir: Cheating actions, only for debugging (replace what comes from the network)
-        #*********************************************************************************
-        if (0):
-            # These are some high quality patterns taken from brute-force search
-            cheat_action=[1,2,2,1,2,1,2,2,2,2,2,2,2,1,2,2,1,1,1,2,1]
-            cheat_action=[1,1,2,2,2,1,2,2,2,2,2,1,1,2,1,2,1,2,2,1,2]
-            action=cheat_action[self.counter]
-        
-        #*********************************************************************************      
-        # Sanity checks
-        #*********************************************************************************
-        if (action > self.fueltypes or action <= 0):
-            print("Illegal action (fuel type): {} attempted.".format(action))
-            raise('error')
-            return [self.GetStateView(), -1, self.done, {}]
-
-        if self.done:
-            print("Game is over, all trials are done")
-            return [self.GetStateView(), 0, self.done, {}]
-        #*********************************************************************************
-        # Convert the integer data to float enrichment (this is done to fit Gym data structures)
-        #*********************************************************************************
-        if action==1:
-            self.enrichvec[self.current_loc]=1.87
-        elif action==2:
-            self.enrichvec[self.current_loc]=2.53
-        else:
-            raise ("illegal action is given")
-        #*********************************************************************************
-        #-----------------------------------
-        #execute casmo4 and compute rewards 
-        #-----------------------------------
-        if self.counter==self.numlocs-1:   
-            self.RunCasmo4()
-            self.compute_rewards()
-            # print('casmo reward:', self.reward)
-        else:
-            # print('No casmo run')
-            self.reward=0
-        
-        # mir: debugging lines
-        # if self.counter in [self.numlocs-1]:            
-        #     print(str(self.counter)+', kinf='+str(self.kinf0), 'enrich='+str(self.avgenrich), 'ppf=' + str(self.maxpppf), 'obj='+str(np.round(self.of,4)), 'reward='+str(np.round(self.creward,3)))
-        #*********************************************************************************
-        #update the assembly state and counter 
-        #*********************************************************************************
-        self.counter += 1
-        if self.ordered_placement:
-            self.state = self.enrichvec  #!!! depricated
-        else:
-            self.state[:,0] = self.enrichvec
-        #*********************************************************************************
-        # check if game is over
-        #*********************************************************************************
-        if self.counter == self.numlocs:
-            self.done = True
-            self.reward_hist.append(self.creward)
-            
-            self.placevec[self.current_loc]=0   #convert the placment vector to all zeros for a new episode
-            if not self.ordered_placement:
-                self.state[:,1]=self.placevec  #initialize the placment array again for a new episode
-            # self.render()      # uncomment to plot the assembly at end of episode     
-        else:
-            self.GetNextLocation()  #if episode does not end, get the next position to visit
-        #*********************************************************************************
-        self.fileindex+=1    #update file index for casmo4
-
-        return [self.GetStateView(), self.reward, self.done, {}]    #these must be returned by the step function
-    
-    def render(self, mode='human'):
-        
-        """
-        Render (optional): plot the assembly and the enrichments for each pin
-        """
-        uo2=self.ConstructAssembly(self.enrichvec)
-        # Make the mesh plot
-        plt.figure()
-        plt.imshow(uo2); plt.set_cmap('summer'); plt.axis('off')
-                
-        # Loop over data dimensions and create text annotations.
-        for i in range(uo2.shape[0]):
-            for j in range(uo2.shape[1]):
-                plt.text(j, i, uo2[i, j], ha="center", va="center", color="k", fontsize=13)
-                
-
-        self.of=100
-        if (self.counter==self.numlocs):
-            plt.title('Step '+str(self.counter)+'/'+str(self.numlocs)+ ', Reward='+ str(np.round(self.creward,2)) +'\n $k_{\infty}^0$=' + str(self.kinf0)+ ', PPF=' + str(self.maxpppf) + ', U-235 wt%=' + str(np.round(self.avgenrich,2)))
-        else:
-            plt.title('Step '+str(self.counter)+'/'+str(self.numlocs) +'\n $k_{\infty}^0$=' + str(self.kinf0)+ ', PPF=' + str(self.maxpppf) + ', U-235 wt%=' + str(np.round(self.avgenrich,2)))
-  
-        plt.tight_layout()
-        #if (self.counter==self.numlocs):
-        plt.savefig('graph_'+self.file+'.png',format='png', dpi=300, bbox_inches="tight")
-        plt.show()
-        
-    def reset(self):
-        """
-        Important: Reset the enviroment after termination is reached
-        """        
-        self.locs=list(range(0,self.numlocs))  # generate a list of locations from 0 to numlocs-1
-        self.enrichvec=[1.5]*self.numlocs  # this vector contains the enrichment in each rod, fixed to 1.5
-        self.placevec=[0]*self.numlocs # intialize the pointer vector to zero
-        
-        if self.ordered_placement:
-            self.state=self.enrichvec # !!!depericated
-        else:
-             self.state = np.zeros((self.numlocs,2))  # initialize the assembly state
-        
-        
-        if self.ordered_placement:
-            self.current_loc=0 # !!!depericated
-        else:
-            self.current_loc=np.random.randint(self.numlocs) # sample random location 
-            self.locs.remove(self.current_loc) # remove new location from the list
-            self.placevec[self.current_loc]=1   # update the pointer 
-            self.state[:,0]=self.enrichvec # update the state array
-            self.state[:,1]=self.placevec # update the state array
-        
-        self.counter = 0  # time step counter
-        self.done = 0   # termination flag
-        self.of_list=[]  # mir: not sure if this variable is useful for anything 
-        self.creward=0   # this is for cumulative reward sum, used for testing purposes only
-        self.clean()    # clean the directory 
-
-        return self.GetStateView()  # the reset function MUST return the initial state 
-    
-    def eval_of(self, x):
-        """
-        This objective function is special for GA, SA, PSO, and other classical optimistion methods
-        It recieves x enrichmet as input and returns objective function as output
-        """
-        self.enrichvec=[]
-        
-        for i in range (len(x)):
-            if x[i]==0:
-                self.enrichvec.append(1.87)
-            elif x[i]==1:
-                self.enrichvec.append(2.53)
-            else:
-                raise('the integer selected is not defined') 
-                
-        self.file='case'+str(self.fileindex)
-        
-        #-----------------------------------
-        #execute casmo4 and compute rewards 
-        #-----------------------------------
-        self.RunCasmo4()
-        self.compute_rewards()
-        #print(self.enrichvec)
-        print(str(self.fileindex)+', kinf='+str(self.kinf0), 'enrich='+str(self.avgenrich), 'ppf=' + str(self.maxpppf), 'obj='+str(np.round(self.of,3)))
-        
-        self.fileindex+=1    #update file index for casmo4
-        
-        if (0):
-          return self.of,
-        else:
-          return self.of
-        
-    def plot_rewards(self):
-        """
-        plot the reward history for logging, this is for mir to check progress
-        """
-        plt.figure()
-        plt.plot(self.reward_hist)
-        plt.xlabel('Episode'); plt.ylabel('Reward')
-        plt.savefig('dqn_reward.png',format='png', dpi=150)
-        plt.close()
+        self.of=wk * (1.25-self.kinf0) + wp*(1.35-self.maxpppf) + we * (2.3-self.avgenrich)        
+        self.reward=100*1/self.of
