@@ -5,15 +5,15 @@ NEORL is a python-based software inspired by the need for a framework that house
 
 `neorl.py`: the main file
 
-**src**: contains all source files, categorized as follows: 
+* **src**: contains all source files, categorized as follows: 
 
    *`rl`: reinforcement learning algorithms. Currently, Deep Q Learning (DQN), Proximal Policy Optimization (PPO), and Advantage Actor Critic (A2C) are supported based on stable-baselines backend.  
 
    *`evolu`: evolutionary algorithms. Currently, genetic algorithm (GA) is supported. Particle swarm (PSO) and simulated annealing (SA) will be added soon.  
 
-  *`parsers`: contains the parser for the master input file (PARSER.py) and the list of all NEORL variables that can be defined by the user (ParamList.py).
+   *`parsers`: contains the parser for the master input file (PARSER.py) and the list of all NEORL variables that can be defined by the user (ParamList.py).
 
-  *`utils`: contains different utilities such as agent testing, logging, file initializers, multiprocessor engine, etc.
+   *`utils`: contains different utilities such as agent testing, logging, file initializers, multiprocessor engine, etc.
 
 **envs**: contains pre-built environments, all are Gym-based environments from nuclear engineering:
 
