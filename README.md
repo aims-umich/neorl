@@ -28,6 +28,7 @@ NEORL is a python-based software inspired by the need for a framework that house
   * `Descriptions to be added later …`
   
 * **other files**: 
+
   *`install.txt`: instructions for installation, will be updated continuously as the package is improved. 
  
   *`LICENSE.md`: open-source MIT license.
