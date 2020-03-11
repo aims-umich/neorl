@@ -7,9 +7,9 @@ NEORL is a python-based software inspired by the need for a framework that house
 
 **src**: contains all source files, categorized as follows: 
 
-  *`rl`: reinforcement learning algorithms. Currently, Deep Q Learning (DQN), Proximal Policy Optimization (PPO), and Advantage Actor Critic (A2C) are supported based on stable-baselines backend.  
+   *`rl`: reinforcement learning algorithms. Currently, Deep Q Learning (DQN), Proximal Policy Optimization (PPO), and Advantage Actor Critic (A2C) are supported based on stable-baselines backend.  
 
-  *`evolu`: evolutionary algorithms. Currently, genetic algorithm (GA) is supported. Particle swarm (PSO) and simulated annealing (SA) will be added soon.  
+   *`evolu`: evolutionary algorithms. Currently, genetic algorithm (GA) is supported. Particle swarm (PSO) and simulated annealing (SA) will be added soon.  
 
   *`parsers`: contains the parser for the master input file (PARSER.py) and the list of all NEORL variables that can be defined by the user (ParamList.py).
 
