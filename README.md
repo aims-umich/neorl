@@ -25,7 +25,7 @@ NEORL is a python-based software inspired by the need for a framework that house
 
 * **examples**: contains input files used as unit tests:
 
-  * Descriptions to be added later …
+  * `Descriptions to be added later …`
   
 * **other files**: 
   *`install.txt`: instructions for installation, will be updated continuously as the package is improved. 
