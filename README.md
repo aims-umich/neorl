@@ -15,7 +15,7 @@ NEORL is a python-based software inspired by the need for a framework that house
 
    *`utils`: contains different utilities such as agent testing, logging, file initializers, multiprocessor engine, etc.
 
-**envs**: contains pre-built environments, all are Gym-based environments from nuclear engineering:
+* **envs**: contains pre-built environments, all are Gym-based environments from nuclear engineering:
 
   *`BWR6x6`: boiling water reactor assembly (BWR) based upon CASMO4 neutronic solver. No burnup is considered (Nuclear Engineering). 
 
