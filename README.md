@@ -7,34 +7,34 @@ NEORL is a python-based software inspired by the need for a framework that house
 
 **src**: contains all source files, categorized as follows: 
 
-  `rl`: reinforcement learning algorithms. Currently, Deep Q Learning (DQN), Proximal Policy Optimization (PPO), and Advantage Actor Critic (A2C) are supported based on stable-baselines backend.  
+  *`rl`: reinforcement learning algorithms. Currently, Deep Q Learning (DQN), Proximal Policy Optimization (PPO), and Advantage Actor Critic (A2C) are supported based on stable-baselines backend.  
 
-  `evolu`: evolutionary algorithms. Currently, genetic algorithm (GA) is supported. Particle swarm (PSO) and simulated annealing (SA) will be added soon.  
+  *`evolu`: evolutionary algorithms. Currently, genetic algorithm (GA) is supported. Particle swarm (PSO) and simulated annealing (SA) will be added soon.  
 
-  `parsers`: contains the parser for the master input file (PARSER.py) and the list of all NEORL variables that can be defined by the user (ParamList.py).
+  *`parsers`: contains the parser for the master input file (PARSER.py) and the list of all NEORL variables that can be defined by the user (ParamList.py).
 
-  `utils`: contains different utilities such as agent testing, logging, file initializers, multiprocessor engine, etc.
+  *`utils`: contains different utilities such as agent testing, logging, file initializers, multiprocessor engine, etc.
 
 **envs**: contains pre-built environments, all are Gym-based environments from nuclear engineering:
 
-  `BWR6x6`: boiling water reactor assembly (BWR) based upon CASMO4 neutronic solver. No burnup is considered (Nuclear Engineering). 
+  *`BWR6x6`: boiling water reactor assembly (BWR) based upon CASMO4 neutronic solver. No burnup is considered (Nuclear Engineering). 
 
-  `BWR10x10`: boiling water reactor assembly (BWR) based upon CASMO4 neutronic solver. Burnup is included (Nuclear Engineering).
+  *`BWR10x10`: boiling water reactor assembly (BWR) based upon CASMO4 neutronic solver. Burnup is included (Nuclear Engineering).
 
-  `1/8 PWR`: pressurized water reactor core based upon SIMULATE3 core simulator. Multi-cycle is included. 
+  *`1/8 PWR`: pressurized water reactor core based upon SIMULATE3 core simulator. Multi-cycle is included. 
 
 **examples**: contains input files used as unit tests:
 
-  Descriptions to be added later …
+  *Descriptions to be added later …
   
 **other files**: 
-  `install.txt`: instructions for installation, will be updated continuously as the package is improved. 
+  *`install.txt`: instructions for installation, will be updated continuously as the package is improved. 
  
-  `LICENSE.md`: open-source MIT license.
+  *`LICENSE.md`: open-source MIT license.
   
-  `neorl.spec`: pyinstaller make file, currently not working. 
+  *`neorl.spec`: pyinstaller make file, currently not working. 
 
-  `requirements.txt`: external packages needed to be installed via pip. 
+  *`requirements.txt`: external packages needed to be installed via pip. 
 
-  `README.md`: this file! 
+  *`README.md`: this file! 
 
