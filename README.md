@@ -3,7 +3,7 @@ Nuclear Engineering Optimisation with Reinforcement Learning
 
 NEORL is a python-based software inspired by the need for a framework that houses classical (evolutionary), modern (reinforcement learning), and their hybrid form to solve combinatorial optimization problems that we face in all engineering disciplines as well as computer science. NEORL provides an easy-to-use interface with access to variety of algorithms. The user needs to build the environment according to a certain template (OpenAI Gym environments are currently supported). The environment is case-dependent and it has the cost/reward function that will be optimized. Afterward, the user completes an easy input file that provides hyperparameters for the optimization methods being used. NEORL provides on-the-fly monitoring of the training and optimization performance to provide users constant feedback on the performance. The current structure of NEORL is as follows: 
 
-`neorl.py`: the main file
+* `neorl.py`: the main file
 
 * **src**: contains all source files, categorized as follows: 
 
@@ -23,11 +23,11 @@ NEORL is a python-based software inspired by the need for a framework that house
 
   *`1/8 PWR`: pressurized water reactor core based upon SIMULATE3 core simulator. Multi-cycle is included. 
 
-**examples**: contains input files used as unit tests:
+* **examples**: contains input files used as unit tests:
 
-  *Descriptions to be added later …
+  * Descriptions to be added later …
   
-**other files**: 
+* **other files**: 
   *`install.txt`: instructions for installation, will be updated continuously as the package is improved. 
  
   *`LICENSE.md`: open-source MIT license.
