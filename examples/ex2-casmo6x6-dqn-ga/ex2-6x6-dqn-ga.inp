@@ -1,0 +1,49 @@
+#for majdi: this example needs revision, currently not working
+# test input for neorl
+# 6x6 test case compares DQN vs GA
+
+READ GENERAL
+ 
+env= casmo6x6:casmo6x6-v0                  
+exepath= /home/majdi/casmo4/bin/casmo4e     
+maxcores= 32                       
+nactions = 2
+xsize = 21
+xsize_plot = 21
+ysize = 3
+
+END GENERAL
+
+
+READ DQN 
+
+casename=dqn
+mode=train
+ncores=1
+gamma=0.95
+learning_rate=1e-3
+exploration_fraction=0.1
+exploration_initial_eps=1.0
+exploration_final_eps=0.04
+train_freq=1
+batch_size=64
+double_q=True
+learning_starts=10
+target_network_update_freq=500
+model_load_path=/home/redo/
+time_steps=30000
+check_freq=1000
+avg_episodes=10
+
+END DQN 
+
+READ GA
+
+casename=ga
+indpb=0.05
+cxpb=0.5
+mutpb=0.2 
+pop=25
+ngen=300
+
+END GA

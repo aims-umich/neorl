@@ -1,0 +1,63 @@
+# test input for neorl
+# simulate3 core case 
+
+READ GENERAL
+
+# Leave as is 
+env= simulate3pwr:simulate3pwr-v0                  
+exepath= /home/jane/pkgs/simulate3/bin      
+maxcores= 16 
+# The following THREE parameters should be changed if you changed the size of the core from 17, 32, etc.
+# Paul mentioned starting with 17 assemblies is ok                       
+nactions = 17
+xsize = 17
+xsize_plot = 17
+# Leave as is
+ysize = 6
+
+END GENERAL
+
+READ DQN 
+
+# Fixed Parameters (Leave as is)
+casename=dqn
+mode=train
+ncores=1
+gamma=0.99
+learning_rate=0.0005
+exploration_initial_eps=1.0
+exploration_final_eps=0.02
+train_freq=1
+double_q=True
+
+#Tuned parameters
+#Total time steps to train, this needs to get larger as needed, buffer size should be always larger than the time steps
+#We set self.max_episode = 30 in the enviroment (you may change), so each episode has 30 time steps. 
+#So example if time_steps = 30000, you basically run 1000 complete episodes.   
+time_steps=60000 
+buffer_size=65000
+
+#the fraction should be tuned between 0.1-0.6, how much the agent spends exploring over the whole training time. 
+exploration_fraction=0.1
+
+#either 16, 32, or 64 for batch_size
+batch_size=32
+
+#How many time steps to intialize the memory before start training the model (should be at least 4-5 times the batch size)
+#wait 50 episodes = 1500 time steps
+learning_starts=1500
+
+# how frequent to update the target model in time steps, this is difficult to tune, but too large leads to poor training,
+# too small leads to unstable learning, I suggest 750 as intial value (Update every 25 episodes)   
+target_network_update_freq=750
+
+#how frequent in time steps you want the logger to get activated to update the csv files, summary file, plots, and save model?
+# I suggest checking every 1500 time steps, so you will have 40 checks overall.   
+check_freq=1500
+
+# This parameter is how many episodes to average while plotting. This is what we call epoch to reduce the 
+# randomness of the process and be able to identify covergence by eye, I suggest averaging every 40 episodes as 1 epoch (larger is better to have better statisitcs)
+#Be careful not to increase this number than check_freq, so that you have enough data collected first for averaging.  
+avg_episodes=40
+
+END DQN 

@@ -1,0 +1,37 @@
+# test input for neorl
+# a2c agent test. The model is provided as external input via model_load_path
+
+READ GENERAL
+ 
+env= casmo10x10:casmo10x10-v0                  
+exepath= /home/majdi/casmo4/bin/casmo4e      
+maxcores= 16                       
+nactions = 19
+xsize = 51
+xsize_plot = 102
+ysize = 6
+
+END GENERAL
+
+READ A2C
+
+casename=a2c
+mode=test
+ncores=6
+n_steps=5 
+gamma=0.99
+learning_rate=0.0007
+vf_coef=0.25
+max_grad_norm=0.5
+ent_coef=0.01
+alpha=0.99
+epsilon=1e-5
+lr_schedule=constant
+time_steps=50000
+check_freq=1000
+avg_episodes=10
+model_load_path=./testmodel.pkl
+render=True
+n_eval_episodes=2
+
+END A2C
