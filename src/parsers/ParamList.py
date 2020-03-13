@@ -24,15 +24,13 @@ class InputParam():
         self.gen_dict={
         'env': ['casmo10x10:casmo10x10-v0','r','str'],                       # Evniorment Type
         'exepath': ['/home/majdi/...','o','str'],         # e.g. Casmo/Simulate/MCNP path  
-        'maxcores': [16,'o','int'],                        # max number of cores to not exceed in parallel calculations
+        'maxcores': [16,'o', 'int'],                        # max number of cores to not exceed in parallel calculations
         'nactions': [0,'r', 'int'],
         'xsize':[0,'r','int'],
-        'xsize_plot':[0,'r','int'],
+        'xsize_plot':[0,'o','int'],
         'ysize':[0,'r','int']
-        #psutil.cpu_count(logical = True)
-        #multiprocessing.cpu_count()
         }
-        
+                
         # DQN Category
         self.dqn_dict={
         'time_steps': [50000,'r','int'],
@@ -52,13 +50,16 @@ class InputParam():
         'learning_starts': [10, 'o', 'int'],
         'target_network_update_freq': [1000, 'o', 'int'],
         'model_load_path': ['/home/majdi/','rs', 'str'],
-        # for plotting 
+        
+         # for plotting 
         'check_freq': [1000,'o', 'int'],
         'avg_episodes': [20,'o', 'int'],
-        'n_eval_episodes': [5,'o', 'int'],
-        'render': [False,'o', 'bool'],
-        'video_record': [False,'o', 'bool'],
-        'fps': [10, 'o', 'int']
+        
+        # only for testing
+        'n_eval_episodes': [5,'rs', 'int'],
+        'render': [False,'rs', 'bool'],
+        'video_record': [False,'rs', 'bool'],
+        'fps': [10, 'rs', 'int']
         
         }
         
@@ -81,6 +82,7 @@ class InputParam():
         'model_load_path': ['/home/majdi/','rs', 'str'],
         'check_freq': [1000,'o', 'int'],
         'avg_episodes': [20,'o', 'int'],
+        # only for testing
         'n_eval_episodes': [5,'o', 'int'],
         'render': [False,'o', 'bool'],
         'video_record': [False,'o', 'bool'],
@@ -106,6 +108,7 @@ class InputParam():
         'model_load_path': ['./base.pkl','rs', 'str'],
         'check_freq': [1000,'o', 'int'],
         'avg_episodes': [20,'o', 'int'],
+        # only for testing
         'n_eval_episodes': [5,'o', 'int'],
         'render': [False,'o', 'bool'],
         'video_record': [False,'o', 'bool'],

@@ -53,7 +53,9 @@ initial_core = [['K-01', 'K-02', 'H-01', 'J-02', 'B-04', 'D-03', 'F-01'], ['M-04
 
 # -----------------
 # --- futur heuristic (e.g No fresh fuel assembly on the side)
-HEUR_INDICES = [0,1,2,3,4,8,14,20,27,34]
+#HEUR_INDICES = [0,1,2,3,4,8,14,20,27,34]
+#HEUR_INDICES = [0,1,2,3,4,8,14]
+    
 Good_state = [4, 0, 37, 3, 25, 36, 15, 18, 19, 14, 9, 17, 24, 6, 20, 22, 26, 10, 29, 23, 39, 5, 30, 1, 32, 2, 28, 27, 21, 12, 7, 35, 13, 38, 33, 11, 40, 31, 8, 34, 16]
 Good_energy = 0.00015534396267663473 # -- minima
 
@@ -178,27 +180,26 @@ class SIMULcolEnv3(gym.Env):
   class for gym-wise SIMULATE3 environment
 
   """
-  def __init__ (self, path_to_config='./config_col2.yaml', casename='method', log_dir='./master_log/'):#, max_episode = 10, run_number = 12): # --- '12' because of my default initial file
+  def __init__ (self, casename='method', log_dir='./master_log/'):#, max_episode = 10, run_number = 12): # --- '12' because of my default initial file
     # -------------------------------------------------------
     # --- Attributs for RL
     self.log_dir=log_dir
     self.casename=casename
-    with open(path_to_config,"r") as yamlfile:
-        config = yaml.safe_load(yamlfile)
-        self.numlocs = config["gym"]["numlocs"] # --- size of the board to make test on : 4 9 16 25 40
-        self.max_episode = config["gym"]["max_episode"] # --- tuning parameter
-        self.run_number = config["gym"]["run_number"]
-        self.swap_type = config["gym"]["swap_type"] # --- number of swap : simple : 1 / binary : 2 / triple : 3 / ... / full size swap treated through color environment
-        self.flatten = config["gym"]["flatten"]
-        self.Gamma = 0.95
-        if self.max_episode % 2 * self.swap_type != 0:
-            print("The number of episode must be a multiplier of 2 times the number of swap not {}".format(self.max_episode % 2 * self.swap_type))
-        #--------------------------------------------------------------------
-        # --- template use for initial input file 3D can be used later on
-        #--------------------------------------------------------------------
-        self.templates_file = config["gym"]["initial_file"]
-        self.ordered_placement = config['gym']['ordered_placement'] # true results in deterministic placement order
-        self.disable_checking = config['gym']['disable_checking'] # turns off board color checking at terminal step
+    self.numlocs = 16 # --- size of the board to make test on : 4 9 16 25 40
+    self.max_episode = 30 # --- tuning parameter
+    self.run_number = 12
+    self.swap_type = 1 # --- number of swap : simple : 1 / binary : 2 / triple : 3 / ... / full size swap treated through color environment
+    self.flatten = True
+    self.Gamma = 0.95
+    if self.max_episode % 2 * self.swap_type != 0:
+        print("The number of episode must be a multiplier of 2 times the number of swap not {}".format(self.max_episode % 2 * self.swap_type))
+    #--------------------------------------------------------------------
+    # --- template use for initial input file 3D can be used later on
+    #--------------------------------------------------------------------
+    self.templates_file ='./restart_files/2Deq.inp'
+
+    self.ordered_placement = False
+    self.disable_checking = True
 
     self.flag = 0 # --- 1 for full core (remove parameters in self.free_coords) anything else for swapping
     self.reward_hist = [0]   # this list to register reward history for plotting purposes
@@ -207,7 +208,7 @@ class SIMULcolEnv3(gym.Env):
     self.counter = 0 # --- keeper : number of episode
     self.subcounter = 0 # --- Count the number of assemblies choosen for swap
      
-    self.default_state = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55]
+    self.default_state = list(range(0,self.numlocs+1))
     self.VECTOR = []
     self.core = []
     self.librairies = {}
@@ -238,8 +239,29 @@ class SIMULcolEnv3(gym.Env):
         self.observation_space = Box(low=0, high=len(self.default_state), shape=(len(self.default_state) * 2,), dtype=int)
     else:
         self.observation_space = Box(low=0, high=len(self.default_state), shape=(len(self.default_state),2), dtype=int)
-
-   
+        
+    # -----------------
+    # --- futur heuristic (e.g No fresh fuel assembly on the side)
+    if self.numlocs >= 34:
+        self.HEUR_INDICES = [0,1,2,3,4,8,14,20,27,34]
+    elif self.numlocs <34 and self.numlocs >= 27: 
+        self.HEUR_INDICES = [0,1,2,3,4,8,14,20,27]
+    elif self.numlocs < 27 and self.numlocs >= 20:
+        self.HEUR_INDICES = [0,1,2,3,4,8,14,20]
+    elif self.numlocs < 20 and self.numlocs >= 14:
+        self.HEUR_INDICES = [0,1,2,3,4,8,14]
+    elif self.numlocs <14 and self.numlocs >= 8:
+        self.HEUR_INDICES = [0,1,2,3,4,8]
+    elif self.numlocs <8 and self.numlocs >= 4:
+        self.HEUR_INDICES = [0,1,2,3,4]
+    elif self.numlocs <4 and self.numlocs >= 3:
+        self.HEUR_INDICES = [0,1,2,3]
+    elif self.numlocs <3 and self.numlocs >= 2:
+        self.HEUR_INDICES = [0,1,2]
+    elif self.numlocs <2 and self.numlocs >= 1:
+        self.HEUR_INDICES = [0,1]
+    else:
+        self.HEUR_INDICES = [0]
 
     # -------------------------------------------------------------------
     # --- attributs for render
@@ -284,7 +306,7 @@ class SIMULcolEnv3(gym.Env):
     iter = 0
     while iter  != 10:
         iter = 0 
-        for index,elem in enumerate(HEUR_INDICES):
+        for index,elem in enumerate(self.HEUR_INDICES):
             if 'TYPE' in float_to_core[x[elem]]:
                 x = Flipt_bits(x,index)
                 # print('Bits were randomly swap because fresh fuels cannot be moved at the outmost regions')
@@ -298,7 +320,7 @@ class SIMULcolEnv3(gym.Env):
         """
         Ask new action if false
         """
-        for diff in HEUR_INDICES:
+        for diff in self.HEUR_INDICES:
             if 'TYPE' in self.float_to_core[self.state[0][diff]]:
                 return False
 
@@ -666,8 +688,8 @@ class SIMULcolEnv3(gym.Env):
   @check_rep_decorate
   def step(self, action): # --- < int > : position
     """ One move in the game """
-    self.file = 'run'+str(self.counter) + '_gym.inp'
-    self.state_file = 'run'+str(self.counter) + '_gym.out'
+    self.file = self.casename+str(self.counter) + '.inp'
+    self.state_file = self.casename+str(self.counter) + '.out'
 
     # --- *********************************************************************************
     # --- check if game is over
@@ -714,6 +736,9 @@ class SIMULcolEnv3(gym.Env):
         # --- Run Simulate:
         self.runSIMULATE()
         reward = self._Compute_reward()
+        
+        
+        
         self.current_score = reward + penalty
         self.creward += np.power(self.Gamma,self.counter - 1) * self.current_score # --- discounted reward
         self.state[1][self.current_loc] = 0
@@ -725,6 +750,9 @@ class SIMULcolEnv3(gym.Env):
             reward = -100000000
          # --- cumulative reward record at the end of the game
         self.reward_hist.append(self.creward) # --- in or out of the loop?
+        #mir: added by majdi 
+        self.monitor()
+        
     else:
         if self.subcounter == self.swap_type * 2 and self.counter != self.max_episode: # --- control compute reward only after choosing which to swap
             print("Buffer",self.buffer)
@@ -756,6 +784,59 @@ class SIMULcolEnv3(gym.Env):
     # --- return [state, reward, true/false, next_state]
 
     return ([self._get_state_agent_view(),self.current_score, self.done, {}])
+
+
+  # def fit(self,x):
+  #   """
+  #   This objective function is special for GA, SA, PSO, and other classical optimistion methods
+  #   It receives x loading pattern as input and returns objective function as output
+  #   """
+  #   self.fileindex=np.random.randint(1,1e6) # to track casmo input/output names
+  #   self.fileheuristic = 'run'+self.casename + "_"+ str(self.counter) + '_%f'%(self.fileindex)
+  #   self.state_file = 'run'+self.casename + "_"+ str(self.counter) + '_%f.out'%(self.fileindex)
+  #   # --- Write input file for next calculation
+  #   self.modify_core()
+  #   self.write_input()
+  #   # --- Run Simulate:
+  #   self.runSIMULATE()
+  #   reward = self._Compute_reward()
+  #   self.monitor(reward)
+  #   self.clean()
+  #   return reward
+
+  # mir: added my majdi to monitor results
+  def monitor(self):
+      """
+        This function is to dump data to csv file, print data to screen, needed only if you activate on-the-fly plotting/logging options. 
+      """
+      # Y-output file logger
+      self.fileindex=np.random.randint(1,1e6) # to track casmo input/output names
+      with open (self.log_dir+self.casename+'_out.csv','a') as fin:
+          fin.write('{}, {}, {}, {}, {}, {}, {}, {} \n'.format(self.fileindex, np.round(self.creward,2), self.max_peaking, self.max_deltah, self.max_boron, self.max_exposure, np.round(self.max_of,2), self.feasible))
+          
+          # fin.write(str(np.round(self.fileindex)) + ', ' + str(self.creward) + ', '+ str(self.max_peaking) + ', '+ str(self.max_deltah) + ', ' + str(self.max_boron) + 
+          #          ', ' + str(self.max_exposure) + ', '+str(self.max_of) + ', '+str(self.feasible) + '\n')
+    
+      with open (self.log_dir+self.casename+'_inp.csv','a') as fin:
+          fin.write('{}, {},'.format(self.fileindex, np.round(self.creward,2)))
+          for i in range (len(self.state[0])):
+              if i == (len(self.state[0]) - 1):
+                  fin.write(str(self.state[0][i])+'\n')
+              else:
+                  fin.write(str(self.state[0][i])+',')
+                  
+      # Save good patterns 
+      #if (self.reward > 0):
+      #    self.render() 
+          
+      #Print to screen (debugging)
+      print('Method:', self.casename)
+      print('CaseID:', self.fileindex)
+      print('Reward:', self.creward)
+      print('Reward:', self.state[0])
+      print('Core:', self.core)
+
+      return
 
   def reset(self, flag = True):
     """ Reinitialize the game """

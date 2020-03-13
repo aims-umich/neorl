@@ -1,6 +1,7 @@
 """
 This class parses the master input file provided by the user
 """ 
+import psutil
 
 class InputParser():
     def __init__(self, input_file_path):
@@ -16,10 +17,11 @@ class InputParser():
         
         
         #input blocks 
-        self.dqn_block=[]
-        self.ppo_block=[]
-        self.a2c_block=[]
-        self.ga_block=[]
+        self.gen_block={}
+        self.dqn_block={}
+        self.ppo_block={}
+        self.a2c_block={}
+        self.ga_block={}
         
         with open(input_file_path) as input_file_text:
             self.input_file = [parameter.replace("\n","").strip() for parameter in input_file_text.readlines() if not parameter.isspace() or parameter[0] != "%"]
@@ -29,47 +31,52 @@ class InputParser():
         # remove comments  #----
         self.input_file=[item for item in self.input_file if item[0] != '#']
         
-        #Setting attributes for each block
+        # check general card      
         try:
-            self.gen_block = self.input_file[self.input_file.index("READ GENERAL") + 1 : self.input_file.index("END GENERAL")]
+            gen_test = self.input_file[self.input_file.index("READ GENERAL") + 1 : self.input_file.index("END GENERAL")]
             print ('--debug: General block is identified')
         except:
             raise('ERR: The general block is required but not found in the input --> READ GENERAL ... END GENERAL is missing')
         
-        self.gen_block=[item.split("=") for item in self.gen_block] # split the = sign
-        self.gen_block = [[element.strip() for element in item] for item in self.gen_block] #strip all white spaces
+        
+    def parse_card(self, card):
+        
+        block = self.input_file[self.input_file.index("READ {}".format(card)) + 1 : self.input_file.index("END {}".format(card))]
+        block = [item for item in block if item[0] != "#"]   # dobule check if there is any comments
+        block = [item.split("=") for item in block]
+        block = [[element.strip() for element in item] for item in block] #strip all white spaces
+        
+        card_dict={}
+        for item in block:
+            card_dict[item[0]] = item[1]  
+        
+        return card_dict
+        
+    def blocks (self):
+        #Setting attributes for each block
+        self.gen_block=self.parse_card("GENERAL")
                 
         if ("READ DQN" in self.input_file and "END DQN" in self.input_file):
             print ('--debug: DQN block is identified')
-            self.dqn_block = self.input_file[self.input_file.index("READ DQN") + 1 : self.input_file.index("END DQN")]
-            self.dqn_block = [item for item in self.dqn_block if item[0] != "#"]   # dobule check if there is any comments
-            self.dqn_block = [item.split("=") for item in self.dqn_block] # split by = sign
-            self.dqn_block = [[element.strip() for element in item] for item in self.dqn_block] #strip all white spaces
+            self.dqn_block=self.parse_card("DQN")
             self.dqn_flag=True
 
         if ("READ PPO" in self.input_file and "END PPO" in self.input_file):
             print ('--debug: PPO block is identified')
-            self.ppo_block = self.input_file[self.input_file.index("READ PPO") + 1 : self.input_file.index("END PPO")]
-            self.ppo_block = [item for item in self.ppo_block if item[0] != "#"]   # dobule check if there is any comments
-            self.ppo_block = [item.split("=") for item in self.ppo_block]
-            self.ppo_block = [[element.strip() for element in item] for item in self.ppo_block] #strip all white spaces
+            self.ppo_block=self.parse_card("PPO")
             self.ppo_flag=True
             
         if ("READ A2C" in self.input_file and "END A2C" in self.input_file):
             print ('--debug: A2C block is identified')
-            self.a2c_block = self.input_file[self.input_file.index("READ A2C") + 1 : self.input_file.index("END A2C")]
-            self.a2c_block = [item for item in self.a2c_block if item[0] != "#"]   # dobule check if there is any comments
-            self.a2c_block = [item.split("=") for item in self.a2c_block]
-            self.a2c_block = [[element.strip() for element in item] for item in self.a2c_block] #strip all white spaces
+            self.a2c_block=self.parse_card("A2C")
             self.a2c_flag=True
 
         if ("READ GA" in self.input_file and "END GA" in self.input_file):
             print ('--debug: GA block is identified')
-            self.ga_block = self.input_file[self.input_file.index("READ GA") + 1 : self.input_file.index("END GA")]
-            self.ga_block = [item for item in self.ga_block if item[0] != "#"]   # dobule check if there is any comments
-            self.ga_block = [item.split("=") for item in self.ga_block]
-            self.ga_block = [[element.strip() for element in item] for item in self.ga_block] #strip all white spaces
+            self.ga_block=self.parse_card("GA")
             self.ga_flag=True
+        
+        return
 
 """
 This checks the input for any errors/typos and then overwrites the default input provided by the developer
@@ -86,55 +93,114 @@ class InputChecker(InputParser):
         self.a2c_dict=self.paramdict.a2c_dict
         self.ppo_dict=self.paramdict.ppo_dict
         self.ga_dict=self.paramdict.ga_dict
-    
-    def check_input (self, parser, paramdict):
+        
+                    
+    def check_input (self, parser, paramdict, card):
         # this function loops through any data list and check if data structure and types are correct
         
         for item in parser:
-            if item[0] not in paramdict:
-                print('--error: {} is NOT found in neorl input syntax '.format(item[0]))
+            if item not in paramdict:
+                print('--error: {} is NOT found in neorl input variable names'.format(item))
+                raise(ValueError)
+                            
+            try: 
+                if paramdict[item][2] == "str":
+                    parser[item] = str(parser[item]).strip()
+                elif paramdict[item][2] == "int":
+                    parser[item] = int(parser[item])
+                elif paramdict[item][2] == "float":
+                    parser[item] = float(parser[item])
+                elif paramdict[item][2] == "bool":
+                    parser[item] = bool(parser[item])
+            except:
+                print('--error: the data structure for parameter {} in card {} must be {}, but something else is used'.format(item, card, paramdict[item][2]))
                 raise(ValueError)
                 
-            #assert type(item[1]) == paramdict[item[0]][2], 'user input for {} is {}, but {} should be used'.format(item[1], type(item[1]), paramdict[item[0]][2])
+        for item in paramdict:
+            if paramdict[item][1] == "r" and item not in parser.keys():
+                raise Exception ('--error: parameter {} in card {} is required for neorl but it is not given in the input'.format(item, card))
+                
+            if paramdict[item][1] == "o" and item not in parser.keys():
+                if item not in ['flag']:
+                    print ('--warning: parameter {} in card {} is missed, Default is used ---> {}'.format(item,card, paramdict[item][0]))
             
-            try: 
-                if paramdict[item[0]][2] == "str":
-                    item[1] = str(item[1]).strip()
-                elif paramdict[item[0]][2] == "int":
-                    item[1] = int(item[1])
-                elif paramdict[item[0]][2] == "float":
-                    item[1] = float(item[1])
-                elif paramdict[item[0]][2] == "bool":
-                    item[1] = bool(item[1])
-            except:
-                print('--error: the data structure for parameter {} must be {}, but something else is used'.format(item[0], paramdict[item[0]][2]))
-                raise(ValueError)
-        
-        #print(self.gen_block, self.a2c_block, self.dqn_block)
+            if paramdict[item][1] == "rs" and item not in parser.keys():
+                
+                if item == 'model_load_path' and parser['mode'][0] in ['test','continue']: #testing or continue learning without path to pre-trained model
+                    raise Exception('--error: the user selected test mode in card {}, but no path to the pre-trained model is provided via model_load_path'.format(card))
+         
+        # check the test 
+        if card in ['DQN', 'PPO', 'A2C']:
+            if parser['mode'] in ['train']:
+                except_var=[i for i in ['model_load_path', 'n_eval_episodes', 'video_record', 'render', 'fps'] if i in parser.keys()]
+                if len(except_var) > 0:
+                    raise Exception('--error: the following variables {} in card {} are not allowed for training mode'.format(except_var, card))
             
+            if parser['mode'] in ['continue']:
+                except_var=[i for i in ['n_eval_episodes', 'video_record', 'render', 'fps'] if i in parser.keys()]
+                if len(except_var) > 0:
+                    raise Exception('--error: the following variables {} in card {} are not allowed for continual mode'.format(except_var, card))
+
+            if parser['mode'] in ['test']:
+                except_var=[i for i in ['n_eval_episodes', 'video_record', 'render', 'fps'] if i in parser.keys()]
+                if len(except_var) > 0:
+                    raise Exception('--error: the following variables {} in card {} are not allowed for continual mode'.format(except_var, card))
+                   
+        #check the xsize plot
+        if card in ['GENERAL']:
+            if "xsize_plot" not in parser.keys():
+                parser['xsize_plot'] = parser['xsize']
+                print ('--warning: xsize_plot is set to equal to xsize ---> {}'.format(parser['xsize_plot']))
+               
+               
+                    
+                
             
     def setup_input(self):
         
         # check the strucutre and syntax first, then overwrite the default dictionary in paramdict.
         self.methods=[]
+        self.used_cores=0
+        self.check_input(self.parser.gen_block,self.gen_dict, 'GENERAL')
+        maxcore_flag=False
         for item in self.parser.gen_block:
-            self.check_input(self.parser.gen_block,self.gen_dict)
-            self.gen_dict[item[0].strip()][0] = item[1]
+            self.gen_dict[item][0] = self.parser.gen_block[item]
+            # General checks
+            
+            #----------------------------
+            # check maxcores parameter
+            #----------------------------
+            
+            if item == 'maxcores':
+                print ('--debug: maxcores is given by user as {}'.format(self.parser.gen_block[item]))
+                maxcore_flag=True
+                self.max_cores=self.parser.gen_block[item]
+                if self.parser.gen_block[item] <= 0:
+                    self.parser.gen_block[item]=psutil.cpu_count(logical = True)
+                    self.max_cores=self.parser.gen_block[item]
+                    print ('--debug: user requested inference of maxcores for the machine which is {}'.format(self.max_cores))
+                    
+        if not maxcore_flag:
+            print('--warning: no limit on maxcores is provided by the user, so all specificed cores in the input will be used')
+            
+        #----------------------------
                 
         if self.parser.dqn_flag:
             
-            self.check_input(self.parser.dqn_block,self.dqn_dict)
+            self.check_input(self.parser.dqn_block,self.dqn_dict, 'DQN')
             self.dqn_dict['flag'][0] = True
             for item in self.parser.dqn_block:
-                self.dqn_dict[item[0].strip()][0] = item[1]
+                self.dqn_dict[item][0] = self.parser.dqn_block[item]
             
             self.methods.append(self.dqn_dict['casename'][0])
+            self.used_cores += self.dqn_dict["ncores"][0]
+            
 
         if self.parser.ppo_flag:
-            self.check_input(self.parser.ppo_block,self.ppo_dict)
+            self.check_input(self.parser.ppo_block,self.ppo_dict, 'PPO')
             self.ppo_dict['flag'][0] = True
             for item in self.parser.ppo_block:
-                self.ppo_dict[item[0].strip()][0] = item[1]
+                self.ppo_dict[item][0] = self.parser.ppo_block[item]
             
             # adjust number of steps for parallel
             if self.ppo_dict["ncores"][0] > 1:
@@ -144,17 +210,19 @@ class InputChecker(InputParser):
                     self.ppo_dict["check_freq"][0] = (self.ppo_dict["check_freq"][0] + self.ppo_dict["ncores"][0] - mod)
                     assert (self.ppo_dict["check_freq"][0] % self.ppo_dict["ncores"][0]) == 0
                     print('warning: the check_freq parameter is adjusted to {} for ppo'.format(self.ppo_dict["check_freq"][0]))
+                    
             
             self.methods.append(self.ppo_dict['casename'][0])
-                
+            self.used_cores += self.ppo_dict["ncores"][0]
+            
+            
+            
         if self.parser.a2c_flag:
-            self.check_input(self.parser.a2c_block,self.a2c_dict)
+            self.check_input(self.parser.a2c_block,self.a2c_dict, 'A2C')
             self.a2c_dict['flag'][0] = True
             for item in self.parser.a2c_block:
-                self.a2c_dict[item[0].strip()][0] = item[1]
-                
-            self.methods.append(self.a2c_dict['casename'][0])
-            
+                self.a2c_dict[item][0] = self.parser.a2c_block[item]
+                            
             # adjust number of steps for parallel
             if self.a2c_dict["ncores"][0] > 1:
                 if self.a2c_dict["check_freq"][0] % self.a2c_dict["ncores"][0] != 0:
@@ -163,16 +231,26 @@ class InputChecker(InputParser):
                     self.a2c_dict["check_freq"][0] = (self.a2c_dict["check_freq"][0] + self.a2c_dict["ncores"][0] - mod)
                     assert (self.a2c_dict["check_freq"][0] % self.a2c_dict["ncores"][0]) == 0
                     print('warning: the check_freq parameter is adjusted to {} for a2c'.format(self.a2c_dict["check_freq"][0]))
+                    
+            self.methods.append(self.a2c_dict['casename'][0])
+            self.used_cores += self.a2c_dict["ncores"][0]
                 
         if self.parser.ga_flag:
-            self.check_input(self.parser.ga_block,self.ga_dict)
+            self.check_input(self.parser.ga_block,self.ga_dict, 'GA')
             self.ga_dict['flag'][0] = True
             for item in self.parser.ga_block:
-                self.ga_dict[item[0].strip()][0] = item[1]
+                self.ga_dict[item][0] = self.parser.ga_block[item]
             
             self.methods.append(self.ga_dict['casename'][0])
-                
+            self.used_cores += self.ga_dict["ncores"][0]
+        
+        if maxcore_flag:
+            assert self.used_cores <= self.max_cores, 'total number of cores assigned by the user ({}) are larger than the maxcores ({})'.format(self.used_cores, self.max_cores)
+            
+        print('------------------------------------------------------------------------------')
         print('--debug: Input check is completed successfully, no major error is found')
+        print('------------------------------------------------------------------------------')
+        print('------------------------------------------------------------------------------')
                 
         #print(self.dqn_dict)
         #print(self.a2c_dict)

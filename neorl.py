@@ -37,7 +37,9 @@ def init_files(methods, nx, ny):
     [inp_names.append('x'+str(i)) for i in range(1,nx+1)]
     [out_names.append('y'+str(i)) for i in range(1,ny+1)]
     
-    
+    if (1):
+        out_names=['caseid', 'reward', 'PPF', 'delta_h', 'boron', 'exposure', 'objective','feasible']
+        
     for method in methods:
         
         with open ('./master_log/'+method+'_inp.csv','w') as fin:
@@ -94,17 +96,19 @@ if __name__ == '__main__':
     if len(sys.argv) < 3:
         raise Exception ("NO input file after -i is passed, try --> python fuse.py -i FUSE_INPUT ")
     else:
-        print ("""---------------------------------------------------------------
-    The input file \"%s\" is passed"
-    #---------------------------------------------------------------"""%(sys.argv[2]))
+        print ("--------------------------------------------------------------- ")
+        print ("The input file {} is passed".format(sys.argv[2]))
+        print ("--------------------------------------------------------------- ")
     input_file_path=sys.argv[2]
     
     # Uncomment these if you work directly from IDE (e.g. spyder)!!!!
     
     print("--debug: All modules are imported sucessfully")
+    print ("--------------------------------------------------------------- ")
     #input_file_path='test'    
     
     parser=InputParser(input_file_path)
+    parser.blocks()
     paramdict=InputParam()
     inp=InputChecker(parser,paramdict)
     inp.setup_input()
