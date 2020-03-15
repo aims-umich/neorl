@@ -21,7 +21,7 @@ NEORL is a python-based software inspired by the need for a framework that house
 
   *`BWR10x10`: boiling water reactor assembly (BWR) based upon CASMO4 neutronic solver. Burnup is included (Nuclear Engineering).
 
-  *`1/8 PWR`: pressurized water reactor core based upon SIMULATE3 core simulator. Multi-cycle is included. 
+  *`1/4 PWR`: pressurized water reactor core based upon SIMULATE3 core simulator. Multi-cycle is included. 
 
 * **examples**: contains input files used as unit tests:
 
