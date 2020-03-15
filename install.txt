@@ -1,5 +1,28 @@
+#------------------------------
+# 1- Setup Anaconda3 (optional if not already)
 #-----------------------------
-# Prerequisite
+# This step is recommended in big clusters with limited access to have your own python3 
+# if you have full control over the machine machine, move to step 2
+
+wget --no-check-certificate https://repo.continuum.io/archive/Anaconda3-5.2.0-Linux-x86_64.sh
+bash https://repo.continuum.io/archive/Anaconda3-5.2.0-Linux-x86_64.sh
+
+#continue installation steps as instructed
+#close to end of installation allow anaconda to change your PATH to have this python as default python version
+#Otherwise you need to do that manually
+
+#----------------------------
+# 2- Clone neorl 
+#----------------------------
+# first make sure the git command is connected to your github account --> git config --global user.name XXXX and git config --global user.email XXXX
+git clone https://github.com/MajdiRadaideh/neorl.git
+
+# or if you have https failure error
+
+git clone https://username@github.com/MajdiRadaideh/neorl.git
+
+#-----------------------------
+# 3- NEORL Prerequisite
 #-----------------------------
 #Build stable-baselines 
 git clone https://github.com/hill-a/stable-baselines.git
@@ -7,16 +30,16 @@ cd stable-baselines
 python3 setup.py install --user
 
 # others can be installed through 
-pip install -r requirements.txt
+python3 -m pip install -r requirements.txt
 
 #-----------------------------------------
-#Register the enviroments
+# 4- Register the enviroments
 #-----------------------------------------
 # go to envs and run 
 ./install_env.sh
 
 #-----------------------------------------
-Add to your path and create alias
+# 5- Add to your path and create alias (optional)
 #-----------------------------------------
 
 # open your bashrc
