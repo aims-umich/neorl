@@ -33,7 +33,7 @@ class InputParam():
                 
         # DQN Category
         self.dqn_dict={
-        'time_steps': [50000,'r','int'],
+        'time_steps': [50000,'rs','int'],
         'flag': [False, 'o', 'bool'],
         'casename': ['dqn', 'o', 'str'],
         'mode': ['train', 'r', 'str'],
@@ -65,7 +65,7 @@ class InputParam():
         
         # PPO Category
         self.ppo_dict={
-        'time_steps': [50000,'r','int'],
+        'time_steps': [50000,'rs','int'],
         'flag': [False, 'o', 'bool'],
         'casename': ['ppo', 'o', 'str'],
         'mode': ['train', 'r', 'str'],
@@ -91,7 +91,7 @@ class InputParam():
         
         #A2C Category
         self.a2c_dict={
-        'time_steps': [50000,'r','int'],
+        'time_steps': [50000,'rs','int'],
         'flag': [False, 'o', 'bool'],
         'casename': ['a2c', 'o', 'str'],
         'mode': ['train', 'r', 'str'],

@@ -128,23 +128,27 @@ class InputChecker(InputParser):
                 
                 if item == 'model_load_path' and parser['mode'][0] in ['test','continue']: #testing or continue learning without path to pre-trained model
                     raise Exception('--error: the user selected test mode in card {}, but no path to the pre-trained model is provided via model_load_path'.format(card))
-         
+
+                if item == 'time_steps' and parser['mode'][0] in ['train','continue']: #testing or continue learning without path to pre-trained model
+                    raise Exception('--error: the user selected train or continue mode in card {}, but number of time_steps is not defined'.format(card))
+                    
         # check the test 
         if card in ['DQN', 'PPO', 'A2C']:
             if parser['mode'] in ['train']:
                 except_var=[i for i in ['model_load_path', 'n_eval_episodes', 'video_record', 'render', 'fps'] if i in parser.keys()]
                 if len(except_var) > 0:
-                    raise Exception('--error: the following variables {} in card {} are not allowed for training mode'.format(except_var, card))
+                    raise Exception('--error: the following variables {} in card {} are NOT allowed for TRAINING mode'.format(except_var, card))
             
             if parser['mode'] in ['continue']:
                 except_var=[i for i in ['n_eval_episodes', 'video_record', 'render', 'fps'] if i in parser.keys()]
                 if len(except_var) > 0:
-                    raise Exception('--error: the following variables {} in card {} are not allowed for continual mode'.format(except_var, card))
+                    raise Exception('--error: the following variables {} in card {} are NOT allowed for CONTINUAL mode'.format(except_var, card))
 
             if parser['mode'] in ['test']:
-                except_var=[i for i in ['n_eval_episodes', 'video_record', 'render', 'fps'] if i in parser.keys()]
+                test_allowed=['casename', 'mode', 'model_load_path', 'n_eval_episodes', 'video_record', 'render', 'fps']
+                except_var=[i for i in parser.keys() if i not in test_allowed]
                 if len(except_var) > 0:
-                    raise Exception('--error: the following variables {} in card {} are not allowed for continual mode'.format(except_var, card))
+                    raise Exception('--error: the following variables {} in card {} are ONLY allowed for TEST mode'.format(test_allowed, card))
                    
         #check the xsize plot
         if card in ['GENERAL']:

@@ -29,7 +29,6 @@ batch_size=64
 double_q=True
 learning_starts=10
 target_network_update_freq=500
-model_load_path=/home/redo/
 time_steps=30000
 check_freq=1000
 avg_episodes=10
@@ -73,9 +72,6 @@ lr_schedule=constant
 time_steps=50000
 check_freq=1000
 avg_episodes=10
-model_load_path=./a2c_bestmodel.pkl
-render=True
-n_eval_episodes=2
 
 END A2C
 

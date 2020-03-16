@@ -24,12 +24,9 @@ git clone https://username@github.com/MajdiRadaideh/neorl.git
 #-----------------------------
 # 3- NEORL Prerequisite
 #-----------------------------
-#Build stable-baselines 
-git clone https://github.com/hill-a/stable-baselines.git
-cd stable-baselines
-python3 setup.py install --user
+conda install numpy=1.17.4 tensorflow=1.13.0
 
-# others can be installed through 
+conda install --file requirements.txt
 python3 -m pip install -r requirements.txt
 
 #-----------------------------------------
