@@ -17,8 +17,14 @@ from src.parsers.ParamList import InputParam
 from src.utils.multiproc import MultiProc
 
 
-def init_files(methods, nx, ny):
+def init_files(methods, nx, ny, inp_headers, out_headers):
     
+    
+    if len(out_headers) >= 1 and out_headers[0] != 'y':
+        assert ny == len(out_headers), 'number of outputs assigned in ysize ({}) is not equal to ynames ({})'.format(ny, len(out_headers))
+    if len(inp_headers) >= 1 and inp_headers[0] != 'x':
+        assert nx == len(inp_headers), 'number of inputs assigned in xsize_plot ({}) is not equal to xnames ({})'.format(nx, len(inp_headers))
+        
     # check if the log directory exists, move to old and create a new log
     if os.path.exists("./master_log/") and os.path.exists("./old_master_log/"):
         os.system('rm -Rf ./old_master_log/')
@@ -30,15 +36,21 @@ def init_files(methods, nx, ny):
     else:
         os.makedirs('./master_log/')
         
-    
     inp_names=['caseid', 'reward'] 
+    if len(inp_headers) == 1 and inp_headers[0]=='x':
+        [inp_names.append('x'+str(i)) for i in range(1,nx+1)]
+    else:
+        [inp_names.append(i) for i in inp_headers]
+        
+    
     out_names=['caseid', 'reward']
+    if len(out_headers) == 1 and out_headers[0]=='y':
+        [out_names.append('y'+str(i)) for i in range(1,ny+1)]
+    else:
+        [out_names.append(i) for i in out_headers]
     
-    [inp_names.append('x'+str(i)) for i in range(1,nx+1)]
-    [out_names.append('y'+str(i)) for i in range(1,ny+1)]
-    
-    if (1):
-        out_names=['caseid', 'reward', 'PPF', 'delta_h', 'boron', 'exposure', 'objective','feasible']
+    #if (1):
+    #    out_names=['caseid', 'reward', 'PPF', 'delta_h', 'boron', 'exposure', 'objective','feasible']
         
     for method in methods:
         
@@ -112,7 +124,12 @@ if __name__ == '__main__':
     paramdict=InputParam()
     inp=InputChecker(parser,paramdict)
     inp.setup_input()
-    init_files(inp.methods, inp.gen_dict['xsize_plot'][0], inp.gen_dict['ysize'][0])  # Intialize the all loggers
+    init_files(inp.methods, inp.gen_dict['xsize_plot'][0], inp.gen_dict['ysize'][0], inp.gen_dict['xnames'][0], inp.gen_dict['ynames'][0])  # Intialize the all loggers
+
+    print('------------------------------------------------------------------------------')
+    print('--debug: Input check is completed successfully, no major error is found')
+    print('------------------------------------------------------------------------------')
+    print('------------------------------------------------------------------------------')
     
     master=MultiProc(inp)
     master.run_all()

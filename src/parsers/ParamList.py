@@ -28,7 +28,10 @@ class InputParam():
         'nactions': [0,'r', 'int'],
         'xsize':[0,'r','int'],
         'xsize_plot':[0,'o','int'],
-        'ysize':[0,'r','int']
+        'ysize':[0,'r','int'],
+        'ynames':[['y'], 'o', 'strvec'],
+        'xnames':[['x'], 'o', 'strvec'],
+        'plot_mode':['subplot','o','str']
         }
                 
         # DQN Category

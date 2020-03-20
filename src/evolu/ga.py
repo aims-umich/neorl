@@ -18,11 +18,12 @@ from src.parsers.PARSER import InputChecker
 
 class GAAgent(InputChecker):
     
-    def __init__ (self, inp):    
+    def __init__ (self, inp, callback):    
     
         self.inp= inp 
         self.env = gym.make(self.inp.gen_dict['env'][0], casename='ga')
         self.log_dir='./master_log/'+self.inp.ga_dict["casename"][0]
+        self.callback=callback
         
     def build(self):
     
@@ -62,22 +63,26 @@ class GAAgent(InputChecker):
         NGEN=self.inp.ga_dict["ngen"][0]
         for gen in range(NGEN):
             fit_lst=[]
-            #print('gen= ' + str(gen))
             offspring = algorithms.varAnd(population, toolbox, cxpb=self.inp.ga_dict["cxpb"][0], mutpb=self.inp.ga_dict["mutpb"][0])
             fits = toolbox.map(toolbox.evaluate, offspring)
             for fit, ind in zip(fits, offspring):
                 ind.fitness.values = fit
                 fit_lst.append(fit)
             population = toolbox.select(offspring, k=len(population))
-            #best_sol=tools.selBest(population, k=1)
-            #print('Best Solution Generation ' + str(gen) + ':', max(fit_lst))
-            #print(best_sol[0])
             
             out_data=pd.read_csv(self.log_dir+'_out.csv')
             inp_data=pd.read_csv(self.log_dir+'_inp.csv')
             sorted_out=out_data.sort_values(by=['reward'],ascending=False)   
             sorted_inp=inp_data.sort_values(by=['reward'],ascending=False)   
             
+            #------------
+            # plot progress 
+            #------------
+            self.callback.plot_progress()
+            
+            #------------
+            # print summary 
+            #------------
             with open (self.log_dir + '_summary.txt', 'a') as fin:
                 fin.write('*****************************************************\n')
                 fin.write('Summary data for generation {}/{} \n'.format(gen+1, NGEN))

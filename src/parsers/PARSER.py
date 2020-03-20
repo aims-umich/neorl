@@ -112,6 +112,8 @@ class InputChecker(InputParser):
                     parser[item] = float(parser[item])
                 elif paramdict[item][2] == "bool":
                     parser[item] = bool(parser[item])
+                elif paramdict[item][2] == "strvec":
+                    parser[item] = [str(element.strip()) for element in parser[item].split(",")]
             except:
                 print('--error: the data structure for parameter {} in card {} must be {}, but something else is used'.format(item, card, paramdict[item][2]))
                 raise(ValueError)
@@ -250,11 +252,6 @@ class InputChecker(InputParser):
         
         if maxcore_flag:
             assert self.used_cores <= self.max_cores, 'total number of cores assigned by the user ({}) are larger than the maxcores ({})'.format(self.used_cores, self.max_cores)
-            
-        print('------------------------------------------------------------------------------')
-        print('--debug: Input check is completed successfully, no major error is found')
-        print('------------------------------------------------------------------------------')
-        print('------------------------------------------------------------------------------')
                 
         #print(self.dqn_dict)
         #print(self.a2c_dict)

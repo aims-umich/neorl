@@ -5,7 +5,9 @@ Created on Wed Feb 26 09:33:45 2020
 
 @author: majdi
 """
-
+#import os
+#import tensorflow as tf
+#tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 # import input parameters from the user 
 from src.parsers.PARSER import InputChecker
 from src.rl.dqn import DQNAgent
@@ -16,17 +18,19 @@ from src.evolu.ga import GAAgent
 from src.utils.neorlcalls import SavePlotCallback
 from stable_baselines.common.callbacks import BaseCallback
 
+
 class MultiProc (InputChecker):
     
      def __init__ (self, inp):
     
          self.inp=inp
-         
+         #os.environ["KMP_WARNINGS"] = "FALSE"
+         #os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
      
      def dqn_proc(self):
          dqn_callback=SavePlotCallback(check_freq=self.inp.dqn_dict["check_freq"][0], avg_step=self.inp.dqn_dict["avg_episodes"][0], 
-                                       log_dir='./master_log/'+self.inp.dqn_dict["casename"][0], total_timesteps=self.inp.dqn_dict["time_steps"][0], 
-                                       basecall=BaseCallback())
+                                       log_dir='./master_log/'+self.inp.dqn_dict["casename"][0], plot_mode=self.inp.gen_dict["plot_mode"][0],
+                                       total_timesteps=self.inp.dqn_dict["time_steps"][0], basecall=BaseCallback())
          dqn=DQNAgent(self.inp, dqn_callback)
          dqn.build()
          
@@ -34,8 +38,8 @@ class MultiProc (InputChecker):
 
      def ppo_proc(self):
          ppo_callback=SavePlotCallback(check_freq=self.inp.ppo_dict["check_freq"][0], avg_step=self.inp.ppo_dict["avg_episodes"][0], 
-                                       log_dir='./master_log/'+self.inp.ppo_dict["casename"][0], total_timesteps=self.inp.ppo_dict["time_steps"][0], 
-                                       basecall=BaseCallback())
+                                       log_dir='./master_log/'+self.inp.ppo_dict["casename"][0], plot_mode=self.inp.gen_dict["plot_mode"][0],
+                                       total_timesteps=self.inp.ppo_dict["time_steps"][0], basecall=BaseCallback())
          ppo=PPOAgent(self.inp, ppo_callback)
          ppo.build()
          
@@ -43,15 +47,20 @@ class MultiProc (InputChecker):
 
      def a2c_proc(self):
          a2c_callback=SavePlotCallback(check_freq=self.inp.a2c_dict["check_freq"][0], avg_step=self.inp.a2c_dict["avg_episodes"][0], 
-                                       log_dir='./master_log/'+self.inp.a2c_dict["casename"][0], total_timesteps=self.inp.a2c_dict["time_steps"][0], 
-                                       basecall=BaseCallback())
+                                       log_dir='./master_log/'+self.inp.a2c_dict["casename"][0], plot_mode=self.inp.gen_dict["plot_mode"][0],
+                                       total_timesteps=self.inp.a2c_dict["time_steps"][0], basecall=BaseCallback())
          a2c=A2CAgent(self.inp, a2c_callback)
          a2c.build()
          
          return
 
      def ga_proc(self):
-         ga=GAAgent(self.inp)
+         #check_freq is set by default to every generation for GA, so it does not have any effect in the callback 
+         #total_timesteps is set by default to all generations for GA,  so it does not have any effect in the callback 
+         ga_callback=SavePlotCallback(check_freq=self.inp.ga_dict["pop"][0], avg_step=self.inp.ga_dict["pop"][0], 
+                               log_dir='./master_log/'+self.inp.ga_dict["casename"][0], plot_mode=self.inp.gen_dict["plot_mode"][0],
+                               total_timesteps=self.inp.ga_dict["ngen"][0], basecall=BaseCallback())
+         ga=GAAgent(self.inp, ga_callback)
          ga.build()
          
          return
@@ -87,6 +96,8 @@ class MultiProc (InputChecker):
         if self.inp.ga_dict['flag'][0]:
             ga_task.start()
             print('--- GA is running on {cores} core(s)'.format(cores=self.inp.ga_dict["ncores"][0]))
+        
+        print('------------------------------------------------------------------------------')
             
 # if __name__ == '__main__':
 #     inp=InputParam()

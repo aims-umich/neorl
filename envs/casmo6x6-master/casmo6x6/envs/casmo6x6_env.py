@@ -325,15 +325,19 @@ END""".format(bu=bu)
                 
         # Save good patterns 
         if (self.reward > 6000):
+            print('*************************************************************************')
+            print('Reward:', np.round(self.reward,4))
             print('GOOD Pattern:', self.enrichvec)
             print('GOOD Pattern:', self.reward, self.kinf0, self.maxpppf, self.avgenrich)
             self.render() 
+            print('*************************************************************************')
             
         #Print to screen (debugging)
         print('Method:', self.casename)
         print('CaseID:', self.file)
-        print('Reward:', self.reward)
+        print('Reward:', np.round(self.reward,4))
         print('Enrich:', self.enrichvec)
+        print('------------------------------------------------------------------------------')
         
     #*************************************************************
     #*************************************************************

@@ -416,16 +416,20 @@ Num of Gd$_2$O$_3$ rods: {gad_rods}   Avg Gd$_2$O$_3$ enrichment: {avg_gad}""".f
                 
         # Save good patterns 
         if (self.reward > 0):
+            print('*************************************************************************')
+            print('Reward:', np.round(self.reward,4))
             print('GOOD Pattern:', self.uo2vec)
             print('GOOD Pattern:', self.gadvec)
             self.render() 
+            print('*************************************************************************')
             
         #Print to screen (debugging)
         print('Method:', self.casename)
         print('CaseID:', self.file)
-        print('Reward:', self.reward)
+        print('Reward:', np.round(self.reward,4))
         print('UO2:', self.uo2vec)
         print('GAD:', self.gadvec)
+        print('------------------------------------------------------------------------------')
         
         
         
