@@ -84,14 +84,16 @@ def get_string (filename,s1,s2):
 
 class Casmo4Env(gym.Env):
     
-    def __init__ (self, bu=0.0, casename='method', log_dir='./master_log/'):
+    def __init__ (self, casename='method', log_dir='./master_log/', exepath=None):
         
         self.casename=casename
         self.log_dir=log_dir
+        self.exepath=exepath
         # Misc parameters for this assembly case
         self.numlocs=21 #see assembly board
         self.n=6   #6x6 
         self.fueltypes=2  #1.87 and 2.53
+        bu=0 # BOL, no depletion c
         
         self.fileindex=np.random.randint(1,1e6) # to track casmo input/output names
         self.file=self.casename+'_case'+str(self.fileindex)
@@ -286,7 +288,14 @@ END""".format(bu=bu)
         This objective function is special for GA, SA, PSO, and other classical optimistion methods
         It recieves x enrichmet as input and returns objective function as output
         """
-        self.enrichvec=x
+        self.enrichvec=[]
+        for i in range (len(x)):
+            if x[i]==1:
+                self.enrichvec.append(1.87)
+            elif x[i]==2:
+                self.enrichvec.append(2.53)
+            else:
+                raise Exception ("illegal value of input is sampled --> {}".format(x[i]))
         
         self.fileindex=np.random.randint(1,1e6) # to track casmo input/output names
         self.file=self.casename+'_case'+str(self.fileindex)
@@ -426,7 +435,7 @@ END""".format(bu=bu)
         Run CASMO4 Input 
         """
         #subprocess.call(['casmo4e', self.file+'.inp'])
-        os.system('casmo4e '+ self.file+'.inp > tmpout')
+        os.system('{} {}.inp > tmpout'.format(self.exepath, self.file))
         
         """
         Process CASMO4 Output 

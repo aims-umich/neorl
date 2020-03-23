@@ -180,11 +180,12 @@ class SIMULcolEnv3(gym.Env):
   class for gym-wise SIMULATE3 environment
 
   """
-  def __init__ (self, casename='method', log_dir='./master_log/'):#, max_episode = 10, run_number = 12): # --- '12' because of my default initial file
+  def __init__ (self, casename='method', log_dir='./master_log/', exepath=None):#, max_episode = 10, run_number = 12): # --- '12' because of my default initial file
     # -------------------------------------------------------
     # --- Attributs for RL
     self.log_dir=log_dir
     self.casename=casename
+    self.exepath=exepath
     self.numlocs = 16 # --- size of the board to make test on : 4 9 16 25 40
     self.max_episode = 30 # --- tuning parameter
     self.run_number = 12
@@ -785,24 +786,40 @@ class SIMULcolEnv3(gym.Env):
 
     return ([self._get_state_agent_view(),self.current_score, self.done, {}])
 
+  def modify_core(self,x):
+    """
+    Update the core with x being your board state for heuristice method
+    """
+    self.state[0] = x
+    core_temp = copy.deepcopy(self.core)
+    for a in range(len(x)):
+      self.move_quarter(a,x[a])
+    return 0
+  
+  def fit(self,x):
+    """
+    This objective function is special for GA, SA, PSO, and other classical optimistion methods
+    It receives x loading pattern as input and returns objective function as output
+    """
+    #self.fileindex=np.random.randint(1,1e6) # to track casmo input/output names
+    #self.fileheuristic = self.casename  + '_%f'%(self.fileindex)+ "_"+ str(self.counter) 
+    #self.state_file = self.casename + '_%f'%(self.fileindex)+ "_"+ str(self.counter) +".out"
+    self.file = self.casename+str(self.counter) + '.inp'
+    self.state_file = self.casename+str(self.counter) + '.out'
+    # --- Write input file for next calculation
+    self.modify_core(x)
+    self.write_input()
+    # --- Run Simulate:
+    self.runSIMULATE()
+    reward = self._Compute_reward()
+    print(reward)
+    self.monitor()
+    self.clean()
 
-  # def fit(self,x):
-  #   """
-  #   This objective function is special for GA, SA, PSO, and other classical optimistion methods
-  #   It receives x loading pattern as input and returns objective function as output
-  #   """
-  #   self.fileindex=np.random.randint(1,1e6) # to track casmo input/output names
-  #   self.fileheuristic = 'run'+self.casename + "_"+ str(self.counter) + '_%f'%(self.fileindex)
-  #   self.state_file = 'run'+self.casename + "_"+ str(self.counter) + '_%f.out'%(self.fileindex)
-  #   # --- Write input file for next calculation
-  #   self.modify_core()
-  #   self.write_input()
-  #   # --- Run Simulate:
-  #   self.runSIMULATE()
-  #   reward = self._Compute_reward()
-  #   self.monitor(reward)
-  #   self.clean()
-  #   return reward
+    if (1):
+      return reward,
+    else:
+      return reward
 
   # mir: added my majdi to monitor results
   def monitor(self):
@@ -1029,7 +1046,7 @@ class SIMULcolEnv3(gym.Env):
         os.system(runcommand)
     else:
         print('Running case : %s \n'%(input_file))
-        os.system('simulate3 %s > /dev/null 2>&1 \n'%(input_file)) # --- silence all command
+        os.system('%s %s > /dev/null 2>&1 \n'%(self.exepath, input_file)) # --- silence all command
         print("Done....")
         if os.path.isdir(out_file) is None:
             raise RuntimeError('Simulate did not run correctly')

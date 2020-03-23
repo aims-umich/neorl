@@ -5,7 +5,7 @@ Created on Wed Feb 26 09:33:45 2020
 
 @author: majdi
 """
-#import os
+import os
 #import tensorflow as tf
 #tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 # import input parameters from the user 
@@ -15,6 +15,7 @@ from src.rl.ppo2 import PPOAgent
 from src.rl.a2c import A2CAgent
 from multiprocessing import Process
 from src.evolu.ga import GAAgent
+from src.evolu.sa import SAAgent
 from src.utils.neorlcalls import SavePlotCallback
 from stable_baselines.common.callbacks import BaseCallback
 
@@ -24,7 +25,7 @@ class MultiProc (InputChecker):
      def __init__ (self, inp):
     
          self.inp=inp
-         #os.environ["KMP_WARNINGS"] = "FALSE"
+         os.environ["KMP_WARNINGS"] = "FALSE"
          #os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
      
      def dqn_proc(self):
@@ -64,6 +65,17 @@ class MultiProc (InputChecker):
          ga.build()
          
          return
+     
+     def sa_proc(self):
+         #avg_step is set by default to every check_freq, so it does not have any effect in the callback 
+         #total_timesteps is set by default to all generations for SA,  so it does not have any effect in the callback 
+         sa_callback=SavePlotCallback(check_freq=self.inp.sa_dict["check_freq"][0], avg_step=self.inp.sa_dict["check_freq"][0], 
+                               log_dir='./master_log/'+self.inp.sa_dict["casename"][0], plot_mode=self.inp.gen_dict["plot_mode"][0],
+                               total_timesteps=self.inp.sa_dict["steps"][0], basecall=BaseCallback())
+         sa=SAAgent(self.inp, sa_callback)
+         sa.build()
+         
+         return
 
      def run_all(self):
         
@@ -79,7 +91,10 @@ class MultiProc (InputChecker):
             
         if self.inp.ga_dict['flag'][0]:
             ga_task = Process(name='ga', target=self.ga_proc)   
-        
+
+        if self.inp.sa_dict['flag'][0]:
+            sa_task = Process(name='sa', target=self.sa_proc)
+            
         # start running processes
         if self.inp.dqn_dict['flag'][0]:
             dqn_task.start()
@@ -96,6 +111,10 @@ class MultiProc (InputChecker):
         if self.inp.ga_dict['flag'][0]:
             ga_task.start()
             print('--- GA is running on {cores} core(s)'.format(cores=self.inp.ga_dict["ncores"][0]))
+            
+        if self.inp.sa_dict['flag'][0]:
+            sa_task.start()
+            print('--- SA is running on {cores} core(s)'.format(cores=self.inp.sa_dict["ncores"][0]))
         
         print('------------------------------------------------------------------------------')
             

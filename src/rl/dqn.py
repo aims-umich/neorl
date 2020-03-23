@@ -31,7 +31,7 @@ class DQNAgent(InputChecker):
         self.inp=inp    
         self.callback=callback 
         self.mode=self.inp.dqn_dict['mode'][0]
-        self.env = gym.make(self.inp.gen_dict['env'][0], casename=self.inp.dqn_dict['casename'][0])
+        self.env = gym.make(self.inp.gen_dict['env'][0], casename=self.inp.dqn_dict['casename'][0], exepath=self.inp.gen_dict['exepath'][0])
         
     def build (self):
         

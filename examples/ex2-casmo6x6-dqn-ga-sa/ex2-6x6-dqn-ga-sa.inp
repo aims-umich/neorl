@@ -1,0 +1,116 @@
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#                                 NEORL Example 2 
+# Description: 6x6 BWR assembly without depletion, solved by classical and RL optimization
+# Uploader: Majdi I. Radaideh 
+# Date: 03/22/2020
+# External Modules: CASMO4
+# Methods: DQN (1 core), GA (1 core), SA (1 core)
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#------------------------------------------------------------------------------
+# General Card
+# env: enviroment name, exepath: this is the full path to casmo4 binary
+# nactions: 2 enrichment types to pick from (1= 1.87wt% and 2= 2.53 wt%)
+# xsize: number of rod positions in the assembly (21) or the size of input space
+# xsize_plot: this is for csv logging only, since each position could
+#             have only UO2 enrichment, then xsize_plot=xsize
+# ysize: refers to the output/responses to be monitored for each pattern. 
+# ynames: the names/headers of the outputs in the csv loggers. 
+# neorl_mode: this is for development purposes to check the input parser without executing 
+#              methods. It is by default set to neorl_mode=run. The user can use test mode
+#			  to check the syntax before running algorathims. 
+#------------------------------------------------------------------------------
+
+READ GENERAL
+
+#neorl_mode=test 
+env= casmo6x6:casmo6x6-v0
+#if only exe name is given, neorl tries to use which to infer absolute path (which is more recommended)                                 
+exepath= casmo4e
+# enter -1 for maxcores if you want neorl to infer it via cpu_count      
+maxcores= 32                       
+nactions = 2
+xsize = 21
+xsize_plot = 21
+ysize = 3
+ynames= kinf, Enrichment, PPF
+
+END GENERAL
+
+#------------------------------------------------------------------------------
+#casname: used as prefix to distinguish each method results
+#time_steps to train the model
+#mode is either train, continue, or test
+#check_freq is how many time steps to wait before updating master_log
+#avg_episodes is how many episodes to average into single point (also known as epoch)
+#------------------------------------------------------------------------------
+
+READ DQN 
+
+casename=dqn
+mode=train
+time_steps=30000
+ncores=1
+# Parameters for logging,
+check_freq=1000
+avg_episodes=40
+#Hyperparameters for DQN 
+gamma=0.95
+learning_rate=1e-3
+exploration_fraction=0.1
+exploration_initial_eps=1.0
+exploration_final_eps=0.04
+train_freq=1
+batch_size=64
+double_q=True
+learning_starts=10
+target_network_update_freq=500
+
+END DQN 
+
+#------------------------------------------------------------------------------
+#pop, ngen: number of population per generation, and total number of generations,
+#			total number of runs = pop * ngen
+#mode: assign (for Casmo4/assembly problems) and shuffle (for simulate3/core problems)
+#lbound, ubound = lower/upper bound for each input position, 
+#			    1 is lbound (1.87wt%) and 2 is ubound (2.53 wt%) for all 21 positions
+#indpb: Independent probability for each attribute to be exchanged to another position
+#cxpb: crossover probability 
+#mutpb: mutation probability
+#------------------------------------------------------------------------------
+
+READ GA
+
+casename=ga
+mode=assign
+pop=25
+ngen=40
+lbound=1
+ubound=2
+indpb=0.05
+cxpb=0.5
+mutpb=0.2 
+
+END GA
+
+#------------------------------------------------------------------------------
+#steps: number of annealing steps and it equals to total number of runs
+#swap: type of input swap --> singleswap, dualswap, quadswap, fullswap
+#lbound, ubound = lower/upper bound for each input position, 
+#			    1 is lbound (1.87wt%) and 2 is ubound (2.53 wt%) for all 21 positions
+#Tmin/Tmax: minimum/maximum temperature for the annealing process
+#check_freq: number of annealing steps to wait and average before updating master_log
+#------------------------------------------------------------------------------
+
+READ SA
+
+casename=sa
+steps=1000
+swap=quadswap
+lbound=1
+ubound=2
+check_freq=50 
+Tmin=1
+Tmax=5000
+
+END SA

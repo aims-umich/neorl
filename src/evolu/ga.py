@@ -21,16 +21,20 @@ class GAAgent(InputChecker):
     def __init__ (self, inp, callback):    
     
         self.inp= inp 
-        self.env = gym.make(self.inp.gen_dict['env'][0], casename='ga')
+        self.env = gym.make(self.inp.gen_dict['env'][0], casename='ga', exepath=self.inp.gen_dict['exepath'][0])
         self.log_dir='./master_log/'+self.inp.ga_dict["casename"][0]
         self.callback=callback
         
+        
     def build(self):
     
+        self.lbound=self.inp.ga_dict['lbound'][0]
+        self.ubound=self.inp.ga_dict['ubound'][0]
+        
         creator.create("FitnessMax", base.Fitness, weights=(1.0,))
         creator.create("Individual", list, fitness=creator.FitnessMax)
-        
         toolbox = base.Toolbox()
+        
         
         #-----------------------------
     #        functions = []
@@ -46,16 +50,22 @@ class GAAgent(InputChecker):
         #ncores=8
         #pool = multiprocessing.Pool(ncores)
         #toolbox.register("map", pool.map)
+        self.env.reset()
         
-        toolbox.register("attr_bool", random.randint, 1, self.inp.gen_dict["nactions"][0])
-        # Structure initializers
-        toolbox.register("individual", tools.initRepeat, creator.Individual, 
-            toolbox.attr_bool, self.inp.gen_dict["xsize"][0])
+        if self.inp.ga_dict["mode"][0] == 'shuffle': #for simulate3
+            toolbox.register("indices", random.sample, range(self.inp.gen_dict["nactions"][0]), self.inp.gen_dict["nactions"][0])
+            toolbox.register("individual", tools.initIterate, creator.Individual, toolbox.indices)
+        elif self.inp.ga_dict["mode"][0] == 'assign': #for casmo4
+            toolbox.register("attr_int", random.randint, self.lbound, self.ubound)        
+            toolbox.register("individual", tools.initRepeat, creator.Individual, toolbox.attr_int, self.inp.gen_dict["xsize"][0])
+        else:
+            raise Exception ('the GA mode is not supported')
+        
         toolbox.register("population", tools.initRepeat, list, toolbox.individual)
         
         toolbox.register("evaluate", self.env.fit)
         toolbox.register("mate", tools.cxTwoPoint)
-        toolbox.register("mutate", tools.mutFlipBit, indpb=self.inp.ga_dict["indpb"][0])
+        toolbox.register("mutate", tools.mutShuffleIndexes, indpb=self.inp.ga_dict["indpb"][0])
         toolbox.register("select", tools.selTournament, tournsize=3)
         
         population = toolbox.population(n=self.inp.ga_dict["pop"][0])

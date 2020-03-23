@@ -131,8 +131,16 @@ if __name__ == '__main__':
     print('------------------------------------------------------------------------------')
     print('------------------------------------------------------------------------------')
     
-    master=MultiProc(inp)
-    master.run_all()
+    if inp.gen_dict['neorl_mode'][0] == 'run':
+        master=MultiProc(inp)
+        master.run_all()
+    elif inp.gen_dict['neorl_mode'][0] == 'test':
+        print('neorl_mode is set to check input only, the input has no errors')
+    else:
+        raise Exception ('neorl_mode is either check or run, the one given by the user is not defined')
+        
+        
+        
 
 
 

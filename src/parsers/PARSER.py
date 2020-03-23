@@ -1,7 +1,8 @@
 """
 This class parses the master input file provided by the user
 """ 
-import psutil
+import psutil, os, subprocess
+import numpy as np
 
 class InputParser():
     def __init__(self, input_file_path):
@@ -14,6 +15,7 @@ class InputParser():
         self.ga_flag=False
         self.a2c_flag=False
         self.ppo_flag=False
+        self.sa_flag=False
         
         
         #input blocks 
@@ -22,6 +24,7 @@ class InputParser():
         self.ppo_block={}
         self.a2c_block={}
         self.ga_block={}
+        self.sa_block={}
         
         with open(input_file_path) as input_file_text:
             self.input_file = [parameter.replace("\n","").strip() for parameter in input_file_text.readlines() if not parameter.isspace() or parameter[0] != "%"]
@@ -75,6 +78,11 @@ class InputParser():
             print ('--debug: GA block is identified')
             self.ga_block=self.parse_card("GA")
             self.ga_flag=True
+
+        if ("READ SA" in self.input_file and "END SA" in self.input_file):
+            print ('--debug: SA block is identified')
+            self.sa_block=self.parse_card("SA")
+            self.sa_flag=True
         
         return
 
@@ -93,6 +101,7 @@ class InputChecker(InputParser):
         self.a2c_dict=self.paramdict.a2c_dict
         self.ppo_dict=self.paramdict.ppo_dict
         self.ga_dict=self.paramdict.ga_dict
+        self.sa_dict=self.paramdict.sa_dict
         
                     
     def check_input (self, parser, paramdict, card):
@@ -114,6 +123,8 @@ class InputChecker(InputParser):
                     parser[item] = bool(parser[item])
                 elif paramdict[item][2] == "strvec":
                     parser[item] = [str(element.strip()) for element in parser[item].split(",")]
+                elif paramdict[item][2] == "vec":
+                    parser[item] = np.array([float(element.strip()) for element in parser[item].split(",")])
             except:
                 print('--error: the data structure for parameter {} in card {} must be {}, but something else is used'.format(item, card, paramdict[item][2]))
                 raise(ValueError)
@@ -152,16 +163,26 @@ class InputChecker(InputParser):
                 if len(except_var) > 0:
                     raise Exception('--error: the following variables {} in card {} are ONLY allowed for TEST mode'.format(test_allowed, card))
                    
-        #check the xsize plot
+        #check conditions in genral card
         if card in ['GENERAL']:
             if "xsize_plot" not in parser.keys():
                 parser['xsize_plot'] = parser['xsize']
                 print ('--warning: xsize_plot is set to equal to xsize ---> {}'.format(parser['xsize_plot']))
-               
-               
-                    
-                
             
+            if "exepath" in parser.keys():
+                
+                print ('--debug: checking the exepath')
+                execheck=os.system('which {}'.format(parser['exepath']))
+                if os.path.exists(parser['exepath']):
+                    print('--debug: User provided absolute directory and the binary file reported in {} exists'.format(parser['exepath']))
+                elif (execheck==0):
+                    exeinfer=subprocess.check_output(['which', str(parser['exepath'])])
+                    parser['exepath']=exeinfer.decode('utf-8').strip()
+                    print('--debug: neorl tried to infer the exepath via which and found {}'.format(parser['exepath']))
+                else:
+                    raise Exception ('--error: The binary file reported in {} cannot be found'.format(parser['exepath']))
+                    
+                    
     def setup_input(self):
         
         # check the strucutre and syntax first, then overwrite the default dictionary in paramdict.
@@ -249,6 +270,15 @@ class InputChecker(InputParser):
             
             self.methods.append(self.ga_dict['casename'][0])
             self.used_cores += self.ga_dict["ncores"][0]
+            
+        if self.parser.sa_flag:
+            self.check_input(self.parser.sa_block,self.sa_dict, 'SA')
+            self.sa_dict['flag'][0] = True
+            for item in self.parser.sa_block:
+                self.sa_dict[item][0] = self.parser.sa_block[item]
+            
+            self.methods.append(self.sa_dict['casename'][0])
+            self.used_cores += self.sa_dict["ncores"][0]            
         
         if maxcore_flag:
             assert self.used_cores <= self.max_cores, 'total number of cores assigned by the user ({}) are larger than the maxcores ({})'.format(self.used_cores, self.max_cores)

@@ -46,7 +46,7 @@ class PPOAgent(InputChecker):
         :param rank: (int) index of the subprocess
         """
         def _init():
-            env = gym.make(env_id, casename=self.inp.ppo_dict['casename'][0])
+            env = gym.make(env_id, casename=self.inp.ppo_dict['casename'][0], exepath=self.inp.gen_dict['exepath'][0])
             env.seed(seed + rank)
             return env
         set_global_seeds(seed)
@@ -60,7 +60,7 @@ class PPOAgent(InputChecker):
         if self.inp.ppo_dict['ncores'][0] > 1:
             self.env = SubprocVecEnv([self.make_env(self.inp.gen_dict['env'][0], i) for i in range(self.inp.ppo_dict['ncores'][0])])
         else:
-            self.env = gym.make(self.inp.gen_dict['env'][0], casename=self.inp.ppo_dict['casename'][0])
+            self.env = gym.make(self.inp.gen_dict['env'][0], casename=self.inp.ppo_dict['casename'][0], exepath=self.inp.gen_dict['exepath'][0])
         
         #print('majdi')
         if self.mode == 'train':

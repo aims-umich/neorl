@@ -103,8 +103,9 @@ class SavePlotCallback(BaseCallback):
         cum_aves=[np.mean(data[i:i+N]) for i in range(0,len(data),N)]
         cum_std=[np.std(data[i:i+N]) for i in range(0,len(data),N)]
         cum_max=[np.max(data[i:i+N]) for i in range(0,len(data),N)]
+        cum_min=[np.min(data[i:i+N]) for i in range(0,len(data),N)]
     
-        return cum_aves, cum_std, cum_max
+        return cum_aves, cum_std, cum_max, cum_min
     
     
     def plot_progress(self):
@@ -173,7 +174,7 @@ class SavePlotCallback(BaseCallback):
             color_index=0
             for i in range (ny): #exclude caseid from plot, which is the first column 
                 plt.subplot(xx[i][0], xx[i][1], xx[i][2])
-                ravg, rstd, rmax=self.calc_cumavg(plot_data.iloc[:,i],self.avg_step)
+                ravg, rstd, rmax, rmin=self.calc_cumavg(plot_data.iloc[:,i],self.avg_step)
                 epochs=np.array(range(1,len(ravg)+1),dtype=int)
                 plt.plot(epochs,ravg,'-o', c=color_list[color_index], label='Average per epoch')
                 
@@ -181,6 +182,9 @@ class SavePlotCallback(BaseCallback):
                 alpha=0.2, edgecolor=color_list[color_index], facecolor=color_list[color_index], label=r'$1-\sigma$ per epoch')
                 
                 plt.plot(epochs,rmax,'-s', c='k', label='Max per epoch')
+                
+                plt.plot(epochs,rmax,'-s', c='k', label='Max per epoch')
+                plt.plot(epochs,rmin,'-.d', c='k', label='Min per epoch')
                 #plt.axhline(y=6000, color='k', linestyle='--', label='Desired reward (top 0.1%)')
                 plt.legend()
                 plt.xlabel('Epoch')

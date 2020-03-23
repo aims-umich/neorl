@@ -1,11 +1,29 @@
-# test input for neorl
-# simulate3 core case 
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#                                 NEORL Example 3 
+# Description: PWR core optimisation with depletion, solved by DQN
+# Uploader: Majdi I. Radaideh 
+# Date: 03/22/2020
+# External Modules: SIMULATE3, liball.lib, restart_files (2Deq.inp, refsimb4c_10.res)
+# Methods: DQN (1 core)
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#------------------------------------------------------------------------------
+# General Card
+# env: enviroment name, exepath: this is the full path to casmo4 binary
+# nactions: number of possible assembly positions to swap 
+# xsize: since this is a shuffling problem, then nactions=xsize 
+# xsize_plot: this is for csv logging only, since each assembly position 
+#             is represented by one property, then xsize_plot=xsize
+# ysize: refers to the output/responses to be monitored for each pattern. 
+# ynames: the names/headers of the outputs in the csv loggers.  
+#------------------------------------------------------------------------------ 
 
 READ GENERAL
 
 # Leave as is 
-env= simulate3pwr:simulate3pwr-v0                  
-exepath= /home/jane/pkgs/simulate3/bin      
+env= simulate3pwr:simulate3pwr-v0  
+#if only exe name is given, neorl tries to use which to infer absolute path (which is more recommended)                               
+exepath= simulate3      
 maxcores= 16 
 # The following THREE parameters should be changed if you changed the size of the core from 17, 32, etc.
 # Paul mentioned starting with 17 assemblies is ok                       
@@ -14,6 +32,7 @@ xsize = 17
 xsize_plot = 17
 # Leave as is
 ysize = 6
+ynames= PPF, delta_h, Boron, Exposure, Objective, Feasiblity
 
 END GENERAL
 
@@ -61,3 +80,19 @@ check_freq=1500
 avg_episodes=40
 
 END DQN 
+
+#------------------------------------------------------------------------------
+#This is not working now
+#------------------------------------------------------------------------------
+#READ GA 
+
+#casename=ga
+#mode= shuffle 
+#indpb=0.05 
+#cxpb=0.5 
+#mutpb=0.2 
+#pop=25 
+#ngen=300
+
+#END GA
+#------------------------------------------------------------------------------
