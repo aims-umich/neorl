@@ -30,24 +30,21 @@ This toolset is a fork of OpenAI Baselines, with a major structural refactoring,
 - Additional algorithms: SAC and TD3 (+ HER support for DQN, DDPG, SAC and TD3)
 
 
-| **Features**                | **Stable-Baselines**              | **OpenAI Baselines**              |
-| --------------------------- | --------------------------------- | --------------------------------- |
-| State of the art RL methods | :heavy_check_mark: <sup>(1)</sup> | :heavy_check_mark:                |
-| Documentation               | :heavy_check_mark:                | :x:                               |
-| Custom environments         | :heavy_check_mark:                | :heavy_check_mark:                |
-| Custom policies             | :heavy_check_mark:                | :heavy_minus_sign: <sup>(2)</sup> |
-| Common interface            | :heavy_check_mark:                | :heavy_minus_sign: <sup>(3)</sup> |
-| Tensorboard support         | :heavy_check_mark:                | :heavy_minus_sign: <sup>(4)</sup> |
-| Ipython / Notebook friendly | :heavy_check_mark:                | :x:                               |
-| PEP8 code style             | :heavy_check_mark:                | :heavy_check_mark: <sup>(5)</sup> |
-| Custom callback             | :heavy_check_mark:                | :heavy_minus_sign: <sup>(6)</sup> |
-
-<sup><sup>(1): Forked from previous version of OpenAI baselines, with now SAC and TD3 in addition</sup></sup><br>
-<sup><sup>(2): Currently not available for DDPG, and only from the run script. </sup></sup><br>
-<sup><sup>(3): Only via the run script.</sup></sup><br>
-<sup><sup>(4): Rudimentary logging of training information (no loss nor graph). </sup></sup><br>
-<sup><sup>(5): EDIT: you did it OpenAI! :cat:</sup></sup><br>
-<sup><sup>(6): Passing a callback function is only available for DQN</sup></sup><br>
+| **Features**                             | **NEORL**                         
+| -----------------------------------------| ----------------------------------- 
+| Reinforcement Learning (standalone)      | :heavy_check_mark: <sup>(1)</sup> |
+| Evolutionary Computation (standalone)    | :heavy_check_mark:                |
+| Hybrid Neuroevolution                    | :heavy_check_mark:                |
+| Supervised Learning                      | :x:                               |
+| Hybrid Neuroevolution                    | :heavy_check_mark:                | 
+| Custom fitness function                  | :heavy_check_mark:                |
+| Parallel processing                      | :heavy_check_mark:                |
+| Common interface                         | :heavy_check_mark:                |
+| Ipython / Notebook friendly              | :heavy_check_mark:                |
+| Documentation                            | :x:                               |
+| Advanced logging                         | :heavy_check_mark:                |
+| Advanced plotters                        | :heavy_check_mark:                |
+| Optimisation Benchmarks                  | :heavy_check_mark:                |
 
 ## Documentation
 
