@@ -6,12 +6,17 @@
 
 NEORL (**N**euro**E**volution **O**ptimsiation with **R**einforcement **L**earning) is a set of implementations of hybrid algorathims combining neural networks and evolutionary computation based on a wide range of machine learning and evolutionary intellgence archtectures. NEORL aims to solve large-scale optimasation problems relevant to operation & optimsiation research, engineering, bussiness, and other disciplins. 
 
-[//]: <> (industrial  OpenAI [Baselines](https://github.com/openai/baselines/).)
-
 You can read a detailed presentation of Stable Baselines in the [Medium article](https://medium.com/@araffin/stable-baselines-a-fork-of-openai-baselines-reinforcement-learning-made-easy-df87c4b2fc82).
 
-
 These algorithms will make it easier for the research community and industry to replicate, refine, and identify new ideas, and will create good baselines to build projects on top of. We expect these tools will be used as a base around which new ideas can be added, and as a tool for comparing a new approach against existing ones. We also hope that the simplicity of these tools will allow beginners to experiment with a more advanced toolset, without being buried in implementation details.
+
+## Copyright
+
+<img src="neorl_utils/copyright.png" align="right" width="40%"/>
+
+This repository and its content are copyright of [Exelon Corporation](https://www.exeloncorp.com/) © in collaboration with [MIT](https://web.mit.edu/nse/) Nuclear Science and Engineering 2021. All rights reserved.
+
+You can read a detailed presentation of Stable Baselines in the [Medium article](https://medium.com/@araffin/stable-baselines-a-fork-of-openai-baselines-reinforcement-learning-made-easy-df87c4b2fc82).
 
 **Note: despite its simplicity of use, Stable Baselines (SB) assumes you have some knowledge about Reinforcement Learning (RL).** You should not utilize this library without some practice. To that extent, we provide good resources in the [documentation](https://stable-baselines.readthedocs.io/en/master/guide/rl.html) to get started with RL.
 
@@ -47,13 +52,6 @@ This toolset is a fork of OpenAI Baselines, with a major structural refactoring,
 ## Documentation
 
 Documentation is available online: [https://stable-baselines.readthedocs.io/](https://stable-baselines.readthedocs.io/)
-
-## Copyright
-
-<img src="neorl_utils/copyright.png" align="right" width="40%"/>
-
-This repository and its content are copyright of [Exelon Corporation](https://www.exeloncorp.com/) © in collaboration with [MIT](https://web.mit.edu/nse/) Nuclear Science and Engineering 2021. All rights reserved.
-
 
 It also provides basic scripts for training, evaluating agents, tuning hyperparameters and recording videos.
 
