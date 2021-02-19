@@ -10,15 +10,15 @@ You can read a detailed presentation of Stable Baselines in the [Medium article]
 
 These algorithms will make it easier for the research community and industry to replicate, refine, and identify new ideas, and will create good baselines to build projects on top of. We expect these tools will be used as a base around which new ideas can be added, and as a tool for comparing a new approach against existing ones. We also hope that the simplicity of these tools will allow beginners to experiment with a more advanced toolset, without being buried in implementation details.
 
+**Note: despite its simplicity of use, Stable Baselines (SB) assumes you have some knowledge about Reinforcement Learning (RL).** You should not utilize this library without some practice. To that extent, we provide good resources in the [documentation](https://stable-baselines.readthedocs.io/en/master/guide/rl.html) to get started with RL.
+
 ## Copyright
 
 <img src="neorl_utils/copyright.png" align="right" width="40%"/>
 
 This repository and its content are copyright of [Exelon Corporation](https://www.exeloncorp.com/) © in collaboration with [MIT](https://web.mit.edu/nse/) Nuclear Science and Engineering 2021. All rights reserved.
 
-You can read a detailed presentation of Stable Baselines in the [Medium article](https://medium.com/@araffin/stable-baselines-a-fork-of-openai-baselines-reinforcement-learning-made-easy-df87c4b2fc82).
-
-**Note: despite its simplicity of use, Stable Baselines (SB) assumes you have some knowledge about Reinforcement Learning (RL).** You should not utilize this library without some practice. To that extent, we provide good resources in the [documentation](https://stable-baselines.readthedocs.io/en/master/guide/rl.html) to get started with RL.
+You can read the first successful application of NEORL for nuclear fuel optimisation in this [News article](https://news.mit.edu/2020/want-cheaper-nuclear-energy-turn-design-process-game-1217).
 
 ## Main differences with OpenAI Baselines
 
