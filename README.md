@@ -10,8 +10,6 @@ You can read a detailed presentation of Stable Baselines in the [Medium article]
 
 These algorithms will make it easier for the research community and industry to replicate, refine, and identify new ideas, and will create good baselines to build projects on top of. We expect these tools will be used as a base around which new ideas can be added, and as a tool for comparing a new approach against existing ones. We also hope that the simplicity of these tools will allow beginners to experiment with a more advanced toolset, without being buried in implementation details.
 
-**Note: despite its simplicity of use, Stable Baselines (SB) assumes you have some knowledge about Reinforcement Learning (RL).** You should not utilize this library without some practice. To that extent, we provide good resources in the [documentation](https://stable-baselines.readthedocs.io/en/master/guide/rl.html) to get started with RL.
-
 ## Copyright
 
 <img src="neorl_utils/copyright.png" align="right" width="40%"/>
@@ -32,14 +30,12 @@ This toolset is a fork of OpenAI Baselines, with a major structural refactoring,
 
 | **Features**                             | **NEORL**                         
 | -----------------------------------------| ----------------------------------- 
-| Reinforcement Learning (standalone)      | :heavy_check_mark: <sup>(1)</sup> |
+| Reinforcement Learning (standalone)      | :heavy_check_mark:                |
 | Evolutionary Computation (standalone)    | :heavy_check_mark:                |
 | Hybrid Neuroevolution                    | :heavy_check_mark:                |
 | Supervised Learning                      | :x:                               |
-| Hybrid Neuroevolution                    | :heavy_check_mark:                | 
-| Custom fitness function                  | :heavy_check_mark:                |
 | Parallel processing                      | :heavy_check_mark:                |
-| Common interface                         | :heavy_check_mark:                |
+| Custom fitness function                  | :heavy_check_mark:                |
 | Ipython / Notebook friendly              | :heavy_check_mark:                |
 | Documentation                            | :x:                               |
 | Advanced logging                         | :heavy_check_mark:                |
@@ -50,22 +46,13 @@ This toolset is a fork of OpenAI Baselines, with a major structural refactoring,
 
 Documentation is available online: [https://stable-baselines.readthedocs.io/](https://stable-baselines.readthedocs.io/)
 
-It also provides basic scripts for training, evaluating agents, tuning hyperparameters and recording videos.
+### Knowledge Prerequisites
 
-Goals of this repository:
-
-1. Provide a simple interface to train and enjoy RL agents
-2. Benchmark the different Reinforcement Learning algorithms
-3. Provide tuned hyperparameters for each environment and RL algorithm
-4. Have fun with the trained agents!
-
-Github repo: https://github.com/araffin/rl-baselines-zoo
-
-Documentation: https://stable-baselines.readthedocs.io/en/master/guide/rl_zoo.html
+**Note: despite the simplicity of NEORL usage, most algorathims, especially the neuro-based, need some basic knowledge about the optimisation research and neural networks in supervised and reinforcement learning**. Using NEORL without sufficient knowledge may lead to undesirable results due to the poor selection of algorathims hyperparameters. You should not utilize this package without some knowledge. 
 
 ## Installation
 
-**Note:** Stable-Baselines supports Tensorflow versions from 1.8.0 to 1.14.0. Support for Tensorflow 2 API is planned.
+**Note:** NEORL supports Tensorflow versions from 1.8.0 to 1.14.0. Please, make sure to have the proper TensorFlow installed on your machine.
 
 ### Prerequisites
 Baselines requires python3 (>=3.5) with the development headers. You'll also need system packages CMake, OpenMPI and zlib. Those can be installed as follows
