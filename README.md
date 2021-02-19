@@ -48,9 +48,12 @@ This toolset is a fork of OpenAI Baselines, with a major structural refactoring,
 
 Documentation is available online: [https://stable-baselines.readthedocs.io/](https://stable-baselines.readthedocs.io/)
 
-## RL Baselines Zoo: A Collection of 100+ Trained RL Agents
+## Copyright
 
-[RL Baselines Zoo](https://github.com/araffin/rl-baselines-zoo). is a collection of pre-trained Reinforcement Learning agents using Stable-Baselines.
+This website and its content are copyright of Exelon Corporation © in collaboration with MIT Nuclear Science and Engineering 2021. All rights reserved.
+
+[Exelon Corporation](https://www.exeloncorp.com/).
+[MIT](https://web.mit.edu/nse/).
 
 It also provides basic scripts for training, evaluating agents, tuning hyperparameters and recording videos.
 
