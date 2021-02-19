@@ -6,7 +6,7 @@
 
 NEORL (**N**euro**E**volution **O**ptimsiation with **R**einforcement **L**earning) is a set of implementations of hybrid algorathims combining neural networks and evolutionary computation based on a wide range of machine learning and evolutionary intellgence archtectures. NEORL aims to solve large-scale optimasation problems relevant to operation & optimsiation research, engineering, bussiness, and other disciplins. 
 
-[comment]: <> industrial  OpenAI [Baselines](https://github.com/openai/baselines/).
+[comment]: <> (industrial  OpenAI [Baselines](https://github.com/openai/baselines/).)
 
 You can read a detailed presentation of Stable Baselines in the [Medium article](https://medium.com/@araffin/stable-baselines-a-fork-of-openai-baselines-reinforcement-learning-made-easy-df87c4b2fc82).
 
