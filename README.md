@@ -50,10 +50,10 @@ Documentation is available online: [https://stable-baselines.readthedocs.io/](ht
 
 ## Copyright
 
-This website and its content are copyright of Exelon Corporation © in collaboration with MIT Nuclear Science and Engineering 2021. All rights reserved.
+<img src="neorl_utils/copyright.png" align="right" width="40%"/>
 
-[Exelon Corporation](https://www.exeloncorp.com/).
-[MIT](https://web.mit.edu/nse/).
+This repository and its content are copyright of [Exelon Corporation](https://www.exeloncorp.com/) © in collaboration with [MIT](https://web.mit.edu/nse/) Nuclear Science and Engineering 2021. All rights reserved.
+
 
 It also provides basic scripts for training, evaluating agents, tuning hyperparameters and recording videos.
 
