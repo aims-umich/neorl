@@ -173,9 +173,6 @@ Actions ```gym.spaces```:
  * ```MultiBinary```: A list of possible actions, where each timestep any of the actions can be used in any combination.
 
 
-## MuJoCo
-Some of the baselines examples use [MuJoCo](http://www.mujoco.org) (multi-joint dynamics in contact) physics simulator, which is proprietary and requires binaries and a license (temporary 30-day license can be obtained from [www.mujoco.org](http://www.mujoco.org)). Instructions on setting up MuJoCo can be found [here](https://github.com/openai/mujoco-py)
-
 ## Testing the installation
 All unit tests in baselines can be run using pytest runner:
 ```
@@ -183,10 +180,15 @@ pip install pytest pytest-cov
 make pytest
 ```
 
-## Projects Using Stable-Baselines
+## Projects/Papers Using NEORL
 
-We try to maintain a list of project using stable-baselines in the [documentation](https://stable-baselines.readthedocs.io/en/master/misc/projects.html),
-please tell us when if you want your project to appear on this page ;)
+1-
+
+2- Radaideh, M. I., Shirvan, K. (2021). Rule-based reinforcement learning methodology to inform evolutionary algorithms for constrained optimization of engineering applications. *Knowledge-Based Systems*, **217**, p. 106836.
+
+3-
+
+4-
 
 ## Citing the Project
 
@@ -216,4 +218,4 @@ To any interested in making NEORL better, there is an open undergraduate researc
 
 ## Acknowledgments
 
-NEORL was established in MIT back to 2020 with feedback, validation, and usage of different colleagues: Issac Wolverton (MIT Quest for Intelligence), Joshua Joseph (MIT Quest for Intelligence), Benoit Forget (MIT Nuclear Science and Engineering), Ugi .
+NEORL was established in MIT back to 2020 with feedback, validation, and usage of different colleagues: Issac Wolverton (MIT Quest for Intelligence), Joshua Joseph (MIT Quest for Intelligence), Benoit Forget (MIT Nuclear Science and Engineering), Ugi Ugotonbar.
