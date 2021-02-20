@@ -18,15 +18,7 @@ This repository and its content are copyright of [Exelon Corporation](https://ww
 
 You can read the first successful application of NEORL for nuclear fuel optimisation in this [News article](https://news.mit.edu/2020/want-cheaper-nuclear-energy-turn-design-process-game-1217).
 
-## Main differences with OpenAI Baselines
-
-This toolset is a fork of OpenAI Baselines, with a major structural refactoring, and code cleanups:
-- Unified structure for all algorithms
-- PEP8 compliant (unified code style)
-- Documented functions and classes
-- More tests & more code coverage
-- Additional algorithms: SAC and TD3 (+ HER support for DQN, DDPG, SAC and TD3)
-
+## Basic Features
 
 | **Features**                             | **NEORL**                         
 | -----------------------------------------| ----------------------------------- 
@@ -52,10 +44,10 @@ Documentation is available online: [https://stable-baselines.readthedocs.io/](ht
 
 ## Installation
 
-**Note:** NEORL supports Tensorflow versions from 1.8.0 to 1.14.0. Please, make sure to have the proper TensorFlow installed on your machine.
+**Note:** NEORL supports Tensorflow versions from 1.8.0 to 1.14.0 (Recommended). Please, make sure to have the proper TensorFlow installed on your machine before installing NEORL.
 
 ### Prerequisites
-Baselines requires python3 (>=3.5) with the development headers. You'll also need system packages CMake, OpenMPI and zlib. Those can be installed as follows
+NEORL requires python3 (>=3.5) with the development headers. You'll also need system packages CMake, OpenMPI and zlib. Those can be installed as follows
 
 #### Ubuntu
 
@@ -127,7 +119,7 @@ model = PPO2('MlpPolicy', 'CartPole-v1').learn(10000)
 Please read the [documentation](https://stable-baselines.readthedocs.io/) for more examples.
 
 
-## Try it online with Colab Notebooks !
+## Try NEORL with Colab Notebooks !
 
 All the following examples can be executed online using Google colab notebooks:
 
@@ -200,9 +192,9 @@ To cite this repository in publications:
 
 ```
 @misc{stable-baselines,
-  author = {Hill, Ashley and Raffin, Antonin and Ernestus, Maximilian and Gleave, Adam and Kanervisto, Anssi and Traore, Rene and Dhariwal, Prafulla and Hesse, Christopher and Klimov, Oleg and Nichol, Alex and Plappert, Matthias and Radford, Alec and Schulman, John and Sidor, Szymon and Wu, Yuhuai},
-  title = {Stable Baselines},
-  year = {2018},
+  author = {Radaideh, Majdi I. and Seurin, Paul and Wang, Haijia and Shirvan, Koroush},
+  title = {NEORL},
+  year = {2021},
   publisher = {GitHub},
   journal = {GitHub repository},
   howpublished = {\url{https://github.com/hill-a/stable-baselines}},
