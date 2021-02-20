@@ -205,19 +205,15 @@ To cite this repository in publications:
 
 ## Maintainers
 
-Stable-Baselines is currently maintained by [Ashley Hill](https://github.com/hill-a) (aka @hill-a), [Antonin Raffin](https://araffin.github.io/) (aka [@araffin](https://github.com/araffin)), [Maximilian Ernestus](https://github.com/erniejunior) (aka @erniejunior), [Adam Gleave](https://github.com/adamgleave) (@AdamGleave) and [Anssi Kanervisto](https://github.com/Miffyli) (@Miffyli).
+NEORL is currently maintained by [Majdi Radaideh](https://github.com/hill-a) (aka @hill-a), [Antonin Raffin](https://araffin.github.io/) (aka [@araffin](https://github.com/araffin)), [Maximilian Ernestus](https://github.com/erniejunior) (aka @erniejunior), [Adam Gleave](https://github.com/adamgleave) (@AdamGleave) and [Anssi Kanervisto](https://github.com/Miffyli) (@Miffyli).
 
-**Important Note: We do not do technical support, nor consulting** and don't answer personal questions per email.
+**Important Note: We do not do technical support** and we do not answer personal questions per email.
 
 
 ## How To Contribute
 
-To any interested in making the baselines better, there is still some documentation that needs to be done.
-If you want to contribute, please read **CONTRIBUTING.md** guide first.
-
+To any interested in making NEORL better, there is an open undergraduate research position at MIT, see [Be Part of the Machine Learning-based Neuroevolution Optimization Framework](http://nurop.scripts.mit.edu/UROP/index.php)
 
 ## Acknowledgments
 
-Stable Baselines was created in the [robotics lab U2IS](http://u2is.ensta-paristech.fr/index.php?lang=en) ([INRIA Flowers](https://flowers.inria.fr/) team) at [ENSTA ParisTech](http://www.ensta-paristech.fr/en).
-
-Logo credits: [L.M. Tenkes](https://www.instagram.com/lucillehue/)
+NEORL was established in MIT back to 2020 with feedback, validation, and usage of different colleagues: Issac Wolverton (MIT Quest for Intelligence), Joshua Joseph (MIT Quest for Intelligence), Benoit Forget (MIT Nuclear Science and Engineering), Ugi .
