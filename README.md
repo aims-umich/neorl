@@ -27,9 +27,11 @@ You can read the first successful application of NEORL for nuclear fuel optimisa
 | Hybrid Neuroevolution                    | :heavy_check_mark:                |
 | Supervised Learning                      | :x:                               |
 | Parallel processing                      | :heavy_check_mark:                |
-| Custom fitness function                  | :heavy_check_mark:                |
+| Combinatorial/Discrete Optimisation      | :heavy_check_mark:                |
+| Continuous Optimisation                  | :heavy_check_mark:                |
+| Mixed Discrete/Continuous Optimisation   | :heavy_check_mark:                |
 | Ipython / Notebook friendly              | :heavy_check_mark:                |
-| Documentation                            | :x:                               |
+| Detailed Documentation                   | :x:                               |
 | Advanced logging                         | :heavy_check_mark:                |
 | Advanced plotters                        | :heavy_check_mark:                |
 | Optimisation Benchmarks                  | :heavy_check_mark:                |
