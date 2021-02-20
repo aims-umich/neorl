@@ -182,13 +182,17 @@ make pytest
 
 ## Projects/Papers Using NEORL
 
-1-
+1- Radaideh, M. I., Wolverton, I., Joseph, J., Tusar, J. J., Otgonbaatar, U., Roy, N., ... & Shirvan, K. (2021). Physics-informed reinforcement learning optimization of nuclear assembly design. *Nuclear Engineering and Design*, **372**, p. 110966.
 
 2- Radaideh, M. I., Shirvan, K. (2021). Rule-based reinforcement learning methodology to inform evolutionary algorithms for constrained optimization of engineering applications. *Knowledge-Based Systems*, **217**, p. 106836.
 
 3-
 
 4-
+
+5-
+
+6-
 
 ## Citing the Project
 
