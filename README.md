@@ -89,27 +89,67 @@ Most of the library tries to follow a sklearn-like syntax for the Reinforcement 
 
 Here is a quick example of how to train and run PPO2 on a cartpole environment:
 ```python
-import gym
 
-from stable_baselines.common.policies import MlpPolicy
-from stable_baselines.common.vec_env import DummyVecEnv
-from stable_baselines import PPO2
+#---------------------------------
+# Import packages
+#---------------------------------
+import numpy as np
+import matplotlib.pyplot as plt
+from neorl import DE, XNES
 
-env = gym.make('CartPole-v1')
-# Optional: PPO2 requires a vectorized environment to run
-# the env is now wrapped automatically when passing it to the constructor
-# env = DummyVecEnv([lambda: env])
+#---------------------------------
+# Fitness
+#---------------------------------
+#Define the fitness function
+def FIT(individual):
+    """Sphere test objective function.
+        F(x) = sum_{i=1}^d xi^2
+        d=1,2,3,...
+        Range: [-100,100]
+        Minima: 0
+    """
+    
+    return -sum(x**2 for x in individual)      #-1 is used to convert minimization to maximization
 
-model = PPO2(MlpPolicy, env, verbose=1)
-model.learn(total_timesteps=10000)
+#---------------------------------
+# Parameter Space
+#---------------------------------
+#Setup the parameter space (d=5)
+nx=5
+BOUNDS={}
+for i in range(1,nx+1):
+    BOUNDS['x'+str(i)]=['float', -100, 100]
 
-obs = env.reset()
-for i in range(1000):
-    action, _states = model.predict(obs)
-    obs, rewards, dones, info = env.step(action)
-    env.render()
+#---------------------------------
+# DE
+#---------------------------------
+de=DE(bounds=BOUNDS, fit=FIT, npop=60, mutate=0.5, recombination=0.7, ncores=1, seed=1)
+x_best, y_best, de_hist=de.evolute(ngen=100, verbose=0)
 
-env.close()
+#---------------------------------
+# NES
+#---------------------------------
+
+mu = x0[0]
+amat = np.eye(len(x0[0]))
+eta_bmat=0.04  
+eta_sigma=0.1
+NPOP=40
+xnes = XNES(FIT, mu, amat, npop=NPOP, bounds=BOUNDS, use_adasam=True, eta_bmat=eta_bmat, eta_sigma=eta_sigma, patience=9999, verbose=0, ncores=1)
+x_best, y_best, nes_hist=xnes.evolute(100)
+
+#---------------------------------
+# Plot
+#---------------------------------
+#Plot fitness for both methods
+plt.figure()
+plt.plot(-np.array(de_hist), label='DE')               #multiply by -1 to covert back to a min problem
+plt.plot(-np.array(nes_hist['fitness']), label='NES')  #multiply by -1 to covert back to a min problem
+plt.xlabel('Step')
+plt.ylabel('Fitness')
+plt.legend()
+plt.show()
+plt.show()
 ```
 
 Or just train a model with a one liner if [the environment is registered in Gym](https://github.com/openai/gym/wiki/Environments) and if [the policy is registered](https://stable-baselines.readthedocs.io/en/master/guide/custom_policy.html):
