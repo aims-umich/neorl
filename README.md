@@ -145,16 +145,9 @@ plt.show()
 plt.show()
 ```
 
-Or just train a model with a one liner if [the environment is registered in Gym](https://github.com/openai/gym/wiki/Environments) and if [the policy is registered](https://stable-baselines.readthedocs.io/en/master/guide/custom_policy.html):
-
-```python
-from stable_baselines import PPO2
-
-model = PPO2('MlpPolicy', 'CartPole-v1').learn(10000)
-```
-
+<!---
 Please read the [documentation](https://stable-baselines.readthedocs.io/) for more examples.
-
+--->
 
 ## Enjoy NEORL with Colab Notebooks !
 
