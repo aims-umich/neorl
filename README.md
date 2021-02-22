@@ -183,13 +183,7 @@ make pytest
 
 2- Radaideh, M. I., Shirvan, K. (2021). Rule-based reinforcement learning methodology to inform evolutionary algorithms for constrained optimization of engineering applications. *Knowledge-Based Systems*, **217**, p. 106836.
 
-3-
-
-4-
-
-5-
-
-6-
+3- Radaideh, M.I., Forget, B., Shirvan, K. (2021). Application of Reinforcement Learning Optimisation Methodology to BWR Assemblies ," In: Proc. International Conference on Mathematics & Computational Methods Applied to Nuclear Science & Engineering (M&C 2021), Rayleigh, North Carolina, USA, October 3-7, 2021.
 
 ## Citing the Project
 
