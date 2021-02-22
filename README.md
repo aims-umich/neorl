@@ -85,17 +85,14 @@ Please read the [documentation](https://stable-baselines.readthedocs.io/) for mo
 
 ## Example
 
-Most of the library tries to follow a sklearn-like syntax for the Reinforcement Learning algorithms.
-
-Here is a quick example of how to train and run PPO2 on a cartpole environment:
+Here is a quick example of how to use NEORL to minimize a 5-D sphere function:
 ```python
-
 #---------------------------------
 # Import packages
 #---------------------------------
 import numpy as np
 import matplotlib.pyplot as plt
-from neorl import DE, XNES
+from neopy import DE, XNES
 
 #---------------------------------
 # Fitness
@@ -129,13 +126,9 @@ x_best, y_best, de_hist=de.evolute(ngen=100, verbose=0)
 #---------------------------------
 # NES
 #---------------------------------
-
-mu = x0[0]
-amat = np.eye(len(x0[0]))
-eta_bmat=0.04  
-eta_sigma=0.1
-NPOP=40
-xnes = XNES(FIT, mu, amat, npop=NPOP, bounds=BOUNDS, use_adasam=True, eta_bmat=eta_bmat, eta_sigma=eta_sigma, patience=9999, verbose=0, ncores=1)
+x0=[-50]*len(BOUNDS)
+amat = np.eye(len(x0))
+xnes = XNES(FIT, x0, amat, npop=40, bounds=BOUNDS, use_adasam=True, eta_bmat=0.04, eta_sigma=0.1, patience=9999, verbose=0, ncores=1)
 x_best, y_best, nes_hist=xnes.evolute(100)
 
 #---------------------------------
