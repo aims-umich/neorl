@@ -68,18 +68,14 @@ brew install cmake openmpi
 To install stable-baselines on Windows, please look at the [documentation](https://stable-baselines.readthedocs.io/en/master/guide/install.html#prerequisites).
 
 ### Install using pip
-Install the Stable Baselines package:
+
 ```
-pip install stable-baselines[mpi]
+pip install neorl
 ```
 
-This includes an optional dependency on MPI, enabling algorithms DDPG, GAIL, PPO1 and TRPO. If you do not need these algorithms, you can install without MPI:
-```
-pip install stable-baselines
-```
-
+<!---
 Please read the [documentation](https://stable-baselines.readthedocs.io/) for more details and alternatives (from source, using docker).
-
+--->
 
 ## Example
 
@@ -156,6 +152,8 @@ All the following examples can be executed online using Google colab notebooks:
 
 ## Implemented Algorithms
 
+NEORL offers a wide range of algorithms, where some algorithms could be used with a specific parameter space (e.g. discrete only).
+
 | **Algorithm**       | **Discrete Space** | **Continous Space**| **Mixed Space**    | **Multiprocessing**|   
 | ------------------- | ------------------ | ------------------ | ------------------ | ------------------ |
 | GA                  | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
@@ -169,7 +167,7 @@ All the following examples can be executed online using Google colab notebooks:
 | NES                 | :x:                | :heavy_check_mark: | :x:                | :heavy_check_mark: |
 
 ## Testing the installation
-All unit tests in baselines can be run using pytest runner:
+All unit tests in NEORL can be run using pytest runner:
 ```
 pip install pytest pytest-cov
 make pytest
@@ -188,7 +186,7 @@ make pytest
 To cite this repository in publications:
 
 ```
-@misc{stable-baselines,
+@misc{neorl,
   author = {Radaideh, Majdi I. and Seurin, Paul and Wang, Haijia and Shirvan, Koroush},
   title = {NEORL},
   year = {2021},
@@ -211,4 +209,4 @@ To any interested in making NEORL better, there is an open undergraduate researc
 
 ## Acknowledgments
 
-NEORL was established in MIT back to 2020 with feedback, validation, and usage of different colleagues: Issac Wolverton (MIT Quest for Intelligence), Joshua Joseph (MIT Quest for Intelligence), Benoit Forget (MIT Nuclear Science and Engineering), Ugi Ugotonbar.
+NEORL was established in MIT back to 2020 with feedback, validation, and usage of different colleagues: Issac Wolverton (MIT Quest for Intelligence), Joshua Joseph (MIT Quest for Intelligence), Benoit Forget (MIT Nuclear Science and Engineering), Ugi Otgonbaatar (Exelon Corporation).
