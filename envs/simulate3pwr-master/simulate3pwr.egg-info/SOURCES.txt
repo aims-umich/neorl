@@ -1,6 +1,0 @@
-setup.py
-simulate3pwr.egg-info/PKG-INFO
-simulate3pwr.egg-info/SOURCES.txt
-simulate3pwr.egg-info/dependency_links.txt
-simulate3pwr.egg-info/requires.txt
-simulate3pwr.egg-info/top_level.txt
