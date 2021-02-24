@@ -6,9 +6,9 @@
 
 # NEORL
 
-NEORL (**N**euro**E**volution **O**ptimsiation with **R**einforcement **L**earning) is a set of implementations of hybrid algorathims combining neural networks and evolutionary computation based on a wide range of machine learning and evolutionary intellgence archtectures. NEORL aims to solve large-scale optimasation problems relevant to operation & optimsiation research, engineering, bussiness, and other disciplins. 
+NEORL (**N**euro**E**volution **O**ptimisation with **R**einforcement **L**earning) is a set of implementations of hybrid algorithms combining neural networks and evolutionary computation based on a wide range of machine learning and evolutionary intelligence architectures. NEORL aims to solve large-scale optimisation problems relevant to operation & optimisation research, engineering, business, and other disciplines. 
 
-NEORL can be used for multidisciplinary applications for research, industrial, academic, and/or teaching purposes. NEORL can be used as a standalone platform or an additional benchmarking tool to supplement or validate other optimisation packages. Our objective when we built NEORL is to give the user a simple and easy-to-use framework with an access to a wide range of covering both standalone and hybrid algorathims in evolutionary, swarm, supervised learning, deep learning, and reinforcement learning. We hope our implementation will allow beginners to enjoy more advanced optimisation and algorathims, without being involved in too many theortical/implementation details.
+NEORL can be used for multidisciplinary applications for research, industrial, academic, and/or teaching purposes. NEORL can be used as a standalone platform or an additional benchmarking tool to supplement or validate other optimisation packages. Our objective when we built NEORL is to give the user a simple and easy-to-use framework with an access to a wide range of covering both standalone and hybrid algorithms in evolutionary, swarm, supervised learning, deep learning, and reinforcement learning. We hope our implementation will allow beginners to enjoy more advanced optimisation and algorithms, without being involved in too many theoretical/implementation details.
 
 ## Copyright
 
@@ -16,7 +16,7 @@ NEORL can be used for multidisciplinary applications for research, industrial, a
 
 This repository and its content are copyright of [Exelon Corporation](https://www.exeloncorp.com/) © in collaboration with [MIT](https://web.mit.edu/nse/) Nuclear Science and Engineering 2021. All rights reserved.
 
-You can read the first successful application of NEORL for nuclear fuel optimisation in this [News article](https://news.mit.edu/2020/want-cheaper-nuclear-energy-turn-design-process-game-1217).
+You can read the first successful application of NEORL for nuclear fuel optimisation in this [News Article](https://news.mit.edu/2020/want-cheaper-nuclear-energy-turn-design-process-game-1217).
 
 ## Basic Features
 
@@ -38,7 +38,11 @@ You can read the first successful application of NEORL for nuclear fuel optimisa
 
 ## Documentation
 
+Documentation is coming soon!
+
+<!---
 Documentation is available online: [https://stable-baselines.readthedocs.io/](https://stable-baselines.readthedocs.io/)
+--->
 
 ### Knowledge Prerequisites
 
@@ -51,24 +55,19 @@ Documentation is available online: [https://stable-baselines.readthedocs.io/](ht
 ### Prerequisites
 NEORL requires python3 (>=3.5) with the development headers. You'll also need system packages CMake, OpenMPI and zlib. Those can be installed as follows
 
-#### Ubuntu
+#### Ubuntu Prerequisites
 
 ```bash
-sudo apt-get update && sudo apt-get install cmake libopenmpi-dev python3-dev zlib1g-dev
+sudo apt-get update && sudo apt-get install cmake python3-dev
 ```
 
-#### Mac OS X
-Installation of system packages on Mac requires [Homebrew](https://brew.sh). With Homebrew installed, run the following:
-```bash
-brew install cmake openmpi
-```
+#### Windows Prerequisites
 
-#### Windows 10
-
-To install stable-baselines on Windows, please look at the [documentation](https://stable-baselines.readthedocs.io/en/master/guide/install.html#prerequisites).
+To install NEORL on Windows, it is recommended to install Anaconda3 on the machine first to have some pre-installed packages, then open "Anaconda Prompt" as an administrator and use the instructions below for "Install using pip".
 
 ### Install using pip
 
+For both Ubuntu and Windows, you can install NEORL via pip 
 ```
 pip install neorl
 ```
