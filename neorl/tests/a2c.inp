@@ -1,0 +1,35 @@
+# mir: test for serial PPO 
+
+READ GENERAL
+
+env= testenv:testenv-v0
+maxcores= 32                       
+nactions = 2
+xsize = 21
+xsize_plot = 21
+ysize = 1
+ynames= Enrichment
+
+END GENERAL
+
+READ A2C
+
+casename=a2c
+mode=train
+ncores=1
+time_steps=1000
+#Hyperparameters for PPO
+n_steps=12
+gamma=0.99
+learning_rate=0.0007
+vf_coef=0.25
+ent_coef=0.01
+max_grad_norm=0.5
+alpha=0.99 
+momentum=0.0
+epsilon=1e-05
+# Parameters for logging
+check_freq=2000
+avg_episodes=10
+
+END A2C

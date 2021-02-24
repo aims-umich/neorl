@@ -1,0 +1,77 @@
+***********************
+To install NEORL
+***********************
+
+1- Create a new directory for your project, for example "myproj"
+2- cd into myproj and clone neorl either from github or extract it from a zip file.
+3- cd into "neorl" and type 
+	   chmod u+x easy_install.sh envs/install_env.sh
+4- Then run 
+	./easy_install.sh
+5- The installer starts by a prompt asking you to choose between full or partial mode:
+	full: pick this option if this is your first time installing neorl (recommended)  --> type full then press enter
+	partial: pick this option if you synced new updates on neorl alone, and you don't want to re-install Python (a faster option)  --> type partial then press enter
+
+Notes: After installation you will notice the following:
+
+	-NEORL Python is under: ~/myproj/anaconda3/bin/python3
+	-NEORL is under:  ~/myproj/neorl/neorl.py
+	-Your bashrc is modified by adding two new variables:
+		-NEORLPATH (you can use this path to access neorl, useful for wrapping NEORL in scripts)
+		-alias neorl= .... (an alias to use neorl in convenient way from the terminal)
+
+***********************
+To uninstall NEORL 
+***********************
+1- To remove NEORL and all its dependencies, go to the directory above myproj and type: 
+	rm -rf myproj
+
+2- Open your bashrc with a text editor (e.g. nano)
+	nano ~/.bashrc
+
+Then delete the following lines from the bashrc, and then save the file again
+
+	#-----------------------------
+	#------NEORL VARIABLES--------
+	export NEORLPATH=/home/USERNAME/myproj/neorl
+	alias neorl="/home/USERNAME/myproj/anaconda3/bin/python3 /home/USERNAME/myproj/neorl/neorl.py -i"
+	#-----------------------------
+	
+
+***********************
+Usage
+***********************
+1- Open a new terminal, different the one you used for installation
+2- cd into the examples directory under ~/myproj/neorl/examples
+3- To test PWR Combustion Engineering example (NEEDS SIMULATE3 TO WORK), type
+	cd ex3-combustion-pwr-core
+	#then
+	neorl PPO.dat
+	#or 
+	neorl PPO.dat > tmpout & 
+	#To send the job to the background
+
+4- To test BWR GE14 example (NEEDS CASMO4E TO WORK), type
+	cd ex4-ge14-bwr-bundle
+	#then
+	neorl psz.dat
+	#or 
+	neorl psz.dat > tmpout & 
+	#To send the job to the background
+
+
+*********************************
+Special notes for CASMO/SIMULATE
+*********************************
+The user must have all studsvik codes pre-installed in the machine and defined in the user PATH:
+CASMO4E, CMSLINK, SIMULATE3
+
+If defined in the user PATH, then "ex3-combustion-pwr-core" and "ex4-ge14-bwr-bundle" should 
+run without issues. NEORL will search in the user PATH and infer the codes automatically.  
+
+If NOT defined in the user PATH, then the user has to replace the exepath card in PPO.dat with the absolute path:
+exepath= simulate3 ---> exepath= /home/user/..../simulate3
+And replace the exepath card in psz.dat with the absolute path to CASMO4E:
+exepath= casmo4e ---> exepath= /home/user/..../casmo4e
+
+
