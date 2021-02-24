@@ -143,12 +143,15 @@ plt.show()
 Please read the [documentation](https://stable-baselines.readthedocs.io/) for more examples.
 --->
 
+<!---
 ## Enjoy NEORL with Colab Notebooks !
 
 All the following examples can be executed online using Google colab notebooks:
 - [Sphere](https://github.com/araffin/rl-tutorial-jnrr19)
 - [Pressure Vessel](https://github.com/Stable-Baselines-Team/rl-colab-notebooks)
 - [Welded Beam](https://colab.research.google.com/github/Stable-Baselines-Team/rl-colab-notebooks/blob/master/stable_baselines_getting_started.ipynb)
+--->
+
 
 ## Implemented Algorithms
 
@@ -192,13 +195,13 @@ To cite this repository in publications:
   year = {2021},
   publisher = {GitHub},
   journal = {GitHub repository},
-  howpublished = {\url{https://github.com/hill-a/stable-baselines}},
+  howpublished = {\url{https://github.com/mradaideh/neorl}},
 }
 ```
 
 ## Maintainers
 
-NEORL is currently maintained by [Majdi Radaideh](https://github.com/MajdiRadaideh) (aka @MajdiRadaideh), [Paul Seurin](https://github.com/pseur) (aka @pseur), [Koroush Shirvan](https://github.com/kshirvan) (aka @kshirvan)
+NEORL is currently maintained by [Majdi Radaideh](https://github.com/mradaideh) (aka @mradaideh), [Paul Seurin](https://github.com/pseur) (aka @pseur), [Koroush Shirvan](https://github.com/kshirvan) (aka @kshirvan)
 
 **Important Note: We do not do technical support** and we do not answer personal questions per email.
 
