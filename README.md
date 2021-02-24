@@ -198,7 +198,7 @@ To cite this repository in publications:
 
 ## Maintainers
 
-NEORL is currently maintained by [Majdi Radaideh](https://github.com/MajdiRadaideh) (aka @MajdiRadaideh), [Paul Seurin](https://github.com/pseur) (aka @pseur), [Koroush Shirvan](https://araffin.github.io/) (aka @kshirvan)
+NEORL is currently maintained by [Majdi Radaideh](https://github.com/MajdiRadaideh) (aka @MajdiRadaideh), [Paul Seurin](https://github.com/pseur) (aka @pseur), [Koroush Shirvan](https://github.com/kshirvan) (aka @kshirvan)
 
 **Important Note: We do not do technical support** and we do not answer personal questions per email.
 
