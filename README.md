@@ -169,10 +169,13 @@ NEORL offers a wide range of algorithms, where some algorithms could be used wit
 | NES                 | :x:                | :heavy_check_mark: | :x:                | :heavy_check_mark: |
 
 ## Testing the installation
-All unit tests in NEORL can be run using pytest runner:
+All unit tests in NEORL can be run using pytest runner. If pytest is not installed, please use
 ```
-pip install pytest pytest-cov
-make pytest
+pip install pytest pytest-cov  
+```
+Then go to the directory `tests` in NEORL and type
+```
+pytest
 ```
 
 ## Projects/Papers Using NEORL
