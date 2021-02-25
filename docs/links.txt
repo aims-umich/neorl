@@ -1,0 +1,1 @@
+https://stackoverflow.com/questions/4840182/setup-py-and-adding-file-to-bin
