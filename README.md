@@ -46,7 +46,7 @@ Documentation is available online: [https://stable-baselines.readthedocs.io/](ht
 
 ### Knowledge Prerequisites
 
-**Note: despite the simplicity of NEORL usage, most algorathims, especially the neuro-based, need some basic knowledge about the optimisation research and neural networks in supervised and reinforcement learning**. Using NEORL without sufficient knowledge may lead to undesirable results due to the poor selection of algorathims hyperparameters. You should not utilize this package without some knowledge. 
+**Note: despite the simplicity of NEORL usage, most algorithms, especially the neuro-based, need some basic knowledge about the optimisation research and neural networks in supervised and reinforcement learning**. Using NEORL without sufficient knowledge may lead to undesirable results due to the poor selection of algorithm hyperparameters. You should not utilize this package without some knowledge. 
 
 ## Installation
 
