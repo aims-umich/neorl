@@ -1,0 +1,307 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>On saving and loading &mdash; NEORL 1.1.3b documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> NEORL
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                main (1.1.3b )
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">General Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Getting Started</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Algorithms</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules/a2c.html">Advantage Actor Critic (A2C)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/dqn.html">Deep Q Learning (DQN)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/ppo2.html">Proximal Policy Optimisation (PPO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/ga.html">Genetic Algorithms (GA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/es.html">Evolution Strategies (ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pso.html">Particle Swarm Optimisation (PSO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/de.html">Differential Evolution (DE)</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tune/grid.html">Grid Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/random.html">Random Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/evolu.html">Evolutionary Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/bayes.html">Bayesian Search</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex1.html">Example 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex2.html">Example 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex3.html">Example 3</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Misc</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../misc/changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/projects.html">Projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/contrib.html">Contributors</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEORL</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>On saving and loading</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/guide/save_format.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="on-saving-and-loading">
+<span id="save-format"></span><h1>On saving and loading<a class="headerlink" href="#on-saving-and-loading" title="Permalink to this headline">¶</a></h1>
+<p>Stable baselines stores both neural network parameters and algorithm-related parameters such as
+exploration schedule, number of environments and observation/action space. This allows continual learning and easy
+use of trained agents without training, but it is not without its issues. Following describes two formats
+used to save agents in stable baselines, their pros and shortcomings.</p>
+<p>Terminology used in this page:</p>
+<ul class="simple">
+<li><p><em>parameters</em> refer to neural network parameters (also called “weights”). This is a dictionary
+mapping Tensorflow variable name to a NumPy array.</p></li>
+<li><p><em>data</em> refers to RL algorithm parameters, e.g. learning rate, exploration schedule, action/observation space.
+These depend on the algorithm used. This is a dictionary mapping classes variable names their values.</p></li>
+</ul>
+<div class="section" id="cloudpickle-stable-baselines-2-7-0">
+<h2>Cloudpickle (stable-baselines&lt;=2.7.0)<a class="headerlink" href="#cloudpickle-stable-baselines-2-7-0" title="Permalink to this headline">¶</a></h2>
+<p>Original stable baselines save format. Data and parameters are bundled up into a tuple <code class="docutils literal notranslate"><span class="pre">(data,</span> <span class="pre">parameters)</span></code>
+and then serialized with <code class="docutils literal notranslate"><span class="pre">cloudpickle</span></code> library (essentially the same as <code class="docutils literal notranslate"><span class="pre">pickle</span></code>).</p>
+<p>This save format is still available via an argument in model save function in stable-baselines versions above
+v2.7.0 for backwards compatibility reasons, but its usage is discouraged.</p>
+<p>Pros:</p>
+<ul class="simple">
+<li><p>Easy to implement and use.</p></li>
+<li><p>Works with almost any type of Python object, including functions.</p></li>
+</ul>
+<p>Cons:</p>
+<ul class="simple">
+<li><p>Pickle/Cloudpickle is not designed for long-term storage or sharing between Python version.</p></li>
+<li><p>If one object in file is not readable (e.g. wrong library version), then reading the rest of the
+file is difficult.</p></li>
+<li><p>Python-specific format, hard to read stored files from other languages.</p></li>
+</ul>
+<p>If part of a saved model becomes unreadable for any reason (e.g. different Tensorflow versions), then
+it may be tricky to restore any of the model. For this reason another save format was designed.</p>
+</div>
+<div class="section" id="zip-archive-stable-baselines-2-7-0">
+<h2>Zip-archive (stable-baselines&gt;2.7.0)<a class="headerlink" href="#zip-archive-stable-baselines-2-7-0" title="Permalink to this headline">¶</a></h2>
+<p>A zip-archived JSON dump and NumPy zip archive of the arrays. The data dictionary (class parameters)
+is stored as a JSON file, model parameters are serialized with <code class="docutils literal notranslate"><span class="pre">numpy.savez</span></code> function and these two files
+are stored under a single .zip archive.</p>
+<p>Any objects that are not JSON serializable are serialized with cloudpickle and stored as base64-encoded
+string in the JSON file, along with some information that was stored in the serialization. This allows
+inspecting stored objects without deserializing the object itself.</p>
+<p>This format allows skipping elements in the file, i.e. we can skip deserializing objects that are
+broken/non-serializable. This can be done via <code class="docutils literal notranslate"><span class="pre">custom_objects</span></code> argument to load functions.</p>
+<p>This is the default save format in stable baselines versions after v2.7.0.</p>
+<p>File structure:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>saved_model.zip/
+├── data              JSON file of class-parameters (dictionary)
+├── parameter_list    JSON file of model parameters and their ordering (list)
+├── parameters        Bytes from numpy.savez (a zip file of the numpy arrays). ...
+    ├── ...           Being a zip-archive itself, this object can also be opened ...
+        ├── ...       as a zip-archive and browsed.
+</pre></div>
+</div>
+<p>Pros:</p>
+<ul class="simple">
+<li><p>More robust to unserializable objects (one bad object does not break everything).</p></li>
+<li><p>Saved file can be inspected/extracted with zip-archive explorers and by other
+languages.</p></li>
+</ul>
+<p>Cons:</p>
+<ul class="simple">
+<li><p>More complex implementation.</p></li>
+<li><p>Still relies partly on cloudpickle for complex objects (e.g. custom functions).</p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Exelon Corp. &amp; MIT.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

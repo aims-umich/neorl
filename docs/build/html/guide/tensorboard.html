@@ -1,0 +1,352 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Tensorboard Integration &mdash; NEORL 1.1.3b documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> NEORL
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                main (1.1.3b )
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">General Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Getting Started</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Algorithms</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules/a2c.html">Advantage Actor Critic (A2C)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/dqn.html">Deep Q Learning (DQN)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/ppo2.html">Proximal Policy Optimisation (PPO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/ga.html">Genetic Algorithms (GA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/es.html">Evolution Strategies (ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pso.html">Particle Swarm Optimisation (PSO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/de.html">Differential Evolution (DE)</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tune/grid.html">Grid Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/random.html">Random Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/evolu.html">Evolutionary Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/bayes.html">Bayesian Search</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex1.html">Example 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex2.html">Example 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex3.html">Example 3</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Misc</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../misc/changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/projects.html">Projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/contrib.html">Contributors</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEORL</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Tensorboard Integration</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/guide/tensorboard.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="tensorboard-integration">
+<span id="tensorboard"></span><h1>Tensorboard Integration<a class="headerlink" href="#tensorboard-integration" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="basic-usage">
+<h2>Basic Usage<a class="headerlink" href="#basic-usage" title="Permalink to this headline">¶</a></h2>
+<p>To use Tensorboard with the rl baselines, you simply need to define a log location for the RL agent:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gym</span>
+
+<span class="kn">from</span> <span class="nn">stable_baselines</span> <span class="kn">import</span> <span class="n">A2C</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">A2C</span><span class="p">(</span><span class="s1">&#39;MlpPolicy&#39;</span><span class="p">,</span> <span class="s1">&#39;CartPole-v1&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">tensorboard_log</span><span class="o">=</span><span class="s2">&quot;./a2c_cartpole_tensorboard/&quot;</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span><span class="n">total_timesteps</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Or after loading an existing model (by default the log path is not saved):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gym</span>
+
+<span class="kn">from</span> <span class="nn">stable_baselines.common.vec_env</span> <span class="kn">import</span> <span class="n">DummyVecEnv</span>
+<span class="kn">from</span> <span class="nn">stable_baselines</span> <span class="kn">import</span> <span class="n">A2C</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s1">&#39;CartPole-v1&#39;</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">DummyVecEnv</span><span class="p">([</span><span class="k">lambda</span><span class="p">:</span> <span class="n">env</span><span class="p">])</span>  <span class="c1"># The algorithms require a vectorized environment to run</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">A2C</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;./a2c_cartpole.pkl&quot;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span> <span class="n">tensorboard_log</span><span class="o">=</span><span class="s2">&quot;./a2c_cartpole_tensorboard/&quot;</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span><span class="n">total_timesteps</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can also define custom logging name when training (by default it is the algorithm name)</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gym</span>
+
+<span class="kn">from</span> <span class="nn">stable_baselines</span> <span class="kn">import</span> <span class="n">A2C</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">A2C</span><span class="p">(</span><span class="s1">&#39;MlpPolicy&#39;</span><span class="p">,</span> <span class="s1">&#39;CartPole-v1&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">tensorboard_log</span><span class="o">=</span><span class="s2">&quot;./a2c_cartpole_tensorboard/&quot;</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span><span class="n">total_timesteps</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">tb_log_name</span><span class="o">=</span><span class="s2">&quot;first_run&quot;</span><span class="p">)</span>
+<span class="c1"># Pass reset_num_timesteps=False to continue the training curve in tensorboard</span>
+<span class="c1"># By default, it will create a new curve</span>
+<span class="n">model</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span><span class="n">total_timesteps</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">tb_log_name</span><span class="o">=</span><span class="s2">&quot;second_run&quot;</span><span class="p">,</span> <span class="n">reset_num_timesteps</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span><span class="n">total_timesteps</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">tb_log_name</span><span class="o">=</span><span class="s2">&quot;thrid_run&quot;</span><span class="p">,</span> <span class="n">reset_num_timesteps</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Once the learn function is called, you can monitor the RL agent during or after the training, with the following bash command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tensorboard --logdir ./a2c_cartpole_tensorboard/
+</pre></div>
+</div>
+<p>you can also add past logging folders:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tensorboard --logdir ./a2c_cartpole_tensorboard/<span class="p">;</span>./ppo2_cartpole_tensorboard/
+</pre></div>
+</div>
+<p>It will display information such as the model graph, the episode reward, the model losses, the observation and other parameter unique to some models.</p>
+<a class="reference internal image-reference" href="../_images/Tensorboard_example_1.png"><img alt="plotting" src="../_images/Tensorboard_example_1.png" style="width: 400px;" /></a>
+<a class="reference internal image-reference" href="../_images/Tensorboard_example_2.png"><img alt="histogram" src="../_images/Tensorboard_example_2.png" style="width: 400px;" /></a>
+<a class="reference internal image-reference" href="../_images/Tensorboard_example_3.png"><img alt="graph" src="../_images/Tensorboard_example_3.png" style="width: 400px;" /></a>
+</div>
+<div class="section" id="logging-more-values">
+<h2>Logging More Values<a class="headerlink" href="#logging-more-values" title="Permalink to this headline">¶</a></h2>
+<p>Using a callback, you can easily log more values with TensorBoard.
+Here is a simple example on how to log both additional tensor or arbitrary scalar value:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">stable_baselines</span> <span class="kn">import</span> <span class="n">SAC</span>
+<span class="kn">from</span> <span class="nn">stable_baselines.common.callbacks</span> <span class="kn">import</span> <span class="n">BaseCallback</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">SAC</span><span class="p">(</span><span class="s2">&quot;MlpPolicy&quot;</span><span class="p">,</span> <span class="s2">&quot;Pendulum-v0&quot;</span><span class="p">,</span> <span class="n">tensorboard_log</span><span class="o">=</span><span class="s2">&quot;/tmp/sac/&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">TensorboardCallback</span><span class="p">(</span><span class="n">BaseCallback</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Custom callback for plotting additional values in tensorboard.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_tb_set</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">TensorboardCallback</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">verbose</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_on_step</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="c1"># Log additional tensor</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_tb_set</span><span class="p">:</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">as_default</span><span class="p">():</span>
+                <span class="n">tf</span><span class="o">.</span><span class="n">summary</span><span class="o">.</span><span class="n">scalar</span><span class="p">(</span><span class="s1">&#39;value_target&#39;</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">value_target</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">summary</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">summary</span><span class="o">.</span><span class="n">merge_all</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">is_tb_set</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1"># Log scalar value (here a random variable)</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+        <span class="n">summary</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Summary</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="p">[</span><span class="n">tf</span><span class="o">.</span><span class="n">Summary</span><span class="o">.</span><span class="n">Value</span><span class="p">(</span><span class="n">tag</span><span class="o">=</span><span class="s1">&#39;random_value&#39;</span><span class="p">,</span> <span class="n">simple_value</span><span class="o">=</span><span class="n">value</span><span class="p">)])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">locals</span><span class="p">[</span><span class="s1">&#39;writer&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_summary</span><span class="p">(</span><span class="n">summary</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_timesteps</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+
+<span class="n">model</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span><span class="mi">50000</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">TensorboardCallback</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="legacy-integration">
+<h2>Legacy Integration<a class="headerlink" href="#legacy-integration" title="Permalink to this headline">¶</a></h2>
+<p>All the information displayed in the terminal (default logging) can be also logged in tensorboard.
+For that, you need to define several environment variables:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># formats are comma-separated, but for tensorboard you only need the last one</span>
+<span class="c1"># stdout -&gt; terminal</span>
+<span class="nb">export</span> <span class="nv">OPENAI_LOG_FORMAT</span><span class="o">=</span><span class="s1">&#39;stdout,log,csv,tensorboard&#39;</span>
+<span class="nb">export</span> <span class="nv">OPENAI_LOGDIR</span><span class="o">=</span>path/to/tensorboard/data
+</pre></div>
+</div>
+<p>and to configure the logger using:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">stable_baselines.logger</span> <span class="kn">import</span> <span class="n">configure</span>
+
+<span class="n">configure</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Then start tensorboard with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tensorboard --logdir<span class="o">=</span><span class="nv">$OPENAI_LOGDIR</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Exelon Corp. &amp; MIT.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,4 +1,4 @@
-<img src="https://github.com/mradaideh/neorl/blob/master/docs/logo.png" align="right" width="40%"/>
+<img src="docs/logo.png" align="right" width="40%"/>
 
 <!---
 [![Build Status](https://travis-ci.com/hill-a/stable-baselines.svg?branch=master)](https://travis-ci.com/hill-a/stable-baselines) [![Documentation Status](https://readthedocs.org/projects/stable-baselines/badge/?version=master)](https://stable-baselines.readthedocs.io/en/master/?badge=master) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/3bcb4cd6d76a4270acb16b5fe6dd9efa)](https://www.codacy.com/app/baselines_janitors/stable-baselines?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=hill-a/stable-baselines&amp;utm_campaign=Badge_Grade) [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/3bcb4cd6d76a4270acb16b5fe6dd9efa)](https://www.codacy.com/app/baselines_janitors/stable-baselines?utm_source=github.com&utm_medium=referral&utm_content=hill-a/stable-baselines&utm_campaign=Badge_Coverage)
@@ -12,7 +12,7 @@ NEORL can be used for multidisciplinary applications for research, industrial, a
 
 ## Copyright
 
-<img src="https://github.com/mradaideh/neorl/blob/master/docs/copyright.png" align="right" width="40%"/>
+<img src="docs/copyright.png" align="right" width="40%"/>
 
 This repository and its content are copyright of [Exelon Corporation](https://www.exeloncorp.com/) © in collaboration with [MIT](https://web.mit.edu/nse/) Nuclear Science and Engineering 2021. All rights reserved.
 

@@ -1,0 +1,453 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Custom Policy Network &mdash; NEORL 1.1.3b documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> NEORL
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                main (1.1.3b )
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">General Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Getting Started</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Algorithms</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules/a2c.html">Advantage Actor Critic (A2C)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/dqn.html">Deep Q Learning (DQN)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/ppo2.html">Proximal Policy Optimisation (PPO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/ga.html">Genetic Algorithms (GA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/es.html">Evolution Strategies (ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pso.html">Particle Swarm Optimisation (PSO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/de.html">Differential Evolution (DE)</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tune/grid.html">Grid Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/random.html">Random Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/evolu.html">Evolutionary Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/bayes.html">Bayesian Search</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex1.html">Example 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex2.html">Example 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex3.html">Example 3</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Misc</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../misc/changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/projects.html">Projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/contrib.html">Contributors</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEORL</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Custom Policy Network</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/guide/custom_policy.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="custom-policy-network">
+<span id="custom-policy"></span><h1>Custom Policy Network<a class="headerlink" href="#custom-policy-network" title="Permalink to this headline">¶</a></h1>
+<p>Stable baselines provides default policy networks (see <span class="xref std std-ref">Policies</span> ) for images (CNNPolicies)
+and other type of input features (MlpPolicies).</p>
+<p>One way of customising the policy network architecture is to pass arguments when creating the model,
+using <code class="docutils literal notranslate"><span class="pre">policy_kwargs</span></code> parameter:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gym</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+
+<span class="kn">from</span> <span class="nn">stable_baselines</span> <span class="kn">import</span> <span class="n">PPO2</span>
+
+<span class="c1"># Custom MLP policy of two layers of size 32 each with tanh activation function</span>
+<span class="n">policy_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">act_fun</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">tanh</span><span class="p">,</span> <span class="n">net_arch</span><span class="o">=</span><span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">])</span>
+<span class="c1"># Create the agent</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">PPO2</span><span class="p">(</span><span class="s2">&quot;MlpPolicy&quot;</span><span class="p">,</span> <span class="s2">&quot;CartPole-v1&quot;</span><span class="p">,</span> <span class="n">policy_kwargs</span><span class="o">=</span><span class="n">policy_kwargs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># Retrieve the environment</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_env</span><span class="p">()</span>
+<span class="c1"># Train the agent</span>
+<span class="n">model</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span><span class="n">total_timesteps</span><span class="o">=</span><span class="mi">100000</span><span class="p">)</span>
+<span class="c1"># Save the agent</span>
+<span class="n">model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;ppo2-cartpole&quot;</span><span class="p">)</span>
+
+<span class="k">del</span> <span class="n">model</span>
+<span class="c1"># the policy_kwargs are automatically loaded</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">PPO2</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;ppo2-cartpole&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can also easily define a custom architecture for the policy (or value) network:</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Defining a custom policy class is equivalent to passing <code class="docutils literal notranslate"><span class="pre">policy_kwargs</span></code>.
+However, it lets you name the policy and so makes usually the code clearer.
+<code class="docutils literal notranslate"><span class="pre">policy_kwargs</span></code> should be rather used when doing hyperparameter search.</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gym</span>
+
+<span class="kn">from</span> <span class="nn">stable_baselines.common.policies</span> <span class="kn">import</span> <span class="n">FeedForwardPolicy</span><span class="p">,</span> <span class="n">register_policy</span>
+<span class="kn">from</span> <span class="nn">stable_baselines.common.vec_env</span> <span class="kn">import</span> <span class="n">DummyVecEnv</span>
+<span class="kn">from</span> <span class="nn">stable_baselines</span> <span class="kn">import</span> <span class="n">A2C</span>
+
+<span class="c1"># Custom MLP policy of three layers of size 128 each</span>
+<span class="k">class</span> <span class="nc">CustomPolicy</span><span class="p">(</span><span class="n">FeedForwardPolicy</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CustomPolicy</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+                                           <span class="n">net_arch</span><span class="o">=</span><span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="n">pi</span><span class="o">=</span><span class="p">[</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">],</span>
+                                                          <span class="n">vf</span><span class="o">=</span><span class="p">[</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">])],</span>
+                                           <span class="n">feature_extraction</span><span class="o">=</span><span class="s2">&quot;mlp&quot;</span><span class="p">)</span>
+
+<span class="c1"># Create and wrap the environment</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s1">&#39;LunarLander-v2&#39;</span><span class="p">)</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">DummyVecEnv</span><span class="p">([</span><span class="k">lambda</span><span class="p">:</span> <span class="n">env</span><span class="p">])</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">A2C</span><span class="p">(</span><span class="n">CustomPolicy</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># Train the agent</span>
+<span class="n">model</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span><span class="n">total_timesteps</span><span class="o">=</span><span class="mi">100000</span><span class="p">)</span>
+<span class="c1"># Save the agent</span>
+<span class="n">model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;a2c-lunar&quot;</span><span class="p">)</span>
+
+<span class="k">del</span> <span class="n">model</span>
+<span class="c1"># When loading a model with a custom policy</span>
+<span class="c1"># you MUST pass explicitly the policy when loading the saved model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">A2C</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;a2c-lunar&quot;</span><span class="p">,</span> <span class="n">policy</span><span class="o">=</span><span class="n">CustomPolicy</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>When loading a model with a custom policy, you must pass the custom policy explicitly when loading the model.
+(cf previous example)</p>
+</div>
+<p>You can also register your policy, to help with code simplicity: you can refer to your custom policy using a string.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gym</span>
+
+<span class="kn">from</span> <span class="nn">stable_baselines.common.policies</span> <span class="kn">import</span> <span class="n">FeedForwardPolicy</span><span class="p">,</span> <span class="n">register_policy</span>
+<span class="kn">from</span> <span class="nn">stable_baselines.common.vec_env</span> <span class="kn">import</span> <span class="n">DummyVecEnv</span>
+<span class="kn">from</span> <span class="nn">stable_baselines</span> <span class="kn">import</span> <span class="n">A2C</span>
+
+<span class="c1"># Custom MLP policy of three layers of size 128 each</span>
+<span class="k">class</span> <span class="nc">CustomPolicy</span><span class="p">(</span><span class="n">FeedForwardPolicy</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CustomPolicy</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+                                           <span class="n">net_arch</span><span class="o">=</span><span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="n">pi</span><span class="o">=</span><span class="p">[</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">],</span>
+                                                          <span class="n">vf</span><span class="o">=</span><span class="p">[</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">])],</span>
+                                           <span class="n">feature_extraction</span><span class="o">=</span><span class="s2">&quot;mlp&quot;</span><span class="p">)</span>
+
+<span class="c1"># Register the policy, it will check that the name is not already taken</span>
+<span class="n">register_policy</span><span class="p">(</span><span class="s1">&#39;CustomPolicy&#39;</span><span class="p">,</span> <span class="n">CustomPolicy</span><span class="p">)</span>
+
+<span class="c1"># Because the policy is now registered, you can pass</span>
+<span class="c1"># a string to the agent constructor instead of passing a class</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">A2C</span><span class="p">(</span><span class="n">policy</span><span class="o">=</span><span class="s1">&#39;CustomPolicy&#39;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="s1">&#39;LunarLander-v2&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span><span class="n">total_timesteps</span><span class="o">=</span><span class="mi">100000</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 2.3.0: </span>Use <code class="docutils literal notranslate"><span class="pre">net_arch</span></code> instead of <code class="docutils literal notranslate"><span class="pre">layers</span></code> parameter to define the network architecture. It allows to have a greater control.</p>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">net_arch</span></code> parameter of <code class="docutils literal notranslate"><span class="pre">FeedForwardPolicy</span></code> allows to specify the amount and size of the hidden layers and how many
+of them are shared between the policy network and the value network. It is assumed to be a list with the following
+structure:</p>
+<ol class="arabic simple">
+<li><p>An arbitrary length (zero allowed) number of integers each specifying the number of units in a shared layer.
+If the number of ints is zero, there will be no shared layers.</p></li>
+<li><p>An optional dict, to specify the following non-shared layers for the value network and the policy network.
+It is formatted like <code class="docutils literal notranslate"><span class="pre">dict(vf=[&lt;value</span> <span class="pre">layer</span> <span class="pre">sizes&gt;],</span> <span class="pre">pi=[&lt;policy</span> <span class="pre">layer</span> <span class="pre">sizes&gt;])</span></code>.
+If it is missing any of the keys (pi or vf), no non-shared layers (empty list) is assumed.</p></li>
+</ol>
+<p>In short: <code class="docutils literal notranslate"><span class="pre">[&lt;shared</span> <span class="pre">layers&gt;,</span> <span class="pre">dict(vf=[&lt;non-shared</span> <span class="pre">value</span> <span class="pre">network</span> <span class="pre">layers&gt;],</span> <span class="pre">pi=[&lt;non-shared</span> <span class="pre">policy</span> <span class="pre">network</span> <span class="pre">layers&gt;])]</span></code>.</p>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>Two shared layers of size 128: <code class="docutils literal notranslate"><span class="pre">net_arch=[128,</span> <span class="pre">128]</span></code></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>          obs
+           |
+         &lt;128&gt;
+           |
+         &lt;128&gt;
+   /               \
+action            value
+</pre></div>
+</div>
+<p>Value network deeper than policy network, first layer shared: <code class="docutils literal notranslate"><span class="pre">net_arch=[128,</span> <span class="pre">dict(vf=[256,</span> <span class="pre">256])]</span></code></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>          obs
+           |
+         &lt;128&gt;
+   /               \
+action             &lt;256&gt;
+                     |
+                   &lt;256&gt;
+                     |
+                   value
+</pre></div>
+</div>
+<p>Initially shared then diverging: <code class="docutils literal notranslate"><span class="pre">[128,</span> <span class="pre">dict(vf=[256],</span> <span class="pre">pi=[16])]</span></code></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>          obs
+           |
+         &lt;128&gt;
+   /               \
+ &lt;16&gt;             &lt;256&gt;
+   |                |
+action            value
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">LstmPolicy</span></code> can be used to construct recurrent policies in a similar way:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">CustomLSTMPolicy</span><span class="p">(</span><span class="n">LstmPolicy</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sess</span><span class="p">,</span> <span class="n">ob_space</span><span class="p">,</span> <span class="n">ac_space</span><span class="p">,</span> <span class="n">n_env</span><span class="p">,</span> <span class="n">n_steps</span><span class="p">,</span> <span class="n">n_batch</span><span class="p">,</span> <span class="n">n_lstm</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">reuse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">_kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">sess</span><span class="p">,</span> <span class="n">ob_space</span><span class="p">,</span> <span class="n">ac_space</span><span class="p">,</span> <span class="n">n_env</span><span class="p">,</span> <span class="n">n_steps</span><span class="p">,</span> <span class="n">n_batch</span><span class="p">,</span> <span class="n">n_lstm</span><span class="p">,</span> <span class="n">reuse</span><span class="p">,</span>
+                         <span class="n">net_arch</span><span class="o">=</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;lstm&#39;</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">vf</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="n">pi</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">])],</span>
+                         <span class="n">layer_norm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">feature_extraction</span><span class="o">=</span><span class="s2">&quot;mlp&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">_kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here the <code class="docutils literal notranslate"><span class="pre">net_arch</span></code> parameter takes an additional (mandatory) ‘lstm’ entry within the shared network section.
+The LSTM is shared between value network and policy network.</p>
+<p>If your task requires even more granular control over the policy architecture, you can redefine the policy directly:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gym</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+
+<span class="kn">from</span> <span class="nn">stable_baselines.common.policies</span> <span class="kn">import</span> <span class="n">ActorCriticPolicy</span><span class="p">,</span> <span class="n">register_policy</span><span class="p">,</span> <span class="n">nature_cnn</span>
+<span class="kn">from</span> <span class="nn">stable_baselines.common.vec_env</span> <span class="kn">import</span> <span class="n">DummyVecEnv</span>
+<span class="kn">from</span> <span class="nn">stable_baselines</span> <span class="kn">import</span> <span class="n">A2C</span>
+
+<span class="c1"># Custom MLP policy of three layers of size 128 each for the actor and 2 layers of 32 for the critic,</span>
+<span class="c1"># with a nature_cnn feature extractor</span>
+<span class="k">class</span> <span class="nc">CustomPolicy</span><span class="p">(</span><span class="n">ActorCriticPolicy</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sess</span><span class="p">,</span> <span class="n">ob_space</span><span class="p">,</span> <span class="n">ac_space</span><span class="p">,</span> <span class="n">n_env</span><span class="p">,</span> <span class="n">n_steps</span><span class="p">,</span> <span class="n">n_batch</span><span class="p">,</span> <span class="n">reuse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CustomPolicy</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">sess</span><span class="p">,</span> <span class="n">ob_space</span><span class="p">,</span> <span class="n">ac_space</span><span class="p">,</span> <span class="n">n_env</span><span class="p">,</span> <span class="n">n_steps</span><span class="p">,</span> <span class="n">n_batch</span><span class="p">,</span> <span class="n">reuse</span><span class="o">=</span><span class="n">reuse</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">variable_scope</span><span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="n">reuse</span><span class="o">=</span><span class="n">reuse</span><span class="p">):</span>
+            <span class="n">activ</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">relu</span>
+
+            <span class="n">extracted_features</span> <span class="o">=</span> <span class="n">nature_cnn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">processed_obs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">extracted_features</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">extracted_features</span><span class="p">)</span>
+
+            <span class="n">pi_h</span> <span class="o">=</span> <span class="n">extracted_features</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">layer_size</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">]):</span>
+                <span class="n">pi_h</span> <span class="o">=</span> <span class="n">activ</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">dense</span><span class="p">(</span><span class="n">pi_h</span><span class="p">,</span> <span class="n">layer_size</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;pi_fc&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)))</span>
+            <span class="n">pi_latent</span> <span class="o">=</span> <span class="n">pi_h</span>
+
+            <span class="n">vf_h</span> <span class="o">=</span> <span class="n">extracted_features</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">layer_size</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">]):</span>
+                <span class="n">vf_h</span> <span class="o">=</span> <span class="n">activ</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">dense</span><span class="p">(</span><span class="n">vf_h</span><span class="p">,</span> <span class="n">layer_size</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;vf_fc&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)))</span>
+            <span class="n">value_fn</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">dense</span><span class="p">(</span><span class="n">vf_h</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;vf&#39;</span><span class="p">)</span>
+            <span class="n">vf_latent</span> <span class="o">=</span> <span class="n">vf_h</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_proba_distribution</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_policy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q_value</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">pdtype</span><span class="o">.</span><span class="n">proba_distribution_from_latent</span><span class="p">(</span><span class="n">pi_latent</span><span class="p">,</span> <span class="n">vf_latent</span><span class="p">,</span> <span class="n">init_scale</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_value_fn</span> <span class="o">=</span> <span class="n">value_fn</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setup_init</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">deterministic</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">deterministic</span><span class="p">:</span>
+            <span class="n">action</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">neglogp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">deterministic_action</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_flat</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">neglogp</span><span class="p">],</span>
+                                                   <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">obs_ph</span><span class="p">:</span> <span class="n">obs</span><span class="p">})</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">action</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">neglogp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">action</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_flat</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">neglogp</span><span class="p">],</span>
+                                                   <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">obs_ph</span><span class="p">:</span> <span class="n">obs</span><span class="p">})</span>
+        <span class="k">return</span> <span class="n">action</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_state</span><span class="p">,</span> <span class="n">neglogp</span>
+
+    <span class="k">def</span> <span class="nf">proba_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">policy_proba</span><span class="p">,</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">obs_ph</span><span class="p">:</span> <span class="n">obs</span><span class="p">})</span>
+
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value_flat</span><span class="p">,</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">obs_ph</span><span class="p">:</span> <span class="n">obs</span><span class="p">})</span>
+
+
+<span class="c1"># Create and wrap the environment</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">DummyVecEnv</span><span class="p">([</span><span class="k">lambda</span><span class="p">:</span> <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s1">&#39;Breakout-v0&#39;</span><span class="p">)])</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">A2C</span><span class="p">(</span><span class="n">CustomPolicy</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># Train the agent</span>
+<span class="n">model</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span><span class="n">total_timesteps</span><span class="o">=</span><span class="mi">100000</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Exelon Corp. &amp; MIT.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

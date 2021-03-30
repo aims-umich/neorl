@@ -1,0 +1,643 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>neorl.evolu.pso &mdash; NEORL 1.1.3b documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> NEORL
+          
+
+          
+            
+            <img src="../../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                main (1.1.3b )
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">General Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/quickstart.html">Getting Started</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Algorithms</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/a2c.html">Advantage Actor Critic (A2C)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/dqn.html">Deep Q Learning (DQN)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/ppo2.html">Proximal Policy Optimisation (PPO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/ga.html">Genetic Algorithms (GA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/es.html">Evolution Strategies (ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/pso.html">Particle Swarm Optimisation (PSO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/de.html">Differential Evolution (DE)</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../tune/grid.html">Grid Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tune/random.html">Random Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tune/evolu.html">Evolutionary Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tune/bayes.html">Bayesian Search</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex1.html">Example 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex2.html">Example 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex3.html">Example 3</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Misc</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../misc/changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../misc/projects.html">Projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../misc/contrib.html">Contributors</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">NEORL</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>neorl.evolu.pso</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for neorl.evolu.pso</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">#Created on Mon Jun 15 19:37:04 2020</span>
+<span class="c1">#@author: Majdi Radaideh</span>
+
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">multiprocessing</span>
+<span class="kn">import</span> <span class="nn">multiprocessing.pool</span>
+<span class="k">class</span> <span class="nc">NoDaemonProcess</span><span class="p">(</span><span class="n">multiprocessing</span><span class="o">.</span><span class="n">Process</span><span class="p">):</span>
+    <span class="c1"># make &#39;daemon&#39; attribute always return False</span>
+    <span class="k">def</span> <span class="nf">_get_daemon</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">def</span> <span class="nf">_set_daemon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">pass</span>
+    <span class="n">daemon</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_daemon</span><span class="p">,</span> <span class="n">_set_daemon</span><span class="p">)</span>
+
+<span class="c1"># We sub-class multiprocessing.pool.Pool instead of multiprocessing.Pool</span>
+<span class="c1"># because the latter is only a wrapper function, not a proper class.</span>
+<span class="k">class</span> <span class="nc">MyPool</span><span class="p">(</span><span class="n">multiprocessing</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">Pool</span><span class="p">):</span>
+    <span class="n">Process</span> <span class="o">=</span> <span class="n">NoDaemonProcess</span>
+
+<div class="viewcode-block" id="PSO"><a class="viewcode-back" href="../../../modules/pso.html#neorl.evolu.pso.PSO">[docs]</a><span class="k">class</span> <span class="nc">PSO</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parallel Particle Swarm Optimisaion (PSO) module</span>
+<span class="sd">	</span>
+<span class="sd">    :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: {&#39;x1&#39;: [&#39;int&#39;, 1, 4], &#39;x2&#39;: [&#39;float&#39;, 0.1, 0.8], &#39;x3&#39;: [&#39;float&#39;, 2.2, 6.2]}</span>
+<span class="sd">    :param fit: (function) the fitness function </span>
+<span class="sd">    :param npar: (int) number of particles in the swarm</span>
+<span class="sd">    :param c1: (float) cognative speed constant </span>
+<span class="sd">    :param c2: (float) social speed constant </span>
+<span class="sd">    :param speed_mech: (str) type of speed mechanism to update particle velocity, choose between &#39;constric&#39;, &#39;timew&#39;, &#39;globw&#39;.			</span>
+<span class="sd">    :param ncores: (int) number of parallel processors</span>
+<span class="sd">    :param seed: (int) random seed for sampling</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">npar</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">c1</span><span class="o">=</span><span class="mf">2.05</span><span class="p">,</span> <span class="n">c2</span><span class="o">=</span><span class="mf">2.05</span><span class="p">,</span> <span class="n">speed_mech</span><span class="o">=</span><span class="s1">&#39;constric&#39;</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  
+
+        <span class="k">if</span> <span class="n">seed</span><span class="p">:</span>
+            <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">npar</span><span class="o">=</span><span class="n">npar</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="o">=</span><span class="n">fit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="o">=</span><span class="n">ncores</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">speed_mech</span><span class="o">=</span><span class="n">speed_mech</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">c1</span><span class="o">=</span><span class="n">c1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">c2</span><span class="o">=</span><span class="n">c2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">bounds</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">datatype</span><span class="o">=</span><span class="p">[</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">bounds</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">low</span><span class="o">=</span><span class="p">[</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">bounds</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">up</span><span class="o">=</span><span class="p">[</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">bounds</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v0</span><span class="o">=</span><span class="mf">0.1</span> <span class="c1"># factor to intialize the speed</span>
+        <span class="c1">#if not swm0:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">swm_pos</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">GenParticle</span><span class="p">(</span><span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">swm_fit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">swm_pos</span><span class="p">)</span>
+        <span class="c1">#else:</span>
+        <span class="c1">#    self.swm_pos=swm0[0]</span>
+        <span class="c1">#    self.swm_fit=swm0[1]</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed_mech</span><span class="o">==</span><span class="s1">&#39;constric&#39;</span><span class="p">:</span>
+            <span class="n">phi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">c1</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">c2</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="o">=</span><span class="mi">2</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="mi">2</span><span class="o">-</span><span class="n">phi</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">phi</span><span class="o">**</span><span class="mi">2</span><span class="o">-</span><span class="mi">4</span><span class="o">*</span><span class="n">phi</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed_mech</span><span class="o">==</span><span class="s1">&#39;timew&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wmin</span><span class="o">=</span><span class="mf">0.4</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wmax</span><span class="o">=</span><span class="mf">0.9</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">wmax</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed_mech</span><span class="o">==</span><span class="s1">&#39;globw&#39;</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="p">(</span><span class="s1">&#39;only timew, globw, or constric are allowed for speed_mech, the mechanism used is not defined&#39;</span><span class="p">)</span>
+        
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span> <span class="o">&gt;=</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Number of cores must be more than or equal 1&quot;</span>
+                        
+    <span class="k">def</span> <span class="nf">GenParticle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bounds</span><span class="p">):</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="c1">#Particle generator</span>
+        <span class="c1">#Input: </span>
+        <span class="c1">#    -bounds (dict): input paramter type and lower/upper bounds in dictionary form</span>
+        <span class="c1">#Returns: </span>
+        <span class="c1">#    -particle (list): particle position</span>
+        <span class="c1">#    -speed (list): particle speed</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="n">content</span><span class="o">=</span><span class="p">[]</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">bounds</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;int&#39;</span><span class="p">:</span>
+                <span class="n">content</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">2</span><span class="p">]))</span>
+            <span class="k">elif</span> <span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;float&#39;</span><span class="p">:</span>
+                <span class="n">content</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">2</span><span class="p">]))</span>
+            <span class="k">elif</span> <span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;grid&#39;</span><span class="p">:</span>
+                <span class="n">content</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span> <span class="p">(</span><span class="s1">&#39;unknown data type is given, either int, float, or grid are allowed for parameter bounds&#39;</span><span class="p">)</span>   
+        <span class="n">particle</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+        <span class="n">speed</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">v0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">content</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">particle</span><span class="p">,</span> <span class="n">speed</span>
+    
+
+    <span class="k">def</span> <span class="nf">InitSwarm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="c1">#Swarm intializer </span>
+        <span class="c1">#Inputs:</span>
+        <span class="c1">#    -warmup (int): number of individuals to create and evaluate initially</span>
+        <span class="c1">#Returns </span>
+        <span class="c1">#    -pop (dict): initial swarm in a dictionary form, looks like this:</span>
+        <span class="c1">#        </span>
+        <span class="c1">#    pop={particle key: [particle position, particle velocity, particle fitness]}</span>
+        <span class="c1">#    pop={0: [[1,2,3,4,5], [0.1,0.2,0.3,0.4,0.5], 1.2], </span>
+        <span class="c1">#         ... </span>
+        <span class="c1">#         99: [[1.1,2.1,3.1,4.1,5.1], [0.1,0.2,0.3,0.4,0.5], 5.2]}</span>
+        <span class="c1">#   </span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="c1">#initialize the swarm and velocity and run them in parallel (these samples will be used to initialize the swarm)</span>
+        <span class="n">pop</span><span class="o">=</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+        <span class="c1"># dict key runs from 0 to self.npar-1</span>
+        <span class="c1"># index 0: individual, index 1: velocity, index 2: fitness </span>
+        
+        <span class="c1">#Establish the swarm</span>
+        <span class="k">if</span> <span class="n">x0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The first particle provided by the user:&#39;</span><span class="p">,</span> <span class="n">x0</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The last particle provided by the user:&#39;</span><span class="p">,</span> <span class="n">x0</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">)):</span>
+                <span class="n">pop</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x0</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="n">speed</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">v0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x0</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+                <span class="n">pop</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">speed</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">npar</span><span class="p">):</span>
+                <span class="n">particle</span><span class="p">,</span> <span class="n">speed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">GenParticle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span>
+                <span class="n">pop</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">particle</span><span class="p">)</span>
+                <span class="n">pop</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">speed</span><span class="p">)</span>
+        
+        <span class="c1">#Evaluate the swarm</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1">#evaluate swarm in parallel</span>
+            <span class="n">core_list</span><span class="o">=</span><span class="p">[]</span>
+            <span class="k">for</span> <span class="n">particle</span> <span class="ow">in</span> <span class="n">pop</span><span class="p">:</span>
+                <span class="n">core_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop</span><span class="p">[</span><span class="n">particle</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+           
+            <span class="n">p</span><span class="o">=</span><span class="n">MyPool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">)</span>
+            <span class="n">fitness</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gen_object</span><span class="p">,</span> <span class="n">core_list</span><span class="p">)</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">close</span><span class="p">();</span> <span class="n">p</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+            
+            <span class="p">[</span><span class="n">pop</span><span class="p">[</span><span class="n">particle</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fitness</span><span class="p">[</span><span class="n">particle</span><span class="p">])</span> <span class="k">for</span> <span class="n">particle</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pop</span><span class="p">))]</span>
+        
+        <span class="k">else</span><span class="p">:</span> <span class="c1">#evaluate swarm in series</span>
+            <span class="k">for</span> <span class="n">particle</span> <span class="ow">in</span> <span class="n">pop</span><span class="p">:</span>
+                <span class="n">fitness</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">pop</span><span class="p">[</span><span class="n">particle</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">pop</span><span class="p">[</span><span class="n">particle</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fitness</span><span class="p">)</span>
+                
+        <span class="c1">#Setup the local position and fitness for PSO calculations</span>
+        <span class="n">local_pos</span><span class="o">=</span><span class="p">[]</span>
+        <span class="n">local_fit</span><span class="o">=</span><span class="p">[]</span>
+        <span class="k">for</span> <span class="n">particle</span> <span class="ow">in</span> <span class="n">pop</span><span class="p">:</span>
+            <span class="n">local_pos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop</span><span class="p">[</span><span class="n">particle</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">local_fit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop</span><span class="p">[</span><span class="n">particle</span><span class="p">][</span><span class="mi">2</span><span class="p">])</span>
+        
+        <span class="k">return</span> <span class="n">pop</span><span class="p">,</span> <span class="n">local_pos</span><span class="p">,</span> <span class="n">local_fit</span>  <span class="c1">#return final pop dictionary with particle, velocity, and fitness</span>
+    
+    <span class="k">def</span> <span class="nf">UpdateParticle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">particle</span><span class="p">,</span> <span class="n">local_pos</span><span class="p">,</span> <span class="n">local_fit</span><span class="p">):</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="c1">#Function that updates the particle speed and position based on the </span>
+        <span class="c1">#best local positon of the particle and best global position of the swarm</span>
+        <span class="c1">#The function works with both int or float variables</span>
+        <span class="c1">#Input: </span>
+        <span class="c1">#    particle (list of lists):</span>
+        <span class="c1">#            particle[0] (list) = current position</span>
+        <span class="c1">#            particle[1] (list) = speed </span>
+        <span class="c1">#            particle[2] (list) = current fit </span>
+        <span class="c1">#    local_pos (list): best local position observed for this particle</span>
+        <span class="c1">#</span>
+        <span class="c1">#Return:</span>
+        <span class="c1">#    new_particle (list of lists): modified particle with same structure as `particle` </span>
+        <span class="c1">#&quot;&quot;&quot;  </span>
+        
+        <span class="n">new_particle</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">particle</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
+            <span class="n">r1</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+            <span class="n">r2</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+            
+            <span class="c1">#**********************</span>
+            <span class="c1">#Update Speed</span>
+            <span class="c1">#**********************</span>
+            <span class="n">speed_cognitive</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">c1</span><span class="o">*</span><span class="n">r1</span><span class="o">*</span><span class="p">(</span><span class="n">local_pos</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">particle</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">speed_social</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">c2</span><span class="o">*</span><span class="n">r2</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">swm_pos</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">particle</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+            
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed_mech</span><span class="o">==</span><span class="s1">&#39;constric&#39;</span><span class="p">:</span>
+                <span class="n">new_particle</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="o">*</span><span class="p">(</span><span class="n">particle</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">speed_cognitive</span><span class="o">+</span><span class="n">speed_social</span><span class="p">)</span>
+                <span class="c1">#print(&#39;constric&#39;, self.w)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed_mech</span><span class="o">==</span><span class="s1">&#39;timew&#39;</span><span class="p">:</span>
+                <span class="n">new_particle</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="o">*</span><span class="n">particle</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">speed_cognitive</span><span class="o">+</span><span class="n">speed_social</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed_mech</span><span class="o">==</span><span class="s1">&#39;globw&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="o">=</span><span class="mf">1.11</span><span class="o">-</span><span class="n">local_fit</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">swm_fit</span>
+                <span class="c1">#print(&#39;globw&#39;, self.w)</span>
+                <span class="n">new_particle</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="o">*</span><span class="n">particle</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">speed_cognitive</span><span class="o">+</span><span class="n">speed_social</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="p">(</span><span class="s1">&#39;only constric, timew, globw, are allowed for speed_mech, the mechanism used is not defined&#39;</span><span class="p">)</span>
+            
+            <span class="c1">#***********************************   </span>
+            <span class="c1">#Update Position based on data type</span>
+            <span class="c1">#************************************</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">datatype</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;float&#39;</span><span class="p">:</span>
+                <span class="n">new_particle</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">particle</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">new_particle</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+            
+                <span class="c1"># adjust maximum position if necessary</span>
+                <span class="k">if</span> <span class="n">new_particle</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">up</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                    <span class="n">new_particle</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">up</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    
+                <span class="c1"># adjust minimum position if neseccary</span>
+                <span class="k">if</span> <span class="n">new_particle</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">low</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                    <span class="n">new_particle</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">low</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">datatype</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;int&#39;</span><span class="p">:</span>
+                <span class="n">move_cond</span><span class="o">=</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sigmoid</span><span class="p">(</span><span class="n">new_particle</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]))</span> <span class="o">*</span> <span class="mi">1</span>    <span class="c1">#returns binary 0/1              </span>
+                <span class="k">if</span> <span class="n">move_cond</span><span class="p">:</span> <span class="c1">#perturb this parameter</span>
+                    
+                    <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">low</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">up</span><span class="p">[</span><span class="n">i</span><span class="p">]):</span>
+                        <span class="n">new_particle</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">low</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># make a list of possiblities after excluding the current value to enforce mutation</span>
+                        <span class="n">choices</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">low</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">up</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+                        <span class="n">choices</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">new_particle</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+                        <span class="c1"># randint is NOT used here since it could re-draw the same integer value, choice is used instead</span>
+                        <span class="n">new_particle</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">choices</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;The particle position in PSO cannot be modified, either int/float data types are allowed&#39;</span><span class="p">)</span>
+                     
+                     
+        <span class="k">return</span> <span class="n">new_particle</span>
+
+    <span class="k">def</span> <span class="nf">_sigmoid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="c1">#Helper method for the sigmoid function</span>
+        <span class="c1">#Input:</span>
+        <span class="c1">#    x (scalar or numpy.ndarray): input attribute(s)</span>
+        <span class="c1">#Returns:</span>
+        <span class="c1">#    scalar or numpy.ndarray: output sigmoid computation</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">gen_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inp</span><span class="p">):</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="c1">#Worker for pool process, just to run the fitness function</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">inp</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="c1">#Reorder the swarm and select the best `k` particles from it</span>
+        <span class="c1">#Input:</span>
+        <span class="c1">#    -pop (dict): swarm of particles </span>
+        <span class="c1">#    -k (int): number of particles to survive [ k &lt; len(pop) ]</span>
+        <span class="c1">#Returns:</span>
+        <span class="c1">#    -best_dict (dict): dictionary of the best k particles in the swarm</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="n">pop</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+        <span class="n">pop</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">e</span><span class="p">:</span> <span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">sorted_dict</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">pop</span><span class="p">[:</span><span class="n">k</span><span class="p">])</span>
+        <span class="c1">#Next block creates a new dict where keys are reset to 0 ... k in order to avoid unordered keys after sort</span>
+        <span class="n">best_dict</span><span class="o">=</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+        <span class="n">index</span><span class="o">=</span><span class="mi">0</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">sorted_dict</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">3</span><span class="p">):</span> 
+                <span class="c1">#5 refers to the properties of each particle in order</span>
+                <span class="c1">#0: current pos, 1: speed, 2: current fitness, 3: best local pos, 4: best local fitness</span>
+                <span class="n">best_dict</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sorted_dict</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">j</span><span class="p">])</span>
+            <span class="n">index</span><span class="o">+=</span><span class="mi">1</span>
+        
+        <span class="n">sorted_dict</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">best_dict</span>
+
+    <span class="k">def</span> <span class="nf">GenSwarm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">swm</span><span class="p">):</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="c1">#Generate the new swarm (offspring) based on the old swarm, </span>
+        <span class="c1">#by looping and updating all particles</span>
+        <span class="c1">#Input:</span>
+        <span class="c1">#    swm (dict): current swarm </span>
+        <span class="c1">#Return:</span>
+        <span class="c1">#    offspring (dict): new updated swarm</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="n">offspring</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">swm</span><span class="p">)):</span>
+            
+            <span class="n">offspring</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">UpdateParticle</span><span class="p">(</span><span class="n">particle</span><span class="o">=</span><span class="n">swm</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">local_pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">local_pos</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">local_fit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">local_fit</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">offspring</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1">#this fitness item is set to zero since it is not evaluated yet by self.fit</span>
+    
+        <span class="k">return</span> <span class="n">offspring</span>
+
+<div class="viewcode-block" id="PSO.evolute"><a class="viewcode-back" href="../../../modules/pso.html#neorl.evolu.pso.PSO.evolute">[docs]</a>    <span class="k">def</span> <span class="nf">evolute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ngen</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function evolutes the PSO algorithm for number of generations.</span>
+<span class="sd">        </span>
+<span class="sd">        :param ngen: (int) number of generations to evolute</span>
+<span class="sd">        :param x0: (list of lists) the initial position of the swarm particles</span>
+<span class="sd">        :param verbose: (bool) print statistics to screen</span>
+<span class="sd">        </span>
+<span class="sd">        :return: (dict) dictionary containing major PSO search results</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">best_scores</span><span class="o">=</span><span class="p">[]</span>
+        <span class="k">if</span> <span class="n">x0</span><span class="p">:</span>
+            <span class="c1">#get the initial swarm position from the user, it has to be </span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;-- Using The Initial PSO Swarm from the User&#39;</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">npar</span><span class="p">,</span> <span class="s1">&#39;--error: the length of x0 (</span><span class="si">{}</span><span class="s1">) (initial swarm) must equal to number of particles (</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">npar</span><span class="p">)</span>
+            <span class="n">swarm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_pos</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_fit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">InitSwarm</span><span class="p">(</span><span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;-- Using A Random Initial PSO Swarm&#39;</span><span class="p">)</span>
+            <span class="c1">#generate the initial swarm internally, assign all variables</span>
+            <span class="n">swarm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_pos</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_fit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">InitSwarm</span><span class="p">()</span>
+        
+        <span class="c1">#-----------------------------</span>
+        <span class="c1"># Begin the evolution process</span>
+        <span class="c1">#-----------------------------</span>
+        <span class="k">for</span> <span class="n">gen</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ngen</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                    
+            <span class="c1">#--Vary the particles and generate new offspring/swarm</span>
+            <span class="n">offspring</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">GenSwarm</span><span class="p">(</span><span class="n">swm</span><span class="o">=</span><span class="n">swarm</span><span class="p">)</span>
+            
+            <span class="c1">#***************************</span>
+            <span class="c1">#Parallel: Evaluate the particles </span>
+            <span class="c1"># with multiprocessign Pool</span>
+            <span class="c1">#***************************</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">t0</span><span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+                <span class="n">core_list</span><span class="o">=</span><span class="p">[]</span>
+                <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">offspring</span><span class="p">:</span>
+                    <span class="n">core_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">offspring</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                <span class="c1">#initialize a pool</span>
+                <span class="n">p</span><span class="o">=</span><span class="n">MyPool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">)</span>
+                <span class="n">fitness</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gen_object</span><span class="p">,</span> <span class="n">core_list</span><span class="p">)</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">close</span><span class="p">();</span> <span class="n">p</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+                
+                <span class="bp">self</span><span class="o">.</span><span class="n">partime</span><span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">t0</span>
+                <span class="c1">#print(&#39;PSO:&#39;, self.partime)</span>
+                
+                <span class="c1">#append fitness data to the swarm dict</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">offspring</span><span class="p">)):</span>
+                    <span class="n">offspring</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">fitness</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                    
+                <span class="c1">#check and update local best</span>
+                <span class="k">for</span> <span class="n">par</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fitness</span><span class="p">)):</span>
+                    <span class="k">if</span> <span class="n">fitness</span><span class="p">[</span><span class="n">par</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_fit</span><span class="p">[</span><span class="n">par</span><span class="p">]:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">local_pos</span><span class="p">[</span><span class="n">par</span><span class="p">]</span><span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">offspring</span><span class="p">[</span><span class="n">par</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">local_fit</span><span class="p">[</span><span class="n">par</span><span class="p">]</span><span class="o">=</span> <span class="n">fitness</span><span class="p">[</span><span class="n">par</span><span class="p">]</span>
+                        <span class="c1">#check and update global/swarm best</span>
+                        <span class="k">if</span> <span class="n">fitness</span><span class="p">[</span><span class="n">par</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">swm_fit</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">swm_fit</span> <span class="o">=</span> <span class="n">fitness</span><span class="p">[</span><span class="n">par</span><span class="p">]</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">swm_pos</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">offspring</span><span class="p">[</span><span class="n">par</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            <span class="c1">#***************************</span>
+            <span class="c1">#Serial: no Pool</span>
+            <span class="c1">#***************************</span>
+            <span class="k">else</span><span class="p">:</span> 
+                <span class="k">for</span> <span class="n">par</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">offspring</span><span class="p">)):</span>
+                    
+                    <span class="n">fitness</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">offspring</span><span class="p">[</span><span class="n">par</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">offspring</span><span class="p">[</span><span class="n">par</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">fitness</span>
+            
+                    <span class="c1">#check and update local best</span>
+                    <span class="k">if</span> <span class="n">fitness</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_fit</span><span class="p">[</span><span class="n">par</span><span class="p">]:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">local_pos</span><span class="p">[</span><span class="n">par</span><span class="p">]</span><span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">offspring</span><span class="p">[</span><span class="n">par</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">local_fit</span><span class="p">[</span><span class="n">par</span><span class="p">]</span><span class="o">=</span> <span class="n">fitness</span>
+                        <span class="c1">#check and update global/swarm best</span>
+                        <span class="k">if</span> <span class="n">fitness</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">swm_fit</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">swm_fit</span> <span class="o">=</span> <span class="n">fitness</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">swm_pos</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">offspring</span><span class="p">[</span><span class="n">par</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                
+                <span class="bp">self</span><span class="o">.</span><span class="n">partime</span><span class="o">=</span><span class="mi">0</span>
+                            
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed_mech</span><span class="o">==</span><span class="s1">&#39;timew&#39;</span><span class="p">:</span>
+                <span class="n">step</span><span class="o">=</span><span class="n">gen</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">npar</span>
+                <span class="n">totsteps</span><span class="o">=</span><span class="n">ngen</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">npar</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wmax</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wmax</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">wmin</span><span class="p">)</span><span class="o">*</span><span class="n">step</span><span class="o">/</span><span class="n">totsteps</span>
+                <span class="c1">#print(&#39;timew&#39;, self.w)</span>
+            
+            <span class="n">fit_best</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="n">offspring</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">offspring</span><span class="p">])</span>  <span class="c1">#get the max fitness for this generation</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">best_scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fit_best</span><span class="p">)</span>
+            <span class="n">swarm</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">offspring</span><span class="p">)</span> 
+            
+            <span class="c1"># Print data</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="n">mean_speed</span><span class="o">=</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">swarm</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">swarm</span><span class="p">]</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;PSO step </span><span class="si">{}</span><span class="s1">/</span><span class="si">{}</span><span class="s1">, C1=</span><span class="si">{}</span><span class="s1">, C2=</span><span class="si">{}</span><span class="s1">, W=</span><span class="si">{}</span><span class="s1">, Particles=</span><span class="si">{}</span><span class="s1">, Ncores=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gen</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">npar</span><span class="p">,</span> <span class="n">ngen</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">npar</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">c1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">c2</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">npar</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Statistics for generation </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gen</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best Swarm Fitness:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">swm_fit</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best Swarm Position:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">swm_pos</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Max Speed:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">mean_speed</span><span class="p">),</span><span class="mi">3</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Min Speed:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">mean_speed</span><span class="p">),</span><span class="mi">3</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Average Speed:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">mean_speed</span><span class="p">),</span><span class="mi">3</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^&#39;</span><span class="p">)</span>
+
+        <span class="c1">#Select and order the last population </span>
+        <span class="n">population</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">pop</span><span class="o">=</span><span class="n">swarm</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">npar</span><span class="p">))</span>
+        
+        <span class="c1"># Append local data to the final swarm population, items [3] and [4] in the dictionary</span>
+        <span class="k">for</span> <span class="n">par</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">swarm</span><span class="p">)):</span>
+            <span class="n">swarm</span><span class="p">[</span><span class="n">par</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">local_pos</span><span class="p">[</span><span class="n">par</span><span class="p">])</span>
+            <span class="n">swarm</span><span class="p">[</span><span class="n">par</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">local_fit</span><span class="p">[</span><span class="n">par</span><span class="p">])</span>
+            
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;------------------------ PSO Summary --------------------------&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best fitness (y) found:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">swm_fit</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best individual (x) found:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">swm_pos</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--------------------------------------------------------------&#39;</span><span class="p">)</span>        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">swm_pos</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">swm_fit</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_scores</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Exelon Corp. &amp; MIT.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

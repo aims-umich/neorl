@@ -72,7 +72,7 @@ class SubprocVecEnv(VecEnv):
            Defaults to 'forkserver' on available platforms, and 'spawn' otherwise.
     """
 
-    def __init__(self, env_fns, start_method=None):
+    def __init__(self, env_fns, start_method=None, daemon=True):
         self.waiting = False
         self.closed = False
         n_envs = len(env_fns)
@@ -90,7 +90,7 @@ class SubprocVecEnv(VecEnv):
         for work_remote, remote, env_fn in zip(self.work_remotes, self.remotes, env_fns):
             args = (work_remote, remote, CloudpickleWrapper(env_fn))
             # daemon=True: if the main process crashes, we should not cause things to hang
-            process = ctx.Process(target=_worker, args=args, daemon=True)  # pytype:disable=attribute-error
+            process = ctx.Process(target=_worker, args=args, daemon=daemon)  # pytype:disable=attribute-error
             process.start()
             self.processes.append(process)
             work_remote.close()

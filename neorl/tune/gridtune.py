@@ -23,41 +23,15 @@ class GRIDTUNE:
     Class object from PARSER.py
     neorl logo
     """
-    def __init__(self, inputfile, tuneblock, logo):
-        self.logo=logo
-        self.inputfile=inputfile
-        self.tuneblock=tuneblock
-        self.n_last_episodes=int(self.tuneblock["n_last_episodes"])
-        self.ncores=int(self.tuneblock["ncores"])
+    def __init__(self, algo_type, param_grid, tuneblock, ncores, verbose):
+        #self.inputfile=inputfile
+        #self.tuneblock=tuneblock
+        #self.n_last_episodes=int(self.tuneblock["n_last_episodes"])
+        self.param_grid=param_grid
+        self.algo_type=algo_type
+        self.ncores=int(ncores)
+        self.verbose=verbose
                     
-        # results directory
-        if os.path.exists('./tunecases/'):
-            shutil.rmtree('./tunecases/')
-            os.makedirs('./tunecases/', exist_ok=True)
-        else:
-            os.makedirs('./tunecases/', exist_ok=True)
-        self.csvlogger='tune.csv'
-        self.tunesummary='tunesummary.txt'
-        
-        #---------------------------------
-        # parse the input template
-        #---------------------------------
-        with open (self.inputfile, 'r') as input_file_text:
-            self.template=input_file_text.readlines()
-            
-        first=0; last=0
-        for i in range (len(self.template)):
-            if ('READ TUNE' in self.template[i]):
-                first=i
-            if ('END TUNE' in self.template[i]):
-                last=i
-        if first == 0 and last==0:
-            raise ('TUNE card cannot be found')
-        
-        del self.template[first : last+1]  
-        
-        self.template="".join(self.template)
-             
     def tune_count(self):
         
         """
@@ -91,17 +65,18 @@ class GRIDTUNE:
                 
         #count all possible combinations      
         self.all_combine = list(itertools.product(*self.param_lst)) # * here helps passing list of lists to product function without need to know the size of parameters beforehand
-        if len(self.all_combine) > 1e6:
-            print ('Number of possible combinations for this tunning problem is huge ({})!!!'.format(int(len(self.all_combine))))
-            answer=input ("Do you want to proceed? Enter yes or no: ")
-            
-            if answer == 'no':
-                print('user asked to terminate the run')
-                sys.exit()
-            elif answer == 'yes':
-                print('user decided to generate all cases')
-            else:
-                raise Exception ('please enter yes or no')
+        
+#        if len(self.all_combine) > 1e6:
+#            print ('Number of possible combinations for this tunning problem is huge ({})!!!'.format(int(len(self.all_combine))))
+#            answer=input ("Do you want to proceed? Enter yes or no: ")
+#            
+#            if answer == 'no':
+#                print('user asked to terminate the run')
+#                sys.exit()
+#            elif answer == 'yes':
+#                print('user decided to generate all cases')
+#            else:
+#                raise Exception ('please enter yes or no')
                 
     def gen_cases(self):
         
@@ -212,7 +187,6 @@ class GRIDTUNE:
         
         with open ('tunesummary.txt', 'w') as fout:
             
-            fout.write(self.logo)
             fout.write('*****************************************************\n')
             fout.write('Summary for the TUNE case \n')
             fout.write('*****************************************************\n')

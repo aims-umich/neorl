@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Mon Jun 15 19:37:04 2020
-
-@author: Majdi
-"""
+#Created on Mon Jun 15 19:37:04 2020
+#@author: Majdi Radaideh
 
 import random
 import numpy as np
@@ -26,24 +23,20 @@ class MyPool(multiprocessing.pool.Pool):
     Process = NoDaemonProcess
 
 class PSO:
-    def __init__ (self, bounds, fit, npar=50, swm0=None, c1=2.05, c2=2.05, speed_mech='constric', ncores=1, seed=None):  
-        """
-        Particle Swarm Optimisaion (PSO)
-        Parallel mixed discrete/continuous PSO module
-        Inputs:
-            -bounds (dict): input paramter type and lower/upper bounds in dictionary form
-                            Example:
-                                {'x1': ['int', 1, 4],
-                                 'x2': ['float', 0.1, 0.8],
-                                 'x3': ['float', 2.2, 6.2]}
-            -fit (function): fitness function 
-            -npar (int): number of particles in the swarm
-            -swm0 (list of 2): swm0[0] --> initial position of the swarm (list)
-                               swm0[1] --> initial fitness of the swarm (float)
-            -ncores (int): parallel cores
-            -c1 (float): cognative speed constant 
-            -c2 (float): social speed constant 
-        """
+    """
+    Parallel Particle Swarm Optimisaion (PSO) module
+	
+    :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: {'x1': ['int', 1, 4], 'x2': ['float', 0.1, 0.8], 'x3': ['float', 2.2, 6.2]}
+    :param fit: (function) the fitness function 
+    :param npar: (int) number of particles in the swarm
+    :param c1: (float) cognative speed constant 
+    :param c2: (float) social speed constant 
+    :param speed_mech: (str) type of speed mechanism to update particle velocity, choose between 'constric', 'timew', 'globw'.			
+    :param ncores: (int) number of parallel processors
+    :param seed: (int) random seed for sampling
+    """
+    def __init__ (self, bounds, fit, npar=50, c1=2.05, c2=2.05, speed_mech='constric', ncores=1, seed=None):  
+
         if seed:
             random.seed(seed)
             self.seed=seed
@@ -60,12 +53,12 @@ class PSO:
         self.low=[bounds[key][1] for key in bounds]
         self.up=[bounds[key][2] for key in bounds]
         self.v0=0.1 # factor to intialize the speed
-        if not swm0:
-            self.swm_pos, _ =self.GenParticle(bounds=bounds)
-            self.swm_fit=self.fit(self.swm_pos)
-        else:
-            self.swm_pos=swm0[0]
-            self.swm_fit=swm0[1]
+        #if not swm0:
+        self.swm_pos, _ =self.GenParticle(bounds=bounds)
+        self.swm_fit=self.fit(self.swm_pos)
+        #else:
+        #    self.swm_pos=swm0[0]
+        #    self.swm_fit=swm0[1]
         
         if self.speed_mech=='constric':
             phi=self.c1+self.c2
@@ -78,20 +71,18 @@ class PSO:
             pass
         else:
             raise ('only timew, globw, or constric are allowed for speed_mech, the mechanism used is not defined')
-            
-        
         
         assert self.ncores >=1, "Number of cores must be more than or equal 1"
-            
+                        
     def GenParticle(self, bounds):
-        """
-        Particle generator
-        Input: 
-            -bounds (dict): input paramter type and lower/upper bounds in dictionary form
-        Returns: 
-            -particle (list): particle position
-            -speed (list): particle speed
-        """
+        #"""
+        #Particle generator
+        #Input: 
+        #    -bounds (dict): input paramter type and lower/upper bounds in dictionary form
+        #Returns: 
+        #    -particle (list): particle position
+        #    -speed (list): particle speed
+        #"""
         content=[]
         for key in bounds:
             if bounds[key][0] == 'int':
@@ -108,19 +99,19 @@ class PSO:
     
 
     def InitSwarm(self, x0=None):
-        """
-        Swarm intializer 
-        Inputs:
-            -warmup (int): number of individuals to create and evaluate initially
-        Returns 
-            -pop (dict): initial swarm in a dictionary form, looks like this:
-                
-            pop={particle key: [particle position, particle velocity, particle fitness]}
-            pop={0: [[1,2,3,4,5], [0.1,0.2,0.3,0.4,0.5], 1.2], 
-                 ... 
-                 99: [[1.1,2.1,3.1,4.1,5.1], [0.1,0.2,0.3,0.4,0.5], 5.2]}
-           
-        """
+        #"""
+        #Swarm intializer 
+        #Inputs:
+        #    -warmup (int): number of individuals to create and evaluate initially
+        #Returns 
+        #    -pop (dict): initial swarm in a dictionary form, looks like this:
+        #        
+        #    pop={particle key: [particle position, particle velocity, particle fitness]}
+        #    pop={0: [[1,2,3,4,5], [0.1,0.2,0.3,0.4,0.5], 1.2], 
+        #         ... 
+        #         99: [[1.1,2.1,3.1,4.1,5.1], [0.1,0.2,0.3,0.4,0.5], 5.2]}
+        #   
+        #"""
         #initialize the swarm and velocity and run them in parallel (these samples will be used to initialize the swarm)
         pop=defaultdict(list)
         # dict key runs from 0 to self.npar-1
@@ -167,20 +158,21 @@ class PSO:
         return pop, local_pos, local_fit  #return final pop dictionary with particle, velocity, and fitness
     
     def UpdateParticle(self, particle, local_pos, local_fit):
-        """
-        Function that updates the particle speed and position based on the 
-        best local positon of the particle and best global position of the swarm
-        The function works with both int or float variables
-        Input: 
-            particle (list of lists):
-                    particle[0] (list) = current position
-                    particle[1] (list) = speed 
-                    particle[2] (list) = current fit 
-            local_pos (list): best local position observed for this particle
+        #"""
+        #Function that updates the particle speed and position based on the 
+        #best local positon of the particle and best global position of the swarm
+        #The function works with both int or float variables
+        #Input: 
+        #    particle (list of lists):
+        #            particle[0] (list) = current position
+        #            particle[1] (list) = speed 
+        #            particle[2] (list) = current fit 
+        #    local_pos (list): best local position observed for this particle
+        #
+        #Return:
+        #    new_particle (list of lists): modified particle with same structure as `particle` 
+        #"""  
         
-        Return:
-            new_particle (list of lists): modified particle with same structure as `particle` 
-        """        
         new_particle=copy.deepcopy(particle)
         for i in range (self.size):
             r1=random.random()
@@ -237,30 +229,30 @@ class PSO:
         return new_particle
 
     def _sigmoid(self, x):
-        """
-        Helper method for the sigmoid function
-        Input:
-            x (scalar or numpy.ndarray): input attribute(s)
-        Returns:
-            scalar or numpy.ndarray: output sigmoid computation
-        """
+        #"""
+        #Helper method for the sigmoid function
+        #Input:
+        #    x (scalar or numpy.ndarray): input attribute(s)
+        #Returns:
+        #    scalar or numpy.ndarray: output sigmoid computation
+        #"""
         return 1 / (1 + np.exp(-x))
 
     def gen_object(self, inp):
-        """
-        Worker for pool process, just to run the fitness function
-        """
+        #"""
+        #Worker for pool process, just to run the fitness function
+        #"""
         return self.fit(inp)
 
     def select(self, pop, k=1):
-        """
-        Reorder the swarm and select the best `k` particles from it
-        Input:
-            -pop (dict): swarm of particles 
-            -k (int): number of particles to survive [ k < len(pop) ]
-        Returns:
-            -best_dict (dict): dictionary of the best k particles in the swarm
-        """
+        #"""
+        #Reorder the swarm and select the best `k` particles from it
+        #Input:
+        #    -pop (dict): swarm of particles 
+        #    -k (int): number of particles to survive [ k < len(pop) ]
+        #Returns:
+        #    -best_dict (dict): dictionary of the best k particles in the swarm
+        #"""
         pop=list(pop.items())
         pop.sort(key=lambda e: e[1][2], reverse=True)
         sorted_dict=dict(pop[:k])
@@ -278,14 +270,14 @@ class PSO:
         return best_dict
 
     def GenSwarm(self, swm):
-        """
-        Generate the new swarm (offspring) based on the old swarm, 
-        by looping and updating all particles
-        Input:
-            swm (dict): current swarm 
-        Return:
-            offspring (dict): new updated swarm
-        """
+        #"""
+        #Generate the new swarm (offspring) based on the old swarm, 
+        #by looping and updating all particles
+        #Input:
+        #    swm (dict): current swarm 
+        #Return:
+        #    offspring (dict): new updated swarm
+        #"""
         offspring = defaultdict(list)
         for i in range(len(swm)):
             
@@ -296,19 +288,15 @@ class PSO:
 
     def evolute(self, ngen, x0=None, verbose=True):
         """
-        This is the PSO evolutionary algorithm.
+        This function evolutes the PSO algorithm for number of generations.
         
-        Inputs:
-            ngen (int): number of generations to evolute
-            x0 (list of lists): initial swarm population (position, speed, fitness for all particles)
-            -verbose (bool): print statistics to screen
-            
-        Returns:
-            population (dict): last swarm population (position, speed, fitness for all particles)
-            swm_pos (list):  best swarm position
-            swm_fit (float): best swarm fitness
+        :param ngen: (int) number of generations to evolute
+        :param x0: (list of lists) the initial position of the swarm particles
+        :param verbose: (bool) print statistics to screen
+        
+        :return: (dict) dictionary containing major PSO search results
         """
-        
+        self.best_scores=[]
         if x0:
             #get the initial swarm position from the user, it has to be 
             print('-- Using The Initial PSO Swarm from the User')
@@ -382,7 +370,10 @@ class PSO:
                 totsteps=ngen*self.npar
                 self.w = self.wmax - (self.wmax-self.wmin)*step/totsteps
                 #print('timew', self.w)
-            swarm = copy.deepcopy(offspring)            
+            
+            fit_best=np.max([offspring[item][2] for item in offspring])  #get the max fitness for this generation
+            self.best_scores.append(fit_best)
+            swarm = copy.deepcopy(offspring) 
             
             # Print data
             if verbose:
@@ -410,4 +401,4 @@ class PSO:
         print('Best fitness (y) found:', self.swm_fit)
         print('Best individual (x) found:', self.swm_pos)
         print('--------------------------------------------------------------')        
-        return population, self.swm_pos, self.swm_fit
+        return self.swm_pos, self.swm_fit, self.best_scores

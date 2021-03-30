@@ -1,0 +1,604 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>neorl.evolu.ga &mdash; NEORL 1.1.3b documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> NEORL
+          
+
+          
+            
+            <img src="../../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                main (1.1.3b )
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">General Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/quickstart.html">Getting Started</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Algorithms</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/a2c.html">Advantage Actor Critic (A2C)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/dqn.html">Deep Q Learning (DQN)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/ppo2.html">Proximal Policy Optimisation (PPO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/ga.html">Genetic Algorithms (GA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/es.html">Evolution Strategies (ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/pso.html">Particle Swarm Optimisation (PSO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/de.html">Differential Evolution (DE)</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../tune/grid.html">Grid Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tune/random.html">Random Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tune/evolu.html">Evolutionary Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tune/bayes.html">Bayesian Search</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex1.html">Example 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex2.html">Example 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex3.html">Example 3</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Misc</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../misc/changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../misc/projects.html">Projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../misc/contrib.html">Contributors</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">NEORL</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>neorl.evolu.ga</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for neorl.evolu.ga</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">#&quot;&quot;&quot;</span>
+<span class="c1">#Created on Tue Feb 25 14:42:24 2020</span>
+<span class="c1">#@author: Majdi Radaideh</span>
+<span class="c1">#&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="c1">#import gym</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="c1">#from deap import algorithms, base, creator, tools</span>
+<span class="c1"># import input parameters from the user</span>
+<span class="c1">#from neorl.parsers.PARSER import InputChecker</span>
+<span class="kn">from</span> <span class="nn">neorl.evolu.crossover</span> <span class="kn">import</span> <span class="n">cxES2point</span><span class="p">,</span> <span class="n">mutES</span><span class="p">,</span> <span class="n">select</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+
+<span class="kn">import</span> <span class="nn">multiprocessing</span>
+<span class="kn">import</span> <span class="nn">multiprocessing.pool</span>
+
+<span class="c1">#import os, csv</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+
+<span class="k">class</span> <span class="nc">NoDaemonProcess</span><span class="p">(</span><span class="n">multiprocessing</span><span class="o">.</span><span class="n">Process</span><span class="p">):</span>
+    <span class="c1"># make &#39;daemon&#39; attribute always return False</span>
+    <span class="k">def</span> <span class="nf">_get_daemon</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">def</span> <span class="nf">_set_daemon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">pass</span>
+    <span class="n">daemon</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_daemon</span><span class="p">,</span> <span class="n">_set_daemon</span><span class="p">)</span>
+
+<span class="c1"># We sub-class multiprocessing.pool.Pool instead of multiprocessing.Pool</span>
+<span class="c1"># because the latter is only a wrapper function, not a proper class.</span>
+<span class="k">class</span> <span class="nc">MyPool</span><span class="p">(</span><span class="n">multiprocessing</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">Pool</span><span class="p">):</span>
+    <span class="n">Process</span> <span class="o">=</span> <span class="n">NoDaemonProcess</span>
+
+<div class="viewcode-block" id="GA"><a class="viewcode-back" href="../../../modules/ga.html#neorl.evolu.ga.GA">[docs]</a><span class="k">class</span> <span class="nc">GA</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parallel Genetic Algorithms</span>
+<span class="sd">    </span>
+<span class="sd">    :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: {&#39;x1&#39;: [&#39;int&#39;, 1, 4], &#39;x2&#39;: [&#39;float&#39;, 0.1, 0.8], &#39;x3&#39;: [&#39;float&#39;, 2.2, 6.2]}</span>
+<span class="sd">    :param fit: (function) the fitness function </span>
+<span class="sd">    :param npop: (int) number of individuals in the population</span>
+<span class="sd">    :param cxpb: (float) population crossover probability between [0,1]</span>
+<span class="sd">    :param mutpb: (float) population mutation probability between [0,1]</span>
+<span class="sd">    :param chi: (float) individual mutation probability between [0,1]</span>
+<span class="sd">    :param ncores: (int) number of parallel processors</span>
+<span class="sd">    :param seed: (int) random seed for sampling</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">npop</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">cxpb</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">cxfunc</span><span class="o">=</span><span class="s1">&#39;cx2point&#39;</span><span class="p">,</span> 
+                  <span class="n">mutfunc</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">mutpb</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> 
+                  <span class="n">chi</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>    
+
+        
+        <span class="k">if</span> <span class="n">seed</span><span class="p">:</span>
+            <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="o">=</span><span class="n">fit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">npop</span><span class="o">=</span><span class="n">npop</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="o">=</span><span class="n">mu</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cxpb</span><span class="o">=</span><span class="n">cxpb</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mutpb</span><span class="o">=</span><span class="n">mutpb</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chi</span><span class="o">=</span><span class="n">chi</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="o">=</span><span class="n">ncores</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span>
+        
+        <span class="k">assert</span> <span class="n">mu</span> <span class="o">&lt;=</span> <span class="n">npop</span><span class="p">,</span> <span class="s1">&#39;--error: the value of `mu` must be less than or equal `npop`&#39;</span>
+        <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">chi</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;--error: `chi` must be between [0,1]&#39;</span>
+        <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">cxpb</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;--error: `cxpb` must be between [0,1]&#39;</span>
+        <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">mutpb</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;--error: `mutpb` must be between [0,1]&#39;</span>
+            
+    <span class="k">def</span> <span class="nf">gen_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inp</span><span class="p">):</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="c1">#This is a worker for multiprocess Pool</span>
+        <span class="c1">#Inputs:</span>
+        <span class="c1">#    inp (list of lists): contains data for each core [[ind1, caseid1], ...,  [indN, caseidN]]</span>
+        <span class="c1">#Returns:</span>
+        <span class="c1">#    fitness value (float)</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">inp</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">GenES</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lb</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">smin</span><span class="p">,</span> <span class="n">smax</span><span class="p">,</span> <span class="n">ub</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="c1">#Individual generator</span>
+        <span class="c1">#Inputs:</span>
+        <span class="c1">#    -lb,ub,datatype (list): input paramter lower/upper bounds in dictionary form</span>
+        <span class="c1">#Returns </span>
+        <span class="c1">#    -ind (list): an individual vector with values sampled from bounds</span>
+        <span class="c1">#    -strategy (list): the strategy vector with values between smin and smax</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">lb</span><span class="p">)</span> <span class="c1"># size of individual </span>
+        <span class="n">content</span><span class="o">=</span><span class="p">[]</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">kbs_path</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">kbs_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">lambda_</span><span class="p">,</span> <span class="s1">&#39;--error: the size of the KBS dataset (</span><span class="si">{}</span><span class="s1">) is not enough to cover initial population lambda (</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kbs_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">lambda_</span><span class="p">)</span>
+            <span class="n">index</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">kbs_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">ind</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kbs_data</span><span class="p">[</span><span class="n">index</span><span class="p">,:])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lb</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="n">datatype</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;int&#39;</span><span class="p">:</span>
+                    <span class="n">content</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">lb</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">ub</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+                <span class="k">elif</span> <span class="n">datatype</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;float&#39;</span><span class="p">:</span>
+                    <span class="n">content</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">lb</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">ub</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+                <span class="k">elif</span> <span class="n">datatype</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;grid&#39;</span><span class="p">:</span>
+                    <span class="n">content</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">lb</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span> <span class="p">(</span><span class="s1">&#39;unknown data type is given, either int, float, or grid are allowed for parameter bounds&#39;</span><span class="p">)</span>
+            
+            <span class="n">ind</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+        <span class="n">strategy</span> <span class="o">=</span> <span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">smin</span><span class="p">,</span><span class="n">smax</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">ind</span><span class="p">,</span> <span class="n">strategy</span>
+
+    <span class="k">def</span> <span class="nf">init_pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">warmup</span><span class="p">):</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="c1">#Population intializer </span>
+        <span class="c1">#Inputs:</span>
+        <span class="c1">#    -warmup (int): number of individuals to create and evaluate initially</span>
+        <span class="c1">#Returns </span>
+        <span class="c1">#    -pop (dict): initial population in a dictionary form, looks like this</span>
+            
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="c1">#initialize the population and strategy and run them in parallel (these samples will be used to initialize the memory)</span>
+        <span class="n">pop</span><span class="o">=</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+        <span class="c1"># dict key runs from 0 to warmup-1</span>
+        <span class="c1"># index 0: individual, index 1: strategy, index 2: fitness </span>
+        <span class="c1"># Example: </span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        pop={key: [ind, strategy, fitness]}</span>
+<span class="sd">        pop={0: [[1,2,3,4,5], [0.1,0.2,0.3,0.4,0.5], 1.2], </span>
+<span class="sd">             ... </span>
+<span class="sd">             99: [[1.1,2.1,3.1,4.1,5.1], [0.1,0.2,0.3,0.4,0.5], 5.2]}</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="n">warmup</span><span class="p">):</span>
+            <span class="c1">#caseid=&#39;es_gen{}_ind{}&#39;.format(0,i+1)  #caseid are only for logging purposes to distinguish sample source</span>
+            <span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">GenES</span><span class="p">(</span><span class="n">lb</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lbound</span><span class="p">,</span> <span class="n">ub</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ubound</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">datatype</span><span class="p">,</span> <span class="n">smax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">smax</span><span class="p">,</span> <span class="n">smin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">smin</span><span class="p">)</span>
+            <span class="n">pop</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">pop</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1">#evaluate warmup in parallel</span>
+            <span class="n">core_list</span><span class="o">=</span><span class="p">[]</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">pop</span><span class="p">:</span>
+                <span class="n">core_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">p</span><span class="o">=</span><span class="n">MyPool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">)</span>
+            <span class="n">fitness</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gen_object</span><span class="p">,</span> <span class="n">core_list</span><span class="p">)</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+            
+            <span class="p">[</span><span class="n">pop</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fitness</span><span class="p">[</span><span class="n">ind</span><span class="p">])</span> <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pop</span><span class="p">))]</span>
+        
+        <span class="k">else</span><span class="p">:</span> <span class="c1">#evaluate warmup in series</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">pop</span><span class="p">:</span>
+                <span class="c1">#caseid=&#39;es_gen{}_ind{}&#39;.format(0,key+1)</span>
+                <span class="n">fitness</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">pop</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">pop</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fitness</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">pop</span>  <span class="c1">#return final pop dictionary with ind, strategy, and fitness</span>
+
+<div class="viewcode-block" id="GA.select"><a class="viewcode-back" href="../../../modules/ga.html#neorl.evolu.ga.GA.select">[docs]</a>    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="n">pop</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Select function sorts the population from max to min based on fitness and select k best</span>
+<span class="sd">        Inputs:</span>
+<span class="sd">            pop (dict): population in dictionary structure</span>
+<span class="sd">            k (int): top k individuals are selected</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            best_dict (dict): the new ordered dictionary with top k selected </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">pop</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+        <span class="n">pop</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">e</span><span class="p">:</span> <span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">sorted_dict</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">pop</span><span class="p">[:</span><span class="n">k</span><span class="p">])</span>
+        
+        <span class="c1">#This block creates a new dict where keys are reset to 0 ... k in order to avoid unordered keys after sort</span>
+        <span class="n">best_dict</span><span class="o">=</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+        <span class="n">index</span><span class="o">=</span><span class="mi">0</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">sorted_dict</span><span class="p">:</span>
+            <span class="n">best_dict</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sorted_dict</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">best_dict</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sorted_dict</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">best_dict</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sorted_dict</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">2</span><span class="p">])</span>
+            <span class="n">index</span><span class="o">+=</span><span class="mi">1</span>
+        
+        <span class="n">sorted_dict</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">best_dict</span></div>
+
+    <span class="k">def</span> <span class="nf">GenOffspring</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">):</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="c1">#This function generates the offspring by applying crossover, mutation **or** reproduction. </span>
+        <span class="c1">#The sum of both probabilities self.cxpb and self.mutpb must be in [0,1]</span>
+        <span class="c1">#The reproduction probability is 1 - cxpb - mutpb</span>
+        <span class="c1">#The new offspring goes for fitness evaluation</span>
+        <span class="c1">#Inputs:</span>
+        <span class="c1">#    pop (dict): population in dictionary structure</span>
+        <span class="c1">#Returns:</span>
+        <span class="c1">#    offspring (dict): new modified population in dictionary structure    </span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="n">pop_indices</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">pop</span><span class="p">)))</span>
+        <span class="n">offspring</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lambda_</span><span class="p">):</span>
+            <span class="n">alpha</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+            <span class="c1">#------------------------------</span>
+            <span class="c1"># Crossover</span>
+            <span class="c1">#------------------------------</span>
+            <span class="k">if</span> <span class="n">alpha</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">cxpb</span><span class="p">:</span>            
+                <span class="n">index1</span><span class="p">,</span> <span class="n">index2</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">pop_indices</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">ind1</span><span class="p">,</span> <span class="n">ind2</span><span class="p">,</span> <span class="n">strat1</span><span class="p">,</span> <span class="n">strat2</span> <span class="o">=</span> <span class="n">cx2point</span><span class="p">(</span><span class="n">ind1</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">pop</span><span class="p">[</span><span class="n">index1</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span><span class="n">ind2</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">pop</span><span class="p">[</span><span class="n">index2</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span> 
+                                                     <span class="n">strat1</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">pop</span><span class="p">[</span><span class="n">index1</span><span class="p">][</span><span class="mi">1</span><span class="p">]),</span><span class="n">strat2</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">pop</span><span class="p">[</span><span class="n">index2</span><span class="p">][</span><span class="mi">1</span><span class="p">]))</span>
+                <span class="n">offspring</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ind1</span><span class="p">)</span>
+                <span class="n">offspring</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">strat1</span><span class="p">)</span>
+                <span class="c1">#print(&#39;crossover is done for sample {} between {} and {}&#39;.format(i,index1,index2))</span>
+            <span class="c1">#------------------------------</span>
+            <span class="c1"># Mutation</span>
+            <span class="c1">#------------------------------</span>
+            <span class="k">elif</span> <span class="n">alpha</span> <span class="o">&lt;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cxpb</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mutpb</span><span class="p">):</span>  <span class="c1"># Apply mutation</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">pop_indices</span><span class="p">)</span>
+                <span class="n">ind</span><span class="p">,</span> <span class="n">strat</span><span class="o">=</span><span class="n">mutES</span><span class="p">(</span><span class="n">ind</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">pop</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span> <span class="n">strat</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">pop</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="mi">1</span><span class="p">]),</span> <span class="n">lb</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lbound</span><span class="p">,</span> <span class="n">ub</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ubound</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">datatype</span><span class="p">,</span> <span class="n">smax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">smax</span><span class="p">,</span> <span class="n">smin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">smin</span><span class="p">)</span>
+                <span class="n">offspring</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span>
+                <span class="n">offspring</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">strat</span><span class="p">)</span>
+                <span class="c1">#print(&#39;mutation is done for sample {} based on {}&#39;.format(i,index))</span>
+            <span class="c1">#------------------------------</span>
+            <span class="c1"># Reproduction from population</span>
+            <span class="c1">#------------------------------</span>
+            <span class="k">else</span><span class="p">:</span>                         
+                <span class="n">index</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">pop_indices</span><span class="p">)</span>
+                <span class="n">offspring</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">offspring</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+                <span class="c1">#print(&#39;reproduction is done for sample {} based on {}&#39;.format(i,index))</span>
+    
+        <span class="k">return</span> <span class="n">offspring</span>
+
+<div class="viewcode-block" id="GA.evolute"><a class="viewcode-back" href="../../../modules/ga.html#neorl.evolu.ga.GA.evolute">[docs]</a>    <span class="k">def</span> <span class="nf">evolute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ngen</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function evolutes the GA algorithm for number of generations.</span>
+<span class="sd">        </span>
+<span class="sd">        :param ngen: (int) number of generations to evolute</span>
+<span class="sd">        :param x0: (list of lists) the initial individuals of the population</span>
+<span class="sd">        :param verbose: (bool) print statistics to screen</span>
+<span class="sd">        </span>
+<span class="sd">        :return: (dict) dictionary containing major GA search results</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">:</span>
+            <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">x0</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">npop</span><span class="p">,</span> <span class="s1">&#39;--error: the length of `x0` (</span><span class="si">{}</span><span class="s1">) (initial population) must equal to number of individuals `npop` (</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">npop</span><span class="p">)</span>
+            <span class="n">population</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">InitPopulation</span><span class="p">(</span><span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">population</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">InitPopulation</span><span class="p">()</span>
+        
+        <span class="c1"># Begin the evolution process</span>
+        <span class="k">for</span> <span class="n">gen</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ngen</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            
+            <span class="c1"># Vary the population and generate new offspring</span>
+            <span class="n">offspring</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">GenOffspring</span><span class="p">(</span><span class="n">pop</span><span class="o">=</span><span class="n">population</span><span class="p">)</span>
+            
+            <span class="c1"># Evaluate the individuals with an invalid fitness with multiprocessign Pool</span>
+            <span class="c1"># create and run the Pool</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">core_list</span><span class="o">=</span><span class="p">[]</span>
+                <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">offspring</span><span class="p">:</span>
+                    <span class="n">core_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">offspring</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                <span class="c1">#initialize a pool</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;---------- Start the real generations------&#39;</span><span class="p">)</span>
+                <span class="n">p</span><span class="o">=</span><span class="n">MyPool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">)</span>
+                <span class="n">fitness</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gen_object</span><span class="p">,</span> <span class="n">core_list</span><span class="p">)</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">close</span><span class="p">();</span> <span class="n">p</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+                
+                <span class="p">[</span><span class="n">offspring</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fitness</span><span class="p">[</span><span class="n">ind</span><span class="p">])</span> <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">offspring</span><span class="p">))]</span>
+            <span class="k">else</span><span class="p">:</span> <span class="c1">#serial calcs</span>
+                <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">offspring</span><span class="p">)):</span>
+                    <span class="n">fitness</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">offspring</span><span class="p">[</span><span class="n">ind</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">offspring</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fitness</span><span class="p">)</span>
+                                
+            <span class="c1"># Select the next generation population</span>
+            <span class="c1">#print([(offspring[item][0],offspring[item][2]) for item in offspring])</span>
+            <span class="c1">#print(&#39;-------------------------------&#39;)</span>
+            <span class="n">population</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">select</span><span class="p">(</span><span class="n">pop</span><span class="o">=</span><span class="n">offspring</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">))</span>
+            <span class="c1">#print([(population[item][0],population[item][2]) for item in population])</span>
+            <span class="c1">#print(&#39;-------------------------------&#39;)        </span>
+            <span class="c1">#print([(population[item][0],population[item][2]) for item in population])</span>
+            <span class="c1">#print(&#39;-------------------------------&#39;)</span>
+                            
+            <span class="c1">#------------</span>
+            <span class="c1"># Monitor Progress</span>
+            <span class="c1">#------------</span>
+            <span class="k">if</span>  <span class="n">gen</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_freq</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">gen</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">ngen</span><span class="p">:</span>
+                
+                <span class="n">out_data</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span><span class="o">+</span><span class="s1">&#39;_out.csv&#39;</span><span class="p">)</span>
+                <span class="n">inp_data</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span><span class="o">+</span><span class="s1">&#39;_inp.csv&#39;</span><span class="p">)</span>
+                <span class="n">sorted_out</span><span class="o">=</span><span class="n">out_data</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;reward&#39;</span><span class="p">],</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>   
+                <span class="n">sorted_inp</span><span class="o">=</span><span class="n">inp_data</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;reward&#39;</span><span class="p">],</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  
+                <span class="n">inds</span><span class="p">,</span> <span class="n">rwd</span><span class="o">=</span><span class="p">[</span><span class="n">population</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">population</span><span class="p">],</span> <span class="p">[</span><span class="n">population</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">population</span><span class="p">]</span>
+                <span class="n">mean_strategy</span><span class="o">=</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">population</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">population</span><span class="p">]</span>
+                <span class="c1">#------------</span>
+                <span class="c1"># plot progress </span>
+                <span class="c1">#------------</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">callback</span><span class="o">.</span><span class="n">plot_progress</span><span class="p">(</span><span class="s1">&#39;Generation&#39;</span><span class="p">)</span>
+                
+                <span class="c1">#------------</span>
+                <span class="c1"># print summary </span>
+                <span class="c1">#------------</span>
+                <span class="k">with</span> <span class="nb">open</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span> <span class="o">+</span> <span class="s1">&#39;_summary.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fin</span><span class="p">:</span>
+                    <span class="n">fin</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;*****************************************************</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                    <span class="n">fin</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;Summary data for generation </span><span class="si">{}</span><span class="s1">/</span><span class="si">{}</span><span class="s1"> </span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ngen</span><span class="p">))</span>
+                    <span class="n">fin</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;*****************************************************</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                    <span class="n">fin</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;Max Reward: </span><span class="si">{0:.2f}</span><span class="s1"> </span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">rwd</span><span class="p">)))</span>
+                    <span class="n">fin</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;Mean Reward: </span><span class="si">{0:.2f}</span><span class="s1"> </span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rwd</span><span class="p">)))</span>
+                    <span class="n">fin</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;Std Reward: </span><span class="si">{0:.2f}</span><span class="s1"> </span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">rwd</span><span class="p">)))</span>
+                    <span class="n">fin</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;Min Reward: </span><span class="si">{0:.2f}</span><span class="s1"> </span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">rwd</span><span class="p">)))</span>
+                    
+                    <span class="n">fin</span><span class="o">.</span><span class="n">write</span> <span class="p">(</span><span class="s1">&#39;--------------------------------------------------------------------------------------</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                    <span class="n">fin</span><span class="o">.</span><span class="n">write</span> <span class="p">(</span><span class="s1">&#39;Best output for this generation </span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                    <span class="n">fin</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">sorted_out</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">.</span><span class="n">to_string</span><span class="p">())</span>
+                    <span class="n">fin</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                    <span class="n">fin</span><span class="o">.</span><span class="n">write</span> <span class="p">(</span><span class="s1">&#39;-------------------------------------------------------------------------------------- </span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                    <span class="n">fin</span><span class="o">.</span><span class="n">write</span> <span class="p">(</span><span class="s1">&#39;Best corresponding input for this generation </span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                    <span class="n">fin</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">sorted_inp</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">.</span><span class="n">to_string</span><span class="p">())</span>
+                    <span class="n">fin</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                    <span class="n">fin</span><span class="o">.</span><span class="n">write</span> <span class="p">(</span><span class="s1">&#39;-------------------------------------------------------------------------------------- </span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                    <span class="n">fin</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;############################################################&#39;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ES generation </span><span class="si">{}</span><span class="s1">/</span><span class="si">{}</span><span class="s1">, CX=</span><span class="si">{}</span><span class="s1">, MUT=</span><span class="si">{}</span><span class="s1">, MU=</span><span class="si">{}</span><span class="s1">, LAMBDA=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gen</span><span class="p">,</span><span class="n">ngen</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cxpb</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mutpb</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lambda_</span><span class="p">))</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;############################################################&#39;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Statistics for generation </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gen</span><span class="p">))</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best Reward:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">rwd</span><span class="p">),</span><span class="mi">2</span><span class="p">))</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Mean Reward:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rwd</span><span class="p">),</span><span class="mi">2</span><span class="p">))</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Max Strategy:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">mean_strategy</span><span class="p">),</span><span class="mi">3</span><span class="p">))</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Min Strategy:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">mean_strategy</span><span class="p">),</span><span class="mi">3</span><span class="p">))</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Average Strategy:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">mean_strategy</span><span class="p">),</span><span class="mi">3</span><span class="p">))</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;############################################################&#39;</span><span class="p">)</span>
+
+            <span class="c1">#------------</span>
+            <span class="c1"># Update the population with KBS </span>
+            <span class="c1">#------------</span>
+            <span class="c1">#print([(population[item][0],population[item][2]) for item in population])            </span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">kbs_path</span><span class="p">:</span>
+                <span class="n">kbs_pop_indices</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kbs_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="bp">self</span><span class="o">.</span><span class="n">kbs_pop</span><span class="p">)</span>
+                <span class="n">last_index</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">population</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+                <span class="n">last_index</span><span class="o">=</span><span class="n">last_index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">kbs_pop_indices</span><span class="p">)):</span>
+                    <span class="n">ind_vec</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kbs_data</span><span class="p">[</span><span class="n">kbs_pop_indices</span><span class="p">[</span><span class="n">i</span><span class="p">],:])</span>
+                    
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">kbs_append</span><span class="p">:</span> <span class="c1">#append KBS individuals to the population</span>
+                        <span class="n">strategy</span> <span class="o">=</span> <span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">smin</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">smax</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lbound</span><span class="p">))]</span>
+                        <span class="n">kbs_ind</span><span class="o">=</span><span class="p">[</span><span class="n">ind_vec</span><span class="p">,</span><span class="n">strategy</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="n">population</span><span class="p">[</span><span class="n">last_index</span><span class="o">+</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span><span class="o">=</span><span class="n">kbs_ind</span>
+                    <span class="k">else</span><span class="p">:</span> <span class="c1">#replace the worst individuals in pop with KBS individuals</span>
+                        <span class="c1">#population[last_index-i-1]=kbs_ind</span>
+                        <span class="c1">#print(last_index-i)</span>
+                        <span class="n">population</span><span class="p">[</span><span class="n">last_index</span><span class="o">-</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">ind_vec</span>
+                        <span class="c1">#print(population[last_index-i][0])</span>
+                    
+        <span class="k">return</span> <span class="n">population</span></div></div>
+        
+<span class="c1">#    def build(self):</span>
+<span class="c1">#        </span>
+<span class="c1">#        &quot;&quot;&quot;</span>
+<span class="c1">#        This function builds a GA module based on the passed user parameters</span>
+<span class="c1">#        &quot;&quot;&quot;</span>
+<span class="c1">#        </span>
+<span class="c1">#        random.seed(42)</span>
+<span class="c1">#        pop0=self.init_pop(warmup=self.lambda_)</span>
+<span class="c1">#        self.evolute(population=pop0, ngen=self.ngen, verbose=0)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Exelon Corp. &amp; MIT.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

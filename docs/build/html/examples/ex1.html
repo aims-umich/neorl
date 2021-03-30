@@ -1,0 +1,287 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Example 1 &mdash; NEORL 1.1.3b documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Example 2" href="ex2.html" />
+    <link rel="prev" title="Bayesian Search" href="../tune/bayes.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> NEORL
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                main (1.1.3b )
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">General Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guide/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/quickstart.html">Getting Started</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Algorithms</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules/a2c.html">Advantage Actor Critic (A2C)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/dqn.html">Deep Q Learning (DQN)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/ppo2.html">Proximal Policy Optimisation (PPO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/ga.html">Genetic Algorithms (GA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/es.html">Evolution Strategies (ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pso.html">Particle Swarm Optimisation (PSO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/de.html">Differential Evolution (DE)</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tune/grid.html">Grid Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/random.html">Random Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/evolu.html">Evolutionary Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/bayes.html">Bayesian Search</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Example 1</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#problem-description">Problem Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#neorl-script">NEORL script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#results">Results</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ex2.html">Example 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ex3.html">Example 3</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Misc</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../misc/changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/projects.html">Projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/contrib.html">Contributors</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEORL</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Example 1</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/examples/ex1.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="example-1">
+<span id="ex1"></span><h1>Example 1<a class="headerlink" href="#example-1" title="Permalink to this headline">¶</a></h1>
+<p>Example of solving a combinatorial optimisation problem using NEORL in a small nuclear fuel assembly with reinforcement learning.</p>
+<div class="section" id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Algorithms: DQN, PPO</p></li>
+<li><p>Type: Discrete/Combinatorial, Multi-objective, Constrained</p></li>
+<li><p>Field: Nuclear Engineering</p></li>
+</ul>
+</div>
+<div class="section" id="problem-description">
+<h2>Problem Description<a class="headerlink" href="#problem-description" title="Permalink to this headline">¶</a></h2>
+<p>The system optimized in this example is the nuclear fuel assembly; a top view of a boiling water reactor assembly design is sketched in Fig.1. Assembly combinatorial optimization is seen as a permutation with repetition problem with cost proportional to <span class="math notranslate nohighlight">\(O(m^n)\)</span>, where <span class="math notranslate nohighlight">\(m\)</span> is the number of fuel types (i.e., choices) to pick from, while <span class="math notranslate nohighlight">\(n\)</span> is the number of fuel rod locations to optimize (i.e., number of times to choose). The fuel material consists of Uranium Oxide (<span class="math notranslate nohighlight">\(UO_2\)</span>). The 6x6 assembly in Fig.1 features two types of <span class="math notranslate nohighlight">\(UO_2\)</span> fuel with 1.87% and 2.53% U-235 enrichment. The assembly geometry is sketched in Fig.1, where the numbered rods on and below the diagonal line are included in the optimization process. So if every position of the 21 has two possible choices of fuel: 1.87% or 2.53%, the exact number of possible permutations (i.e., full size of the search space) can be estimated as <span class="math notranslate nohighlight">\(2^{21}=2,097,152\)</span>. The multi-objective function to be minimized can be expressed as</p>
+<div class="math notranslate nohighlight">
+\[\min \limits_{\vec{x}} \ F(\vec{x}) =  \bigg|\frac{1.25-k_\infty}{1.25}\bigg| + w_p \bigg|\frac{1.35-PPF}{1.35}\bigg| + \bigg|\frac{2.3 - E}{2.3}\bigg|,\]</div>
+<p>where <span class="math notranslate nohighlight">\(w_p= 1\)</span> when <span class="math notranslate nohighlight">\(PPF &gt; 1.35\)</span> and <span class="math notranslate nohighlight">\(w_p= 0\)</span> otherwise. The reason is that PPF is perceived as a threshold safety parameter to be maintained below a specific value (e.g., 1.35). Once this condition is satisfied, optimizing PPF is no longer needed. Accordingly, the reward to be maximized in this example is nothing but the reciprocal of the objective function</p>
+<div class="math notranslate nohighlight">
+\[\max \limits_{\vec{x}} \ Reward =  \frac{1}{F(\vec{x})},\]</div>
+<p>For this case study, the action space is a <code class="docutils literal notranslate"><span class="pre">Discrete</span></code> variable of size two: 1.87% and 2.53%, which are the <span class="math notranslate nohighlight">\(UO_2\)</span> enrichment. The state space is a <code class="docutils literal notranslate"><span class="pre">Box</span></code> of size <span class="math notranslate nohighlight">\(21 \times 2\)</span>, while the <code class="docutils literal notranslate"><span class="pre">reward</span></code> is a scalar value.</p>
+<a class="reference internal image-reference" href="../_images/ex1-geom.png" id="fig-ex1-geom"><img alt="alternate text" class="align-center" id="fig-ex1-geom" src="../_images/ex1-geom.png" style="width: 176.7px; height: 201.6px;" /></a>
+</div>
+<div class="section" id="neorl-script">
+<h2>NEORL script<a class="headerlink" href="#neorl-script" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="results">
+<h2>Results<a class="headerlink" href="#results" title="Permalink to this headline">¶</a></h2>
+<p id="fig-ex1-objs">The convergence of the three individual objectives (<span class="math notranslate nohighlight">\(k_\infty\)</span> , <span class="math notranslate nohighlight">\(E\)</span>, <span class="math notranslate nohighlight">\(PPF\)</span>) are shown below</p>
+<a class="reference internal image-reference" href="../_images/ex1-objs.png"><img alt="alternate text" class="align-center" src="../_images/ex1-objs.png" style="width: 710.4px; height: 287.09999999999997px;" /></a>
+<p>The convergence of the total reward is shown below for both DQN and PPO</p>
+<a class="reference internal image-reference" href="../_images/ex1-rl.png"><img alt="alternate text" class="align-center" src="../_images/ex1-rl.png" style="width: 712.1999999999999px; height: 287.7px;" /></a>
+<p>Lastly, plots of the best nuclear assembly patterns based on Fig.1 are shown below as found by the two RL algorithms. These two assembly designs belong to the known global optima group (the best possible patterns to find)</p>
+<a class="reference internal image-reference" href="../_images/ex1-sols.png"><img alt="alternate text" class="align-center" src="../_images/ex1-sols.png" style="width: 542.0px; height: 284.0px;" /></a>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="ex2.html" class="btn btn-neutral float-right" title="Example 2" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../tune/bayes.html" class="btn btn-neutral float-left" title="Bayesian Search" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Exelon Corp. &amp; MIT.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

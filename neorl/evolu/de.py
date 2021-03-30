@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Sun Jun 14 13:45:54 2020
+#Created on Sun Jun 14 13:45:54 2020
+#@author: Majdi Radaideh
 
-@author: Majdi
-"""
 
 #--- IMPORT DEPENDENCIES ------------------------------------------------------+
 
@@ -31,18 +29,19 @@ class MyPool(multiprocessing.pool.Pool):
     Process = NoDaemonProcess
 
 class DE:
-    def __init__ (self, bounds, fit, npop=50, mutate=0.5, recombination=0.7, ncores=1, seed=None):  
-        """
-        Parallel Differential Evolution:
-        Inputs:
-            bounds (dict): input paramter lower/upper bounds in dictionary form
-            fit (function): fitness function 
-            npop (int): number of individuals in the population group
-            ncores (int): parallel cores
-            mutate (float): mutation factor
-            recombination (float): recombination factor 
-            seed (int): random seeding for reproducibility
-        """
+    """
+    Parallel Differential Evolution
+    
+    :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: {'x1': ['int', 1, 4], 'x2': ['float', 0.1, 0.8], 'x3': ['float', 2.2, 6.2]}
+    :param fit: (function) the fitness function 
+    :param npop: (int) number of individuals in the population
+    :param F: (float) differential/mutation weight between [0,2]
+    :param CR: (float) crossover probability between [0,1]
+    :param ncores: (int) number of parallel processors
+    :param seed: (int) random seed for sampling
+    """
+    def __init__ (self, bounds, fit, npop=50, F=0.5, CR=0.3, ncores=1, seed=None):  
+
         
         if seed:
             random.seed(seed)
@@ -52,8 +51,8 @@ class DE:
         self.bounds=bounds
         self.ncores=ncores
         self.fit=fit
-        self.mutate=mutate
-        self.recombination=recombination
+        self.F=F
+        self.CR=CR
         
     def ensure_bounds(self, vec, bounds):
     
@@ -76,14 +75,14 @@ class DE:
         return vec_new
 
     def GenIndv(self, bounds):
-        """
-        Particle generator
-        Input: 
-            -bounds (dict): input paramter type and lower/upper bounds in dictionary form
-        Returns: 
-            -particle (list): particle position
-            -speed (list): particle speed
-        """
+        #"""
+        #Particle generator
+        #Input: 
+        #    -bounds (dict): input paramter type and lower/upper bounds in dictionary form
+        #Returns: 
+        #    -particle (list): particle position
+        #    -speed (list): particle speed
+        #"""
         
         indv=[]
         for key in bounds:
@@ -114,12 +113,16 @@ class DE:
         return pop
 
     def evolute(self, ngen, x0=None, verbose=0):
+        """
+        This function evolutes the DE algorithm for number of generations.
         
-        #print('***************************************************************************')
-        #print('***************************************************************************')
-        #print('*******************Differential Evolution (DE)*****************************')
-        #print('***************************************************************************')
-        #print('***************************************************************************')
+        :param ngen: (int) number of generations to evolute
+        :param x0: (list of lists) the initial individuals of the population
+        :param verbose: (bool) print statistics to screen
+        
+        :return: (dict) dictionary containing major DE search results
+        """
+        
         if self.seed:
             random.seed(self.seed)
         #np.random.seed(self.seed)
@@ -160,7 +163,7 @@ class DE:
                 x_diff = [x_2_i - x_3_i for x_2_i, x_3_i in zip(x_2, x_3)]
     
                 # multiply x_diff by the mutation factor (F) and add to x_1
-                v_donor = [x_1_i + self.mutate * x_diff_i for x_1_i, x_diff_i in zip(x_1, x_diff)]
+                v_donor = [x_1_i + self.F * x_diff_i for x_1_i, x_diff_i in zip(x_1, x_diff)]
                 v_donor = self.ensure_bounds(v_donor, bounds=self.bounds) #XXX check this line
     
                 #--- RECOMBINATION (step #3.B) ----------------+
@@ -168,7 +171,7 @@ class DE:
                 v_trial = []
                 for k in range(len(x_t)):
                     crossover = random.random()
-                    if crossover <= self.recombination:
+                    if crossover <= self.CR:
                         v_trial.append(v_donor[k])
     
                     else:
@@ -190,16 +193,10 @@ class DE:
             y_best = max(gen_scores)                                  # fitness of best individual
             x_best = population[gen_scores.index(max(gen_scores))]     # solution of best individual
             best_scores.append(y_best)
-                    
-#            if verbose:
-#                print ("GENERATION:",gen)
-#                print ('      > GENERATION AVERAGE:',gen_avg)
-#                print ('      > GENERATION BEST:',gen_best)
-#                print ('         > BEST SOLUTION:',gen_sol,'\n')
 
             if verbose:
                 print('************************************************************')
-                print('DE step {}/{}, Mutate={}, Recombination={}, Ncores={}'.format(gen*self.npop, ngen*self.npop, self.mutate, self.recombination, self.ncores))
+                print('DE step {}/{}, F={}, CR={}, Ncores={}'.format(gen*self.npop, ngen*self.npop, self.F, self.CR, self.ncores))
                 print('************************************************************')
                 print('Best fitness:', np.round(y_best,6))
                 print('Best individual:', x_best)

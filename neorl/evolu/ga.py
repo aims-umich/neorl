@@ -1,27 +1,25 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Feb 25 14:42:24 2020
-
-@author: majdi
-"""
+#"""
+#Created on Tue Feb 25 14:42:24 2020
+#@author: Majdi Radaideh
+#"""
 
 import warnings
 warnings.filterwarnings("ignore")
 import random
-import gym
+#import gym
 import pandas as pd
 import numpy as np
-from deap import algorithms, base, creator, tools
+#from deap import algorithms, base, creator, tools
 # import input parameters from the user
-from neorl.parsers.PARSER import InputChecker
-from neorl.evolu.crossover import cx2point, mutES, select
+#from neorl.parsers.PARSER import InputChecker
+from neorl.evolu.crossover import cxES2point, mutES, select
 from collections import defaultdict
 
 import multiprocessing
 import multiprocessing.pool
 
-import os, csv
+#import os, csv
 import copy
 
 class NoDaemonProcess(multiprocessing.Process):
@@ -37,88 +35,61 @@ class NoDaemonProcess(multiprocessing.Process):
 class MyPool(multiprocessing.pool.Pool):
     Process = NoDaemonProcess
 
-class GAAgent(InputChecker):
+class GA:
+    """
+    Parallel Genetic Algorithms
     
-    def __init__ (self, inp, callback):    
-    
-        """
-        Input: 
-        inp: is a dictionary of validated user input {"ncores": 8, "env": 6x6, ...}
-        callback: a class of callback built from stable-baselines to allow intervening during training 
-                  to process data and save models
-        """
-        random.seed(42)
-        self.inp= inp
-        self.env = gym.make(self.inp.gen_dict['env'][0], casename=self.inp.ga_dict['casename'][0], exepath=self.inp.gen_dict['exepath'][0], 
-                            log_dir=self.inp.gen_dict['log_dir'], env_data=self.inp.gen_dict['env_data'][0])
-        self.log_dir=self.inp.gen_dict['log_dir']+self.inp.ga_dict["casename"][0]
-        self.callback=callback
+    :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: {'x1': ['int', 1, 4], 'x2': ['float', 0.1, 0.8], 'x3': ['float', 2.2, 6.2]}
+    :param fit: (function) the fitness function 
+    :param npop: (int) number of individuals in the population
+    :param cxpb: (float) population crossover probability between [0,1]
+    :param mutpb: (float) population mutation probability between [0,1]
+    :param chi: (float) individual mutation probability between [0,1]
+    :param ncores: (int) number of parallel processors
+    :param seed: (int) random seed for sampling
+    """
+    def __init__ (self, bounds, fit, npop=50, mu=50, cxpb=0.7, cxfunc='cx2point', 
+                  mutfunc='', mutpb=0.2, 
+                  chi=0.1, ncores=1, seed=None):    
+
         
-        # Infer GA user paramters from the ga_dict
-        self.check_freq=self.inp.ga_dict["check_freq"][0]
-        self.ncores=self.inp.ga_dict["ncores"][0]
-        self.kbs_path=self.inp.ga_dict["kbs_path"][0]
+        if seed:
+            random.seed(seed)
         
-        self.npop=self.inp.ga_dict["pop"][0]
-        self.smax=self.inp.ga_dict["smax"][0]
-        self.smin=self.inp.ga_dict["smin"][0]
-        self.cxpb=self.inp.ga_dict["cxpb"][0]
-        self.mutpb=self.inp.ga_dict["mutpb"][0]
-        self.ngen=self.inp.ga_dict["ngen"][0]
-        self.mu=self.inp.ga_dict["pop"][0]
-        if self.inp.ga_dict["lambda"][0]:
-            self.lambda_=self.inp.ga_dict["lambda"][0]
-        else:
-            self.lambda_=self.mu
+        self.bounds=bounds
+        self.fit=fit
+        self.npop=npop
+        self.mu=mu
+        self.cxpb=cxpb
+        self.mutpb=mutpb
+        self.chi=chi
+        self.ncores=ncores
+        self.seed=seed
         
-        #-------------------------------------
-        # Initialize lower/upper bound 
-        #-------------------------------------
-        self.lbound=self.inp.ga_dict['lbound'][0]
-        self.ubound=self.inp.ga_dict['ubound'][0]
-        self.datatype=self.inp.ga_dict['type'][0]
-        assert len(self.lbound) == len(self.ubound), '--error: the lbound ({}) and ubounds ({}) must have same length'.format(len(self.lbound),len(self.ubound))
-        assert len(self.lbound) == len(self.datatype), '--error: the lbound/ubound ({}) and type ({}) must have same length'.format(len(self.lbound),len(self.datatype))
-        if len(self.lbound) > 1 or len(self.ubound) > 1:
-            self.lbound=[item for item in self.lbound]
-            self.ubound=[item for item in self.ubound]
-            self.datatype=[str(item) for item in self.datatype]
-        
-        
-        #-------------------------------------
-        # KBS Mode (via a CSV dataset)
-        # This option is valid if solutions are provided by RL
-        # This is activated if kbs_path is provided 
-        #-------------------------------------
-        if self.kbs_path:
-            print('--debug: A path to KBS dataset is provided for GA')
-            if not os.path.exists (self.kbs_path):
-                raise Exception ('--error: a kbs mode is used for GA, but the path to dataset ({}) does not exist'.format(self.kbs_path))
-            kbs_frac=self.inp.ga_dict["kbs_frac"][0]
-            print('--debug: Loading the dataset from {} ...'.format(self.kbs_path))
-            self.kbs_data=pd.read_csv(self.kbs_path).values
-            self.kbs_pop=int(kbs_frac*self.lambda_) # number of kbs individuals to contribute from total population
-            self.kbs_append=False
+        assert mu <= npop, '--error: the value of `mu` must be less than or equal `npop`'
+        assert 0 <= chi <= 1, '--error: `chi` must be between [0,1]'
+        assert 0 <= cxpb <= 1, '--error: `cxpb` must be between [0,1]'
+        assert 0 <= mutpb <= 1, '--error: `mutpb` must be between [0,1]'
             
     def gen_object(self, inp):
-        """
-        This is a worker for multiprocess Pool
-        Inputs:
-            inp (list of lists): contains data for each core [[ind1, caseid1], ...,  [indN, caseidN]]
-        Returns:
-            fitness value (float)
-        """
+        #"""
+        #This is a worker for multiprocess Pool
+        #Inputs:
+        #    inp (list of lists): contains data for each core [[ind1, caseid1], ...,  [indN, caseidN]]
+        #Returns:
+        #    fitness value (float)
+        #"""
         return self.env.fit(inp)
 
     def GenES(self, lb, datatype, smin, smax, ub=None):
-        """
-        Individual generator
-        Inputs:
-            -lb,ub,datatype (list): input paramter lower/upper bounds in dictionary form
-        Returns 
-            -ind (list): an individual vector with values sampled from bounds
-            -strategy (list): the strategy vector with values between smin and smax
-        """
+        #"""
+        #Individual generator
+        #Inputs:
+        #    -lb,ub,datatype (list): input paramter lower/upper bounds in dictionary form
+        #Returns 
+        #    -ind (list): an individual vector with values sampled from bounds
+        #    -strategy (list): the strategy vector with values between smin and smax
+        #"""
         size = len(lb) # size of individual 
         content=[]
         
@@ -142,14 +113,14 @@ class GAAgent(InputChecker):
         return ind, strategy
 
     def init_pop(self, warmup):
-        """
-        Population intializer 
-        Inputs:
-            -warmup (int): number of individuals to create and evaluate initially
-        Returns 
-            -pop (dict): initial population in a dictionary form, looks like this
+        #"""
+        #Population intializer 
+        #Inputs:
+        #    -warmup (int): number of individuals to create and evaluate initially
+        #Returns 
+        #    -pop (dict): initial population in a dictionary form, looks like this
             
-        """
+        #"""
         #initialize the population and strategy and run them in parallel (these samples will be used to initialize the memory)
         pop=defaultdict(list)
         # dict key runs from 0 to warmup-1
@@ -186,19 +157,43 @@ class GAAgent(InputChecker):
         
         return pop  #return final pop dictionary with ind, strategy, and fitness
 
-    def GenOffspring(self, pop):
+    def select(pop, k=1):
         """
-        
-        This function generates the offspring by applying crossover, mutation **or** reproduction. 
-        The sum of both probabilities self.cxpb and self.mutpb must be in [0,1]
-        The reproduction probability is 1 - cxpb - mutpb
-        The new offspring goes for fitness evaluation
-        
+        Select function sorts the population from max to min based on fitness and select k best
         Inputs:
             pop (dict): population in dictionary structure
+            k (int): top k individuals are selected
         Returns:
-            offspring (dict): new modified population in dictionary structure    
+            best_dict (dict): the new ordered dictionary with top k selected 
         """
+        
+        pop=list(pop.items())
+        pop.sort(key=lambda e: e[1][2], reverse=True)
+        sorted_dict=dict(pop[:k])
+        
+        #This block creates a new dict where keys are reset to 0 ... k in order to avoid unordered keys after sort
+        best_dict=defaultdict(list)
+        index=0
+        for key in sorted_dict:
+            best_dict[index].append(sorted_dict[key][0])
+            best_dict[index].append(sorted_dict[key][1])
+            best_dict[index].append(sorted_dict[key][2])
+            index+=1
+        
+        sorted_dict.clear()
+        return best_dict
+
+    def GenOffspring(self, pop):
+        #"""
+        #This function generates the offspring by applying crossover, mutation **or** reproduction. 
+        #The sum of both probabilities self.cxpb and self.mutpb must be in [0,1]
+        #The reproduction probability is 1 - cxpb - mutpb
+        #The new offspring goes for fitness evaluation
+        #Inputs:
+        #    pop (dict): population in dictionary structure
+        #Returns:
+        #    offspring (dict): new modified population in dictionary structure    
+        #"""
         pop_indices=list(range(0,len(pop)))
         offspring = defaultdict(list)
         for i in range(self.lambda_):
@@ -233,16 +228,24 @@ class GAAgent(InputChecker):
     
         return offspring
 
-    def evolute(self, population, ngen, verbose=0):
-        """This is the :math:`(\mu~,~\lambda)` evolutionary algorithm.
-    
-        Inputs:
-            population (dict): initial population in dictionary structure
-            ngen (int): number of generations to evolute
-            verbose (bool): print summary to screen
-        Returns:
-            population (dict): final population after running all generations (ngen)
+    def evolute(self, ngen, x0, verbose=0):
         """
+        This function evolutes the GA algorithm for number of generations.
+        
+        :param ngen: (int) number of generations to evolute
+        :param x0: (list of lists) the initial individuals of the population
+        :param verbose: (bool) print statistics to screen
+        
+        :return: (dict) dictionary containing major GA search results
+        """
+        if self.seed:
+            random.seed(self.seed)
+
+        if x0:
+            assert len(x0) == self.npop, '--error: the length of `x0` ({}) (initial population) must equal to number of individuals `npop` ({})'.format(len(x0), self.npop)
+            population = self.InitPopulation(x0=x0)
+        else:
+            population = self.InitPopulation()
         
         # Begin the evolution process
         for gen in range(1, ngen + 1):
@@ -351,12 +354,12 @@ class GAAgent(InputChecker):
                     
         return population
         
-    def build(self):
-        
-        """
-        This function builds a GA module based on the passed user parameters
-        """
-        
-        random.seed(42)
-        pop0=self.init_pop(warmup=self.lambda_)
-        self.evolute(population=pop0, ngen=self.ngen, verbose=0)
+#    def build(self):
+#        
+#        """
+#        This function builds a GA module based on the passed user parameters
+#        """
+#        
+#        random.seed(42)
+#        pop0=self.init_pop(warmup=self.lambda_)
+#        self.evolute(population=pop0, ngen=self.ngen, verbose=0)

@@ -1,0 +1,382 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Example 3 &mdash; NEORL 1.1.3b documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Changelog" href="../misc/changelog.html" />
+    <link rel="prev" title="Example 2" href="ex2.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> NEORL
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                main (1.1.3b )
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">General Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guide/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/quickstart.html">Getting Started</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Algorithms</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules/a2c.html">Advantage Actor Critic (A2C)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/dqn.html">Deep Q Learning (DQN)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/ppo2.html">Proximal Policy Optimisation (PPO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/ga.html">Genetic Algorithms (GA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/es.html">Evolution Strategies (ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pso.html">Particle Swarm Optimisation (PSO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/de.html">Differential Evolution (DE)</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tune/grid.html">Grid Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/random.html">Random Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/evolu.html">Evolutionary Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/bayes.html">Bayesian Search</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ex1.html">Example 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ex2.html">Example 2</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Example 3</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#problem-description">Problem Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#neorl-script">NEORL script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#results">Results</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Misc</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../misc/changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/projects.html">Projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/contrib.html">Contributors</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEORL</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Example 3</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/examples/ex3.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="example-3">
+<span id="ex3"></span><h1>Example 3<a class="headerlink" href="#example-3" title="Permalink to this headline">¶</a></h1>
+<p>Example of solving the heavily-constrained engineering optimization problem “Welded-beam design” using NEORL with the PESA hybrid algorithm.</p>
+<div class="section" id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Algorithms: PESA</p></li>
+<li><p>Type: Continuous, Single-objective, Constrained</p></li>
+<li><p>Field: Structural Engineering</p></li>
+</ul>
+</div>
+<div class="section" id="problem-description">
+<h2>Problem Description<a class="headerlink" href="#problem-description" title="Permalink to this headline">¶</a></h2>
+<p>The welded beam is a common engineering optimisation problem with an objective to find an optimal set of the dimensions <span class="math notranslate nohighlight">\(h (x_1)\)</span>, <span class="math notranslate nohighlight">\(l (x_2)\)</span>, <span class="math notranslate nohighlight">\(t (x_3)\)</span>, and <span class="math notranslate nohighlight">\(b (x_4)\)</span> such that the fabrication cost of the beam is minimized. This problem is a continuous optimisation problem. See the Figure below for graphical details of the beam dimensions (<span class="math notranslate nohighlight">\(h, l, t, b\)</span>) to be optimised.</p>
+<a class="reference internal image-reference" href="../_images/welded-beam.png"><img alt="alternate text" class="align-center" src="../_images/welded-beam.png" style="width: 340.0px; height: 377.0px;" /></a>
+<p>The cost of the welded beam is formulated as</p>
+<div class="math notranslate nohighlight">
+\[\min_{\vec{x}} f (\vec{x}) = 1.10471x_1^2x_2 + 0.04811x_3x_4 (14+x_2),\]</div>
+<p>subject to 7 rules/constraints, the first on the shear stress ($tau$)</p>
+<div class="math notranslate nohighlight">
+\[g_1(\vec{x}) = \tau(\vec{x}) - \tau_{max} \leq 0,\]</div>
+<p>the second on the bending stress ($sigma$)</p>
+<div class="math notranslate nohighlight">
+\[g_2(\vec{x}) = \sigma(\vec{x}) - \sigma_{max} \leq 0,\]</div>
+<p>three side constraints</p>
+<div class="math notranslate nohighlight">
+\[g_3(\vec{x}) = x_1 - x_4 \leq 0,\]</div>
+<div class="math notranslate nohighlight">
+\[g_4(\vec{x}) = 0.10471x_1^2 + 0.04811x_3x_4 (14+x_2) - 5 \leq 0,\]</div>
+<div class="math notranslate nohighlight">
+\[g_5(\vec{x}) = 0.125 - x_1 \leq 0,\]</div>
+<p>the sixth on the end deflection of the beam ($delta$)</p>
+<div class="math notranslate nohighlight">
+\[g_6(\vec{x}) = \delta(\vec{x}) - \delta_{max} \leq 0,\]</div>
+<p>and the last on the buckling load on the bar ($P_c$)</p>
+<div class="math notranslate nohighlight">
+\[g_7(\vec{x}) = P - P_{c}(\vec{x}) \leq 0,\]</div>
+<p>while the range of the design variables are:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{split}
+     0.1 \leq x_1 \leq 2 &amp;, \quad 0.1 \leq x_2 \leq 10, \\
+     0.1 \leq x_3 \leq 10 &amp;, \quad 0.1 \leq x_4 \leq 2. \\
+\end{split}\end{split}\]</div>
+<p>The derived variables and their related constants are expressed as follows cite{coello2000use}:</p>
+<div class="math notranslate nohighlight">
+\[\tau(\vec{x}) = \sqrt{(\tau')^2 + 2\tau' \tau'' \frac{x_2}{2R}+(\tau'')^2},\]</div>
+<div class="math notranslate nohighlight">
+\[\tau' = \frac{P}{\sqrt{2}x_1x_2}, \tau''=\frac{MR}{J}, M= P (L+x_2/2),\]</div>
+<div class="math notranslate nohighlight">
+\[R= \sqrt{\frac{x_2^2}{4}+\frac{(x_1+x_3)^2}{4}},\]</div>
+<div class="math notranslate nohighlight">
+\[J= 2\Bigg[\sqrt{2}x_1x_2 \Bigg(\frac{x_2^2}{12} + \frac{(x_1+x_3)^2}{4} \Bigg) \Bigg],\]</div>
+<div class="math notranslate nohighlight">
+\[\sigma(\vec{x}) = \frac{6PL}{x_4x_3^2},\]</div>
+<div class="math notranslate nohighlight">
+\[\delta(\vec{x}) = \frac{4PL^3}{Ex_3^3x_4},\]</div>
+<div class="math notranslate nohighlight">
+\[P_c(\vec{x}) = \frac{4.013E\sqrt{\frac{x_3^2x_4^6}{36}}}{L^2}\Bigg(1-\frac{x_3}{2L}\sqrt{\frac{E}{4G}}\Bigg),\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{split}
+   P &amp;= 6000 \text{ lb} , L =14 \text{ in},  E=30\times 10^6 \text{ psi}, \\
+   G &amp;= 12 \times 10^6 \text{ psi}, \\
+   \tau_{max} &amp; =13,600 \text{ psi}, \sigma_{max} = 30,000 \text{ psi}, \delta_{max} = 0.25 \text{ in}
+\end{split}\end{split}\]</div>
+</div>
+<div class="section" id="neorl-script">
+<h2>NEORL script<a class="headerlink" href="#neorl-script" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#---------------------------------</span>
+<span class="c1"># Import packages</span>
+<span class="c1">#---------------------------------</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">PESA</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">pi</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1">#---------------------------------</span>
+<span class="c1"># Fitness function</span>
+<span class="c1">#---------------------------------</span>
+<span class="k">def</span> <span class="nf">ACKLEY</span><span class="p">(</span><span class="n">individual</span><span class="p">):</span>
+    <span class="c1">#Ackley objective function.</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">individual</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">=</span><span class="mi">20</span> <span class="o">-</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.2</span><span class="o">*</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="n">d</span> <span class="o">*</span> <span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">individual</span><span class="p">)))</span> \
+            <span class="o">+</span> <span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">exp</span><span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="n">d</span> <span class="o">*</span> <span class="nb">sum</span><span class="p">(</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">individual</span><span class="p">))</span>
+    <span class="k">return</span> <span class="o">-</span><span class="n">f</span>   <span class="c1">#-1 to convert to maximization problem</span>
+
+<span class="c1">#---------------------------------</span>
+<span class="c1"># Parameter Space</span>
+<span class="c1">#---------------------------------</span>
+<span class="c1">#Setup the parameter space (d=8)</span>
+<span class="n">d</span><span class="o">=</span><span class="mi">8</span>
+<span class="n">lb</span><span class="o">=-</span><span class="mi">32</span>
+<span class="n">ub</span><span class="o">=</span><span class="mi">32</span>
+<span class="n">BOUNDS</span><span class="o">=</span><span class="p">{}</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">d</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">BOUNDS</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="n">lb</span><span class="p">,</span> <span class="n">ub</span><span class="p">]</span>
+
+<span class="c1">#---------------------------------</span>
+<span class="c1"># PESA</span>
+<span class="c1">#---------------------------------</span>
+<span class="n">pesa</span><span class="o">=</span><span class="n">PESA</span><span class="p">(</span><span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">FIT</span><span class="p">,</span> <span class="n">ngen</span><span class="o">=</span><span class="n">NGEN</span><span class="p">,</span> <span class="n">npop</span><span class="o">=</span><span class="n">NPOP</span><span class="p">,</span> <span class="n">memory_size</span><span class="o">=</span><span class="n">MEMORY_SIZE</span><span class="p">,</span> <span class="n">pop0</span><span class="o">=</span><span class="n">pop0</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">MODE</span><span class="p">,</span>
+      <span class="n">alpha0</span><span class="o">=</span><span class="n">ALPHA0</span><span class="p">,</span> <span class="n">alpha1</span><span class="o">=</span><span class="n">ALPHA1</span><span class="p">,</span> <span class="n">warmup</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi</span><span class="o">=</span><span class="n">CHI</span><span class="p">,</span> <span class="n">replay_rate</span><span class="o">=</span><span class="n">REPLAY_RATE</span><span class="p">,</span> <span class="n">Tmax</span><span class="o">=</span><span class="n">TMAX</span><span class="p">,</span>
+      <span class="n">mu</span><span class="o">=</span><span class="n">MU</span><span class="p">,</span> <span class="n">cxpb</span><span class="o">=</span><span class="n">CXPB</span><span class="p">,</span> <span class="n">mutpb</span><span class="o">=</span><span class="n">MUTPB</span><span class="p">,</span> <span class="n">c1</span><span class="o">=</span><span class="n">C1</span><span class="p">,</span> <span class="n">c2</span><span class="o">=</span><span class="n">C2</span><span class="p">,</span> <span class="n">speed_mech</span><span class="o">=</span><span class="n">SPEED_MECH</span><span class="p">,</span> <span class="n">pso_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">xpesa_best</span><span class="p">,</span> <span class="n">ypesa_best</span><span class="o">=</span> <span class="n">pesa</span><span class="o">.</span><span class="n">evolute</span><span class="p">()</span>
+
+<span class="c1">#---------------------------------</span>
+<span class="c1"># Plot</span>
+<span class="c1">#---------------------------------</span>
+<span class="c1">#Plot fitness for both methods</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pso_hist</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;PSO&#39;</span><span class="p">)</span>             <span class="c1">#multiply by -1 to covert back to a min problem</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">de_hist</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;DE&#39;</span><span class="p">)</span>               <span class="c1">#multiply by -1 to covert back to a min problem</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">nes_hist</span><span class="p">[</span><span class="s1">&#39;fitness&#39;</span><span class="p">]),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;NES&#39;</span><span class="p">)</span>  <span class="c1">#multiply by -1 to covert back to a min problem</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Generation&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Fitness&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;ex2_fitness.png&#39;</span><span class="p">,</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="results">
+<h2>Results<a class="headerlink" href="#results" title="Permalink to this headline">¶</a></h2>
+<p>The convergence of the fitness function is shown below</p>
+<a class="reference internal image-reference" href="../_images/ex2_fitness.png"><img alt="alternate text" class="align-center" src="../_images/ex2_fitness.png" style="width: 491.09999999999997px; height: 328.5px;" /></a>
+<p>After detailed hyperparameter tuning, PESA can achieve competitive performance for the welded beam design compared to other algorithms in the literature</p>
+<a class="reference internal image-reference" href="../_images/ex3_table.png"><img alt="alternate text" class="align-center" src="../_images/ex3_table.png" style="width: 674.6999999999999px; height: 166.2px;" /></a>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../misc/changelog.html" class="btn btn-neutral float-right" title="Changelog" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="ex2.html" class="btn btn-neutral float-left" title="Example 2" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Exelon Corp. &amp; MIT.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

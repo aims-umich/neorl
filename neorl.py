@@ -25,22 +25,23 @@ from neorl.tune.randtune import RANDTUNE
 from neorl.tune.bayestune import BAYESTUNE
 from neorl.tune.estune import ESTUNE
 from neorl.utils.initfiles import initfiles
-#random.seed(1)
-#np.random.seed(1)
-
-    
+  
 if __name__ == '__main__':
     
     
     logo="""
-                 NEOPy: NeuroEvolution Optimisation in Python
-                 ███╗   ██╗███████╗ ██████╗ ██████╗ ██╗   ██╗
-                 ████╗  ██║██╔════╝██╔═══██╗██╔══██╗╚██╗ ██╔╝
-                 ██╔██╗ ██║█████╗  ██║   ██║██████╔╝ ╚████╔╝ 
-                 ██║╚██╗██║██╔══╝  ██║   ██║██╔═══╝   ╚██╔╝  
-                 ██║ ╚████║███████╗╚██████╔╝██║        ██║   
-                 ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝        ╚═╝                                                 
-
+    
+    \t\t NEORL: NeuroEvolution Optimisation with Reinforcement Learning
+    \t\t\t ███╗   ██╗███████╗ ██████╗ ██████╗ ██╗     
+    \t\t\t ████╗  ██║██╔════╝██╔═══██╗██╔══██╗██║     
+    \t\t\t ██╔██╗ ██║█████╗  ██║   ██║██████╔╝██║     
+    \t\t\t ██║╚██╗██║██╔══╝  ██║   ██║██╔══██╗██║     
+    \t\t\t ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗
+    \t\t\t ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝                                                
+    Copyright © 2021 Exelon Corporation (https://www.exeloncorp.com/) in collaboration with 
+                 MIT Nuclear Science and Engineering (https://web.mit.edu/nse/)
+                                 All Rights Reserved
+    
                            \n"""
                            
     print(logo)

@@ -1,0 +1,659 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Deep Q Learning (DQN) &mdash; NEORL 1.1.3b documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Proximal Policy Optimisation (PPO)" href="ppo2.html" />
+    <link rel="prev" title="Advantage Actor Critic (A2C)" href="a2c.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> NEORL
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                main (1.1.3b )
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">General Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guide/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/quickstart.html">Getting Started</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Algorithms</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="a2c.html">Advantage Actor Critic (A2C)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Deep Q Learning (DQN)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-can-you-use">What can you use?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example">Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#notes">Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ppo2.html">Proximal Policy Optimisation (PPO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ga.html">Genetic Algorithms (GA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="es.html">Evolution Strategies (ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pso.html">Particle Swarm Optimisation (PSO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="de.html">Differential Evolution (DE)</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tune/grid.html">Grid Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/random.html">Random Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/evolu.html">Evolutionary Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/bayes.html">Bayesian Search</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex1.html">Example 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex2.html">Example 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex3.html">Example 3</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Misc</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../misc/changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/projects.html">Projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/contrib.html">Contributors</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEORL</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Deep Q Learning (DQN)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/modules/dqn.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <span class="target" id="module-neorl.rl.baselines.deepq"><span id="dqn"></span></span><div class="section" id="deep-q-learning-dqn">
+<h1>Deep Q Learning (DQN)<a class="headerlink" href="#deep-q-learning-dqn" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://arxiv.org/abs/1312.5602">Deep Q Network (DQN)</a>
+and its extensions (Double-DQN, Dueling-DQN, Prioritized Experience Replay).</p>
+<p>Original papers:
+- DQN paper: <a class="reference external" href="https://arxiv.org/abs/1312.5602">https://arxiv.org/abs/1312.5602</a>
+- Dueling DQN: <a class="reference external" href="https://arxiv.org/abs/1511.06581">https://arxiv.org/abs/1511.06581</a>
+- Double-Q Learning: <a class="reference external" href="https://arxiv.org/abs/1509.06461">https://arxiv.org/abs/1509.06461</a>
+- Prioritized Experience Replay: <a class="reference external" href="https://arxiv.org/abs/1511.05952">https://arxiv.org/abs/1511.05952</a></p>
+<div class="section" id="what-can-you-use">
+<h2>What can you use?<a class="headerlink" href="#what-can-you-use" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Multi processing: ❌</p></li>
+<li><p>Discrete spaces: ✔️</p></li>
+<li><p>Continuous spaces: ❌</p></li>
+<li><p>Mixed Discrete/Continuous spaces: ❌</p></li>
+</ul>
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gym</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">gym.spaces</span> <span class="kn">import</span> <span class="n">Discrete</span><span class="p">,</span> <span class="n">Box</span>
+<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">DQN</span>
+<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">DQNPolicy</span>
+<span class="kn">from</span> <span class="nn">neorl.tools</span> <span class="kn">import</span> <span class="n">RLLogger</span>
+
+<span class="c1">#Define a Gym-class containing your function to optimise</span>
+<span class="c1">#follow the template below</span>
+<span class="k">class</span> <span class="nc">Sphere</span><span class="p">(</span><span class="n">gym</span><span class="o">.</span><span class="n">Env</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">lb</span><span class="o">=-</span><span class="mi">100</span>
+        <span class="n">ub</span><span class="o">=</span><span class="mi">100</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="o">=</span><span class="mi">5</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">action_space</span> <span class="o">=</span> <span class="n">Discrete</span><span class="p">(</span><span class="mi">201</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">real_actions</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">lb</span><span class="p">,</span><span class="n">ub</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">observation_space</span> <span class="o">=</span> <span class="n">Box</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">real_actions</span><span class="p">),</span> <span class="n">high</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">real_actions</span><span class="p">),</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">episode_length</span><span class="o">=</span><span class="mi">50</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">done</span><span class="o">=</span><span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+        <span class="n">individual</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">real_actions</span><span class="p">[</span><span class="n">action</span><span class="p">]]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">individual</span><span class="p">)</span>
+        <span class="n">reward</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">individual</span><span class="o">=</span><span class="n">individual</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">episode_length</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">done</span><span class="o">=</span><span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">return</span> <span class="n">individual</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">done</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span><span class="n">action</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">individual</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;Sphere test objective function.</span>
+<span class="sd">                    F(x) = sum_{i=1}^d xi^2</span>
+<span class="sd">                    d=1,2,3,...</span>
+<span class="sd">                    Range: [-100,100]</span>
+<span class="sd">                    Minima: 0</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="c1">#-1 is used to convert minimization to maximization</span>
+            <span class="k">return</span> <span class="o">-</span><span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">individual</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">done</span><span class="o">=</span><span class="kc">False</span>
+        <span class="n">ac</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+        <span class="n">individual</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">real_actions</span><span class="p">[</span><span class="n">ac</span><span class="p">]]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span>
+        <span class="k">return</span> <span class="n">individual</span>
+
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;human&#39;</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+<span class="c1">#create an object from the class</span>
+<span class="n">env</span><span class="o">=</span><span class="n">Sphere</span><span class="p">()</span>
+<span class="c1">#create a callback function to log data</span>
+<span class="n">cb</span><span class="o">=</span><span class="n">RLLogger</span><span class="p">(</span><span class="n">check_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">log_dir</span><span class="o">=</span><span class="s1">&#39;dqn_log&#39;</span><span class="p">)</span>
+<span class="c1">#create an a2c object based on the env object</span>
+<span class="n">dqn</span> <span class="o">=</span> <span class="n">DQN</span><span class="p">(</span><span class="n">DQNPolicy</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1">#optimise the enviroment class</span>
+<span class="n">dqn</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span><span class="n">total_timesteps</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">cb</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="neorl.rl.baselines.deepq.DQN">
+<em class="property">class </em><code class="sig-prename descclassname">neorl.rl.baselines.deepq.</code><code class="sig-name descname">DQN</code><span class="sig-paren">(</span><em class="sig-param">policy</em>, <em class="sig-param">env</em>, <em class="sig-param">gamma=0.99</em>, <em class="sig-param">learning_rate=0.0005</em>, <em class="sig-param">buffer_size=50000</em>, <em class="sig-param">exploration_fraction=0.1</em>, <em class="sig-param">exploration_final_eps=0.02</em>, <em class="sig-param">exploration_initial_eps=1.0</em>, <em class="sig-param">train_freq=1</em>, <em class="sig-param">batch_size=32</em>, <em class="sig-param">double_q=True</em>, <em class="sig-param">learning_starts=1000</em>, <em class="sig-param">target_network_update_freq=500</em>, <em class="sig-param">prioritized_replay=False</em>, <em class="sig-param">prioritized_replay_alpha=0.6</em>, <em class="sig-param">prioritized_replay_beta0=0.4</em>, <em class="sig-param">prioritized_replay_beta_iters=None</em>, <em class="sig-param">prioritized_replay_eps=1e-06</em>, <em class="sig-param">param_noise=False</em>, <em class="sig-param">n_cpu_tf_sess=None</em>, <em class="sig-param">verbose=0</em>, <em class="sig-param">tensorboard_log=None</em>, <em class="sig-param">_init_setup_model=True</em>, <em class="sig-param">policy_kwargs=None</em>, <em class="sig-param">full_tensorboard_log=False</em>, <em class="sig-param">seed=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/rl/baselines/deepq/dqn.html#DQN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neorl.rl.baselines.deepq.DQN" title="Permalink to this definition">¶</a></dt>
+<dd><p>The DQN model class.
+DQN paper: <a class="reference external" href="https://arxiv.org/abs/1312.5602">https://arxiv.org/abs/1312.5602</a>
+Dueling DQN: <a class="reference external" href="https://arxiv.org/abs/1511.06581">https://arxiv.org/abs/1511.06581</a>
+Double-Q Learning: <a class="reference external" href="https://arxiv.org/abs/1509.06461">https://arxiv.org/abs/1509.06461</a>
+Prioritized Experience Replay: <a class="reference external" href="https://arxiv.org/abs/1511.05952">https://arxiv.org/abs/1511.05952</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>policy</strong> – (DQNPolicy or str) The policy model to use (MlpPolicy, CnnPolicy, LnMlpPolicy, …)</p></li>
+<li><p><strong>env</strong> – (Gym environment or str) The environment to learn from (if registered in Gym, can be str)</p></li>
+<li><p><strong>gamma</strong> – (float) discount factor</p></li>
+<li><p><strong>learning_rate</strong> – (float) learning rate for adam optimizer</p></li>
+<li><p><strong>buffer_size</strong> – (int) size of the replay buffer</p></li>
+<li><p><strong>exploration_fraction</strong> – (float) fraction of entire training period over which the exploration rate is
+annealed</p></li>
+<li><p><strong>exploration_final_eps</strong> – (float) final value of random action probability</p></li>
+<li><p><strong>exploration_initial_eps</strong> – (float) initial value of random action probability</p></li>
+<li><p><strong>train_freq</strong> – (int) update the model every <cite>train_freq</cite> steps. set to None to disable printing</p></li>
+<li><p><strong>batch_size</strong> – (int) size of a batched sampled from replay buffer for training</p></li>
+<li><p><strong>double_q</strong> – (bool) Whether to enable Double-Q learning or not.</p></li>
+<li><p><strong>learning_starts</strong> – (int) how many steps of the model to collect transitions for before learning starts</p></li>
+<li><p><strong>target_network_update_freq</strong> – (int) update the target network every <cite>target_network_update_freq</cite> steps.</p></li>
+<li><p><strong>prioritized_replay</strong> – (bool) if True prioritized replay buffer will be used.</p></li>
+<li><p><strong>prioritized_replay_alpha</strong> – (float)alpha parameter for prioritized replay buffer.
+It determines how much prioritization is used, with alpha=0 corresponding to the uniform case.</p></li>
+<li><p><strong>prioritized_replay_beta0</strong> – (float) initial value of beta for prioritized replay buffer</p></li>
+<li><p><strong>prioritized_replay_beta_iters</strong> – (int) number of iterations over which beta will be annealed from initial
+value to 1.0. If set to None equals to max_timesteps.</p></li>
+<li><p><strong>prioritized_replay_eps</strong> – (float) epsilon to add to the TD errors when updating priorities.</p></li>
+<li><p><strong>param_noise</strong> – (bool) Whether or not to apply noise to the parameters of the policy.</p></li>
+<li><p><strong>verbose</strong> – (int) the verbosity level: 0 none, 1 training information, 2 tensorflow debug</p></li>
+<li><p><strong>tensorboard_log</strong> – (str) the log location for tensorboard (if None, no logging)</p></li>
+<li><p><strong>_init_setup_model</strong> – (bool) Whether or not to build the network at the creation of the instance</p></li>
+<li><p><strong>full_tensorboard_log</strong> – (bool) enable additional logging when using tensorboard
+WARNING: this logging can take a lot of space quickly</p></li>
+<li><p><strong>seed</strong> – (int) Seed for the pseudo-random generators (python, numpy, tensorflow).
+If None (default), use random seed. Note that if you want completely deterministic
+results, you must set <cite>n_cpu_tf_sess</cite> to 1.</p></li>
+<li><p><strong>n_cpu_tf_sess</strong> – (int) The number of threads for TensorFlow operations
+If None, the number of cpu of the current machine will be used.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="neorl.rl.baselines.deepq.DQN.action_probability">
+<code class="sig-name descname">action_probability</code><span class="sig-paren">(</span><em class="sig-param">observation</em>, <em class="sig-param">state=None</em>, <em class="sig-param">mask=None</em>, <em class="sig-param">actions=None</em>, <em class="sig-param">logp=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/rl/baselines/deepq/dqn.html#DQN.action_probability"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neorl.rl.baselines.deepq.DQN.action_probability" title="Permalink to this definition">¶</a></dt>
+<dd><p>If <code class="docutils literal notranslate"><span class="pre">actions</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code>, then get the model’s action probability distribution from a given observation.</p>
+<dl class="simple">
+<dt>Depending on the action space the output is:</dt><dd><ul class="simple">
+<li><p>Discrete: probability for each possible action</p></li>
+<li><p>Box: mean and standard deviation of the action output</p></li>
+</ul>
+</dd>
+</dl>
+<p>However if <code class="docutils literal notranslate"><span class="pre">actions</span></code> is not <code class="docutils literal notranslate"><span class="pre">None</span></code>, this function will return the probability that the given actions are
+taken with the given parameters (observation, state, …) on this model. For discrete action spaces, it
+returns the probability mass; for continuous action spaces, the probability density. This is since the
+probability mass will always be zero in continuous spaces, see <a class="reference external" href="http://blog.christianperone.com/2019/01/">http://blog.christianperone.com/2019/01/</a>
+for a good explanation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>observation</strong> – (np.ndarray) the input observation</p></li>
+<li><p><strong>state</strong> – (np.ndarray) The last states (can be None, used in recurrent policies)</p></li>
+<li><p><strong>mask</strong> – (np.ndarray) The last masks (can be None, used in recurrent policies)</p></li>
+<li><p><strong>actions</strong> – (np.ndarray) (OPTIONAL) For calculating the likelihood that the given actions are chosen by
+the model for each of the given parameters. Must have the same number of actions and observations.
+(set to None to return the complete action probability distribution)</p></li>
+<li><p><strong>logp</strong> – (bool) (OPTIONAL) When specified with actions, returns probability in log-space.
+This has no effect if actions is None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(np.ndarray) the model’s (log) action probability</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="neorl.rl.baselines.deepq.DQN.get_env">
+<code class="sig-name descname">get_env</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#neorl.rl.baselines.deepq.DQN.get_env" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the current environment (can be None if not defined)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>(Gym Environment) The current environment</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="neorl.rl.baselines.deepq.DQN.get_parameter_list">
+<code class="sig-name descname">get_parameter_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/rl/baselines/deepq/dqn.html#DQN.get_parameter_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neorl.rl.baselines.deepq.DQN.get_parameter_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get tensorflow Variables of model’s parameters</p>
+<p>This includes all variables necessary for continuing training (saving / loading).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>(list) List of tensorflow Variables</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="neorl.rl.baselines.deepq.DQN.get_parameters">
+<code class="sig-name descname">get_parameters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#neorl.rl.baselines.deepq.DQN.get_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get current model parameters as dictionary of variable name -&gt; ndarray.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>(OrderedDict) Dictionary of variable name -&gt; ndarray of model’s parameters.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="neorl.rl.baselines.deepq.DQN.get_vec_normalize_env">
+<code class="sig-name descname">get_vec_normalize_env</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Optional[neorl.rl.baselines.shared.vec_env.vec_normalize.VecNormalize]<a class="headerlink" href="#neorl.rl.baselines.deepq.DQN.get_vec_normalize_env" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the <code class="docutils literal notranslate"><span class="pre">VecNormalize</span></code> wrapper of the training env
+if it exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Optional[VecNormalize] The <code class="docutils literal notranslate"><span class="pre">VecNormalize</span></code> env.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="neorl.rl.baselines.deepq.DQN.is_using_her">
+<code class="sig-name descname">is_using_her</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#neorl.rl.baselines.deepq.DQN.is_using_her" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if is using HER</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>(bool) Whether is using HER or not</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="neorl.rl.baselines.deepq.DQN.learn">
+<code class="sig-name descname">learn</code><span class="sig-paren">(</span><em class="sig-param">total_timesteps</em>, <em class="sig-param">callback=None</em>, <em class="sig-param">log_interval=100</em>, <em class="sig-param">tb_log_name='DQN'</em>, <em class="sig-param">reset_num_timesteps=True</em>, <em class="sig-param">replay_wrapper=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/rl/baselines/deepq/dqn.html#DQN.learn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neorl.rl.baselines.deepq.DQN.learn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a trained model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>total_timesteps</strong> – (int) The total number of samples to train on</p></li>
+<li><p><strong>callback</strong> – (Union[callable, [callable], BaseCallback])
+function called at every steps with state of the algorithm.
+It takes the local and global variables. If it returns False, training is aborted.
+When the callback inherits from BaseCallback, you will have access
+to additional stages of the training (training start/end),
+please read the documentation for more details.</p></li>
+<li><p><strong>log_interval</strong> – (int) The number of timesteps before logging.</p></li>
+<li><p><strong>tb_log_name</strong> – (str) the name of the run for tensorboard log</p></li>
+<li><p><strong>reset_num_timesteps</strong> – (bool) whether or not to reset the current timestep number (used in logging)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(BaseRLModel) the trained model</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="neorl.rl.baselines.deepq.DQN.load">
+<em class="property">classmethod </em><code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">load_path</em>, <em class="sig-param">env=None</em>, <em class="sig-param">custom_objects=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#neorl.rl.baselines.deepq.DQN.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the model from file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>load_path</strong> – (str or file-like) the saved parameter location</p></li>
+<li><p><strong>env</strong> – (Gym Environment) the new environment to run the loaded model on
+(can be None if you only need prediction from a trained model)</p></li>
+<li><p><strong>custom_objects</strong> – (dict) Dictionary of objects to replace
+upon loading. If a variable is present in this dictionary as a
+key, it will not be deserialized and the corresponding item
+will be used instead. Similar to custom_objects in
+<cite>keras.models.load_model</cite>. Useful when you have an object in
+file that can not be deserialized.</p></li>
+<li><p><strong>kwargs</strong> – extra arguments to change the model when loading</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="neorl.rl.baselines.deepq.DQN.load_parameters">
+<code class="sig-name descname">load_parameters</code><span class="sig-paren">(</span><em class="sig-param">load_path_or_dict</em>, <em class="sig-param">exact_match=True</em><span class="sig-paren">)</span><a class="headerlink" href="#neorl.rl.baselines.deepq.DQN.load_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load model parameters from a file or a dictionary</p>
+<p>Dictionary keys should be tensorflow variable names, which can be obtained
+with <code class="docutils literal notranslate"><span class="pre">get_parameters</span></code> function. If <code class="docutils literal notranslate"><span class="pre">exact_match</span></code> is True, dictionary
+should contain keys for all model’s parameters, otherwise RunTimeError
+is raised. If False, only variables included in the dictionary will be updated.</p>
+<p>This does not load agent’s hyper-parameters.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This function does not update trainer/optimizer variables (e.g. momentum).
+As such training after using this function may lead to less-than-optimal results.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>load_path_or_dict</strong> – (str or file-like or dict) Save parameter location
+or dict of parameters as variable.name -&gt; ndarrays to be loaded.</p></li>
+<li><p><strong>exact_match</strong> – (bool) If True, expects load dictionary to contain keys for
+all variables in the model. If False, loads parameters only for variables
+mentioned in the dictionary. Defaults to True.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="neorl.rl.baselines.deepq.DQN.predict">
+<code class="sig-name descname">predict</code><span class="sig-paren">(</span><em class="sig-param">observation</em>, <em class="sig-param">state=None</em>, <em class="sig-param">mask=None</em>, <em class="sig-param">deterministic=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/rl/baselines/deepq/dqn.html#DQN.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neorl.rl.baselines.deepq.DQN.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the model’s action from an observation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>observation</strong> – (np.ndarray) the input observation</p></li>
+<li><p><strong>state</strong> – (np.ndarray) The last states (can be None, used in recurrent policies)</p></li>
+<li><p><strong>mask</strong> – (np.ndarray) The last masks (can be None, used in recurrent policies)</p></li>
+<li><p><strong>deterministic</strong> – (bool) Whether or not to return deterministic actions.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(np.ndarray, np.ndarray) the model’s action and the next state (used in recurrent policies)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="neorl.rl.baselines.deepq.DQN.pretrain">
+<code class="sig-name descname">pretrain</code><span class="sig-paren">(</span><em class="sig-param">dataset</em>, <em class="sig-param">n_epochs=10</em>, <em class="sig-param">learning_rate=0.0001</em>, <em class="sig-param">adam_epsilon=1e-08</em>, <em class="sig-param">val_interval=None</em><span class="sig-paren">)</span><a class="headerlink" href="#neorl.rl.baselines.deepq.DQN.pretrain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pretrain a model using behavior cloning:
+supervised learning given an expert dataset.</p>
+<p>NOTE: only Box and Discrete spaces are supported for now.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> – (ExpertDataset) Dataset manager</p></li>
+<li><p><strong>n_epochs</strong> – (int) Number of iterations on the training set</p></li>
+<li><p><strong>learning_rate</strong> – (float) Learning rate</p></li>
+<li><p><strong>adam_epsilon</strong> – (float) the epsilon value for the adam optimizer</p></li>
+<li><p><strong>val_interval</strong> – (int) Report training and validation losses every n epochs.
+By default, every 10th of the maximum number of epochs.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(BaseRLModel) the pretrained model</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="neorl.rl.baselines.deepq.DQN.replay_buffer_add">
+<code class="sig-name descname">replay_buffer_add</code><span class="sig-paren">(</span><em class="sig-param">obs_t</em>, <em class="sig-param">action</em>, <em class="sig-param">reward</em>, <em class="sig-param">obs_tp1</em>, <em class="sig-param">done</em>, <em class="sig-param">info</em><span class="sig-paren">)</span><a class="headerlink" href="#neorl.rl.baselines.deepq.DQN.replay_buffer_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new transition to the replay buffer</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obs_t</strong> – (np.ndarray) the last observation</p></li>
+<li><p><strong>action</strong> – ([float]) the action</p></li>
+<li><p><strong>reward</strong> – (float) the reward of the transition</p></li>
+<li><p><strong>obs_tp1</strong> – (np.ndarray) the new observation</p></li>
+<li><p><strong>done</strong> – (bool) is the episode done</p></li>
+<li><p><strong>info</strong> – (dict) extra values used to compute the reward when using HER</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="neorl.rl.baselines.deepq.DQN.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">save_path</em>, <em class="sig-param">cloudpickle=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/rl/baselines/deepq/dqn.html#DQN.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neorl.rl.baselines.deepq.DQN.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the current parameters to file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>save_path</strong> – (str or file-like) The save location</p></li>
+<li><p><strong>cloudpickle</strong> – (bool) Use older cloudpickle format instead of zip-archives.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="neorl.rl.baselines.deepq.DQN.set_env">
+<code class="sig-name descname">set_env</code><span class="sig-paren">(</span><em class="sig-param">env</em><span class="sig-paren">)</span><a class="headerlink" href="#neorl.rl.baselines.deepq.DQN.set_env" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks the validity of the environment, and if it is coherent, set it as the current environment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>env</strong> – (Gym Environment) The environment for learning a policy</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="neorl.rl.baselines.deepq.DQN.set_random_seed">
+<code class="sig-name descname">set_random_seed</code><span class="sig-paren">(</span><em class="sig-param">seed: Optional[int]</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#neorl.rl.baselines.deepq.DQN.set_random_seed" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>seed</strong> – (Optional[int]) Seed for the pseudo-random generators. If None,
+do not change the seeds.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="neorl.rl.baselines.deepq.DQN.setup_model">
+<code class="sig-name descname">setup_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/rl/baselines/deepq/dqn.html#DQN.setup_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neorl.rl.baselines.deepq.DQN.setup_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create all the functions and tensorflow graphs necessary to train the model</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="notes">
+<span id="deepq-policies"></span><h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="ppo2.html" class="btn btn-neutral float-right" title="Proximal Policy Optimisation (PPO)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="a2c.html" class="btn btn-neutral float-left" title="Advantage Actor Critic (A2C)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Exelon Corp. &amp; MIT.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

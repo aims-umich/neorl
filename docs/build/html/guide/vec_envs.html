@@ -1,0 +1,985 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Vectorized Environments &mdash; NEORL 1.1.3b documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> NEORL
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                main (1.1.3b )
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">General Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Getting Started</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Algorithms</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules/a2c.html">Advantage Actor Critic (A2C)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/dqn.html">Deep Q Learning (DQN)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/ppo2.html">Proximal Policy Optimisation (PPO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/ga.html">Genetic Algorithms (GA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/es.html">Evolution Strategies (ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pso.html">Particle Swarm Optimisation (PSO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/de.html">Differential Evolution (DE)</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tune/grid.html">Grid Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/random.html">Random Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/evolu.html">Evolutionary Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/bayes.html">Bayesian Search</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex1.html">Example 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex2.html">Example 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex3.html">Example 3</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Misc</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../misc/changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/projects.html">Projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/contrib.html">Contributors</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEORL</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Vectorized Environments</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/guide/vec_envs.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <span class="target" id="module-stable_baselines.common.vec_env"><span id="vec-env"></span></span><div class="section" id="vectorized-environments">
+<h1>Vectorized Environments<a class="headerlink" href="#vectorized-environments" title="Permalink to this headline">¶</a></h1>
+<p>Vectorized Environments are a method for stacking multiple independent environments into a single environment.
+Instead of training an RL agent on 1 environment per step, it allows us to train it on <code class="docutils literal notranslate"><span class="pre">n</span></code> environments per step.
+Because of this, <code class="docutils literal notranslate"><span class="pre">actions</span></code> passed to the environment are now a vector (of dimension <code class="docutils literal notranslate"><span class="pre">n</span></code>).
+It is the same for <code class="docutils literal notranslate"><span class="pre">observations</span></code>, <code class="docutils literal notranslate"><span class="pre">rewards</span></code> and end of episode signals (<code class="docutils literal notranslate"><span class="pre">dones</span></code>).
+In the case of non-array observation spaces such as <code class="docutils literal notranslate"><span class="pre">Dict</span></code> or <code class="docutils literal notranslate"><span class="pre">Tuple</span></code>, where different sub-spaces
+may have different shapes, the sub-observations are vectors (of dimension <code class="docutils literal notranslate"><span class="pre">n</span></code>).</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 11%" />
+<col style="width: 18%" />
+<col style="width: 12%" />
+<col style="width: 14%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">Box</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">Discrete</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">Dict</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">Tuple</span></code></p></th>
+<th class="head"><p>Multi Processing</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>DummyVecEnv</p></td>
+<td><p>✔️</p></td>
+<td><p>✔️</p></td>
+<td><p>✔️</p></td>
+<td><p>✔️</p></td>
+<td><p>❌️</p></td>
+</tr>
+<tr class="row-odd"><td><p>SubprocVecEnv</p></td>
+<td><p>✔️</p></td>
+<td><p>✔️</p></td>
+<td><p>✔️</p></td>
+<td><p>✔️</p></td>
+<td><p>✔️</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Vectorized environments are required when using wrappers for frame-stacking or normalization.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When using vectorized environments, the environments are automatically reset at the end of each episode.
+Thus, the observation returned for the i-th environment when <code class="docutils literal notranslate"><span class="pre">done[i]</span></code> is true will in fact be the first observation of the next episode, not the last observation of the episode that has just terminated.
+You can access the “real” final observation of the terminated episode—that is, the one that accompanied the <code class="docutils literal notranslate"><span class="pre">done</span></code> event provided by the underlying environment—using the <code class="docutils literal notranslate"><span class="pre">terminal_observation</span></code> keys in the info dicts returned by the vecenv.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>When using <code class="docutils literal notranslate"><span class="pre">SubprocVecEnv</span></code>, users must wrap the code in an <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">__name__</span> <span class="pre">==</span> <span class="pre">&quot;__main__&quot;:</span></code> if using the <code class="docutils literal notranslate"><span class="pre">forkserver</span></code> or <code class="docutils literal notranslate"><span class="pre">spawn</span></code> start method (default on Windows).
+On Linux, the default start method is <code class="docutils literal notranslate"><span class="pre">fork</span></code> which is not thread safe and can create deadlocks.</p>
+<p>For more information, see Python’s <a class="reference external" href="https://docs.python.org/3/library/multiprocessing.html#the-spawn-and-forkserver-start-methods">multiprocessing guidelines</a>.</p>
+</div>
+<div class="section" id="vecenv">
+<h2>VecEnv<a class="headerlink" href="#vecenv" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="stable_baselines.common.vec_env.VecEnv">
+<em class="property">class </em><code class="sig-prename descclassname">stable_baselines.common.vec_env.</code><code class="sig-name descname">VecEnv</code><span class="sig-paren">(</span><em class="sig-param">num_envs</em>, <em class="sig-param">observation_space</em>, <em class="sig-param">action_space</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/base_vec_env.html#VecEnv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.VecEnv" title="Permalink to this definition">¶</a></dt>
+<dd><p>An abstract asynchronous, vectorized environment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_envs</strong> – (int) the number of environments</p></li>
+<li><p><strong>observation_space</strong> – (Gym Space) the observation space</p></li>
+<li><p><strong>action_space</strong> – (Gym Space) the action space</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.VecEnv.close">
+<em class="property">abstract </em><code class="sig-name descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/base_vec_env.html#VecEnv.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.VecEnv.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clean up the environment’s resources.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.VecEnv.env_method">
+<em class="property">abstract </em><code class="sig-name descname">env_method</code><span class="sig-paren">(</span><em class="sig-param">method_name</em>, <em class="sig-param">*method_args</em>, <em class="sig-param">indices=None</em>, <em class="sig-param">**method_kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/base_vec_env.html#VecEnv.env_method"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.VecEnv.env_method" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call instance methods of vectorized environments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>method_name</strong> – (str) The name of the environment method to invoke.</p></li>
+<li><p><strong>indices</strong> – (list,int) Indices of envs whose method to call</p></li>
+<li><p><strong>method_args</strong> – (tuple) Any positional arguments to provide in the call</p></li>
+<li><p><strong>method_kwargs</strong> – (dict) Any keyword arguments to provide in the call</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(list) List of items returned by the environment’s method call</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.VecEnv.get_attr">
+<em class="property">abstract </em><code class="sig-name descname">get_attr</code><span class="sig-paren">(</span><em class="sig-param">attr_name</em>, <em class="sig-param">indices=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/base_vec_env.html#VecEnv.get_attr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.VecEnv.get_attr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return attribute from vectorized environment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>attr_name</strong> – (str) The name of the attribute whose value to return</p></li>
+<li><p><strong>indices</strong> – (list,int) Indices of envs to get attribute from</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(list) List of values of ‘attr_name’ in all environments</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.VecEnv.get_images">
+<code class="sig-name descname">get_images</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span> &#x2192; Sequence[numpy.ndarray]<a class="reference internal" href="../_modules/stable_baselines/common/vec_env/base_vec_env.html#VecEnv.get_images"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.VecEnv.get_images" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return RGB images from each environment</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.VecEnv.getattr_depth_check">
+<code class="sig-name descname">getattr_depth_check</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">already_found</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/base_vec_env.html#VecEnv.getattr_depth_check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.VecEnv.getattr_depth_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if an attribute reference is being hidden in a recursive call to __getattr__</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – (str) name of attribute to check for</p></li>
+<li><p><strong>already_found</strong> – (bool) whether this attribute has already been found in a wrapper</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(str or None) name of module whose attribute is being shadowed, if any.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.VecEnv.render">
+<code class="sig-name descname">render</code><span class="sig-paren">(</span><em class="sig-param">mode: str</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/base_vec_env.html#VecEnv.render"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.VecEnv.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gym environment rendering</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mode</strong> – the rendering type</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.VecEnv.reset">
+<em class="property">abstract </em><code class="sig-name descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/base_vec_env.html#VecEnv.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.VecEnv.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset all the environments and return an array of
+observations, or a tuple of observation arrays.</p>
+<p>If step_async is still doing work, that work will
+be cancelled and step_wait() should not be called
+until step_async() is invoked again.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>([int] or [float]) observation</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.VecEnv.seed">
+<em class="property">abstract </em><code class="sig-name descname">seed</code><span class="sig-paren">(</span><em class="sig-param">seed: Optional[int] = None</em><span class="sig-paren">)</span> &#x2192; List[Union[None, int]]<a class="reference internal" href="../_modules/stable_baselines/common/vec_env/base_vec_env.html#VecEnv.seed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.VecEnv.seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the random seeds for all environments, based on a given seed.
+Each individual environment will still get its own seed, by incrementing the given seed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>seed</strong> – (Optional[int]) The random seed. May be None for completely random seeding.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(List[Union[None, int]]) Returns a list containing the seeds for each individual env.
+Note that all list elements may be None, if the env does not return anything when being seeded.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.VecEnv.set_attr">
+<em class="property">abstract </em><code class="sig-name descname">set_attr</code><span class="sig-paren">(</span><em class="sig-param">attr_name</em>, <em class="sig-param">value</em>, <em class="sig-param">indices=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/base_vec_env.html#VecEnv.set_attr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.VecEnv.set_attr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set attribute inside vectorized environments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>attr_name</strong> – (str) The name of attribute to assign new value</p></li>
+<li><p><strong>value</strong> – (obj) Value to assign to <cite>attr_name</cite></p></li>
+<li><p><strong>indices</strong> – (list,int) Indices of envs to assign value</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(NoneType)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.VecEnv.step">
+<code class="sig-name descname">step</code><span class="sig-paren">(</span><em class="sig-param">actions</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/base_vec_env.html#VecEnv.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.VecEnv.step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Step the environments with the given action</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>actions</strong> – ([int] or [float]) the action</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>([int] or [float], [float], [bool], dict) observation, reward, done, information</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.VecEnv.step_async">
+<em class="property">abstract </em><code class="sig-name descname">step_async</code><span class="sig-paren">(</span><em class="sig-param">actions</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/base_vec_env.html#VecEnv.step_async"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.VecEnv.step_async" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tell all the environments to start taking a step
+with the given actions.
+Call step_wait() to get the results of the step.</p>
+<p>You should not call this if a step_async run is
+already pending.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.VecEnv.step_wait">
+<em class="property">abstract </em><code class="sig-name descname">step_wait</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/base_vec_env.html#VecEnv.step_wait"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.VecEnv.step_wait" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait for the step taken with step_async().</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>([int] or [float], [float], [bool], dict) observation, reward, done, information</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="dummyvecenv">
+<h2>DummyVecEnv<a class="headerlink" href="#dummyvecenv" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="stable_baselines.common.vec_env.DummyVecEnv">
+<em class="property">class </em><code class="sig-prename descclassname">stable_baselines.common.vec_env.</code><code class="sig-name descname">DummyVecEnv</code><span class="sig-paren">(</span><em class="sig-param">env_fns</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/dummy_vec_env.html#DummyVecEnv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.DummyVecEnv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a simple vectorized wrapper for multiple environments, calling each environment in sequence on the current
+Python process. This is useful for computationally simple environment such as <code class="docutils literal notranslate"><span class="pre">cartpole-v1</span></code>, as the overhead of
+multiprocess or multithread outweighs the environment computation time. This can also be used for RL methods that
+require a vectorized environment, but that you want a single environments to train with.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>env_fns</strong> – ([callable]) A list of functions that will create the environments
+(each callable returns a <cite>Gym.Env</cite> instance when called).</p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.DummyVecEnv.close">
+<code class="sig-name descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/dummy_vec_env.html#DummyVecEnv.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.DummyVecEnv.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clean up the environment’s resources.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.DummyVecEnv.env_method">
+<code class="sig-name descname">env_method</code><span class="sig-paren">(</span><em class="sig-param">method_name</em>, <em class="sig-param">*method_args</em>, <em class="sig-param">indices=None</em>, <em class="sig-param">**method_kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/dummy_vec_env.html#DummyVecEnv.env_method"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.DummyVecEnv.env_method" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call instance methods of vectorized environments.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.DummyVecEnv.get_attr">
+<code class="sig-name descname">get_attr</code><span class="sig-paren">(</span><em class="sig-param">attr_name</em>, <em class="sig-param">indices=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/dummy_vec_env.html#DummyVecEnv.get_attr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.DummyVecEnv.get_attr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return attribute from vectorized environment (see base class).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.DummyVecEnv.get_images">
+<code class="sig-name descname">get_images</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span> &#x2192; Sequence[numpy.ndarray]<a class="reference internal" href="../_modules/stable_baselines/common/vec_env/dummy_vec_env.html#DummyVecEnv.get_images"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.DummyVecEnv.get_images" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return RGB images from each environment</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.DummyVecEnv.render">
+<code class="sig-name descname">render</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/dummy_vec_env.html#DummyVecEnv.render"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.DummyVecEnv.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gym environment rendering. If there are multiple environments then
+they are tiled together in one image via <cite>BaseVecEnv.render()</cite>.
+Otherwise (if <cite>self.num_envs == 1</cite>), we pass the render call directly to the
+underlying environment.</p>
+<p>Therefore, some arguments such as <cite>mode</cite> will have values that are valid
+only when <cite>num_envs == 1</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mode</strong> – The rendering type.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.DummyVecEnv.reset">
+<code class="sig-name descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/dummy_vec_env.html#DummyVecEnv.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.DummyVecEnv.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset all the environments and return an array of
+observations, or a tuple of observation arrays.</p>
+<p>If step_async is still doing work, that work will
+be cancelled and step_wait() should not be called
+until step_async() is invoked again.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>([int] or [float]) observation</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.DummyVecEnv.seed">
+<code class="sig-name descname">seed</code><span class="sig-paren">(</span><em class="sig-param">seed=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/dummy_vec_env.html#DummyVecEnv.seed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.DummyVecEnv.seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the random seeds for all environments, based on a given seed.
+Each individual environment will still get its own seed, by incrementing the given seed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>seed</strong> – (Optional[int]) The random seed. May be None for completely random seeding.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(List[Union[None, int]]) Returns a list containing the seeds for each individual env.
+Note that all list elements may be None, if the env does not return anything when being seeded.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.DummyVecEnv.set_attr">
+<code class="sig-name descname">set_attr</code><span class="sig-paren">(</span><em class="sig-param">attr_name</em>, <em class="sig-param">value</em>, <em class="sig-param">indices=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/dummy_vec_env.html#DummyVecEnv.set_attr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.DummyVecEnv.set_attr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set attribute inside vectorized environments (see base class).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.DummyVecEnv.step_async">
+<code class="sig-name descname">step_async</code><span class="sig-paren">(</span><em class="sig-param">actions</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/dummy_vec_env.html#DummyVecEnv.step_async"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.DummyVecEnv.step_async" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tell all the environments to start taking a step
+with the given actions.
+Call step_wait() to get the results of the step.</p>
+<p>You should not call this if a step_async run is
+already pending.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.DummyVecEnv.step_wait">
+<code class="sig-name descname">step_wait</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/dummy_vec_env.html#DummyVecEnv.step_wait"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.DummyVecEnv.step_wait" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait for the step taken with step_async().</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>([int] or [float], [float], [bool], dict) observation, reward, done, information</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="subprocvecenv">
+<h2>SubprocVecEnv<a class="headerlink" href="#subprocvecenv" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="stable_baselines.common.vec_env.SubprocVecEnv">
+<em class="property">class </em><code class="sig-prename descclassname">stable_baselines.common.vec_env.</code><code class="sig-name descname">SubprocVecEnv</code><span class="sig-paren">(</span><em class="sig-param">env_fns</em>, <em class="sig-param">start_method=None</em>, <em class="sig-param">daemon=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/subproc_vec_env.html#SubprocVecEnv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.SubprocVecEnv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a multiprocess vectorized wrapper for multiple environments, distributing each environment to its own
+process, allowing significant speed up when the environment is computationally complex.</p>
+<p>For performance reasons, if your environment is not IO bound, the number of environments should not exceed the
+number of logical cores on your CPU.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Only ‘forkserver’ and ‘spawn’ start methods are thread-safe,
+which is important when TensorFlow sessions or other non thread-safe
+libraries are used in the parent (see issue #217). However, compared to
+‘fork’ they incur a small start-up cost and have restrictions on
+global variables. With those methods, users must wrap the code in an
+<code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">__name__</span> <span class="pre">==</span> <span class="pre">&quot;__main__&quot;:</span></code> block.
+For more information, see the multiprocessing documentation.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>env_fns</strong> – ([callable]) A list of functions that will create the environments
+(each callable returns a <cite>Gym.Env</cite> instance when called).</p></li>
+<li><p><strong>start_method</strong> – (str) method used to start the subprocesses.
+Must be one of the methods returned by multiprocessing.get_all_start_methods().
+Defaults to ‘forkserver’ on available platforms, and ‘spawn’ otherwise.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.SubprocVecEnv.close">
+<code class="sig-name descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/subproc_vec_env.html#SubprocVecEnv.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.SubprocVecEnv.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clean up the environment’s resources.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.SubprocVecEnv.env_method">
+<code class="sig-name descname">env_method</code><span class="sig-paren">(</span><em class="sig-param">method_name</em>, <em class="sig-param">*method_args</em>, <em class="sig-param">indices=None</em>, <em class="sig-param">**method_kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/subproc_vec_env.html#SubprocVecEnv.env_method"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.SubprocVecEnv.env_method" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call instance methods of vectorized environments.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.SubprocVecEnv.get_attr">
+<code class="sig-name descname">get_attr</code><span class="sig-paren">(</span><em class="sig-param">attr_name</em>, <em class="sig-param">indices=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/subproc_vec_env.html#SubprocVecEnv.get_attr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.SubprocVecEnv.get_attr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return attribute from vectorized environment (see base class).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.SubprocVecEnv.get_images">
+<code class="sig-name descname">get_images</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span> &#x2192; Sequence[numpy.ndarray]<a class="reference internal" href="../_modules/stable_baselines/common/vec_env/subproc_vec_env.html#SubprocVecEnv.get_images"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.SubprocVecEnv.get_images" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return RGB images from each environment</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.SubprocVecEnv.reset">
+<code class="sig-name descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/subproc_vec_env.html#SubprocVecEnv.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.SubprocVecEnv.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset all the environments and return an array of
+observations, or a tuple of observation arrays.</p>
+<p>If step_async is still doing work, that work will
+be cancelled and step_wait() should not be called
+until step_async() is invoked again.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>([int] or [float]) observation</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.SubprocVecEnv.seed">
+<code class="sig-name descname">seed</code><span class="sig-paren">(</span><em class="sig-param">seed=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/subproc_vec_env.html#SubprocVecEnv.seed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.SubprocVecEnv.seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the random seeds for all environments, based on a given seed.
+Each individual environment will still get its own seed, by incrementing the given seed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>seed</strong> – (Optional[int]) The random seed. May be None for completely random seeding.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(List[Union[None, int]]) Returns a list containing the seeds for each individual env.
+Note that all list elements may be None, if the env does not return anything when being seeded.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.SubprocVecEnv.set_attr">
+<code class="sig-name descname">set_attr</code><span class="sig-paren">(</span><em class="sig-param">attr_name</em>, <em class="sig-param">value</em>, <em class="sig-param">indices=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/subproc_vec_env.html#SubprocVecEnv.set_attr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.SubprocVecEnv.set_attr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set attribute inside vectorized environments (see base class).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.SubprocVecEnv.step_async">
+<code class="sig-name descname">step_async</code><span class="sig-paren">(</span><em class="sig-param">actions</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/subproc_vec_env.html#SubprocVecEnv.step_async"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.SubprocVecEnv.step_async" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tell all the environments to start taking a step
+with the given actions.
+Call step_wait() to get the results of the step.</p>
+<p>You should not call this if a step_async run is
+already pending.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.SubprocVecEnv.step_wait">
+<code class="sig-name descname">step_wait</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/subproc_vec_env.html#SubprocVecEnv.step_wait"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.SubprocVecEnv.step_wait" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait for the step taken with step_async().</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>([int] or [float], [float], [bool], dict) observation, reward, done, information</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="wrappers">
+<h2>Wrappers<a class="headerlink" href="#wrappers" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="vecframestack">
+<h3>VecFrameStack<a class="headerlink" href="#vecframestack" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="stable_baselines.common.vec_env.VecFrameStack">
+<em class="property">class </em><code class="sig-prename descclassname">stable_baselines.common.vec_env.</code><code class="sig-name descname">VecFrameStack</code><span class="sig-paren">(</span><em class="sig-param">venv</em>, <em class="sig-param">n_stack</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/vec_frame_stack.html#VecFrameStack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.VecFrameStack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Frame stacking wrapper for vectorized environment</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>venv</strong> – (VecEnv) the vectorized environment to wrap</p></li>
+<li><p><strong>n_stack</strong> – (int) Number of frames to stack</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.VecFrameStack.close">
+<code class="sig-name descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/vec_frame_stack.html#VecFrameStack.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.VecFrameStack.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clean up the environment’s resources.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.VecFrameStack.reset">
+<code class="sig-name descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/vec_frame_stack.html#VecFrameStack.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.VecFrameStack.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset all environments</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.VecFrameStack.step_wait">
+<code class="sig-name descname">step_wait</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/vec_frame_stack.html#VecFrameStack.step_wait"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.VecFrameStack.step_wait" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait for the step taken with step_async().</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>([int] or [float], [float], [bool], dict) observation, reward, done, information</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="vecnormalize">
+<h3>VecNormalize<a class="headerlink" href="#vecnormalize" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="stable_baselines.common.vec_env.VecNormalize">
+<em class="property">class </em><code class="sig-prename descclassname">stable_baselines.common.vec_env.</code><code class="sig-name descname">VecNormalize</code><span class="sig-paren">(</span><em class="sig-param">venv</em>, <em class="sig-param">training=True</em>, <em class="sig-param">norm_obs=True</em>, <em class="sig-param">norm_reward=True</em>, <em class="sig-param">clip_obs=10.0</em>, <em class="sig-param">clip_reward=10.0</em>, <em class="sig-param">gamma=0.99</em>, <em class="sig-param">epsilon=1e-08</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/vec_normalize.html#VecNormalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.VecNormalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>A moving average, normalizing wrapper for vectorized environment.</p>
+<p>It is pickleable which will save moving averages and configuration parameters.
+The wrapped environment <cite>venv</cite> is not saved, and must be restored manually with
+<cite>set_venv</cite> after being unpickled.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>venv</strong> – (VecEnv) the vectorized environment to wrap</p></li>
+<li><p><strong>training</strong> – (bool) Whether to update or not the moving average</p></li>
+<li><p><strong>norm_obs</strong> – (bool) Whether to normalize observation or not (default: True)</p></li>
+<li><p><strong>norm_reward</strong> – (bool) Whether to normalize rewards or not (default: True)</p></li>
+<li><p><strong>clip_obs</strong> – (float) Max absolute value for observation</p></li>
+<li><p><strong>clip_reward</strong> – (float) Max value absolute for discounted reward</p></li>
+<li><p><strong>gamma</strong> – (float) discount factor</p></li>
+<li><p><strong>epsilon</strong> – (float) To avoid division by zero</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.VecNormalize.get_original_obs">
+<code class="sig-name descname">get_original_obs</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="../_modules/stable_baselines/common/vec_env/vec_normalize.html#VecNormalize.get_original_obs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.VecNormalize.get_original_obs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an unnormalized version of the observations from the most recent
+step or reset.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.VecNormalize.get_original_reward">
+<code class="sig-name descname">get_original_reward</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="../_modules/stable_baselines/common/vec_env/vec_normalize.html#VecNormalize.get_original_reward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.VecNormalize.get_original_reward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an unnormalized version of the rewards from the most recent step.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.VecNormalize.load">
+<em class="property">static </em><code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">load_path</em>, <em class="sig-param">venv</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/vec_normalize.html#VecNormalize.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.VecNormalize.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads a saved VecNormalize object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>load_path</strong> – the path to load from.</p></li>
+<li><p><strong>venv</strong> – the VecEnv to wrap.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(VecNormalize)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.VecNormalize.load_running_average">
+<code class="sig-name descname">load_running_average</code><span class="sig-paren">(</span><em class="sig-param">path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/vec_normalize.html#VecNormalize.load_running_average"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.VecNormalize.load_running_average" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> – (str) path to log dir</p>
+</dd>
+</dl>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 2.9.0: </span>This function will be removed in a future version</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.VecNormalize.normalize_obs">
+<code class="sig-name descname">normalize_obs</code><span class="sig-paren">(</span><em class="sig-param">obs: numpy.ndarray</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="../_modules/stable_baselines/common/vec_env/vec_normalize.html#VecNormalize.normalize_obs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.VecNormalize.normalize_obs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalize observations using this VecNormalize’s observations statistics.
+Calling this method does not update statistics.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.VecNormalize.normalize_reward">
+<code class="sig-name descname">normalize_reward</code><span class="sig-paren">(</span><em class="sig-param">reward: numpy.ndarray</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="../_modules/stable_baselines/common/vec_env/vec_normalize.html#VecNormalize.normalize_reward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.VecNormalize.normalize_reward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalize rewards using this VecNormalize’s rewards statistics.
+Calling this method does not update statistics.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.VecNormalize.reset">
+<code class="sig-name descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/vec_normalize.html#VecNormalize.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.VecNormalize.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset all environments</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.VecNormalize.save_running_average">
+<code class="sig-name descname">save_running_average</code><span class="sig-paren">(</span><em class="sig-param">path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/vec_normalize.html#VecNormalize.save_running_average"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.VecNormalize.save_running_average" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> – (str) path to log dir</p>
+</dd>
+</dl>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 2.9.0: </span>This function will be removed in a future version</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.VecNormalize.set_venv">
+<code class="sig-name descname">set_venv</code><span class="sig-paren">(</span><em class="sig-param">venv</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/vec_normalize.html#VecNormalize.set_venv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.VecNormalize.set_venv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the vector environment to wrap to venv.</p>
+<p>Also sets attributes derived from this such as <cite>num_env</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>venv</strong> – (VecEnv)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.VecNormalize.step_wait">
+<code class="sig-name descname">step_wait</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/vec_normalize.html#VecNormalize.step_wait"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.VecNormalize.step_wait" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply sequence of actions to sequence of environments
+actions -&gt; (observations, rewards, news)</p>
+<p>where ‘news’ is a boolean vector indicating whether each element is new.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="vecvideorecorder">
+<h3>VecVideoRecorder<a class="headerlink" href="#vecvideorecorder" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="stable_baselines.common.vec_env.VecVideoRecorder">
+<em class="property">class </em><code class="sig-prename descclassname">stable_baselines.common.vec_env.</code><code class="sig-name descname">VecVideoRecorder</code><span class="sig-paren">(</span><em class="sig-param">venv</em>, <em class="sig-param">video_folder</em>, <em class="sig-param">record_video_trigger</em>, <em class="sig-param">video_length=200</em>, <em class="sig-param">name_prefix='rl-video'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/vec_video_recorder.html#VecVideoRecorder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.VecVideoRecorder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wraps a VecEnv or VecEnvWrapper object to record rendered image as mp4 video.
+It requires ffmpeg or avconv to be installed on the machine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>venv</strong> – (VecEnv or VecEnvWrapper)</p></li>
+<li><p><strong>video_folder</strong> – (str) Where to save videos</p></li>
+<li><p><strong>record_video_trigger</strong> – (func) Function that defines when to start recording.
+The function takes the current number of step,
+and returns whether we should start recording or not.</p></li>
+<li><p><strong>video_length</strong> – (int)  Length of recorded videos</p></li>
+<li><p><strong>name_prefix</strong> – (str) Prefix to the video name</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.VecVideoRecorder.close">
+<code class="sig-name descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/vec_video_recorder.html#VecVideoRecorder.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.VecVideoRecorder.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clean up the environment’s resources.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.VecVideoRecorder.reset">
+<code class="sig-name descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/vec_video_recorder.html#VecVideoRecorder.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.VecVideoRecorder.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset all the environments and return an array of
+observations, or a tuple of observation arrays.</p>
+<p>If step_async is still doing work, that work will
+be cancelled and step_wait() should not be called
+until step_async() is invoked again.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>([int] or [float]) observation</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.VecVideoRecorder.step_wait">
+<code class="sig-name descname">step_wait</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/vec_video_recorder.html#VecVideoRecorder.step_wait"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.VecVideoRecorder.step_wait" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait for the step taken with step_async().</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>([int] or [float], [float], [bool], dict) observation, reward, done, information</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="vecchecknan">
+<h3>VecCheckNan<a class="headerlink" href="#vecchecknan" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="stable_baselines.common.vec_env.VecCheckNan">
+<em class="property">class </em><code class="sig-prename descclassname">stable_baselines.common.vec_env.</code><code class="sig-name descname">VecCheckNan</code><span class="sig-paren">(</span><em class="sig-param">venv</em>, <em class="sig-param">raise_exception=False</em>, <em class="sig-param">warn_once=True</em>, <em class="sig-param">check_inf=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/vec_check_nan.html#VecCheckNan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.VecCheckNan" title="Permalink to this definition">¶</a></dt>
+<dd><p>NaN and inf checking wrapper for vectorized environment, will raise a warning by default,
+allowing you to know from what the NaN of inf originated from.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>venv</strong> – (VecEnv) the vectorized environment to wrap</p></li>
+<li><p><strong>raise_exception</strong> – (bool) Whether or not to raise a ValueError, instead of a UserWarning</p></li>
+<li><p><strong>warn_once</strong> – (bool) Whether or not to only warn once.</p></li>
+<li><p><strong>check_inf</strong> – (bool) Whether or not to check for +inf or -inf as well</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.VecCheckNan.reset">
+<code class="sig-name descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/vec_check_nan.html#VecCheckNan.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.VecCheckNan.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset all the environments and return an array of
+observations, or a tuple of observation arrays.</p>
+<p>If step_async is still doing work, that work will
+be cancelled and step_wait() should not be called
+until step_async() is invoked again.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>([int] or [float]) observation</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.VecCheckNan.step_async">
+<code class="sig-name descname">step_async</code><span class="sig-paren">(</span><em class="sig-param">actions</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/vec_check_nan.html#VecCheckNan.step_async"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.VecCheckNan.step_async" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tell all the environments to start taking a step
+with the given actions.
+Call step_wait() to get the results of the step.</p>
+<p>You should not call this if a step_async run is
+already pending.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.common.vec_env.VecCheckNan.step_wait">
+<code class="sig-name descname">step_wait</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/common/vec_env/vec_check_nan.html#VecCheckNan.step_wait"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.common.vec_env.VecCheckNan.step_wait" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait for the step taken with step_async().</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>([int] or [float], [float], [bool], dict) observation, reward, done, information</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Exelon Corp. &amp; MIT.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

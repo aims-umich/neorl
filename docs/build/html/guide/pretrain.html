@@ -1,0 +1,489 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Pre-Training (Behavior Cloning) &mdash; NEORL 1.1.3b documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> NEORL
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                main (1.1.3b )
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">General Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Getting Started</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Algorithms</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules/a2c.html">Advantage Actor Critic (A2C)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/dqn.html">Deep Q Learning (DQN)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/ppo2.html">Proximal Policy Optimisation (PPO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/ga.html">Genetic Algorithms (GA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/es.html">Evolution Strategies (ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pso.html">Particle Swarm Optimisation (PSO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/de.html">Differential Evolution (DE)</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tune/grid.html">Grid Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/random.html">Random Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/evolu.html">Evolutionary Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/bayes.html">Bayesian Search</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex1.html">Example 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex2.html">Example 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex3.html">Example 3</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Misc</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../misc/changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/projects.html">Projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/contrib.html">Contributors</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEORL</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Pre-Training (Behavior Cloning)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/guide/pretrain.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="pre-training-behavior-cloning">
+<span id="pretrain"></span><h1>Pre-Training (Behavior Cloning)<a class="headerlink" href="#pre-training-behavior-cloning" title="Permalink to this headline">¶</a></h1>
+<p>With the <code class="docutils literal notranslate"><span class="pre">.pretrain()</span></code> method, you can pre-train RL policies using trajectories from an expert, and therefore accelerate training.</p>
+<p>Behavior Cloning (BC) treats the problem of imitation learning, i.e., using expert demonstrations, as a supervised learning problem.
+That is to say, given expert trajectories (observations-actions pairs), the policy network is trained to reproduce the expert behavior:
+for a given observation, the action taken by the policy must be the one taken by the expert.</p>
+<p>Expert trajectories can be human demonstrations, trajectories from another controller (e.g. a PID controller)
+or trajectories from a trained RL agent.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only <code class="docutils literal notranslate"><span class="pre">Box</span></code> and <code class="docutils literal notranslate"><span class="pre">Discrete</span></code> spaces are supported for now for pre-training a model.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Images datasets are treated a bit differently as other datasets to avoid memory issues.
+The images from the expert demonstrations must be located in a folder, not in the expert numpy archive.</p>
+</div>
+<div class="section" id="generate-expert-trajectories">
+<h2>Generate Expert Trajectories<a class="headerlink" href="#generate-expert-trajectories" title="Permalink to this headline">¶</a></h2>
+<p>Here, we are going to train a RL model and then generate expert trajectories
+using this agent.</p>
+<p>Note that in practice, generating expert trajectories usually does not require training an RL agent.</p>
+<p>The following example is only meant to demonstrate the <code class="docutils literal notranslate"><span class="pre">pretrain()</span></code> feature.</p>
+<p>However, we recommend users to take a look at the code of the <code class="docutils literal notranslate"><span class="pre">generate_expert_traj()</span></code> function (located in <code class="docutils literal notranslate"><span class="pre">gail/dataset/</span></code> folder)
+to learn about the data structure of the expert dataset (see below for an overview) and how to record trajectories.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">stable_baselines</span> <span class="kn">import</span> <span class="n">DQN</span>
+<span class="kn">from</span> <span class="nn">stable_baselines.gail</span> <span class="kn">import</span> <span class="n">generate_expert_traj</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">DQN</span><span class="p">(</span><span class="s1">&#39;MlpPolicy&#39;</span><span class="p">,</span> <span class="s1">&#39;CartPole-v1&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+      <span class="c1"># Train a DQN agent for 1e5 timesteps and generate 10 trajectories</span>
+      <span class="c1"># data will be saved in a numpy archive named `expert_cartpole.npz`</span>
+<span class="n">generate_expert_traj</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;expert_cartpole&#39;</span><span class="p">,</span> <span class="n">n_timesteps</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mf">1e5</span><span class="p">),</span> <span class="n">n_episodes</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here is an additional example when the expert controller is a callable,
+that is passed to the function instead of a RL model.
+The idea is that this callable can be a PID controller, asking a human player, …</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gym</span>
+
+<span class="kn">from</span> <span class="nn">stable_baselines.gail</span> <span class="kn">import</span> <span class="n">generate_expert_traj</span>
+
+<span class="n">env</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s2">&quot;CartPole-v1&quot;</span><span class="p">)</span>
+<span class="c1"># Here the expert is a random agent</span>
+<span class="c1"># but it can be any python function, e.g. a PID controller</span>
+<span class="k">def</span> <span class="nf">dummy_expert</span><span class="p">(</span><span class="n">_obs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Random agent. It samples actions randomly</span>
+<span class="sd">    from the action space of the environment.</span>
+
+<span class="sd">    :param _obs: (np.ndarray) Current observation</span>
+<span class="sd">    :return: (np.ndarray) action taken by the expert</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+<span class="c1"># Data will be saved in a numpy archive named `expert_cartpole.npz`</span>
+<span class="c1"># when using something different than an RL expert,</span>
+<span class="c1"># you must pass the environment object explicitly</span>
+<span class="n">generate_expert_traj</span><span class="p">(</span><span class="n">dummy_expert</span><span class="p">,</span> <span class="s1">&#39;dummy_expert_cartpole&#39;</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">n_episodes</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pre-train-a-model-using-behavior-cloning">
+<h2>Pre-Train a Model using Behavior Cloning<a class="headerlink" href="#pre-train-a-model-using-behavior-cloning" title="Permalink to this headline">¶</a></h2>
+<p>Using the <code class="docutils literal notranslate"><span class="pre">expert_cartpole.npz</span></code> dataset generated with the previous script.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">stable_baselines</span> <span class="kn">import</span> <span class="n">PPO2</span>
+<span class="kn">from</span> <span class="nn">stable_baselines.gail</span> <span class="kn">import</span> <span class="n">ExpertDataset</span>
+<span class="c1"># Using only one expert trajectory</span>
+<span class="c1"># you can specify `traj_limitation=-1` for using the whole dataset</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">ExpertDataset</span><span class="p">(</span><span class="n">expert_path</span><span class="o">=</span><span class="s1">&#39;expert_cartpole.npz&#39;</span><span class="p">,</span>
+                        <span class="n">traj_limitation</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">PPO2</span><span class="p">(</span><span class="s1">&#39;MlpPolicy&#39;</span><span class="p">,</span> <span class="s1">&#39;CartPole-v1&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># Pretrain the PPO2 model</span>
+<span class="n">model</span><span class="o">.</span><span class="n">pretrain</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">n_epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+
+<span class="c1"># As an option, you can train the RL agent</span>
+<span class="c1"># model.learn(int(1e5))</span>
+
+<span class="c1"># Test the pre-trained model</span>
+<span class="n">env</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_env</span><span class="p">()</span>
+<span class="n">obs</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+<span class="n">reward_sum</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+        <span class="n">action</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span>
+        <span class="n">obs</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+        <span class="n">reward_sum</span> <span class="o">+=</span> <span class="n">reward</span>
+        <span class="n">env</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">done</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">reward_sum</span><span class="p">)</span>
+                <span class="n">reward_sum</span> <span class="o">=</span> <span class="mf">0.0</span>
+                <span class="n">obs</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+<span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="data-structure-of-the-expert-dataset">
+<h2>Data Structure of the Expert Dataset<a class="headerlink" href="#data-structure-of-the-expert-dataset" title="Permalink to this headline">¶</a></h2>
+<p>The expert dataset is a <code class="docutils literal notranslate"><span class="pre">.npz</span></code> archive. The data is saved in python dictionary format with keys: <code class="docutils literal notranslate"><span class="pre">actions</span></code>, <code class="docutils literal notranslate"><span class="pre">episode_returns</span></code>, <code class="docutils literal notranslate"><span class="pre">rewards</span></code>, <code class="docutils literal notranslate"><span class="pre">obs</span></code>, <code class="docutils literal notranslate"><span class="pre">episode_starts</span></code>.</p>
+<p>In case of images, <code class="docutils literal notranslate"><span class="pre">obs</span></code> contains the relative path to the images.</p>
+<p>obs, actions: shape (N * L, ) + S</p>
+<p>where N = # episodes, L = episode length
+and S is the environment observation/action space.</p>
+<p>S = (1, ) for discrete space</p>
+<dl class="class">
+<dt id="stable_baselines.gail.ExpertDataset">
+<em class="property">class </em><code class="sig-prename descclassname">stable_baselines.gail.</code><code class="sig-name descname">ExpertDataset</code><span class="sig-paren">(</span><em class="sig-param">expert_path=None</em>, <em class="sig-param">traj_data=None</em>, <em class="sig-param">train_fraction=0.7</em>, <em class="sig-param">batch_size=64</em>, <em class="sig-param">traj_limitation=-1</em>, <em class="sig-param">randomize=True</em>, <em class="sig-param">verbose=1</em>, <em class="sig-param">sequential_preprocessing=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/gail/dataset/dataset.html#ExpertDataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.gail.ExpertDataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dataset for using behavior cloning or GAIL.</p>
+<p>The structure of the expert dataset is a dict, saved as an “.npz” archive.
+The dictionary contains the keys ‘actions’, ‘episode_returns’, ‘rewards’, ‘obs’ and ‘episode_starts’.
+The corresponding values have data concatenated across episode: the first axis is the timestep,
+the remaining axes index into the data. In case of images, ‘obs’ contains the relative path to
+the images, to enable space saving from image compression.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>expert_path</strong> – (str) The path to trajectory data (.npz file). Mutually exclusive with traj_data.</p></li>
+<li><p><strong>traj_data</strong> – (dict) Trajectory data, in format described above. Mutually exclusive with expert_path.</p></li>
+<li><p><strong>train_fraction</strong> – (float) the train validation split (0 to 1)
+for pre-training using behavior cloning (BC)</p></li>
+<li><p><strong>batch_size</strong> – (int) the minibatch size for behavior cloning</p></li>
+<li><p><strong>traj_limitation</strong> – (int) the number of trajectory to use (if -1, load all)</p></li>
+<li><p><strong>randomize</strong> – (bool) if the dataset should be shuffled</p></li>
+<li><p><strong>verbose</strong> – (int) Verbosity</p></li>
+<li><p><strong>sequential_preprocessing</strong> – (bool) Do not use subprocess to preprocess
+the data (slower but use less memory for the CI)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="stable_baselines.gail.ExpertDataset.get_next_batch">
+<code class="sig-name descname">get_next_batch</code><span class="sig-paren">(</span><em class="sig-param">split=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/gail/dataset/dataset.html#ExpertDataset.get_next_batch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.gail.ExpertDataset.get_next_batch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the batch from the dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>split</strong> – (str) the type of data split (can be None, ‘train’, ‘val’)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(np.ndarray, np.ndarray) inputs and labels</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.gail.ExpertDataset.init_dataloader">
+<code class="sig-name descname">init_dataloader</code><span class="sig-paren">(</span><em class="sig-param">batch_size</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/gail/dataset/dataset.html#ExpertDataset.init_dataloader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.gail.ExpertDataset.init_dataloader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the dataloader used by GAIL.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>batch_size</strong> – (int)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.gail.ExpertDataset.log_info">
+<code class="sig-name descname">log_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/gail/dataset/dataset.html#ExpertDataset.log_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.gail.ExpertDataset.log_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log the information of the dataset.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.gail.ExpertDataset.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/gail/dataset/dataset.html#ExpertDataset.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.gail.ExpertDataset.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show histogram plotting of the episode returns</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.gail.ExpertDataset.prepare_pickling">
+<code class="sig-name descname">prepare_pickling</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/gail/dataset/dataset.html#ExpertDataset.prepare_pickling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.gail.ExpertDataset.prepare_pickling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exit processes in order to pickle the dataset.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="stable_baselines.gail.DataLoader">
+<em class="property">class </em><code class="sig-prename descclassname">stable_baselines.gail.</code><code class="sig-name descname">DataLoader</code><span class="sig-paren">(</span><em class="sig-param">indices</em>, <em class="sig-param">observations</em>, <em class="sig-param">actions</em>, <em class="sig-param">batch_size</em>, <em class="sig-param">n_workers=1</em>, <em class="sig-param">infinite_loop=True</em>, <em class="sig-param">max_queue_len=1</em>, <em class="sig-param">shuffle=False</em>, <em class="sig-param">start_process=True</em>, <em class="sig-param">backend='threading'</em>, <em class="sig-param">sequential=False</em>, <em class="sig-param">partial_minibatch=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/gail/dataset/dataset.html#DataLoader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.gail.DataLoader" title="Permalink to this definition">¶</a></dt>
+<dd><p>A custom dataloader to preprocessing observations (including images)
+and feed them to the network.</p>
+<p>Original code for the dataloader from <a class="reference external" href="https://github.com/araffin/robotics-rl-srl">https://github.com/araffin/robotics-rl-srl</a>
+(MIT licence)
+Authors: Antonin Raffin, René Traoré, Ashley Hill</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>indices</strong> – ([int]) list of observations indices</p></li>
+<li><p><strong>observations</strong> – (np.ndarray) observations or images path</p></li>
+<li><p><strong>actions</strong> – (np.ndarray) actions</p></li>
+<li><p><strong>batch_size</strong> – (int) Number of samples per minibatch</p></li>
+<li><p><strong>n_workers</strong> – (int) number of preprocessing worker (for loading the images)</p></li>
+<li><p><strong>infinite_loop</strong> – (bool) whether to have an iterator that can be reset</p></li>
+<li><p><strong>max_queue_len</strong> – (int) Max number of minibatches that can be preprocessed at the same time</p></li>
+<li><p><strong>shuffle</strong> – (bool) Shuffle the minibatch after each epoch</p></li>
+<li><p><strong>start_process</strong> – (bool) Start the preprocessing process (default: True)</p></li>
+<li><p><strong>backend</strong> – (str) joblib backend (one of ‘multiprocessing’, ‘sequential’, ‘threading’
+or ‘loky’ in newest versions)</p></li>
+<li><p><strong>sequential</strong> – (bool) Do not use subprocess to preprocess the data
+(slower but use less memory for the CI)</p></li>
+<li><p><strong>partial_minibatch</strong> – (bool) Allow partial minibatches (minibatches with a number of element
+lesser than the batch_size)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="stable_baselines.gail.DataLoader.sequential_next">
+<code class="sig-name descname">sequential_next</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/gail/dataset/dataset.html#DataLoader.sequential_next"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.gail.DataLoader.sequential_next" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sequential version of the pre-processing.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="stable_baselines.gail.DataLoader.start_process">
+<code class="sig-name descname">start_process</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/gail/dataset/dataset.html#DataLoader.start_process"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.gail.DataLoader.start_process" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start preprocessing process</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="stable_baselines.gail.generate_expert_traj">
+<code class="sig-prename descclassname">stable_baselines.gail.</code><code class="sig-name descname">generate_expert_traj</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">save_path=None</em>, <em class="sig-param">env=None</em>, <em class="sig-param">n_timesteps=0</em>, <em class="sig-param">n_episodes=100</em>, <em class="sig-param">image_folder='recorded_images'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/stable_baselines/gail/dataset/record_expert.html#generate_expert_traj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#stable_baselines.gail.generate_expert_traj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Train expert controller (if needed) and record expert trajectories.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>only Box and Discrete spaces are supported for now.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – (RL model or callable) The expert model, if it needs to be trained,
+then you need to pass <code class="docutils literal notranslate"><span class="pre">n_timesteps</span> <span class="pre">&gt;</span> <span class="pre">0</span></code>.</p></li>
+<li><p><strong>save_path</strong> – (str) Path without the extension where the expert dataset will be saved
+(ex: ‘expert_cartpole’ -&gt; creates ‘expert_cartpole.npz’).
+If not specified, it will not save, and just return the generated expert trajectories.
+This parameter must be specified for image-based environments.</p></li>
+<li><p><strong>env</strong> – (gym.Env) The environment, if not defined then it tries to use the model
+environment.</p></li>
+<li><p><strong>n_timesteps</strong> – (int) Number of training timesteps</p></li>
+<li><p><strong>n_episodes</strong> – (int) Number of trajectories (episodes) to record</p></li>
+<li><p><strong>image_folder</strong> – (str) When using images, folder that will be used to record images.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(dict) the generated expert trajectories.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Exelon Corp. &amp; MIT.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

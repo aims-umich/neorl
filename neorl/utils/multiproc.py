@@ -10,13 +10,13 @@ import os, random
 #tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 # import input parameters from the user 
 from neorl.parsers.PARSER import InputChecker
-from neorl.rl.dqn import DQNAgent
-from neorl.rl.ppo2 import PPOAgent
-from neorl.rl.a2c import A2CAgent
-from neorl.rl.acer import ACERAgent
+from neorl.rl.runners.dqn import DQNAgent
+from neorl.rl.runners.ppo2 import PPOAgent
+from neorl.rl.runners.a2c import A2CAgent
+from neorl.rl.runners.acer import ACERAgent
 from multiprocessing import Process
-from neorl.evolu.ga import GAAgent
-from neorl.evolu.sa import SAAgent
+from neorl.evolu.runners.ga import GAAgent
+from neorl.evolu.runners.sa import SAAgent
 from neorl.utils.neorlcalls import SavePlotCallback
 from neorl.rl.baselines.shared.callbacks import BaseCallback
 

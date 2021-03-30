@@ -1,0 +1,439 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>stable_baselines.common.vec_env.subproc_vec_env &mdash; NEORL 1.1.3b documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> NEORL
+          
+
+          
+            
+            <img src="../../../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                main (1.1.3b )
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">General Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../guide/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../guide/quickstart.html">Getting Started</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Algorithms</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules/a2c.html">Advantage Actor Critic (A2C)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules/dqn.html">Deep Q Learning (DQN)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules/ppo2.html">Proximal Policy Optimisation (PPO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules/ga.html">Genetic Algorithms (GA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules/es.html">Evolution Strategies (ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules/pso.html">Particle Swarm Optimisation (PSO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules/de.html">Differential Evolution (DE)</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tune/grid.html">Grid Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tune/random.html">Random Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tune/evolu.html">Evolutionary Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tune/bayes.html">Bayesian Search</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../examples/ex1.html">Example 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../examples/ex2.html">Example 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../examples/ex3.html">Example 3</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Misc</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../misc/changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../misc/projects.html">Projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../misc/contrib.html">Contributors</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">NEORL</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>stable_baselines.common.vec_env.subproc_vec_env</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for stable_baselines.common.vec_env.subproc_vec_env</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">multiprocessing</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Sequence</span>
+
+<span class="kn">import</span> <span class="nn">gym</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">stable_baselines.common.vec_env.base_vec_env</span> <span class="kn">import</span> <span class="n">VecEnv</span><span class="p">,</span> <span class="n">CloudpickleWrapper</span>
+
+
+<span class="k">def</span> <span class="nf">_worker</span><span class="p">(</span><span class="n">remote</span><span class="p">,</span> <span class="n">parent_remote</span><span class="p">,</span> <span class="n">env_fn_wrapper</span><span class="p">):</span>
+    <span class="n">parent_remote</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">env_fn_wrapper</span><span class="o">.</span><span class="n">var</span><span class="p">()</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cmd</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">remote</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">cmd</span> <span class="o">==</span> <span class="s1">&#39;step&#39;</span><span class="p">:</span>
+                <span class="n">observation</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">done</span><span class="p">:</span>
+                    <span class="c1"># save final observation where user can get it, then reset</span>
+                    <span class="n">info</span><span class="p">[</span><span class="s1">&#39;terminal_observation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">observation</span>
+                    <span class="n">observation</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+                <span class="n">remote</span><span class="o">.</span><span class="n">send</span><span class="p">((</span><span class="n">observation</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">info</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">cmd</span> <span class="o">==</span> <span class="s1">&#39;seed&#39;</span><span class="p">:</span>
+                <span class="n">remote</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">cmd</span> <span class="o">==</span> <span class="s1">&#39;reset&#39;</span><span class="p">:</span>
+                <span class="n">observation</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+                <span class="n">remote</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">observation</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">cmd</span> <span class="o">==</span> <span class="s1">&#39;render&#39;</span><span class="p">:</span>
+                <span class="n">remote</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">**</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="k">elif</span> <span class="n">cmd</span> <span class="o">==</span> <span class="s1">&#39;close&#39;</span><span class="p">:</span>
+                <span class="n">remote</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="k">break</span>
+            <span class="k">elif</span> <span class="n">cmd</span> <span class="o">==</span> <span class="s1">&#39;get_spaces&#39;</span><span class="p">:</span>
+                <span class="n">remote</span><span class="o">.</span><span class="n">send</span><span class="p">((</span><span class="n">env</span><span class="o">.</span><span class="n">observation_space</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">action_space</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">cmd</span> <span class="o">==</span> <span class="s1">&#39;env_method&#39;</span><span class="p">:</span>
+                <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">remote</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">method</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="o">**</span><span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+            <span class="k">elif</span> <span class="n">cmd</span> <span class="o">==</span> <span class="s1">&#39;get_attr&#39;</span><span class="p">:</span>
+                <span class="n">remote</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">data</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">cmd</span> <span class="o">==</span> <span class="s1">&#39;set_attr&#39;</span><span class="p">:</span>
+                <span class="n">remote</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="nb">setattr</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+        <span class="k">except</span> <span class="ne">EOFError</span><span class="p">:</span>
+            <span class="k">break</span>
+
+
+<div class="viewcode-block" id="SubprocVecEnv"><a class="viewcode-back" href="../../../../guide/vec_envs.html#stable_baselines.common.vec_env.SubprocVecEnv">[docs]</a><span class="k">class</span> <span class="nc">SubprocVecEnv</span><span class="p">(</span><span class="n">VecEnv</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates a multiprocess vectorized wrapper for multiple environments, distributing each environment to its own</span>
+<span class="sd">    process, allowing significant speed up when the environment is computationally complex.</span>
+
+<span class="sd">    For performance reasons, if your environment is not IO bound, the number of environments should not exceed the</span>
+<span class="sd">    number of logical cores on your CPU.</span>
+
+<span class="sd">    .. warning::</span>
+
+<span class="sd">        Only &#39;forkserver&#39; and &#39;spawn&#39; start methods are thread-safe,</span>
+<span class="sd">        which is important when TensorFlow sessions or other non thread-safe</span>
+<span class="sd">        libraries are used in the parent (see issue #217). However, compared to</span>
+<span class="sd">        &#39;fork&#39; they incur a small start-up cost and have restrictions on</span>
+<span class="sd">        global variables. With those methods, users must wrap the code in an</span>
+<span class="sd">        ``if __name__ == &quot;__main__&quot;:`` block.</span>
+<span class="sd">        For more information, see the multiprocessing documentation.</span>
+
+<span class="sd">    :param env_fns: ([callable]) A list of functions that will create the environments</span>
+<span class="sd">        (each callable returns a `Gym.Env` instance when called).</span>
+<span class="sd">    :param start_method: (str) method used to start the subprocesses.</span>
+<span class="sd">           Must be one of the methods returned by multiprocessing.get_all_start_methods().</span>
+<span class="sd">           Defaults to &#39;forkserver&#39; on available platforms, and &#39;spawn&#39; otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env_fns</span><span class="p">,</span> <span class="n">start_method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">daemon</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">waiting</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">closed</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">n_envs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">env_fns</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">start_method</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Fork is not a thread safe method (see issue #217)</span>
+            <span class="c1"># but is more user friendly (does not require to wrap the code in</span>
+            <span class="c1"># a `if __name__ == &quot;__main__&quot;:`)</span>
+            <span class="n">forkserver_available</span> <span class="o">=</span> <span class="s1">&#39;forkserver&#39;</span> <span class="ow">in</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">get_all_start_methods</span><span class="p">()</span>
+            <span class="n">start_method</span> <span class="o">=</span> <span class="s1">&#39;forkserver&#39;</span> <span class="k">if</span> <span class="n">forkserver_available</span> <span class="k">else</span> <span class="s1">&#39;spawn&#39;</span>
+        <span class="n">ctx</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">get_context</span><span class="p">(</span><span class="n">start_method</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">remotes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">work_remotes</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">ctx</span><span class="o">.</span><span class="n">Pipe</span><span class="p">(</span><span class="n">duplex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_envs</span><span class="p">)])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">processes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">work_remote</span><span class="p">,</span> <span class="n">remote</span><span class="p">,</span> <span class="n">env_fn</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">work_remotes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">remotes</span><span class="p">,</span> <span class="n">env_fns</span><span class="p">):</span>
+            <span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">work_remote</span><span class="p">,</span> <span class="n">remote</span><span class="p">,</span> <span class="n">CloudpickleWrapper</span><span class="p">(</span><span class="n">env_fn</span><span class="p">))</span>
+            <span class="c1"># daemon=True: if the main process crashes, we should not cause things to hang</span>
+            <span class="n">process</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">_worker</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">daemon</span><span class="o">=</span><span class="n">daemon</span><span class="p">)</span>  <span class="c1"># pytype:disable=attribute-error</span>
+            <span class="n">process</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">processes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">process</span><span class="p">)</span>
+            <span class="n">work_remote</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">remotes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">send</span><span class="p">((</span><span class="s1">&#39;get_spaces&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+        <span class="n">observation_space</span><span class="p">,</span> <span class="n">action_space</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remotes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span>
+        <span class="n">VecEnv</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">env_fns</span><span class="p">),</span> <span class="n">observation_space</span><span class="p">,</span> <span class="n">action_space</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SubprocVecEnv.step_async"><a class="viewcode-back" href="../../../../guide/vec_envs.html#stable_baselines.common.vec_env.SubprocVecEnv.step_async">[docs]</a>    <span class="k">def</span> <span class="nf">step_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">actions</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">remote</span><span class="p">,</span> <span class="n">action</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remotes</span><span class="p">,</span> <span class="n">actions</span><span class="p">):</span>
+            <span class="n">remote</span><span class="o">.</span><span class="n">send</span><span class="p">((</span><span class="s1">&#39;step&#39;</span><span class="p">,</span> <span class="n">action</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">waiting</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="SubprocVecEnv.step_wait"><a class="viewcode-back" href="../../../../guide/vec_envs.html#stable_baselines.common.vec_env.SubprocVecEnv.step_wait">[docs]</a>    <span class="k">def</span> <span class="nf">step_wait</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">[</span><span class="n">remote</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span> <span class="k">for</span> <span class="n">remote</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">remotes</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">waiting</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">obs</span><span class="p">,</span> <span class="n">rews</span><span class="p">,</span> <span class="n">dones</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">results</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_flatten_obs</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_space</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">rews</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">dones</span><span class="p">),</span> <span class="n">infos</span></div>
+
+<div class="viewcode-block" id="SubprocVecEnv.seed"><a class="viewcode-back" href="../../../../guide/vec_envs.html#stable_baselines.common.vec_env.SubprocVecEnv.seed">[docs]</a>    <span class="k">def</span> <span class="nf">seed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">remote</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">remotes</span><span class="p">):</span>
+            <span class="n">remote</span><span class="o">.</span><span class="n">send</span><span class="p">((</span><span class="s1">&#39;seed&#39;</span><span class="p">,</span> <span class="n">seed</span> <span class="o">+</span> <span class="n">idx</span><span class="p">))</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">remote</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span> <span class="k">for</span> <span class="n">remote</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">remotes</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="SubprocVecEnv.reset"><a class="viewcode-back" href="../../../../guide/vec_envs.html#stable_baselines.common.vec_env.SubprocVecEnv.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">remote</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">remotes</span><span class="p">:</span>
+            <span class="n">remote</span><span class="o">.</span><span class="n">send</span><span class="p">((</span><span class="s1">&#39;reset&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+        <span class="n">obs</span> <span class="o">=</span> <span class="p">[</span><span class="n">remote</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span> <span class="k">for</span> <span class="n">remote</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">remotes</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">_flatten_obs</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_space</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SubprocVecEnv.close"><a class="viewcode-back" href="../../../../guide/vec_envs.html#stable_baselines.common.vec_env.SubprocVecEnv.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">closed</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">waiting</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">remote</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">remotes</span><span class="p">:</span>
+                <span class="n">remote</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">remote</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">remotes</span><span class="p">:</span>
+            <span class="n">remote</span><span class="o">.</span><span class="n">send</span><span class="p">((</span><span class="s1">&#39;close&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">process</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">processes</span><span class="p">:</span>
+            <span class="n">process</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">closed</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="SubprocVecEnv.get_images"><a class="viewcode-back" href="../../../../guide/vec_envs.html#stable_baselines.common.vec_env.SubprocVecEnv.get_images">[docs]</a>    <span class="k">def</span> <span class="nf">get_images</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">pipe</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">remotes</span><span class="p">:</span>
+            <span class="c1"># gather images from subprocesses</span>
+            <span class="c1"># `mode` will be taken into account later</span>
+            <span class="n">pipe</span><span class="o">.</span><span class="n">send</span><span class="p">((</span><span class="s1">&#39;render&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;mode&#39;</span><span class="p">:</span> <span class="s1">&#39;rgb_array&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">})))</span>
+        <span class="n">imgs</span> <span class="o">=</span> <span class="p">[</span><span class="n">pipe</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span> <span class="k">for</span> <span class="n">pipe</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">remotes</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">imgs</span></div>
+
+<div class="viewcode-block" id="SubprocVecEnv.get_attr"><a class="viewcode-back" href="../../../../guide/vec_envs.html#stable_baselines.common.vec_env.SubprocVecEnv.get_attr">[docs]</a>    <span class="k">def</span> <span class="nf">get_attr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr_name</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return attribute from vectorized environment (see base class).&quot;&quot;&quot;</span>
+        <span class="n">target_remotes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_target_remotes</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">remote</span> <span class="ow">in</span> <span class="n">target_remotes</span><span class="p">:</span>
+            <span class="n">remote</span><span class="o">.</span><span class="n">send</span><span class="p">((</span><span class="s1">&#39;get_attr&#39;</span><span class="p">,</span> <span class="n">attr_name</span><span class="p">))</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">remote</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span> <span class="k">for</span> <span class="n">remote</span> <span class="ow">in</span> <span class="n">target_remotes</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="SubprocVecEnv.set_attr"><a class="viewcode-back" href="../../../../guide/vec_envs.html#stable_baselines.common.vec_env.SubprocVecEnv.set_attr">[docs]</a>    <span class="k">def</span> <span class="nf">set_attr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr_name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set attribute inside vectorized environments (see base class).&quot;&quot;&quot;</span>
+        <span class="n">target_remotes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_target_remotes</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">remote</span> <span class="ow">in</span> <span class="n">target_remotes</span><span class="p">:</span>
+            <span class="n">remote</span><span class="o">.</span><span class="n">send</span><span class="p">((</span><span class="s1">&#39;set_attr&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">attr_name</span><span class="p">,</span> <span class="n">value</span><span class="p">)))</span>
+        <span class="k">for</span> <span class="n">remote</span> <span class="ow">in</span> <span class="n">target_remotes</span><span class="p">:</span>
+            <span class="n">remote</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SubprocVecEnv.env_method"><a class="viewcode-back" href="../../../../guide/vec_envs.html#stable_baselines.common.vec_env.SubprocVecEnv.env_method">[docs]</a>    <span class="k">def</span> <span class="nf">env_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method_name</span><span class="p">,</span> <span class="o">*</span><span class="n">method_args</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">method_kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Call instance methods of vectorized environments.&quot;&quot;&quot;</span>
+        <span class="n">target_remotes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_target_remotes</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">remote</span> <span class="ow">in</span> <span class="n">target_remotes</span><span class="p">:</span>
+            <span class="n">remote</span><span class="o">.</span><span class="n">send</span><span class="p">((</span><span class="s1">&#39;env_method&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">method_name</span><span class="p">,</span> <span class="n">method_args</span><span class="p">,</span> <span class="n">method_kwargs</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">remote</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span> <span class="k">for</span> <span class="n">remote</span> <span class="ow">in</span> <span class="n">target_remotes</span><span class="p">]</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_target_remotes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the connection object needed to communicate with the wanted</span>
+<span class="sd">        envs that are in subprocesses.</span>
+
+<span class="sd">        :param indices: (None,int,Iterable) refers to indices of envs.</span>
+<span class="sd">        :return: ([multiprocessing.Connection]) Connection object to communicate between processes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_indices</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">remotes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">]</span></div>
+
+
+<span class="k">def</span> <span class="nf">_flatten_obs</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">space</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Flatten observations, depending on the observation space.</span>
+
+<span class="sd">    :param obs: (list&lt;X&gt; or tuple&lt;X&gt; where X is dict&lt;ndarray&gt;, tuple&lt;ndarray&gt; or ndarray) observations.</span>
+<span class="sd">                A list or tuple of observations, one per environment.</span>
+<span class="sd">                Each environment observation may be a NumPy array, or a dict or tuple of NumPy arrays.</span>
+<span class="sd">    :return (OrderedDict&lt;ndarray&gt;, tuple&lt;ndarray&gt; or ndarray) flattened observations.</span>
+<span class="sd">            A flattened NumPy array or an OrderedDict or tuple of flattened numpy arrays.</span>
+<span class="sd">            Each NumPy array has the environment index as its first axis.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)),</span> <span class="s2">&quot;expected list or tuple of observations per environment&quot;</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;need observations from at least one environment&quot;</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="n">gym</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Dict</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">space</span><span class="o">.</span><span class="n">spaces</span><span class="p">,</span> <span class="n">OrderedDict</span><span class="p">),</span> <span class="s2">&quot;Dict space must have ordered subspaces&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">dict</span><span class="p">),</span> <span class="s2">&quot;non-dict observation for environment with Dict observation space&quot;</span>
+        <span class="k">return</span> <span class="n">OrderedDict</span><span class="p">([(</span><span class="n">k</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">o</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">obs</span><span class="p">]))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">space</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">keys</span><span class="p">()])</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">space</span><span class="p">,</span> <span class="n">gym</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Tuple</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">),</span> <span class="s2">&quot;non-tuple observation for environment with Tuple observation space&quot;</span>
+        <span class="n">obs_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">space</span><span class="o">.</span><span class="n">spaces</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">o</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">obs</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">obs_len</span><span class="p">)))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Exelon Corp. &amp; MIT.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
