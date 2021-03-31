@@ -14,3 +14,15 @@ cloudpickle-1.2.2
 gym-0.15.4 
 opencv-python-4.5.1.48 
 pyglet-1.3.2
+
+#to do list
+-Fix GE and ES!
+-Fix PESA
+-Fix DQN, PPO, and A2C
+-Fix GRID and RAND Tune
+-Fix GATUNE and BAYESTUNE
+-Check the Terminal API
+-Add five unit tests
+-Check the PyPi
+-Check the docs/examples
+-Make a final installation from scratch and examples run.

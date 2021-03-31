@@ -14,7 +14,7 @@
 #
 import os
 import sys
-
+from neorl.version import version
 # We CANNOT enable 'sphinxcontrib.spelling' because ReadTheDocs.org does not support
 # PyEnchant.
 try:
@@ -25,7 +25,7 @@ except ImportError:
 
 # source code directory, relative to this file, for sphinx-autobuild
 sys.path.insert(0, os.path.abspath('../..'))
-
+sys.path.insert(0, os.path.abspath('../../neorl'))
 
 #class Mock(MagicMock):
 #    @classmethod
@@ -46,8 +46,7 @@ sys.path.insert(0, os.path.abspath('../..'))
 # Read version from file
 #version_file = os.path.join(os.path.dirname(__file__), '../../../neorl', 'version.txt')
 version_file =  '../../neorl/version.txt'
-with open(version_file, 'r') as file_handler:
-    __version__ = file_handler.read().strip()
+__version__ = version()
 
 # -- Project information -----------------------------------------------------
 

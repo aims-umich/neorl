@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Mon Jun 15 19:37:04 2020
-
-@author: Majdi
-"""
+#"""
+#Created on Mon Jun 15 19:37:04 2020
+#
+#@author: Majdi
+#"""
 
 import random
 import numpy as np
@@ -29,22 +29,23 @@ class MyPool(multiprocessing.pool.Pool):
     Process = NoDaemonProcess
 
 class ES:
-    def __init__ (self, bounds, fit, mu, lambda_, cxmode='cx2point', 
-                  alpha=0.1, cxpb=0.6, mutpb=0.3, smin=0.01, smax=0.5, ncores=1, seed=None):  
+    def __init__ (self, bounds, fit, lambda_=60, mu=30, cxmode='cx2point', 
+                  alpha=0.5, cxpb=0.6, mutpb=0.3, smin=0.01, smax=0.5, ncores=1, seed=None):  
         """
-        Parallel ES:
-        A module for constructing evolution strategy (ES) with parallelization in evaluating the population
-        Inputs:
-            -bounds (dict): input paramter lower/upper bounds in dictionary form
-            -fit (function): fitness function 
-            -mu (int): number of individuals to survive for next generation mu < lambda_
-            -lambda_ (int): total size of population
-            -ncores (int): parallel cores
-            -cxpb (float): population crossover probablity for ES
-            -mutpb (float): population mutation probablity for ES 
-            -indpb (float): independent probability for attribute mutation (ONLY used for continuous attributes)
-            -smin (float): minimum bound for strategy vector (fix it to 0.01)
-            -smin (float): max bound for strategy vector (fix it to 0.5)
+        Parallel Evolution Strategies
+        
+        :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: {'x1': ['int', 1, 4], 'x2': ['float', 0.1, 0.8], 'x3': ['float', 2.2, 6.2]}
+        :param fit: (function) the fitness function 
+        :param lambda_: (int) total number of individuals in the population
+        :param mu: (int): number of individuals to survive to the next generation, mu < lambda_
+        :param cxmode: (str): the crossover mode, either 'cx2point' or 'blend'
+        :param alpha: (float) Extent of the blending between [0,1], the blend crossover randomly selects a child in the range [x1-alpha(x2-x1), x2+alpha(x2-x1)] (Only used for cxmode='blend')
+        :param cxpb: (float) population crossover probability between [0,1]
+        :param mutpb: (float) population mutation probability between [0,1] 
+        :param smin: (float): minimum bound for the strategy vector
+        :param smax: (float): maximum bound for the strategy vector
+        :param ncores: (int) number of parallel processors
+        :param seed: (int) random seed for sampling
         """
         if seed:
             random.seed(seed)
@@ -69,14 +70,14 @@ class ES:
         assert self.ncores >=1, "Number of cores must be more than or equal 1"
             
     def GenES(self, bounds):
-        """
-        Individual generator
-        Inputs:
-            -bounds (dict): input paramter lower/upper bounds in dictionary form
-        Returns 
-            -ind (list): an individual vector with values sampled from bounds
-            -strategy (list): the strategy vector with values between smin and smax
-        """
+        #"""
+        #Individual generator
+        #Inputs:
+        #    -bounds (dict): input paramter lower/upper bounds in dictionary form
+        #Returns 
+        #    -ind (list): an individual vector with values sampled from bounds
+        #    -strategy (list): the strategy vector with values between smin and smax
+        #"""
         content=[]
         for key in bounds:
             if bounds[key][0] == 'int':
@@ -92,25 +93,25 @@ class ES:
         return ind, strategy
 
     def init_pop(self, x0=None):
-        """
-        Population intializer 
-        Inputs:
-            -warmup (int): number of individuals to create and evaluate initially
-        Returns 
-            -pop (dict): initial population in a dictionary form, looks like this
+        #"""
+        #Population intializer 
+        #Inputs:
+        #    -warmup (int): number of individuals to create and evaluate initially
+        #Returns 
+        #    -pop (dict): initial population in a dictionary form, looks like this
             
-        """
+        #"""
         #initialize the population and strategy and run them in parallel (these samples will be used to initialize the memory)
         pop=defaultdict(list)
         # dict key runs from 0 to warmup-1
         # index 0: individual, index 1: strategy, index 2: fitness 
         # Example: 
-        """
-        pop={key: [ind, strategy, fitness]}
-        pop={0: [[1,2,3,4,5], [0.1,0.2,0.3,0.4,0.5], 1.2], 
-             ... 
-             99: [[1.1,2.1,3.1,4.1,5.1], [0.1,0.2,0.3,0.4,0.5], 5.2]}
-        """
+        #"""
+        #pop={key: [ind, strategy, fitness]}
+        #pop={0: [[1,2,3,4,5], [0.1,0.2,0.3,0.4,0.5], 1.2], 
+        #     ... 
+        #     99: [[1.1,2.1,3.1,4.1,5.1], [0.1,0.2,0.3,0.4,0.5], 5.2]}
+        #"""
         
         if x0:
             print('The first particle provided by the user:', x0[0])
@@ -144,24 +145,24 @@ class ES:
         return pop  #return final pop dictionary with ind, strategy, and fitness
 
     def gen_object(self, inp):
-        """
-        This is a worker for multiprocess Pool
-        Inputs:
-            inp (list of lists): contains data for each core [[ind1, caseid1], ...,  [indN, caseidN]]
-        Returns:
-            fitness value (float)
-        """
+        #"""
+        #This is a worker for multiprocess Pool
+        #Inputs:
+        #    inp (list of lists): contains data for each core [[ind1, caseid1], ...,  [indN, caseidN]]
+        #Returns:
+        #    fitness value (float)
+        #"""
         return self.fit(inp)
 
     def select(self, pop, k=1):
-        """
-        Select function sorts the population from max to min based on fitness and select k best
-        Inputs:
-            pop (dict): population in dictionary structure
-            k (int): top k individuals are selected
-        Returns:
-            best_dict (dict): the new ordered dictionary with top k selected 
-        """
+        #"""
+        #Select function sorts the population from max to min based on fitness and select k best
+        #Inputs:
+        #    pop (dict): population in dictionary structure
+        #    k (int): top k individuals are selected
+        #Returns:
+        #    best_dict (dict): the new ordered dictionary with top k selected 
+        #"""
         
         pop=list(pop.items())
         pop.sort(key=lambda e: e[1][2], reverse=True)
@@ -179,48 +180,20 @@ class ES:
         sorted_dict.clear()
         return best_dict
 
-#    def cx(self, ind1, ind2, strat1, strat2):
-#        """Executes a classical two points crossover on both the individuals and their
-#        strategy. The individuals /strategies should be a list. The crossover points for the
-#        individual and the strategy are the same.
-#        
-#        Inputs:
-#            -ind1 (list): The first individual participating in the crossover.
-#            -ind2 (list): The second individual participating in the crossover.
-#            -strat1 (list): The first evolution strategy participating in the crossover.
-#            -strat2 (list): The second evolution strategy participating in the crossover.
-#        Returns:
-#            The new ind1, ind2, strat1, strat2 after crossover in list form
-#        """
-#        size = min(len(ind1), len(ind2))
-#    
-#        pt1 = random.randint(1, size)
-#        pt2 = random.randint(1, size - 1)
-#        if pt2 >= pt1:
-#            pt2 += 1
-#        else:  # Swap the two cx points
-#            pt1, pt2 = pt2, pt1
-#    
-#        ind1[pt1:pt2], ind2[pt1:pt2] = ind2[pt1:pt2], ind1[pt1:pt2]
-#        strat1[pt1:pt2], strat2[pt1:pt2] = strat2[pt1:pt2], strat1[pt1:pt2]
-#        
-#        return ind1, ind2, strat1, strat2
-
-
     def mutES(self, ind, strat):
-        """Mutate an evolution strategy according to mixed Discrete/Continuous mutation rules
-        attribute as described in [Li2013].
-        The function mutates discrete/float variables according to their type as indicated in self.bounds
-        .. Li, Rui, et al. "Mixed integer evolution strategies for parameter optimization." 
-           Evolutionary computation 21.1 (2013): 29-64.
-        Inputs:
-            -ind (list): individual to be mutated.
-            -strat (list): individual strategy to be mutated.
-        Returns: 
-            -ind (list): new individual after mutatation
-            -strat (list): individual strategy after mutatation       
-
-        """
+        #"""Mutate an evolution strategy according to mixed Discrete/Continuous mutation rules
+        #attribute as described in [Li2013].
+        #The function mutates discrete/float variables according to their type as indicated in self.bounds
+        #.. Li, Rui, et al. "Mixed integer evolution strategies for parameter optimization." 
+        #   Evolutionary computation 21.1 (2013): 29-64.
+        #Inputs:
+        #    -ind (list): individual to be mutated.
+        #    -strat (list): individual strategy to be mutated.
+        #Returns: 
+        #    -ind (list): new individual after mutatation
+        #    -strat (list): individual strategy after mutatation
+        
+        #"""
         # Infer the datatype, lower/upper bounds from self.bounds for flexible usage 
         lb=[]; ub=[]; datatype=[]
         for key in self.bounds:
@@ -281,28 +254,28 @@ class ES:
         return ind, strat
 
     def GenOffspring(self, pop):
-        """
+        #"""
+        # 
+        #This function generates the offspring by applying crossover, mutation **or** reproduction. 
+        #The sum of both probabilities self.cxpb and self.mutpb must be in [0,1]
+        #The reproduction probability is 1 - cxpb - mutpb
+        #The new offspring goes for fitness evaluation
         
-        This function generates the offspring by applying crossover, mutation **or** reproduction. 
-        The sum of both probabilities self.cxpb and self.mutpb must be in [0,1]
-        The reproduction probability is 1 - cxpb - mutpb
-        The new offspring goes for fitness evaluation
-        
-        Inputs:
-            pop (dict): population in dictionary structure
-        Returns:
-            offspring (dict): new modified population in dictionary structure    
-        """
+        #Inputs:
+        #    pop (dict): population in dictionary structure
+        #Returns:
+        #    offspring (dict): new modified population in dictionary structure    
+        #"""
         
         
         pop_indices=list(range(0,len(pop)))
         offspring = defaultdict(list)
         for i in range(self.lambda_):
-            alpha = random.random()
+            rn = random.random()
             #------------------------------
             # Crossover
             #------------------------------
-            if alpha < self.cxpb:            
+            if rn < self.cxpb:            
                 index1, index2 = random.sample(pop_indices,2)
                 if self.cxmode.strip() =='cx2point':
                     ind1, ind2, strat1, strat2 = cxES2point(ind1=list(pop[index1][0]),ind2=list(pop[index2][0]), 
@@ -320,7 +293,7 @@ class ES:
             #------------------------------
             # Mutation
             #------------------------------
-            elif alpha < self.cxpb + self.mutpb:  # Apply mutation
+            elif rn < self.cxpb + self.mutpb:  # Apply mutation
                 index = random.choice(pop_indices)
                 ind, strat=self.mutES(ind=list(pop[index][0]), strat=list(pop[index][1]))
                 offspring[i].append(ind)
@@ -338,17 +311,17 @@ class ES:
         return offspring
 
     def evolute(self, ngen, x0=None, verbose=0):
-        """This is the :math:`(\mu~,~\lambda)` evolutionary algorithm.
-    
-        Inputs:
-            pop (dict): initial population in dictionary structure
-            ngeg (int): number of generations to evolute
-            caseids (list of strings): for logging purposes, to attach a casename for each indvidual
-            verbose (bool): print summary to screen
-        Returns:
-            population (dict): final population after running all generations (ngen)
+        """
+        This function evolutes the ES algorithm for number of generations.
+        
+        :param ngen: (int) number of generations to evolute
+        :param x0: (list of lists) the initial position of the swarm particles
+        :param verbose: (bool) print statistics to screen
+        
+        :return: (dict) dictionary containing major ES search results
         """
         self.y_opt=-np.inf
+        self.best_scores=[]
         
         if x0:    
             assert len(x0) == self.lambda_, '--error: the length of x0 ({}) (initial population) must equal to the size of lambda ({})'.format(len(x0), self.lambda_)
@@ -385,6 +358,7 @@ class ES:
             # Select the next generation population
             population = copy.deepcopy(self.select(pop=offspring, k=self.mu))
             inds, rwd=[population[i][0] for i in population], [population[i][2] for i in population]
+            self.best_scores.append(np.max(rwd))
             arg_max=np.argmax(rwd)
             if rwd[arg_max] > self.y_opt:
                 self.y_opt=rwd[arg_max]
@@ -408,5 +382,5 @@ class ES:
         print('Best individual (x) found:', self.x_opt)
         print('--------------------------------------------------------------') 
         
-        return self.x_opt, self.y_opt, population
+        return self.x_opt, self.y_opt, self.best_scores
     

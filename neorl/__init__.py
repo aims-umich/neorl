@@ -31,11 +31,7 @@ from neorl.evolu.pso import PSO
 from neorl.evolu.sa import SA
 from neorl.evolu.de import DE
 from neorl.evolu.xnes import XNES
+from neorl.evolu.es import ES
 from neorl.hybrid.pesa import PESA
 from neorl.rl.baselines.shared.policies import MlpPolicy
 from neorl.rl.baselines.deepq.policies import MlpPolicy as DQNPolicy
-
-# Read version from file
-version_file = os.path.join(os.path.dirname(__file__), 'version.txt')
-with open(version_file, 'r') as file_handler:
-    __version__ = file_handler.read().strip()

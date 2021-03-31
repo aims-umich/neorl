@@ -10,6 +10,7 @@ import sys
 import subprocess
 from setuptools import setup, find_packages
 from distutils.version import LooseVersion
+from neorl.version import version
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 warnings.filterwarnings("ignore", message=r"Passing", category=FutureWarning)
@@ -131,8 +132,7 @@ To cite this repository in publications:
 """
 
 # Read version from file
-with open(os.path.join('neorl', 'version.txt'), 'r') as file_handler:
-    __version__ = file_handler.read().strip()
+__version__ = version()
     
 # Check tensorflow installation to avoid
 # breaking pre-installed tf gpu ##(credit to @hill-a and stable-baselines)

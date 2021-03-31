@@ -103,7 +103,6 @@
 <li class="toctree-l1"><a class="reference internal" href="modules/a2c.html">Advantage Actor Critic (A2C)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/dqn.html">Deep Q Learning (DQN)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/ppo2.html">Proximal Policy Optimisation (PPO)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules/ga.html">Genetic Algorithms (GA)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/es.html">Evolution Strategies (ES)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/pso.html">Particle Swarm Optimisation (PSO)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/de.html">Differential Evolution (DE)</a></li>
@@ -203,6 +202,7 @@
  | <a href="#G"><strong>G</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#L"><strong>L</strong></a>
+ | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
  | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
@@ -288,6 +288,8 @@
         <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecEnv.env_method">(stable_baselines.common.vec_env.VecEnv method)</a>
 </li>
       </ul></li>
+      <li><a href="modules/es.html#neorl.evolu.es.ES">ES (class in neorl.evolu.es)</a>
+</li>
       <li><a href="guide/callbacks.html#stable_baselines.common.callbacks.EvalCallback">EvalCallback (class in stable_baselines.common.callbacks)</a>
 </li>
       <li><a href="guide/callbacks.html#stable_baselines.common.callbacks.EventCallback">EventCallback (class in stable_baselines.common.callbacks)</a>
@@ -299,9 +301,11 @@
       <li><a href="modules/de.html#neorl.evolu.de.DE.evolute">evolute() (neorl.evolu.de.DE method)</a>
 
       <ul>
+        <li><a href="modules/es.html#neorl.evolu.es.ES.evolute">(neorl.evolu.es.ES method)</a>
+</li>
         <li><a href="modules/ga.html#neorl.evolu.ga.GA.evolute">(neorl.evolu.ga.GA method)</a>
 </li>
-        <li><a href="modules/es.html#neorl.evolu.pso.PSO.evolute">(neorl.evolu.pso.PSO method)</a>, <a href="modules/pso.html#neorl.evolu.pso.PSO.evolute">[1]</a>
+        <li><a href="modules/pso.html#neorl.evolu.pso.PSO.evolute">(neorl.evolu.pso.PSO method)</a>
 </li>
       </ul></li>
       <li><a href="guide/pretrain.html#stable_baselines.gail.ExpertDataset">ExpertDataset (class in stable_baselines.gail)</a>
@@ -314,7 +318,13 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/ga.html#neorl.evolu.ga.GA">GA (class in neorl.evolu.ga)</a>
 </li>
+      <li><a href="modules/es.html#neorl.evolu.es.ES.gen_object">gen_object() (neorl.evolu.es.ES method)</a>
+</li>
       <li><a href="guide/pretrain.html#stable_baselines.gail.generate_expert_traj">generate_expert_traj() (in module stable_baselines.gail)</a>
+</li>
+      <li><a href="modules/es.html#neorl.evolu.es.ES.GenES">GenES() (neorl.evolu.es.ES method)</a>
+</li>
+      <li><a href="modules/es.html#neorl.evolu.es.ES.GenOffspring">GenOffspring() (neorl.evolu.es.ES method)</a>
 </li>
       <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.DummyVecEnv.get_attr">get_attr() (stable_baselines.common.vec_env.DummyVecEnv method)</a>
 
@@ -340,10 +350,10 @@
         <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecEnv.get_images">(stable_baselines.common.vec_env.VecEnv method)</a>
 </li>
       </ul></li>
-      <li><a href="guide/pretrain.html#stable_baselines.gail.ExpertDataset.get_next_batch">get_next_batch() (stable_baselines.gail.ExpertDataset method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="guide/pretrain.html#stable_baselines.gail.ExpertDataset.get_next_batch">get_next_batch() (stable_baselines.gail.ExpertDataset method)</a>
+</li>
       <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecNormalize.get_original_obs">get_original_obs() (stable_baselines.common.vec_env.VecNormalize method)</a>
 </li>
       <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecNormalize.get_original_reward">get_original_reward() (stable_baselines.common.vec_env.VecNormalize method)</a>
@@ -390,6 +400,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="guide/pretrain.html#stable_baselines.gail.ExpertDataset.init_dataloader">init_dataloader() (stable_baselines.gail.ExpertDataset method)</a>
 </li>
+      <li><a href="modules/es.html#neorl.evolu.es.ES.init_pop">init_pop() (neorl.evolu.es.ES method)</a>
+</li>
       <li><a href="modules/dqn.html#neorl.rl.baselines.deepq.DQN.is_using_her">is_using_her() (neorl.rl.baselines.deepq.DQN method)</a>
 </li>
   </ul></td>
@@ -433,19 +445,29 @@
   </ul></td>
 </tr></table>
 
+<h2 id="M">M</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="modules/es.html#neorl.evolu.es.ES.mutES">mutES() (neorl.evolu.es.ES method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/de.html#module-neorl.evolu.de">neorl.evolu.de (module)</a>
 </li>
+      <li><a href="modules/es.html#module-neorl.evolu.es">neorl.evolu.es (module)</a>
+</li>
       <li><a href="modules/ga.html#module-neorl.evolu.ga">neorl.evolu.ga (module)</a>
 </li>
-      <li><a href="modules/es.html#module-neorl.evolu.pso">neorl.evolu.pso (module)</a>, <a href="modules/pso.html#module-neorl.evolu.pso">[1]</a>
-</li>
-      <li><a href="modules/a2c.html#module-neorl.rl.baselines.a2c">neorl.rl.baselines.a2c (module)</a>
+      <li><a href="modules/pso.html#module-neorl.evolu.pso">neorl.evolu.pso (module)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="modules/a2c.html#module-neorl.rl.baselines.a2c">neorl.rl.baselines.a2c (module)</a>
+</li>
       <li><a href="modules/dqn.html#module-neorl.rl.baselines.deepq">neorl.rl.baselines.deepq (module)</a>
 </li>
       <li><a href="modules/ppo2.html#module-neorl.rl.baselines.ppo2">neorl.rl.baselines.ppo2 (module)</a>
@@ -492,7 +514,7 @@
         <li><a href="modules/ppo2.html#neorl.rl.baselines.ppo2.PPO2.pretrain">(neorl.rl.baselines.ppo2.PPO2 method)</a>
 </li>
       </ul></li>
-      <li><a href="modules/es.html#neorl.evolu.pso.PSO">PSO (class in neorl.evolu.pso)</a>, <a href="modules/pso.html#neorl.evolu.pso.PSO">[1]</a>
+      <li><a href="modules/pso.html#neorl.evolu.pso.PSO">PSO (class in neorl.evolu.pso)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -548,8 +570,12 @@
         <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecEnv.seed">(stable_baselines.common.vec_env.VecEnv method)</a>
 </li>
       </ul></li>
-      <li><a href="modules/ga.html#neorl.evolu.ga.GA.select">select() (neorl.evolu.ga.GA method)</a>
+      <li><a href="modules/es.html#neorl.evolu.es.ES.select">select() (neorl.evolu.es.ES method)</a>
+
+      <ul>
+        <li><a href="modules/ga.html#neorl.evolu.ga.GA.select">(neorl.evolu.ga.GA method)</a>
 </li>
+      </ul></li>
       <li><a href="guide/pretrain.html#stable_baselines.gail.DataLoader.sequential_next">sequential_next() (stable_baselines.gail.DataLoader method)</a>
 </li>
       <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.DummyVecEnv.set_attr">set_attr() (stable_baselines.common.vec_env.DummyVecEnv method)</a>

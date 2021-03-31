@@ -44,7 +44,6 @@ User Guide
   modules/a2c
   modules/dqn
   modules/ppo2
-  modules/ga
   modules/es
   modules/pso
   modules/de
