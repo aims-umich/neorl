@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Example 3 &mdash; NEORL 1.1.3b documentation</title>
+  <title>Example 3 &mdash; NEORL 1.1.16b documentation</title>
   
 
   
@@ -30,11 +30,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -69,7 +68,7 @@
             
             
               <div class="version">
-                main (1.1.3b )
+                main (1.1.16b )
               </div>
             
           
@@ -98,6 +97,9 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../guide/install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../guide/quickstart.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/rl.html">Reinforcement Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/evolu.html">Evolutionary Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/hyperparameter.html">Hyperparameter Tuning</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Algorithms</span></p>
 <ul>
@@ -112,8 +114,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../tune/grid.html">Grid Search</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tune/random.html">Random Search</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tune/evolu.html">Evolutionary Search</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tune/bayes.html">Bayesian Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/evolu.html">Evolutionary Search</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
 <ul class="current">
@@ -201,11 +203,11 @@
             
   <div class="section" id="example-3">
 <span id="ex3"></span><h1>Example 3<a class="headerlink" href="#example-3" title="Permalink to this headline">¶</a></h1>
-<p>Example of solving the heavily-constrained engineering optimization problem “Welded-beam design” using NEORL with the PESA hybrid algorithm.</p>
+<p>Example of solving the heavily-constrained engineering optimization problem “Welded-beam design” using NEORL with the ES algorithm tuned with Grid search.</p>
 <div class="section" id="summary">
 <h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p>Algorithms: PESA</p></li>
+<li><p>Algorithms: ES, Grid search for tuning</p></li>
 <li><p>Type: Continuous, Single-objective, Constrained</p></li>
 <li><p>Field: Structural Engineering</p></li>
 </ul>
@@ -270,63 +272,154 @@
 <span class="c1"># Import packages</span>
 <span class="c1">#---------------------------------</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">PESA</span>
-<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">pi</span>
-<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">sqrt</span>
+<span class="kn">from</span> <span class="nn">neorl.tune</span> <span class="kn">import</span> <span class="n">BAYESTUNE</span>
+<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">ES</span>
 
-<span class="c1">#---------------------------------</span>
-<span class="c1"># Fitness function</span>
-<span class="c1">#---------------------------------</span>
-<span class="k">def</span> <span class="nf">ACKLEY</span><span class="p">(</span><span class="n">individual</span><span class="p">):</span>
-    <span class="c1">#Ackley objective function.</span>
-    <span class="n">d</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">individual</span><span class="p">)</span>
-    <span class="n">f</span><span class="o">=</span><span class="mi">20</span> <span class="o">-</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.2</span><span class="o">*</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="n">d</span> <span class="o">*</span> <span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">individual</span><span class="p">)))</span> \
-            <span class="o">+</span> <span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">exp</span><span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="n">d</span> <span class="o">*</span> <span class="nb">sum</span><span class="p">(</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">individual</span><span class="p">))</span>
-    <span class="k">return</span> <span class="o">-</span><span class="n">f</span>   <span class="c1">#-1 to convert to maximization problem</span>
+<span class="c1">#**********************************************************</span>
+<span class="c1"># Part I: Original Problem</span>
+<span class="c1">#**********************************************************</span>
+<span class="c1">#Define the fitness function (for the welded beam)</span>
+<span class="k">def</span> <span class="nf">BEAM</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 
-<span class="c1">#---------------------------------</span>
-<span class="c1"># Parameter Space</span>
-<span class="c1">#---------------------------------</span>
-<span class="c1">#Setup the parameter space (d=8)</span>
-<span class="n">d</span><span class="o">=</span><span class="mi">8</span>
-<span class="n">lb</span><span class="o">=-</span><span class="mi">32</span>
-<span class="n">ub</span><span class="o">=</span><span class="mi">32</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="mf">1.10471</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mf">0.04811</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="mf">14.0</span><span class="o">+</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="c1"># parameters</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="mi">6000</span><span class="p">;</span> <span class="n">L</span> <span class="o">=</span> <span class="mi">14</span><span class="p">;</span> <span class="n">E</span> <span class="o">=</span> <span class="mf">30e+6</span><span class="p">;</span> <span class="n">G</span> <span class="o">=</span> <span class="mf">12e+6</span><span class="p">;</span>
+    <span class="n">t_max</span> <span class="o">=</span> <span class="mi">13600</span><span class="p">;</span> <span class="n">s_max</span> <span class="o">=</span> <span class="mi">30000</span><span class="p">;</span> <span class="n">d_max</span> <span class="o">=</span> <span class="mf">0.25</span><span class="p">;</span>
+
+    <span class="n">M</span> <span class="o">=</span> <span class="n">P</span><span class="o">*</span><span class="p">(</span><span class="n">L</span><span class="o">+</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="mf">0.25</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">J</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mi">12</span><span class="o">+</span><span class="mf">0.25</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">));</span>
+    <span class="n">P_c</span> <span class="o">=</span> <span class="p">(</span><span class="mf">4.013</span><span class="o">*</span><span class="n">E</span><span class="o">/</span><span class="p">(</span><span class="mi">6</span><span class="o">*</span><span class="n">L</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">**</span><span class="mi">3</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="mf">0.25</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">sqrt</span><span class="p">(</span><span class="n">E</span><span class="o">/</span><span class="n">G</span><span class="p">)</span><span class="o">/</span><span class="n">L</span><span class="p">);</span>
+    <span class="n">t1</span> <span class="o">=</span> <span class="n">P</span><span class="o">/</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span> <span class="n">t2</span> <span class="o">=</span> <span class="n">M</span><span class="o">*</span><span class="n">R</span><span class="o">/</span><span class="n">J</span><span class="p">;</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">t1</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">t1</span><span class="o">*</span><span class="n">t2</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="n">R</span><span class="o">+</span><span class="n">t2</span><span class="o">**</span><span class="mi">2</span><span class="p">);</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="mi">6</span><span class="o">*</span><span class="n">P</span><span class="o">*</span><span class="n">L</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="mi">4</span><span class="o">*</span><span class="n">P</span><span class="o">*</span><span class="n">L</span><span class="o">**</span><span class="mi">3</span><span class="o">/</span><span class="p">(</span><span class="n">E</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">**</span><span class="mi">3</span><span class="p">);</span>
+    <span class="c1"># Constraints</span>
+    <span class="n">g1</span> <span class="o">=</span> <span class="n">t</span><span class="o">-</span><span class="n">t_max</span><span class="p">;</span> <span class="c1">#done</span>
+    <span class="n">g2</span> <span class="o">=</span> <span class="n">s</span><span class="o">-</span><span class="n">s_max</span><span class="p">;</span> <span class="c1">#done</span>
+    <span class="n">g3</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+    <span class="n">g4</span> <span class="o">=</span> <span class="mf">0.10471</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="mf">0.04811</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="mf">14.0</span><span class="o">+</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">-</span><span class="mf">5.0</span><span class="p">;</span>
+    <span class="n">g5</span> <span class="o">=</span> <span class="mf">0.125</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="n">g6</span> <span class="o">=</span> <span class="n">d</span><span class="o">-</span><span class="n">d_max</span><span class="p">;</span>
+    <span class="n">g7</span> <span class="o">=</span> <span class="n">P</span><span class="o">-</span><span class="n">P_c</span><span class="p">;</span> <span class="c1">#done</span>
+
+    <span class="n">g</span><span class="o">=</span><span class="p">[</span><span class="n">g1</span><span class="p">,</span><span class="n">g2</span><span class="p">,</span><span class="n">g3</span><span class="p">,</span><span class="n">g4</span><span class="p">,</span><span class="n">g5</span><span class="p">,</span><span class="n">g6</span><span class="p">,</span><span class="n">g7</span><span class="p">]</span>
+    <span class="n">g_round</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">g</span><span class="p">),</span><span class="mi">6</span><span class="p">)</span>
+    <span class="n">w1</span><span class="o">=</span><span class="mi">100</span>
+    <span class="n">w2</span><span class="o">=</span><span class="mi">100</span>
+
+    <span class="n">phi</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">item</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">g_round</span><span class="p">)</span>
+    <span class="n">viol</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">g_round</span><span class="p">)</span>
+
+    <span class="n">reward</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="p">(</span><span class="n">w1</span><span class="o">*</span><span class="n">phi</span> <span class="o">+</span> <span class="n">w2</span><span class="o">*</span><span class="n">viol</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">reward</span>
+
+<span class="c1">#**********************************************************</span>
+<span class="c1"># Part II: Setup parameter space</span>
+<span class="c1">#**********************************************************</span>
+<span class="c1">#--setup the parameter space for the welded beam</span>
+<span class="n">lb</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]</span>
+<span class="n">ub</span><span class="o">=</span><span class="p">[</span><span class="mf">2.0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">]</span>
+<span class="n">d2type</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="s1">&#39;float&#39;</span><span class="p">]</span>
 <span class="n">BOUNDS</span><span class="o">=</span><span class="p">{}</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">d</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
-    <span class="n">BOUNDS</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="n">lb</span><span class="p">,</span> <span class="n">ub</span><span class="p">]</span>
+<span class="n">nx</span><span class="o">=</span><span class="mi">4</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nx</span><span class="p">):</span>
+    <span class="n">BOUNDS</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span><span class="o">=</span><span class="p">[</span><span class="n">d2type</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">lb</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">ub</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
 
-<span class="c1">#---------------------------------</span>
-<span class="c1"># PESA</span>
-<span class="c1">#---------------------------------</span>
-<span class="n">pesa</span><span class="o">=</span><span class="n">PESA</span><span class="p">(</span><span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">FIT</span><span class="p">,</span> <span class="n">ngen</span><span class="o">=</span><span class="n">NGEN</span><span class="p">,</span> <span class="n">npop</span><span class="o">=</span><span class="n">NPOP</span><span class="p">,</span> <span class="n">memory_size</span><span class="o">=</span><span class="n">MEMORY_SIZE</span><span class="p">,</span> <span class="n">pop0</span><span class="o">=</span><span class="n">pop0</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">MODE</span><span class="p">,</span>
-      <span class="n">alpha0</span><span class="o">=</span><span class="n">ALPHA0</span><span class="p">,</span> <span class="n">alpha1</span><span class="o">=</span><span class="n">ALPHA1</span><span class="p">,</span> <span class="n">warmup</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chi</span><span class="o">=</span><span class="n">CHI</span><span class="p">,</span> <span class="n">replay_rate</span><span class="o">=</span><span class="n">REPLAY_RATE</span><span class="p">,</span> <span class="n">Tmax</span><span class="o">=</span><span class="n">TMAX</span><span class="p">,</span>
-      <span class="n">mu</span><span class="o">=</span><span class="n">MU</span><span class="p">,</span> <span class="n">cxpb</span><span class="o">=</span><span class="n">CXPB</span><span class="p">,</span> <span class="n">mutpb</span><span class="o">=</span><span class="n">MUTPB</span><span class="p">,</span> <span class="n">c1</span><span class="o">=</span><span class="n">C1</span><span class="p">,</span> <span class="n">c2</span><span class="o">=</span><span class="n">C2</span><span class="p">,</span> <span class="n">speed_mech</span><span class="o">=</span><span class="n">SPEED_MECH</span><span class="p">,</span> <span class="n">pso_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="c1">#*************************************************************</span>
+<span class="c1"># Part III: Define fitness function for hyperparameter tuning</span>
+<span class="c1">#*************************************************************</span>
+<span class="k">def</span> <span class="nf">tune_fit</span><span class="p">(</span><span class="n">cxpb</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">cxmode</span><span class="p">,</span> <span class="n">mutpb</span><span class="p">):</span>
 
-<span class="n">xpesa_best</span><span class="p">,</span> <span class="n">ypesa_best</span><span class="o">=</span> <span class="n">pesa</span><span class="o">.</span><span class="n">evolute</span><span class="p">()</span>
+    <span class="c1">#--setup the ES algorithm</span>
+    <span class="n">es</span><span class="o">=</span><span class="n">ES</span><span class="p">(</span><span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">BEAM</span><span class="p">,</span> <span class="n">lambda_</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">mutpb</span><span class="o">=</span><span class="n">mutpb</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
+         <span class="n">cxmode</span><span class="o">=</span><span class="n">cxmode</span><span class="p">,</span> <span class="n">cxpb</span><span class="o">=</span><span class="n">cxpb</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1">#--Evolute the ES object and obtains y_best</span>
+    <span class="c1">#--turn off verbose for less algorithm print-out when tuning</span>
+    <span class="n">x_best</span><span class="p">,</span> <span class="n">y_best</span><span class="p">,</span> <span class="n">es_hist</span><span class="o">=</span><span class="n">es</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">y_best</span> <span class="c1">#returns the best score</span>
+
+<span class="c1">#*************************************************************</span>
+<span class="c1"># Part IV: Tuning</span>
+<span class="c1">#*************************************************************</span>
+<span class="c1">#Setup the parameter space for Bayesian optimisation</span>
+<span class="c1">#VERY IMPORTANT: The order of these parameters MUST be similar to their order in tune_fit</span>
+<span class="c1">#see tune_fit</span>
+<span class="n">param_grid</span><span class="o">=</span><span class="p">{</span>
+<span class="c1">#def tune_fit(cxpb, mu, alpha, cxmode):</span>
+<span class="s1">&#39;cxpb&#39;</span><span class="p">:</span> <span class="p">[[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">],</span><span class="s1">&#39;float&#39;</span><span class="p">],</span>             <span class="c1">#cxpb is first (low=0.1, high=0.8, type=float/continuous)</span>
+<span class="s1">&#39;mu&#39;</span><span class="p">:</span>   <span class="p">[[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">],</span><span class="s1">&#39;int&#39;</span><span class="p">],</span>                 <span class="c1">#mu is second (low=30, high=60, type=int/discrete)</span>
+<span class="s1">&#39;alpha&#39;</span><span class="p">:[[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span><span class="s1">&#39;grid&#39;</span><span class="p">],</span>    <span class="c1">#alpha is third (grid with fixed values, type=grid/categorical)</span>
+<span class="s1">&#39;cxmode&#39;</span><span class="p">:[[</span><span class="s1">&#39;blend&#39;</span><span class="p">,</span> <span class="s1">&#39;cx2point&#39;</span><span class="p">],</span><span class="s1">&#39;grid&#39;</span><span class="p">],</span>
+<span class="s1">&#39;mutpb&#39;</span><span class="p">:</span> <span class="p">[[</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span> <span class="s1">&#39;float&#39;</span><span class="p">]}</span>  <span class="c1">#cxmode is fourth (grid with fixed values, type=grid/categorical)</span>
+
+<span class="c1">#setup a bayesian tune object</span>
+<span class="n">btune</span><span class="o">=</span><span class="n">BAYESTUNE</span><span class="p">(</span><span class="n">param_grid</span><span class="o">=</span><span class="n">param_grid</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">tune_fit</span><span class="p">,</span> <span class="n">ncases</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+<span class="c1">#tune the parameters with method .tune</span>
+<span class="n">bayesres</span><span class="o">=</span><span class="n">btune</span><span class="o">.</span><span class="n">tune</span><span class="p">(</span><span class="n">nthreads</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">csvname</span><span class="o">=</span><span class="s1">&#39;bayestune.csv&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;----Top 10 hyperparameter sets----&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">bayesres</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">,:])</span>   <span class="c1">#the results are saved in dataframe and ranked from best to worst</span>
+
+<span class="c1">#*************************************************************</span>
+<span class="c1"># Part V: Rerun ES with the best hyperparameter set</span>
+<span class="c1">#*************************************************************</span>
+<span class="n">es</span><span class="o">=</span><span class="n">ES</span><span class="p">(</span><span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">BEAM</span><span class="p">,</span> <span class="n">lambda_</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="n">bayesres</span><span class="p">[</span><span class="s1">&#39;mu&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+      <span class="n">mutpb</span><span class="o">=</span><span class="n">bayesres</span><span class="p">[</span><span class="s1">&#39;mutpb&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="n">bayesres</span><span class="p">[</span><span class="s1">&#39;alpha&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+      <span class="n">cxmode</span><span class="o">=</span><span class="n">bayesres</span><span class="p">[</span><span class="s1">&#39;cxmode&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cxpb</span><span class="o">=</span><span class="n">bayesres</span><span class="p">[</span><span class="s1">&#39;cxpb&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+      <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">x_best</span><span class="p">,</span> <span class="n">y_best</span><span class="p">,</span> <span class="n">es_hist</span><span class="o">=</span><span class="n">es</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best fitness (y) found:&#39;</span><span class="p">,</span> <span class="o">-</span><span class="n">y_best</span><span class="p">)</span>  <span class="c1">#convert back to original scale</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best individual (x) found:&#39;</span><span class="p">,</span> <span class="n">x_best</span><span class="p">)</span>
 
 <span class="c1">#---------------------------------</span>
 <span class="c1"># Plot</span>
 <span class="c1">#---------------------------------</span>
-<span class="c1">#Plot fitness for both methods</span>
+<span class="c1">#Plot fitness convergence</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pso_hist</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;PSO&#39;</span><span class="p">)</span>             <span class="c1">#multiply by -1 to covert back to a min problem</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">de_hist</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;DE&#39;</span><span class="p">)</span>               <span class="c1">#multiply by -1 to covert back to a min problem</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">nes_hist</span><span class="p">[</span><span class="s1">&#39;fitness&#39;</span><span class="p">]),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;NES&#39;</span><span class="p">)</span>  <span class="c1">#multiply by -1 to covert back to a min problem</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">es_hist</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ES&#39;</span><span class="p">)</span> <span class="c1">#multiply by -1 to covert back to a min problem</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Generation&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Fitness&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;ex2_fitness.png&#39;</span><span class="p">,</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;ex3_fitness.png&#39;</span><span class="p">,</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="results">
 <h2>Results<a class="headerlink" href="#results" title="Permalink to this headline">¶</a></h2>
-<p>The convergence of the fitness function is shown below</p>
-<a class="reference internal image-reference" href="../_images/ex2_fitness.png"><img alt="alternate text" class="align-center" src="../_images/ex2_fitness.png" style="width: 491.09999999999997px; height: 328.5px;" /></a>
-<p>After detailed hyperparameter tuning, PESA can achieve competitive performance for the welded beam design compared to other algorithms in the literature</p>
-<a class="reference internal image-reference" href="../_images/ex3_table.png"><img alt="alternate text" class="align-center" src="../_images/ex3_table.png" style="width: 674.6999999999999px; height: 166.2px;" /></a>
+<p>After Bayesian hyperparameter tuning, the top 10 are</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">----</span><span class="n">Top</span> <span class="mi">10</span> <span class="n">hyperparameter</span> <span class="n">sets</span><span class="o">----</span>
+<span class="nb">id</span>     <span class="n">cxpb</span>   <span class="n">mu</span>  <span class="n">alpha</span>    <span class="n">cxmode</span>     <span class="n">mutpb</span>     <span class="n">score</span>
+
+<span class="mi">11</span>  <span class="mf">0.100000</span>  <span class="mi">30</span>    <span class="mf">0.1</span>  <span class="n">cx2point</span>  <span class="mf">0.050000</span> <span class="o">-</span><span class="mf">1.854470</span>
+<span class="mi">18</span>  <span class="mf">0.104516</span>  <span class="mi">30</span>    <span class="mf">0.1</span>  <span class="n">cx2point</span>  <span class="mf">0.050000</span> <span class="o">-</span><span class="mf">1.912297</span>
+<span class="mi">1</span>   <span class="mf">0.177505</span>  <span class="mi">32</span>    <span class="mf">0.3</span>     <span class="n">blend</span>  <span class="mf">0.088050</span> <span class="o">-</span><span class="mf">1.981251</span>
+<span class="mi">5</span>   <span class="mf">0.573562</span>  <span class="mi">41</span>    <span class="mf">0.1</span>     <span class="n">blend</span>  <span class="mf">0.054562</span> <span class="o">-</span><span class="mf">2.141732</span>
+<span class="mi">22</span>  <span class="mf">0.100002</span>  <span class="mi">32</span>    <span class="mf">0.3</span>  <span class="n">cx2point</span>  <span class="mf">0.114052</span> <span class="o">-</span><span class="mf">2.179987</span>
+<span class="mi">7</span>   <span class="mf">0.131645</span>  <span class="mi">53</span>    <span class="mf">0.2</span>     <span class="n">blend</span>  <span class="mf">0.129494</span> <span class="o">-</span><span class="mf">2.195028</span>
+<span class="mi">25</span>  <span class="mf">0.148318</span>  <span class="mi">32</span>    <span class="mf">0.3</span>     <span class="n">blend</span>  <span class="mf">0.093325</span> <span class="o">-</span><span class="mf">2.208725</span>
+<span class="mi">20</span>  <span class="mf">0.594956</span>  <span class="mi">41</span>    <span class="mf">0.1</span>     <span class="n">blend</span>  <span class="mf">0.084657</span> <span class="o">-</span><span class="mf">2.244329</span>
+<span class="mi">3</span>   <span class="mf">0.180873</span>  <span class="mi">48</span>    <span class="mf">0.4</span>     <span class="n">blend</span>  <span class="mf">0.123485</span> <span class="o">-</span><span class="mf">2.276671</span>
+<span class="mi">4</span>   <span class="mf">0.243426</span>  <span class="mi">45</span>    <span class="mf">0.1</span>     <span class="n">blend</span>  <span class="mf">0.217842</span> <span class="o">-</span><span class="mf">2.337914</span>
+</pre></div>
+</div>
+<p>After re-running the problem with the best hyperparameter set, the convergence of the fitness function is shown below</p>
+<a class="reference internal image-reference" href="../_images/ex3_fitness.png"><img alt="alternate text" class="align-center" src="../_images/ex3_fitness.png" style="width: 483.0px; height: 331.8px;" /></a>
+<p>while the best <span class="math notranslate nohighlight">\(\vec{x} (x_1-x_4)\)</span> and <span class="math notranslate nohighlight">\(y=f(x)\)</span> (minimum beam cost) are:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Best</span> <span class="n">fitness</span> <span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="n">found</span><span class="p">:</span> <span class="mf">1.8544702483870839</span>
+<span class="n">Best</span> <span class="n">individual</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">found</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.1994589637402763</span><span class="p">,</span> <span class="mf">4.343869581792787</span><span class="p">,</span> <span class="mf">9.105271242105985</span><span class="p">,</span> <span class="mf">0.20702316005633725</span><span class="p">]</span>
+</pre></div>
+</div>
 </div>
 </div>
 

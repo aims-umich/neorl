@@ -76,9 +76,6 @@ echo "alias neorl=\"$P3PATH $here/neorl.py -i\"" >> $HOME/.bashrc
 echo "#-----------------------------" >> $HOME/.bashrc
 source $HOME/.bashrc
 
-#update subproc_vec_env.py to include the daemon option
-cp $here/src/utils/subproc_vec_env.py $oneback/anaconda3/lib/python3.6/site-packages/stable_baselines/common/vec_env/subproc_vec_env.py
-
 #*********************************************************************************************************
 
 #rm neorl

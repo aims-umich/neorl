@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Reinforcement Learning Resources &mdash; NEORL 1.1.3b documentation</title>
+  <title>Reinforcement Learning &mdash; NEORL 1.1.16b documentation</title>
   
 
   
@@ -30,17 +30,18 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Evolutionary Algorithms" href="evolu.html" />
+    <link rel="prev" title="Getting Started" href="quickstart.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -67,7 +68,7 @@
             
             
               <div class="version">
-                main (1.1.3b )
+                main (1.1.16b )
               </div>
             
           
@@ -93,9 +94,17 @@
             
             
               <p class="caption"><span class="caption-text">General Guide</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Reinforcement Learning</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#deep-q-learning">Deep Q Learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#proximal-policy-optimisation">Proximal Policy Optimisation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#advantage-actor-critic">Advantage Actor Critic</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="evolu.html">Evolutionary Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hyperparameter.html">Hyperparameter Tuning</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Algorithms</span></p>
 <ul>
@@ -110,8 +119,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../tune/grid.html">Grid Search</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tune/random.html">Random Search</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tune/evolu.html">Evolutionary Search</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tune/bayes.html">Bayesian Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/evolu.html">Evolutionary Search</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
 <ul>
@@ -172,7 +181,7 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Reinforcement Learning Resources</li>
+      <li>Reinforcement Learning</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -191,18 +200,33 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="reinforcement-learning-resources">
-<span id="rl"></span><h1>Reinforcement Learning Resources<a class="headerlink" href="#reinforcement-learning-resources" title="Permalink to this headline">¶</a></h1>
-<p>Stable-Baselines assumes that you already understand the basic concepts of Reinforcement Learning (RL).</p>
-<p>However, if you want to learn about RL, there are several good resources to get started:</p>
-<ul class="simple">
-<li><p><a class="reference external" href="https://spinningup.openai.com/en/latest/">OpenAI Spinning Up</a></p></li>
-<li><p><a class="reference external" href="http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html">David Silver’s course</a></p></li>
-<li><p><a class="reference external" href="https://lilianweng.github.io/lil-log/2018/04/08/policy-gradient-algorithms.html">Lilian Weng’s blog</a></p></li>
-<li><p><a class="reference external" href="https://sites.google.com/view/deep-rl-bootcamp/lectures">Berkeley’s Deep RL Bootcamp</a></p></li>
-<li><p><a class="reference external" href="http://rail.eecs.berkeley.edu/deeprlcourse/">Berkeley’s Deep Reinforcement Learning course</a></p></li>
-<li><p><a class="reference external" href="https://github.com/dennybritz/reinforcement-learning">More resources</a></p></li>
-</ul>
+  <div class="section" id="reinforcement-learning">
+<span id="hyperparameter"></span><h1>Reinforcement Learning<a class="headerlink" href="#reinforcement-learning" title="Permalink to this headline">¶</a></h1>
+<p>Reinforcement learning (RL) is a paradigm of machine learning concerned with developing intelligent systems, that know how to take actions in an environment in order to maximize cumulative reward. RL does not need labelled input/output data as other machine learning algorithms. Instead, RL collects the data on-the-fly as needed to maximize the reward. This advantage makes RL a natural choice for optimisation problems, for which the search space is usually too complex and too high to generate a representative dataset.</p>
+<a class="reference internal image-reference" href="../_images/rl.png"><img alt="alternate text" class="align-center" src="../_images/rl.png" style="width: 362.0px; height: 217.25px;" /></a>
+<p>RL algorithms, like evolutionary algorithms, focus on finding a balance between exploration (new knowledge) and exploitation (of current knowledge) to maximize the fitness/reward function. We can take this analogy to make RL intuitive in solving optimisation problems through:</p>
+<blockquote>
+<div><p>1- The agent: which is the optimizer. The agent is controlled by the RL algorithm that trains the agent to take proper actions. The algorithm takes the current state (<span class="math notranslate nohighlight">\(s_t\)</span>) and the current reward (<span class="math notranslate nohighlight">\(r_t\)</span>) as inputs, and decides the next action to take (<span class="math notranslate nohighlight">\(a_t\)</span>) as output. The action <span class="math notranslate nohighlight">\(a_t\)</span> in this case is a sample drawn from the parameter space for optimisation (<span class="math notranslate nohighlight">\(\vec{x}=[x_1, x_2, ..., x_d]\)</span>).</p>
+<p>2- The current state (<span class="math notranslate nohighlight">\(s_t\)</span>) for optimisation can be set equal to the current action (<span class="math notranslate nohighlight">\(s_t \leftarrow a_t\)</span>), since we perturb the whole action space at once, and we are not marching through time.</p>
+<p>3- The reward is similar as the fitness function in optimisation. If it is a minimization problem, the user can convert to reward maximization by multiplying the final fitness value with -1.</p>
+<p>4- The environment: takes the action provided by the agent (<span class="math notranslate nohighlight">\(a_t\)</span>), evaluates that action using the fitness function, assigns the next state and the next reward for taking that action (<span class="math notranslate nohighlight">\(s_{t+1}, r_t\)</span>), and sends them back to the RL agent. In NEORL, the user only needs to specify the reward/fitness function and the parameter space, and NEORL can automatically create the environment class.</p>
+<p>5- Steps 1-4 are repeated for sufficient time steps until the agent learns how to take the right action based on the given state such that the reward is maximized.</p>
+<p>6-The best action taken by the agent involves the optimised parameters (<span class="math notranslate nohighlight">\(\vec{x}\)</span>), while the best reward is similar as the best fitness, <span class="math notranslate nohighlight">\(y=f(\vec{x})\)</span>.</p>
+</div></blockquote>
+<p>Currently we have a support of some standalone deep RL algorithms, some are listed below</p>
+<div class="section" id="deep-q-learning">
+<h2>Deep Q Learning<a class="headerlink" href="#deep-q-learning" title="Permalink to this headline">¶</a></h2>
+<p>See the <a class="reference internal" href="../modules/dqn.html#dqn"><span class="std std-ref">DQN</span></a> section</p>
+</div>
+<div class="section" id="proximal-policy-optimisation">
+<h2>Proximal Policy Optimisation<a class="headerlink" href="#proximal-policy-optimisation" title="Permalink to this headline">¶</a></h2>
+<p>See the <a class="reference internal" href="../modules/ppo2.html#ppo2"><span class="std std-ref">PPO</span></a> section</p>
+</div>
+<div class="section" id="advantage-actor-critic">
+<h2>Advantage Actor Critic<a class="headerlink" href="#advantage-actor-critic" title="Permalink to this headline">¶</a></h2>
+<p>See the <a class="reference internal" href="../modules/a2c.html#a2c"><span class="std std-ref">A2C</span></a> section</p>
+<p>Lastly, it is worth highlighting some major differences between DQN and PPO. During training, DQN updates the parameters/weights of the Q-function, which acts as a middleman to map states to actions, while PPO updates the policy <span class="math notranslate nohighlight">\(\pi\)</span> directly, that maps states to actions without Q-function in between. In addition, DQN is observed as sample efficient due to the replay memory and the frequent training <span class="math notranslate nohighlight">\(F_{train}^{DQN} &lt;&lt; F_{train}^{PPO}\)</span>. Although PPO is observed as sample inefficient since it discards previous experiences after updating the surrogate every <span class="math notranslate nohighlight">\(F_{train}\)</span> (i.e., no replay memory), this sacrifice allows simpler implementation and faster training, facilitates hyperparameter tuning, and eases parallel calculations. The PPO algorithm used in this work is shown in Algorithm ref{alg:ppo}.</p>
+</div>
 </div>
 
 
@@ -210,6 +234,10 @@
            
           </div>
           <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="evolu.html" class="btn btn-neutral float-right" title="Evolutionary Algorithms" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="quickstart.html" class="btn btn-neutral float-left" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
 
   <hr/>
 

@@ -3,15 +3,17 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to NEORL documentation!
+Welcome to NEORL Website!
 =================================
+--This project is currently in Beta Testing, please contact Majdi I. Radaideh on radaideh@mit.edu for any bugs or issues 
+------------------------------------------------------------------------------------------------------------------------------
 
 .. image:: images/logo.png
    :scale: 30 %
    :alt: alternate text
    :align: right
    
-NEORL (NeuroEvolution Optimisation with Reinforcement Learning) is a set of implementations of hybrid algorithms combining neural networks and evolutionary computation based on a wide range of machine learning and evolutionary intelligence architectures. NEORL aims to solve large-scale optimisation problems relevant to operation & optimisation research, engineering, business, and other disciplines. 
+NEORL (**N**\ euro\ **E**\ volution **O**\ ptimisation with **R**\ einforcement **L**\ earning) is a set of implementations of hybrid algorithms combining neural networks and evolutionary computation based on a wide range of machine learning and evolutionary intelligence architectures. NEORL aims to solve large-scale optimisation problems relevant to operation & optimisation research, engineering, business, and other disciplines. 
 
 Github repository: https://github.com/mradaideh/neorl
 
@@ -23,7 +25,7 @@ Copyright
    :alt: alternate text
    :align: right
    
-This repository and its content are copyright of `Exelon Corporation <https://www.exeloncorp.com/>`_ © in collaboration with `MIT <https://web.mit.edu/nse/>`_ Nuclear Science and Engineering 2021. All rights reserved.
+This repository and its content are copyright of `Exelon Corporation <https://www.exeloncorp.com/>`_ © in collaboration with `MIT Nuclear Science and Engineering <https://web.mit.edu/nse/>`_  2021. All rights reserved.
 
 You can read the first successful application of NEORL for nuclear fuel optimisation in this `News Article <https://news.mit.edu/2020/want-cheaper-nuclear-energy-turn-design-process-game-1217>`_.
 
@@ -36,6 +38,9 @@ User Guide
    
    guide/install
    guide/quickstart
+   guide/rl
+   guide/evolu
+   guide/hyperparameter
 
 .. toctree::
   :maxdepth: 1
@@ -54,8 +59,8 @@ User Guide
 
   tune/grid
   tune/random
-  tune/evolu
   tune/bayes
+  tune/evolu
   
 .. toctree::
   :maxdepth: 1

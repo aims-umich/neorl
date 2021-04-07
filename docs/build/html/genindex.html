@@ -1,6 +1,5 @@
 
 
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
@@ -8,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Index &mdash; NEORL 1.1.3b documentation</title>
+  <title>Index &mdash; NEORL 1.1.16b documentation</title>
   
 
   
@@ -31,11 +30,9 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -68,7 +65,7 @@
             
             
               <div class="version">
-                main (1.1.3b )
+                main (1.1.16b )
               </div>
             
           
@@ -97,6 +94,9 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="guide/install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="guide/quickstart.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guide/rl.html">Reinforcement Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guide/evolu.html">Evolutionary Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guide/hyperparameter.html">Hyperparameter Tuning</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Algorithms</span></p>
 <ul>
@@ -111,8 +111,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="tune/grid.html">Grid Search</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tune/random.html">Random Search</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tune/evolu.html">Evolutionary Search</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tune/bayes.html">Bayesian Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tune/evolu.html">Evolutionary Search</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
 <ul>
@@ -196,7 +196,6 @@
 <div class="genindex-jumpbox">
  <a href="#A"><strong>A</strong></a>
  | <a href="#B"><strong>B</strong></a>
- | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
  | <a href="#E"><strong>E</strong></a>
  | <a href="#G"><strong>G</strong></a>
@@ -204,11 +203,10 @@
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
- | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
- | <a href="#V"><strong>V</strong></a>
+ | <a href="#T"><strong>T</strong></a>
  
 </div>
 <h2 id="A">A</h2>
@@ -230,33 +228,7 @@
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="guide/callbacks.html#stable_baselines.common.callbacks.BaseCallback">BaseCallback (class in stable_baselines.common.callbacks)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="C">C</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="guide/callbacks.html#stable_baselines.common.callbacks.CallbackList">CallbackList (class in stable_baselines.common.callbacks)</a>
-</li>
-      <li><a href="guide/callbacks.html#stable_baselines.common.callbacks.CheckpointCallback">CheckpointCallback (class in stable_baselines.common.callbacks)</a>
-</li>
-      <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.DummyVecEnv.close">close() (stable_baselines.common.vec_env.DummyVecEnv method)</a>
-
-      <ul>
-        <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.SubprocVecEnv.close">(stable_baselines.common.vec_env.SubprocVecEnv method)</a>
-</li>
-        <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecEnv.close">(stable_baselines.common.vec_env.VecEnv method)</a>
-</li>
-        <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecFrameStack.close">(stable_baselines.common.vec_env.VecFrameStack method)</a>
-</li>
-        <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecVideoRecorder.close">(stable_baselines.common.vec_env.VecVideoRecorder method)</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="guide/callbacks.html#stable_baselines.common.callbacks.ConvertCallback">ConvertCallback (class in stable_baselines.common.callbacks)</a>
+      <li><a href="tune/bayes.html#neorl.tune.bayestune.BAYESTUNE">BAYESTUNE (class in neorl.tune.bayestune)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -264,15 +236,11 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="guide/pretrain.html#stable_baselines.gail.DataLoader">DataLoader (class in stable_baselines.gail)</a>
-</li>
       <li><a href="modules/de.html#neorl.evolu.de.DE">DE (class in neorl.evolu.de)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/dqn.html#neorl.rl.baselines.deepq.DQN">DQN (class in neorl.rl.baselines.deepq)</a>
-</li>
-      <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.DummyVecEnv">DummyVecEnv (class in stable_baselines.common.vec_env)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -280,23 +248,7 @@
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.DummyVecEnv.env_method">env_method() (stable_baselines.common.vec_env.DummyVecEnv method)</a>
-
-      <ul>
-        <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.SubprocVecEnv.env_method">(stable_baselines.common.vec_env.SubprocVecEnv method)</a>
-</li>
-        <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecEnv.env_method">(stable_baselines.common.vec_env.VecEnv method)</a>
-</li>
-      </ul></li>
       <li><a href="modules/es.html#neorl.evolu.es.ES">ES (class in neorl.evolu.es)</a>
-</li>
-      <li><a href="guide/callbacks.html#stable_baselines.common.callbacks.EvalCallback">EvalCallback (class in stable_baselines.common.callbacks)</a>
-</li>
-      <li><a href="guide/callbacks.html#stable_baselines.common.callbacks.EventCallback">EventCallback (class in stable_baselines.common.callbacks)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="guide/callbacks.html#stable_baselines.common.callbacks.EveryNTimesteps">EveryNTimesteps (class in stable_baselines.common.callbacks)</a>
 </li>
       <li><a href="modules/de.html#neorl.evolu.de.DE.evolute">evolute() (neorl.evolu.de.DE method)</a>
 
@@ -308,8 +260,6 @@
         <li><a href="modules/pso.html#neorl.evolu.pso.PSO.evolute">(neorl.evolu.pso.PSO method)</a>
 </li>
       </ul></li>
-      <li><a href="guide/pretrain.html#stable_baselines.gail.ExpertDataset">ExpertDataset (class in stable_baselines.gail)</a>
-</li>
   </ul></td>
 </tr></table>
 
@@ -318,22 +268,6 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/ga.html#neorl.evolu.ga.GA">GA (class in neorl.evolu.ga)</a>
 </li>
-      <li><a href="modules/es.html#neorl.evolu.es.ES.gen_object">gen_object() (neorl.evolu.es.ES method)</a>
-</li>
-      <li><a href="guide/pretrain.html#stable_baselines.gail.generate_expert_traj">generate_expert_traj() (in module stable_baselines.gail)</a>
-</li>
-      <li><a href="modules/es.html#neorl.evolu.es.ES.GenES">GenES() (neorl.evolu.es.ES method)</a>
-</li>
-      <li><a href="modules/es.html#neorl.evolu.es.ES.GenOffspring">GenOffspring() (neorl.evolu.es.ES method)</a>
-</li>
-      <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.DummyVecEnv.get_attr">get_attr() (stable_baselines.common.vec_env.DummyVecEnv method)</a>
-
-      <ul>
-        <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.SubprocVecEnv.get_attr">(stable_baselines.common.vec_env.SubprocVecEnv method)</a>
-</li>
-        <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecEnv.get_attr">(stable_baselines.common.vec_env.VecEnv method)</a>
-</li>
-      </ul></li>
       <li><a href="modules/a2c.html#neorl.rl.baselines.a2c.A2C.get_env">get_env() (neorl.rl.baselines.a2c.A2C method)</a>
 
       <ul>
@@ -342,22 +276,6 @@
         <li><a href="modules/ppo2.html#neorl.rl.baselines.ppo2.PPO2.get_env">(neorl.rl.baselines.ppo2.PPO2 method)</a>
 </li>
       </ul></li>
-      <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.DummyVecEnv.get_images">get_images() (stable_baselines.common.vec_env.DummyVecEnv method)</a>
-
-      <ul>
-        <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.SubprocVecEnv.get_images">(stable_baselines.common.vec_env.SubprocVecEnv method)</a>
-</li>
-        <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecEnv.get_images">(stable_baselines.common.vec_env.VecEnv method)</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="guide/pretrain.html#stable_baselines.gail.ExpertDataset.get_next_batch">get_next_batch() (stable_baselines.gail.ExpertDataset method)</a>
-</li>
-      <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecNormalize.get_original_obs">get_original_obs() (stable_baselines.common.vec_env.VecNormalize method)</a>
-</li>
-      <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecNormalize.get_original_reward">get_original_reward() (stable_baselines.common.vec_env.VecNormalize method)</a>
-</li>
       <li><a href="modules/a2c.html#neorl.rl.baselines.a2c.A2C.get_parameter_list">get_parameter_list() (neorl.rl.baselines.a2c.A2C method)</a>
 
       <ul>
@@ -366,6 +284,8 @@
         <li><a href="modules/ppo2.html#neorl.rl.baselines.ppo2.PPO2.get_parameter_list">(neorl.rl.baselines.ppo2.PPO2 method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/a2c.html#neorl.rl.baselines.a2c.A2C.get_parameters">get_parameters() (neorl.rl.baselines.a2c.A2C method)</a>
 
       <ul>
@@ -382,7 +302,7 @@
         <li><a href="modules/ppo2.html#neorl.rl.baselines.ppo2.PPO2.get_vec_normalize_env">(neorl.rl.baselines.ppo2.PPO2 method)</a>
 </li>
       </ul></li>
-      <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecEnv.getattr_depth_check">getattr_depth_check() (stable_baselines.common.vec_env.VecEnv method)</a>
+      <li><a href="tune/grid.html#neorl.tune.gridtune.GRIDTUNE">GRIDTUNE (class in neorl.tune.gridtune)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -390,18 +310,6 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="guide/callbacks.html#stable_baselines.common.callbacks.BaseCallback.init_callback">init_callback() (stable_baselines.common.callbacks.BaseCallback method)</a>
-
-      <ul>
-        <li><a href="guide/callbacks.html#stable_baselines.common.callbacks.EventCallback.init_callback">(stable_baselines.common.callbacks.EventCallback method)</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="guide/pretrain.html#stable_baselines.gail.ExpertDataset.init_dataloader">init_dataloader() (stable_baselines.gail.ExpertDataset method)</a>
-</li>
-      <li><a href="modules/es.html#neorl.evolu.es.ES.init_pop">init_pop() (neorl.evolu.es.ES method)</a>
-</li>
       <li><a href="modules/dqn.html#neorl.rl.baselines.deepq.DQN.is_using_her">is_using_her() (neorl.rl.baselines.deepq.DQN method)</a>
 </li>
   </ul></td>
@@ -425,8 +333,6 @@
 </li>
         <li><a href="modules/ppo2.html#neorl.rl.baselines.ppo2.PPO2.load">(neorl.rl.baselines.ppo2.PPO2 class method)</a>
 </li>
-        <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecNormalize.load">(stable_baselines.common.vec_env.VecNormalize static method)</a>
-</li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -438,60 +344,121 @@
         <li><a href="modules/ppo2.html#neorl.rl.baselines.ppo2.PPO2.load_parameters">(neorl.rl.baselines.ppo2.PPO2 method)</a>
 </li>
       </ul></li>
-      <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecNormalize.load_running_average">load_running_average() (stable_baselines.common.vec_env.VecNormalize method)</a>
-</li>
-      <li><a href="guide/pretrain.html#stable_baselines.gail.ExpertDataset.log_info">log_info() (stable_baselines.gail.ExpertDataset method)</a>
-</li>
   </ul></td>
 </tr></table>
 
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules/es.html#neorl.evolu.es.ES.mutES">mutES() (neorl.evolu.es.ES method)</a>
+      <li>
+    module
+
+      <ul>
+        <li><a href="modules/de.html#module-neorl.evolu.de">neorl.evolu.de</a>
 </li>
+        <li><a href="modules/es.html#module-neorl.evolu.es">neorl.evolu.es</a>
+</li>
+        <li><a href="modules/ga.html#module-neorl.evolu.ga">neorl.evolu.ga</a>
+</li>
+        <li><a href="modules/pso.html#module-neorl.evolu.pso">neorl.evolu.pso</a>
+</li>
+        <li><a href="modules/a2c.html#module-neorl.rl.baselines.a2c">neorl.rl.baselines.a2c</a>
+</li>
+        <li><a href="modules/dqn.html#module-neorl.rl.baselines.deepq">neorl.rl.baselines.deepq</a>
+</li>
+        <li><a href="modules/ppo2.html#module-neorl.rl.baselines.ppo2">neorl.rl.baselines.ppo2</a>
+</li>
+        <li><a href="tune/bayes.html#module-neorl.tune.bayestune">neorl.tune.bayestune</a>
+</li>
+        <li><a href="tune/grid.html#module-neorl.tune.gridtune">neorl.tune.gridtune</a>
+</li>
+        <li><a href="tune/random.html#module-neorl.tune.randtune">neorl.tune.randtune</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules/de.html#module-neorl.evolu.de">neorl.evolu.de (module)</a>
-</li>
-      <li><a href="modules/es.html#module-neorl.evolu.es">neorl.evolu.es (module)</a>
-</li>
-      <li><a href="modules/ga.html#module-neorl.evolu.ga">neorl.evolu.ga (module)</a>
-</li>
-      <li><a href="modules/pso.html#module-neorl.evolu.pso">neorl.evolu.pso (module)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules/a2c.html#module-neorl.rl.baselines.a2c">neorl.rl.baselines.a2c (module)</a>
-</li>
-      <li><a href="modules/dqn.html#module-neorl.rl.baselines.deepq">neorl.rl.baselines.deepq (module)</a>
-</li>
-      <li><a href="modules/ppo2.html#module-neorl.rl.baselines.ppo2">neorl.rl.baselines.ppo2 (module)</a>
-</li>
-      <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecNormalize.normalize_obs">normalize_obs() (stable_baselines.common.vec_env.VecNormalize method)</a>
-</li>
-      <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecNormalize.normalize_reward">normalize_reward() (stable_baselines.common.vec_env.VecNormalize method)</a>
-</li>
-  </ul></td>
-</tr></table>
+      <li>
+    neorl.evolu.de
 
-<h2 id="O">O</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="guide/callbacks.html#stable_baselines.common.callbacks.BaseCallback.on_step">on_step() (stable_baselines.common.callbacks.BaseCallback method)</a>
+      <ul>
+        <li><a href="modules/de.html#module-neorl.evolu.de">module</a>
 </li>
+      </ul></li>
+      <li>
+    neorl.evolu.es
+
+      <ul>
+        <li><a href="modules/es.html#module-neorl.evolu.es">module</a>
+</li>
+      </ul></li>
+      <li>
+    neorl.evolu.ga
+
+      <ul>
+        <li><a href="modules/ga.html#module-neorl.evolu.ga">module</a>
+</li>
+      </ul></li>
+      <li>
+    neorl.evolu.pso
+
+      <ul>
+        <li><a href="modules/pso.html#module-neorl.evolu.pso">module</a>
+</li>
+      </ul></li>
+      <li>
+    neorl.rl.baselines.a2c
+
+      <ul>
+        <li><a href="modules/a2c.html#module-neorl.rl.baselines.a2c">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    neorl.rl.baselines.deepq
+
+      <ul>
+        <li><a href="modules/dqn.html#module-neorl.rl.baselines.deepq">module</a>
+</li>
+      </ul></li>
+      <li>
+    neorl.rl.baselines.ppo2
+
+      <ul>
+        <li><a href="modules/ppo2.html#module-neorl.rl.baselines.ppo2">module</a>
+</li>
+      </ul></li>
+      <li>
+    neorl.tune.bayestune
+
+      <ul>
+        <li><a href="tune/bayes.html#module-neorl.tune.bayestune">module</a>
+</li>
+      </ul></li>
+      <li>
+    neorl.tune.gridtune
+
+      <ul>
+        <li><a href="tune/grid.html#module-neorl.tune.gridtune">module</a>
+</li>
+      </ul></li>
+      <li>
+    neorl.tune.randtune
+
+      <ul>
+        <li><a href="tune/random.html#module-neorl.tune.randtune">module</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="guide/pretrain.html#stable_baselines.gail.ExpertDataset.plot">plot() (stable_baselines.gail.ExpertDataset method)</a>
-</li>
       <li><a href="modules/ppo2.html#neorl.rl.baselines.ppo2.PPO2">PPO2 (class in neorl.rl.baselines.ppo2)</a>
 </li>
       <li><a href="modules/a2c.html#neorl.rl.baselines.a2c.A2C.predict">predict() (neorl.rl.baselines.a2c.A2C method)</a>
@@ -504,8 +471,6 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="guide/pretrain.html#stable_baselines.gail.ExpertDataset.prepare_pickling">prepare_pickling() (stable_baselines.gail.ExpertDataset method)</a>
-</li>
       <li><a href="modules/a2c.html#neorl.rl.baselines.a2c.A2C.pretrain">pretrain() (neorl.rl.baselines.a2c.A2C method)</a>
 
       <ul>
@@ -522,30 +487,12 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.DummyVecEnv.render">render() (stable_baselines.common.vec_env.DummyVecEnv method)</a>
-
-      <ul>
-        <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecEnv.render">(stable_baselines.common.vec_env.VecEnv method)</a>
+      <li><a href="tune/random.html#neorl.tune.randtune.RANDTUNE">RANDTUNE (class in neorl.tune.randtune)</a>
 </li>
-      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/dqn.html#neorl.rl.baselines.deepq.DQN.replay_buffer_add">replay_buffer_add() (neorl.rl.baselines.deepq.DQN method)</a>
 </li>
-      <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.DummyVecEnv.reset">reset() (stable_baselines.common.vec_env.DummyVecEnv method)</a>
-
-      <ul>
-        <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.SubprocVecEnv.reset">(stable_baselines.common.vec_env.SubprocVecEnv method)</a>
-</li>
-        <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecCheckNan.reset">(stable_baselines.common.vec_env.VecCheckNan method)</a>
-</li>
-        <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecEnv.reset">(stable_baselines.common.vec_env.VecEnv method)</a>
-</li>
-        <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecFrameStack.reset">(stable_baselines.common.vec_env.VecFrameStack method)</a>
-</li>
-        <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecNormalize.reset">(stable_baselines.common.vec_env.VecNormalize method)</a>
-</li>
-        <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecVideoRecorder.reset">(stable_baselines.common.vec_env.VecVideoRecorder method)</a>
-</li>
-      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -560,32 +507,8 @@
         <li><a href="modules/ppo2.html#neorl.rl.baselines.ppo2.PPO2.save">(neorl.rl.baselines.ppo2.PPO2 method)</a>
 </li>
       </ul></li>
-      <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecNormalize.save_running_average">save_running_average() (stable_baselines.common.vec_env.VecNormalize method)</a>
+      <li><a href="modules/ga.html#neorl.evolu.ga.GA.select">select() (neorl.evolu.ga.GA method)</a>
 </li>
-      <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.DummyVecEnv.seed">seed() (stable_baselines.common.vec_env.DummyVecEnv method)</a>
-
-      <ul>
-        <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.SubprocVecEnv.seed">(stable_baselines.common.vec_env.SubprocVecEnv method)</a>
-</li>
-        <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecEnv.seed">(stable_baselines.common.vec_env.VecEnv method)</a>
-</li>
-      </ul></li>
-      <li><a href="modules/es.html#neorl.evolu.es.ES.select">select() (neorl.evolu.es.ES method)</a>
-
-      <ul>
-        <li><a href="modules/ga.html#neorl.evolu.ga.GA.select">(neorl.evolu.ga.GA method)</a>
-</li>
-      </ul></li>
-      <li><a href="guide/pretrain.html#stable_baselines.gail.DataLoader.sequential_next">sequential_next() (stable_baselines.gail.DataLoader method)</a>
-</li>
-      <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.DummyVecEnv.set_attr">set_attr() (stable_baselines.common.vec_env.DummyVecEnv method)</a>
-
-      <ul>
-        <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.SubprocVecEnv.set_attr">(stable_baselines.common.vec_env.SubprocVecEnv method)</a>
-</li>
-        <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecEnv.set_attr">(stable_baselines.common.vec_env.VecEnv method)</a>
-</li>
-      </ul></li>
       <li><a href="modules/a2c.html#neorl.rl.baselines.a2c.A2C.set_env">set_env() (neorl.rl.baselines.a2c.A2C method)</a>
 
       <ul>
@@ -594,6 +517,8 @@
         <li><a href="modules/ppo2.html#neorl.rl.baselines.ppo2.PPO2.set_env">(neorl.rl.baselines.ppo2.PPO2 method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/a2c.html#neorl.rl.baselines.a2c.A2C.set_random_seed">set_random_seed() (neorl.rl.baselines.a2c.A2C method)</a>
 
       <ul>
@@ -602,10 +527,6 @@
         <li><a href="modules/ppo2.html#neorl.rl.baselines.ppo2.PPO2.set_random_seed">(neorl.rl.baselines.ppo2.PPO2 method)</a>
 </li>
       </ul></li>
-      <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecNormalize.set_venv">set_venv() (stable_baselines.common.vec_env.VecNormalize method)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/a2c.html#neorl.rl.baselines.a2c.A2C.setup_model">setup_model() (neorl.rl.baselines.a2c.A2C method)</a>
 
       <ul>
@@ -614,62 +535,20 @@
         <li><a href="modules/ppo2.html#neorl.rl.baselines.ppo2.PPO2.setup_model">(neorl.rl.baselines.ppo2.PPO2 method)</a>
 </li>
       </ul></li>
-      <li><a href="guide/callbacks.html#module-stable_baselines.common.callbacks">stable_baselines.common.callbacks (module)</a>
-</li>
-      <li><a href="guide/vec_envs.html#module-stable_baselines.common.vec_env">stable_baselines.common.vec_env (module)</a>
-</li>
-      <li><a href="guide/pretrain.html#stable_baselines.gail.DataLoader.start_process">start_process() (stable_baselines.gail.DataLoader method)</a>
-</li>
-      <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecEnv.step">step() (stable_baselines.common.vec_env.VecEnv method)</a>
-</li>
-      <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.DummyVecEnv.step_async">step_async() (stable_baselines.common.vec_env.DummyVecEnv method)</a>
-
-      <ul>
-        <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.SubprocVecEnv.step_async">(stable_baselines.common.vec_env.SubprocVecEnv method)</a>
-</li>
-        <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecCheckNan.step_async">(stable_baselines.common.vec_env.VecCheckNan method)</a>
-</li>
-        <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecEnv.step_async">(stable_baselines.common.vec_env.VecEnv method)</a>
-</li>
-      </ul></li>
-      <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.DummyVecEnv.step_wait">step_wait() (stable_baselines.common.vec_env.DummyVecEnv method)</a>
-
-      <ul>
-        <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.SubprocVecEnv.step_wait">(stable_baselines.common.vec_env.SubprocVecEnv method)</a>
-</li>
-        <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecCheckNan.step_wait">(stable_baselines.common.vec_env.VecCheckNan method)</a>
-</li>
-        <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecEnv.step_wait">(stable_baselines.common.vec_env.VecEnv method)</a>
-</li>
-        <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecFrameStack.step_wait">(stable_baselines.common.vec_env.VecFrameStack method)</a>
-</li>
-        <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecNormalize.step_wait">(stable_baselines.common.vec_env.VecNormalize method)</a>
-</li>
-        <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecVideoRecorder.step_wait">(stable_baselines.common.vec_env.VecVideoRecorder method)</a>
-</li>
-      </ul></li>
-      <li><a href="guide/callbacks.html#stable_baselines.common.callbacks.StopTrainingOnRewardThreshold">StopTrainingOnRewardThreshold (class in stable_baselines.common.callbacks)</a>
-</li>
-      <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.SubprocVecEnv">SubprocVecEnv (class in stable_baselines.common.vec_env)</a>
-</li>
   </ul></td>
 </tr></table>
 
-<h2 id="V">V</h2>
+<h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecCheckNan">VecCheckNan (class in stable_baselines.common.vec_env)</a>
+      <li><a href="tune/bayes.html#neorl.tune.bayestune.BAYESTUNE.tune">tune() (neorl.tune.bayestune.BAYESTUNE method)</a>
+
+      <ul>
+        <li><a href="tune/grid.html#neorl.tune.gridtune.GRIDTUNE.tune">(neorl.tune.gridtune.GRIDTUNE method)</a>
 </li>
-      <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecEnv">VecEnv (class in stable_baselines.common.vec_env)</a>
+        <li><a href="tune/random.html#neorl.tune.randtune.RANDTUNE.tune">(neorl.tune.randtune.RANDTUNE method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecFrameStack">VecFrameStack (class in stable_baselines.common.vec_env)</a>
-</li>
-      <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecNormalize">VecNormalize (class in stable_baselines.common.vec_env)</a>
-</li>
-      <li><a href="guide/vec_envs.html#stable_baselines.common.vec_env.VecVideoRecorder">VecVideoRecorder (class in stable_baselines.common.vec_env)</a>
-</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 

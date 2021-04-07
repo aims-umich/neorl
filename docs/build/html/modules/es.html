@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Evolution Strategies (ES) &mdash; NEORL 1.1.3b documentation</title>
+  <title>Evolution Strategies (ES) &mdash; NEORL 1.1.16b documentation</title>
   
 
   
@@ -30,11 +30,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -69,7 +68,7 @@
             
             
               <div class="version">
-                main (1.1.3b )
+                main (1.1.16b )
               </div>
             
           
@@ -98,6 +97,9 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../guide/install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../guide/quickstart.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/rl.html">Reinforcement Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/evolu.html">Evolutionary Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/hyperparameter.html">Hyperparameter Tuning</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Algorithms</span></p>
 <ul class="current">
@@ -118,8 +120,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../tune/grid.html">Grid Search</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tune/random.html">Random Search</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tune/evolu.html">Evolutionary Search</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tune/bayes.html">Bayesian Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/evolu.html">Evolutionary Search</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
 <ul>
@@ -199,9 +201,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <span class="target" id="module-neorl.evolu.es"><span id="es"></span></span><p>Created on Mon Jun 15 19:37:04 2020</p>
-<p>&#64;author: Majdi</p>
-<div class="section" id="evolution-strategies-es">
+  <span class="target" id="module-neorl.evolu.es"><span id="es"></span></span><div class="section" id="evolution-strategies-es">
 <h1>Evolution Strategies (ES)<a class="headerlink" href="#evolution-strategies-es" title="Permalink to this headline">¶</a></h1>
 <p>A module for the evolution strategies (<span class="math notranslate nohighlight">\(\mu,\lambda\)</span>) with adaptive strategy vectors.</p>
 <p>Original paper: Bäck, T., Fogel, D. B., Michalewicz, Z. (Eds.). (2018). Evolutionary computation 1: Basic algorithms and operators. CRC press.</p>
@@ -216,113 +216,42 @@
 </div>
 <div class="section" id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="neorl.evolu.es.ES">
-<em class="property">class </em><code class="sig-prename descclassname">neorl.evolu.es.</code><code class="sig-name descname">ES</code><span class="sig-paren">(</span><em class="sig-param">bounds</em>, <em class="sig-param">fit</em>, <em class="sig-param">mu</em>, <em class="sig-param">lambda_</em>, <em class="sig-param">cxmode='cx2point'</em>, <em class="sig-param">alpha=0.1</em>, <em class="sig-param">cxpb=0.6</em>, <em class="sig-param">mutpb=0.3</em>, <em class="sig-param">smin=0.01</em>, <em class="sig-param">smax=0.5</em>, <em class="sig-param">ncores=1</em>, <em class="sig-param">seed=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/evolu/es.html#ES"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neorl.evolu.es.ES" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="neorl.evolu.es.ES.GenES">
-<code class="sig-name descname">GenES</code><span class="sig-paren">(</span><em class="sig-param">bounds</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/evolu/es.html#ES.GenES"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neorl.evolu.es.ES.GenES" title="Permalink to this definition">¶</a></dt>
-<dd><p>Individual generator
-Inputs:</p>
-<blockquote>
-<div><p>-bounds (dict): input paramter lower/upper bounds in dictionary form</p>
-</div></blockquote>
-<dl class="simple">
-<dt>Returns </dt><dd><p>-ind (list): an individual vector with values sampled from bounds
--strategy (list): the strategy vector with values between smin and smax</p>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">neorl.evolu.es.</span></code><code class="sig-name descname"><span class="pre">ES</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bounds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambda_</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cxmode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cx2point'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cxpb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mutpb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ncores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/evolu/es.html#ES"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.evolu.es.ES" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parallel Evolution Strategies</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bounds</strong> – (dict) input parameter type and lower/upper bounds in dictionary form. Example: {‘x1’: [‘int’, 1, 4], ‘x2’: [‘float’, 0.1, 0.8], ‘x3’: [‘float’, 2.2, 6.2]}</p></li>
+<li><p><strong>fit</strong> – (function) the fitness function</p></li>
+<li><p><strong>lambda</strong> – (int) total number of individuals in the population</p></li>
+<li><p><strong>mu</strong> – (int): number of individuals to survive to the next generation, mu &lt; <a href="#id1"><span class="problematic" id="id2">lambda_</span></a></p></li>
+<li><p><strong>cxmode</strong> – (str): the crossover mode, either ‘cx2point’ or ‘blend’</p></li>
+<li><p><strong>alpha</strong> – (float) Extent of the blending between [0,1], the blend crossover randomly selects a child in the range [x1-alpha(x2-x1), x2+alpha(x2-x1)] (Only used for cxmode=’blend’)</p></li>
+<li><p><strong>cxpb</strong> – (float) population crossover probability between [0,1]</p></li>
+<li><p><strong>mutpb</strong> – (float) population mutation probability between [0,1]</p></li>
+<li><p><strong>smin</strong> – (float): minimum bound for the strategy vector</p></li>
+<li><p><strong>smax</strong> – (float): maximum bound for the strategy vector</p></li>
+<li><p><strong>ncores</strong> – (int) number of parallel processors</p></li>
+<li><p><strong>seed</strong> – (int) random seed for sampling</p></li>
+</ul>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="neorl.evolu.es.ES.GenOffspring">
-<code class="sig-name descname">GenOffspring</code><span class="sig-paren">(</span><em class="sig-param">pop</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/evolu/es.html#ES.GenOffspring"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neorl.evolu.es.ES.GenOffspring" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function generates the offspring by applying crossover, mutation <strong>or</strong> reproduction. 
-The sum of both probabilities self.cxpb and self.mutpb must be in [0,1]
-The reproduction probability is 1 - cxpb - mutpb
-The new offspring goes for fitness evaluation</p>
-<dl class="simple">
-<dt>Inputs:</dt><dd><p>pop (dict): population in dictionary structure</p>
-</dd>
-<dt>Returns:</dt><dd><p>offspring (dict): new modified population in dictionary structure</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
+<dl class="py method">
 <dt id="neorl.evolu.es.ES.evolute">
-<code class="sig-name descname">evolute</code><span class="sig-paren">(</span><em class="sig-param">ngen</em>, <em class="sig-param">x0=None</em>, <em class="sig-param">verbose=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/evolu/es.html#ES.evolute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neorl.evolu.es.ES.evolute" title="Permalink to this definition">¶</a></dt>
-<dd><p>This is the <span class="math notranslate nohighlight">\((\mu~,~\lambda)\)</span> evolutionary algorithm.</p>
-<dl class="simple">
-<dt>Inputs:</dt><dd><p>pop (dict): initial population in dictionary structure
-ngeg (int): number of generations to evolute
-caseids (list of strings): for logging purposes, to attach a casename for each indvidual
-verbose (bool): print summary to screen</p>
+<code class="sig-name descname"><span class="pre">evolute</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ngen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/evolu/es.html#ES.evolute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.evolu.es.ES.evolute" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function evolutes the ES algorithm for number of generations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ngen</strong> – (int) number of generations to evolute</p></li>
+<li><p><strong>x0</strong> – (list of lists) the initial position of the swarm particles</p></li>
+<li><p><strong>verbose</strong> – (bool) print statistics to screen</p></li>
+</ul>
 </dd>
-<dt>Returns:</dt><dd><p>population (dict): final population after running all generations (ngen)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="neorl.evolu.es.ES.gen_object">
-<code class="sig-name descname">gen_object</code><span class="sig-paren">(</span><em class="sig-param">inp</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/evolu/es.html#ES.gen_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neorl.evolu.es.ES.gen_object" title="Permalink to this definition">¶</a></dt>
-<dd><p>This is a worker for multiprocess Pool
-Inputs:</p>
-<blockquote>
-<div><p>inp (list of lists): contains data for each core [[ind1, caseid1], …,  [indN, caseidN]]</p>
-</div></blockquote>
-<dl class="simple">
-<dt>Returns:</dt><dd><p>fitness value (float)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="neorl.evolu.es.ES.init_pop">
-<code class="sig-name descname">init_pop</code><span class="sig-paren">(</span><em class="sig-param">x0=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/evolu/es.html#ES.init_pop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neorl.evolu.es.ES.init_pop" title="Permalink to this definition">¶</a></dt>
-<dd><p>Population intializer 
-Inputs:</p>
-<blockquote>
-<div><p>-warmup (int): number of individuals to create and evaluate initially</p>
-</div></blockquote>
-<dl class="simple">
-<dt>Returns </dt><dd><p>-pop (dict): initial population in a dictionary form, looks like this</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="neorl.evolu.es.ES.mutES">
-<code class="sig-name descname">mutES</code><span class="sig-paren">(</span><em class="sig-param">ind</em>, <em class="sig-param">strat</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/evolu/es.html#ES.mutES"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neorl.evolu.es.ES.mutES" title="Permalink to this definition">¶</a></dt>
-<dd><p>Mutate an evolution strategy according to mixed Discrete/Continuous mutation rules
-attribute as described in [Li2013].
-The function mutates discrete/float variables according to their type as indicated in self.bounds
-.. Li, Rui, et al. “Mixed integer evolution strategies for parameter optimization.”</p>
-<blockquote>
-<div><p>Evolutionary computation 21.1 (2013): 29-64.</p>
-</div></blockquote>
-<dl class="simple">
-<dt>Inputs:</dt><dd><p>-ind (list): individual to be mutated.
--strat (list): individual strategy to be mutated.</p>
-</dd>
-<dt>Returns: </dt><dd><p>-ind (list): new individual after mutatation
--strat (list): individual strategy after mutatation</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="neorl.evolu.es.ES.select">
-<code class="sig-name descname">select</code><span class="sig-paren">(</span><em class="sig-param">pop</em>, <em class="sig-param">k=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/evolu/es.html#ES.select"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neorl.evolu.es.ES.select" title="Permalink to this definition">¶</a></dt>
-<dd><p>Select function sorts the population from max to min based on fitness and select k best
-Inputs:</p>
-<blockquote>
-<div><p>pop (dict): population in dictionary structure
-k (int): top k individuals are selected</p>
-</div></blockquote>
-<dl class="simple">
-<dt>Returns:</dt><dd><p>best_dict (dict): the new ordered dictionary with top k selected</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(dict) dictionary containing major ES search results</p>
 </dd>
 </dl>
 </dd></dl>

@@ -1,23 +1,18 @@
-
-
-
 #---------------------------------
 # Import packages
 #---------------------------------
 import numpy as np
-import matplotlib.pyplot as plt
-from neorl import PESA
-from neorl.hybrid.pesacore.es import ESMod
-from math import exp, sqrt, cos, pi
-import csv, copy
-from collections import defaultdict
-import pandas as pd
 np.random.seed(50)
+import matplotlib.pyplot as plt
+from math import sqrt
+from neorl.tune import BAYESTUNE
+from neorl import ES
 
-#---------------------------------
-# Fitness
-#---------------------------------
-def BEAM(x, return_g=False):
+#**********************************************************
+# Part I: Original Problem 
+#**********************************************************
+#Define the fitness function (for the welded beam)
+def BEAM(x):
 
     y = 1.10471*x[0]**2*x[1]+0.04811*x[2]*x[3]*(14.0+x[1])
     
@@ -49,161 +44,79 @@ def BEAM(x, return_g=False):
     
     phi=sum(max(item,0) for item in g_round)
     viol=sum(float(num) > 0 for num in g_round)
-    #print(viol)
-    #phi=sum(max(item,0) for item in g)
-#    if phi > 1e-6:
-#        reward=-phi-10
-#    else:
-#        reward=-y
     
     reward = -(y + (w1*phi + w2*viol))
 
     return reward
 
-#---------------------------------
-# Parameter Space
-#---------------------------------
+#**********************************************************
+# Part II: Setup parameter space
+#**********************************************************
+#--setup the parameter space for the welded beam
 lb=[0.1, 0.1, 0.1, 0.1]
 ub=[2.0, 10, 10, 2.0]
 d2type=['float', 'float', 'float', 'float']
 BOUNDS={}
 nx=4
 for i in range(nx):
-    BOUNDS['x'+str(i+1)]=[d2type[i], lb[i], ub[i]]
-
-#---------------------------------
-# Initial Population
-#---------------------------------
-def start(PROBLEM, BOUNDS, FIT, WARMUP, extdata=None, savedata=False):
-    """
-    This function intializes population for all methods based on warmup samples
-    Returns:
-        pop0 (dict): initial population for PESA and ES
-        swarm0 (dict): initial swarm for PSO 
-        swm_pos (list), swm_fit (float): initial guess for swarm best position and fitness for PSO
-        local_pos (list of lists), local_fit (list): initial guesses for local best position of each particle and their fitness for PSO
-        x0 (list of lists), E0 (list): initial input vectors and their initial fitness for SA
-    """
-    NCORES=1
-    MU=30
-    LAMBDA=60
-    NPOP=LAMBDA
-    
-    warm=ESMod(bounds=BOUNDS, fit=FIT, mu=MU, lambda_=LAMBDA, ncores=NCORES)
-    pop0=warm.init_pop(warmup=WARMUP)  #initial population for ES
-    #Save data to logger
-    if savedata:
-        inp_names=[] 
-        [inp_names.append('x'+str(i)) for i in range(1,nx+1)]
-        [inp_names.append('s'+str(i)) for i in range(1,nx+1)]
-        inp_names.append('fit')
-        with open (PROBLEM+'0.csv', 'w') as csvfile:
-            csvwriter = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_MINIMAL, lineterminator = '\n')
-            csvwriter.writerow(inp_names)
-        pop0_csv=copy.deepcopy(pop0) 
-        for item in pop0:
-            data=pop0_csv[item][0]
-            pop0_csv[item][1].append(pop0_csv[item][2])
-            data.extend(pop0_csv[item][1])
-            assert len(data) ==2*nx+1, 'length of warmup data is not equal to 2*nx+1'
-            with open (PROBLEM+'0.csv', 'a') as csvfile:
-                csvwriter = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_MINIMAL, lineterminator = '\n')
-                csvwriter.writerow(data)
-    
-    sorted_dict=dict(sorted(pop0.items(), key=lambda e: e[1][2], reverse=True)[:NCORES]) # sort the initial samples
-    sorted_pso=dict(sorted(pop0.items(), key=lambda e: e[1][2], reverse=True)[:NPOP]) # sort the initial samples
-    x0, E0=[sorted_dict[key][0] for key in sorted_dict], [sorted_dict[key][2] for key in sorted_dict] # initial guess for SA
-    swarm0=defaultdict(list)
-    index=0
-    local_pos=[]
-    local_fit=[]
-    for key in sorted_pso:
-        swarm0[index].append(sorted_pso[key][0])
-        swarm0[index].append(list(0.1*np.array(sorted_pso[key][0])))
-        swarm0[index].append(sorted_pso[key][2])
-        local_pos.append(sorted_pso[key][0])
-        local_fit.append(sorted_pso[key][2])
-        index+=1
-    
-    swm_pos=swarm0[0][0]
-    swm_fit=swarm0[0][2]
-    
-    return pop0, swarm0, swm_pos, swm_fit, local_pos, local_fit, x0, E0
-
-pop0, swarm0, swm_pos, swm_fit, local_pos, local_fit, x0, E0=start(PROBLEM='hi', BOUNDS=BOUNDS, FIT=BEAM, 
-                                                                   WARMUP=WARMUP, extdata=False, savedata=False)
+    BOUNDS['x'+str(i+1)]=[d2type[i], lb[i], ub[i]]  
         
-#---------------------------------
-# PESA
-#---------------------------------
-
-mu=[35]
-cxpb=[0.7]
-mutpb=[0.1]
-phi=[2.05]
-chi=[0.4]
-npop=[50]
-ngen=[250]
-a0=[0.01]
-       
-#-----------------------
-#PESA global parameters
-#-----------------------
-NGEN=250         #number of generations
-NPOP=50          #LAMBDA for ES, total length of each chains for SA, Swarm Size for PSO 
-STEPS=NGEN*NPOP  #Total number of steps to run for each method (Derived)
-WARMUP=500       #warmup the replay memory with some samples
-REPLAY_RATE=0.1  #FOR SA, replace random-walk with the `best` sample from memory
-MU=35           # number of individuals to survive next generation in PSO/ES 
-                 # and also equal to number of pop to join each generation from the memory
-MEMORY_SIZE=STEPS*3+1000 #Max memory size (Derived)
-#MEMORY_SIZE=6000
-#--------------------
-#Experience Replay
-#--------------------
-MODE='prior' #`uniform`, `greedy`, or `prior`
-ALPHA0=0.01  #only needed for mode=prior
-ALPHA1=1.0 #only needed for mode=prior
-#--------------------
-# ES HyperParameters
-#--------------------
-CXPB=0.7  #population crossover (0.4-0.8)
-MUTPB=0.1   #population mutation (0.05-0.0.25)
-INDPB=1.0 #ES attribute mutation (only used for cont. optimisation)
-LAMBDA=NPOP #full population size before selection of MU (Fixed)
-SMIN = 1/nx #ES strategy min (Fixed)
-SMAX = 0.5  #ES strategy max (Fixed)
-#--------------------
-# PSO HyperParameters
-#--------------------
-C1=2.05                #cognitive speed coeff (2.05 is typical value)
-C2=2.05                  #social speed coeff (2.05 is typical value)
-SPEED_MECH='globw'   #`constric`, `timew`, or `globw` --> how to modify particle speed
-NPAR=NPOP               #Swarm size which is equal to ES LAMBDA, 
-                        #Both LAMBDA and NPAR equal to NPOP, symmetry between methods
-#--------------------
-# SA hyperparameters
-#--------------------
-TMAX=10000     #max annealing temperature for SA
-CHI=0.4        #probablity to perturb each input attribute
-COOLING='fast' #Cooling schedule (Fixed)
-TMIN=1         #Minimum Temperature (Fixed)
-
-NCORES=1
+#*************************************************************
+# Part III: Define fitness function for hyperparameter tuning
+#*************************************************************  
+def tune_fit(cxpb, mu, alpha, cxmode, mutpb):
     
-pesa=PESA(bounds=BOUNDS, fit=BEAM, ngen=NGEN, npop=NPOP, pop0=pop0, memory_size=MEMORY_SIZE, mode=MODE, 
-          alpha0=ALPHA0, alpha1=ALPHA1, warmup=None, chi=CHI, replay_rate=REPLAY_RATE, Tmax=TMAX, 
-          mu=MU, cxpb=CXPB, mutpb=MUTPB, c1=C1, c2=C2, speed_mech=SPEED_MECH, pso_flag=True, verbose=0)
+    #--setup the ES algorithm
+    es=ES(bounds=BOUNDS, fit=BEAM, lambda_=80, mu=mu, mutpb=mutpb, alpha=alpha,
+         cxmode=cxmode, cxpb=cxpb, ncores=1, seed=1)
+    
+    #--Evolute the ES object and obtains y_best 
+    #--turn off verbose for less algorithm print-out when tuning
+    x_best, y_best, es_hist=es.evolute(ngen=100, verbose=0)      
+    
+    return y_best #returns the best score
 
-xpesa_best, ypesa_best= pesa.evolute()
+#*************************************************************
+# Part IV: Tuning
+#************************************************************* 
+#Setup the parameter space for Bayesian optimisation
+#VERY IMPORTANT: The order of these parameters MUST be similar to their order in tune_fit 
+#see tune_fit
+param_grid={
+#def tune_fit(cxpb, mu, alpha, cxmode):
+'cxpb': [[0.1, 0.7],'float'],             #cxpb is first (low=0.1, high=0.8, type=float/continuous)
+'mu':   [[30, 60],'int'],                 #mu is second (low=30, high=60, type=int/discrete)
+'alpha':[[0.1, 0.2, 0.3, 0.4],'grid'],    #alpha is third (grid with fixed values, type=grid/categorical)
+'cxmode':[['blend', 'cx2point'],'grid'],
+'mutpb': [[0.05, 0.3], 'float']}  #cxmode is fourth (grid with fixed values, type=grid/categorical)
 
+#setup a bayesian tune object
+btune=BAYESTUNE(param_grid=param_grid, fit=tune_fit, ncases=30)
+#tune the parameters with method .tune
+bayesres=btune.tune(nthreads=1, csvname='bayestune.csv', verbose=True)
 
+print('----Top 10 hyperparameter sets----')
+print(bayesres.iloc[0:10,:])   #the results are saved in dataframe and ranked from best to worst
+
+#*************************************************************
+# Part V: Rerun ES with the best hyperparameter set
+#************************************************************* 
+es=ES(bounds=BOUNDS, fit=BEAM, lambda_=80, mu=bayesres['mu'].iloc[0], 
+      mutpb=bayesres['mutpb'].iloc[0], alpha=bayesres['alpha'].iloc[0],
+      cxmode=bayesres['cxmode'].iloc[0], cxpb=bayesres['cxpb'].iloc[0], 
+      ncores=1, seed=1)
+
+x_best, y_best, es_hist=es.evolute(ngen=100, verbose=0)  
+
+print('Best fitness (y) found:', -y_best)  #convert back to original scale
+print('Best individual (x) found:', x_best)
+    
 #---------------------------------
 # Plot
 #---------------------------------
-#Plot fitness for both methods
+#Plot fitness convergence
 plt.figure()
-plt.plot(-np.array(pso_hist), label='PESA')            #multiply by -1 to covert back to a min problem
+plt.plot(-np.array(es_hist), label='ES') #multiply by -1 to covert back to a min problem
 plt.xlabel('Generation')
 plt.ylabel('Fitness')
 plt.legend()

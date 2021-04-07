@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Bayesian Search &mdash; NEORL 1.1.3b documentation</title>
+  <title>Bayesian Search &mdash; NEORL 1.1.16b documentation</title>
   
 
   
@@ -30,19 +30,17 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Example 1" href="../examples/ex1.html" />
-    <link rel="prev" title="Evolutionary Search" href="evolu.html" /> 
+    <link rel="next" title="Evolutionary Search" href="evolu.html" />
+    <link rel="prev" title="Random Search" href="random.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -69,7 +67,7 @@
             
             
               <div class="version">
-                main (1.1.3b )
+                main (1.1.16b )
               </div>
             
           
@@ -98,6 +96,9 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../guide/install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../guide/quickstart.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/rl.html">Reinforcement Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/evolu.html">Evolutionary Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/hyperparameter.html">Hyperparameter Tuning</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Algorithms</span></p>
 <ul>
@@ -112,14 +113,15 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="grid.html">Grid Search</a></li>
 <li class="toctree-l1"><a class="reference internal" href="random.html">Random Search</a></li>
-<li class="toctree-l1"><a class="reference internal" href="evolu.html">Evolutionary Search</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Bayesian Search</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#what-can-you-use">What can you use?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#parameters">Parameters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#example">Example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#acknowledgment">Acknowledgment</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="evolu.html">Evolutionary Search</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
 <ul>
@@ -199,25 +201,15 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="bayesian-search">
-<span id="bayes"></span><h1>Bayesian Search<a class="headerlink" href="#bayesian-search" title="Permalink to this headline">¶</a></h1>
+  <span class="target" id="module-neorl.tune.bayestune"><span id="bayes"></span></span><div class="section" id="bayesian-search">
+<h1>Bayesian Search<a class="headerlink" href="#bayesian-search" title="Permalink to this headline">¶</a></h1>
 <p>A module of Bayesian optimisation search for hyperparameter tuning of NEORL algorithms based upon <code class="docutils literal notranslate"><span class="pre">scikit-optimise</span></code>.</p>
 <p>Original paper: <a class="reference external" href="https://arxiv.org/abs/1012.2599">https://arxiv.org/abs/1012.2599</a></p>
 <p>Bayesian search, in contrast to grid and random searches, keeps track of past evaluation results. Bayesian uses past evaluations to form a probabilistic model mapping hyperparameters to a probability of a score on the objective function (e.g. max fitness, max reward). Bayesian optimization excels when the objective functions are expensive to evaluate, when we do not have access to derivatives, or when the problem at hand is non-convex.</p>
-<p>The heart of Bayesian optimization is Bayes theorem, which updates our prior beliefs (e.g. hyperparameter values) after new evidence/data is observed (e.g. new fitness values found by the algorithm of interest). The updated beliefs are represented by the posterior distribution, which is used to guide the next round of hyperparameter sampling. Also, Bayesian optimization combines the concepts of “surrogate” models (e.g. Gaussian processes) to accelerate the search, and the “acquisition” function to guide sampling from the posterior  distribution, which both can effectively make a robust search toward the global optima of the cost function (see the Figure below). The sequential-nature of Bayesian optimisation makes its parallelization complex and not natural as grid/random/evolutionary search, which is the obvious downside of Bayesian optimisation.</p>
-<a class="reference internal image-reference" href="../_images/bayes.png"><img alt="alternate text" class="align-center" src="../_images/bayes.png" style="width: 774.0px; height: 492.0px;" /></a>
-<p>For example, to tune few hyperparameters of DQN by Bayesian search, the parameter space can be defined as:</p>
-<div class="line-block">
-<div class="line"><code class="docutils literal notranslate"><span class="pre">learning_rate</span></code> = <span class="math notranslate nohighlight">\(Real(low=0.0001, high=0.001) \rightarrow\)</span> Continuous hyperparameter</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">batch_size</span></code> = <span class="math notranslate nohighlight">\(Categorical (categories=(16, 32, 64)) \rightarrow\)</span> Categorical hyperparameter</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">target_network_update_freq</span></code> = <span class="math notranslate nohighlight">\(Integer(low=1, high=4) \rightarrow\)</span> Discrete hyperparameter</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">exploration_fraction</span></code> = <span class="math notranslate nohighlight">\(Real(low=0.05, high=0.35) \rightarrow\)</span> Continuous hyperparameter</div>
-</div>
-<p>The cost of Bayesian search is determined by the total number of fitness evaluations provided by the user (<code class="docutils literal notranslate"><span class="pre">n_calls</span></code>).</p>
 <div class="section" id="what-can-you-use">
 <h2>What can you use?<a class="headerlink" href="#what-can-you-use" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p>Multi processing: ❌</p></li>
+<li><p>Multi processing: ❌ (Multithreading in a single processor is available via <code class="docutils literal notranslate"><span class="pre">nthreads</span></code>)</p></li>
 <li><p>Discrete/Continuous/Mixed spaces: ✔️</p></li>
 <li><p>Reinforcement Learning Algorithms: ✔️</p></li>
 <li><p>Evolutionary Algorithms: ✔️</p></li>
@@ -226,43 +218,107 @@
 </div>
 <div class="section" id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="neorl.tune.bayestune.BAYESTUNE">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">neorl.tune.bayestune.</span></code><code class="sig-name descname"><span class="pre">BAYESTUNE</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param_grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ncases</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/tune/bayestune.html#BAYESTUNE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.tune.bayestune.BAYESTUNE" title="Permalink to this definition">¶</a></dt>
+<dd><p>A module for Bayesian search for hyperparameter tuning</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>param_grid</strong> – (dict) the type and range of each hyperparameter in a dictionary form (types are <code class="docutils literal notranslate"><span class="pre">int/discrete</span></code> or <code class="docutils literal notranslate"><span class="pre">float/continuous</span></code> or <code class="docutils literal notranslate"><span class="pre">grid/categorical</span></code>). Example: {‘x1’: [[40, 50, 60, 100], ‘grid’], ‘x2’: [[0.2, 0.8], ‘float’], ‘x3’: [[‘blend’, ‘cx2point’], ‘grid’], ‘x4’: [[20, 80], ‘int’]}</p></li>
+<li><p><strong>fit</strong> – (function) the self-defined fitness function that includes the hyperparameters as input and algorithm score as output</p></li>
+<li><p><strong>ncases</strong> – (int) number of random hyperparameter cases to generate per core, <code class="docutils literal notranslate"><span class="pre">ncases</span> <span class="pre">&gt;=</span> <span class="pre">11</span></code> (see <strong>Notes</strong> for an important remark)</p></li>
+<li><p><strong>seed</strong> – (int) random seed for sampling reproducibility</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="neorl.tune.bayestune.BAYESTUNE.tune">
+<code class="sig-name descname"><span class="pre">tune</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nthreads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">csvname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/tune/bayestune.html#BAYESTUNE.tune"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.tune.bayestune.BAYESTUNE.tune" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function starts the tuning process with specified number of processors</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nthreads</strong> – (int) number of parallel threads (see the <strong>Notes</strong> section below for an important note about parallel execution)</p></li>
+<li><p><strong>csvname</strong> – (str) the name of the csv file name to save the tuning results (useful for expensive cases as the csv file is updated directly after the case is done)</p></li>
+<li><p><strong>verbose</strong> – (bool) whether to print updates to the screen or not</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">GA</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neorl.tune</span> <span class="kn">import</span> <span class="n">BAYESTUNE</span>
+<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">ES</span>
 
-<span class="c1">#Define the fitness function</span>
-<span class="k">def</span> <span class="nf">FIT</span><span class="p">(</span><span class="n">individual</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Sphere test objective function.</span>
-<span class="sd">                F(x) = sum_{i=1}^d xi^2</span>
-<span class="sd">                d=1,2,3,...</span>
-<span class="sd">                Range: [-100,100]</span>
-<span class="sd">                Minima: 0</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="c1">#**********************************************************</span>
+<span class="c1"># Part I: Original Problem Settings</span>
+<span class="c1">#**********************************************************</span>
+
+<span class="c1">#Define the fitness function (for original optimisation)</span>
+<span class="k">def</span> <span class="nf">sphere</span><span class="p">(</span><span class="n">individual</span><span class="p">):</span>
         <span class="n">y</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">individual</span><span class="p">)</span>
         <span class="k">return</span> <span class="o">-</span><span class="n">y</span>  <span class="c1">#-1 to convert min to max problem</span>
 
-<span class="c1">#Setup the parameter space (d=5)</span>
-<span class="n">nx</span><span class="o">=</span><span class="mi">5</span>
-<span class="n">BOUNDS</span><span class="o">=</span><span class="p">{}</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">nx</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
-        <span class="n">BOUNDS</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
+<span class="c1">#*************************************************************</span>
+<span class="c1"># Part II: Define fitness function for hyperparameter tuning</span>
+<span class="c1">#*************************************************************</span>
+<span class="k">def</span> <span class="nf">tune_fit</span><span class="p">(</span><span class="n">cxpb</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">cxmode</span><span class="p">):</span>
 
-<span class="n">ga</span><span class="o">=</span><span class="n">GA</span><span class="p">(</span><span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">FIT</span><span class="p">,</span> <span class="n">npop</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">mutate</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
-     <span class="n">cx</span><span class="o">=</span><span class="s1">&#39;2point&#39;</span><span class="p">,</span> <span class="n">cxpb</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">chi</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
-         <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">x_best</span><span class="p">,</span> <span class="n">y_best</span><span class="p">,</span> <span class="n">ga_hist</span><span class="o">=</span><span class="n">ga</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="c1">#--setup the parameter space</span>
+        <span class="n">nx</span><span class="o">=</span><span class="mi">5</span>
+        <span class="n">BOUNDS</span><span class="o">=</span><span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">nx</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">BOUNDS</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
+
+        <span class="c1">#--setup the ES algorithm</span>
+        <span class="n">es</span><span class="o">=</span><span class="n">ES</span><span class="p">(</span><span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">sphere</span><span class="p">,</span> <span class="n">lambda_</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">mutpb</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
+                 <span class="n">cxmode</span><span class="o">=</span><span class="n">cxmode</span><span class="p">,</span> <span class="n">cxpb</span><span class="o">=</span><span class="n">cxpb</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1">#--Evolute the ES object and obtains y_best</span>
+        <span class="c1">#--turn off verbose for less algorithm print-out when tuning</span>
+        <span class="n">x_best</span><span class="p">,</span> <span class="n">y_best</span><span class="p">,</span> <span class="n">es_hist</span><span class="o">=</span><span class="n">es</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">y_best</span> <span class="c1">#returns the best score</span>
+
+<span class="c1">#*************************************************************</span>
+<span class="c1"># Part III: Tuning</span>
+<span class="c1">#*************************************************************</span>
+<span class="c1">#Setup the parameter space</span>
+<span class="c1">#VERY IMPORTANT: The order of these parameters MUST be similar to their order in tune_fit</span>
+<span class="c1">#see tune_fit</span>
+<span class="n">param_grid</span><span class="o">=</span><span class="p">{</span>
+<span class="c1">#def tune_fit(cxpb, mu, alpha, cxmode):</span>
+<span class="s1">&#39;cxpb&#39;</span><span class="p">:</span> <span class="p">[[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">],</span><span class="s1">&#39;float&#39;</span><span class="p">],</span>             <span class="c1">#cxpb is first (low=0.1, high=0.8, type=float/continuous)</span>
+<span class="s1">&#39;mu&#39;</span><span class="p">:</span>   <span class="p">[[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">],</span><span class="s1">&#39;int&#39;</span><span class="p">],</span>                 <span class="c1">#mu is second (low=30, high=60, type=int/discrete)</span>
+<span class="s1">&#39;alpha&#39;</span><span class="p">:[[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span><span class="s1">&#39;grid&#39;</span><span class="p">],</span>    <span class="c1">#alpha is third (grid with fixed values, type=grid/categorical)</span>
+<span class="s1">&#39;cxmode&#39;</span><span class="p">:[[</span><span class="s1">&#39;blend&#39;</span><span class="p">,</span> <span class="s1">&#39;cx2point&#39;</span><span class="p">],</span><span class="s1">&#39;grid&#39;</span><span class="p">]}</span>  <span class="c1">#cxmode is fourth (grid with fixed values, type=grid/categorical)</span>
+
+<span class="c1">#setup a bayesian tune object</span>
+<span class="n">btune</span><span class="o">=</span><span class="n">BAYESTUNE</span><span class="p">(</span><span class="n">param_grid</span><span class="o">=</span><span class="n">param_grid</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">tune_fit</span><span class="p">,</span> <span class="n">ncases</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="c1">#tune the parameters with method .tune</span>
+<span class="n">bayesres</span><span class="o">=</span><span class="n">btune</span><span class="o">.</span><span class="n">tune</span><span class="p">(</span><span class="n">nthreads</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">csvname</span><span class="o">=</span><span class="s1">&#39;bayestune.csv&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">bayesres</span><span class="p">)</span>   <span class="c1">#the results are saved in dataframe and ranked from best to worst</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="notes">
 <h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p>To allow a weak parallelization of Bayesian search, the user can start different search sessions with different initial guesses <code class="docutils literal notranslate"><span class="pre">x0</span></code>. The convergence of most sessions to the same hyperparameter set would imply a high-performance by the Bayesian algorithm. Conversely, if the parallel sessions converge to different values, the user can compare them and pick the best hyperparameter set. <strong>The automation of this parallel capability is on track of NEORL development</strong>.</p></li>
-<li><p>Keep <code class="docutils literal notranslate"><span class="pre">n_calls</span> <span class="pre">&gt;</span> <span class="pre">11</span></code> to avoid internal error raise. It is good to start with <code class="docutils literal notranslate"><span class="pre">n_calls=50</span></code>, check the optimizer convergence, and increase as needed.</p></li>
-<li><p>Relying on <code class="docutils literal notranslate"><span class="pre">Categorical</span></code> variables can accelerate the search by a wide margin. Therefore, if the user is aware of certain values of the discrete (<code class="docutils literal notranslate"><span class="pre">Integer</span></code>) or the continuous(<code class="docutils literal notranslate"><span class="pre">Real</span></code>) hyperparameters, it is good to convert them to <code class="docutils literal notranslate"><span class="pre">Categorical</span></code>.</p></li>
-<li><p>Try to pick a reasonable initial guess <code class="docutils literal notranslate"><span class="pre">x0</span></code> for the Bayesian search. Starting from the center of the range of each hyperparameter can be a good starting choice.</p></li>
+<li><p>We allow a weak parallelization of Bayesian search via multithreading. The user can start independent Bayesian search with different seeds by increasing <code class="docutils literal notranslate"><span class="pre">nthreads</span></code>. However, all threads will be executed on a single processor, which will slow down every Bayesian sequence. Therefore, this option is recommended when each hyperparameter case is fast-to-evaluate and does not require intensive CPU power.</p></li>
+<li><p>If the user sets <code class="docutils literal notranslate"><span class="pre">nthreads=4</span></code> and sets <code class="docutils literal notranslate"><span class="pre">ncases=15</span></code>, a total of 60 hyperparameter cases are evaluated, where each thread uses 25% of the CPU power. <strong>The extension to multiprocessing/multi-core capability is on track in future</strong>.</p></li>
+<li><p>Keep <code class="docutils literal notranslate"><span class="pre">ncases</span> <span class="pre">&gt;=</span> <span class="pre">11</span></code>. If ncases &lt; 11 is given, the optimiser resets <code class="docutils literal notranslate"><span class="pre">ncases=11</span></code>. It is good to start with <code class="docutils literal notranslate"><span class="pre">ncases=30</span></code>, check the optimizer convergence, and increase as needed.</p></li>
+<li><p>Relying on <code class="docutils literal notranslate"><span class="pre">grid/categorical</span></code> variables can accelerate the search by a wide margin. Therefore, if the user is aware of certain values of the (<code class="docutils literal notranslate"><span class="pre">int/discrete</span></code>) or the (<code class="docutils literal notranslate"><span class="pre">float/continuous</span></code>) hyperparameters, it is good to convert them to <code class="docutils literal notranslate"><span class="pre">grid/categorical</span></code>.</p></li>
 </ul>
+</div>
+<div class="section" id="acknowledgment">
+<h2>Acknowledgment<a class="headerlink" href="#acknowledgment" title="Permalink to this headline">¶</a></h2>
+<p>Thanks to our fellows in <a class="reference external" href="https://github.com/scikit-optimize/scikit-optimize">scikit-optimize</a>, as we used their <code class="docutils literal notranslate"><span class="pre">gp_minimize</span></code> implementation to leverage our Bayesian search module in this page.</p>
+<p>Head, Tim, Gilles Louppe MechCoder, and Iaroslav Shcherbatyi. “scikit-optimize/scikit-optimize: v0.7.1”(2020).</p>
 </div>
 </div>
 
@@ -272,8 +328,8 @@
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="../examples/ex1.html" class="btn btn-neutral float-right" title="Example 1" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="evolu.html" class="btn btn-neutral float-left" title="Evolutionary Search" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="evolu.html" class="btn btn-neutral float-right" title="Evolutionary Search" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="random.html" class="btn btn-neutral float-left" title="Random Search" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

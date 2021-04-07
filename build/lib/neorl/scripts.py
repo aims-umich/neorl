@@ -3,9 +3,11 @@ Created on Mon Jan 28 08:09:18 2019
 
 @author: Majdi Radaideh
 """
-    
-import os, sys, warnings, random
-warnings.filterwarnings("ignore")
+
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+warnings.filterwarnings("ignore", message=r"Passing", category=FutureWarning)
+import os, sys, random
 sys.path.insert(0, './neorl/')
 sys.path.insert(0, './neorl/rl')
 sys.path.insert(0, './neorl/rl/baselines')
@@ -15,23 +17,58 @@ sys.path.insert(0, './neorl/parsers')
 import numpy as np
 import gym
 import time
+import argparse
 
+import neorl
+import pytest
 from neorl.parsers.PARSER import InputParser, InputChecker
 from neorl.parsers.TuneChecker import TuneChecker
 from neorl.parsers.ParamList import InputParam
 from neorl.utils.multiproc import MultiProc
-from neorl.tune.gridtune import GRIDTUNE
-from neorl.tune.randtune import RANDTUNE
-from neorl.tune.bayestune import BAYESTUNE
-from neorl.tune.estune import ESTUNE
+from neorl.tune.runners.gridtune import GRIDTUNE
+from neorl.tune.runners.randtune import RANDTUNE
+from neorl.tune.runners.bayestune import BAYESTUNE
+from neorl.tune.runners.estune import ESTUNE
 from neorl.utils.initfiles import initfiles
+from neorl.version import version
+
+
+    
+simple_example="""
+#***************************************************************************
+# NEORL Simple Example
+# Using DE to minimize the sphere function 
+#***************************************************************************
+from neorl import DE
+
+#--Define the fitness function
+def FIT(individual):
+    #Sphere test objective function. 
+    y=sum(x**2 for x in individual)
+    return -y  #-1 is used to convert min to max
+
+#--Define parameter space (d=5)
+nx=5
+BOUNDS={}
+for i in range(1,nx+1):
+    BOUNDS['x'+str(i)]=['float', -100, 100]
+
+#--Differential Evolution
+de=DE(bounds=BOUNDS, fit=FIT, npop=60, CR=0.7, F=0.5, ncores=1, seed=1)
+x_best, y_best, de_hist=de.evolute(ngen=100, verbose=0)
+
+#--Optimal Results
+print('best x:', x_best)
+print('best y:', y_best)
+#***************************************************************************
+"""
   
 def main():
     
     
     logo="""
     
-    \t\t NEORL: NeuroEvolution Optimisation with Reinforcement Learning
+    \t    NEORL: NeuroEvolution Optimisation with Reinforcement Learning
     \t\t\t ███╗   ██╗███████╗ ██████╗ ██████╗ ██╗     
     \t\t\t ████╗  ██║██╔════╝██╔═══██╗██╔══██╗██║     
     \t\t\t ██╔██╗ ██║█████╗  ██║   ██║██████╔╝██║     
@@ -44,15 +81,33 @@ def main():
     
                            \n"""
                            
-    print(logo)
+    #print(logo)
     
-    if len(sys.argv) < 3:
-        raise Exception ("--error: NO input file after neorl is passed, try --> neorl NEORL_INPUT")
+    __version__=version()
+    path=os.path.dirname(neorl.__file__)
+    parser = argparse.ArgumentParser(description='NEORL command line API parser')
+    parser.add_argument('-i', '--input', required=False, help='Name of the input ASCII file, e.g. INPUT.inp, INPUT.dat (required arg)')
+    parser.add_argument('-c', '--check', help="check input file syntax and exit")
+    parser.add_argument('-t', '--test', action='store_true', help="run NEORL units tests")
+    parser.add_argument('-e', '--example', action='store_true', help='print a simple NEORL script and exit')
+    parser.add_argument('-v', '--version', action='version', version='NEORL-'+__version__)
+    args = parser.parse_args()
+    
+    if args.example:
+        print(simple_example)
+        sys.exit()
+        
+    if args.test:
+        pytest.main(["-x", path])
+        sys.exit(0)
+        
+    if args.input:
+        input_file_path=args.input
+    elif args.test:
+        input_file_path=args.test
     else:
-        print ("--------------------------------------------------------------- ")
-        print ("The input file {} is passed".format(sys.argv[2]))
-        print ("--------------------------------------------------------------- ")
-    input_file_path=sys.argv[2]
+        parser.print_help()
+        sys.exit(0)
     
     print("--debug: All modules are imported sucessfully")
     print ("--------------------------------------------------------------- ")
@@ -98,6 +153,13 @@ def main():
             t0=time.time()
             inp=InputChecker(parser,paramdict,log_dir)
             inp.setup_input()
+            
+            if args.test:
+                print('***************************************************************************')
+                print('NEORL was run on -t/--test mode successfully and the syntax seems correct')
+                print('***************************************************************************')
+                sys.exit()
+                
             initfiles(methods=inp.methods, nx=inp.gen_dict['xsize_plot'][0], ny=inp.gen_dict['ysize'][0], 
                       inp_headers= inp.gen_dict['xnames'][0], out_headers=inp.gen_dict['ynames'][0], 
                       log_dir=inp.gen_dict['log_dir'], logo=logo)  # Intialize the all loggers

@@ -5,8 +5,7 @@ Created on Mon Mar 15 17:54:11 2021
 @author: majdi
 """
 
-import stable_baselines
-from stable_baselines.common.env_checker import check_env
+from neorl.rl.baselines.shared.env_checker import check_env
 from envs.hit6x6 import Casmo4Env
 from neorl import PPO2
 from neorl.rl.baselines.shared.policies import MlpPolicy

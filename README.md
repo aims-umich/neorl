@@ -81,7 +81,7 @@ Here is a quick example of how to use NEORL to minimize a 5-D sphere function:
 #---------------------------------
 import numpy as np
 import matplotlib.pyplot as plt
-from neopy import DE, XNES
+from neorl import DE, XNES
 
 #---------------------------------
 # Fitness
@@ -109,7 +109,7 @@ for i in range(1,nx+1):
 #---------------------------------
 # DE
 #---------------------------------
-de=DE(bounds=BOUNDS, fit=FIT, npop=60, mutate=0.5, recombination=0.7, ncores=1, seed=1)
+de=DE(bounds=BOUNDS, fit=FIT, npop=60, CR=0.5, F=0.7, ncores=1, seed=1)
 x_best, y_best, de_hist=de.evolute(ngen=100, verbose=0)
 
 #---------------------------------

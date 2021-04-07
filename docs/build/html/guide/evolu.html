@@ -1,0 +1,271 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Evolutionary Algorithms &mdash; NEORL 1.1.16b documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Hyperparameter Tuning" href="hyperparameter.html" />
+    <link rel="prev" title="Reinforcement Learning" href="rl.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> NEORL
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                main (1.1.16b )
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">General Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rl.html">Reinforcement Learning</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Evolutionary Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#evolution-strategies">Evolution Strategies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#particle-swarm-optimisation">Particle Swarm Optimisation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#differential-evolution">Differential Evolution</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hyperparameter.html">Hyperparameter Tuning</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Algorithms</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules/a2c.html">Advantage Actor Critic (A2C)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/dqn.html">Deep Q Learning (DQN)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/ppo2.html">Proximal Policy Optimisation (PPO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/es.html">Evolution Strategies (ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pso.html">Particle Swarm Optimisation (PSO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/de.html">Differential Evolution (DE)</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tune/grid.html">Grid Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/random.html">Random Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/bayes.html">Bayesian Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/evolu.html">Evolutionary Search</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex1.html">Example 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex2.html">Example 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex3.html">Example 3</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Misc</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../misc/changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/projects.html">Projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/contrib.html">Contributors</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEORL</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Evolutionary Algorithms</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/guide/evolu.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="evolutionary-algorithms">
+<span id="evolu"></span><h1>Evolutionary Algorithms<a class="headerlink" href="#evolutionary-algorithms" title="Permalink to this headline">¶</a></h1>
+<p>Evolutionary and Swarm algorithms are a class of computational intelligence that rely on heuristic-based approaches to solve optimisation problems, which cannot be easily solved in polynomial time. These problems include NP-Hard combinatorial problems, and similar problems that require too long to process due to the fitness function complexity (e.g. engineering problems, computer simulation).</p>
+<p>The concept of evolutionary algorithms (EA) is quite simple as it follows the process of natural selection and evolution. Genetic algorithms, evolution strategies, and differential evolution are among the most popular  EA. An EA contains four overall stages: initialization, selection, genetic operators, and termination. Typically in an EA, fitter individuals that maximize/minimize the fitness function will survive and proliferate into the next generations, while weak individuals will die off and not contribute to the pool of further generations, just like natural selection processes. A typical workflow of an EA is shown in the figure below.</p>
+<a class="reference internal image-reference" href="../_images/genetic.png"><img alt="alternate text" class="align-center" src="../_images/genetic.png" style="width: 796.8px; height: 374.4px;" /></a>
+<p>Swarm intelligence is also another variant of EA and nature-inspired metaheuristics, in which a population of agents are interacting locally with one another and globally with their environment. The inspiration comes from the nature, especially how biological systems interact. The agents follow simple rules and with repeated local and some random interactions between the agents, an emergence of “intelligent” global behavior can be observed among the whole population of agents. For example, this behavior can be seen in ant colonies, bee colonies, and bird flocking movement when searching for food. Among the most common swarm algorithms are particle swarm optimisation, ant colony optimization, artificial bee colony, cuckoo search, and many others.</p>
+<p>Currently we have a support of different standalone evolutionary and swarm algorithms, some are listed below, and many others are on track.</p>
+<div class="section" id="evolution-strategies">
+<h2>Evolution Strategies<a class="headerlink" href="#evolution-strategies" title="Permalink to this headline">¶</a></h2>
+<p>See the <a class="reference internal" href="../modules/es.html#es"><span class="std std-ref">ES</span></a> section</p>
+</div>
+<div class="section" id="particle-swarm-optimisation">
+<h2>Particle Swarm Optimisation<a class="headerlink" href="#particle-swarm-optimisation" title="Permalink to this headline">¶</a></h2>
+<p>See the <a class="reference internal" href="../modules/pso.html#pso"><span class="std std-ref">PSO</span></a> section</p>
+</div>
+<div class="section" id="differential-evolution">
+<h2>Differential Evolution<a class="headerlink" href="#differential-evolution" title="Permalink to this headline">¶</a></h2>
+<p>See the <a class="reference internal" href="../modules/de.html#de"><span class="std std-ref">DE</span></a> section</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="hyperparameter.html" class="btn btn-neutral float-right" title="Hyperparameter Tuning" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="rl.html" class="btn btn-neutral float-left" title="Reinforcement Learning" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Exelon Corp. &amp; MIT.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -61,7 +61,7 @@ Here is a quick example of how to use NEORL to minimize a 5-D sphere function:
 #---------------------------------
 import numpy as np
 import matplotlib.pyplot as plt
-from neopy import DE, XNES
+from neorl import DE, XNES
 
 #---------------------------------
 # Fitness
@@ -89,7 +89,7 @@ for i in range(1,nx+1):
 #---------------------------------
 # DE
 #---------------------------------
-de=DE(bounds=BOUNDS, fit=FIT, npop=60, mutate=0.5, recombination=0.7, ncores=1, seed=1)
+de=DE(bounds=BOUNDS, fit=FIT, npop=60, CR=0.5, F=0.7, ncores=1, seed=1)
 x_best, y_best, de_hist=de.evolute(ngen=100, verbose=0)
 
 #---------------------------------
@@ -171,14 +171,21 @@ setup(
     packages=[package for package in find_packages() if package.startswith('neorl')],
     include_package_data=True,
     package_data={'neorl': ['requirements.txt', 'version.txt']},
-    install_requires=['gym[atari,classic_control]>=0.11',
+    install_requires=['tensorflow==1.13.1',
+                      'numpy== 1.16.2',
+                      'gym >= 0.15.4, < 0.17.0',
+                      'scikit-optimize==0.8.1',
+                      'cloudpickle >= 1.2.2',
                       'scipy',
                       'joblib',
-                      'cloudpickle>=0.5.5',
-                      'opencv-python',
-                      'numpy',
                       'pandas',
-                      'matplotlib'] + find_tf_dependency(),               
+                      'xlrd==1.2.0',
+                      'matplotlib',
+                      'pytest',
+                      'pytest-cov',
+                     'sphinx',
+                     'sphinx-rtd-theme',
+                     'sphinx-autobuild'] + find_tf_dependency(),               
      extras_require={'tests': ['pytest', 'pytest-cov', 'pytest-env', 'pytest-xdist', 'pytype'],
                      'docs': ['sphinx', 'sphinx-autobuild', 'sphinx-rtd-theme']},   
     

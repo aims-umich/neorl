@@ -42,6 +42,9 @@ For this case study, the action space is a ``Discrete`` variable of size two: 1.
 NEORL script
 --------------------
 
+**Currently, under review, to be released when available.**
+
+
 Results
 --------------------
 

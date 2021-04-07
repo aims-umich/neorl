@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Changelog &mdash; NEORL 1.1.3b documentation</title>
+  <title>Changelog &mdash; NEORL 1.1.16b documentation</title>
   
 
   
@@ -30,11 +30,9 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -69,7 +67,7 @@
             
             
               <div class="version">
-                main (1.1.3b )
+                main (1.1.16b )
               </div>
             
           
@@ -98,6 +96,9 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../guide/install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../guide/quickstart.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/rl.html">Reinforcement Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/evolu.html">Evolutionary Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/hyperparameter.html">Hyperparameter Tuning</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Algorithms</span></p>
 <ul>
@@ -112,8 +113,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../tune/grid.html">Grid Search</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tune/random.html">Random Search</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tune/evolu.html">Evolutionary Search</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tune/bayes.html">Bayesian Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/evolu.html">Evolutionary Search</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
 <ul>
@@ -124,10 +125,11 @@
 <p class="caption"><span class="caption-text">Misc</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#release-1-2-0-2021-03-15">Release 1.2.0 (2021-03-15)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#release-1-1-0-2020-12-15">Release 1.1.0 (2020-12-15)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#release-1-0-0-2020-09-15">Release 1.0.0 (2020-09-15)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#release-0-1-1-2020-03-15">Release 0.1.1 (2020-03-15)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#coming-next">Coming next</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#release-1-2-0-2021-04-15">Release 1.2.0 (2021-04-15)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#release-1-1-0-private-2020-12-15">Release 1.1.0-Private (2020-12-15)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#release-1-0-0-private-2020-09-15">Release 1.0.0-Private (2020-09-15)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#release-0-1-1-private-2020-03-15">Release 0.1.1-Private (2020-03-15)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="projects.html">Projects</a></li>
@@ -201,28 +203,38 @@
             
   <div class="section" id="changelog">
 <span id="id1"></span><h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="release-1-2-0-2021-03-15">
-<h2>Release 1.2.0 (2021-03-15)<a class="headerlink" href="#release-1-2-0-2021-03-15" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="coming-next">
+<h2>Coming next<a class="headerlink" href="#coming-next" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
+<li><p>To add a module for the hybrid algorithm PESA.</p></li>
+<li><p>To add Genetic/Evolutionary hyperparameter tuning with documentation.</p></li>
+<li><p>To add a module for the hybrid PPO-ES algorithm.</p></li>
+<li><p>Adding a class for easy-to-use environment construction for RL optimization.</p></li>
+<li><p>And more …</p></li>
+</ul>
+</div>
+<div class="section" id="release-1-2-0-2021-04-15">
+<h2>Release 1.2.0 (2021-04-15)<a class="headerlink" href="#release-1-2-0-2021-04-15" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><strong>The first public open-source version of NEORL</strong></p></li>
 <li><p>Added DE with serial implementation.</p></li>
 <li><p>Added NES with parallel implementation.</p></li>
 <li><p>Restructuring the input parameter space.</p></li>
 <li><p>Detailed README file in the Github page.</p></li>
 <li><p>Added unit tests to NEORL.</p></li>
+<li><p>Automatic documentation via Sphinx</p></li>
 </ul>
 </div>
-<div class="section" id="release-1-1-0-2020-12-15">
-<h2>Release 1.1.0 (2020-12-15)<a class="headerlink" href="#release-1-1-0-2020-12-15" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="release-1-1-0-private-2020-12-15">
+<h2>Release 1.1.0-Private (2020-12-15)<a class="headerlink" href="#release-1-1-0-private-2020-12-15" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p>Added Genetic/Evolutionary hyperparameter tuning.</p></li>
 <li><p>Added Bayesian hyperparameter tuning from <code class="docutils literal notranslate"><span class="pre">scikit-optimise</span></code>.</p></li>
 <li><p>Added parallel evolutionary strategies(ES).</p></li>
-<li><p>Added hybrid PPO-ES algorithm.</p></li>
 <li><p>Updated documentation.</p></li>
 </ul>
 </div>
-<div class="section" id="release-1-0-0-2020-09-15">
-<h2>Release 1.0.0 (2020-09-15)<a class="headerlink" href="#release-1-0-0-2020-09-15" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="release-1-0-0-private-2020-09-15">
+<h2>Release 1.0.0-Private (2020-09-15)<a class="headerlink" href="#release-1-0-0-private-2020-09-15" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>Added parallel GA.</p></li>
 <li><p>Added a PDF documentation.</p></li>
@@ -230,8 +242,8 @@
 <li><p>Added Random search hyperparameter tuning.</p></li>
 </ul>
 </div>
-<div class="section" id="release-0-1-1-2020-03-15">
-<h2>Release 0.1.1 (2020-03-15)<a class="headerlink" href="#release-0-1-1-2020-03-15" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="release-0-1-1-private-2020-03-15">
+<h2>Release 0.1.1-Private (2020-03-15)<a class="headerlink" href="#release-0-1-1-private-2020-03-15" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>A support for both classical (evolutionary) and modern (machine learning) optimization in the same package. Currently, DQN (serial), PPO (parallel), A2C (parallel), GA (serial), SA (serial) are supported. All RL algorithms are based upon <code class="docutils literal notranslate"><span class="pre">stable-baselines</span></code>.</p></li>
 <li><p>Easy-to-use syntax and friendly interaction with the package.</p></li>

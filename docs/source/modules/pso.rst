@@ -6,10 +6,13 @@
 Particle Swarm Optimisation (PSO)
 ==================================
 
-A module for classical genetic algorithms with constant mutation strengths on population and individual levels. 
+A module for particle swarm optimisation with three different speed mechanisms. 
 
-Original paper: Bäck, T., Fogel, D. B., Michalewicz, Z. (Eds.). (2018). Evolutionary computation 1: Basic algorithms and operators. CRC press.
+Original papers: 
 
+- Kennedy, J., Eberhart, R. (1995). Particle swarm optimization. In: Proceedings of ICNN'95-international conference on neural networks (Vol. 4, pp. 1942-1948), IEEE.
+- Kennedy, J., & Eberhart, R. C. (1997). A discrete binary version of the particle swarm algorithm. In: 1997 IEEE International conference on systems, man, and cybernetics. Computational cybernetics and simulation (Vol. 5, pp. 4104-4108), IEEE.
+- Clerc, M., Kennedy, J. (2002). The particle swarm-explosion, stability, and convergence in a multidimensional complex space. IEEE transactions on Evolutionary Computation, 6(1), 58-73.
 
 What can you use?
 --------------------
@@ -31,32 +34,36 @@ Example
 
 .. code-block:: python
 
-	from neorl import GA
+	from neorl import PSO
 
 	#Define the fitness function
 	def FIT(individual):
-		"""Sphere test objective function.
-			F(x) = sum_{i=1}^d xi^2
-			d=1,2,3,...
-			Range: [-100,100]
-			Minima: 0
-		"""
-		y=sum(x**2 for x in individual)
-		return -y  #-1 to convert min to max problem
+			"""Sphere test objective function.
+					F(x) = sum_{i=1}^d xi^2
+					d=1,2,3,...
+					Range: [-100,100]
+					Minima: 0
+			"""
+			y=sum(x**2 for x in individual)
+			return -y  #-1 to convert min to max problem
 
 	#Setup the parameter space (d=5)
 	nx=5
 	BOUNDS={}
 	for i in range(1,nx+1):
-		BOUNDS['x'+str(i)]=['float', -100, 100]
+			BOUNDS['x'+str(i)]=['float', -100, 100]
 
-	ga=GA(bounds=BOUNDS, fit=FIT, npop=60, mutate=0.25, 
-	     cx='2point', cxpb=0.7, chi=0.1, 
-		 ncores=1, seed=1)
-	x_best, y_best, ga_hist=ga.evolute(ngen=100, verbose=0)
+	#setup and evolute PSO
+	pso=PSO(bounds=BOUNDS, fit=FIT, c1=2.05, c2=2.1, npar=50, 
+			speed_mech='constric', ncores=1, seed=1)
+	x_best, y_best, pso_hist=pso.evolute(ngen=100, verbose=0)
 
 Notes
 -----
 
-- Too large mutation rate "``mutate``" could destroy the population, the recommended range for this variable is between 0.01-0.4. 
-- Too large mutation rate "``chi``" could destroy the individual and hence the population, the recommended range for this variable is 0.01-0.3. 
+- Always try the three speed mechanisms via ``speed_mech`` when you solve any problem. 
+- Keep c1, c2 > 2.0 when using ``speed_mech='constric'``. 
+- ``speed_mech=timew`` uses a time-dependent inertia factor, where inertia ``w`` is annealed over PSO generations.
+- ``speed_mech=globw`` uses a ratio of swarm global position to local position to define inertia factor, and this factor is updated every generation.
+- Look for an optimal balance between ``npar`` and ``ngen``, it is recommended to minimize particle size to allow for more generations.
+- Total number of cost evaluations for PSO is ``npar`` * ``ngen``.

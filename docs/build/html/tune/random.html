@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Random Search &mdash; NEORL 1.1.3b documentation</title>
+  <title>Random Search &mdash; NEORL 1.1.16b documentation</title>
   
 
   
@@ -30,18 +30,16 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Evolutionary Search" href="evolu.html" />
+    <link rel="next" title="Bayesian Search" href="bayes.html" />
     <link rel="prev" title="Grid Search" href="grid.html" /> 
 </head>
 
@@ -69,7 +67,7 @@
             
             
               <div class="version">
-                main (1.1.3b )
+                main (1.1.16b )
               </div>
             
           
@@ -98,6 +96,9 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../guide/install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../guide/quickstart.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/rl.html">Reinforcement Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/evolu.html">Evolutionary Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/hyperparameter.html">Hyperparameter Tuning</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Algorithms</span></p>
 <ul>
@@ -118,8 +119,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#notes">Notes</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="evolu.html">Evolutionary Search</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bayes.html">Bayesian Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="evolu.html">Evolutionary Search</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
 <ul>
@@ -199,20 +200,11 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="random-search">
-<span id="random"></span><h1>Random Search<a class="headerlink" href="#random-search" title="Permalink to this headline">¶</a></h1>
+  <span class="target" id="module-neorl.tune.randtune"><span id="random"></span></span><div class="section" id="random-search">
+<h1>Random Search<a class="headerlink" href="#random-search" title="Permalink to this headline">¶</a></h1>
 <p>A module for random search of hyperparameters of NEORL algorithms.</p>
 <p>Original paper: Bergstra, J., &amp; Bengio, Y. (2012). Random search for hyper-parameter optimization. Journal of machine learning research, 13(2).</p>
 <p>Random search is a technique where random combinations of the hyperparameters are used to find the best solution for the algorithm used. Random search tries random combinations of the hyperparameter set, where the cost function is evaluated at these random sets in the parameter space. As indicated by the reference above, the chances of finding the optimal hyperparameters are comparatively higher in random search than grid search, because of the random search pattern as the algorithm might end up being used on the optimised hyperparameters without any aliasing or wasting of resources.</p>
-<a class="reference internal image-reference" href="../_images/random.png"><img alt="alternate text" class="align-center" src="../_images/random.png" style="width: 281.6px; height: 314.40000000000003px;" /></a>
-<p>For example, to tune few hyperparameters of DQN, the following grids can be defined:</p>
-<div class="line-block">
-<div class="line"><code class="docutils literal notranslate"><span class="pre">learning_rate</span></code> = <span class="math notranslate nohighlight">\(\mathcal{N}(0.0005, 0.0001)\)</span> (Continuous normal distribution)</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">batch_size</span></code> = <span class="math notranslate nohighlight">\(\mathcal{U}  \{16, 64\}\)</span> (Discrete uniform distribution)</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">target_network_update_freq</span></code> = :math:<a href="#id1"><span class="problematic" id="id2">`</span></a>mathcal{U}  {100, 2000}`(Discrete uniform distribution)</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">exploration_fraction</span></code> = <span class="math notranslate nohighlight">\(\mathcal{N}(0.25, 0.05)\)</span> (Continuous normal distribution)</div>
-</div>
-<p>The cost of random search is determined by the total number of random evaluations provided by the user (<code class="docutils literal notranslate"><span class="pre">n_calls</span></code>).</p>
 <div class="section" id="what-can-you-use">
 <h2>What can you use?<a class="headerlink" href="#what-can-you-use" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
@@ -225,40 +217,103 @@
 </div>
 <div class="section" id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="neorl.tune.randtune.RANDTUNE">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">neorl.tune.randtune.</span></code><code class="sig-name descname"><span class="pre">RANDTUNE</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param_grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ncases</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/tune/randtune.html#RANDTUNE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.tune.randtune.RANDTUNE" title="Permalink to this definition">¶</a></dt>
+<dd><p>A module for random search for hyperparameter tuning</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>param_grid</strong> – (dict) the type and range of each hyperparameter in a dictionary form (types are <code class="docutils literal notranslate"><span class="pre">int/discrete</span></code> or <code class="docutils literal notranslate"><span class="pre">float/continuous</span></code> or <code class="docutils literal notranslate"><span class="pre">grid/categorical</span></code>). Example: {‘x1’: [[40, 50, 60, 100], ‘grid’], ‘x2’: [[0.2, 0.8], ‘float’], ‘x3’: [[‘blend’, ‘cx2point’], ‘grid’], ‘x4’: [[20, 80], ‘int’]}</p></li>
+<li><p><strong>fit</strong> – (function) the self-defined fitness function that includes the hyperparameters as input and algorithm score as output</p></li>
+<li><p><strong>ncases</strong> – (int) number of random hyperparameter cases to generate</p></li>
+<li><p><strong>seed</strong> – (int) random seed for sampling reproducibility</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="neorl.tune.randtune.RANDTUNE.tune">
+<code class="sig-name descname"><span class="pre">tune</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ncores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">csvname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/tune/randtune.html#RANDTUNE.tune"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.tune.randtune.RANDTUNE.tune" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function starts the tuning process with specified number of processors</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ncores</strong> – (int) number of parallel processors (see the <strong>Notes</strong> section below for an important note about parallel execution)</p></li>
+<li><p><strong>csvname</strong> – (str) the name of the csv file name to save the tuning results (useful for expensive cases as the csv file is updated directly after the case is done)</p></li>
+<li><p><strong>verbose</strong> – (bool) whether to print updates to the screen or not</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">GA</span>
+<p>Example of using random search to tune three ES hyperparameters for solving the 5-d Sphere function</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neorl.tune</span> <span class="kn">import</span> <span class="n">RANDTUNE</span>
+<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">ES</span>
 
-<span class="c1">#Define the fitness function</span>
-<span class="k">def</span> <span class="nf">FIT</span><span class="p">(</span><span class="n">individual</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Sphere test objective function.</span>
-<span class="sd">                F(x) = sum_{i=1}^d xi^2</span>
-<span class="sd">                d=1,2,3,...</span>
-<span class="sd">                Range: [-100,100]</span>
-<span class="sd">                Minima: 0</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">y</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">individual</span><span class="p">)</span>
-        <span class="k">return</span> <span class="o">-</span><span class="n">y</span>  <span class="c1">#-1 to convert min to max problem</span>
+<span class="c1">#**********************************************************</span>
+<span class="c1"># Part I: Original Problem Settings</span>
+<span class="c1">#**********************************************************</span>
 
-<span class="c1">#Setup the parameter space (d=5)</span>
-<span class="n">nx</span><span class="o">=</span><span class="mi">5</span>
-<span class="n">BOUNDS</span><span class="o">=</span><span class="p">{}</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">nx</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+<span class="c1">#Define the fitness function (for original optimisation)</span>
+<span class="k">def</span> <span class="nf">sphere</span><span class="p">(</span><span class="n">individual</span><span class="p">):</span>
+    <span class="n">y</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">individual</span><span class="p">)</span>
+    <span class="k">return</span> <span class="o">-</span><span class="n">y</span>  <span class="c1">#-1 to convert min to max problem</span>
+
+<span class="c1">#*************************************************************</span>
+<span class="c1"># Part II: Define fitness function for hyperparameter tuning</span>
+<span class="c1">#*************************************************************</span>
+<span class="k">def</span> <span class="nf">tune_fit</span><span class="p">(</span><span class="n">cxpb</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">cxmode</span><span class="p">):</span>
+
+    <span class="c1">#--setup the parameter space</span>
+    <span class="n">nx</span><span class="o">=</span><span class="mi">5</span>
+    <span class="n">BOUNDS</span><span class="o">=</span><span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">nx</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
         <span class="n">BOUNDS</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
 
-<span class="n">ga</span><span class="o">=</span><span class="n">GA</span><span class="p">(</span><span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">FIT</span><span class="p">,</span> <span class="n">npop</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">mutate</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
-     <span class="n">cx</span><span class="o">=</span><span class="s1">&#39;2point&#39;</span><span class="p">,</span> <span class="n">cxpb</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">chi</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
-         <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">x_best</span><span class="p">,</span> <span class="n">y_best</span><span class="p">,</span> <span class="n">ga_hist</span><span class="o">=</span><span class="n">ga</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="c1">#--setup the ES algorithm</span>
+    <span class="n">es</span><span class="o">=</span><span class="n">ES</span><span class="p">(</span><span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">sphere</span><span class="p">,</span> <span class="n">lambda_</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">mutpb</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
+         <span class="n">cxmode</span><span class="o">=</span><span class="n">cxmode</span><span class="p">,</span> <span class="n">cxpb</span><span class="o">=</span><span class="n">cxpb</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1">#--Evolute the ES object and obtains y_best</span>
+    <span class="c1">#--turn off verbose for less algorithm print-out when tuning</span>
+    <span class="n">x_best</span><span class="p">,</span> <span class="n">y_best</span><span class="p">,</span> <span class="n">es_hist</span><span class="o">=</span><span class="n">es</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">y_best</span> <span class="c1">#returns the best score</span>
+
+<span class="c1">#*************************************************************</span>
+<span class="c1"># Part III: Tuning</span>
+<span class="c1">#*************************************************************</span>
+<span class="c1">#Setup the parameter space</span>
+<span class="c1">#VERY IMPORTANT: The order of these parameters MUST be similar to their order in tune_fit</span>
+<span class="c1">#see tune_fit</span>
+<span class="n">param_grid</span><span class="o">=</span><span class="p">{</span>
+<span class="c1">#def tune_fit(cxpb, mu, alpha, cxmode):</span>
+<span class="s1">&#39;cxpb&#39;</span><span class="p">:</span> <span class="p">[[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">],</span><span class="s1">&#39;float&#39;</span><span class="p">],</span>             <span class="c1">#cxpb is first (low=0.1, high=0.8, type=float/continuous)</span>
+<span class="s1">&#39;mu&#39;</span><span class="p">:</span>   <span class="p">[[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">],</span><span class="s1">&#39;int&#39;</span><span class="p">],</span>                 <span class="c1">#mu is second (low=30, high=60, type=int/discrete)</span>
+<span class="s1">&#39;alpha&#39;</span><span class="p">:[[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span><span class="s1">&#39;grid&#39;</span><span class="p">],</span>    <span class="c1">#alpha is third (grid with fixed values, type=grid/categorical)</span>
+<span class="s1">&#39;cxmode&#39;</span><span class="p">:[[</span><span class="s1">&#39;blend&#39;</span><span class="p">,</span> <span class="s1">&#39;cx2point&#39;</span><span class="p">],</span><span class="s1">&#39;grid&#39;</span><span class="p">]}</span>  <span class="c1">#cxmode is fourth (grid with fixed values, type=grid/categorical)</span>
+
+<span class="c1">#setup a random tune object</span>
+<span class="n">rtune</span><span class="o">=</span><span class="n">RANDTUNE</span><span class="p">(</span><span class="n">param_grid</span><span class="o">=</span><span class="n">param_grid</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">tune_fit</span><span class="p">,</span> <span class="n">ncases</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1">#view the generated cases before running them</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">rtune</span><span class="o">.</span><span class="n">hyperparameter_cases</span><span class="p">)</span>
+<span class="c1">#tune the parameters with method .tune</span>
+<span class="n">randres</span><span class="o">=</span><span class="n">rtune</span><span class="o">.</span><span class="n">tune</span><span class="p">(</span><span class="n">ncores</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">csvname</span><span class="o">=</span><span class="s1">&#39;tune.csv&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">randres</span><span class="p">)</span>   <span class="c1">#the results are saved in dataframe and ranked from best to worst</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="notes">
 <h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
+<li><p>For <code class="docutils literal notranslate"><span class="pre">ncores</span> <span class="pre">&gt;</span> <span class="pre">1</span></code>, the parallel tuning engine starts. <strong>Make sure to run your python script from Terminal NOT from an IDE (e.g. Spyder, Jupyter Notebook)</strong>. IDEs usually crash when running parallel problems with packages like <code class="docutils literal notranslate"><span class="pre">joblib</span></code> or <code class="docutils literal notranslate"><span class="pre">multiprocessing</span></code>. For <code class="docutils literal notranslate"><span class="pre">ncores</span> <span class="pre">=</span> <span class="pre">1</span></code>, IDEs seem to work fine.</p></li>
 <li><p>Random search struggles with dimensionality if there are large number of hyperparameters to tune. Therefore, it is always recommended to do a preliminary sensitivity study to exclude or fix the hyperparameters with small impact.</p></li>
-<li><p>To determine an optimal <code class="docutils literal notranslate"><span class="pre">n_calls</span></code>, try to setup your problem for grid search on paper, calculate the grid search cost, and go for 50% of this cost. Achieving similar performance with 50% cost is a promise for random search.</p></li>
+<li><p>To determine an optimal <code class="docutils literal notranslate"><span class="pre">ncases</span></code>, try to setup your problem for grid search on paper, calculate the grid search cost, and go for 50% of this cost. Achieving similar performance with 50% cost is a promise for random search.</p></li>
 <li><p>For difficult problems, the analyst can start with a random search first to narrow the choices of the important hyperparameters. Then, a grid search can be executed on those important parameters with more refined and narrower grids.</p></li>
 </ul>
 </div>
@@ -270,7 +325,7 @@
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="evolu.html" class="btn btn-neutral float-right" title="Evolutionary Search" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="bayes.html" class="btn btn-neutral float-right" title="Bayesian Search" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
         <a href="grid.html" class="btn btn-neutral float-left" title="Grid Search" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 

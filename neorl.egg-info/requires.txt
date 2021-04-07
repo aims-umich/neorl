@@ -1,11 +1,18 @@
-gym[atari,classic_control]>=0.11
+tensorflow==1.13.1
+numpy==1.16.2
+gym<0.17.0,>=0.15.4
+scikit-optimize==0.8.1
+cloudpickle>=1.2.2
 scipy
 joblib
-cloudpickle>=0.5.5
-opencv-python
-numpy
 pandas
+xlrd==1.2.0
 matplotlib
+pytest
+pytest-cov
+sphinx
+sphinx-rtd-theme
+sphinx-autobuild
 
 [docs]
 sphinx

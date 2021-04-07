@@ -1,0 +1,22 @@
+detailed steps:
+
+#install anaconda
+
+wget --no-check-certificate https://repo.continuum.io/archive/Anaconda3-2019.03-Linux-x86_64.sh
+bash Anaconda3-2019.03-Linux-x86_64.sh
+
+
+conda create --name neorl --clone base
+conda create --name neorl python=3.7
+conda activate neorl
+conda update -n base -c defaults conda
+pip install --upgrade pip setuptools wheel
+
+conda remove --name neorl --all
+
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python get-pip.py
+
+pip install neorl --extra-index-url https://test.pypi.org/simple
+
+#matplotlib issue
+rm -rf ~/.cache/matplotlib

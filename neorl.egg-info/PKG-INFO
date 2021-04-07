@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: neorl
-Version: 1.1.3b0
+Version: 1.1.17b0
 Summary: NeuroEvolution Optimisation with Reinforcement Learning
 Home-page: https://github.com/mradaideh/neorl
 Author: Majdi I. Radaideh
@@ -39,7 +39,7 @@ Description:
         #---------------------------------
         import numpy as np
         import matplotlib.pyplot as plt
-        from neopy import DE, XNES
+        from neorl import DE, XNES
         
         #---------------------------------
         # Fitness
@@ -67,7 +67,7 @@ Description:
         #---------------------------------
         # DE
         #---------------------------------
-        de=DE(bounds=BOUNDS, fit=FIT, npop=60, mutate=0.5, recombination=0.7, ncores=1, seed=1)
+        de=DE(bounds=BOUNDS, fit=FIT, npop=60, CR=0.5, F=0.7, ncores=1, seed=1)
         x_best, y_best, de_hist=de.evolute(ngen=100, verbose=0)
         
         #---------------------------------

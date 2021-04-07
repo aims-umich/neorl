@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.rl.baselines.a2c.a2c &mdash; NEORL 1.1.3b documentation</title>
+  <title>neorl.rl.baselines.a2c.a2c &mdash; NEORL 1.1.16b documentation</title>
   
 
   
@@ -30,11 +30,9 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../../../../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../../../../../_static/jquery.js"></script>
+        <script src="../../../../../_static/underscore.js"></script>
+        <script src="../../../../../_static/doctools.js"></script>
     
     <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
 
@@ -67,7 +65,7 @@
             
             
               <div class="version">
-                main (1.1.3b )
+                main (1.1.16b )
               </div>
             
           
@@ -96,6 +94,9 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../guide/install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../guide/quickstart.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guide/rl.html">Reinforcement Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guide/evolu.html">Evolutionary Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../guide/hyperparameter.html">Hyperparameter Tuning</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Algorithms</span></p>
 <ul>
@@ -110,8 +111,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../tune/grid.html">Grid Search</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../tune/random.html">Random Search</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../tune/evolu.html">Evolutionary Search</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../tune/bayes.html">Bayesian Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../tune/evolu.html">Evolutionary Search</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
 <ul>
@@ -387,20 +388,22 @@
 
                 <span class="bp">self</span><span class="o">.</span><span class="n">summary</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">summary</span><span class="o">.</span><span class="n">merge_all</span><span class="p">()</span></div>
 
-    <span class="k">def</span> <span class="nf">_train_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">masks</span><span class="p">,</span> <span class="n">actions</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">update</span><span class="p">,</span> <span class="n">writer</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        applies a training step to the model</span>
-
-<span class="sd">        :param obs: ([float]) The input observations</span>
-<span class="sd">        :param states: ([float]) The states (used for recurrent policies)</span>
-<span class="sd">        :param rewards: ([float]) The rewards from the environment</span>
-<span class="sd">        :param masks: ([bool]) Whether or not the episode is over (used for recurrent policies)</span>
-<span class="sd">        :param actions: ([float]) The actions taken</span>
-<span class="sd">        :param values: ([float]) The logits values</span>
-<span class="sd">        :param update: (int) the current step iteration</span>
-<span class="sd">        :param writer: (TensorFlow Summary.writer) the writer for tensorboard</span>
-<span class="sd">        :return: (float, float, float) policy loss, value loss, policy entropy</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">_train_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">masks</span><span class="p">,</span> <span class="n">actions</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">update</span><span class="p">,</span> <span class="n">writer</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>     
+        <span class="c1"># =============================================================================</span>
+        <span class="c1">#         &quot;&quot;&quot;</span>
+        <span class="c1">#         applies a training step to the model</span>
+        <span class="c1"># </span>
+        <span class="c1">#         :param obs: ([float]) The input observations</span>
+        <span class="c1">#         :param states: ([float]) The states (used for recurrent policies)</span>
+        <span class="c1">#         :param rewards: ([float]) The rewards from the environment</span>
+        <span class="c1">#         :param masks: ([bool]) Whether or not the episode is over (used for recurrent policies)</span>
+        <span class="c1">#         :param actions: ([float]) The actions taken</span>
+        <span class="c1">#         :param values: ([float]) The logits values</span>
+        <span class="c1">#         :param update: (int) the current step iteration</span>
+        <span class="c1">#         :param writer: (TensorFlow Summary.writer) the writer for tensorboard</span>
+        <span class="c1">#         :return: (float, float, float) policy loss, value loss, policy entropy</span>
+        <span class="c1">#         &quot;&quot;&quot;</span>
+        <span class="c1"># =============================================================================</span>
         <span class="n">advs</span> <span class="o">=</span> <span class="n">rewards</span> <span class="o">-</span> <span class="n">values</span>
         <span class="n">cur_lr</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">obs</span><span class="p">)):</span>
