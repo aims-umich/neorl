@@ -117,8 +117,6 @@ neorl/tests/test_ppo.py
 neorl/tests/test_ppo2.py
 neorl/tests/test_pso.py
 neorl/tests/test_random.py
-neorl/tests/tests_old/__init__.py
-neorl/tests/tests_old/runtests.py
 neorl/tune/__init__.py
 neorl/tune/bayestune.py
 neorl/tune/estune.py

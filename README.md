@@ -151,24 +151,22 @@ NEORL offers a wide range of algorithms, where some algorithms could be used wit
 
 | **Algorithm**       | **Discrete Space** | **Continous Space**| **Mixed Space**    | **Multiprocessing**|   
 | ------------------- | ------------------ | ------------------ | ------------------ | ------------------ |
-| GA                  | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| SA                  | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| PSO                 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | PPO                 | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: |
 | A2C                 | :heavy_check_mark: | :heavy_check_mark: | :x:                | :heavy_check_mark: |
-| PESA                | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| DQN                 | :heavy_check_mark: | :x:                | :x:                | :x:                |
 | ES                  | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | DE                  | :x:                | :heavy_check_mark: | :x:                | :heavy_check_mark: |
+| PSO                 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | NES                 | :x:                | :heavy_check_mark: | :x:                | :heavy_check_mark: |
 
 ## Testing the installation
 All unit tests in NEORL can be run using pytest runner. If pytest is not installed, please use
 ```
-pip install pytest pytest-cov  
+pip install pytest pytest-cov
 ```
-Then go to the directory `tests` in NEORL and type
+Then run
 ```
-pytest
+neorl --test
 ```
 
 ## Projects/Papers Using NEORL
