@@ -1,2 +1,14 @@
 gym
 pandas
+tensorflow==1.13.1
+numpy==1.16.2
+gym >= 0.15.4, < 0.17.0
+scikit-optimize==0.8.1
+cloudpickle >= 1.2.2
+scipy
+joblib
+pandas
+xlrd==1.2.0
+matplotlib
+pytest
+pytest-cov
