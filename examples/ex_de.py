@@ -1,11 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Apr  5 13:14:22 2021
-
-@author: majdi
-"""
-
-from neorl import PSO
+from neorl import DE
 
 #Define the fitness function
 def FIT(individual):
@@ -24,7 +17,5 @@ BOUNDS={}
 for i in range(1,nx+1):
         BOUNDS['x'+str(i)]=['float', -100, 100]
 
-#setup and evolute PSO
-pso=PSO(bounds=BOUNDS, fit=FIT, c1=2.05, c2=2.1, npar=50, 
-        speed_mech='constric', ncores=1, seed=1)
-x_best, y_best, pso_hist=pso.evolute(ngen=100, verbose=0)
+de=DE(bounds=BOUNDS, fit=FIT, npop=60, F=0.5, CR=0.7, ncores=1, seed=1)
+x_best, y_best, de_hist=de.evolute(ngen=100, verbose=0)

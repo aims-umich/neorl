@@ -1,46 +1,38 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Mar 30 12:04:52 2021
-
-@author: majdi
-"""
-
+import numpy as np
 import gym
-from gym.spaces import Discrete, Box
-from neorl import DQN
-from neorl import DQNPolicy
+from gym.spaces import Box
+from neorl import PPO2
+from neorl import MlpPolicy
 from neorl import RLLogger
 
 #--------------------------------------------------------
 # Fitness class based on OpenAI Gym
-#--------------------------------------------------------    
+#--------------------------------------------------------
 #Define a Gym-class containing your function to optimise
 #see the template below for the Sphere function
 #We will build automatic templates for RL in the near future to simplify fitness definition
-class IntegerSphere(gym.Env):
-    #An integer/discrete form of the sphere function
+class Sphere(gym.Env):
+
     def __init__(self):
-        lb=-100
-        ub=100
-        self.nx=5
-        self.action_space = Discrete(201)
-        self.real_actions=list(range(lb,ub+1))
-        self.observation_space = Box(low=min(self.real_actions), high=max(self.real_actions), shape=(self.nx,), dtype=int)
-        self.episode_length=50
+        lb=np.array([-5.12,-5.12,-5.12,-5.12,-5.12])
+        ub=np.array([5.12,5.12,5.12,5.12,5.12])
+        self.nx=len(lb)
+        self.action_space = Box(low=lb, high=ub, dtype=np.float32)
+        self.observation_space = Box(low=lb, high=ub, dtype=np.float32)
+        self.episode_length=5
         self.reset()
         self.done=False
         self.counter = 0
 
     def step(self, action):
-        individual=[self.real_actions[action]]*self.nx
-        reward=self.fit(individual=individual)
+        reward=self.fit(individual=action)
         self.counter += 1
         if self.counter == self.episode_length:
             self.done=True
             self.counter = 0
-        
-        return individual, reward, self.done, {'x':individual}
- 
+
+        return action, reward, self.done, {'x':action}
+
     def fit(self, individual):
             """Sphere test objective function.
                     F(x) = sum_{i=1}^d xi^2
@@ -49,13 +41,11 @@ class IntegerSphere(gym.Env):
                     Minima: 0
             """
             #-1 is used to convert minimization to maximization
-            return -sum(x**2 for x in individual)    
+            return -sum(x**2 for x in individual)
 
     def reset(self):
         self.done=False
-        ac=self.action_space.sample()
-        individual=[self.real_actions[ac]]*self.nx
-        return individual
+        return self.action_space.sample()
 
     def render(self, mode='human'):
         pass
@@ -64,14 +54,14 @@ class IntegerSphere(gym.Env):
 # RL Optimisation
 #--------------------------------------------------------
 #create an object from the class
-env=IntegerSphere()
+env=Sphere()
 #create a callback function to log data
 cb=RLLogger(check_freq=1)
 #create an a2c object based on the env object
-dqn = DQN(DQNPolicy, env=env)
+ppo = PPO2(MlpPolicy, env=env, n_steps=12)
 #optimise the enviroment class
-dqn.learn(total_timesteps=2000, callback=cb)
+ppo.learn(total_timesteps=2000, callback=cb)
 #print the best results
-print('--------------- DQN results ---------------')
+print('--------------- PPO results ---------------')
 print('The best value of x found:', cb.xbest)
 print('The best value of y found:', cb.rbest)

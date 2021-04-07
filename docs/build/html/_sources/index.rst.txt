@@ -37,6 +37,7 @@ User Guide
    :caption: General Guide
    
    guide/install
+   guide/detinstall
    guide/quickstart
    guide/rl
    guide/evolu
