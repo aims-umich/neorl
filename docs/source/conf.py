@@ -77,10 +77,7 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
-    'sphinx_automodapi.automodapi',
 ]
-
-numpydoc_show_class_members = False
 
 if enable_spell_check:
     extensions.append('sphinxcontrib.spelling')
