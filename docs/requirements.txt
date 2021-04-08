@@ -1,6 +1,6 @@
 gym
 pandas
-tensorflow
+tensorflow==1.13.1
 numpy
 gym
 scikit-optimize
