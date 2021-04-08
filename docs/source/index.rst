@@ -84,9 +84,9 @@ User Guide
 Projects/Papers Using NEORL
 --------------------------------------
 
-1- Radaideh, M. I., Wolverton, I., Joseph, J., Tusar, J. J., Otgonbaatar, U., Roy, N., Forget, B., Shirvan, K. (2021). Physics-informed reinforcement learning optimization of nuclear assembly design. *Nuclear Engineering and Design*, **372**, p. 110966 `[LINK] <https://doi.org/10.1016/j.nucengdes.2020.110966>`_.  
+1- Radaideh, M. I., Wolverton, I., Joseph, J., Tusar, J. J., Otgonbaatar, U., Roy, N., Forget, B., Shirvan, K. (2021). Physics-informed reinforcement learning optimization of nuclear assembly design. *Nuclear Engineering and Design*, **372**, p. 110966 `[LINK1] <https://doi.org/10.1016/j.nucengdes.2020.110966>`_.  
 
-2- Radaideh, M. I., Shirvan, K. (2021). Rule-based reinforcement learning methodology to inform evolutionary algorithms for constrained optimization of engineering applications. *Knowledge-Based Systems*, **217**, p. 106836 `[LINK] <https://doi.org/10.1016/j.knosys.2021.106836>`_.
+2- Radaideh, M. I., Shirvan, K. (2021). Rule-based reinforcement learning methodology to inform evolutionary algorithms for constrained optimization of engineering applications. *Knowledge-Based Systems*, **217**, p. 106836 `[LINK2] <https://doi.org/10.1016/j.knosys.2021.106836>`_.
 
 3- Radaideh, M.I., Forget, B., Shirvan, K. (2021). Application of Reinforcement Learning Optimisation Methodology to BWR Assemblies ," In: *Proc. International Conference on Mathematics & Computational Methods Applied to Nuclear Science & Engineering (M&C 2021)*, Rayleigh, North Carolina, USA, October 3-7, 2021.
 

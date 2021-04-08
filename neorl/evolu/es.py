@@ -34,8 +34,8 @@ class ES:
     
     :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: {'x1': ['int', 1, 4], 'x2': ['float', 0.1, 0.8], 'x3': ['float', 2.2, 6.2]}
     :param fit: (function) the fitness function 
-    :param lambda_: (int) total number of individuals in the population
-    :param mu: (int): number of individuals to survive to the next generation, mu < lambda_
+    :param lambda\_: (int) total number of individuals in the population
+    :param mu: (int): number of individuals to survive to the next generation, mu < lambda\_
     :param cxmode: (str): the crossover mode, either 'cx2point' or 'blend'
     :param alpha: (float) Extent of the blending between [0,1], the blend crossover randomly selects a child in the range [x1-alpha(x2-x1), x2+alpha(x2-x1)] (Only used for cxmode='blend')
     :param cxpb: (float) population crossover probability between [0,1]

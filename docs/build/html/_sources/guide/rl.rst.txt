@@ -1,4 +1,4 @@
-.. _hyperparameter:
+.. _rl:
 
 =======================
 Reinforcement Learning

@@ -13,7 +13,6 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
   <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
 
   
@@ -257,7 +256,7 @@
 </div>
 <div class="section" id="evolutionary-search">
 <h2>Evolutionary Search<a class="headerlink" href="#evolutionary-search" title="Permalink to this headline">¶</a></h2>
-<p>See the <a class="reference internal" href="../tune/evolu.html#evolu"><span class="std std-ref">Evolutionary Search</span></a> section</p>
+<p>See the <a class="reference internal" href="evolu.html#evolu"><span class="std std-ref">Evolutionary Search</span></a> section</p>
 <p>Original paper: E. Bochinski, T. Senst and T. Sikora, “Hyper-parameter optimization for convolutional neural network committees based on evolutionary algorithms,” 2017 IEEE International Conference on Image Processing (ICIP), Beijing, China, 2017, pp. 3924-3928, doi: 10.1109/ICIP.2017.8297018.</p>
 <p>We have used a compact evolution strategy (ES) module for the purpose of tuning hyperparameter of NEORL algorithms. See the <a class="reference internal" href="../modules/es.html#es"><span class="std std-ref">ES algorithm</span></a> section for more details about the (<span class="math notranslate nohighlight">\(\mu,\lambda\)</span>) algorithm. To reduce the burden on the users, we specified and adapt all ES tuner hyperparameters, so the user needs to specify the hyperparameter space similar to grid, random, and other search methods. ES tuner leverages a population of individuals, where each individual represents a sample from the hyperparameter space. ES uses recombination, crossover, and mutation operations to improve the individuals from generation to the other. The best of the best individuals in all generations are reported as the top hyperparameter sets for the algorithm (See the Figure below).</p>
 <a class="reference internal image-reference" href="../_images/genetic.png"><img alt="alternate text" class="align-center" src="../_images/genetic.png" style="width: 796.8px; height: 374.4px;" /></a>

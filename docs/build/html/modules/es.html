@@ -13,7 +13,6 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
   <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
 
   
@@ -227,8 +226,8 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>bounds</strong> – (dict) input parameter type and lower/upper bounds in dictionary form. Example: {‘x1’: [‘int’, 1, 4], ‘x2’: [‘float’, 0.1, 0.8], ‘x3’: [‘float’, 2.2, 6.2]}</p></li>
 <li><p><strong>fit</strong> – (function) the fitness function</p></li>
-<li><p><strong>lambda</strong> – (int) total number of individuals in the population</p></li>
-<li><p><strong>mu</strong> – (int): number of individuals to survive to the next generation, mu &lt; <a href="#id1"><span class="problematic" id="id2">lambda_</span></a></p></li>
+<li><p><strong>lambda_</strong> – (int) total number of individuals in the population</p></li>
+<li><p><strong>mu</strong> – (int): number of individuals to survive to the next generation, mu &lt; lambda_</p></li>
 <li><p><strong>cxmode</strong> – (str): the crossover mode, either ‘cx2point’ or ‘blend’</p></li>
 <li><p><strong>alpha</strong> – (float) Extent of the blending between [0,1], the blend crossover randomly selects a child in the range [x1-alpha(x2-x1), x2+alpha(x2-x1)] (Only used for cxmode=’blend’)</p></li>
 <li><p><strong>cxpb</strong> – (float) population crossover probability between [0,1]</p></li>

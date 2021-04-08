@@ -1,4 +1,4 @@
-.. _evolu:
+.. _evolsearch:
 
 Evolutionary Search
 =====================
