@@ -112,8 +112,6 @@ Parameters
   :members:
   :inherited-members:
 
-.. _deepq_policies:
-
 Acknowledgment
 -----------------
 
