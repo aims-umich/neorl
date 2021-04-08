@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: neorl
-Version: 1.2.0b0
+Version: 1.2.1b0
 Summary: NeuroEvolution Optimisation with Reinforcement Learning
 Home-page: https://github.com/mradaideh/neorl
 Author: Majdi I. Radaideh
@@ -28,7 +28,7 @@ Description:
         https://news.mit.edu/2020/want-cheaper-nuclear-energy-turn-design-process-game-1217
         
         Documentation:
-        https://neorl.readthedocs.io/en/master/
+        https://neorl.readthedocs.io/en/latest/index.html
         
         ## Quick Example
         

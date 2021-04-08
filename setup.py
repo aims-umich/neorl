@@ -50,7 +50,7 @@ Main News Article:
 https://news.mit.edu/2020/want-cheaper-nuclear-energy-turn-design-process-game-1217
 
 Documentation:
-https://neorl.readthedocs.io/en/master/
+https://neorl.readthedocs.io/en/latest/index.html
 
 ## Quick Example
 

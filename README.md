@@ -10,6 +10,10 @@ NEORL (**N**euro**E**volution **O**ptimisation with **R**einforcement **L**earni
 
 NEORL can be used for multidisciplinary applications for research, industrial, academic, and/or teaching purposes. NEORL can be used as a standalone platform or an additional benchmarking tool to supplement or validate other optimisation packages. Our objective when we built NEORL is to give the user a simple and easy-to-use framework with an access to a wide range of covering both standalone and hybrid algorithms in evolutionary, swarm, supervised learning, deep learning, and reinforcement learning. We hope our implementation will allow beginners to enjoy more advanced optimisation and algorithms, without being involved in too many theoretical/implementation details.
 
+## Documentation
+
+Documentation is available online: [https://neorl.readthedocs.io/en/latest/index.html](https://neorl.readthedocs.io/en/latest/index.html)
+
 ## Copyright
 
 <img src="docs/copyright.png" align="right" width="40%"/>
@@ -35,14 +39,6 @@ You can read the first successful application of NEORL for nuclear fuel optimisa
 | Advanced logging                         | :heavy_check_mark:                |
 | Advanced plotters                        | :heavy_check_mark:                |
 | Optimisation Benchmarks                  | :heavy_check_mark:                |
-
-## Documentation
-
-Documentation is coming soon!
-
-<!---
-Documentation is available online: [https://stable-baselines.readthedocs.io/](https://stable-baselines.readthedocs.io/)
---->
 
 ### Knowledge Prerequisites
 
