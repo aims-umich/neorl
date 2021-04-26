@@ -1,0 +1,380 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Modern PESA (PESA2) &mdash; NEORL 1.2.0b documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Simulated Annealing (SA)" href="sa.html" />
+    <link rel="prev" title="Prioritized replay Evolutionary and Swarm Algorithm (PESA)" href="pesa.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> NEORL
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                main (1.2.0b )
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">General Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guide/install.html">Quick Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/detinstall.html">Detailed Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/quickstart.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/rl.html">Reinforcement Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/evolu.html">Evolutionary Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/hyperparameter.html">Hyperparameter Tuning</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Algorithms</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="a2c.html">Advantage Actor Critic (A2C)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dqn.html">Deep Q Learning (DQN)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ppo2.html">Proximal Policy Optimisation (PPO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="es.html">Evolution Strategies (<span class="math notranslate nohighlight">\(\mu,\lambda\)</span>) (ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pso.html">Particle Swarm Optimisation (PSO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="de.html">Differential Evolution (DE)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xnes.html">Exponential Natural Evolution Strategies (XNES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gwo.html">Grey Wolf Optimizer (GWO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pesa.html">Prioritized replay Evolutionary and Swarm Algorithm (PESA)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Modern PESA (PESA2)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-can-you-use">What can you use?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example">Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#notes">Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sa.html">Simulated Annealing (SA)</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tune/grid.html">Grid Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/random.html">Random Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/bayes.html">Bayesian Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/evolu.html">Evolutionary Search</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex1.html">Example 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex2.html">Example 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex3.html">Example 3</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Misc</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../misc/changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/projects.html">Projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/contrib.html">Contributors</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEORL</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Modern PESA (PESA2)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/modules/pesa2.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <span class="target" id="module-neorl.hybrid.pesa2"><span id="pesa2"></span></span><div class="section" id="modern-pesa-pesa2">
+<h1>Modern PESA (PESA2)<a class="headerlink" href="#modern-pesa-pesa2" title="Permalink to this headline">¶</a></h1>
+<p>A module for the parallel hybrid PESA2 algorithm with prioritized experience replay from reinforcement learning. Modern PESA2 combines GWO, XNES, and DE modules in NEORL.</p>
+<p>Original paper: Radaideh, M. I., Shirvan, K. (2021). Prioritized Experience Replay for Parallel Hybrid Evolutionary and Swarm Algorithms: Application to Nuclear Fuel, <em>Under Review</em>.</p>
+<div class="section" id="what-can-you-use">
+<h2>What can you use?<a class="headerlink" href="#what-can-you-use" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Multi processing: ✔️</p></li>
+<li><p>Discrete spaces: ❌</p></li>
+<li><p>Continuous spaces: ✔️</p></li>
+<li><p>Mixed Discrete/Continuous spaces: ❌</p></li>
+</ul>
+</div>
+<div class="section" id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="neorl.hybrid.pesa2.PESA2">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">neorl.hybrid.pesa2.</span></code><code class="sig-name descname"><span class="pre">PESA2</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">npop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R_frac</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memory_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha_end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nwolves</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CR</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eta_mu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eta_sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eta_Bmat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adapt_sampling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ncores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/hybrid/pesa2.html#PESA2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.hybrid.pesa2.PESA2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prioritized replay for Evolutionary Swarm Algorithms: PESA 2 (Modern Version) 
+A hybrid algorithm of GWO, DE, and XNES</p>
+<p><em>PESA2 Major Parameters</em></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bounds</strong> – (dict) input parameter type and lower/upper bounds in dictionary form. Example: <code class="docutils literal notranslate"><span class="pre">bounds={'x1':</span> <span class="pre">['int',</span> <span class="pre">1,</span> <span class="pre">4],</span> <span class="pre">'x2':</span> <span class="pre">['float',</span> <span class="pre">0.1,</span> <span class="pre">0.8],</span> <span class="pre">'x3':</span> <span class="pre">['float',</span> <span class="pre">2.2,</span> <span class="pre">6.2]}</span></code></p></li>
+<li><p><strong>fit</strong> – (function) the fitness function</p></li>
+<li><p><strong>npop</strong> – (int) total number of individuals in DE and XNES populations</p></li>
+<li><p><strong>R_frac</strong> – (int) fraction of <code class="docutils literal notranslate"><span class="pre">npop``and</span> <span class="pre">``nwolves</span></code> to survive to the next generation.
+Also, <code class="docutils literal notranslate"><span class="pre">R_frac</span></code> equals to the number of individuals to replay from the memory</p></li>
+<li><p><strong>memory_size</strong> – (int) max size of the replay memory (if None, <code class="docutils literal notranslate"><span class="pre">memory_size</span></code> is built to accommodate all samples during search)</p></li>
+<li><p><strong>alpha_init</strong> – (float) initial value of the prioritized replay coefficient (See <strong>Notes</strong> below)</p></li>
+<li><p><strong>alpha_end</strong> – (float) final value of the prioritized replay coefficient (See <strong>Notes</strong> below)</p></li>
+</ul>
+</dd>
+</dl>
+<p><em>PESA2 Auxiliary Parameters (for the internal algorithms)</em></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nwolves</strong> – (float) for <strong>GWO</strong>, number of wolves for GWO</p></li>
+<li><p><strong>CR</strong> – (float) for <strong>DE</strong>, crossover probability between [0,1]</p></li>
+<li><p><strong>F</strong> – (float) for <strong>DE</strong>, differential/mutation weight between [0,2]</p></li>
+<li><p><strong>eta_mu</strong> – (float) for <strong>XNES</strong>, learning rate for updating the center of the search distribution <code class="docutils literal notranslate"><span class="pre">mu</span></code></p></li>
+<li><p><strong>eta_sigma</strong> – (float) for <strong>XNES</strong>, learning rate for updating the step size <code class="docutils literal notranslate"><span class="pre">sigma</span></code> (default: if None, an approximation is used)</p></li>
+<li><p><strong>eta_Bmat</strong> – (float) for <strong>XNES</strong>, learning rate for updating the normalized transformation matrix <code class="docutils literal notranslate"><span class="pre">B</span></code>  (default: if None, an approximation is used)</p></li>
+</ul>
+</dd>
+</dl>
+<p><em>PESA2 Misc. Parameters</em></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ncores</strong> – (int) number of parallel processors</p></li>
+<li><p><strong>seed</strong> – (int) random seed for sampling</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="neorl.hybrid.pesa2.PESA2.evolute">
+<code class="sig-name descname"><span class="pre">evolute</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ngen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replay_every</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warmup</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/hybrid/pesa2.html#PESA2.evolute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.hybrid.pesa2.PESA2.evolute" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function evolutes the PESA2 algorithm for number of generations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ngen</strong> – (int) number of generations to evolute</p></li>
+<li><p><strong>x0</strong> – (list of lists) initial samples to start the replay memory (<code class="docutils literal notranslate"><span class="pre">len(x0)</span></code> must be equal or more than <code class="docutils literal notranslate"><span class="pre">npop</span></code>)</p></li>
+<li><p><strong>replay_every</strong> – (int) perform memory replay every number of generations, default: replay after every generation</p></li>
+<li><p><strong>warmup</strong> – (int) number of random warmup samples to initialize the replay memory and must be equal or more than <code class="docutils literal notranslate"><span class="pre">npop</span></code> (only used if <code class="docutils literal notranslate"><span class="pre">x0=None</span></code>)</p></li>
+<li><p><strong>verbose</strong> – (int) print statistics to screen, 0: no print, 1: PESA print, 2: detailed print</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(dict) dictionary containing major PESA search results</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">PESA2</span>
+
+<span class="c1">#Define the fitness function</span>
+<span class="k">def</span> <span class="nf">FIT</span><span class="p">(</span><span class="n">individual</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sphere test objective function.</span>
+<span class="sd">                F(x) = sum_{i=1}^d xi^2</span>
+<span class="sd">                d=1,2,3,...</span>
+<span class="sd">                Range: [-100,100]</span>
+<span class="sd">                Minima: 0</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">y</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">individual</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">y</span>
+
+<span class="c1">#Setup the parameter space (d=5)</span>
+<span class="n">nx</span><span class="o">=</span><span class="mi">5</span>
+<span class="n">BOUNDS</span><span class="o">=</span><span class="p">{}</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">nx</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">BOUNDS</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
+
+<span class="n">pesa2</span><span class="o">=</span><span class="n">PESA2</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">FIT</span><span class="p">,</span> <span class="n">npop</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">eta_mu</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">nwolves</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">x_best</span><span class="p">,</span> <span class="n">y_best</span><span class="p">,</span> <span class="n">pesa2_hist</span><span class="o">=</span><span class="n">pesa2</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">replay_every</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>PESA2 is symmetric, meaning population size is equal between DE, XNES, and GWO, which is helpful to ensure that all algorithms can update the memory with similar computing time. Since GWO has typically smaller population than XNES and DE, i.e. <code class="docutils literal notranslate"><span class="pre">nwolves</span> <span class="pre">&lt;</span> <span class="pre">npop</span></code>, PESA2 adjusts number of internal generations for GWO to ensure similar fitness calculations per individual algorithm.</p></li>
+<li><p>For example, if the user sets <code class="docutils literal notranslate"><span class="pre">npop=60</span></code> for XNES/DE, <code class="docutils literal notranslate"><span class="pre">nwovles=6</span></code> for GWO, then GWO is executed internally for 10 generations to have a total of 60 evaluations per individual algorithm.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">R_frac</span></code> defines the fraction of individuals from <code class="docutils literal notranslate"><span class="pre">npop</span></code> and <code class="docutils literal notranslate"><span class="pre">nwovles</span></code> to survive to the next generation, and also the number of samples to replay from the memory. For example, if the user sets <code class="docutils literal notranslate"><span class="pre">R_frac=0.5</span></code>, <code class="docutils literal notranslate"><span class="pre">npop=60</span></code> for XNES/DE, <code class="docutils literal notranslate"><span class="pre">nwovles=6</span></code> for GWO, then after every generation, the top 30 individuals in DE and XNES as well as the best 3 wolves survive to the next generation. Then the replay memory feeds 30 individuals to XNES and DE, and three new wolves to GWO.</p></li>
+<li><p>For complex problems and limited memory, we recommend to set <code class="docutils literal notranslate"><span class="pre">memory_size</span> <span class="pre">~</span> <span class="pre">5000</span></code>. When the memory gets full, old samples are overwritten by new ones. Allowing a large memory for complex problems may slow down PESA2 as handling large memories is more computationally exhaustive. If <code class="docutils literal notranslate"><span class="pre">memory_size</span> <span class="pre">=</span> <span class="pre">None</span></code>, the memory size will be set to maximum value of <code class="docutils literal notranslate"><span class="pre">ngen*npop*3</span></code>.</p></li>
+<li><p>For parallel computing of PESA2, pick <code class="docutils literal notranslate"><span class="pre">ncores</span></code> divisible by 3 (e.g. 6, 18, 30) to ensure equal computing power across the internal algorithms.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">ncores=1</span></code>, serial calculation of PESA2 is executed.</p></li>
+<li><p>Check the sections of <a class="reference internal" href="gwo.html#gwo"><span class="std std-ref">GWO</span></a>, <a class="reference internal" href="xnes.html#xnes"><span class="std std-ref">XNES</span></a>, and <a class="reference internal" href="de.html#de"><span class="std std-ref">DE</span></a> for notes on the internal algorithms and the auxiliary parameters of PESA2.</p></li>
+<li><p>Start the prioritized replay with a small fraction for <code class="docutils literal notranslate"><span class="pre">alpha_init</span> <span class="pre">&lt;</span> <span class="pre">0.1</span></code> to increase randomness earlier to improve PESA exploration. Choose a high fraction for <code class="docutils literal notranslate"><span class="pre">alpha_end</span> <span class="pre">&gt;</span> <span class="pre">0.9</span></code> to increase exploitation by the end of evolution.</p></li>
+<li><p>Look for an optimal balance between <code class="docutils literal notranslate"><span class="pre">npop</span></code> and <code class="docutils literal notranslate"><span class="pre">ngen</span></code>, it is recommended to minimize population size to allow for more generations.</p></li>
+<li><p>Total number of cost evaluations for PESA2 is <code class="docutils literal notranslate"><span class="pre">ngen*npop*3</span></code>.</p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="sa.html" class="btn btn-neutral float-right" title="Simulated Annealing (SA)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="pesa.html" class="btn btn-neutral float-left" title="Prioritized replay Evolutionary and Swarm Algorithm (PESA)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Exelon Corp. &amp; MIT.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -117,7 +117,7 @@ class GRIDTUNE:
         gridres = pd.DataFrame(self.hyperparameter_cases, columns=self.param_names)
         gridres.index += 1
         gridres['score'] = results
-        gridres = gridres.sort_values(['score'], axis='index', ascending=False)     
+        #gridres = gridres.sort_values(['score'], axis='index', ascending=False)     
         
         return gridres
         

@@ -45,7 +45,7 @@ def BEAM(x):
     phi=sum(max(item,0) for item in g_round)
     viol=sum(float(num) > 0 for num in g_round)
 
-    reward = -(y + (w1*phi + w2*viol))
+    reward = (y + (w1*phi + w2*viol))
 
     return reward
 
@@ -67,7 +67,7 @@ for i in range(nx):
 def tune_fit(cxpb, mu, alpha, cxmode, mutpb):
 
     #--setup the ES algorithm
-    es=ES(bounds=BOUNDS, fit=BEAM, lambda_=80, mu=mu, mutpb=mutpb, alpha=alpha,
+    es=ES(mode='min', bounds=BOUNDS, fit=BEAM, lambda_=80, mu=mu, mutpb=mutpb, alpha=alpha,
          cxmode=cxmode, cxpb=cxpb, ncores=1, seed=1)
 
     #--Evolute the ES object and obtains y_best
@@ -96,19 +96,21 @@ btune=BAYESTUNE(param_grid=param_grid, fit=tune_fit, ncases=30)
 bayesres=btune.tune(nthreads=1, csvname='bayestune.csv', verbose=True)
 
 print('----Top 10 hyperparameter sets----')
+bayesres = bayesres[bayesres['score'] >= 1] #drop the cases with scores < 1 (violates the constraints)
+bayesres = bayesres.sort_values(['score'], axis='index', ascending=True) #rank the scores from best (lowest) to worst (high)
 print(bayesres.iloc[0:10,:])   #the results are saved in dataframe and ranked from best to worst
 
 #*************************************************************
 # Part V: Rerun ES with the best hyperparameter set
 #*************************************************************
-es=ES(bounds=BOUNDS, fit=BEAM, lambda_=80, mu=bayesres['mu'].iloc[0],
+es=ES(mode='min', bounds=BOUNDS, fit=BEAM, lambda_=80, mu=bayesres['mu'].iloc[0],
       mutpb=bayesres['mutpb'].iloc[0], alpha=bayesres['alpha'].iloc[0],
       cxmode=bayesres['cxmode'].iloc[0], cxpb=bayesres['cxpb'].iloc[0],
       ncores=1, seed=1)
 
 x_best, y_best, es_hist=es.evolute(ngen=100, verbose=0)
 
-print('Best fitness (y) found:', -y_best)  #convert back to original scale
+print('Best fitness (y) found:', y_best)
 print('Best individual (x) found:', x_best)
 
 #---------------------------------
@@ -116,7 +118,7 @@ print('Best individual (x) found:', x_best)
 #---------------------------------
 #Plot fitness convergence
 plt.figure()
-plt.plot(-np.array(es_hist), label='ES') #multiply by -1 to covert back to a min problem
+plt.plot(np.array(es_hist), label='ES')
 plt.xlabel('Generation')
 plt.ylabel('Fitness')
 plt.legend()

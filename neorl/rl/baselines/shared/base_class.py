@@ -96,28 +96,28 @@ class BaseRLModel(ABC):
         self._vec_normalize_env = unwrap_vec_normalize(self.env)
 
     def get_env(self):
-        """
-        returns the current environment (can be None if not defined)
-
-        :return: (Gym Environment) The current environment
-        """
+#        """
+#        returns the current environment (can be None if not defined)
+#
+#        :return: (Gym Environment) The current environment
+#        """
         return self.env
 
     def get_vec_normalize_env(self) -> Optional[VecNormalize]:
-        """
-        Return the ``VecNormalize`` wrapper of the training env
-        if it exists.
-
-        :return: Optional[VecNormalize] The ``VecNormalize`` env.
-        """
+#        """
+#        Return the ``VecNormalize`` wrapper of the training env
+#        if it exists.
+#
+#        :return: Optional[VecNormalize] The ``VecNormalize`` env.
+#        """
         return self._vec_normalize_env
 
     def set_env(self, env):
-        """
-        Checks the validity of the environment, and if it is coherent, set it as the current environment.
-
-        :param env: (Gym Environment) The environment for learning a policy
-        """
+#        """
+#        Checks the validity of the environment, and if it is coherent, set it as the current environment.
+#
+#        :param env: (Gym Environment) The environment for learning a policy
+#        """
         if env is None and self.env is None:
             if self.verbose >= 1:
                 print("Loading a model without an environment, "
@@ -162,14 +162,14 @@ class BaseRLModel(ABC):
         self.ep_info_buf = None
 
     def _init_num_timesteps(self, reset_num_timesteps=True):
-        """
-        Initialize and resets num_timesteps (total timesteps since beginning of training)
-        if needed. Mainly used logging and plotting (tensorboard).
-
-        :param reset_num_timesteps: (bool) Set it to false when continuing training
-            to not create new plotting curves in tensorboard.
-        :return: (bool) Whether a new tensorboard log needs to be created
-        """
+#        """
+#        Initialize and resets num_timesteps (total timesteps since beginning of training)
+#        if needed. Mainly used logging and plotting (tensorboard).
+#
+#        :param reset_num_timesteps: (bool) Set it to false when continuing training
+#            to not create new plotting curves in tensorboard.
+#        :return: (bool) Whether a new tensorboard log needs to be created
+#        """
         if reset_num_timesteps:
             self.num_timesteps = 0
 
@@ -178,18 +178,18 @@ class BaseRLModel(ABC):
 
     @abstractmethod
     def setup_model(self):
-        """
-        Create all the functions and tensorflow graphs necessary to train the model
-        """
+#        """
+#        Create all the functions and tensorflow graphs necessary to train the model
+#        """
         pass
 
     def _init_callback(self,
                       callback: Union[None, Callable, List[BaseCallback], BaseCallback]
                       ) -> BaseCallback:
-        """
-        :param callback: (Union[None, Callable, List[BaseCallback], BaseCallback])
-        :return: (BaseCallback)
-        """
+#        """
+#        :param callback: (Union[None, Callable, List[BaseCallback], BaseCallback])
+#        :return: (BaseCallback)
+#        """
         # Convert a list of callbacks into a callback
         if isinstance(callback, list):
             callback = CallbackList(callback)
@@ -201,10 +201,10 @@ class BaseRLModel(ABC):
         return callback
 
     def set_random_seed(self, seed: Optional[int]) -> None:
-        """
-        :param seed: (Optional[int]) Seed for the pseudo-random generators. If None,
-            do not change the seeds.
-        """
+#        """
+#        :param seed: (Optional[int]) Seed for the pseudo-random generators. If None,
+#            do not change the seeds.
+#        """
         # Ignore if the seed is None
         if seed is None:
             return
@@ -218,9 +218,9 @@ class BaseRLModel(ABC):
         self.action_space.seed(seed)
 
     def _setup_learn(self):
-        """
-        Check the environment.
-        """
+#        """
+#        Check the environment.
+#        """
         if self.env is None:
             raise ValueError("Error: cannot train the model without a valid environment, please set an environment with"
                              "set_env(self, env) method.")
@@ -231,30 +231,30 @@ class BaseRLModel(ABC):
 
     @abstractmethod
     def get_parameter_list(self):
-        """
-        Get tensorflow Variables of model's parameters
-
-        This includes all variables necessary for continuing training (saving / loading).
-
-        :return: (list) List of tensorflow Variables
-        """
+#        """
+#        Get tensorflow Variables of model's parameters
+#
+#        This includes all variables necessary for continuing training (saving / loading).
+#
+#        :return: (list) List of tensorflow Variables
+#        """
         pass
 
     def get_parameters(self):
-        """
-        Get current model parameters as dictionary of variable name -> ndarray.
-
-        :return: (OrderedDict) Dictionary of variable name -> ndarray of model's parameters.
-        """
+#        """
+#        Get current model parameters as dictionary of variable name -> ndarray.
+#
+#        :return: (OrderedDict) Dictionary of variable name -> ndarray of model's parameters.
+#        """
         parameters = self.get_parameter_list()
         parameter_values = self.sess.run(parameters)
         return_dictionary = OrderedDict((param.name, value) for param, value in zip(parameters, parameter_values))
         return return_dictionary
 
     def _setup_load_operations(self):
-        """
-        Create tensorflow operations for loading model parameters
-        """
+#        """
+#        Create tensorflow operations for loading model parameters
+#        """
         # Assume tensorflow graphs are static -> check
         # that we only call this function once
         if self._param_load_ops is not None:
@@ -274,34 +274,34 @@ class BaseRLModel(ABC):
 
     @abstractmethod
     def _get_pretrain_placeholders(self):
-        """
-        Return the placeholders needed for the pretraining:
-        - obs_ph: observation placeholder
-        - actions_ph will be population with an action from the environment
-            (from the expert dataset)
-        - deterministic_actions_ph: e.g., in the case of a Gaussian policy,
-            the mean.
-
-        :return: ((tf.placeholder)) (obs_ph, actions_ph, deterministic_actions_ph)
-        """
+#        """
+#        Return the placeholders needed for the pretraining:
+#        - obs_ph: observation placeholder
+#        - actions_ph will be population with an action from the environment
+#            (from the expert dataset)
+#        - deterministic_actions_ph: e.g., in the case of a Gaussian policy,
+#            the mean.
+#
+#        :return: ((tf.placeholder)) (obs_ph, actions_ph, deterministic_actions_ph)
+#        """
         pass
 
     def pretrain(self, dataset, n_epochs=10, learning_rate=1e-4,
                  adam_epsilon=1e-8, val_interval=None):
-        """
-        Pretrain a model using behavior cloning:
-        supervised learning given an expert dataset.
-
-        NOTE: only Box and Discrete spaces are supported for now.
-
-        :param dataset: (ExpertDataset) Dataset manager
-        :param n_epochs: (int) Number of iterations on the training set
-        :param learning_rate: (float) Learning rate
-        :param adam_epsilon: (float) the epsilon value for the adam optimizer
-        :param val_interval: (int) Report training and validation losses every n epochs.
-            By default, every 10th of the maximum number of epochs.
-        :return: (BaseRLModel) the pretrained model
-        """
+#        """
+#        Pretrain a model using behavior cloning:
+#        supervised learning given an expert dataset.
+#
+#        NOTE: only Box and Discrete spaces are supported for now.
+#
+#        :param dataset: (ExpertDataset) Dataset manager
+#        :param n_epochs: (int) Number of iterations on the training set
+#        :param learning_rate: (float) Learning rate
+#        :param adam_epsilon: (float) the epsilon value for the adam optimizer
+#        :param val_interval: (int) Report training and validation losses every n epochs.
+#            By default, every 10th of the maximum number of epochs.
+#        :return: (BaseRLModel) the pretrained model
+#        """
         continuous_actions = isinstance(self.action_space, gym.spaces.Box)
         discrete_actions = isinstance(self.action_space, gym.spaces.Discrete)
 
@@ -409,52 +409,52 @@ class BaseRLModel(ABC):
 
     @abstractmethod
     def action_probability(self, observation, state=None, mask=None, actions=None, logp=False):
-        """
-        If ``actions`` is ``None``, then get the model's action probability distribution from a given observation.
-
-        Depending on the action space the output is:
-            - Discrete: probability for each possible action
-            - Box: mean and standard deviation of the action output
-
-        However if ``actions`` is not ``None``, this function will return the probability that the given actions are
-        taken with the given parameters (observation, state, ...) on this model. For discrete action spaces, it
-        returns the probability mass; for continuous action spaces, the probability density. This is since the
-        probability mass will always be zero in continuous spaces, see http://blog.christianperone.com/2019/01/
-        for a good explanation
-
-        :param observation: (np.ndarray) the input observation
-        :param state: (np.ndarray) The last states (can be None, used in recurrent policies)
-        :param mask: (np.ndarray) The last masks (can be None, used in recurrent policies)
-        :param actions: (np.ndarray) (OPTIONAL) For calculating the likelihood that the given actions are chosen by
-            the model for each of the given parameters. Must have the same number of actions and observations.
-            (set to None to return the complete action probability distribution)
-        :param logp: (bool) (OPTIONAL) When specified with actions, returns probability in log-space.
-            This has no effect if actions is None.
-        :return: (np.ndarray) the model's (log) action probability
-        """
+#        """
+#        If ``actions`` is ``None``, then get the model's action probability distribution from a given observation.
+#
+#        Depending on the action space the output is:
+#            - Discrete: probability for each possible action
+#            - Box: mean and standard deviation of the action output
+#
+#        However if ``actions`` is not ``None``, this function will return the probability that the given actions are
+#        taken with the given parameters (observation, state, ...) on this model. For discrete action spaces, it
+#        returns the probability mass; for continuous action spaces, the probability density. This is since the
+#        probability mass will always be zero in continuous spaces, see http://blog.christianperone.com/2019/01/
+#        for a good explanation
+#
+#        :param observation: (np.ndarray) the input observation
+#        :param state: (np.ndarray) The last states (can be None, used in recurrent policies)
+#        :param mask: (np.ndarray) The last masks (can be None, used in recurrent policies)
+#        :param actions: (np.ndarray) (OPTIONAL) For calculating the likelihood that the given actions are chosen by
+#            the model for each of the given parameters. Must have the same number of actions and observations.
+#            (set to None to return the complete action probability distribution)
+#        :param logp: (bool) (OPTIONAL) When specified with actions, returns probability in log-space.
+#            This has no effect if actions is None.
+#        :return: (np.ndarray) the model's (log) action probability
+#        """
         pass
 
     def load_parameters(self, load_path_or_dict, exact_match=True):
-        """
-        Load model parameters from a file or a dictionary
-
-        Dictionary keys should be tensorflow variable names, which can be obtained
-        with ``get_parameters`` function. If ``exact_match`` is True, dictionary
-        should contain keys for all model's parameters, otherwise RunTimeError
-        is raised. If False, only variables included in the dictionary will be updated.
-
-        This does not load agent's hyper-parameters.
-
-        .. warning::
-            This function does not update trainer/optimizer variables (e.g. momentum).
-            As such training after using this function may lead to less-than-optimal results.
-
-        :param load_path_or_dict: (str or file-like or dict) Save parameter location
-            or dict of parameters as variable.name -> ndarrays to be loaded.
-        :param exact_match: (bool) If True, expects load dictionary to contain keys for
-            all variables in the model. If False, loads parameters only for variables
-            mentioned in the dictionary. Defaults to True.
-        """
+#        """
+#        Load model parameters from a file or a dictionary
+#
+#        Dictionary keys should be tensorflow variable names, which can be obtained
+#        with ``get_parameters`` function. If ``exact_match`` is True, dictionary
+#        should contain keys for all model's parameters, otherwise RunTimeError
+#        is raised. If False, only variables included in the dictionary will be updated.
+#
+#        This does not load agent's hyper-parameters.
+#
+#        .. warning::
+#            This function does not update trainer/optimizer variables (e.g. momentum).
+#            As such training after using this function may lead to less-than-optimal results.
+#
+#        :param load_path_or_dict: (str or file-like or dict) Save parameter location
+#            or dict of parameters as variable.name -> ndarrays to be loaded.
+#        :param exact_match: (bool) If True, expects load dictionary to contain keys for
+#            all variables in the model. If False, loads parameters only for variables
+#            mentioned in the dictionary. Defaults to True.
+#        """
         # Make sure we have assign ops
         if self._param_load_ops is None:
             self._setup_load_operations()
@@ -513,30 +513,30 @@ class BaseRLModel(ABC):
     @classmethod
     @abstractmethod
     def load(cls, load_path, env=None, custom_objects=None, **kwargs):
-        """
-        Load the model from file
-
-        :param load_path: (str or file-like) the saved parameter location
-        :param env: (Gym Environment) the new environment to run the loaded model on
-            (can be None if you only need prediction from a trained model)
-        :param custom_objects: (dict) Dictionary of objects to replace
-            upon loading. If a variable is present in this dictionary as a
-            key, it will not be deserialized and the corresponding item
-            will be used instead. Similar to custom_objects in
-            `keras.models.load_model`. Useful when you have an object in
-            file that can not be deserialized.
-        :param kwargs: extra arguments to change the model when loading
-        """
+#        """
+#        Load the model from file
+#
+#        :param load_path: (str or file-like) the saved parameter location
+#        :param env: (Gym Environment) the new environment to run the loaded model on
+#            (can be None if you only need prediction from a trained model)
+#        :param custom_objects: (dict) Dictionary of objects to replace
+#            upon loading. If a variable is present in this dictionary as a
+#            key, it will not be deserialized and the corresponding item
+#            will be used instead. Similar to custom_objects in
+#            `keras.models.load_model`. Useful when you have an object in
+#            file that can not be deserialized.
+#        :param kwargs: extra arguments to change the model when loading
+#        """
         raise NotImplementedError()
 
     @staticmethod
     def _save_to_file_cloudpickle(save_path, data=None, params=None):
-        """Legacy code for saving models with cloudpickle
-
-        :param save_path: (str or file-like) Where to store the model
-        :param data: (OrderedDict) Class parameters being stored
-        :param params: (OrderedDict) Model parameters being stored
-        """
+#        """Legacy code for saving models with cloudpickle
+#
+#        :param save_path: (str or file-like) Where to store the model
+#        :param data: (OrderedDict) Class parameters being stored
+#        :param params: (OrderedDict) Model parameters being stored
+#        """
         if isinstance(save_path, str):
             _, ext = os.path.splitext(save_path)
             if ext == "":
@@ -550,12 +550,12 @@ class BaseRLModel(ABC):
 
     @staticmethod
     def _save_to_file_zip(save_path, data=None, params=None):
-        """Save model to a .zip archive
-
-        :param save_path: (str or file-like) Where to store the model
-        :param data: (OrderedDict) Class parameters being stored
-        :param params: (OrderedDict) Model parameters being stored
-        """
+#        """Save model to a .zip archive
+#
+#        :param save_path: (str or file-like) Where to store the model
+#        :param data: (OrderedDict) Class parameters being stored
+#        :param params: (OrderedDict) Model parameters being stored
+#        """
         # data/params can be None, so do not
         # try to serialize them blindly
         if data is not None:
@@ -590,14 +590,14 @@ class BaseRLModel(ABC):
 
     @staticmethod
     def _save_to_file(save_path, data=None, params=None, cloudpickle=False):
-        """Save model to a zip archive or cloudpickle file.
-
-        :param save_path: (str or file-like) Where to store the model
-        :param data: (OrderedDict) Class parameters being stored
-        :param params: (OrderedDict) Model parameters being stored
-        :param cloudpickle: (bool) Use old cloudpickle format
-            (stable-baselines<=2.7.0) instead of a zip archive.
-        """
+#        """Save model to a zip archive or cloudpickle file.
+#
+#        :param save_path: (str or file-like) Where to store the model
+#        :param data: (OrderedDict) Class parameters being stored
+#        :param params: (OrderedDict) Model parameters being stored
+#        :param cloudpickle: (bool) Use old cloudpickle format
+#            (stable-baselines<=2.7.0) instead of a zip archive.
+#        """
         if cloudpickle:
             BaseRLModel._save_to_file_cloudpickle(save_path, data, params)
         else:
@@ -980,26 +980,26 @@ class OffPolicyRLModel(BaseRLModel):
         self.replay_buffer = replay_buffer
 
     def is_using_her(self) -> bool:
-        """
-        Check if is using HER
-
-        :return: (bool) Whether is using HER or not
-        """
+#        """
+#        Check if is using HER
+#
+#        :return: (bool) Whether is using HER or not
+#        """
         # Avoid circular import
         from neorl.rl.baselines.deepq.replay_buffer import HindsightExperienceReplayWrapper
         return isinstance(self.replay_buffer, HindsightExperienceReplayWrapper)
 
     def replay_buffer_add(self, obs_t, action, reward, obs_tp1, done, info):
-        """
-        Add a new transition to the replay buffer
-
-        :param obs_t: (np.ndarray) the last observation
-        :param action: ([float]) the action
-        :param reward: (float) the reward of the transition
-        :param obs_tp1: (np.ndarray) the new observation
-        :param done: (bool) is the episode done
-        :param info: (dict) extra values used to compute the reward when using HER
-        """
+#        """
+#        Add a new transition to the replay buffer
+#
+#        :param obs_t: (np.ndarray) the last observation
+#        :param action: ([float]) the action
+#        :param reward: (float) the reward of the transition
+#        :param obs_tp1: (np.ndarray) the new observation
+#        :param done: (bool) is the episode done
+#        :param info: (dict) extra values used to compute the reward when using HER
+#        """
         # Pass info dict when using HER, as it can be used to compute the reward
         kwargs = dict(info=info) if self.is_using_her() else {}
         self.replay_buffer.add(obs_t, action, reward, obs_tp1, float(done), **kwargs)

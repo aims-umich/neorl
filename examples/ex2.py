@@ -15,7 +15,7 @@ def ACKLEY(individual):
     d = len(individual)
     f=20 - 20 * exp(-0.2*sqrt(1.0/d * sum(x**2 for x in individual))) \
             + exp(1) - exp(1.0/d * sum(cos(2*pi*x) for x in individual))
-    return -f   #-1 to convert to maximization problem
+    return f
 
 #---------------------------------
 # Parameter Space
@@ -31,31 +31,33 @@ for i in range(1,d+1):
 #---------------------------------
 # PSO
 #---------------------------------
-pso=PSO(bounds=BOUNDS, fit=ACKLEY, npar=60, c1=2.05, c2=2.1, speed_mech='constric', seed=1)
-x_best, y_best, pso_hist=pso.evolute(ngen=120, verbose=0)
+pso=PSO(mode='min', bounds=BOUNDS, fit=ACKLEY, npar=60, 
+        c1=2.05, c2=2.1, speed_mech='constric', seed=1)
+x_best, y_best, pso_hist=pso.evolute(ngen=120, verbose=1)
 
 #---------------------------------
 # DE
 #---------------------------------
-de=DE(bounds=BOUNDS, fit=ACKLEY, npop=60, F=0.5, CR=0.7, ncores=1, seed=1)
-x_best, y_best, de_hist=de.evolute(ngen=120, verbose=0)
+de=DE(mode='min', bounds=BOUNDS, fit=ACKLEY, npop=60, 
+      F=0.5, CR=0.7, ncores=1, seed=1)
+x_best, y_best, de_hist=de.evolute(ngen=120, verbose=1)
 
 #---------------------------------
 # NES
 #---------------------------------
-x0=[-18]*d
-amat = np.eye(len(x0))
-xnes = XNES(ACKLEY, x0, amat, npop=80, bounds=BOUNDS, use_adasam=True, eta_bmat=0.04, eta_sigma=0.1, patience=9999, verbose=0, ncores=1)
-x_best, y_best, nes_hist=xnes.evolute(120)
+amat = np.eye(d)
+xnes = XNES(mode='min', fit=ACKLEY, bounds=BOUNDS, A=amat, npop=60, 
+            eta_Bmat=0.04, eta_sigma=0.1, adapt_sampling=True, ncores=1, seed=1)
+x_best, y_best, nes_hist=xnes.evolute(120, verbose=1)
 
 #---------------------------------
 # Plot
 #---------------------------------
 #Plot fitness for both methods
 plt.figure()
-plt.plot(-np.array(pso_hist), label='PSO')             #multiply by -1 to covert back to a min problem
-plt.plot(-np.array(de_hist), label='DE')               #multiply by -1 to covert back to a min problem
-plt.plot(-np.array(nes_hist['fitness']), label='NES')  #multiply by -1 to covert back to a min problem
+plt.plot(np.array(pso_hist), label='PSO')           
+plt.plot(np.array(de_hist), label='DE')            
+plt.plot(np.array(nes_hist['fitness']), label='NES')
 plt.xlabel('Generation')
 plt.ylabel('Fitness')
 plt.legend()

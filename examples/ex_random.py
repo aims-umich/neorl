@@ -8,7 +8,7 @@ from neorl import ES
 #Define the fitness function (for original optimisation)
 def sphere(individual):
     y=sum(x**2 for x in individual)
-    return -y  #-1 to convert min to max problem
+    return y
 
 #*************************************************************
 # Part II: Define fitness function for hyperparameter tuning
@@ -22,7 +22,7 @@ def tune_fit(cxpb, mu, alpha, cxmode):
         BOUNDS['x'+str(i)]=['float', -100, 100]
 
     #--setup the ES algorithm
-    es=ES(bounds=BOUNDS, fit=sphere, lambda_=80, mu=mu, mutpb=0.1, alpha=alpha,
+    es=ES(mode='min', bounds=BOUNDS, fit=sphere, lambda_=80, mu=mu, mutpb=0.1, alpha=alpha,
          cxmode=cxmode, cxpb=cxpb, ncores=1, seed=1)
 
     #--Evolute the ES object and obtains y_best
@@ -49,5 +49,5 @@ rtune=RANDTUNE(param_grid=param_grid, fit=tune_fit, ncases=25, seed=1)
 #view the generated cases before running them
 print(rtune.hyperparameter_cases)
 #tune the parameters with method .tune
-randres=rtune.tune(ncores=4, csvname='tune.csv')
-print(randres)   #the results are saved in dataframe and ranked from best to worst
+randres=rtune.tune(ncores=1, csvname='tune.csv')
+print(randres)

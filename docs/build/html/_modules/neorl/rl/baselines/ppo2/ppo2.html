@@ -104,9 +104,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../modules/a2c.html">Advantage Actor Critic (A2C)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../modules/dqn.html">Deep Q Learning (DQN)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../modules/ppo2.html">Proximal Policy Optimisation (PPO)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../modules/es.html">Evolution Strategies (ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules/es.html">Evolution Strategies (<span class="math notranslate nohighlight">\(\mu,\lambda\)</span>) (ES)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../modules/pso.html">Particle Swarm Optimisation (PSO)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../modules/de.html">Differential Evolution (DE)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules/xnes.html">Exponential Natural Evolution Strategies (XNES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules/gwo.html">Grey Wolf Optimizer (GWO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules/pesa.html">Prioritized replay Evolutionary and Swarm Algorithm (PESA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules/pesa2.html">Modern PESA (PESA2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules/sa.html">Simulated Annealing (SA)</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
 <ul>
@@ -300,7 +305,7 @@
             <span class="k">return</span> <span class="n">policy</span><span class="o">.</span><span class="n">obs_ph</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_ph</span><span class="p">,</span> <span class="n">policy</span><span class="o">.</span><span class="n">policy</span>
         <span class="k">return</span> <span class="n">policy</span><span class="o">.</span><span class="n">obs_ph</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_ph</span><span class="p">,</span> <span class="n">policy</span><span class="o">.</span><span class="n">deterministic_action</span>
 
-<div class="viewcode-block" id="PPO2.setup_model"><a class="viewcode-back" href="../../../../../modules/ppo2.html#neorl.rl.baselines.ppo2.PPO2.setup_model">[docs]</a>    <span class="k">def</span> <span class="nf">setup_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">setup_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">with</span> <span class="n">SetVerbosity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">):</span>
 
             <span class="k">assert</span> <span class="nb">issubclass</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="p">,</span> <span class="n">ActorCriticPolicy</span><span class="p">),</span> <span class="s2">&quot;Error: the input policy for the PPO2 model must be &quot;</span> \
@@ -433,7 +438,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">initial_state</span> <span class="o">=</span> <span class="n">act_model</span><span class="o">.</span><span class="n">initial_state</span>
                 <span class="n">tf</span><span class="o">.</span><span class="n">global_variables_initializer</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sess</span><span class="p">)</span>  <span class="c1"># pylint: disable=E1101</span>
 
-                <span class="bp">self</span><span class="o">.</span><span class="n">summary</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">summary</span><span class="o">.</span><span class="n">merge_all</span><span class="p">()</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">summary</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">summary</span><span class="o">.</span><span class="n">merge_all</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_train_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">,</span> <span class="n">cliprange</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">returns</span><span class="p">,</span> <span class="n">masks</span><span class="p">,</span> <span class="n">actions</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">neglogpacs</span><span class="p">,</span> <span class="n">update</span><span class="p">,</span>
                     <span class="n">writer</span><span class="p">,</span> <span class="n">states</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cliprange_vf</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>

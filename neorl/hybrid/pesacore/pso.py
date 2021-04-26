@@ -186,7 +186,7 @@ class PSOMod:
         """
         Worker for pool process, just to run the fitness function
         """
-        return self.fit(inp[0],inp[1])
+        return self.fit(inp[0])
 
     def select(self, pop, k=1):
         """
@@ -334,7 +334,7 @@ class PSOMod:
             else: 
                 for par in range(len(offspring)):
                     if caseids:
-                        fitness=self.fit(offspring[par][0],caseids[case_idx])
+                        fitness=self.fit(offspring[par][0])
                         case_idx+=1
                     else:
                         fitness=self.fit(offspring[par][0])

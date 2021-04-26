@@ -285,21 +285,21 @@ class InputChecker(InputParser):
                 parser['xsize_plot'] = parser['xsize']
                 print ('--warning: xsize_plot is set to equal to xsize ---> {}'.format(parser['xsize_plot']))
             
-            if "exepath" in parser.keys():
-                
-                print ('--debug: checking the exepath')
-                if os.path.isdir(parser['exepath']):
-                    raise Exception ('--error: the user provided a path for directory not to exefile --> {} --> not complete'.format(parser['exepath']))
-                execheck=os.system('which {}'.format(parser['exepath']))
-                if os.path.exists(parser['exepath']):
-                    print('--debug: User provided absolute directory and the binary file reported in {} exists'.format(parser['exepath']))
-                elif (execheck==0):
-                    exeinfer=subprocess.check_output(['which', str(parser['exepath'])])
-                    parser['exepath']=exeinfer.decode('utf-8').strip()
-                    print('--debug: neorl tried to infer the exepath via which and found {}'.format(parser['exepath']))
-                else:
-                    raise Exception ('--error: The binary file reported in {} cannot be found'.format(parser['exepath']))
-                    
+#            if "exepath" in parser.keys():
+#                
+#                print ('--debug: checking the exepath')
+#                if os.path.isdir(parser['exepath']):
+#                    raise Exception ('--error: the user provided a path for directory not to exefile --> {} --> not complete'.format(parser['exepath']))
+#                execheck=os.system('which {}'.format(parser['exepath']))
+#                if os.path.exists(parser['exepath']):
+#                    print('--debug: User provided absolute directory and the binary file reported in {} exists'.format(parser['exepath']))
+#                elif (execheck==0):
+#                    exeinfer=subprocess.check_output(['which', str(parser['exepath'])])
+#                    parser['exepath']=exeinfer.decode('utf-8').strip()
+#                    print('--debug: neorl tried to infer the exepath via which and found {}'.format(parser['exepath']))
+#                else:
+#                    raise Exception ('--error: The binary file reported in {} cannot be found'.format(parser['exepath']))
+#                    
             #------------------------------------
             #check availability of GYM env
             #------------------------------------

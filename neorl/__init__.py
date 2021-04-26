@@ -19,7 +19,7 @@ Copyright © 2021 Exelon Corporation (https://www.exeloncorp.com/) in collaborat
 
                        \n"""
                        
-print(logo)
+#print(logo)
 
 import os
 
@@ -32,7 +32,9 @@ from neorl.evolu.sa import SA
 from neorl.evolu.de import DE
 from neorl.evolu.xnes import XNES
 from neorl.evolu.es import ES
-#from neorl.hybrid.pesa import PESA
+from neorl.evolu.gwo import GWO
+from neorl.hybrid.pesa import PESA
+from neorl.hybrid.pesa2 import PESA2
 from neorl.rl.baselines.shared.policies import MlpPolicy
 from neorl.rl.baselines.deepq.policies import MlpPolicy as DQNPolicy
 from neorl.utils.neorlcalls import RLLogger

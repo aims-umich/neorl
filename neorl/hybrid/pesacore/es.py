@@ -83,7 +83,7 @@ class ESMod:
         strategy = [random.uniform(self.smin,self.smax) for _ in range(size)]
         return ind, strategy
 
-    def init_pop(self, warmup=100):
+    def init_pop(self, warmup=100, x_known=None):
         """
         Population intializer 
         Inputs:
@@ -106,7 +106,10 @@ class ESMod:
         for i in range (warmup):
             caseid='es_gen{}_ind{}'.format(0,i+1)  #caseid are only for logging purposes to distinguish sample source
             data=self.GenES(self.bounds)
-            pop[i].append(data[0])
+            if x_known:
+                pop[i].append(x_known[i])
+            else:
+                pop[i].append(data[0])
             pop[i].append(data[1])
         
         if self.ncores > 1:  #evaluate warmup in parallel
@@ -124,7 +127,7 @@ class ESMod:
         else: #evaluate warmup in series
             for key in pop:
                 caseid='es_gen{}_ind{}'.format(0,key+1)
-                fitness=self.fit(pop[key][0],caseid)
+                fitness=self.fit(pop[key][0])
                 pop[key].append(fitness)
         
         return pop  #return final pop dictionary with ind, strategy, and fitness
@@ -137,7 +140,7 @@ class ESMod:
         Returns:
             fitness value (float)
         """
-        return self.fit(inp[0],inp[1])
+        return self.fit(inp[0])
 
     def select(self, pop, k=1):
         """
@@ -251,9 +254,8 @@ class ESMod:
             #--------------------------
             elif datatype[i] == 'float':
                 norm=random.gauss(0,1)
-                if random.random() < self.indpb:  #this is to indicate whether ind/strategy to be mutated for this float variable
-                    strat[i] *= np.exp(tau*norm + tau_prime * random.gauss(0, 1)) #normal mutation of strategy
-                    ind[i] += strat[i] * random.gauss(0, 1) # update the individual position
+                strat[i] *= np.exp(tau*norm + tau_prime * random.gauss(0, 1)) #normal mutation of strategy
+                ind[i] += strat[i] * random.gauss(0, 1) # update the individual position
                 
                 #check the new individual falls within lower/upper boundaries
                 if ind[i] < lb[i]:
@@ -359,7 +361,7 @@ class ESMod:
                 
                 for ind in range(len(offspring)):
                     if caseids:
-                        fitness=self.fit(offspring[ind][0],caseids[case_idx])
+                        fitness=self.fit(offspring[ind][0])
                         case_idx+=1
                     else:
                         fitness=self.fit(offspring[ind][0])

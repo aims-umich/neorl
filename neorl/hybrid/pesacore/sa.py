@@ -157,13 +157,13 @@ class SAMod(ExperienceReplay):
             
             if random.random() < self.replay_rate and self._memory: #replay memory
                 x, E, _=self._memory.sample(batch_size=1, mode='greedy', seed=core_seed)[0]
-                E=self.fit(x=x,caseid='sa_case'+str(int(k)), dontcall=E)
+                E=self.fit(x)
                 #if core_seed==1 or core_seed==10:
                 #    print('memory sample {}, step {}, E {}'.format(core_seed, k, np.round(E,2)))
             else: #random-walk
                 x=copy.deepcopy(self.move(x=x_prev,chi=self.chi[core_seed-1]))
                 #SA is programmed to maximize reward
-                E=self.fit(x=x,caseid='sa_case'+str(int(k)))
+                E=self.fit(x)
             
             dE = E - E_prev        
             #-----------------------------------

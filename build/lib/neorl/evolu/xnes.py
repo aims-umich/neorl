@@ -1,48 +1,68 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Thu Dec  3 14:42:29 2020
+#"""
+#Created on Thu Dec  3 14:42:29 2020
+#
+#@author: Majdi
+#"""
 
-@author: Majdi
-"""
 
-"""
-xNES from 'Natural Evolution Strategies'
-if n_jobs>1, I suggest using "export MKL_NUM_THREADS=1"
-See at the bottom (under __main__) for an example of usage
-"""
+from scipy import dot, eye, randn, asarray, array, trace, log, exp, sqrt 
+from scipy import mean, sum, argsort, arange
+from scipy.stats import multivariate_normal, norm
+from scipy.linalg import det, expm
 import joblib
 import random
 import numpy as np
-
-import scipy as sp
-from scipy import (dot, eye, randn, asarray, array, trace, log, exp, sqrt, mean, sum, argsort, square, arange)
-from scipy.stats import multivariate_normal, norm
-from scipy.linalg import (det, expm)
-import pandas as pd
 import copy
 
 class XNES(object):
-    def __init__(self, f, mu, amat, bounds,
-                 eta_mu=1.0, eta_sigma=None, eta_bmat=None,
-                 npop=None, use_fshape=True, use_adasam=False, patience=100, ncores=1, verbose=True, seed=None):
+    """
+    Exponential Natural Evolution Strategies
+    
+    :param mode: (str) problem type, either "min" for minimization problem or "max" for maximization
+    :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: ``bounds={'x1': ['int', 1, 4], 'x2': ['float', 0.1, 0.8], 'x3': ['float', 2.2, 6.2]}``
+    :param fit: (function) the fitness function 
+    :param npop: (int) total number of individuals in the population (default: if None, it will make an approximation, see **Notes** below)
+    :param A: (np.array): initial guess of the covariance matrix A (default: identity matrix, see **Notes** below)
+    :param eta_mu: (float) learning rate for updating the center of the search distribution ``mu`` (see **Notes** below)
+    :param eta_sigma: (float) learning rate for updating the step size ``sigma`` (default: if None, it will make an approximation, see **Notes** below)
+    :param eta_Bmat: (float) learning rate for updating the normalized transformation matrix ``B``  (default: if None, it will make an approximation, see **Notes** below)
+    :param adapt_sampling: (bool): activate the adaption sampling option
+    :param ncores: (int) number of parallel processors
+    :param seed: (int) random seed for sampling
+    """
+    def __init__(self, mode, bounds, fit, A=None, npop=None,
+                 eta_mu=1.0, eta_sigma=None, eta_Bmat=None, 
+                 adapt_sampling=False, ncores=1, seed=None):
         
         if seed:
             random.seed(seed)
             np.random.seed(seed)
+            
         self.seed=seed
-        
+        patience=100
         self.fitness_hom=-np.inf
-
-        self.f = f
-        self.mu = mu
+        
+        #--mir
+        self.mode=mode
+        if mode == 'max':
+            self.f=fit
+        elif mode == 'min':
+            def fitness_wrapper(*args, **kwargs):
+                return -fit(*args, **kwargs) 
+            self.f=fitness_wrapper
+        else:
+            raise ValueError('--error: The mode entered by user is invalid, use either `min` or `max`')
+            
         self.eta_mu = eta_mu
-        self.use_adasam = use_adasam
+        self.use_adasam = adapt_sampling
         self.ncores = ncores
         self.bounds=bounds
 
-        dim = len(mu)
-        sigma = abs(det(amat))**(1.0/dim)
-        bmat = amat*(1.0/sigma)
+        dim = len(bounds)
+        A = np.eye(dim) if A is None else A
+        sigma = abs(det(A))**(1.0/dim)
+        bmat = A*(1.0/sigma)
         self.dim = dim
         self.sigma = sigma
         self.bmat = bmat
@@ -50,11 +70,12 @@ class XNES(object):
         # default population size and learning rates
         npop = int(4 + 3*log(dim)) if npop is None else npop
         eta_sigma = 3*(3+log(dim))*(1.0/(5*dim*sqrt(dim))) if eta_sigma is None else eta_sigma
-        eta_bmat = 3*(3+log(dim))*(1.0/(5*dim*sqrt(dim))) if eta_bmat is None else eta_bmat
+        eta_Bmat = 3*(3+log(dim))*(1.0/(5*dim*sqrt(dim))) if eta_Bmat is None else eta_Bmat
         self.npop = npop
         self.eta_sigma = eta_sigma
-        self.eta_bmat = eta_bmat
-
+        self.eta_bmat = eta_Bmat
+        
+        use_fshape=True
         # compute utilities if using fitness shaping
         if use_fshape:
             a = log(1+0.5*npop)
@@ -78,13 +99,27 @@ class XNES(object):
         self.counter = 0
         self.patience = patience
         self.history = {'eta_sigma':[], 'sigma':[], 'fitness':[]}
-        self.verbose=verbose
+        
 
-        # do not use these when hill-climbing
+        # do not use options below when one individual in population is used
         if npop == 1:
             self.use_fshape = False
             self.use_adasam = False
 
+    def init_sample(self, bounds):
+    
+        indv=[]
+        for key in bounds:
+            if bounds[key][0] == 'int':
+                indv.append(random.randint(bounds[key][1], bounds[key][2]))
+            elif bounds[key][0] == 'float':
+                indv.append(random.uniform(bounds[key][1], bounds[key][2]))
+            elif bounds[key][0] == 'grid':
+                indv.append(random.sample(bounds[key][1],1)[0])
+            else:
+                raise Exception ('unknown data type is given, either int, float, or grid are allowed for parameter bounds')   
+        return indv
+    
     def ensure_bounds(self, vec, bounds):
     
         vec_new = []
@@ -105,9 +140,23 @@ class XNES(object):
             
         return vec_new
 
-    def evolute(self, niter):
-        """ xNES """
+    def evolute(self, ngen, x0=None, verbose=True):
+        """
+        This function evolutes the XNES algorithm for number of generations.
+        
+        :param ngen: (int) number of generations to evolute
+        :param x0: (list) initial guess for the search (must be of same size as ``len(bounds)``)
+        :param verbose: (bool) print statistics to screen
+        
+        :return: (dict) dictionary containing major XNES search results
+        """
         f = self.f
+        self.verbose=verbose
+        if x0:
+            assert len(x0) == self.dim, 'the length of x0 ({}) MUST equal the number of parameters in bounds ({})'.format(len(x0), self.dim)
+            self.mu=x0
+        else:
+            self.mu=self.init_sample(self.bounds)
         mu, sigma, bmat = self.mu, self.sigma, self.bmat
         eta_mu, eta_sigma, eta_bmat = self.eta_mu, self.eta_sigma, self.eta_bmat
         npop = self.npop
@@ -118,7 +167,7 @@ class XNES(object):
 
         with joblib.Parallel(n_jobs=self.ncores) as parallel:
 
-            for i in range(niter):
+            for i in range(ngen):
                 s_try = randn(npop, dim)
                 z_try = mu + sigma * dot(s_try, bmat)     # broadcast
                 
@@ -149,9 +198,9 @@ class XNES(object):
                 else: 
                     self.counter += 1
                     
-                if self.counter > self.patience:
-                    self.done = True
-                    return
+                #if self.counter > self.patience:
+                #    self.done = True
+                #    return
                 
                 u_try = self.utilities if self.use_fshape else f_try
 
@@ -174,14 +223,20 @@ class XNES(object):
                 self.history['fitness'].append(self.fitness_best)
                 self.history['sigma'].append(sigma)
                 self.history['eta_sigma'].append(eta_sigma)
+                
+                #--mir
+                if self.mode=='min':
+                    self.fitness_best_correct=-self.fitness_best
+                else:
+                    self.fitness_best_correct=self.fitness_best
 
                 # Print data
                 if self.verbose and i % self.npop:
                     print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
-                    print('NES step {}/{}, NPOP={}, ETA_MU={}, ETA_SIGMA={}, ETA_BMAT={}, Ncores={}'.format((i+1)*self.npop, niter*self.npop, self.npop, np.round(self.eta_mu,2), np.round(self.eta_sigma,2), np.round(self.eta_bmat,2), self.ncores))
+                    print('XNES step {}/{}, NPOP={}, ETA_MU={}, ETA_SIGMA={}, ETA_BMAT={}, Ncores={}'.format((i+1)*self.npop, ngen*self.npop, self.npop, np.round(self.eta_mu,2), np.round(self.eta_sigma,2), np.round(self.eta_bmat,2), self.ncores))
                     print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
-                    print('Best Swarm Fitness:', np.round(self.fitness_best,6))
-                    print('Best Swarm Position:', np.round(self.x_best,6))
+                    print('Best XNES Fitness:', np.round(self.fitness_best_correct,6))
+                    print('Best XNES Position:', np.round(self.x_best,6))
                     print('MU:', np.round(mu,3))
                     print('Sigma:', np.round(sigma,3))
                     print('BMAT:', np.round(bmat,3))
@@ -192,15 +247,20 @@ class XNES(object):
         self.eta_sigma = eta_sigma
         self.sigma_old = sigma_old
         
-        print('------------------------ NES Summary --------------------------')
-        print('Best fitness (y) found:', self.fitness_best)
-        print('Best individual (x) found:', self.x_best)
-        print('--------------------------------------------------------------')  
-        
-        return self.x_best, self.fitness_best, self.history
+        if self.verbose:
+            print('------------------------ NES Summary --------------------------')
+            print('Best fitness (y) found:', self.fitness_best_correct)
+            print('Best individual (x) found:', self.x_best)
+            print('--------------------------------------------------------------')  
+
+        #--mir
+        if self.mode=='min':
+            self.history['fitness']=[-item for item in self.history['fitness']]
+            
+        return self.x_best, self.fitness_best_correct, self.history
 
     def adasam(self, eta_sigma, mu, sigma, bmat, sigma_old, z_try):
-        """ Adaptation sampling """
+        #Adaptation sampling
         eta_sigma_init = self.eta_sigma_init
         dim = self.dim
         c = .1

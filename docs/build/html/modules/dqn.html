@@ -112,9 +112,14 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="ppo2.html">Proximal Policy Optimisation (PPO)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="es.html">Evolution Strategies (ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="es.html">Evolution Strategies (<span class="math notranslate nohighlight">\(\mu,\lambda\)</span>) (ES)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pso.html">Particle Swarm Optimisation (PSO)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="de.html">Differential Evolution (DE)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xnes.html">Exponential Natural Evolution Strategies (XNES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gwo.html">Grey Wolf Optimizer (GWO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pesa.html">Prioritized replay Evolutionary and Swarm Algorithm (PESA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pesa2.html">Modern PESA (PESA2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sa.html">Simulated Annealing (SA)</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
 <ul>
@@ -346,98 +351,6 @@ If None, the number of cpu of the current machine will be used.</p></li>
 </dd>
 </dl>
 <dl class="py method">
-<dt id="neorl.rl.baselines.deepq.DQN.action_probability">
-<code class="sig-name descname"><span class="pre">action_probability</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">observation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/rl/baselines/deepq/dqn.html#DQN.action_probability"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.rl.baselines.deepq.DQN.action_probability" title="Permalink to this definition">¶</a></dt>
-<dd><p>If <code class="docutils literal notranslate"><span class="pre">actions</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code>, then get the model’s action probability distribution from a given observation.</p>
-<dl class="simple">
-<dt>Depending on the action space the output is:</dt><dd><ul class="simple">
-<li><p>Discrete: probability for each possible action</p></li>
-<li><p>Box: mean and standard deviation of the action output</p></li>
-</ul>
-</dd>
-</dl>
-<p>However if <code class="docutils literal notranslate"><span class="pre">actions</span></code> is not <code class="docutils literal notranslate"><span class="pre">None</span></code>, this function will return the probability that the given actions are
-taken with the given parameters (observation, state, …) on this model. For discrete action spaces, it
-returns the probability mass; for continuous action spaces, the probability density. This is since the
-probability mass will always be zero in continuous spaces, see <a class="reference external" href="http://blog.christianperone.com/2019/01/">http://blog.christianperone.com/2019/01/</a>
-for a good explanation</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>observation</strong> – (np.ndarray) the input observation</p></li>
-<li><p><strong>state</strong> – (np.ndarray) The last states (can be None, used in recurrent policies)</p></li>
-<li><p><strong>mask</strong> – (np.ndarray) The last masks (can be None, used in recurrent policies)</p></li>
-<li><p><strong>actions</strong> – (np.ndarray) (OPTIONAL) For calculating the likelihood that the given actions are chosen by
-the model for each of the given parameters. Must have the same number of actions and observations.
-(set to None to return the complete action probability distribution)</p></li>
-<li><p><strong>logp</strong> – (bool) (OPTIONAL) When specified with actions, returns probability in log-space.
-This has no effect if actions is None.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>(np.ndarray) the model’s (log) action probability</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="neorl.rl.baselines.deepq.DQN.get_env">
-<code class="sig-name descname"><span class="pre">get_env</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#neorl.rl.baselines.deepq.DQN.get_env" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns the current environment (can be None if not defined)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>(Gym Environment) The current environment</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="neorl.rl.baselines.deepq.DQN.get_parameter_list">
-<code class="sig-name descname"><span class="pre">get_parameter_list</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/rl/baselines/deepq/dqn.html#DQN.get_parameter_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.rl.baselines.deepq.DQN.get_parameter_list" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get tensorflow Variables of model’s parameters</p>
-<p>This includes all variables necessary for continuing training (saving / loading).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>(list) List of tensorflow Variables</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="neorl.rl.baselines.deepq.DQN.get_parameters">
-<code class="sig-name descname"><span class="pre">get_parameters</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#neorl.rl.baselines.deepq.DQN.get_parameters" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get current model parameters as dictionary of variable name -&gt; ndarray.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>(OrderedDict) Dictionary of variable name -&gt; ndarray of model’s parameters.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="neorl.rl.baselines.deepq.DQN.get_vec_normalize_env">
-<code class="sig-name descname"><span class="pre">get_vec_normalize_env</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">neorl.rl.baselines.shared.vec_env.vec_normalize.VecNormalize</span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#neorl.rl.baselines.deepq.DQN.get_vec_normalize_env" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the <code class="docutils literal notranslate"><span class="pre">VecNormalize</span></code> wrapper of the training env
-if it exists.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Optional[VecNormalize] The <code class="docutils literal notranslate"><span class="pre">VecNormalize</span></code> env.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="neorl.rl.baselines.deepq.DQN.is_using_her">
-<code class="sig-name descname"><span class="pre">is_using_her</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="headerlink" href="#neorl.rl.baselines.deepq.DQN.is_using_her" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check if is using HER</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>(bool) Whether is using HER or not</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt id="neorl.rl.baselines.deepq.DQN.learn">
 <code class="sig-name descname"><span class="pre">learn</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">total_timesteps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_log_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DQN'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reset_num_timesteps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replay_wrapper</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/rl/baselines/deepq/dqn.html#DQN.learn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.rl.baselines.deepq.DQN.learn" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a trained model.</p>
@@ -485,33 +398,6 @@ file that can not be deserialized.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt id="neorl.rl.baselines.deepq.DQN.load_parameters">
-<code class="sig-name descname"><span class="pre">load_parameters</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">load_path_or_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exact_match</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neorl.rl.baselines.deepq.DQN.load_parameters" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load model parameters from a file or a dictionary</p>
-<p>Dictionary keys should be tensorflow variable names, which can be obtained
-with <code class="docutils literal notranslate"><span class="pre">get_parameters</span></code> function. If <code class="docutils literal notranslate"><span class="pre">exact_match</span></code> is True, dictionary
-should contain keys for all model’s parameters, otherwise RunTimeError
-is raised. If False, only variables included in the dictionary will be updated.</p>
-<p>This does not load agent’s hyper-parameters.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>This function does not update trainer/optimizer variables (e.g. momentum).
-As such training after using this function may lead to less-than-optimal results.</p>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>load_path_or_dict</strong> – (str or file-like or dict) Save parameter location
-or dict of parameters as variable.name -&gt; ndarrays to be loaded.</p></li>
-<li><p><strong>exact_match</strong> – (bool) If True, expects load dictionary to contain keys for
-all variables in the model. If False, loads parameters only for variables
-mentioned in the dictionary. Defaults to True.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt id="neorl.rl.baselines.deepq.DQN.predict">
 <code class="sig-name descname"><span class="pre">predict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">observation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deterministic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/rl/baselines/deepq/dqn.html#DQN.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.rl.baselines.deepq.DQN.predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the model’s action from an observation</p>
@@ -531,47 +417,6 @@ mentioned in the dictionary. Defaults to True.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt id="neorl.rl.baselines.deepq.DQN.pretrain">
-<code class="sig-name descname"><span class="pre">pretrain</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adam_epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neorl.rl.baselines.deepq.DQN.pretrain" title="Permalink to this definition">¶</a></dt>
-<dd><p>Pretrain a model using behavior cloning:
-supervised learning given an expert dataset.</p>
-<p>NOTE: only Box and Discrete spaces are supported for now.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dataset</strong> – (ExpertDataset) Dataset manager</p></li>
-<li><p><strong>n_epochs</strong> – (int) Number of iterations on the training set</p></li>
-<li><p><strong>learning_rate</strong> – (float) Learning rate</p></li>
-<li><p><strong>adam_epsilon</strong> – (float) the epsilon value for the adam optimizer</p></li>
-<li><p><strong>val_interval</strong> – (int) Report training and validation losses every n epochs.
-By default, every 10th of the maximum number of epochs.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>(BaseRLModel) the pretrained model</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="neorl.rl.baselines.deepq.DQN.replay_buffer_add">
-<code class="sig-name descname"><span class="pre">replay_buffer_add</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs_t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">action</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reward</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obs_tp1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">done</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neorl.rl.baselines.deepq.DQN.replay_buffer_add" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a new transition to the replay buffer</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>obs_t</strong> – (np.ndarray) the last observation</p></li>
-<li><p><strong>action</strong> – ([float]) the action</p></li>
-<li><p><strong>reward</strong> – (float) the reward of the transition</p></li>
-<li><p><strong>obs_tp1</strong> – (np.ndarray) the new observation</p></li>
-<li><p><strong>done</strong> – (bool) is the episode done</p></li>
-<li><p><strong>info</strong> – (dict) extra values used to compute the reward when using HER</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt id="neorl.rl.baselines.deepq.DQN.save">
 <code class="sig-name descname"><span class="pre">save</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cloudpickle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/rl/baselines/deepq/dqn.html#DQN.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.rl.baselines.deepq.DQN.save" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save the current parameters to file</p>
@@ -583,34 +428,6 @@ By default, every 10th of the maximum number of epochs.</p></li>
 </ul>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="neorl.rl.baselines.deepq.DQN.set_env">
-<code class="sig-name descname"><span class="pre">set_env</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neorl.rl.baselines.deepq.DQN.set_env" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks the validity of the environment, and if it is coherent, set it as the current environment.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>env</strong> – (Gym Environment) The environment for learning a policy</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="neorl.rl.baselines.deepq.DQN.set_random_seed">
-<code class="sig-name descname"><span class="pre">set_random_seed</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="headerlink" href="#neorl.rl.baselines.deepq.DQN.set_random_seed" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>seed</strong> – (Optional[int]) Seed for the pseudo-random generators. If None,
-do not change the seeds.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="neorl.rl.baselines.deepq.DQN.setup_model">
-<code class="sig-name descname"><span class="pre">setup_model</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/rl/baselines/deepq/dqn.html#DQN.setup_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.rl.baselines.deepq.DQN.setup_model" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create all the functions and tensorflow graphs necessary to train the model</p>
 </dd></dl>
 
 </dd></dl>

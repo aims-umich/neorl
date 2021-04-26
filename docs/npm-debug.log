@@ -1,0 +1,1685 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/nodejs', '/usr/bin/npm', 'install', 'tensorflow' ]
+2 info using npm@3.5.2
+3 info using node@v4.2.6
+4 silly loadCurrentTree Starting
+5 silly install loadCurrentTree
+6 silly install readLocalPackageData
+7 silly fetchPackageMetaData tensorflow
+8 silly fetchNamedPackageData tensorflow
+9 silly mapToRegistry name tensorflow
+10 silly mapToRegistry using default registry
+11 silly mapToRegistry registry https://registry.npmjs.org/
+12 silly mapToRegistry uri https://registry.npmjs.org/tensorflow
+13 verbose request uri https://registry.npmjs.org/tensorflow
+14 verbose request no auth needed
+15 info attempt registry request try #1 at 11:32:00 AM
+16 verbose request id 68e1fa3e3c72878e
+17 verbose etag W/"72e87f1cd2099cc3dee2dbfa0d4e2c93"
+18 verbose lastModified Sun, 27 May 2018 19:08:12 GMT
+19 http request GET https://registry.npmjs.org/tensorflow
+20 http 304 https://registry.npmjs.org/tensorflow
+21 verbose headers { date: 'Fri, 16 Apr 2021 16:32:00 GMT',
+21 verbose headers   connection: 'keep-alive',
+21 verbose headers   'set-cookie': [ '__cfduid=d5b1aa362d50ee19cdc169621b7b8cf5b1618590720; expires=Sun, 16-May-21 16:32:00 GMT; path=/; domain=.npmjs.org; HttpOnly; SameSite=Lax' ],
+21 verbose headers   'cf-ray': '640ecea55aae3b6f-BOS',
+21 verbose headers   age: '45',
+21 verbose headers   'cache-control': 'public, max-age=300',
+21 verbose headers   etag: '"72e87f1cd2099cc3dee2dbfa0d4e2c93"',
+21 verbose headers   'last-modified': 'Sun, 27 May 2018 19:08:12 GMT',
+21 verbose headers   vary: 'Accept-Encoding',
+21 verbose headers   'cf-cache-status': 'HIT',
+21 verbose headers   'cf-request-id': '097d1f7b5600003b6f66a51000000001',
+21 verbose headers   'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+21 verbose headers   server: 'cloudflare' }
+22 silly get cb [ 304,
+22 silly get   { date: 'Fri, 16 Apr 2021 16:32:00 GMT',
+22 silly get     connection: 'keep-alive',
+22 silly get     'set-cookie': [ '__cfduid=d5b1aa362d50ee19cdc169621b7b8cf5b1618590720; expires=Sun, 16-May-21 16:32:00 GMT; path=/; domain=.npmjs.org; HttpOnly; SameSite=Lax' ],
+22 silly get     'cf-ray': '640ecea55aae3b6f-BOS',
+22 silly get     age: '45',
+22 silly get     'cache-control': 'public, max-age=300',
+22 silly get     etag: '"72e87f1cd2099cc3dee2dbfa0d4e2c93"',
+22 silly get     'last-modified': 'Sun, 27 May 2018 19:08:12 GMT',
+22 silly get     vary: 'Accept-Encoding',
+22 silly get     'cf-cache-status': 'HIT',
+22 silly get     'cf-request-id': '097d1f7b5600003b6f66a51000000001',
+22 silly get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+22 silly get     server: 'cloudflare' } ]
+23 verbose etag https://registry.npmjs.org/tensorflow from cache
+24 verbose get saving tensorflow to /home/majdi/.npm/registry.npmjs.org/tensorflow/.cache.json
+25 silly install normalizeTree
+26 silly loadCurrentTree Finishing
+27 silly loadIdealTree Starting
+28 silly install loadIdealTree
+29 silly cloneCurrentTree Starting
+30 silly install cloneCurrentTreeToIdealTree
+31 silly cloneCurrentTree Finishing
+32 silly loadShrinkwrap Starting
+33 silly install loadShrinkwrap
+34 silly loadShrinkwrap Finishing
+35 silly loadAllDepsIntoIdealTree Starting
+36 silly install loadAllDepsIntoIdealTree
+37 silly resolveWithNewModule tensorflow@0.7.0 checking installable status
+38 silly cache add args [ 'tensorflow', null ]
+39 verbose cache add spec tensorflow
+40 silly cache add parsed spec Result {
+40 silly cache add   raw: 'tensorflow',
+40 silly cache add   scope: null,
+40 silly cache add   name: 'tensorflow',
+40 silly cache add   rawSpec: '',
+40 silly cache add   spec: 'latest',
+40 silly cache add   type: 'tag' }
+41 silly addNamed tensorflow@latest
+42 verbose addNamed "latest" is being treated as a dist-tag for tensorflow
+43 info addNameTag [ 'tensorflow', 'latest' ]
+44 silly mapToRegistry name tensorflow
+45 silly mapToRegistry using default registry
+46 silly mapToRegistry registry https://registry.npmjs.org/
+47 silly mapToRegistry uri https://registry.npmjs.org/tensorflow
+48 verbose addNameTag registry:https://registry.npmjs.org/tensorflow not in flight; fetching
+49 verbose get https://registry.npmjs.org/tensorflow not expired, no request
+50 silly addNameTag next cb for tensorflow with tag latest
+51 silly addNamed tensorflow@0.7.0
+52 verbose addNamed "0.7.0" is a plain semver version for tensorflow
+53 silly cache afterAdd tensorflow@0.7.0
+54 verbose afterAdd /home/majdi/.npm/tensorflow/0.7.0/package/package.json not in flight; writing
+55 verbose afterAdd /home/majdi/.npm/tensorflow/0.7.0/package/package.json written
+56 silly fetchNamedPackageData ffi
+57 silly mapToRegistry name ffi
+58 silly mapToRegistry using default registry
+59 silly mapToRegistry registry https://registry.npmjs.org/
+60 silly mapToRegistry uri https://registry.npmjs.org/ffi
+61 silly fetchNamedPackageData ref
+62 silly mapToRegistry name ref
+63 silly mapToRegistry using default registry
+64 silly mapToRegistry registry https://registry.npmjs.org/
+65 silly mapToRegistry uri https://registry.npmjs.org/ref
+66 silly fetchNamedPackageData ref-array
+67 silly mapToRegistry name ref-array
+68 silly mapToRegistry using default registry
+69 silly mapToRegistry registry https://registry.npmjs.org/
+70 silly mapToRegistry uri https://registry.npmjs.org/ref-array
+71 silly fetchNamedPackageData ref-struct
+72 silly mapToRegistry name ref-struct
+73 silly mapToRegistry using default registry
+74 silly mapToRegistry registry https://registry.npmjs.org/
+75 silly mapToRegistry uri https://registry.npmjs.org/ref-struct
+76 verbose request uri https://registry.npmjs.org/ffi
+77 verbose request no auth needed
+78 info attempt registry request try #1 at 11:32:00 AM
+79 verbose etag W/"37f4af4c4bce136c5f3925f631003e53"
+80 verbose lastModified Thu, 03 Jan 2019 21:15:11 GMT
+81 http request GET https://registry.npmjs.org/ffi
+82 verbose request uri https://registry.npmjs.org/ref-array
+83 verbose request no auth needed
+84 info attempt registry request try #1 at 11:32:00 AM
+85 verbose etag W/"e71d4f64ec2b45f56500f120a82669e5"
+86 verbose lastModified Sun, 27 May 2018 15:42:28 GMT
+87 http request GET https://registry.npmjs.org/ref-array
+88 verbose request uri https://registry.npmjs.org/ref-struct
+89 verbose request no auth needed
+90 info attempt registry request try #1 at 11:32:00 AM
+91 verbose etag W/"6f955628a701f4375673dbd6b9074db3"
+92 verbose lastModified Sun, 27 May 2018 15:42:29 GMT
+93 http request GET https://registry.npmjs.org/ref-struct
+94 verbose request uri https://registry.npmjs.org/ref
+95 verbose request no auth needed
+96 info attempt registry request try #1 at 11:32:00 AM
+97 verbose etag W/"3a11ac1b3ff3bf182ad2f12e8174bfbe"
+98 verbose lastModified Sun, 27 May 2018 15:42:29 GMT
+99 http request GET https://registry.npmjs.org/ref
+100 http 304 https://registry.npmjs.org/ref
+101 verbose headers { date: 'Fri, 16 Apr 2021 16:32:01 GMT',
+101 verbose headers   connection: 'keep-alive',
+101 verbose headers   'set-cookie': [ '__cfduid=dbbde2be04b77f8f1a6c345b0ddd2192e1618590721; expires=Sun, 16-May-21 16:32:01 GMT; path=/; domain=.npmjs.org; HttpOnly; SameSite=Lax' ],
+101 verbose headers   'cf-ray': '640ecea6588b3b7c-BOS',
+101 verbose headers   age: '1780',
+101 verbose headers   'cache-control': 'public, max-age=300',
+101 verbose headers   etag: '"3a11ac1b3ff3bf182ad2f12e8174bfbe"',
+101 verbose headers   'last-modified': 'Sun, 27 May 2018 15:42:29 GMT',
+101 verbose headers   vary: 'Accept-Encoding',
+101 verbose headers   'cf-cache-status': 'HIT',
+101 verbose headers   'cf-request-id': '097d1f7bf700003b7cd625d000000001',
+101 verbose headers   'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+101 verbose headers   server: 'cloudflare' }
+102 silly get cb [ 304,
+102 silly get   { date: 'Fri, 16 Apr 2021 16:32:01 GMT',
+102 silly get     connection: 'keep-alive',
+102 silly get     'set-cookie': [ '__cfduid=dbbde2be04b77f8f1a6c345b0ddd2192e1618590721; expires=Sun, 16-May-21 16:32:01 GMT; path=/; domain=.npmjs.org; HttpOnly; SameSite=Lax' ],
+102 silly get     'cf-ray': '640ecea6588b3b7c-BOS',
+102 silly get     age: '1780',
+102 silly get     'cache-control': 'public, max-age=300',
+102 silly get     etag: '"3a11ac1b3ff3bf182ad2f12e8174bfbe"',
+102 silly get     'last-modified': 'Sun, 27 May 2018 15:42:29 GMT',
+102 silly get     vary: 'Accept-Encoding',
+102 silly get     'cf-cache-status': 'HIT',
+102 silly get     'cf-request-id': '097d1f7bf700003b7cd625d000000001',
+102 silly get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+102 silly get     server: 'cloudflare' } ]
+103 verbose etag https://registry.npmjs.org/ref from cache
+104 verbose get saving ref to /home/majdi/.npm/registry.npmjs.org/ref/.cache.json
+105 http 304 https://registry.npmjs.org/ref-struct
+106 verbose headers { date: 'Fri, 16 Apr 2021 16:32:01 GMT',
+106 verbose headers   connection: 'keep-alive',
+106 verbose headers   'set-cookie': [ '__cfduid=d45d40a4bdc7a7e9793e2433ddaccc40b1618590721; expires=Sun, 16-May-21 16:32:01 GMT; path=/; domain=.npmjs.org; HttpOnly; SameSite=Lax' ],
+106 verbose headers   'cf-ray': '640ecea65ac7ff8c-BOS',
+106 verbose headers   age: '1780',
+106 verbose headers   'cache-control': 'public, max-age=300',
+106 verbose headers   etag: '"6f955628a701f4375673dbd6b9074db3"',
+106 verbose headers   'last-modified': 'Sun, 27 May 2018 15:42:29 GMT',
+106 verbose headers   vary: 'Accept-Encoding',
+106 verbose headers   'cf-cache-status': 'HIT',
+106 verbose headers   'cf-request-id': '097d1f7bf70000ff8c6e30b000000001',
+106 verbose headers   'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+106 verbose headers   server: 'cloudflare' }
+107 silly get cb [ 304,
+107 silly get   { date: 'Fri, 16 Apr 2021 16:32:01 GMT',
+107 silly get     connection: 'keep-alive',
+107 silly get     'set-cookie': [ '__cfduid=d45d40a4bdc7a7e9793e2433ddaccc40b1618590721; expires=Sun, 16-May-21 16:32:01 GMT; path=/; domain=.npmjs.org; HttpOnly; SameSite=Lax' ],
+107 silly get     'cf-ray': '640ecea65ac7ff8c-BOS',
+107 silly get     age: '1780',
+107 silly get     'cache-control': 'public, max-age=300',
+107 silly get     etag: '"6f955628a701f4375673dbd6b9074db3"',
+107 silly get     'last-modified': 'Sun, 27 May 2018 15:42:29 GMT',
+107 silly get     vary: 'Accept-Encoding',
+107 silly get     'cf-cache-status': 'HIT',
+107 silly get     'cf-request-id': '097d1f7bf70000ff8c6e30b000000001',
+107 silly get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+107 silly get     server: 'cloudflare' } ]
+108 verbose etag https://registry.npmjs.org/ref-struct from cache
+109 verbose get saving ref-struct to /home/majdi/.npm/registry.npmjs.org/ref-struct/.cache.json
+110 http 304 https://registry.npmjs.org/ffi
+111 verbose headers { date: 'Fri, 16 Apr 2021 16:32:01 GMT',
+111 verbose headers   connection: 'keep-alive',
+111 verbose headers   'set-cookie': [ '__cfduid=d1d05c08b10b4b1d6eb67f4554a9057d71618590721; expires=Sun, 16-May-21 16:32:01 GMT; path=/; domain=.npmjs.org; HttpOnly; SameSite=Lax' ],
+111 verbose headers   'cf-ray': '640ecea65ef1ff90-BOS',
+111 verbose headers   age: '2100',
+111 verbose headers   'cache-control': 'public, max-age=300',
+111 verbose headers   etag: '"37f4af4c4bce136c5f3925f631003e53"',
+111 verbose headers   'last-modified': 'Thu, 03 Jan 2019 21:15:11 GMT',
+111 verbose headers   vary: 'Accept-Encoding',
+111 verbose headers   'cf-cache-status': 'HIT',
+111 verbose headers   'cf-request-id': '097d1f7bf60000ff90828ba000000001',
+111 verbose headers   'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+111 verbose headers   server: 'cloudflare' }
+112 silly get cb [ 304,
+112 silly get   { date: 'Fri, 16 Apr 2021 16:32:01 GMT',
+112 silly get     connection: 'keep-alive',
+112 silly get     'set-cookie': [ '__cfduid=d1d05c08b10b4b1d6eb67f4554a9057d71618590721; expires=Sun, 16-May-21 16:32:01 GMT; path=/; domain=.npmjs.org; HttpOnly; SameSite=Lax' ],
+112 silly get     'cf-ray': '640ecea65ef1ff90-BOS',
+112 silly get     age: '2100',
+112 silly get     'cache-control': 'public, max-age=300',
+112 silly get     etag: '"37f4af4c4bce136c5f3925f631003e53"',
+112 silly get     'last-modified': 'Thu, 03 Jan 2019 21:15:11 GMT',
+112 silly get     vary: 'Accept-Encoding',
+112 silly get     'cf-cache-status': 'HIT',
+112 silly get     'cf-request-id': '097d1f7bf60000ff90828ba000000001',
+112 silly get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+112 silly get     server: 'cloudflare' } ]
+113 verbose etag https://registry.npmjs.org/ffi from cache
+114 verbose get saving ffi to /home/majdi/.npm/registry.npmjs.org/ffi/.cache.json
+115 silly resolveWithNewModule ref-struct@1.1.0 checking installable status
+116 silly cache add args [ 'ref-struct@^1.1.0', null ]
+117 verbose cache add spec ref-struct@^1.1.0
+118 silly cache add parsed spec Result {
+118 silly cache add   raw: 'ref-struct@^1.1.0',
+118 silly cache add   scope: null,
+118 silly cache add   name: 'ref-struct',
+118 silly cache add   rawSpec: '^1.1.0',
+118 silly cache add   spec: '>=1.1.0 <2.0.0',
+118 silly cache add   type: 'range' }
+119 silly addNamed ref-struct@>=1.1.0 <2.0.0
+120 verbose addNamed ">=1.1.0 <2.0.0" is a valid semver range for ref-struct
+121 silly addNameRange { name: 'ref-struct', range: '>=1.1.0 <2.0.0', hasData: false }
+122 silly mapToRegistry name ref-struct
+123 silly mapToRegistry using default registry
+124 silly mapToRegistry registry https://registry.npmjs.org/
+125 silly mapToRegistry uri https://registry.npmjs.org/ref-struct
+126 verbose addNameRange registry:https://registry.npmjs.org/ref-struct not in flight; fetching
+127 silly resolveWithNewModule ref@1.3.5 checking installable status
+128 silly cache add args [ 'ref@^1.3.5', null ]
+129 verbose cache add spec ref@^1.3.5
+130 silly cache add parsed spec Result {
+130 silly cache add   raw: 'ref@^1.3.5',
+130 silly cache add   scope: null,
+130 silly cache add   name: 'ref',
+130 silly cache add   rawSpec: '^1.3.5',
+130 silly cache add   spec: '>=1.3.5 <2.0.0',
+130 silly cache add   type: 'range' }
+131 silly addNamed ref@>=1.3.5 <2.0.0
+132 verbose addNamed ">=1.3.5 <2.0.0" is a valid semver range for ref
+133 silly addNameRange { name: 'ref', range: '>=1.3.5 <2.0.0', hasData: false }
+134 silly mapToRegistry name ref
+135 silly mapToRegistry using default registry
+136 silly mapToRegistry registry https://registry.npmjs.org/
+137 silly mapToRegistry uri https://registry.npmjs.org/ref
+138 verbose addNameRange registry:https://registry.npmjs.org/ref not in flight; fetching
+139 silly resolveWithNewModule ffi@2.3.0 checking installable status
+140 silly cache add args [ 'ffi@^2.2.0', null ]
+141 verbose cache add spec ffi@^2.2.0
+142 silly cache add parsed spec Result {
+142 silly cache add   raw: 'ffi@^2.2.0',
+142 silly cache add   scope: null,
+142 silly cache add   name: 'ffi',
+142 silly cache add   rawSpec: '^2.2.0',
+142 silly cache add   spec: '>=2.2.0 <3.0.0',
+142 silly cache add   type: 'range' }
+143 silly addNamed ffi@>=2.2.0 <3.0.0
+144 verbose addNamed ">=2.2.0 <3.0.0" is a valid semver range for ffi
+145 silly addNameRange { name: 'ffi', range: '>=2.2.0 <3.0.0', hasData: false }
+146 silly mapToRegistry name ffi
+147 silly mapToRegistry using default registry
+148 silly mapToRegistry registry https://registry.npmjs.org/
+149 silly mapToRegistry uri https://registry.npmjs.org/ffi
+150 verbose addNameRange registry:https://registry.npmjs.org/ffi not in flight; fetching
+151 verbose get https://registry.npmjs.org/ref-struct not expired, no request
+152 silly addNameRange number 2 { name: 'ref-struct', range: '>=1.1.0 <2.0.0', hasData: true }
+153 silly addNameRange versions [ 'ref-struct',
+153 silly addNameRange   [ '0.0.1',
+153 silly addNameRange     '0.0.2',
+153 silly addNameRange     '0.0.3',
+153 silly addNameRange     '0.0.4',
+153 silly addNameRange     '0.0.5',
+153 silly addNameRange     '0.0.6',
+153 silly addNameRange     '0.0.7',
+153 silly addNameRange     '1.0.0',
+153 silly addNameRange     '1.0.1',
+153 silly addNameRange     '1.0.2',
+153 silly addNameRange     '1.1.0' ] ]
+154 silly addNamed ref-struct@1.1.0
+155 verbose addNamed "1.1.0" is a plain semver version for ref-struct
+156 verbose get https://registry.npmjs.org/ref not expired, no request
+157 silly addNameRange number 2 { name: 'ref', range: '>=1.3.5 <2.0.0', hasData: true }
+158 silly addNameRange versions [ 'ref',
+158 silly addNameRange   [ '0.0.1',
+158 silly addNameRange     '0.0.2',
+158 silly addNameRange     '0.0.3',
+158 silly addNameRange     '0.0.4',
+158 silly addNameRange     '0.0.5',
+158 silly addNameRange     '0.0.6',
+158 silly addNameRange     '0.0.7',
+158 silly addNameRange     '0.0.8',
+158 silly addNameRange     '0.0.9',
+158 silly addNameRange     '0.0.10',
+158 silly addNameRange     '0.0.11',
+158 silly addNameRange     '0.0.12',
+158 silly addNameRange     '0.0.13',
+158 silly addNameRange     '0.0.14',
+158 silly addNameRange     '0.0.15',
+158 silly addNameRange     '0.0.16',
+158 silly addNameRange     '0.0.17',
+158 silly addNameRange     '0.0.18',
+158 silly addNameRange     '0.0.19',
+158 silly addNameRange     '0.0.20',
+158 silly addNameRange     '0.1.0',
+158 silly addNameRange     '0.1.1',
+158 silly addNameRange     '0.1.2',
+158 silly addNameRange     '0.1.3',
+158 silly addNameRange     '0.2.0',
+158 silly addNameRange     '0.2.1',
+158 silly addNameRange     '0.2.2',
+158 silly addNameRange     '0.2.3',
+158 silly addNameRange     '0.3.0',
+158 silly addNameRange     '0.3.1',
+158 silly addNameRange     '0.3.2',
+158 silly addNameRange     '0.3.3',
+158 silly addNameRange     '0.3.4',
+158 silly addNameRange     '0.3.5',
+158 silly addNameRange     '1.0.0',
+158 silly addNameRange     '1.0.1',
+158 silly addNameRange     '1.0.2',
+158 silly addNameRange     '1.1.0',
+158 silly addNameRange     '1.1.1',
+158 silly addNameRange     '1.1.2',
+158 silly addNameRange     '1.1.3',
+158 silly addNameRange     '1.2.0',
+158 silly addNameRange     '1.3.0',
+158 silly addNameRange     '1.3.1',
+158 silly addNameRange     '1.3.2',
+158 silly addNameRange     '1.3.3',
+158 silly addNameRange     '1.3.4',
+158 silly addNameRange     '1.3.5' ] ]
+159 silly addNamed ref@1.3.5
+160 verbose addNamed "1.3.5" is a plain semver version for ref
+161 verbose get https://registry.npmjs.org/ffi not expired, no request
+162 silly addNameRange number 2 { name: 'ffi', range: '>=2.2.0 <3.0.0', hasData: true }
+163 silly addNameRange versions [ 'ffi',
+163 silly addNameRange   [ '1.0.0',
+163 silly addNameRange     '1.0.1',
+163 silly addNameRange     '1.0.3',
+163 silly addNameRange     '1.0.4',
+163 silly addNameRange     '1.0.5',
+163 silly addNameRange     '1.0.6',
+163 silly addNameRange     '1.0.7',
+163 silly addNameRange     '1.1.0',
+163 silly addNameRange     '1.1.1',
+163 silly addNameRange     '1.1.2',
+163 silly addNameRange     '1.1.3',
+163 silly addNameRange     '1.2.0',
+163 silly addNameRange     '1.2.1',
+163 silly addNameRange     '1.2.2',
+163 silly addNameRange     '1.2.3',
+163 silly addNameRange     '1.2.4',
+163 silly addNameRange     '1.2.5',
+163 silly addNameRange     '1.2.6',
+163 silly addNameRange     '1.2.7',
+163 silly addNameRange     '1.3.0',
+163 silly addNameRange     '1.3.1',
+163 silly addNameRange     '1.3.2',
+163 silly addNameRange     '2.0.0',
+163 silly addNameRange     '2.1.0',
+163 silly addNameRange     '2.2.0',
+163 silly addNameRange     '2.3.0' ] ]
+164 silly addNamed ffi@2.3.0
+165 verbose addNamed "2.3.0" is a plain semver version for ffi
+166 http 304 https://registry.npmjs.org/ref-array
+167 verbose headers { date: 'Fri, 16 Apr 2021 16:32:01 GMT',
+167 verbose headers   connection: 'keep-alive',
+167 verbose headers   'set-cookie': [ '__cfduid=dba006480d4acd369fa486781aded85951618590721; expires=Sun, 16-May-21 16:32:01 GMT; path=/; domain=.npmjs.org; HttpOnly; SameSite=Lax' ],
+167 verbose headers   'cf-ray': '640ecea68ccf0cd1-EWR',
+167 verbose headers   age: '1780',
+167 verbose headers   'cache-control': 'public, max-age=300',
+167 verbose headers   etag: '"e71d4f64ec2b45f56500f120a82669e5"',
+167 verbose headers   'last-modified': 'Sun, 27 May 2018 15:42:28 GMT',
+167 verbose headers   vary: 'Accept-Encoding',
+167 verbose headers   'cf-cache-status': 'HIT',
+167 verbose headers   'cf-request-id': '097d1f7c1a00000cd1411ea000000001',
+167 verbose headers   'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+167 verbose headers   server: 'cloudflare' }
+168 silly get cb [ 304,
+168 silly get   { date: 'Fri, 16 Apr 2021 16:32:01 GMT',
+168 silly get     connection: 'keep-alive',
+168 silly get     'set-cookie': [ '__cfduid=dba006480d4acd369fa486781aded85951618590721; expires=Sun, 16-May-21 16:32:01 GMT; path=/; domain=.npmjs.org; HttpOnly; SameSite=Lax' ],
+168 silly get     'cf-ray': '640ecea68ccf0cd1-EWR',
+168 silly get     age: '1780',
+168 silly get     'cache-control': 'public, max-age=300',
+168 silly get     etag: '"e71d4f64ec2b45f56500f120a82669e5"',
+168 silly get     'last-modified': 'Sun, 27 May 2018 15:42:28 GMT',
+168 silly get     vary: 'Accept-Encoding',
+168 silly get     'cf-cache-status': 'HIT',
+168 silly get     'cf-request-id': '097d1f7c1a00000cd1411ea000000001',
+168 silly get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+168 silly get     server: 'cloudflare' } ]
+169 verbose etag https://registry.npmjs.org/ref-array from cache
+170 verbose get saving ref-array to /home/majdi/.npm/registry.npmjs.org/ref-array/.cache.json
+171 silly cache afterAdd ref-struct@1.1.0
+172 verbose afterAdd /home/majdi/.npm/ref-struct/1.1.0/package/package.json not in flight; writing
+173 silly cache afterAdd ref@1.3.5
+174 verbose afterAdd /home/majdi/.npm/ref/1.3.5/package/package.json not in flight; writing
+175 silly cache afterAdd ffi@2.3.0
+176 verbose afterAdd /home/majdi/.npm/ffi/2.3.0/package/package.json not in flight; writing
+177 silly resolveWithNewModule ref-array@1.2.0 checking installable status
+178 silly cache add args [ 'ref-array@^1.2.0', null ]
+179 verbose cache add spec ref-array@^1.2.0
+180 silly cache add parsed spec Result {
+180 silly cache add   raw: 'ref-array@^1.2.0',
+180 silly cache add   scope: null,
+180 silly cache add   name: 'ref-array',
+180 silly cache add   rawSpec: '^1.2.0',
+180 silly cache add   spec: '>=1.2.0 <2.0.0',
+180 silly cache add   type: 'range' }
+181 silly addNamed ref-array@>=1.2.0 <2.0.0
+182 verbose addNamed ">=1.2.0 <2.0.0" is a valid semver range for ref-array
+183 silly addNameRange { name: 'ref-array', range: '>=1.2.0 <2.0.0', hasData: false }
+184 silly mapToRegistry name ref-array
+185 silly mapToRegistry using default registry
+186 silly mapToRegistry registry https://registry.npmjs.org/
+187 silly mapToRegistry uri https://registry.npmjs.org/ref-array
+188 verbose addNameRange registry:https://registry.npmjs.org/ref-array not in flight; fetching
+189 verbose afterAdd /home/majdi/.npm/ref-struct/1.1.0/package/package.json written
+190 verbose afterAdd /home/majdi/.npm/ref/1.3.5/package/package.json written
+191 verbose afterAdd /home/majdi/.npm/ffi/2.3.0/package/package.json written
+192 verbose get https://registry.npmjs.org/ref-array not expired, no request
+193 silly addNameRange number 2 { name: 'ref-array', range: '>=1.2.0 <2.0.0', hasData: true }
+194 silly addNameRange versions [ 'ref-array',
+194 silly addNameRange   [ '0.0.1',
+194 silly addNameRange     '0.0.2',
+194 silly addNameRange     '0.0.3',
+194 silly addNameRange     '0.0.4',
+194 silly addNameRange     '1.0.0',
+194 silly addNameRange     '1.1.0',
+194 silly addNameRange     '1.1.1',
+194 silly addNameRange     '1.1.2',
+194 silly addNameRange     '1.2.0' ] ]
+195 silly addNamed ref-array@1.2.0
+196 verbose addNamed "1.2.0" is a plain semver version for ref-array
+197 silly cache afterAdd ref-array@1.2.0
+198 verbose afterAdd /home/majdi/.npm/ref-array/1.2.0/package/package.json not in flight; writing
+199 verbose afterAdd /home/majdi/.npm/ref-array/1.2.0/package/package.json written
+200 silly loadAllDepsIntoIdealTree Finishing
+201 silly idealTree:prePrune docs
+201 silly idealTree:prePrune ├── array-index@1.0.0
+201 silly idealTree:prePrune ├── bindings@1.2.1
+201 silly idealTree:prePrune ├── d@1.0.1
+201 silly idealTree:prePrune ├── debug@2.6.9
+201 silly idealTree:prePrune ├── es5-ext@0.10.53
+201 silly idealTree:prePrune ├── es6-iterator@2.0.3
+201 silly idealTree:prePrune ├── es6-symbol@3.1.3
+201 silly idealTree:prePrune ├─┬ ext@1.4.0
+201 silly idealTree:prePrune │ └── type@2.5.0
+201 silly idealTree:prePrune ├── ffi@2.3.0
+201 silly idealTree:prePrune ├── ieee754@1.2.1
+201 silly idealTree:prePrune ├── ms@2.0.0
+201 silly idealTree:prePrune ├── nan@2.14.2
+201 silly idealTree:prePrune ├── next-tick@1.0.0
+201 silly idealTree:prePrune ├── pbf@3.2.1
+201 silly idealTree:prePrune ├── protocol-buffers-schema@3.5.1
+201 silly idealTree:prePrune ├── ref-array@1.2.0
+201 silly idealTree:prePrune ├── ref-struct@1.1.0
+201 silly idealTree:prePrune ├── ref@1.3.5
+201 silly idealTree:prePrune ├── resolve-protobuf-schema@2.1.0
+201 silly idealTree:prePrune ├── tensorflow@0.7.0
+201 silly idealTree:prePrune └── type@1.2.0
+202 silly loadIdealTree Finishing
+203 silly currentTree docs
+203 silly currentTree ├── array-index@1.0.0
+203 silly currentTree ├── bindings@1.2.1
+203 silly currentTree ├── d@1.0.1
+203 silly currentTree ├── debug@2.6.9
+203 silly currentTree ├── es5-ext@0.10.53
+203 silly currentTree ├── es6-iterator@2.0.3
+203 silly currentTree ├── es6-symbol@3.1.3
+203 silly currentTree ├─┬ ext@1.4.0
+203 silly currentTree │ └── type@2.5.0
+203 silly currentTree ├── ieee754@1.2.1
+203 silly currentTree ├── ms@2.0.0
+203 silly currentTree ├── nan@2.14.2
+203 silly currentTree ├── next-tick@1.0.0
+203 silly currentTree ├── pbf@3.2.1
+203 silly currentTree ├── protocol-buffers-schema@3.5.1
+203 silly currentTree ├── resolve-protobuf-schema@2.1.0
+203 silly currentTree └── type@1.2.0
+204 silly idealTree docs
+204 silly idealTree ├── array-index@1.0.0
+204 silly idealTree ├── bindings@1.2.1
+204 silly idealTree ├── d@1.0.1
+204 silly idealTree ├── debug@2.6.9
+204 silly idealTree ├── es5-ext@0.10.53
+204 silly idealTree ├── es6-iterator@2.0.3
+204 silly idealTree ├── es6-symbol@3.1.3
+204 silly idealTree ├─┬ ext@1.4.0
+204 silly idealTree │ └── type@2.5.0
+204 silly idealTree ├── ffi@2.3.0
+204 silly idealTree ├── ieee754@1.2.1
+204 silly idealTree ├── ms@2.0.0
+204 silly idealTree ├── nan@2.14.2
+204 silly idealTree ├── next-tick@1.0.0
+204 silly idealTree ├── pbf@3.2.1
+204 silly idealTree ├── protocol-buffers-schema@3.5.1
+204 silly idealTree ├── ref-array@1.2.0
+204 silly idealTree ├── ref-struct@1.1.0
+204 silly idealTree ├── ref@1.3.5
+204 silly idealTree ├── resolve-protobuf-schema@2.1.0
+204 silly idealTree ├── tensorflow@0.7.0
+204 silly idealTree └── type@1.2.0
+205 silly generateActionsToTake Starting
+206 silly install generateActionsToTake
+207 silly generateActionsToTake Finishing
+208 silly diffTrees action count 5
+209 silly diffTrees add ref@1.3.5
+210 silly diffTrees add ref-array@1.2.0
+211 silly diffTrees add ref-struct@1.1.0
+212 silly diffTrees add ffi@2.3.0
+213 silly diffTrees add tensorflow@0.7.0
+214 silly decomposeActions action count 40
+215 silly decomposeActions fetch ref@1.3.5
+216 silly decomposeActions extract ref@1.3.5
+217 silly decomposeActions test ref@1.3.5
+218 silly decomposeActions preinstall ref@1.3.5
+219 silly decomposeActions build ref@1.3.5
+220 silly decomposeActions install ref@1.3.5
+221 silly decomposeActions postinstall ref@1.3.5
+222 silly decomposeActions finalize ref@1.3.5
+223 silly decomposeActions fetch ref-array@1.2.0
+224 silly decomposeActions extract ref-array@1.2.0
+225 silly decomposeActions test ref-array@1.2.0
+226 silly decomposeActions preinstall ref-array@1.2.0
+227 silly decomposeActions build ref-array@1.2.0
+228 silly decomposeActions install ref-array@1.2.0
+229 silly decomposeActions postinstall ref-array@1.2.0
+230 silly decomposeActions finalize ref-array@1.2.0
+231 silly decomposeActions fetch ref-struct@1.1.0
+232 silly decomposeActions extract ref-struct@1.1.0
+233 silly decomposeActions test ref-struct@1.1.0
+234 silly decomposeActions preinstall ref-struct@1.1.0
+235 silly decomposeActions build ref-struct@1.1.0
+236 silly decomposeActions install ref-struct@1.1.0
+237 silly decomposeActions postinstall ref-struct@1.1.0
+238 silly decomposeActions finalize ref-struct@1.1.0
+239 silly decomposeActions fetch ffi@2.3.0
+240 silly decomposeActions extract ffi@2.3.0
+241 silly decomposeActions test ffi@2.3.0
+242 silly decomposeActions preinstall ffi@2.3.0
+243 silly decomposeActions build ffi@2.3.0
+244 silly decomposeActions install ffi@2.3.0
+245 silly decomposeActions postinstall ffi@2.3.0
+246 silly decomposeActions finalize ffi@2.3.0
+247 silly decomposeActions fetch tensorflow@0.7.0
+248 silly decomposeActions extract tensorflow@0.7.0
+249 silly decomposeActions test tensorflow@0.7.0
+250 silly decomposeActions preinstall tensorflow@0.7.0
+251 silly decomposeActions build tensorflow@0.7.0
+252 silly decomposeActions install tensorflow@0.7.0
+253 silly decomposeActions postinstall tensorflow@0.7.0
+254 silly decomposeActions finalize tensorflow@0.7.0
+255 silly executeActions Starting
+256 silly install executeActions
+257 silly doSerial global-install 0
+258 silly doParallel fetch 5
+259 verbose lock using /home/majdi/.npm/_locks/staging-229a303ac89d160e.lock for /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging
+260 silly doParallel extract 5
+261 silly extract ref@1.3.5
+262 silly extract ref-array@1.2.0
+263 silly extract ref-struct@1.1.0
+264 silly extract ffi@2.3.0
+265 silly extract tensorflow@0.7.0
+266 verbose unbuild node_modules/.staging/ref-ad16f5f4
+267 verbose unbuild node_modules/.staging/ref-array-f52ff68b
+268 verbose unbuild node_modules/.staging/ffi-70ba0209
+269 verbose unbuild node_modules/.staging/tensorflow-cee573aa
+270 verbose unbuild node_modules/.staging/ref-struct-dd6c62ac
+271 silly gentlyRm /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/ref-ad16f5f4 is being purged from base /home/majdi/Dropbox/mit/neorl/docs
+272 verbose gentlyRm don't care about contents; nuking /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/ref-ad16f5f4
+273 silly gentlyRm /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/ref-array-f52ff68b is being purged from base /home/majdi/Dropbox/mit/neorl/docs
+274 verbose gentlyRm don't care about contents; nuking /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/ref-array-f52ff68b
+275 silly gentlyRm /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/ffi-70ba0209 is being purged from base /home/majdi/Dropbox/mit/neorl/docs
+276 verbose gentlyRm don't care about contents; nuking /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/ffi-70ba0209
+277 silly gentlyRm /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/tensorflow-cee573aa is being purged from base /home/majdi/Dropbox/mit/neorl/docs
+278 verbose gentlyRm don't care about contents; nuking /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/tensorflow-cee573aa
+279 silly gentlyRm /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/ref-struct-dd6c62ac is being purged from base /home/majdi/Dropbox/mit/neorl/docs
+280 verbose gentlyRm don't care about contents; nuking /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/ref-struct-dd6c62ac
+281 verbose tar unpack /home/majdi/.npm/ref/1.3.5/package.tgz
+282 verbose tar unpacking to /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/ref-ad16f5f4
+283 silly gentlyRm /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/ref-ad16f5f4 is being purged
+284 verbose gentlyRm don't care about contents; nuking /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/ref-ad16f5f4
+285 verbose tar unpack /home/majdi/.npm/ref-array/1.2.0/package.tgz
+286 verbose tar unpacking to /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/ref-array-f52ff68b
+287 silly gentlyRm /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/ref-array-f52ff68b is being purged
+288 verbose gentlyRm don't care about contents; nuking /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/ref-array-f52ff68b
+289 verbose tar unpack /home/majdi/.npm/ffi/2.3.0/package.tgz
+290 verbose tar unpacking to /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/ffi-70ba0209
+291 silly gentlyRm /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/ffi-70ba0209 is being purged
+292 verbose gentlyRm don't care about contents; nuking /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/ffi-70ba0209
+293 verbose tar unpack /home/majdi/.npm/tensorflow/0.7.0/package.tgz
+294 verbose tar unpacking to /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/tensorflow-cee573aa
+295 silly gentlyRm /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/tensorflow-cee573aa is being purged
+296 verbose gentlyRm don't care about contents; nuking /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/tensorflow-cee573aa
+297 verbose tar unpack /home/majdi/.npm/ref-struct/1.1.0/package.tgz
+298 verbose tar unpacking to /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/ref-struct-dd6c62ac
+299 silly gentlyRm /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/ref-struct-dd6c62ac is being purged
+300 verbose gentlyRm don't care about contents; nuking /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/ref-struct-dd6c62ac
+301 silly gunzTarPerm modes [ '775', '664' ]
+302 silly gunzTarPerm modes [ '775', '664' ]
+303 silly gunzTarPerm modes [ '775', '664' ]
+304 silly gunzTarPerm modes [ '775', '664' ]
+305 silly gunzTarPerm modes [ '775', '664' ]
+306 silly gunzTarPerm extractEntry package.json
+307 silly gunzTarPerm modified mode [ 'package.json', 420, 436 ]
+308 silly gunzTarPerm extractEntry package.json
+309 silly gunzTarPerm modified mode [ 'package.json', 420, 436 ]
+310 silly gunzTarPerm extractEntry package.json
+311 silly gunzTarPerm modified mode [ 'package.json', 420, 436 ]
+312 silly gunzTarPerm extractEntry package.json
+313 silly gunzTarPerm modified mode [ 'package.json', 420, 436 ]
+314 silly gunzTarPerm extractEntry package.json
+315 silly gunzTarPerm modified mode [ 'package.json', 420, 436 ]
+316 silly gunzTarPerm extractEntry .npmignore
+317 silly gunzTarPerm modified mode [ '.npmignore', 420, 436 ]
+318 silly gunzTarPerm extractEntry README.md
+319 silly gunzTarPerm modified mode [ 'README.md', 420, 436 ]
+320 silly gunzTarPerm extractEntry LICENSE
+321 silly gunzTarPerm modified mode [ 'LICENSE', 420, 436 ]
+322 silly gunzTarPerm extractEntry README.md
+323 silly gunzTarPerm modified mode [ 'README.md', 420, 436 ]
+324 silly gunzTarPerm extractEntry .npmignore
+325 silly gunzTarPerm modified mode [ '.npmignore', 420, 436 ]
+326 silly gunzTarPerm extractEntry README.md
+327 silly gunzTarPerm modified mode [ 'README.md', 420, 436 ]
+328 silly gunzTarPerm extractEntry .jshintrc
+329 silly gunzTarPerm modified mode [ '.jshintrc', 420, 436 ]
+330 silly gunzTarPerm extractEntry .travis.yml
+331 silly gunzTarPerm modified mode [ '.travis.yml', 420, 436 ]
+332 silly gunzTarPerm extractEntry .npmignore
+333 silly gunzTarPerm modified mode [ '.npmignore', 420, 436 ]
+334 silly gunzTarPerm extractEntry README.md
+335 silly gunzTarPerm modified mode [ 'README.md', 420, 436 ]
+336 silly gunzTarPerm extractEntry appveyor.yml
+337 silly gunzTarPerm modified mode [ 'appveyor.yml', 420, 436 ]
+338 silly gunzTarPerm extractEntry binding.gyp
+339 silly gunzTarPerm modified mode [ 'binding.gyp', 420, 436 ]
+340 silly gunzTarPerm extractEntry appveyor.yml
+341 silly gunzTarPerm modified mode [ 'appveyor.yml', 420, 436 ]
+342 silly gunzTarPerm extractEntry .travis.yml
+343 silly gunzTarPerm modified mode [ '.travis.yml', 420, 436 ]
+344 silly gunzTarPerm extractEntry appveyor.yml
+345 silly gunzTarPerm modified mode [ 'appveyor.yml', 420, 436 ]
+346 silly gunzTarPerm extractEntry binding.gyp
+347 silly gunzTarPerm modified mode [ 'binding.gyp', 420, 436 ]
+348 silly gunzTarPerm extractEntry setup/setup.js
+349 silly gunzTarPerm modified mode [ 'setup/setup.js', 420, 436 ]
+350 silly gunzTarPerm extractEntry .jshintrc
+351 silly gunzTarPerm modified mode [ '.jshintrc', 420, 436 ]
+352 silly gunzTarPerm extractEntry .travis.yml
+353 silly gunzTarPerm modified mode [ '.travis.yml', 420, 436 ]
+354 silly gunzTarPerm extractEntry .travis.yml
+355 silly gunzTarPerm modified mode [ '.travis.yml', 420, 436 ]
+356 silly gunzTarPerm extractEntry docs/compile.js
+357 silly gunzTarPerm modified mode [ 'docs/compile.js', 420, 436 ]
+358 silly gunzTarPerm extractEntry lib/array.js
+359 silly gunzTarPerm modified mode [ 'lib/array.js', 420, 436 ]
+360 silly gunzTarPerm extractEntry History.md
+361 silly gunzTarPerm modified mode [ 'History.md', 420, 436 ]
+362 silly gunzTarPerm extractEntry test/array.js
+363 silly gunzTarPerm modified mode [ 'test/array.js', 420, 436 ]
+364 silly gunzTarPerm extractEntry test/binding.gyp
+365 silly gunzTarPerm modified mode [ 'test/binding.gyp', 420, 436 ]
+366 silly gunzTarPerm extractEntry test/native_tests.cc
+367 silly gunzTarPerm modified mode [ 'test/native_tests.cc', 420, 436 ]
+368 silly gunzTarPerm extractEntry CHANGELOG.md
+369 silly gunzTarPerm modified mode [ 'CHANGELOG.md', 420, 436 ]
+370 silly gunzTarPerm extractEntry History.md
+371 silly gunzTarPerm modified mode [ 'History.md', 420, 436 ]
+372 silly gunzTarPerm extractEntry appveyor.yml
+373 silly gunzTarPerm modified mode [ 'appveyor.yml', 420, 436 ]
+374 silly gunzTarPerm extractEntry src/graph.js
+375 silly gunzTarPerm modified mode [ 'src/graph.js', 420, 436 ]
+376 silly gunzTarPerm extractEntry src/index.d.ts
+377 silly gunzTarPerm modified mode [ 'src/index.d.ts', 420, 436 ]
+378 silly gunzTarPerm extractEntry LICENSE
+379 silly gunzTarPerm modified mode [ 'LICENSE', 420, 436 ]
+380 silly gunzTarPerm extractEntry docs/gh-pages.sh
+381 silly gunzTarPerm modified mode [ 'docs/gh-pages.sh', 493, 509 ]
+382 silly gunzTarPerm extractEntry README.md
+383 silly gunzTarPerm modified mode [ 'README.md', 420, 436 ]
+384 silly gunzTarPerm extractEntry deps/libffi/acinclude.m4
+385 silly gunzTarPerm modified mode [ 'deps/libffi/acinclude.m4', 420, 436 ]
+386 silly gunzTarPerm extractEntry src/index.js
+387 silly gunzTarPerm modified mode [ 'src/index.js', 420, 436 ]
+388 silly gunzTarPerm extractEntry src/interop/api.js
+389 silly gunzTarPerm modified mode [ 'src/interop/api.js', 420, 436 ]
+390 silly gunzTarPerm extractEntry lib/struct.js
+391 silly gunzTarPerm modified mode [ 'lib/struct.js', 420, 436 ]
+392 silly gunzTarPerm extractEntry docs/images/apple-touch-icon-114x114.png
+393 silly gunzTarPerm modified mode [ 'docs/images/apple-touch-icon-114x114.png', 420, 436 ]
+394 silly gunzTarPerm extractEntry docs/images/apple-touch-icon-72x72.png
+395 silly gunzTarPerm modified mode [ 'docs/images/apple-touch-icon-72x72.png', 420, 436 ]
+396 silly gunzTarPerm extractEntry deps/libffi/aclocal.m4
+397 silly gunzTarPerm modified mode [ 'deps/libffi/aclocal.m4', 420, 436 ]
+398 silly gunzTarPerm extractEntry deps/libffi/ChangeLog
+399 silly gunzTarPerm modified mode [ 'deps/libffi/ChangeLog', 420, 436 ]
+400 silly gunzTarPerm extractEntry src/interop/messages.js
+401 silly gunzTarPerm modified mode [ 'src/interop/messages.js', 420, 436 ]
+402 silly gunzTarPerm extractEntry src/interop/messages.proto
+403 silly gunzTarPerm modified mode [ 'src/interop/messages.proto', 420, 436 ]
+404 silly gunzTarPerm extractEntry docs/images/apple-touch-icon.png
+405 silly gunzTarPerm modified mode [ 'docs/images/apple-touch-icon.png', 420, 436 ]
+406 silly gunzTarPerm extractEntry docs/images/favicon.ico
+407 silly gunzTarPerm modified mode [ 'docs/images/favicon.ico', 420, 436 ]
+408 silly gunzTarPerm extractEntry deps/libffi/ChangeLog.libffi
+409 silly gunzTarPerm modified mode [ 'deps/libffi/ChangeLog.libffi', 420, 436 ]
+410 silly gunzTarPerm extractEntry src/session.js
+411 silly gunzTarPerm modified mode [ 'src/session.js', 420, 436 ]
+412 silly gunzTarPerm extractEntry src/tensor.js
+413 silly gunzTarPerm modified mode [ 'src/tensor.js', 420, 436 ]
+414 silly gunzTarPerm extractEntry docs/images/ref.pxm
+415 silly gunzTarPerm modified mode [ 'docs/images/ref.pxm', 420, 436 ]
+416 silly gunzTarPerm extractEntry docs/index.jade
+417 silly gunzTarPerm modified mode [ 'docs/index.jade', 420, 436 ]
+418 silly gunzTarPerm extractEntry deps/libffi/ChangeLog.libgcj
+419 silly gunzTarPerm modified mode [ 'deps/libffi/ChangeLog.libgcj', 420, 436 ]
+420 silly gunzTarPerm extractEntry deps/libffi/ChangeLog.v1
+421 silly gunzTarPerm modified mode [ 'deps/libffi/ChangeLog.v1', 420, 436 ]
+422 silly gunzTarPerm extractEntry docs/scripts/jquery-1.7.2.min.js
+423 silly gunzTarPerm modified mode [ 'docs/scripts/jquery-1.7.2.min.js', 420, 436 ]
+424 silly gunzTarPerm extractEntry docs/scripts/main.js
+425 silly gunzTarPerm modified mode [ 'docs/scripts/main.js', 420, 436 ]
+426 silly gunzTarPerm extractEntry deps/libffi/closure.c
+427 silly gunzTarPerm modified mode [ 'deps/libffi/closure.c', 420, 436 ]
+428 silly gunzTarPerm extractEntry deps/libffi/compile
+429 silly gunzTarPerm modified mode [ 'deps/libffi/compile', 493, 509 ]
+430 silly gunzTarPerm extractEntry docs/stylesheets/base.css
+431 silly gunzTarPerm modified mode [ 'docs/stylesheets/base.css', 420, 436 ]
+432 silly gunzTarPerm extractEntry docs/stylesheets/layout.css
+433 silly gunzTarPerm modified mode [ 'docs/stylesheets/layout.css', 420, 436 ]
+434 silly gunzTarPerm extractEntry deps/libffi/config.guess
+435 silly gunzTarPerm modified mode [ 'deps/libffi/config.guess', 493, 509 ]
+436 silly gunzTarPerm extractEntry deps/libffi/config.sub
+437 silly gunzTarPerm modified mode [ 'deps/libffi/config.sub', 493, 509 ]
+438 silly gunzTarPerm extractEntry docs/stylesheets/skeleton.css
+439 silly gunzTarPerm modified mode [ 'docs/stylesheets/skeleton.css', 420, 436 ]
+440 silly gunzTarPerm extractEntry lib/ref.js
+441 silly gunzTarPerm modified mode [ 'lib/ref.js', 420, 436 ]
+442 silly gunzTarPerm extractEntry src/binding.cc
+443 silly gunzTarPerm modified mode [ 'src/binding.cc', 420, 436 ]
+444 silly gunzTarPerm extractEntry CHANGELOG.md
+445 silly gunzTarPerm modified mode [ 'CHANGELOG.md', 420, 436 ]
+446 silly gunzTarPerm extractEntry test/address.js
+447 silly gunzTarPerm modified mode [ 'test/address.js', 420, 436 ]
+448 silly gunzTarPerm extractEntry test/coerce.js
+449 silly gunzTarPerm modified mode [ 'test/coerce.js', 420, 436 ]
+450 silly gunzTarPerm extractEntry test/int64.js
+451 silly gunzTarPerm modified mode [ 'test/int64.js', 420, 436 ]
+452 silly gunzTarPerm extractEntry test/iojs3issue.js
+453 silly gunzTarPerm modified mode [ 'test/iojs3issue.js', 420, 436 ]
+454 silly gunzTarPerm extractEntry test/isNull.js
+455 silly gunzTarPerm modified mode [ 'test/isNull.js', 420, 436 ]
+456 silly gunzTarPerm extractEntry test/char.js
+457 silly gunzTarPerm modified mode [ 'test/char.js', 420, 436 ]
+458 silly gunzTarPerm extractEntry test/pointer.js
+459 silly gunzTarPerm modified mode [ 'test/pointer.js', 420, 436 ]
+460 silly gunzTarPerm extractEntry test/ref-deref.js
+461 silly gunzTarPerm modified mode [ 'test/ref-deref.js', 420, 436 ]
+462 silly gunzTarPerm extractEntry test/reinterpret.js
+463 silly gunzTarPerm modified mode [ 'test/reinterpret.js', 420, 436 ]
+464 silly gunzTarPerm extractEntry test/reinterpretUntilZeros.js
+465 silly gunzTarPerm modified mode [ 'test/reinterpretUntilZeros.js', 420, 436 ]
+466 silly gunzTarPerm extractEntry test/string.js
+467 silly gunzTarPerm modified mode [ 'test/string.js', 420, 436 ]
+468 silly gunzTarPerm extractEntry test/bool.js
+469 silly gunzTarPerm modified mode [ 'test/bool.js', 420, 436 ]
+470 silly gunzTarPerm extractEntry test/types.js
+471 silly gunzTarPerm modified mode [ 'test/types.js', 420, 436 ]
+472 silly gunzTarPerm extractEntry test/alloc.js
+473 silly gunzTarPerm modified mode [ 'test/alloc.js', 420, 436 ]
+474 silly gunzTarPerm extractEntry test/object.js
+475 silly gunzTarPerm modified mode [ 'test/object.js', 420, 436 ]
+476 silly gunzTarPerm extractEntry test/utf16le.bin
+477 silly gunzTarPerm modified mode [ 'test/utf16le.bin', 420, 436 ]
+478 silly gentlyRm /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/ref-struct-dd6c62ac/node_modules is being purged
+479 verbose gentlyRm don't care about contents; nuking /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/ref-struct-dd6c62ac/node_modules
+480 silly gunzTarPerm extractEntry deps/libffi/config/freebsd/ia32/ffi.h
+481 silly gunzTarPerm modified mode [ 'deps/libffi/config/freebsd/ia32/ffi.h', 420, 436 ]
+482 silly gunzTarPerm extractEntry deps/libffi/config/freebsd/ia32/fficonfig.h
+483 silly gunzTarPerm modified mode [ 'deps/libffi/config/freebsd/ia32/fficonfig.h', 420, 436 ]
+484 silly gunzTarPerm extractEntry deps/libffi/config/freebsd/ia32/ffitarget.h
+485 silly gunzTarPerm modified mode [ 'deps/libffi/config/freebsd/ia32/ffitarget.h', 420, 436 ]
+486 silly gunzTarPerm extractEntry deps/libffi/config/freebsd/x64/ffi.h
+487 silly gunzTarPerm modified mode [ 'deps/libffi/config/freebsd/x64/ffi.h', 420, 436 ]
+488 silly gunzTarPerm extractEntry deps/libffi/config/freebsd/x64/fficonfig.h
+489 silly gunzTarPerm modified mode [ 'deps/libffi/config/freebsd/x64/fficonfig.h', 420, 436 ]
+490 silly gunzTarPerm extractEntry deps/libffi/config/freebsd/x64/ffitarget.h
+491 silly gunzTarPerm modified mode [ 'deps/libffi/config/freebsd/x64/ffitarget.h', 420, 436 ]
+492 silly gunzTarPerm extractEntry deps/libffi/config/linux/arm/ffi.h
+493 silly gunzTarPerm modified mode [ 'deps/libffi/config/linux/arm/ffi.h', 420, 436 ]
+494 silly gentlyRm /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/ref-array-f52ff68b/node_modules is being purged
+495 verbose gentlyRm don't care about contents; nuking /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/ref-array-f52ff68b/node_modules
+496 silly gunzTarPerm extractEntry deps/libffi/config/linux/arm/fficonfig.h
+497 silly gunzTarPerm modified mode [ 'deps/libffi/config/linux/arm/fficonfig.h', 420, 436 ]
+498 silly gunzTarPerm extractEntry deps/libffi/config/linux/arm/ffitarget.h
+499 silly gunzTarPerm modified mode [ 'deps/libffi/config/linux/arm/ffitarget.h', 420, 436 ]
+500 silly gunzTarPerm extractEntry deps/libffi/config/linux/arm/flags.txt
+501 silly gunzTarPerm modified mode [ 'deps/libffi/config/linux/arm/flags.txt', 420, 436 ]
+502 silly gunzTarPerm extractEntry deps/libffi/config/linux/ia32/ffi.h
+503 silly gunzTarPerm modified mode [ 'deps/libffi/config/linux/ia32/ffi.h', 420, 436 ]
+504 silly gunzTarPerm extractEntry deps/libffi/config/linux/ia32/fficonfig.h
+505 silly gunzTarPerm modified mode [ 'deps/libffi/config/linux/ia32/fficonfig.h', 420, 436 ]
+506 silly gunzTarPerm extractEntry deps/libffi/config/linux/ia32/ffitarget.h
+507 silly gunzTarPerm modified mode [ 'deps/libffi/config/linux/ia32/ffitarget.h', 420, 436 ]
+508 silly gunzTarPerm extractEntry deps/libffi/config/linux/ia32/flags.txt
+509 silly gunzTarPerm modified mode [ 'deps/libffi/config/linux/ia32/flags.txt', 420, 436 ]
+510 silly gunzTarPerm extractEntry deps/libffi/config/linux/x64/ffi.h
+511 silly gunzTarPerm modified mode [ 'deps/libffi/config/linux/x64/ffi.h', 420, 436 ]
+512 silly gunzTarPerm extractEntry deps/libffi/config/linux/x64/fficonfig.h
+513 silly gunzTarPerm modified mode [ 'deps/libffi/config/linux/x64/fficonfig.h', 420, 436 ]
+514 silly gunzTarPerm extractEntry deps/libffi/config/linux/x64/ffitarget.h
+515 silly gunzTarPerm modified mode [ 'deps/libffi/config/linux/x64/ffitarget.h', 420, 436 ]
+516 silly gunzTarPerm extractEntry deps/libffi/config/linux/x64/flags.txt
+517 silly gunzTarPerm modified mode [ 'deps/libffi/config/linux/x64/flags.txt', 420, 436 ]
+518 silly gunzTarPerm extractEntry deps/libffi/config/mac/ia32/ffi.h
+519 silly gunzTarPerm modified mode [ 'deps/libffi/config/mac/ia32/ffi.h', 420, 436 ]
+520 silly gunzTarPerm extractEntry deps/libffi/config/mac/ia32/fficonfig.h
+521 silly gunzTarPerm modified mode [ 'deps/libffi/config/mac/ia32/fficonfig.h', 420, 436 ]
+522 silly gentlyRm /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/tensorflow-cee573aa/node_modules is being purged
+523 verbose gentlyRm don't care about contents; nuking /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/tensorflow-cee573aa/node_modules
+524 silly gunzTarPerm extractEntry deps/libffi/config/mac/ia32/ffitarget.h
+525 silly gunzTarPerm modified mode [ 'deps/libffi/config/mac/ia32/ffitarget.h', 420, 436 ]
+526 silly gunzTarPerm extractEntry deps/libffi/config/mac/ia32/flags.txt
+527 silly gunzTarPerm modified mode [ 'deps/libffi/config/mac/ia32/flags.txt', 420, 436 ]
+528 silly gunzTarPerm extractEntry deps/libffi/config/mac/x64/ffi.h
+529 silly gunzTarPerm modified mode [ 'deps/libffi/config/mac/x64/ffi.h', 420, 436 ]
+530 silly gunzTarPerm extractEntry deps/libffi/config/mac/x64/fficonfig.h
+531 silly gunzTarPerm modified mode [ 'deps/libffi/config/mac/x64/fficonfig.h', 420, 436 ]
+532 silly gunzTarPerm extractEntry deps/libffi/config/mac/x64/ffitarget.h
+533 silly gunzTarPerm modified mode [ 'deps/libffi/config/mac/x64/ffitarget.h', 420, 436 ]
+534 silly gunzTarPerm extractEntry deps/libffi/config/mac/x64/flags.txt
+535 silly gunzTarPerm modified mode [ 'deps/libffi/config/mac/x64/flags.txt', 420, 436 ]
+536 silly gunzTarPerm extractEntry deps/libffi/config/README
+537 silly gunzTarPerm modified mode [ 'deps/libffi/config/README', 420, 436 ]
+538 silly gunzTarPerm extractEntry deps/libffi/config/solaris/ia32/ffi.h
+539 silly gunzTarPerm modified mode [ 'deps/libffi/config/solaris/ia32/ffi.h', 420, 436 ]
+540 silly gunzTarPerm extractEntry deps/libffi/config/solaris/ia32/fficonfig.h
+541 silly gunzTarPerm modified mode [ 'deps/libffi/config/solaris/ia32/fficonfig.h', 420, 436 ]
+542 silly gunzTarPerm extractEntry deps/libffi/config/solaris/ia32/ffitarget.h
+543 silly gunzTarPerm modified mode [ 'deps/libffi/config/solaris/ia32/ffitarget.h', 420, 436 ]
+544 silly gunzTarPerm extractEntry deps/libffi/config/solaris/ia32/flags.txt
+545 silly gunzTarPerm modified mode [ 'deps/libffi/config/solaris/ia32/flags.txt', 420, 436 ]
+546 silly gunzTarPerm extractEntry deps/libffi/config/solaris/x64/ffi.h
+547 silly gunzTarPerm modified mode [ 'deps/libffi/config/solaris/x64/ffi.h', 420, 436 ]
+548 silly gunzTarPerm extractEntry deps/libffi/config/solaris/x64/fficonfig.h
+549 silly gunzTarPerm modified mode [ 'deps/libffi/config/solaris/x64/fficonfig.h', 420, 436 ]
+550 silly gunzTarPerm extractEntry deps/libffi/config/solaris/x64/ffitarget.h
+551 silly gunzTarPerm modified mode [ 'deps/libffi/config/solaris/x64/ffitarget.h', 420, 436 ]
+552 silly gunzTarPerm extractEntry deps/libffi/config/solaris/x64/flags.txt
+553 silly gunzTarPerm modified mode [ 'deps/libffi/config/solaris/x64/flags.txt', 420, 436 ]
+554 silly gunzTarPerm extractEntry deps/libffi/config/win/ia32/ffi.h
+555 silly gunzTarPerm modified mode [ 'deps/libffi/config/win/ia32/ffi.h', 420, 436 ]
+556 silly gunzTarPerm extractEntry deps/libffi/config/win/ia32/fficonfig.h
+557 silly gunzTarPerm modified mode [ 'deps/libffi/config/win/ia32/fficonfig.h', 420, 436 ]
+558 silly gunzTarPerm extractEntry deps/libffi/config/win/ia32/ffitarget.h
+559 silly gunzTarPerm modified mode [ 'deps/libffi/config/win/ia32/ffitarget.h', 420, 436 ]
+560 silly gunzTarPerm extractEntry deps/libffi/config/win/ia32/flags.txt
+561 silly gunzTarPerm modified mode [ 'deps/libffi/config/win/ia32/flags.txt', 420, 436 ]
+562 silly gunzTarPerm extractEntry deps/libffi/config/win/x64/ffi.h
+563 silly gunzTarPerm modified mode [ 'deps/libffi/config/win/x64/ffi.h', 420, 436 ]
+564 silly gunzTarPerm extractEntry deps/libffi/config/win/x64/fficonfig.h
+565 silly gunzTarPerm modified mode [ 'deps/libffi/config/win/x64/fficonfig.h', 420, 436 ]
+566 silly gunzTarPerm extractEntry deps/libffi/config/win/x64/ffitarget.h
+567 silly gunzTarPerm modified mode [ 'deps/libffi/config/win/x64/ffitarget.h', 420, 436 ]
+568 silly gunzTarPerm extractEntry deps/libffi/configure
+569 silly gunzTarPerm modified mode [ 'deps/libffi/configure', 493, 509 ]
+570 silly gunzTarPerm extractEntry deps/libffi/configure.ac
+571 silly gunzTarPerm modified mode [ 'deps/libffi/configure.ac', 420, 436 ]
+572 silly gunzTarPerm extractEntry deps/libffi/configure.host
+573 silly gunzTarPerm modified mode [ 'deps/libffi/configure.host', 420, 436 ]
+574 silly gunzTarPerm extractEntry deps/libffi/depcomp
+575 silly gunzTarPerm modified mode [ 'deps/libffi/depcomp', 493, 509 ]
+576 silly gunzTarPerm extractEntry deps/libffi/doc/libffi.info
+577 silly gunzTarPerm modified mode [ 'deps/libffi/doc/libffi.info', 420, 436 ]
+578 silly gunzTarPerm extractEntry deps/libffi/doc/libffi.texi
+579 silly gunzTarPerm modified mode [ 'deps/libffi/doc/libffi.texi', 420, 436 ]
+580 silly gunzTarPerm extractEntry deps/libffi/doc/stamp-vti
+581 silly gunzTarPerm modified mode [ 'deps/libffi/doc/stamp-vti', 420, 436 ]
+582 silly gunzTarPerm extractEntry deps/libffi/doc/version.texi
+583 silly gunzTarPerm modified mode [ 'deps/libffi/doc/version.texi', 420, 436 ]
+584 silly gunzTarPerm extractEntry deps/libffi/fficonfig.h.in
+585 silly gunzTarPerm modified mode [ 'deps/libffi/fficonfig.h.in', 420, 436 ]
+586 silly gunzTarPerm extractEntry deps/libffi/generate-ios-source-and-headers.py
+587 silly gunzTarPerm modified mode [ 'deps/libffi/generate-ios-source-and-headers.py', 420, 436 ]
+588 silly gunzTarPerm extractEntry deps/libffi/generate-osx-source-and-headers.py
+589 silly gunzTarPerm modified mode [ 'deps/libffi/generate-osx-source-and-headers.py', 420, 436 ]
+590 silly gunzTarPerm extractEntry deps/libffi/include/ffi_common.h
+591 silly gunzTarPerm modified mode [ 'deps/libffi/include/ffi_common.h', 420, 436 ]
+592 silly gunzTarPerm extractEntry deps/libffi/include/ffi.h.in
+593 silly gunzTarPerm modified mode [ 'deps/libffi/include/ffi.h.in', 420, 436 ]
+594 silly gunzTarPerm extractEntry deps/libffi/include/Makefile.am
+595 silly gunzTarPerm modified mode [ 'deps/libffi/include/Makefile.am', 420, 436 ]
+596 silly gunzTarPerm extractEntry deps/libffi/include/Makefile.in
+597 silly gunzTarPerm modified mode [ 'deps/libffi/include/Makefile.in', 420, 436 ]
+598 silly gunzTarPerm extractEntry deps/libffi/install-sh
+599 silly gunzTarPerm modified mode [ 'deps/libffi/install-sh', 493, 509 ]
+600 silly gunzTarPerm extractEntry deps/libffi/libffi.gyp
+601 silly gunzTarPerm modified mode [ 'deps/libffi/libffi.gyp', 420, 436 ]
+602 silly gunzTarPerm extractEntry deps/libffi/libffi.pc.in
+603 silly gunzTarPerm modified mode [ 'deps/libffi/libffi.pc.in', 420, 436 ]
+604 silly gunzTarPerm extractEntry deps/libffi/libffi.xcodeproj/project.pbxproj
+605 silly gunzTarPerm modified mode [ 'deps/libffi/libffi.xcodeproj/project.pbxproj', 420, 436 ]
+606 silly gunzTarPerm extractEntry deps/libffi/libtool-version
+607 silly gunzTarPerm modified mode [ 'deps/libffi/libtool-version', 420, 436 ]
+608 silly gunzTarPerm extractEntry deps/libffi/LICENSE
+609 silly gunzTarPerm modified mode [ 'deps/libffi/LICENSE', 420, 436 ]
+610 silly gunzTarPerm extractEntry deps/libffi/ltmain.sh
+611 silly gunzTarPerm modified mode [ 'deps/libffi/ltmain.sh', 493, 509 ]
+612 silly gunzTarPerm extractEntry deps/libffi/m4/asmcfi.m4
+613 silly gunzTarPerm modified mode [ 'deps/libffi/m4/asmcfi.m4', 420, 436 ]
+614 silly gunzTarPerm extractEntry deps/libffi/m4/ax_cc_maxopt.m4
+615 silly gunzTarPerm modified mode [ 'deps/libffi/m4/ax_cc_maxopt.m4', 420, 436 ]
+616 silly gunzTarPerm extractEntry deps/libffi/m4/ax_cflags_warn_all.m4
+617 silly gunzTarPerm modified mode [ 'deps/libffi/m4/ax_cflags_warn_all.m4', 420, 436 ]
+618 silly gunzTarPerm extractEntry deps/libffi/m4/ax_compiler_vendor.m4
+619 silly gunzTarPerm modified mode [ 'deps/libffi/m4/ax_compiler_vendor.m4', 420, 436 ]
+620 silly gunzTarPerm extractEntry deps/libffi/m4/ax_configure_args.m4
+621 silly gunzTarPerm modified mode [ 'deps/libffi/m4/ax_configure_args.m4', 420, 436 ]
+622 silly gunzTarPerm extractEntry deps/libffi/m4/ax_enable_builddir.m4
+623 silly gunzTarPerm modified mode [ 'deps/libffi/m4/ax_enable_builddir.m4', 420, 436 ]
+624 silly gunzTarPerm extractEntry deps/libffi/m4/ax_gcc_archflag.m4
+625 silly gunzTarPerm modified mode [ 'deps/libffi/m4/ax_gcc_archflag.m4', 420, 436 ]
+626 silly gunzTarPerm extractEntry deps/libffi/m4/ax_gcc_x86_cpuid.m4
+627 silly gunzTarPerm modified mode [ 'deps/libffi/m4/ax_gcc_x86_cpuid.m4', 420, 436 ]
+628 silly gunzTarPerm extractEntry deps/libffi/m4/libtool.m4
+629 silly gunzTarPerm modified mode [ 'deps/libffi/m4/libtool.m4', 420, 436 ]
+630 silly gunzTarPerm extractEntry deps/libffi/m4/lt~obsolete.m4
+631 silly gunzTarPerm modified mode [ 'deps/libffi/m4/lt~obsolete.m4', 420, 436 ]
+632 silly gunzTarPerm extractEntry deps/libffi/m4/ltoptions.m4
+633 silly gunzTarPerm modified mode [ 'deps/libffi/m4/ltoptions.m4', 420, 436 ]
+634 silly gunzTarPerm extractEntry deps/libffi/m4/ltsugar.m4
+635 silly gunzTarPerm modified mode [ 'deps/libffi/m4/ltsugar.m4', 420, 436 ]
+636 silly gentlyRm /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/ref-ad16f5f4/node_modules is being purged
+637 verbose gentlyRm don't care about contents; nuking /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/ref-ad16f5f4/node_modules
+638 silly gunzTarPerm extractEntry deps/libffi/m4/ltversion.m4
+639 silly gunzTarPerm modified mode [ 'deps/libffi/m4/ltversion.m4', 420, 436 ]
+640 silly gunzTarPerm extractEntry deps/libffi/Makefile.am
+641 silly gunzTarPerm modified mode [ 'deps/libffi/Makefile.am', 420, 436 ]
+642 silly gunzTarPerm extractEntry deps/libffi/Makefile.in
+643 silly gunzTarPerm modified mode [ 'deps/libffi/Makefile.in', 420, 436 ]
+644 silly gunzTarPerm extractEntry deps/libffi/man/ffi_call.3
+645 silly gunzTarPerm modified mode [ 'deps/libffi/man/ffi_call.3', 420, 436 ]
+646 silly gunzTarPerm extractEntry deps/libffi/man/ffi_prep_cif_var.3
+647 silly gunzTarPerm modified mode [ 'deps/libffi/man/ffi_prep_cif_var.3', 420, 436 ]
+648 silly gunzTarPerm extractEntry deps/libffi/man/ffi_prep_cif.3
+649 silly gunzTarPerm modified mode [ 'deps/libffi/man/ffi_prep_cif.3', 420, 436 ]
+650 silly gunzTarPerm extractEntry deps/libffi/man/ffi.3
+651 silly gunzTarPerm modified mode [ 'deps/libffi/man/ffi.3', 420, 436 ]
+652 silly gunzTarPerm extractEntry deps/libffi/man/Makefile.am
+653 silly gunzTarPerm modified mode [ 'deps/libffi/man/Makefile.am', 420, 436 ]
+654 silly gunzTarPerm extractEntry deps/libffi/man/Makefile.in
+655 silly gunzTarPerm modified mode [ 'deps/libffi/man/Makefile.in', 420, 436 ]
+656 silly gunzTarPerm extractEntry deps/libffi/mdate-sh
+657 silly gunzTarPerm modified mode [ 'deps/libffi/mdate-sh', 420, 436 ]
+658 silly gunzTarPerm extractEntry deps/libffi/missing
+659 silly gunzTarPerm modified mode [ 'deps/libffi/missing', 493, 509 ]
+660 silly gunzTarPerm extractEntry deps/libffi/msvcc.sh
+661 silly gunzTarPerm modified mode [ 'deps/libffi/msvcc.sh', 493, 509 ]
+662 silly gunzTarPerm extractEntry deps/libffi/README
+663 silly gunzTarPerm modified mode [ 'deps/libffi/README', 420, 436 ]
+664 silly gunzTarPerm extractEntry deps/libffi/src/alpha/ffi.c
+665 silly gunzTarPerm modified mode [ 'deps/libffi/src/alpha/ffi.c', 420, 436 ]
+666 silly gunzTarPerm extractEntry deps/libffi/src/alpha/ffitarget.h
+667 silly gunzTarPerm modified mode [ 'deps/libffi/src/alpha/ffitarget.h', 420, 436 ]
+668 silly gunzTarPerm extractEntry deps/libffi/src/alpha/osf.S
+669 silly gunzTarPerm modified mode [ 'deps/libffi/src/alpha/osf.S', 420, 436 ]
+670 silly gunzTarPerm extractEntry deps/libffi/src/arm/ffi.c
+671 silly gunzTarPerm modified mode [ 'deps/libffi/src/arm/ffi.c', 420, 436 ]
+672 silly gunzTarPerm extractEntry deps/libffi/src/arm/ffitarget.h
+673 silly gunzTarPerm modified mode [ 'deps/libffi/src/arm/ffitarget.h', 420, 436 ]
+674 silly gunzTarPerm extractEntry deps/libffi/src/arm/gentramp.sh
+675 silly gunzTarPerm modified mode [ 'deps/libffi/src/arm/gentramp.sh', 493, 509 ]
+676 silly gunzTarPerm extractEntry deps/libffi/src/arm/sysv.S
+677 silly gunzTarPerm modified mode [ 'deps/libffi/src/arm/sysv.S', 420, 436 ]
+678 silly gunzTarPerm extractEntry deps/libffi/src/arm/trampoline.S
+679 silly gunzTarPerm modified mode [ 'deps/libffi/src/arm/trampoline.S', 420, 436 ]
+680 silly gunzTarPerm extractEntry deps/libffi/src/avr32/ffi.c
+681 silly gunzTarPerm modified mode [ 'deps/libffi/src/avr32/ffi.c', 420, 436 ]
+682 silly gunzTarPerm extractEntry deps/libffi/src/avr32/ffitarget.h
+683 silly gunzTarPerm modified mode [ 'deps/libffi/src/avr32/ffitarget.h', 420, 436 ]
+684 silly gunzTarPerm extractEntry deps/libffi/src/avr32/sysv.S
+685 silly gunzTarPerm modified mode [ 'deps/libffi/src/avr32/sysv.S', 420, 436 ]
+686 silly gunzTarPerm extractEntry deps/libffi/src/closures.c
+687 silly gunzTarPerm modified mode [ 'deps/libffi/src/closures.c', 420, 436 ]
+688 silly gunzTarPerm extractEntry deps/libffi/src/cris/ffi.c
+689 silly gunzTarPerm modified mode [ 'deps/libffi/src/cris/ffi.c', 420, 436 ]
+690 silly gunzTarPerm extractEntry deps/libffi/src/cris/ffitarget.h
+691 silly gunzTarPerm modified mode [ 'deps/libffi/src/cris/ffitarget.h', 420, 436 ]
+692 silly gunzTarPerm extractEntry deps/libffi/src/cris/sysv.S
+693 silly gunzTarPerm modified mode [ 'deps/libffi/src/cris/sysv.S', 420, 436 ]
+694 silly gunzTarPerm extractEntry deps/libffi/src/debug.c
+695 silly gunzTarPerm modified mode [ 'deps/libffi/src/debug.c', 420, 436 ]
+696 silly gunzTarPerm extractEntry deps/libffi/src/dlmalloc.c
+697 silly gunzTarPerm modified mode [ 'deps/libffi/src/dlmalloc.c', 420, 436 ]
+698 silly gunzTarPerm extractEntry deps/libffi/src/frv/eabi.S
+699 silly gunzTarPerm modified mode [ 'deps/libffi/src/frv/eabi.S', 420, 436 ]
+700 silly gunzTarPerm extractEntry deps/libffi/src/frv/ffi.c
+701 silly gunzTarPerm modified mode [ 'deps/libffi/src/frv/ffi.c', 420, 436 ]
+702 silly gunzTarPerm extractEntry deps/libffi/src/frv/ffitarget.h
+703 silly gunzTarPerm modified mode [ 'deps/libffi/src/frv/ffitarget.h', 420, 436 ]
+704 silly gunzTarPerm extractEntry deps/libffi/src/ia64/ffi.c
+705 silly gunzTarPerm modified mode [ 'deps/libffi/src/ia64/ffi.c', 420, 436 ]
+706 silly gunzTarPerm extractEntry deps/libffi/src/ia64/ffitarget.h
+707 silly gunzTarPerm modified mode [ 'deps/libffi/src/ia64/ffitarget.h', 420, 436 ]
+708 silly gunzTarPerm extractEntry deps/libffi/src/ia64/ia64_flags.h
+709 silly gunzTarPerm modified mode [ 'deps/libffi/src/ia64/ia64_flags.h', 420, 436 ]
+710 silly gunzTarPerm extractEntry deps/libffi/src/ia64/unix.S
+711 silly gunzTarPerm modified mode [ 'deps/libffi/src/ia64/unix.S', 420, 436 ]
+712 silly gunzTarPerm extractEntry deps/libffi/src/java_raw_api.c
+713 silly gunzTarPerm modified mode [ 'deps/libffi/src/java_raw_api.c', 420, 436 ]
+714 silly gunzTarPerm extractEntry deps/libffi/src/m32r/ffi.c
+715 silly gunzTarPerm modified mode [ 'deps/libffi/src/m32r/ffi.c', 420, 436 ]
+716 silly gunzTarPerm extractEntry deps/libffi/src/m32r/ffitarget.h
+717 silly gunzTarPerm modified mode [ 'deps/libffi/src/m32r/ffitarget.h', 420, 436 ]
+718 silly gunzTarPerm extractEntry deps/libffi/src/m32r/sysv.S
+719 silly gunzTarPerm modified mode [ 'deps/libffi/src/m32r/sysv.S', 420, 436 ]
+720 silly gunzTarPerm extractEntry deps/libffi/src/m68k/ffi.c
+721 silly gunzTarPerm modified mode [ 'deps/libffi/src/m68k/ffi.c', 420, 436 ]
+722 silly gunzTarPerm extractEntry deps/libffi/src/m68k/ffitarget.h
+723 silly gunzTarPerm modified mode [ 'deps/libffi/src/m68k/ffitarget.h', 420, 436 ]
+724 silly gunzTarPerm extractEntry deps/libffi/src/m68k/sysv.S
+725 silly gunzTarPerm modified mode [ 'deps/libffi/src/m68k/sysv.S', 420, 436 ]
+726 silly gunzTarPerm extractEntry deps/libffi/src/mips/ffi.c
+727 silly gunzTarPerm modified mode [ 'deps/libffi/src/mips/ffi.c', 420, 436 ]
+728 silly gunzTarPerm extractEntry deps/libffi/src/mips/ffitarget.h
+729 silly gunzTarPerm modified mode [ 'deps/libffi/src/mips/ffitarget.h', 420, 436 ]
+730 silly gunzTarPerm extractEntry deps/libffi/src/mips/n32.S
+731 silly gunzTarPerm modified mode [ 'deps/libffi/src/mips/n32.S', 420, 436 ]
+732 silly gunzTarPerm extractEntry deps/libffi/src/mips/o32.S
+733 silly gunzTarPerm modified mode [ 'deps/libffi/src/mips/o32.S', 420, 436 ]
+734 silly gunzTarPerm extractEntry deps/libffi/src/moxie/eabi.S
+735 silly gunzTarPerm modified mode [ 'deps/libffi/src/moxie/eabi.S', 420, 436 ]
+736 silly gunzTarPerm extractEntry deps/libffi/src/moxie/ffi.c
+737 silly gunzTarPerm modified mode [ 'deps/libffi/src/moxie/ffi.c', 420, 436 ]
+738 silly gunzTarPerm extractEntry deps/libffi/src/pa/ffi.c
+739 silly gunzTarPerm modified mode [ 'deps/libffi/src/pa/ffi.c', 420, 436 ]
+740 silly gunzTarPerm extractEntry deps/libffi/src/pa/ffitarget.h
+741 silly gunzTarPerm modified mode [ 'deps/libffi/src/pa/ffitarget.h', 420, 436 ]
+742 silly gunzTarPerm extractEntry deps/libffi/src/pa/hpux32.S
+743 silly gunzTarPerm modified mode [ 'deps/libffi/src/pa/hpux32.S', 420, 436 ]
+744 silly gunzTarPerm extractEntry deps/libffi/src/pa/linux.S
+745 silly gunzTarPerm modified mode [ 'deps/libffi/src/pa/linux.S', 420, 436 ]
+746 silly gunzTarPerm extractEntry deps/libffi/src/powerpc/aix_closure.S
+747 silly gunzTarPerm modified mode [ 'deps/libffi/src/powerpc/aix_closure.S', 420, 436 ]
+748 silly gunzTarPerm extractEntry deps/libffi/src/powerpc/aix.S
+749 silly gunzTarPerm modified mode [ 'deps/libffi/src/powerpc/aix.S', 420, 436 ]
+750 silly gunzTarPerm extractEntry deps/libffi/src/powerpc/asm.h
+751 silly gunzTarPerm modified mode [ 'deps/libffi/src/powerpc/asm.h', 420, 436 ]
+752 silly gunzTarPerm extractEntry deps/libffi/src/powerpc/darwin_closure.S
+753 silly gunzTarPerm modified mode [ 'deps/libffi/src/powerpc/darwin_closure.S', 420, 436 ]
+754 silly gunzTarPerm extractEntry deps/libffi/src/powerpc/darwin.S
+755 silly gunzTarPerm modified mode [ 'deps/libffi/src/powerpc/darwin.S', 420, 436 ]
+756 silly gunzTarPerm extractEntry deps/libffi/src/powerpc/ffi_darwin.c
+757 silly gunzTarPerm modified mode [ 'deps/libffi/src/powerpc/ffi_darwin.c', 420, 436 ]
+758 silly gunzTarPerm extractEntry deps/libffi/src/powerpc/ffi.c
+759 silly gunzTarPerm modified mode [ 'deps/libffi/src/powerpc/ffi.c', 420, 436 ]
+760 silly gunzTarPerm extractEntry deps/libffi/src/powerpc/ffitarget.h
+761 silly gunzTarPerm modified mode [ 'deps/libffi/src/powerpc/ffitarget.h', 420, 436 ]
+762 silly gunzTarPerm extractEntry deps/libffi/src/powerpc/linux64_closure.S
+763 silly gunzTarPerm modified mode [ 'deps/libffi/src/powerpc/linux64_closure.S', 420, 436 ]
+764 silly gunzTarPerm extractEntry deps/libffi/src/powerpc/linux64.S
+765 silly gunzTarPerm modified mode [ 'deps/libffi/src/powerpc/linux64.S', 420, 436 ]
+766 silly gunzTarPerm extractEntry deps/libffi/src/powerpc/ppc_closure.S
+767 silly gunzTarPerm modified mode [ 'deps/libffi/src/powerpc/ppc_closure.S', 420, 436 ]
+768 silly gunzTarPerm extractEntry deps/libffi/src/powerpc/sysv.S
+769 silly gunzTarPerm modified mode [ 'deps/libffi/src/powerpc/sysv.S', 420, 436 ]
+770 silly gunzTarPerm extractEntry deps/libffi/src/prep_cif.c
+771 silly gunzTarPerm modified mode [ 'deps/libffi/src/prep_cif.c', 420, 436 ]
+772 silly gunzTarPerm extractEntry deps/libffi/src/raw_api.c
+773 silly gunzTarPerm modified mode [ 'deps/libffi/src/raw_api.c', 420, 436 ]
+774 silly gunzTarPerm extractEntry deps/libffi/src/s390/ffi.c
+775 silly gunzTarPerm modified mode [ 'deps/libffi/src/s390/ffi.c', 420, 436 ]
+776 silly gunzTarPerm extractEntry deps/libffi/src/s390/ffitarget.h
+777 silly gunzTarPerm modified mode [ 'deps/libffi/src/s390/ffitarget.h', 420, 436 ]
+778 silly gunzTarPerm extractEntry deps/libffi/src/s390/sysv.S
+779 silly gunzTarPerm modified mode [ 'deps/libffi/src/s390/sysv.S', 420, 436 ]
+780 silly gunzTarPerm extractEntry deps/libffi/src/sh/ffi.c
+781 silly gunzTarPerm modified mode [ 'deps/libffi/src/sh/ffi.c', 420, 436 ]
+782 silly gunzTarPerm extractEntry deps/libffi/src/sh/ffitarget.h
+783 silly gunzTarPerm modified mode [ 'deps/libffi/src/sh/ffitarget.h', 420, 436 ]
+784 silly gunzTarPerm extractEntry deps/libffi/src/sh/sysv.S
+785 silly gunzTarPerm modified mode [ 'deps/libffi/src/sh/sysv.S', 420, 436 ]
+786 silly gunzTarPerm extractEntry deps/libffi/src/sh64/ffi.c
+787 silly gunzTarPerm modified mode [ 'deps/libffi/src/sh64/ffi.c', 420, 436 ]
+788 silly gunzTarPerm extractEntry deps/libffi/src/sh64/ffitarget.h
+789 silly gunzTarPerm modified mode [ 'deps/libffi/src/sh64/ffitarget.h', 420, 436 ]
+790 silly gunzTarPerm extractEntry deps/libffi/src/sh64/sysv.S
+791 silly gunzTarPerm modified mode [ 'deps/libffi/src/sh64/sysv.S', 420, 436 ]
+792 silly gunzTarPerm extractEntry deps/libffi/src/sparc/ffi.c
+793 silly gunzTarPerm modified mode [ 'deps/libffi/src/sparc/ffi.c', 420, 436 ]
+794 silly gunzTarPerm extractEntry deps/libffi/src/sparc/ffitarget.h
+795 silly gunzTarPerm modified mode [ 'deps/libffi/src/sparc/ffitarget.h', 420, 436 ]
+796 silly gunzTarPerm extractEntry deps/libffi/src/sparc/v8.S
+797 silly gunzTarPerm modified mode [ 'deps/libffi/src/sparc/v8.S', 420, 436 ]
+798 silly gunzTarPerm extractEntry deps/libffi/src/sparc/v9.S
+799 silly gunzTarPerm modified mode [ 'deps/libffi/src/sparc/v9.S', 420, 436 ]
+800 silly gunzTarPerm extractEntry deps/libffi/src/types.c
+801 silly gunzTarPerm modified mode [ 'deps/libffi/src/types.c', 420, 436 ]
+802 silly gunzTarPerm extractEntry deps/libffi/src/x86/darwin.S
+803 silly gunzTarPerm modified mode [ 'deps/libffi/src/x86/darwin.S', 420, 436 ]
+804 silly gunzTarPerm extractEntry deps/libffi/src/x86/darwin64.S
+805 silly gunzTarPerm modified mode [ 'deps/libffi/src/x86/darwin64.S', 420, 436 ]
+806 silly gunzTarPerm extractEntry deps/libffi/src/x86/ffi.c
+807 silly gunzTarPerm modified mode [ 'deps/libffi/src/x86/ffi.c', 420, 436 ]
+808 silly gunzTarPerm extractEntry deps/libffi/src/x86/ffi64.c
+809 silly gunzTarPerm modified mode [ 'deps/libffi/src/x86/ffi64.c', 420, 436 ]
+810 silly gunzTarPerm extractEntry deps/libffi/src/x86/ffitarget.h
+811 silly gunzTarPerm modified mode [ 'deps/libffi/src/x86/ffitarget.h', 420, 436 ]
+812 silly gunzTarPerm extractEntry deps/libffi/src/x86/freebsd.S
+813 silly gunzTarPerm modified mode [ 'deps/libffi/src/x86/freebsd.S', 420, 436 ]
+814 silly gunzTarPerm extractEntry deps/libffi/src/x86/sysv.S
+815 silly gunzTarPerm modified mode [ 'deps/libffi/src/x86/sysv.S', 420, 436 ]
+816 silly gunzTarPerm extractEntry deps/libffi/src/x86/unix64.S
+817 silly gunzTarPerm modified mode [ 'deps/libffi/src/x86/unix64.S', 420, 436 ]
+818 silly gunzTarPerm extractEntry deps/libffi/src/x86/win32.asm
+819 silly gunzTarPerm modified mode [ 'deps/libffi/src/x86/win32.asm', 420, 436 ]
+820 silly gunzTarPerm extractEntry deps/libffi/src/x86/win32.S
+821 silly gunzTarPerm modified mode [ 'deps/libffi/src/x86/win32.S', 420, 436 ]
+822 silly gunzTarPerm extractEntry deps/libffi/src/x86/win64.asm
+823 silly gunzTarPerm modified mode [ 'deps/libffi/src/x86/win64.asm', 493, 509 ]
+824 silly gunzTarPerm extractEntry deps/libffi/src/x86/win64.S
+825 silly gunzTarPerm modified mode [ 'deps/libffi/src/x86/win64.S', 420, 436 ]
+826 silly gunzTarPerm extractEntry deps/libffi/test.c
+827 silly gunzTarPerm modified mode [ 'deps/libffi/test.c', 420, 436 ]
+828 silly gunzTarPerm extractEntry deps/libffi/testsuite/config/default.exp
+829 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/config/default.exp', 420, 436 ]
+830 silly gunzTarPerm extractEntry deps/libffi/testsuite/lib/libffi.exp
+831 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/lib/libffi.exp', 420, 436 ]
+832 silly gunzTarPerm extractEntry deps/libffi/testsuite/lib/target-libpath.exp
+833 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/lib/target-libpath.exp', 420, 436 ]
+834 silly gunzTarPerm extractEntry deps/libffi/testsuite/lib/wrapper.exp
+835 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/lib/wrapper.exp', 420, 436 ]
+836 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/call.exp
+837 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/call.exp', 420, 436 ]
+838 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/closure_fn0.c
+839 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/closure_fn0.c', 420, 436 ]
+840 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/closure_fn1.c
+841 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/closure_fn1.c', 420, 436 ]
+842 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/closure_fn2.c
+843 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/closure_fn2.c', 420, 436 ]
+844 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/closure_fn3.c
+845 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/closure_fn3.c', 420, 436 ]
+846 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/closure_fn4.c
+847 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/closure_fn4.c', 420, 436 ]
+848 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/closure_fn5.c
+849 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/closure_fn5.c', 420, 436 ]
+850 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/closure_fn6.c
+851 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/closure_fn6.c', 420, 436 ]
+852 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/closure_loc_fn0.c
+853 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/closure_loc_fn0.c',
+853 silly gunzTarPerm   420,
+853 silly gunzTarPerm   436 ]
+854 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/closure_stdcall.c
+855 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/closure_stdcall.c',
+855 silly gunzTarPerm   420,
+855 silly gunzTarPerm   436 ]
+856 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/closure_thiscall.c
+857 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/closure_thiscall.c',
+857 silly gunzTarPerm   420,
+857 silly gunzTarPerm   436 ]
+858 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_1_1byte.c
+859 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_1_1byte.c', 420, 436 ]
+860 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_12byte.c
+861 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_12byte.c', 420, 436 ]
+862 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_16byte.c
+863 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_16byte.c', 420, 436 ]
+864 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_18byte.c
+865 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_18byte.c', 420, 436 ]
+866 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_19byte.c
+867 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_19byte.c', 420, 436 ]
+868 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_20byte.c
+869 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_20byte.c', 420, 436 ]
+870 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_20byte1.c
+871 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_20byte1.c', 420, 436 ]
+872 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_24byte.c
+873 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_24byte.c', 420, 436 ]
+874 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_2byte.c
+875 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_2byte.c', 420, 436 ]
+876 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_3_1byte.c
+877 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_3_1byte.c', 420, 436 ]
+878 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_3byte1.c
+879 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_3byte1.c', 420, 436 ]
+880 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_3byte2.c
+881 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_3byte2.c', 420, 436 ]
+882 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_4_1byte.c
+883 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_4_1byte.c', 420, 436 ]
+884 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_4byte.c
+885 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_4byte.c', 420, 436 ]
+886 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_5_1_byte.c
+887 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_5_1_byte.c', 420, 436 ]
+888 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_5byte.c
+889 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_5byte.c', 420, 436 ]
+890 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_6_1_byte.c
+891 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_6_1_byte.c', 420, 436 ]
+892 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_64byte.c
+893 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_64byte.c', 420, 436 ]
+894 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_6byte.c
+895 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_6byte.c', 420, 436 ]
+896 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_7_1_byte.c
+897 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_7_1_byte.c', 420, 436 ]
+898 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_7byte.c
+899 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_7byte.c', 420, 436 ]
+900 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_8byte.c
+901 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_8byte.c', 420, 436 ]
+902 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_9byte1.c
+903 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_9byte1.c', 420, 436 ]
+904 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_9byte2.c
+905 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_9byte2.c', 420, 436 ]
+906 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_align_double.c
+907 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_align_double.c',
+907 silly gunzTarPerm   420,
+907 silly gunzTarPerm   436 ]
+908 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_align_float.c
+909 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_align_float.c',
+909 silly gunzTarPerm   420,
+909 silly gunzTarPerm   436 ]
+910 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_align_longdouble_split.c
+911 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_align_longdouble_split.c',
+911 silly gunzTarPerm   420,
+911 silly gunzTarPerm   436 ]
+912 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_align_longdouble_split2.c
+913 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_align_longdouble_split2.c',
+913 silly gunzTarPerm   420,
+913 silly gunzTarPerm   436 ]
+914 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_align_longdouble.c
+915 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_align_longdouble.c',
+915 silly gunzTarPerm   420,
+915 silly gunzTarPerm   436 ]
+916 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_align_pointer.c
+917 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_align_pointer.c',
+917 silly gunzTarPerm   420,
+917 silly gunzTarPerm   436 ]
+918 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_align_sint16.c
+919 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_align_sint16.c',
+919 silly gunzTarPerm   420,
+919 silly gunzTarPerm   436 ]
+920 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_align_sint32.c
+921 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_align_sint32.c',
+921 silly gunzTarPerm   420,
+921 silly gunzTarPerm   436 ]
+922 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_align_sint64.c
+923 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_align_sint64.c',
+923 silly gunzTarPerm   420,
+923 silly gunzTarPerm   436 ]
+924 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_align_uint16.c
+925 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_align_uint16.c',
+925 silly gunzTarPerm   420,
+925 silly gunzTarPerm   436 ]
+926 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_align_uint32.c
+927 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_align_uint32.c',
+927 silly gunzTarPerm   420,
+927 silly gunzTarPerm   436 ]
+928 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_align_uint64.c
+929 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_align_uint64.c',
+929 silly gunzTarPerm   420,
+929 silly gunzTarPerm   436 ]
+930 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_dbls_struct.c
+931 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_dbls_struct.c',
+931 silly gunzTarPerm   420,
+931 silly gunzTarPerm   436 ]
+932 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_double_va.c
+933 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_double_va.c', 420, 436 ]
+934 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_double.c
+935 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_double.c', 420, 436 ]
+936 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_float.c
+937 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_float.c', 420, 436 ]
+938 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_longdouble_va.c
+939 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_longdouble_va.c',
+939 silly gunzTarPerm   420,
+939 silly gunzTarPerm   436 ]
+940 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_longdouble.c
+941 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_longdouble.c',
+941 silly gunzTarPerm   420,
+941 silly gunzTarPerm   436 ]
+942 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_multi_schar.c
+943 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_multi_schar.c',
+943 silly gunzTarPerm   420,
+943 silly gunzTarPerm   436 ]
+944 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_multi_sshort.c
+945 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_multi_sshort.c',
+945 silly gunzTarPerm   420,
+945 silly gunzTarPerm   436 ]
+946 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_multi_sshortchar.c
+947 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_multi_sshortchar.c',
+947 silly gunzTarPerm   420,
+947 silly gunzTarPerm   436 ]
+948 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_multi_uchar.c
+949 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_multi_uchar.c',
+949 silly gunzTarPerm   420,
+949 silly gunzTarPerm   436 ]
+950 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_multi_ushort.c
+951 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_multi_ushort.c',
+951 silly gunzTarPerm   420,
+951 silly gunzTarPerm   436 ]
+952 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_multi_ushortchar.c
+953 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_multi_ushortchar.c',
+953 silly gunzTarPerm   420,
+953 silly gunzTarPerm   436 ]
+954 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_pointer_stack.c
+955 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_pointer_stack.c',
+955 silly gunzTarPerm   420,
+955 silly gunzTarPerm   436 ]
+956 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_pointer.c
+957 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_pointer.c', 420, 436 ]
+958 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_schar.c
+959 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_schar.c', 420, 436 ]
+960 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_sint.c
+961 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_sint.c', 420, 436 ]
+962 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_sshort.c
+963 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_sshort.c', 420, 436 ]
+964 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_uchar.c
+965 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_uchar.c', 420, 436 ]
+966 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_uint.c
+967 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_uint.c', 420, 436 ]
+968 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_ulonglong.c
+969 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_ulonglong.c', 420, 436 ]
+970 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/cls_ushort.c
+971 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/cls_ushort.c', 420, 436 ]
+972 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/err_bad_abi.c
+973 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/err_bad_abi.c', 420, 436 ]
+974 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/err_bad_typedef.c
+975 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/err_bad_typedef.c',
+975 silly gunzTarPerm   420,
+975 silly gunzTarPerm   436 ]
+976 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/fastthis1_win32.c
+977 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/fastthis1_win32.c',
+977 silly gunzTarPerm   420,
+977 silly gunzTarPerm   436 ]
+978 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/fastthis2_win32.c
+979 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/fastthis2_win32.c',
+979 silly gunzTarPerm   420,
+979 silly gunzTarPerm   436 ]
+980 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/fastthis3_win32.c
+981 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/fastthis3_win32.c',
+981 silly gunzTarPerm   420,
+981 silly gunzTarPerm   436 ]
+982 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/ffitest.h
+983 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/ffitest.h', 420, 436 ]
+984 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/float_va.c
+985 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/float_va.c', 420, 436 ]
+986 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/float.c
+987 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/float.c', 420, 436 ]
+988 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/float1.c
+989 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/float1.c', 420, 436 ]
+990 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/float2.c
+991 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/float2.c', 420, 436 ]
+992 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/float3.c
+993 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/float3.c', 420, 436 ]
+994 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/float4.c
+995 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/float4.c', 420, 436 ]
+996 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/huge_struct.c
+997 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/huge_struct.c', 420, 436 ]
+998 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/many_win32.c
+999 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/many_win32.c', 420, 436 ]
+1000 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/many.c
+1001 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/many.c', 420, 436 ]
+1002 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/many2_win32.c
+1003 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/many2_win32.c', 420, 436 ]
+1004 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/many2.c
+1005 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/many2.c', 420, 436 ]
+1006 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/negint.c
+1007 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/negint.c', 420, 436 ]
+1008 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/nested_struct.c
+1009 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/nested_struct.c', 420, 436 ]
+1010 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/nested_struct1.c
+1011 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/nested_struct1.c',
+1011 silly gunzTarPerm   420,
+1011 silly gunzTarPerm   436 ]
+1012 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/nested_struct10.c
+1013 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/nested_struct10.c',
+1013 silly gunzTarPerm   420,
+1013 silly gunzTarPerm   436 ]
+1014 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/nested_struct2.c
+1015 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/nested_struct2.c',
+1015 silly gunzTarPerm   420,
+1015 silly gunzTarPerm   436 ]
+1016 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/nested_struct3.c
+1017 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/nested_struct3.c',
+1017 silly gunzTarPerm   420,
+1017 silly gunzTarPerm   436 ]
+1018 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/nested_struct4.c
+1019 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/nested_struct4.c',
+1019 silly gunzTarPerm   420,
+1019 silly gunzTarPerm   436 ]
+1020 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/nested_struct5.c
+1021 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/nested_struct5.c',
+1021 silly gunzTarPerm   420,
+1021 silly gunzTarPerm   436 ]
+1022 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/nested_struct6.c
+1023 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/nested_struct6.c',
+1023 silly gunzTarPerm   420,
+1023 silly gunzTarPerm   436 ]
+1024 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/nested_struct7.c
+1025 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/nested_struct7.c',
+1025 silly gunzTarPerm   420,
+1025 silly gunzTarPerm   436 ]
+1026 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/nested_struct8.c
+1027 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/nested_struct8.c',
+1027 silly gunzTarPerm   420,
+1027 silly gunzTarPerm   436 ]
+1028 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/nested_struct9.c
+1029 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/nested_struct9.c',
+1029 silly gunzTarPerm   420,
+1029 silly gunzTarPerm   436 ]
+1030 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/problem1.c
+1031 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/problem1.c', 420, 436 ]
+1032 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/promotion.c
+1033 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/promotion.c', 420, 436 ]
+1034 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/pyobjc-tc.c
+1035 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/pyobjc-tc.c', 420, 436 ]
+1036 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/return_dbl.c
+1037 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/return_dbl.c', 420, 436 ]
+1038 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/return_dbl1.c
+1039 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/return_dbl1.c', 420, 436 ]
+1040 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/return_dbl2.c
+1041 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/return_dbl2.c', 420, 436 ]
+1042 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/return_fl.c
+1043 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/return_fl.c', 420, 436 ]
+1044 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/return_fl1.c
+1045 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/return_fl1.c', 420, 436 ]
+1046 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/return_fl2.c
+1047 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/return_fl2.c', 420, 436 ]
+1048 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/return_fl3.c
+1049 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/return_fl3.c', 420, 436 ]
+1050 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/return_ldl.c
+1051 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/return_ldl.c', 420, 436 ]
+1052 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/return_ll.c
+1053 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/return_ll.c', 420, 436 ]
+1054 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/return_ll1.c
+1055 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/return_ll1.c', 420, 436 ]
+1056 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/return_sc.c
+1057 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/return_sc.c', 420, 436 ]
+1058 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/return_sl.c
+1059 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/return_sl.c', 420, 436 ]
+1060 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/return_uc.c
+1061 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/return_uc.c', 420, 436 ]
+1062 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/return_ul.c
+1063 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/return_ul.c', 420, 436 ]
+1064 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/stret_large.c
+1065 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/stret_large.c', 420, 436 ]
+1066 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/stret_large2.c
+1067 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/stret_large2.c', 420, 436 ]
+1068 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/stret_medium.c
+1069 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/stret_medium.c', 420, 436 ]
+1070 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/stret_medium2.c
+1071 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/stret_medium2.c', 420, 436 ]
+1072 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/strlen_win32.c
+1073 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/strlen_win32.c', 420, 436 ]
+1074 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/strlen.c
+1075 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/strlen.c', 420, 436 ]
+1076 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/strlen2_win32.c
+1077 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/strlen2_win32.c', 420, 436 ]
+1078 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/struct1_win32.c
+1079 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/struct1_win32.c', 420, 436 ]
+1080 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/struct1.c
+1081 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/struct1.c', 420, 436 ]
+1082 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/struct2_win32.c
+1083 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/struct2_win32.c', 420, 436 ]
+1084 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/struct2.c
+1085 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/struct2.c', 420, 436 ]
+1086 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/struct3.c
+1087 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/struct3.c', 420, 436 ]
+1088 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/struct4.c
+1089 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/struct4.c', 420, 436 ]
+1090 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/struct5.c
+1091 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/struct5.c', 420, 436 ]
+1092 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/struct6.c
+1093 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/struct6.c', 420, 436 ]
+1094 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/struct7.c
+1095 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/struct7.c', 420, 436 ]
+1096 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/struct8.c
+1097 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/struct8.c', 420, 436 ]
+1098 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/struct9.c
+1099 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/struct9.c', 420, 436 ]
+1100 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.call/testclosure.c
+1101 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.call/testclosure.c', 420, 436 ]
+1102 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.special/ffitestcxx.h
+1103 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.special/ffitestcxx.h', 420, 436 ]
+1104 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.special/special.exp
+1105 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.special/special.exp', 420, 436 ]
+1106 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.special/unwindtest_ffi_call.cc
+1107 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.special/unwindtest_ffi_call.cc',
+1107 silly gunzTarPerm   420,
+1107 silly gunzTarPerm   436 ]
+1108 silly gunzTarPerm extractEntry deps/libffi/testsuite/libffi.special/unwindtest.cc
+1109 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/libffi.special/unwindtest.cc',
+1109 silly gunzTarPerm   420,
+1109 silly gunzTarPerm   436 ]
+1110 silly gunzTarPerm extractEntry deps/libffi/testsuite/Makefile.am
+1111 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/Makefile.am', 420, 436 ]
+1112 silly gunzTarPerm extractEntry deps/libffi/testsuite/Makefile.in
+1113 silly gunzTarPerm modified mode [ 'deps/libffi/testsuite/Makefile.in', 420, 436 ]
+1114 silly gunzTarPerm extractEntry deps/libffi/texinfo.tex
+1115 silly gunzTarPerm modified mode [ 'deps/libffi/texinfo.tex', 420, 436 ]
+1116 silly gunzTarPerm extractEntry example/abs.js
+1117 silly gunzTarPerm modified mode [ 'example/abs.js', 420, 436 ]
+1118 silly gunzTarPerm extractEntry example/factorial/factorial.c
+1119 silly gunzTarPerm modified mode [ 'example/factorial/factorial.c', 420, 436 ]
+1120 silly gunzTarPerm extractEntry example/factorial/factorial.js
+1121 silly gunzTarPerm modified mode [ 'example/factorial/factorial.js', 420, 436 ]
+1122 silly gunzTarPerm extractEntry example/factorial/README.md
+1123 silly gunzTarPerm modified mode [ 'example/factorial/README.md', 420, 436 ]
+1124 silly gunzTarPerm extractEntry example/sqlite.js
+1125 silly gunzTarPerm modified mode [ 'example/sqlite.js', 420, 436 ]
+1126 silly gunzTarPerm extractEntry lib/_foreign_function.js
+1127 silly gunzTarPerm modified mode [ 'lib/_foreign_function.js', 420, 436 ]
+1128 silly gunzTarPerm extractEntry lib/bindings.js
+1129 silly gunzTarPerm modified mode [ 'lib/bindings.js', 420, 436 ]
+1130 silly gunzTarPerm extractEntry lib/callback.js
+1131 silly gunzTarPerm modified mode [ 'lib/callback.js', 420, 436 ]
+1132 silly gunzTarPerm extractEntry lib/cif_var.js
+1133 silly gunzTarPerm modified mode [ 'lib/cif_var.js', 420, 436 ]
+1134 silly gunzTarPerm extractEntry lib/cif.js
+1135 silly gunzTarPerm modified mode [ 'lib/cif.js', 420, 436 ]
+1136 silly gunzTarPerm extractEntry lib/dynamic_library.js
+1137 silly gunzTarPerm modified mode [ 'lib/dynamic_library.js', 420, 436 ]
+1138 silly gunzTarPerm extractEntry lib/errno.js
+1139 silly gunzTarPerm modified mode [ 'lib/errno.js', 420, 436 ]
+1140 silly gunzTarPerm extractEntry lib/ffi.js
+1141 silly gunzTarPerm modified mode [ 'lib/ffi.js', 420, 436 ]
+1142 silly gunzTarPerm extractEntry lib/foreign_function_var.js
+1143 silly gunzTarPerm modified mode [ 'lib/foreign_function_var.js', 420, 436 ]
+1144 silly gunzTarPerm extractEntry lib/foreign_function.js
+1145 silly gunzTarPerm modified mode [ 'lib/foreign_function.js', 420, 436 ]
+1146 silly gunzTarPerm extractEntry lib/function.js
+1147 silly gunzTarPerm modified mode [ 'lib/function.js', 420, 436 ]
+1148 silly gunzTarPerm extractEntry lib/library.js
+1149 silly gunzTarPerm modified mode [ 'lib/library.js', 420, 436 ]
+1150 silly gunzTarPerm extractEntry lib/type.js
+1151 silly gunzTarPerm modified mode [ 'lib/type.js', 420, 436 ]
+1152 silly gunzTarPerm extractEntry src/callback_info.cc
+1153 silly gunzTarPerm modified mode [ 'src/callback_info.cc', 420, 436 ]
+1154 silly gunzTarPerm extractEntry src/ffi.cc
+1155 silly gunzTarPerm modified mode [ 'src/ffi.cc', 420, 436 ]
+1156 silly gunzTarPerm extractEntry src/ffi.h
+1157 silly gunzTarPerm modified mode [ 'src/ffi.h', 420, 436 ]
+1158 silly gunzTarPerm extractEntry src/threaded_callback_invokation.cc
+1159 silly gunzTarPerm modified mode [ 'src/threaded_callback_invokation.cc', 420, 436 ]
+1160 silly gunzTarPerm extractEntry src/win32-dlfcn.cc
+1161 silly gunzTarPerm modified mode [ 'src/win32-dlfcn.cc', 420, 436 ]
+1162 silly gunzTarPerm extractEntry src/win32-dlfcn.h
+1163 silly gunzTarPerm modified mode [ 'src/win32-dlfcn.h', 420, 436 ]
+1164 silly gunzTarPerm extractEntry test/binding.gyp
+1165 silly gunzTarPerm modified mode [ 'test/binding.gyp', 420, 436 ]
+1166 silly gunzTarPerm extractEntry test/callback.js
+1167 silly gunzTarPerm modified mode [ 'test/callback.js', 420, 436 ]
+1168 silly gunzTarPerm extractEntry test/cif.js
+1169 silly gunzTarPerm modified mode [ 'test/cif.js', 420, 436 ]
+1170 silly gunzTarPerm extractEntry test/dynamic_library.js
+1171 silly gunzTarPerm modified mode [ 'test/dynamic_library.js', 420, 436 ]
+1172 silly gunzTarPerm extractEntry test/errno.js
+1173 silly gunzTarPerm modified mode [ 'test/errno.js', 420, 436 ]
+1174 silly gunzTarPerm extractEntry test/ffi_tests.cc
+1175 silly gunzTarPerm modified mode [ 'test/ffi_tests.cc', 420, 436 ]
+1176 silly gunzTarPerm extractEntry test/foreign_function.js
+1177 silly gunzTarPerm modified mode [ 'test/foreign_function.js', 420, 436 ]
+1178 silly gunzTarPerm extractEntry test/function.js
+1179 silly gunzTarPerm modified mode [ 'test/function.js', 420, 436 ]
+1180 silly gunzTarPerm extractEntry test/library.js
+1181 silly gunzTarPerm modified mode [ 'test/library.js', 420, 436 ]
+1182 silly gunzTarPerm extractEntry test/objc.js
+1183 silly gunzTarPerm modified mode [ 'test/objc.js', 420, 436 ]
+1184 silly gunzTarPerm extractEntry test/types.js
+1185 silly gunzTarPerm modified mode [ 'test/types.js', 420, 436 ]
+1186 silly gunzTarPerm extractEntry test/variadic.js
+1187 silly gunzTarPerm modified mode [ 'test/variadic.js', 420, 436 ]
+1188 silly gentlyRm /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/ffi-70ba0209/node_modules is being purged
+1189 verbose gentlyRm don't care about contents; nuking /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/ffi-70ba0209/node_modules
+1190 silly doParallel preinstall 5
+1191 silly preinstall ref@1.3.5 /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/ref-ad16f5f4
+1192 info lifecycle ref@1.3.5~preinstall: ref@1.3.5
+1193 silly preinstall ref-array@1.2.0 /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/ref-array-f52ff68b
+1194 info lifecycle ref-array@1.2.0~preinstall: ref-array@1.2.0
+1195 silly preinstall ref-struct@1.1.0 /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/ref-struct-dd6c62ac
+1196 info lifecycle ref-struct@1.1.0~preinstall: ref-struct@1.1.0
+1197 silly preinstall ffi@2.3.0 /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/ffi-70ba0209
+1198 info lifecycle ffi@2.3.0~preinstall: ffi@2.3.0
+1199 silly preinstall tensorflow@0.7.0 /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/tensorflow-cee573aa
+1200 info lifecycle tensorflow@0.7.0~preinstall: tensorflow@0.7.0
+1201 silly lifecycle ref@1.3.5~preinstall: no script for preinstall, continuing
+1202 silly lifecycle ref-array@1.2.0~preinstall: no script for preinstall, continuing
+1203 silly lifecycle ref-struct@1.1.0~preinstall: no script for preinstall, continuing
+1204 silly lifecycle ffi@2.3.0~preinstall: no script for preinstall, continuing
+1205 silly lifecycle tensorflow@0.7.0~preinstall: no script for preinstall, continuing
+1206 silly doReverseSerial remove 0
+1207 silly doSerial move 0
+1208 silly doSerial finalize 5
+1209 silly finalize /home/majdi/Dropbox/mit/neorl/docs/node_modules/ref
+1210 silly finalize /home/majdi/Dropbox/mit/neorl/docs/node_modules/ref-array
+1211 silly finalize /home/majdi/Dropbox/mit/neorl/docs/node_modules/ref-struct
+1212 silly finalize /home/majdi/Dropbox/mit/neorl/docs/node_modules/ffi
+1213 silly finalize /home/majdi/Dropbox/mit/neorl/docs/node_modules/tensorflow
+1214 silly doSerial build 5
+1215 silly build ref@1.3.5
+1216 info linkStuff ref@1.3.5
+1217 silly linkStuff ref@1.3.5 has /home/majdi/Dropbox/mit/neorl/docs/node_modules as its parent node_modules
+1218 verbose linkBins ref@1.3.5
+1219 verbose linkMans ref@1.3.5
+1220 silly build ref-array@1.2.0
+1221 info linkStuff ref-array@1.2.0
+1222 silly linkStuff ref-array@1.2.0 has /home/majdi/Dropbox/mit/neorl/docs/node_modules as its parent node_modules
+1223 verbose linkBins ref-array@1.2.0
+1224 verbose linkMans ref-array@1.2.0
+1225 silly build ref-struct@1.1.0
+1226 info linkStuff ref-struct@1.1.0
+1227 silly linkStuff ref-struct@1.1.0 has /home/majdi/Dropbox/mit/neorl/docs/node_modules as its parent node_modules
+1228 verbose linkBins ref-struct@1.1.0
+1229 verbose linkMans ref-struct@1.1.0
+1230 silly build ffi@2.3.0
+1231 info linkStuff ffi@2.3.0
+1232 silly linkStuff ffi@2.3.0 has /home/majdi/Dropbox/mit/neorl/docs/node_modules as its parent node_modules
+1233 verbose linkBins ffi@2.3.0
+1234 verbose linkMans ffi@2.3.0
+1235 silly build tensorflow@0.7.0
+1236 info linkStuff tensorflow@0.7.0
+1237 silly linkStuff tensorflow@0.7.0 has /home/majdi/Dropbox/mit/neorl/docs/node_modules as its parent node_modules
+1238 verbose linkBins tensorflow@0.7.0
+1239 verbose linkMans tensorflow@0.7.0
+1240 silly doSerial global-link 0
+1241 silly doParallel update-linked 0
+1242 silly doSerial install 5
+1243 silly install ref@1.3.5 /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging/ref-ad16f5f4
+1244 info lifecycle ref@1.3.5~install: ref@1.3.5
+1245 verbose lifecycle ref@1.3.5~install: unsafe-perm in lifecycle true
+1246 verbose lifecycle ref@1.3.5~install: PATH: /usr/share/npm/bin/node-gyp-bin:/home/majdi/Dropbox/mit/neorl/docs/node_modules/ref/node_modules/.bin:/home/majdi/Dropbox/mit/neorl/docs/node_modules/.bin:/home/majdi/anaconda3/bin:/home/majdi/anaconda3/condabin:/home/majdi/casmo4/bin:/home/majdi/simulate3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+1247 verbose lifecycle ref@1.3.5~install: CWD: /home/majdi/Dropbox/mit/neorl/docs/node_modules/ref
+1248 silly lifecycle ref@1.3.5~install: Args: [ '-c', 'node-gyp rebuild' ]
+1249 silly lifecycle ref@1.3.5~install: Returned: code: 1  signal: null
+1250 info lifecycle ref@1.3.5~install: Failed to exec install script
+1251 verbose unlock done using /home/majdi/.npm/_locks/staging-229a303ac89d160e.lock for /home/majdi/Dropbox/mit/neorl/docs/node_modules/.staging
+1252 silly rollbackFailedOptional Starting
+1253 silly rollbackFailedOptional Finishing
+1254 silly runTopLevelLifecycles Starting
+1255 silly runTopLevelLifecycles Finishing
+1256 silly install printInstalled
+1257 warn enoent ENOENT: no such file or directory, open '/home/majdi/Dropbox/mit/neorl/docs/package.json'
+1258 warn docs No description
+1259 warn docs No repository field.
+1260 warn docs No README data
+1261 warn docs No license field.
+1262 verbose stack Error: ref@1.3.5 install: `node-gyp rebuild`
+1262 verbose stack Exit status 1
+1262 verbose stack     at EventEmitter.<anonymous> (/usr/share/npm/lib/utils/lifecycle.js:232:16)
+1262 verbose stack     at emitTwo (events.js:87:13)
+1262 verbose stack     at EventEmitter.emit (events.js:172:7)
+1262 verbose stack     at ChildProcess.<anonymous> (/usr/share/npm/lib/utils/spawn.js:24:14)
+1262 verbose stack     at emitTwo (events.js:87:13)
+1262 verbose stack     at ChildProcess.emit (events.js:172:7)
+1262 verbose stack     at maybeClose (internal/child_process.js:821:16)
+1262 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:211:5)
+1263 verbose pkgid ref@1.3.5
+1264 verbose cwd /home/majdi/Dropbox/mit/neorl/docs
+1265 error Linux 4.15.0-139-generic
+1266 error argv "/usr/bin/nodejs" "/usr/bin/npm" "install" "tensorflow"
+1267 error node v4.2.6
+1268 error npm  v3.5.2
+1269 error code ELIFECYCLE
+1270 error ref@1.3.5 install: `node-gyp rebuild`
+1270 error Exit status 1
+1271 error Failed at the ref@1.3.5 install script 'node-gyp rebuild'.
+1271 error Make sure you have the latest version of node.js and npm installed.
+1271 error If you do, this is most likely a problem with the ref package,
+1271 error not with npm itself.
+1271 error Tell the author that this fails on your system:
+1271 error     node-gyp rebuild
+1271 error You can get information on how to open an issue for this project with:
+1271 error     npm bugs ref
+1271 error Or if that isn't available, you can get their info via:
+1271 error     npm owner ls ref
+1271 error There is likely additional logging output above.
+1272 verbose exit [ 1, true ]

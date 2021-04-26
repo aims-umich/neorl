@@ -133,17 +133,17 @@ NEORL script
 	from neorl import ES
 	
 	#**********************************************************
-	# Part I: Original Problem 
+	# Part I: Original Problem
 	#**********************************************************
 	#Define the fitness function (for the welded beam)
 	def BEAM(x):
 	
 	    y = 1.10471*x[0]**2*x[1]+0.04811*x[2]*x[3]*(14.0+x[1])
-	    
+	
 	    # parameters
 	    P = 6000; L = 14; E = 30e+6; G = 12e+6;
 	    t_max = 13600; s_max = 30000; d_max = 0.25;
-	    
+	
 	    M = P*(L+x[1]/2)
 	    R = sqrt(0.25*(x[1]**2+(x[0]+x[2])**2))
 	    J = 2*(sqrt(2)*x[0]*x[1]*(x[1]**2/12+0.25*(x[0]+x[2])**2));
@@ -165,11 +165,11 @@ NEORL script
 	    g_round=np.round(np.array(g),6)
 	    w1=100
 	    w2=100
-	    
+	
 	    phi=sum(max(item,0) for item in g_round)
 	    viol=sum(float(num) > 0 for num in g_round)
-	    
-	    reward = -(y + (w1*phi + w2*viol))
+	
+	    reward = (y + (w1*phi + w2*viol))
 	
 	    return reward
 	
@@ -183,28 +183,28 @@ NEORL script
 	BOUNDS={}
 	nx=4
 	for i in range(nx):
-	    BOUNDS['x'+str(i+1)]=[d2type[i], lb[i], ub[i]]  
-	        
+	    BOUNDS['x'+str(i+1)]=[d2type[i], lb[i], ub[i]]
+	
 	#*************************************************************
 	# Part III: Define fitness function for hyperparameter tuning
-	#*************************************************************  
+	#*************************************************************
 	def tune_fit(cxpb, mu, alpha, cxmode, mutpb):
-	    
+	
 	    #--setup the ES algorithm
-	    es=ES(bounds=BOUNDS, fit=BEAM, lambda_=80, mu=mu, mutpb=mutpb, alpha=alpha,
+	    es=ES(mode='min', bounds=BOUNDS, fit=BEAM, lambda_=80, mu=mu, mutpb=mutpb, alpha=alpha,
 	         cxmode=cxmode, cxpb=cxpb, ncores=1, seed=1)
-	    
-	    #--Evolute the ES object and obtains y_best 
+	
+	    #--Evolute the ES object and obtains y_best
 	    #--turn off verbose for less algorithm print-out when tuning
-	    x_best, y_best, es_hist=es.evolute(ngen=100, verbose=0)      
-	    
+	    x_best, y_best, es_hist=es.evolute(ngen=100, verbose=0)
+	
 	    return y_best #returns the best score
 	
 	#*************************************************************
 	# Part IV: Tuning
-	#************************************************************* 
+	#*************************************************************
 	#Setup the parameter space for Bayesian optimisation
-	#VERY IMPORTANT: The order of these parameters MUST be similar to their order in tune_fit 
+	#VERY IMPORTANT: The order of these parameters MUST be similar to their order in tune_fit
 	#see tune_fit
 	param_grid={
 	#def tune_fit(cxpb, mu, alpha, cxmode):
@@ -220,27 +220,29 @@ NEORL script
 	bayesres=btune.tune(nthreads=1, csvname='bayestune.csv', verbose=True)
 	
 	print('----Top 10 hyperparameter sets----')
+	bayesres = bayesres[bayesres['score'] >= 1] #drop the cases with scores < 1 (violates the constraints)
+	bayesres = bayesres.sort_values(['score'], axis='index', ascending=True) #rank the scores from best (lowest) to worst (high)
 	print(bayesres.iloc[0:10,:])   #the results are saved in dataframe and ranked from best to worst
 	
 	#*************************************************************
 	# Part V: Rerun ES with the best hyperparameter set
-	#************************************************************* 
-	es=ES(bounds=BOUNDS, fit=BEAM, lambda_=80, mu=bayesres['mu'].iloc[0], 
+	#*************************************************************
+	es=ES(mode='min', bounds=BOUNDS, fit=BEAM, lambda_=80, mu=bayesres['mu'].iloc[0],
 	      mutpb=bayesres['mutpb'].iloc[0], alpha=bayesres['alpha'].iloc[0],
-	      cxmode=bayesres['cxmode'].iloc[0], cxpb=bayesres['cxpb'].iloc[0], 
+	      cxmode=bayesres['cxmode'].iloc[0], cxpb=bayesres['cxpb'].iloc[0],
 	      ncores=1, seed=1)
 	
-	x_best, y_best, es_hist=es.evolute(ngen=100, verbose=0)  
+	x_best, y_best, es_hist=es.evolute(ngen=100, verbose=0)
 	
-	print('Best fitness (y) found:', -y_best)  #convert back to original scale
+	print('Best fitness (y) found:', y_best)
 	print('Best individual (x) found:', x_best)
-	    
+	
 	#---------------------------------
 	# Plot
 	#---------------------------------
 	#Plot fitness convergence
 	plt.figure()
-	plt.plot(-np.array(es_hist), label='ES') #multiply by -1 to covert back to a min problem
+	plt.plot(np.array(es_hist), label='ES')
 	plt.xlabel('Generation')
 	plt.ylabel('Fitness')
 	plt.legend()
@@ -256,18 +258,18 @@ After Bayesian hyperparameter tuning, the top 10 are
 .. code-block:: python
 
 	----Top 10 hyperparameter sets----
-	id     cxpb   mu  alpha    cxmode     mutpb     score
-	                                                   
-	11  0.100000  30    0.1  cx2point  0.050000 -1.854470
-	18  0.104516  30    0.1  cx2point  0.050000 -1.912297
-	1   0.177505  32    0.3     blend  0.088050 -1.981251
-	5   0.573562  41    0.1     blend  0.054562 -2.141732
-	22  0.100002  32    0.3  cx2point  0.114052 -2.179987
-	7   0.131645  53    0.2     blend  0.129494 -2.195028
-	25  0.148318  32    0.3     blend  0.093325 -2.208725
-	20  0.594956  41    0.1     blend  0.084657 -2.244329
-	3   0.180873  48    0.4     blend  0.123485 -2.276671
-	4   0.243426  45    0.1     blend  0.217842 -2.337914
+	id	cxpb  mu  alpha    cxmode     mutpb     score
+                                                   
+	20  0.100000  30    0.4  cx2point  0.050000  1.854470
+	1   0.177505  32    0.3     blend  0.088050  1.981251
+	16  0.214306  60    0.4  cx2point  0.300000  2.009669
+	5   0.573562  41    0.1     blend  0.054562  2.141732
+	7   0.131645  53    0.2     blend  0.129494  2.195028
+	17  0.700000  30    0.4  cx2point  0.050000  2.274378
+	3   0.180873  48    0.4     blend  0.123485  2.276671
+	4   0.243426  45    0.1     blend  0.217842  2.337914
+	28  0.422938  60    0.4  cx2point  0.166513  2.368654
+	21  0.686839  48    0.1  cx2point  0.279152  2.372720
 
 After re-running the problem with the best hyperparameter set, the convergence of the fitness function is shown below
 

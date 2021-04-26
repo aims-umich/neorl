@@ -5,4 +5,4 @@ Created on Mon Jan 28 08:09:18 2021
 """
 
 def version():
-    return '1.2.1b'
+    return '1.3.0b'

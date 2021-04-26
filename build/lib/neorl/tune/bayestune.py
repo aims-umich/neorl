@@ -146,7 +146,7 @@ class BAYESTUNE:
             bayesres['score'] = -self.search_result.func_vals
 
         bayesres.index+=1
-        bayesres = bayesres.sort_values(['score'], axis='index', ascending=False)
+        #bayesres = bayesres.sort_values(['score'], axis='index', ascending=False)
         
         if self.csvlogger:
             bayesres.index.name='id'

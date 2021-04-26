@@ -32,8 +32,8 @@ class ES:
     """
     Parallel Evolution Strategies
     
-    :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: {'x1': ['int', 1, 4], 'x2': ['float', 0.1, 0.8], 'x3': ['float', 2.2, 6.2]}
-    :param fit: (function) the fitness function 
+    :param mode: (str) problem type, either "min" for minimization problem or "max" for maximization
+    :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: ``bounds={'x1': ['int', 1, 4], 'x2': ['float', 0.1, 0.8], 'x3': ['float', 2.2, 6.2]}``
     :param lambda\_: (int) total number of individuals in the population
     :param mu: (int): number of individuals to survive to the next generation, mu < lambda\_
     :param cxmode: (str): the crossover mode, either 'cx2point' or 'blend'
@@ -45,14 +45,24 @@ class ES:
     :param ncores: (int) number of parallel processors
     :param seed: (int) random seed for sampling
     """
-    def __init__ (self, bounds, fit, lambda_=60, mu=30, cxmode='cx2point', 
+    def __init__ (self, mode, bounds, fit, lambda_=60, mu=30, cxmode='cx2point', 
                   alpha=0.5, cxpb=0.6, mutpb=0.3, smin=0.01, smax=0.5, ncores=1, seed=None):  
         if seed:
             random.seed(seed)
         self.seed=seed
         self.bounds=bounds
         self.nx=len(bounds.keys())
-        self.fit=fit
+        #--mir
+        self.mode=mode
+        if mode == 'max':
+            self.fit=fit
+        elif mode == 'min':
+            def fitness_wrapper(*args, **kwargs):
+                return -fit(*args, **kwargs) 
+            self.fit=fitness_wrapper
+        else:
+            raise ValueError('--error: The mode entered by user is invalid, use either `min` or `max`')
+            
         self.ncores=ncores
         self.smin=smin
         self.smax=smax
@@ -363,6 +373,12 @@ class ES:
             if rwd[arg_max] > self.y_opt:
                 self.y_opt=rwd[arg_max]
                 self.x_opt=copy.deepcopy(inds[arg_max])
+            
+            #--mir
+            if self.mode=='min':
+                self.y_opt_correct=-self.y_opt
+            else:
+                self.y_opt_correct=self.y_opt
                 
             if verbose:
                 mean_strategy=[np.mean(population[i][1]) for i in population]
@@ -370,7 +386,7 @@ class ES:
                 print('ES step {}/{}, CX={}, MUT={}, MU={}, LAMBDA={}, Ncores={}'.format(gen*self.lambda_,ngen*self.lambda_, np.round(self.cxpb,2), np.round(self.mutpb,2), self.mu, self.lambda_, self.ncores))
                 print('##############################################################################')
                 print('Statistics for generation {}'.format(gen))
-                print('Best Fitness:', np.round(np.max(rwd),6))
+                print('Best Fitness:', np.round(np.max(rwd),6) if self.mode is 'max' else -np.round(np.max(rwd),6))
                 print('Best Individual:', inds[0])
                 print('Max Strategy:', np.round(np.max(mean_strategy),3))
                 print('Min Strategy:', np.round(np.min(mean_strategy),3))
@@ -379,9 +395,13 @@ class ES:
         
         if verbose:
             print('------------------------ ES Summary --------------------------')
-            print('Best fitness (y) found:', self.y_opt)
+            print('Best fitness (y) found:', self.y_opt_correct)
             print('Best individual (x) found:', self.x_opt)
             print('--------------------------------------------------------------') 
-        
-        return self.x_opt, self.y_opt, self.best_scores
+
+        #--mir
+        if self.mode=='min':
+            self.best_scores=[-item for item in self.best_scores]
+            
+        return self.x_opt, self.y_opt_correct, self.best_scores
     

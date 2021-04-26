@@ -107,9 +107,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../modules/a2c.html">Advantage Actor Critic (A2C)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../modules/dqn.html">Deep Q Learning (DQN)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../modules/ppo2.html">Proximal Policy Optimisation (PPO)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../modules/es.html">Evolution Strategies (ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/es.html">Evolution Strategies (<span class="math notranslate nohighlight">\(\mu,\lambda\)</span>) (ES)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../modules/pso.html">Particle Swarm Optimisation (PSO)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../modules/de.html">Differential Evolution (DE)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/xnes.html">Exponential Natural Evolution Strategies (XNES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/gwo.html">Grey Wolf Optimizer (GWO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pesa.html">Prioritized replay Evolutionary and Swarm Algorithm (PESA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pesa2.html">Modern PESA (PESA2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/sa.html">Simulated Annealing (SA)</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
 <ul>
@@ -316,7 +321,7 @@
     <span class="n">phi</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">item</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">g_round</span><span class="p">)</span>
     <span class="n">viol</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">g_round</span><span class="p">)</span>
 
-    <span class="n">reward</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="p">(</span><span class="n">w1</span><span class="o">*</span><span class="n">phi</span> <span class="o">+</span> <span class="n">w2</span><span class="o">*</span><span class="n">viol</span><span class="p">))</span>
+    <span class="n">reward</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="p">(</span><span class="n">w1</span><span class="o">*</span><span class="n">phi</span> <span class="o">+</span> <span class="n">w2</span><span class="o">*</span><span class="n">viol</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="n">reward</span>
 
@@ -338,7 +343,7 @@
 <span class="k">def</span> <span class="nf">tune_fit</span><span class="p">(</span><span class="n">cxpb</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">cxmode</span><span class="p">,</span> <span class="n">mutpb</span><span class="p">):</span>
 
     <span class="c1">#--setup the ES algorithm</span>
-    <span class="n">es</span><span class="o">=</span><span class="n">ES</span><span class="p">(</span><span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">BEAM</span><span class="p">,</span> <span class="n">lambda_</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">mutpb</span><span class="o">=</span><span class="n">mutpb</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
+    <span class="n">es</span><span class="o">=</span><span class="n">ES</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">BEAM</span><span class="p">,</span> <span class="n">lambda_</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">mutpb</span><span class="o">=</span><span class="n">mutpb</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
          <span class="n">cxmode</span><span class="o">=</span><span class="n">cxmode</span><span class="p">,</span> <span class="n">cxpb</span><span class="o">=</span><span class="n">cxpb</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="c1">#--Evolute the ES object and obtains y_best</span>
@@ -367,19 +372,21 @@
 <span class="n">bayesres</span><span class="o">=</span><span class="n">btune</span><span class="o">.</span><span class="n">tune</span><span class="p">(</span><span class="n">nthreads</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">csvname</span><span class="o">=</span><span class="s1">&#39;bayestune.csv&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;----Top 10 hyperparameter sets----&#39;</span><span class="p">)</span>
+<span class="n">bayesres</span> <span class="o">=</span> <span class="n">bayesres</span><span class="p">[</span><span class="n">bayesres</span><span class="p">[</span><span class="s1">&#39;score&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">]</span> <span class="c1">#drop the cases with scores &lt; 1 (violates the constraints)</span>
+<span class="n">bayesres</span> <span class="o">=</span> <span class="n">bayesres</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s1">&#39;score&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1">#rank the scores from best (lowest) to worst (high)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">bayesres</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">,:])</span>   <span class="c1">#the results are saved in dataframe and ranked from best to worst</span>
 
 <span class="c1">#*************************************************************</span>
 <span class="c1"># Part V: Rerun ES with the best hyperparameter set</span>
 <span class="c1">#*************************************************************</span>
-<span class="n">es</span><span class="o">=</span><span class="n">ES</span><span class="p">(</span><span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">BEAM</span><span class="p">,</span> <span class="n">lambda_</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="n">bayesres</span><span class="p">[</span><span class="s1">&#39;mu&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+<span class="n">es</span><span class="o">=</span><span class="n">ES</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">BEAM</span><span class="p">,</span> <span class="n">lambda_</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="n">bayesres</span><span class="p">[</span><span class="s1">&#39;mu&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
       <span class="n">mutpb</span><span class="o">=</span><span class="n">bayesres</span><span class="p">[</span><span class="s1">&#39;mutpb&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="n">bayesres</span><span class="p">[</span><span class="s1">&#39;alpha&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
       <span class="n">cxmode</span><span class="o">=</span><span class="n">bayesres</span><span class="p">[</span><span class="s1">&#39;cxmode&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cxpb</span><span class="o">=</span><span class="n">bayesres</span><span class="p">[</span><span class="s1">&#39;cxpb&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
       <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="n">x_best</span><span class="p">,</span> <span class="n">y_best</span><span class="p">,</span> <span class="n">es_hist</span><span class="o">=</span><span class="n">es</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best fitness (y) found:&#39;</span><span class="p">,</span> <span class="o">-</span><span class="n">y_best</span><span class="p">)</span>  <span class="c1">#convert back to original scale</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best fitness (y) found:&#39;</span><span class="p">,</span> <span class="n">y_best</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best individual (x) found:&#39;</span><span class="p">,</span> <span class="n">x_best</span><span class="p">)</span>
 
 <span class="c1">#---------------------------------</span>
@@ -387,7 +394,7 @@
 <span class="c1">#---------------------------------</span>
 <span class="c1">#Plot fitness convergence</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">es_hist</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ES&#39;</span><span class="p">)</span> <span class="c1">#multiply by -1 to covert back to a min problem</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">es_hist</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ES&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Generation&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Fitness&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
@@ -400,18 +407,18 @@
 <h2>Results<a class="headerlink" href="#results" title="Permalink to this headline">¶</a></h2>
 <p>After Bayesian hyperparameter tuning, the top 10 are</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">----</span><span class="n">Top</span> <span class="mi">10</span> <span class="n">hyperparameter</span> <span class="n">sets</span><span class="o">----</span>
-<span class="nb">id</span>     <span class="n">cxpb</span>   <span class="n">mu</span>  <span class="n">alpha</span>    <span class="n">cxmode</span>     <span class="n">mutpb</span>     <span class="n">score</span>
+<span class="nb">id</span>      <span class="n">cxpb</span>  <span class="n">mu</span>  <span class="n">alpha</span>    <span class="n">cxmode</span>     <span class="n">mutpb</span>     <span class="n">score</span>
 
-<span class="mi">11</span>  <span class="mf">0.100000</span>  <span class="mi">30</span>    <span class="mf">0.1</span>  <span class="n">cx2point</span>  <span class="mf">0.050000</span> <span class="o">-</span><span class="mf">1.854470</span>
-<span class="mi">18</span>  <span class="mf">0.104516</span>  <span class="mi">30</span>    <span class="mf">0.1</span>  <span class="n">cx2point</span>  <span class="mf">0.050000</span> <span class="o">-</span><span class="mf">1.912297</span>
-<span class="mi">1</span>   <span class="mf">0.177505</span>  <span class="mi">32</span>    <span class="mf">0.3</span>     <span class="n">blend</span>  <span class="mf">0.088050</span> <span class="o">-</span><span class="mf">1.981251</span>
-<span class="mi">5</span>   <span class="mf">0.573562</span>  <span class="mi">41</span>    <span class="mf">0.1</span>     <span class="n">blend</span>  <span class="mf">0.054562</span> <span class="o">-</span><span class="mf">2.141732</span>
-<span class="mi">22</span>  <span class="mf">0.100002</span>  <span class="mi">32</span>    <span class="mf">0.3</span>  <span class="n">cx2point</span>  <span class="mf">0.114052</span> <span class="o">-</span><span class="mf">2.179987</span>
-<span class="mi">7</span>   <span class="mf">0.131645</span>  <span class="mi">53</span>    <span class="mf">0.2</span>     <span class="n">blend</span>  <span class="mf">0.129494</span> <span class="o">-</span><span class="mf">2.195028</span>
-<span class="mi">25</span>  <span class="mf">0.148318</span>  <span class="mi">32</span>    <span class="mf">0.3</span>     <span class="n">blend</span>  <span class="mf">0.093325</span> <span class="o">-</span><span class="mf">2.208725</span>
-<span class="mi">20</span>  <span class="mf">0.594956</span>  <span class="mi">41</span>    <span class="mf">0.1</span>     <span class="n">blend</span>  <span class="mf">0.084657</span> <span class="o">-</span><span class="mf">2.244329</span>
-<span class="mi">3</span>   <span class="mf">0.180873</span>  <span class="mi">48</span>    <span class="mf">0.4</span>     <span class="n">blend</span>  <span class="mf">0.123485</span> <span class="o">-</span><span class="mf">2.276671</span>
-<span class="mi">4</span>   <span class="mf">0.243426</span>  <span class="mi">45</span>    <span class="mf">0.1</span>     <span class="n">blend</span>  <span class="mf">0.217842</span> <span class="o">-</span><span class="mf">2.337914</span>
+<span class="mi">20</span>  <span class="mf">0.100000</span>  <span class="mi">30</span>    <span class="mf">0.4</span>  <span class="n">cx2point</span>  <span class="mf">0.050000</span>  <span class="mf">1.854470</span>
+<span class="mi">1</span>   <span class="mf">0.177505</span>  <span class="mi">32</span>    <span class="mf">0.3</span>     <span class="n">blend</span>  <span class="mf">0.088050</span>  <span class="mf">1.981251</span>
+<span class="mi">16</span>  <span class="mf">0.214306</span>  <span class="mi">60</span>    <span class="mf">0.4</span>  <span class="n">cx2point</span>  <span class="mf">0.300000</span>  <span class="mf">2.009669</span>
+<span class="mi">5</span>   <span class="mf">0.573562</span>  <span class="mi">41</span>    <span class="mf">0.1</span>     <span class="n">blend</span>  <span class="mf">0.054562</span>  <span class="mf">2.141732</span>
+<span class="mi">7</span>   <span class="mf">0.131645</span>  <span class="mi">53</span>    <span class="mf">0.2</span>     <span class="n">blend</span>  <span class="mf">0.129494</span>  <span class="mf">2.195028</span>
+<span class="mi">17</span>  <span class="mf">0.700000</span>  <span class="mi">30</span>    <span class="mf">0.4</span>  <span class="n">cx2point</span>  <span class="mf">0.050000</span>  <span class="mf">2.274378</span>
+<span class="mi">3</span>   <span class="mf">0.180873</span>  <span class="mi">48</span>    <span class="mf">0.4</span>     <span class="n">blend</span>  <span class="mf">0.123485</span>  <span class="mf">2.276671</span>
+<span class="mi">4</span>   <span class="mf">0.243426</span>  <span class="mi">45</span>    <span class="mf">0.1</span>     <span class="n">blend</span>  <span class="mf">0.217842</span>  <span class="mf">2.337914</span>
+<span class="mi">28</span>  <span class="mf">0.422938</span>  <span class="mi">60</span>    <span class="mf">0.4</span>  <span class="n">cx2point</span>  <span class="mf">0.166513</span>  <span class="mf">2.368654</span>
+<span class="mi">21</span>  <span class="mf">0.686839</span>  <span class="mi">48</span>    <span class="mf">0.1</span>  <span class="n">cx2point</span>  <span class="mf">0.279152</span>  <span class="mf">2.372720</span>
 </pre></div>
 </div>
 <p>After re-running the problem with the best hyperparameter set, the convergence of the fitness function is shown below</p>

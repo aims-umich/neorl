@@ -104,9 +104,14 @@
 <li class="toctree-l1"><a class="reference internal" href="modules/a2c.html">Advantage Actor Critic (A2C)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/dqn.html">Deep Q Learning (DQN)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/ppo2.html">Proximal Policy Optimisation (PPO)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules/es.html">Evolution Strategies (ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/es.html">Evolution Strategies (<span class="math notranslate nohighlight">\(\mu,\lambda\)</span>) (ES)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/pso.html">Particle Swarm Optimisation (PSO)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/de.html">Differential Evolution (DE)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/xnes.html">Exponential Natural Evolution Strategies (XNES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/gwo.html">Grey Wolf Optimizer (GWO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/pesa.html">Prioritized replay Evolutionary and Swarm Algorithm (PESA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/pesa2.html">Modern PESA (PESA2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/sa.html">Simulated Annealing (SA)</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
 <ul>
@@ -200,7 +205,6 @@
  | <a href="#D"><strong>D</strong></a>
  | <a href="#E"><strong>E</strong></a>
  | <a href="#G"><strong>G</strong></a>
- | <a href="#I"><strong>I</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
@@ -208,6 +212,7 @@
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
+ | <a href="#X"><strong>X</strong></a>
  
 </div>
 <h2 id="A">A</h2>
@@ -215,14 +220,6 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/a2c.html#neorl.rl.baselines.a2c.A2C">A2C (class in neorl.rl.baselines.a2c)</a>
 </li>
-      <li><a href="modules/a2c.html#neorl.rl.baselines.a2c.A2C.action_probability">action_probability() (neorl.rl.baselines.a2c.A2C method)</a>
-
-      <ul>
-        <li><a href="modules/dqn.html#neorl.rl.baselines.deepq.DQN.action_probability">(neorl.rl.baselines.deepq.DQN method)</a>
-</li>
-        <li><a href="modules/ppo2.html#neorl.rl.baselines.ppo2.PPO2.action_probability">(neorl.rl.baselines.ppo2.PPO2 method)</a>
-</li>
-      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -256,7 +253,15 @@
       <ul>
         <li><a href="modules/es.html#neorl.evolu.es.ES.evolute">(neorl.evolu.es.ES method)</a>
 </li>
+        <li><a href="modules/gwo.html#neorl.evolu.gwo.GWO.evolute">(neorl.evolu.gwo.GWO method)</a>
+</li>
         <li><a href="modules/pso.html#neorl.evolu.pso.PSO.evolute">(neorl.evolu.pso.PSO method)</a>
+</li>
+        <li><a href="modules/xnes.html#neorl.evolu.xnes.XNES.evolute">(neorl.evolu.xnes.XNES method)</a>
+</li>
+        <li><a href="modules/pesa.html#neorl.hybrid.pesa.PESA.evolute">(neorl.hybrid.pesa.PESA method)</a>
+</li>
+        <li><a href="modules/pesa2.html#neorl.hybrid.pesa2.PESA2.evolute">(neorl.hybrid.pesa2.PESA2 method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -265,49 +270,11 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules/a2c.html#neorl.rl.baselines.a2c.A2C.get_env">get_env() (neorl.rl.baselines.a2c.A2C method)</a>
-
-      <ul>
-        <li><a href="modules/dqn.html#neorl.rl.baselines.deepq.DQN.get_env">(neorl.rl.baselines.deepq.DQN method)</a>
-</li>
-        <li><a href="modules/ppo2.html#neorl.rl.baselines.ppo2.PPO2.get_env">(neorl.rl.baselines.ppo2.PPO2 method)</a>
-</li>
-      </ul></li>
-      <li><a href="modules/a2c.html#neorl.rl.baselines.a2c.A2C.get_parameter_list">get_parameter_list() (neorl.rl.baselines.a2c.A2C method)</a>
-
-      <ul>
-        <li><a href="modules/dqn.html#neorl.rl.baselines.deepq.DQN.get_parameter_list">(neorl.rl.baselines.deepq.DQN method)</a>
-</li>
-        <li><a href="modules/ppo2.html#neorl.rl.baselines.ppo2.PPO2.get_parameter_list">(neorl.rl.baselines.ppo2.PPO2 method)</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules/a2c.html#neorl.rl.baselines.a2c.A2C.get_parameters">get_parameters() (neorl.rl.baselines.a2c.A2C method)</a>
-
-      <ul>
-        <li><a href="modules/dqn.html#neorl.rl.baselines.deepq.DQN.get_parameters">(neorl.rl.baselines.deepq.DQN method)</a>
-</li>
-        <li><a href="modules/ppo2.html#neorl.rl.baselines.ppo2.PPO2.get_parameters">(neorl.rl.baselines.ppo2.PPO2 method)</a>
-</li>
-      </ul></li>
-      <li><a href="modules/a2c.html#neorl.rl.baselines.a2c.A2C.get_vec_normalize_env">get_vec_normalize_env() (neorl.rl.baselines.a2c.A2C method)</a>
-
-      <ul>
-        <li><a href="modules/dqn.html#neorl.rl.baselines.deepq.DQN.get_vec_normalize_env">(neorl.rl.baselines.deepq.DQN method)</a>
-</li>
-        <li><a href="modules/ppo2.html#neorl.rl.baselines.ppo2.PPO2.get_vec_normalize_env">(neorl.rl.baselines.ppo2.PPO2 method)</a>
-</li>
-      </ul></li>
       <li><a href="tune/grid.html#neorl.tune.gridtune.GRIDTUNE">GRIDTUNE (class in neorl.tune.gridtune)</a>
 </li>
   </ul></td>
-</tr></table>
-
-<h2 id="I">I</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules/dqn.html#neorl.rl.baselines.deepq.DQN.is_using_her">is_using_her() (neorl.rl.baselines.deepq.DQN method)</a>
+      <li><a href="modules/gwo.html#neorl.evolu.gwo.GWO">GWO (class in neorl.evolu.gwo)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -323,22 +290,14 @@
         <li><a href="modules/ppo2.html#neorl.rl.baselines.ppo2.PPO2.learn">(neorl.rl.baselines.ppo2.PPO2 method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/a2c.html#neorl.rl.baselines.a2c.A2C.load">load() (neorl.rl.baselines.a2c.A2C class method)</a>
 
       <ul>
         <li><a href="modules/dqn.html#neorl.rl.baselines.deepq.DQN.load">(neorl.rl.baselines.deepq.DQN class method)</a>
 </li>
         <li><a href="modules/ppo2.html#neorl.rl.baselines.ppo2.PPO2.load">(neorl.rl.baselines.ppo2.PPO2 class method)</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules/a2c.html#neorl.rl.baselines.a2c.A2C.load_parameters">load_parameters() (neorl.rl.baselines.a2c.A2C method)</a>
-
-      <ul>
-        <li><a href="modules/dqn.html#neorl.rl.baselines.deepq.DQN.load_parameters">(neorl.rl.baselines.deepq.DQN method)</a>
-</li>
-        <li><a href="modules/ppo2.html#neorl.rl.baselines.ppo2.PPO2.load_parameters">(neorl.rl.baselines.ppo2.PPO2 method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -355,7 +314,17 @@
 </li>
         <li><a href="modules/es.html#module-neorl.evolu.es">neorl.evolu.es</a>
 </li>
+        <li><a href="modules/gwo.html#module-neorl.evolu.gwo">neorl.evolu.gwo</a>
+</li>
         <li><a href="modules/pso.html#module-neorl.evolu.pso">neorl.evolu.pso</a>
+</li>
+        <li><a href="modules/sa.html#module-neorl.evolu.sa">neorl.evolu.sa</a>
+</li>
+        <li><a href="modules/xnes.html#module-neorl.evolu.xnes">neorl.evolu.xnes</a>
+</li>
+        <li><a href="modules/pesa.html#module-neorl.hybrid.pesa">neorl.hybrid.pesa</a>
+</li>
+        <li><a href="modules/pesa2.html#module-neorl.hybrid.pesa2">neorl.hybrid.pesa2</a>
 </li>
         <li><a href="modules/a2c.html#module-neorl.rl.baselines.a2c">neorl.rl.baselines.a2c</a>
 </li>
@@ -391,10 +360,47 @@
 </li>
       </ul></li>
       <li>
+    neorl.evolu.gwo
+
+      <ul>
+        <li><a href="modules/gwo.html#module-neorl.evolu.gwo">module</a>
+</li>
+      </ul></li>
+      <li>
     neorl.evolu.pso
 
       <ul>
         <li><a href="modules/pso.html#module-neorl.evolu.pso">module</a>
+</li>
+      </ul></li>
+      <li>
+    neorl.evolu.sa
+
+      <ul>
+        <li><a href="modules/sa.html#module-neorl.evolu.sa">module</a>
+</li>
+      </ul></li>
+      <li>
+    neorl.evolu.xnes
+
+      <ul>
+        <li><a href="modules/xnes.html#module-neorl.evolu.xnes">module</a>
+</li>
+      </ul></li>
+      <li>
+    neorl.hybrid.pesa
+
+      <ul>
+        <li><a href="modules/pesa.html#module-neorl.hybrid.pesa">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    neorl.hybrid.pesa2
+
+      <ul>
+        <li><a href="modules/pesa2.html#module-neorl.hybrid.pesa2">module</a>
 </li>
       </ul></li>
       <li>
@@ -411,8 +417,6 @@
         <li><a href="modules/dqn.html#module-neorl.rl.baselines.deepq">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     neorl.rl.baselines.ppo2
 
@@ -447,24 +451,20 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="modules/pesa.html#neorl.hybrid.pesa.PESA">PESA (class in neorl.hybrid.pesa)</a>
+</li>
+      <li><a href="modules/pesa2.html#neorl.hybrid.pesa2.PESA2">PESA2 (class in neorl.hybrid.pesa2)</a>
+</li>
       <li><a href="modules/ppo2.html#neorl.rl.baselines.ppo2.PPO2">PPO2 (class in neorl.rl.baselines.ppo2)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/a2c.html#neorl.rl.baselines.a2c.A2C.predict">predict() (neorl.rl.baselines.a2c.A2C method)</a>
 
       <ul>
         <li><a href="modules/dqn.html#neorl.rl.baselines.deepq.DQN.predict">(neorl.rl.baselines.deepq.DQN method)</a>
 </li>
         <li><a href="modules/ppo2.html#neorl.rl.baselines.ppo2.PPO2.predict">(neorl.rl.baselines.ppo2.PPO2 method)</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules/a2c.html#neorl.rl.baselines.a2c.A2C.pretrain">pretrain() (neorl.rl.baselines.a2c.A2C method)</a>
-
-      <ul>
-        <li><a href="modules/dqn.html#neorl.rl.baselines.deepq.DQN.pretrain">(neorl.rl.baselines.deepq.DQN method)</a>
-</li>
-        <li><a href="modules/ppo2.html#neorl.rl.baselines.ppo2.PPO2.pretrain">(neorl.rl.baselines.ppo2.PPO2 method)</a>
 </li>
       </ul></li>
       <li><a href="modules/pso.html#neorl.evolu.pso.PSO">PSO (class in neorl.evolu.pso)</a>
@@ -478,10 +478,6 @@
       <li><a href="tune/random.html#neorl.tune.randtune.RANDTUNE">RANDTUNE (class in neorl.tune.randtune)</a>
 </li>
   </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules/dqn.html#neorl.rl.baselines.deepq.DQN.replay_buffer_add">replay_buffer_add() (neorl.rl.baselines.deepq.DQN method)</a>
-</li>
-  </ul></td>
 </tr></table>
 
 <h2 id="S">S</h2>
@@ -493,32 +489,6 @@
         <li><a href="modules/dqn.html#neorl.rl.baselines.deepq.DQN.save">(neorl.rl.baselines.deepq.DQN method)</a>
 </li>
         <li><a href="modules/ppo2.html#neorl.rl.baselines.ppo2.PPO2.save">(neorl.rl.baselines.ppo2.PPO2 method)</a>
-</li>
-      </ul></li>
-      <li><a href="modules/a2c.html#neorl.rl.baselines.a2c.A2C.set_env">set_env() (neorl.rl.baselines.a2c.A2C method)</a>
-
-      <ul>
-        <li><a href="modules/dqn.html#neorl.rl.baselines.deepq.DQN.set_env">(neorl.rl.baselines.deepq.DQN method)</a>
-</li>
-        <li><a href="modules/ppo2.html#neorl.rl.baselines.ppo2.PPO2.set_env">(neorl.rl.baselines.ppo2.PPO2 method)</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules/a2c.html#neorl.rl.baselines.a2c.A2C.set_random_seed">set_random_seed() (neorl.rl.baselines.a2c.A2C method)</a>
-
-      <ul>
-        <li><a href="modules/dqn.html#neorl.rl.baselines.deepq.DQN.set_random_seed">(neorl.rl.baselines.deepq.DQN method)</a>
-</li>
-        <li><a href="modules/ppo2.html#neorl.rl.baselines.ppo2.PPO2.set_random_seed">(neorl.rl.baselines.ppo2.PPO2 method)</a>
-</li>
-      </ul></li>
-      <li><a href="modules/a2c.html#neorl.rl.baselines.a2c.A2C.setup_model">setup_model() (neorl.rl.baselines.a2c.A2C method)</a>
-
-      <ul>
-        <li><a href="modules/dqn.html#neorl.rl.baselines.deepq.DQN.setup_model">(neorl.rl.baselines.deepq.DQN method)</a>
-</li>
-        <li><a href="modules/ppo2.html#neorl.rl.baselines.ppo2.PPO2.setup_model">(neorl.rl.baselines.ppo2.PPO2 method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -535,6 +505,14 @@
         <li><a href="tune/random.html#neorl.tune.randtune.RANDTUNE.tune">(neorl.tune.randtune.RANDTUNE method)</a>
 </li>
       </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="X">X</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="modules/xnes.html#neorl.evolu.xnes.XNES">XNES (class in neorl.evolu.xnes)</a>
+</li>
   </ul></td>
 </tr></table>
 

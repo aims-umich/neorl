@@ -25,25 +25,38 @@ class MyPool(multiprocessing.pool.Pool):
 class PSO:
     """
     Parallel Particle Swarm Optimisaion (PSO) module
-	
-    :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: {'x1': ['int', 1, 4], 'x2': ['float', 0.1, 0.8], 'x3': ['float', 2.2, 6.2]}
+	 
+    :param mode: (str) problem type, either "min" for minimization problem or "max" for maximization
+    :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: ``bounds={'x1': ['int', 1, 4], 'x2': ['float', 0.1, 0.8], 'x3': ['float', 2.2, 6.2]}``
     :param fit: (function) the fitness function 
     :param npar: (int) number of particles in the swarm
     :param c1: (float) cognitive speed constant 
     :param c2: (float) social speed constant 
-    :param speed_mech: (str) type of speed mechanism to update particle velocity, choose between 'constric', 'timew', 'globw'.			
+    :param speed_mech: (str) type of speed mechanism to update particle velocity, choose between ``constric``, ``timew``, ``globw``.			
     :param ncores: (int) number of parallel processors
     :param seed: (int) random seed for sampling
     """
-    def __init__ (self, bounds, fit, npar=50, c1=2.05, c2=2.05, speed_mech='constric', ncores=1, seed=None):  
+    def __init__ (self, mode, bounds, fit, npar=50, c1=2.05, c2=2.05, speed_mech='constric', ncores=1, seed=None):  
 
         if seed:
             random.seed(seed)
             self.seed=seed
-            
+        
         self.bounds=bounds
         self.npar=npar
-        self.fit=fit
+        
+        #--mir
+        self.mode=mode
+        if mode == 'max':
+            self.fit=fit
+        elif mode == 'min':
+            def fitness_wrapper(*args, **kwargs):
+                return -fit(*args, **kwargs) 
+            self.fit=fitness_wrapper
+        else:
+            raise ValueError('--error: The mode entered by user is invalid, use either `min` or `max`')
+            
+            
         self.ncores=ncores
         self.speed_mech=speed_mech
         self.c1=c1
@@ -299,11 +312,11 @@ class PSO:
         self.best_scores=[]
         if x0:
             #get the initial swarm position from the user, it has to be 
-            print('-- Using The Initial PSO Swarm from the User')
+            #print('-- Using The Initial PSO Swarm from the User')
             assert len(x0) == self.npar, '--error: the length of x0 ({}) (initial swarm) must equal to number of particles ({})'.format(len(x0), self.npar)
             swarm, self.local_pos, self.local_fit=self.InitSwarm(x0=x0)
         else:
-            print('-- Using A Random Initial PSO Swarm')
+            #print('-- Using A Random Initial PSO Swarm')
             #generate the initial swarm internally, assign all variables
             swarm, self.local_pos, self.local_fit=self.InitSwarm()
         
@@ -375,6 +388,12 @@ class PSO:
             self.best_scores.append(fit_best)
             swarm = copy.deepcopy(offspring) 
             
+            #--mir
+            if self.mode=='min':
+                self.swm_fit_correct=-self.swm_fit
+            else:
+                self.swm_fit_correct=self.swm_fit
+            
             # Print data
             if verbose:
                 mean_speed=[np.mean(swarm[i][1]) for i in swarm]
@@ -382,7 +401,7 @@ class PSO:
                 print('PSO step {}/{}, C1={}, C2={}, W={}, Particles={}, Ncores={}'.format(gen*self.npar, ngen*self.npar, np.round(self.c1,2), np.round(self.c2,2), np.round(self.w,2), self.npar, self.ncores))
                 print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
                 print('Statistics for generation {}'.format(gen))
-                print('Best Swarm Fitness:', np.round(self.swm_fit,6))
+                print('Best Swarm Fitness:', np.round(self.swm_fit_correct,6))
                 print('Best Swarm Position:', np.round(self.swm_pos,6))
                 print('Max Speed:', np.round(np.max(mean_speed),3))
                 print('Min Speed:', np.round(np.min(mean_speed),3))
@@ -396,9 +415,15 @@ class PSO:
         for par in range(len(swarm)):
             swarm[par].append(self.local_pos[par])
             swarm[par].append(self.local_fit[par])
-            
-        print('------------------------ PSO Summary --------------------------')
-        print('Best fitness (y) found:', self.swm_fit)
-        print('Best individual (x) found:', self.swm_pos)
-        print('--------------------------------------------------------------')        
-        return self.swm_pos, self.swm_fit, self.best_scores
+        
+        if verbose:
+            print('------------------------ PSO Summary --------------------------')
+            print('Best fitness (y) found:', self.swm_fit_correct)
+            print('Best individual (x) found:', self.swm_pos)
+            print('--------------------------------------------------------------')
+    
+        #--mir
+        if self.mode=='min':
+            self.best_scores=[-item for item in self.best_scores]
+                
+        return self.swm_pos, self.swm_fit_correct, self.best_scores

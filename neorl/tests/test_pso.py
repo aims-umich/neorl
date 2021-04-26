@@ -10,7 +10,7 @@ def test_pso():
                     Minima: 0
             """
             y=sum(x**2 for x in individual)
-            return -y  #-1 to convert min to max problem
+            return y
     
     #Setup the parameter space (d=5)
     nx=5
@@ -18,7 +18,7 @@ def test_pso():
     for i in range(1,nx+1):
             BOUNDS['x'+str(i)]=['float', -100, 100]
     
-    pso=PSO(bounds=BOUNDS, fit=FIT, c1=2.05, c2=2.05, speed_mech='constric', ncores=1, seed=1)
-    x_best, y_best, pso_hist=pso.evolute(ngen=100, verbose=0)
+    pso=PSO(mode='min', bounds=BOUNDS, fit=FIT, c1=2.05, c2=2.05, speed_mech='constric', ncores=1, seed=1)
+    x_best, y_best, pso_hist=pso.evolute(ngen=100, verbose=1)
 
 test_pso()

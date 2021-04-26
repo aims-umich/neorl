@@ -44,34 +44,34 @@ Example of using random search to tune three ES hyperparameters for solving the 
 	#Define the fitness function (for original optimisation)
 	def sphere(individual):
 	    y=sum(x**2 for x in individual)
-	    return -y  #-1 to convert min to max problem
-	    
+	    return y
+	
 	#*************************************************************
 	# Part II: Define fitness function for hyperparameter tuning
-	#*************************************************************  
+	#*************************************************************
 	def tune_fit(cxpb, mu, alpha, cxmode):
-	    
+	
 	    #--setup the parameter space
 	    nx=5
 	    BOUNDS={}
 	    for i in range(1,nx+1):
-	        BOUNDS['x'+str(i)]=['float', -100, 100]    
-	    
+	        BOUNDS['x'+str(i)]=['float', -100, 100]
+	
 	    #--setup the ES algorithm
-	    es=ES(bounds=BOUNDS, fit=sphere, lambda_=80, mu=mu, mutpb=0.1, alpha=alpha,
+	    es=ES(mode='min', bounds=BOUNDS, fit=sphere, lambda_=80, mu=mu, mutpb=0.1, alpha=alpha,
 	         cxmode=cxmode, cxpb=cxpb, ncores=1, seed=1)
-	    
-	    #--Evolute the ES object and obtains y_best 
+	
+	    #--Evolute the ES object and obtains y_best
 	    #--turn off verbose for less algorithm print-out when tuning
-	    x_best, y_best, es_hist=es.evolute(ngen=100, verbose=0)      
-	    
+	    x_best, y_best, es_hist=es.evolute(ngen=100, verbose=0)
+	
 	    return y_best #returns the best score
-	    
+	
 	#*************************************************************
 	# Part III: Tuning
-	#************************************************************* 
+	#*************************************************************
 	#Setup the parameter space
-	#VERY IMPORTANT: The order of these parameters MUST be similar to their order in tune_fit 
+	#VERY IMPORTANT: The order of these parameters MUST be similar to their order in tune_fit
 	#see tune_fit
 	param_grid={
 	#def tune_fit(cxpb, mu, alpha, cxmode):
@@ -85,8 +85,8 @@ Example of using random search to tune three ES hyperparameters for solving the 
 	#view the generated cases before running them
 	print(rtune.hyperparameter_cases)
 	#tune the parameters with method .tune
-	randres=rtune.tune(ncores=4, csvname='tune.csv')
-	print(randres)   #the results are saved in dataframe and ranked from best to worst
+	randres=rtune.tune(ncores=1, csvname='tune.csv')
+	print(randres)
 
 Notes
 -----

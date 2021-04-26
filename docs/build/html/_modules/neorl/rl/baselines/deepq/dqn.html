@@ -104,9 +104,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../modules/a2c.html">Advantage Actor Critic (A2C)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../modules/dqn.html">Deep Q Learning (DQN)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../modules/ppo2.html">Proximal Policy Optimisation (PPO)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../modules/es.html">Evolution Strategies (ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules/es.html">Evolution Strategies (<span class="math notranslate nohighlight">\(\mu,\lambda\)</span>) (ES)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../modules/pso.html">Particle Swarm Optimisation (PSO)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../modules/de.html">Differential Evolution (DE)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules/xnes.html">Exponential Natural Evolution Strategies (XNES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules/gwo.html">Grey Wolf Optimizer (GWO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules/pesa.html">Prioritized replay Evolutionary and Swarm Algorithm (PESA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules/pesa2.html">Modern PESA (PESA2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules/sa.html">Simulated Annealing (SA)</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
 <ul>
@@ -300,7 +305,7 @@
         <span class="n">policy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">step_model</span>
         <span class="k">return</span> <span class="n">policy</span><span class="o">.</span><span class="n">obs_ph</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span> <span class="p">[</span><span class="kc">None</span><span class="p">]),</span> <span class="n">policy</span><span class="o">.</span><span class="n">q_values</span>
 
-<div class="viewcode-block" id="DQN.setup_model"><a class="viewcode-back" href="../../../../../modules/dqn.html#neorl.rl.baselines.deepq.DQN.setup_model">[docs]</a>    <span class="k">def</span> <span class="nf">setup_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">setup_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
         <span class="k">with</span> <span class="n">SetVerbosity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">):</span>
             <span class="k">assert</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">action_space</span><span class="p">,</span> <span class="n">gym</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Box</span><span class="p">),</span> \
@@ -341,7 +346,7 @@
                 <span class="n">tf_util</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sess</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">update_target</span><span class="p">(</span><span class="n">sess</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sess</span><span class="p">)</span>
 
-                <span class="bp">self</span><span class="o">.</span><span class="n">summary</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">summary</span><span class="o">.</span><span class="n">merge_all</span><span class="p">()</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">summary</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">summary</span><span class="o">.</span><span class="n">merge_all</span><span class="p">()</span>
 
 <div class="viewcode-block" id="DQN.learn"><a class="viewcode-back" href="../../../../../modules/dqn.html#neorl.rl.baselines.deepq.DQN.learn">[docs]</a>    <span class="k">def</span> <span class="nf">learn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">total_timesteps</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">log_interval</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">tb_log_name</span><span class="o">=</span><span class="s2">&quot;DQN&quot;</span><span class="p">,</span>
               <span class="n">reset_num_timesteps</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">replay_wrapper</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -533,7 +538,7 @@
 
         <span class="k">return</span> <span class="n">actions</span><span class="p">,</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="DQN.action_probability"><a class="viewcode-back" href="../../../../../modules/dqn.html#neorl.rl.baselines.deepq.DQN.action_probability">[docs]</a>    <span class="k">def</span> <span class="nf">action_probability</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observation</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">actions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">logp</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">action_probability</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observation</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">actions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">logp</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="n">observation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">observation</span><span class="p">)</span>
         <span class="n">vectorized_env</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_vectorized_observation</span><span class="p">(</span><span class="n">observation</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_space</span><span class="p">)</span>
 
@@ -556,10 +561,10 @@
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Error: The environment must be vectorized when using recurrent policies.&quot;</span><span class="p">)</span>
             <span class="n">actions_proba</span> <span class="o">=</span> <span class="n">actions_proba</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="n">actions_proba</span></div>
+        <span class="k">return</span> <span class="n">actions_proba</span>
 
-<div class="viewcode-block" id="DQN.get_parameter_list"><a class="viewcode-back" href="../../../../../modules/dqn.html#neorl.rl.baselines.deepq.DQN.get_parameter_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_parameter_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span></div>
+    <span class="k">def</span> <span class="nf">get_parameter_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span>
 
 <div class="viewcode-block" id="DQN.save"><a class="viewcode-back" href="../../../../../modules/dqn.html#neorl.rl.baselines.deepq.DQN.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">save_path</span><span class="p">,</span> <span class="n">cloudpickle</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="c1"># params</span>

@@ -15,6 +15,7 @@ neorl/evolu/crossover.py
 neorl/evolu/de.py
 neorl/evolu/es.py
 neorl/evolu/ga.py
+neorl/evolu/gwo.py
 neorl/evolu/mutation.py
 neorl/evolu/pso.py
 neorl/evolu/sa.py
@@ -22,13 +23,9 @@ neorl/evolu/xnes.py
 neorl/evolu/runners/__init__.py
 neorl/evolu/runners/ga.py
 neorl/evolu/runners/sa.py
-neorl/files/__init__.py
-neorl/files/ga.py
-neorl/files/ga_deap.py
-neorl/files/sa_base.py
-neorl/files/sa_new.py
 neorl/hybrid/__init__.py
 neorl/hybrid/pesa.py
+neorl/hybrid/pesa2.py
 neorl/hybrid/rles.py
 neorl/parsers/PARSER.py
 neorl/parsers/ParamList.py
@@ -113,6 +110,9 @@ neorl/tests/test_dqn.py
 neorl/tests/test_es.py
 neorl/tests/test_globalmin.py
 neorl/tests/test_grid.py
+neorl/tests/test_gwo.py
+neorl/tests/test_pesa.py
+neorl/tests/test_pesa2.py
 neorl/tests/test_ppo.py
 neorl/tests/test_ppo2.py
 neorl/tests/test_pso.py

@@ -10,7 +10,7 @@ def test_de():
                     Minima: 0
             """
             y=sum(x**2 for x in individual)
-            return -y  #-1 to convert min to max problem
+            return y
     
     #Setup the parameter space (d=5)
     nx=5
@@ -18,7 +18,7 @@ def test_de():
     for i in range(1,nx+1):
             BOUNDS['x'+str(i)]=['float', -100, 100]
     
-    de=DE(bounds=BOUNDS, fit=FIT, npop=60, F=0.5, CR=0.7, ncores=1, seed=1)
+    de=DE(mode='min', bounds=BOUNDS, fit=FIT, npop=60, F=0.5, CR=0.7, ncores=1, seed=1)
     x_best, y_best, de_hist=de.evolute(ngen=100, verbose=0)
 
 test_de()

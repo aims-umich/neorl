@@ -1,0 +1,748 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>neorl.hybrid.pesa &mdash; NEORL 1.2.0b documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> NEORL
+          
+
+          
+            
+            <img src="../../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                main (1.2.0b )
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">General Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/install.html">Quick Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/detinstall.html">Detailed Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/quickstart.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/rl.html">Reinforcement Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/evolu.html">Evolutionary Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/hyperparameter.html">Hyperparameter Tuning</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Algorithms</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/a2c.html">Advantage Actor Critic (A2C)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/dqn.html">Deep Q Learning (DQN)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/ppo2.html">Proximal Policy Optimisation (PPO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/es.html">Evolution Strategies (<span class="math notranslate nohighlight">\(\mu,\lambda\)</span>) (ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/pso.html">Particle Swarm Optimisation (PSO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/de.html">Differential Evolution (DE)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/xnes.html">Exponential Natural Evolution Strategies (XNES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/gwo.html">Grey Wolf Optimizer (GWO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/pesa.html">Prioritized replay Evolutionary and Swarm Algorithm (PESA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/pesa2.html">Modern PESA (PESA2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/sa.html">Simulated Annealing (SA)</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../tune/grid.html">Grid Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tune/random.html">Random Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tune/bayes.html">Bayesian Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tune/evolu.html">Evolutionary Search</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex1.html">Example 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex2.html">Example 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex3.html">Example 3</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Misc</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../misc/changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../misc/projects.html">Projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../misc/contrib.html">Contributors</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">NEORL</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>neorl.hybrid.pesa</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for neorl.hybrid.pesa</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">#&quot;&quot;&quot;</span>
+<span class="c1">#Created on Sun Jun 28 18:21:05 2020</span>
+<span class="c1">#</span>
+<span class="c1">#@author: Majdi Radaideh</span>
+<span class="c1">#&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">neorl.hybrid.pesacore.er</span> <span class="kn">import</span> <span class="n">ExperienceReplay</span>
+<span class="kn">from</span> <span class="nn">neorl.hybrid.pesacore.sa</span> <span class="kn">import</span> <span class="n">SAMod</span>
+<span class="kn">from</span> <span class="nn">neorl.hybrid.pesacore.es</span> <span class="kn">import</span> <span class="n">ESMod</span>
+<span class="kn">from</span> <span class="nn">neorl.hybrid.pesacore.pso</span> <span class="kn">import</span> <span class="n">PSOMod</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Process</span><span class="p">,</span> <span class="n">Queue</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<div class="viewcode-block" id="PESA"><a class="viewcode-back" href="../../../modules/pesa.html#neorl.hybrid.pesa.PESA">[docs]</a><span class="k">class</span> <span class="nc">PESA</span><span class="p">(</span><span class="n">ExperienceReplay</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    *PESA Major Parameters*</span>
+<span class="sd">    </span>
+<span class="sd">    :param mode: (str) problem type, either &quot;min&quot; for minimization problem or &quot;max&quot; for maximization</span>
+<span class="sd">    :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: ``bounds={&#39;x1&#39;: [&#39;int&#39;, 1, 4], &#39;x2&#39;: [&#39;float&#39;, 0.1, 0.8], &#39;x3&#39;: [&#39;float&#39;, 2.2, 6.2]}``</span>
+<span class="sd">    :param fit: (function) the fitness function </span>
+<span class="sd">    :param npop: (int) total number of individuals in each group. So for ES, PSO, and SA, full population is ``npop*3``.</span>
+<span class="sd">    :param mu: (int) number of individuals to survive to the next generation. </span>
+<span class="sd">                     Also, ``mu`` equals to the number of individuals to sample from the memory. If None, ``mu=int(npop/2)``.</span>
+<span class="sd">                     So 1/2 of PESA population comes from previous generation, and 1/2 comes from the replay memory (See **Notes** below for more info)</span>
+<span class="sd">    :param memory_size: (int) max size of the replay memory (if None, ``memory_size`` is built to accommodate all samples during search) </span>
+<span class="sd">    :param alpha_init: (float) initial value of the prioritized replay coefficient (See **Notes** below)</span>
+<span class="sd">    :param alpha_end: (float) final value of the prioritized replay coefficient (See **Notes** below)</span>
+<span class="sd">    :param alpha_backdoor: (float) backdoor greedy replay rate/probability to sample from the memory for SA instead of random-walk (See **Notes** below)</span>
+<span class="sd">    </span>
+<span class="sd">    *PESA Auxiliary Parameters (for the internal algorithms)*</span>
+<span class="sd">    </span>
+<span class="sd">    :param cxpb: (float) for **ES**, population crossover probability between [0,1]</span>
+<span class="sd">    :param mutpb: (float) for **ES**, population mutation probability between [0,1] </span>
+<span class="sd">    :param c1: (float) for **PSO**, cognitive speed constant </span>
+<span class="sd">    :param c2: (float) for **PSO**, social speed constant</span>
+<span class="sd">    :param speed_mech: (str) for **PSO**, type of speed mechanism for to update particle velocity, choose between ``constric``, ``timew``, ``globw``.	</span>
+<span class="sd">    :param Tmax: (float) for **SA**, initial/max temperature to start the annealing process </span>
+<span class="sd">    :param chi: (float) for **SA**, probability to perturb an attribute during SA annealing (occurs when ``rand(0,1) &lt; chi``).	</span>
+<span class="sd">    </span>
+<span class="sd">    *PESA Misc. Parameters*</span>
+<span class="sd">    </span>
+<span class="sd">    :param ncores: (int) number of parallel processors</span>
+<span class="sd">    :param seed: (int) random seed for sampling</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">npop</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1">#general parameters</span>
+                  <span class="n">memory_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha_init</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">alpha_end</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha_backdoor</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="c1">#replay parameters</span>
+                  <span class="n">Tmax</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">chi</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="c1">#SA parameters</span>
+                  <span class="n">cxpb</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">mutpb</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>  <span class="c1">#ES parameters</span>
+                  <span class="n">c1</span><span class="o">=</span><span class="mf">2.05</span><span class="p">,</span> <span class="n">c2</span><span class="o">=</span><span class="mf">2.05</span><span class="p">,</span> <span class="n">speed_mech</span><span class="o">=</span><span class="s1">&#39;constric&#39;</span><span class="p">,</span> <span class="c1">#PSO parameters</span>
+                  <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span> <span class="c1">#misc parameters</span>
+        
+        <span class="c1">#--------------------</span>
+        <span class="c1">#General Parameters</span>
+        <span class="c1">#--------------------</span>
+        <span class="k">if</span> <span class="n">seed</span><span class="p">:</span>
+            <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">BOUNDS</span><span class="o">=</span><span class="n">bounds</span>
+
+        <span class="c1">#--mir</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;max&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">FIT</span><span class="o">=</span><span class="n">fit</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;min&#39;</span><span class="p">:</span>
+            <span class="k">def</span> <span class="nf">fitness_wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                <span class="k">return</span> <span class="o">-</span><span class="n">fit</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">FIT</span><span class="o">=</span><span class="n">fitness_wrapper</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;--error: The mode entered by user is invalid, use either `min` or `max`&#39;</span><span class="p">)</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">NPOP</span><span class="o">=</span><span class="n">npop</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pso_flag</span><span class="o">=</span><span class="kc">True</span>
+        <span class="k">if</span> <span class="n">ncores</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">NCORES</span><span class="o">=</span><span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">PROC</span><span class="o">=</span><span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">PROC</span><span class="o">=</span><span class="kc">True</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pso_flag</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">NCORES</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">ncores</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">NCORES</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">ncores</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+        <span class="c1"># option for first-level parallelism       </span>
+        <span class="c1">#self.PROC=True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SEED</span><span class="o">=</span><span class="n">seed</span>
+        
+        <span class="c1">#--------------------</span>
+        <span class="c1">#Experience Replay</span>
+        <span class="c1">#--------------------</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">MODE</span><span class="o">=</span><span class="s1">&#39;prior&#39;</span><span class="p">;</span>  <span class="bp">self</span><span class="o">.</span><span class="n">ALPHA0</span><span class="o">=</span><span class="n">alpha_init</span><span class="p">;</span>   <span class="bp">self</span><span class="o">.</span><span class="n">ALPHA1</span><span class="o">=</span><span class="n">alpha_end</span>
+        <span class="c1">#--------------------</span>
+        <span class="c1"># SA hyperparameters</span>
+        <span class="c1">#--------------------</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">TMAX</span><span class="o">=</span><span class="n">Tmax</span><span class="p">;</span>  <span class="bp">self</span><span class="o">.</span><span class="n">CHI</span><span class="o">=</span><span class="n">chi</span><span class="p">;</span>  <span class="bp">self</span><span class="o">.</span><span class="n">REPLAY_RATE</span><span class="o">=</span><span class="n">alpha_backdoor</span>
+        
+        <span class="c1">#--------------------</span>
+        <span class="c1"># ES HyperParameters</span>
+        <span class="c1">#--------------------</span>
+        <span class="k">if</span> <span class="n">mu</span><span class="p">:</span>    
+            <span class="k">assert</span> <span class="n">mu</span> <span class="o">&lt;</span> <span class="n">npop</span><span class="p">,</span> <span class="s1">&#39;--error: The value of mu (</span><span class="si">{}</span><span class="s1">) MUST be less than npop (</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">npop</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">MU</span><span class="o">=</span><span class="n">mu</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">MU</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">npop</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">CXPB</span><span class="o">=</span><span class="n">cxpb</span><span class="p">;</span>  <span class="bp">self</span><span class="o">.</span><span class="n">MUTPB</span><span class="o">=</span><span class="n">mutpb</span><span class="p">;</span>   <span class="bp">self</span><span class="o">.</span><span class="n">INDPB</span><span class="o">=</span><span class="mf">1.0</span>
+        
+        <span class="c1">#--------------------</span>
+        <span class="c1"># PSO HyperParameters</span>
+        <span class="c1">#--------------------</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">C1</span><span class="o">=</span><span class="n">c1</span><span class="p">;</span>   <span class="bp">self</span><span class="o">.</span><span class="n">C2</span><span class="o">=</span><span class="n">c2</span><span class="p">;</span>   <span class="bp">self</span><span class="o">.</span><span class="n">SPEED_MECH</span><span class="o">=</span><span class="n">speed_mech</span>
+        
+        <span class="c1">#-------------------------------</span>
+        <span class="c1">#Memory Supply for each method</span>
+        <span class="c1">#-------------------------------</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ES_MEMORY</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">MU</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SA_MEMORY</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">NCORES</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">PSO_MEMORY</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">NPOP</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">MU</span>
+        <span class="c1">#--------------------</span>
+        <span class="c1"># Fixed/Derived parameters </span>
+        <span class="c1">#--------------------</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">BOUNDS</span><span class="p">)</span>  <span class="c1">#all</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">memory_size</span><span class="o">=</span><span class="n">memory_size</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">COOLING</span><span class="o">=</span><span class="s1">&#39;fast&#39;</span> <span class="c1">#SA</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">TMIN</span><span class="o">=</span><span class="mi">1</span>  <span class="c1">#SA</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">LAMBDA</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">NPOP</span> <span class="c1">#ES</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">NPAR</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">NPOP</span> <span class="c1">#PSO</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SMIN</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span> <span class="c1">#ES</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SMAX</span> <span class="o">=</span> <span class="mf">0.5</span>  <span class="c1">#ES</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v0</span><span class="o">=</span><span class="mf">0.1</span> <span class="c1">#constant to initialize PSO speed, not very important</span>
+
+
+<div class="viewcode-block" id="PESA.evolute"><a class="viewcode-back" href="../../../modules/pesa.html#neorl.hybrid.pesa.PESA.evolute">[docs]</a>    <span class="k">def</span> <span class="nf">evolute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ngen</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">warmup</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function evolutes the PESA algorithm for number of generations.</span>
+<span class="sd">        </span>
+<span class="sd">        :param ngen: (int) number of generations to evolute</span>
+<span class="sd">        :param x0: (list of lists) initial samples to start the replay memory (``len(x0)`` must be equal or more than ``npop``)</span>
+<span class="sd">        :param warmup: (int) number of random warmup samples to initialize the replay memory and must be equal or more than ``npop`` (only used if ``x0=None``)</span>
+<span class="sd">        :param verbose: (int) print statistics to screen, 0: no print, 1: PESA print, 2: detailed print</span>
+<span class="sd">        </span>
+<span class="sd">        :return: (dict) dictionary containing major PESA search results</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">NGEN</span><span class="o">=</span><span class="n">ngen</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">STEPS</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">NGEN</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">NPOP</span> <span class="c1">#all </span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">memory_size</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">MEMORY_SIZE</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">memory_size</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">MEMORY_SIZE</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">STEPS</span><span class="o">*</span><span class="mi">3</span><span class="o">+</span><span class="mi">1</span> <span class="c1">#PESA</span>
+            
+        <span class="c1">#-------------------------------------------------------</span>
+        <span class="c1"># Check if initial pop is provided as initial guess </span>
+        <span class="c1">#-------------------------------------------------------</span>
+        <span class="k">if</span> <span class="n">x0</span><span class="p">:</span> 
+            <span class="c1"># use provided initial guess</span>
+            <span class="n">warm</span><span class="o">=</span><span class="n">ESMod</span><span class="p">(</span><span class="n">bounds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">FIT</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">MU</span><span class="p">,</span> <span class="n">lambda_</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">LAMBDA</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">NCORES</span><span class="p">)</span>
+            <span class="n">x0size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="n">x0size</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">NPOP</span><span class="p">,</span> <span class="s1">&#39;the number of lists in x0 (</span><span class="si">{}</span><span class="s1">) must be more than or equal npop (</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x0size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">NPOP</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pop0</span><span class="o">=</span><span class="n">warm</span><span class="o">.</span><span class="n">init_pop</span><span class="p">(</span><span class="n">warmup</span><span class="o">=</span><span class="n">x0size</span><span class="p">,</span> <span class="n">x_known</span><span class="o">=</span><span class="n">x0</span><span class="p">)</span>  <span class="c1">#initial population for ES</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1">#create initial guess </span>
+            <span class="k">assert</span> <span class="n">warmup</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">NPOP</span><span class="p">,</span> <span class="s1">&#39;the number of warmup samples (</span><span class="si">{}</span><span class="s1">) must be more than npop (</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">warmup</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">NPOP</span><span class="p">)</span>
+            <span class="n">warm</span><span class="o">=</span><span class="n">ESMod</span><span class="p">(</span><span class="n">bounds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">FIT</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">MU</span><span class="p">,</span> <span class="n">lambda_</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">LAMBDA</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">NCORES</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pop0</span><span class="o">=</span><span class="n">warm</span><span class="o">.</span><span class="n">init_pop</span><span class="p">(</span><span class="n">warmup</span><span class="o">=</span><span class="n">warmup</span><span class="p">)</span>  <span class="c1">#initial population for ES</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">partime</span><span class="o">=</span><span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">partime</span><span class="p">[</span><span class="s1">&#39;pesa&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">partime</span><span class="p">[</span><span class="s1">&#39;es&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">partime</span><span class="p">[</span><span class="s1">&#39;pso&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">partime</span><span class="p">[</span><span class="s1">&#39;sa&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fit_hist</span><span class="o">=</span><span class="p">[]</span>
+        <span class="c1">#------------------------------</span>
+        <span class="c1"># Step 1: Initialize the memory</span>
+        <span class="c1">#------------------------------</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mymemory</span><span class="o">=</span><span class="n">ExperienceReplay</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">MEMORY_SIZE</span><span class="p">)</span> <span class="c1">#memory object</span>
+        <span class="n">xvec0</span><span class="p">,</span> <span class="n">obj0</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pop0</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pop0</span><span class="p">],</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pop0</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pop0</span><span class="p">]</span>  <span class="c1">#parse the initial samples</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mymemory</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">xvec</span><span class="o">=</span><span class="n">xvec0</span><span class="p">,</span> <span class="n">obj</span><span class="o">=</span><span class="n">obj0</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;na&#39;</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">xvec0</span><span class="p">))</span> <span class="c1"># add initial samples to the replay memory</span>
+        
+        <span class="c1">#--------------------------------</span>
+        <span class="c1"># Step 2: Initialize all methods</span>
+        <span class="c1">#--------------------------------</span>
+        <span class="c1"># Obtain initial population for all methods</span>
+        <span class="n">espop0</span><span class="p">,</span> <span class="n">swarm0</span><span class="p">,</span> <span class="n">swm_pos0</span><span class="p">,</span> <span class="n">swm_fit0</span><span class="p">,</span> <span class="n">local_pos</span><span class="p">,</span> <span class="n">local_fit</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">E0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">init_guess</span><span class="p">(</span><span class="n">pop0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pop0</span><span class="p">)</span>
+        <span class="c1"># Initialize ES class</span>
+        <span class="n">es</span><span class="o">=</span><span class="n">ESMod</span><span class="p">(</span><span class="n">bounds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">FIT</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">MU</span><span class="p">,</span> <span class="n">lambda_</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">LAMBDA</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">NCORES</span><span class="p">,</span> <span class="n">indpb</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">INDPB</span><span class="p">,</span> 
+                 <span class="n">cxpb</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">CXPB</span><span class="p">,</span> <span class="n">mutpb</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">MUTPB</span><span class="p">,</span> <span class="n">smin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">SMIN</span><span class="p">,</span> <span class="n">smax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">SMAX</span><span class="p">)</span>
+        <span class="c1"># Initialize SA class</span>
+        <span class="n">sa</span><span class="o">=</span><span class="n">SAMod</span><span class="p">(</span><span class="n">bounds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">memory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mymemory</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">FIT</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">STEPS</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">NCORES</span><span class="p">,</span> 
+                 <span class="n">chi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">CHI</span><span class="p">,</span> <span class="n">replay_rate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">REPLAY_RATE</span><span class="p">,</span> <span class="n">cooling</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">COOLING</span><span class="p">,</span> <span class="n">Tmax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">TMAX</span><span class="p">,</span> <span class="n">Tmin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">TMIN</span><span class="p">)</span>
+        <span class="c1"># Initialize PSO class (if USED)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pso_flag</span><span class="p">:</span>
+            <span class="n">pso</span><span class="o">=</span><span class="n">PSOMod</span><span class="p">(</span><span class="n">bounds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">FIT</span><span class="p">,</span> <span class="n">npar</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">NPAR</span><span class="p">,</span> <span class="n">swm0</span><span class="o">=</span><span class="p">[</span><span class="n">swm_pos0</span><span class="p">,</span><span class="n">swm_fit0</span><span class="p">],</span> 
+                       <span class="n">ncores</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">NCORES</span><span class="p">,</span> <span class="n">c1</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">C1</span><span class="p">,</span> <span class="n">c2</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">C2</span><span class="p">,</span> <span class="n">speed_mech</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">SPEED_MECH</span><span class="p">)</span>
+            
+        <span class="c1">#--------------------------------</span>
+        <span class="c1"># Step 3: Initialize PESA engine</span>
+        <span class="c1">#--------------------------------</span>
+        <span class="c1">#Use initial samples as first guess for SA, ES, and PSO</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pop_next</span><span class="o">=</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">espop0</span><span class="p">)</span> <span class="c1"># x0 for ES</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_next</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">E_next</span><span class="o">=</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">x0</span><span class="p">),</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">E0</span><span class="p">)</span> <span class="c1"># x0 for SA</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pso_flag</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">swm_next</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_pos_next</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_fit_next</span><span class="o">=</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">swarm0</span><span class="p">),</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">local_pos</span><span class="p">),</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">local_fit</span><span class="p">)</span> <span class="c1"># x0 for PSO (if used)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">STEP0</span><span class="o">=</span><span class="mi">1</span>  <span class="c1">#step counter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ALPHA</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ALPHA0</span>  <span class="c1">#set alpha to alpha0</span>
+        
+        <span class="c1">#--------------------------------</span>
+        <span class="c1"># Step 4: PESA evolution</span>
+        <span class="c1">#--------------------------------</span>
+        <span class="k">for</span> <span class="n">gen</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">NGEN</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            
+            <span class="n">caseids</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;es_gen</span><span class="si">{}</span><span class="s1">_ind</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gen</span><span class="p">,</span><span class="n">ind</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">LAMBDA</span><span class="p">)]</span> <span class="c1"># save caseids for ES </span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pso_flag</span><span class="p">:</span>
+                <span class="n">pso_caseids</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;pso_gen</span><span class="si">{}</span><span class="s1">_par</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gen</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">ind</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NPAR</span><span class="p">)]</span> <span class="c1"># save caseids for PSO </span>
+            <span class="c1">#-------------------------------------------------------------------------------------------------------------------</span>
+            <span class="c1"># Step 5: evolute all methods for 1 generation </span>
+            <span class="c1">#-------------------------------------------------------------------------------------------------------------------</span>
+            <span class="c1">#**********************************</span>
+            <span class="c1">#--Step 5A: Complete PARALEL calcs </span>
+            <span class="c1"># via multiprocess.Process</span>
+            <span class="c1">#*********************************</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">PROC</span><span class="p">:</span>
+                <span class="n">t0</span><span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+                
+                <span class="n">QSA</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">();</span> <span class="n">QES</span><span class="o">=</span><span class="n">Queue</span><span class="p">();</span> <span class="n">QPSO</span><span class="o">=</span><span class="n">Queue</span><span class="p">()</span>
+                <span class="k">def</span> <span class="nf">sa_worker</span><span class="p">():</span>
+                    <span class="n">x_new</span><span class="p">,</span> <span class="n">E_new</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">acc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rej</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">imp</span><span class="p">,</span> <span class="n">x_best</span><span class="p">,</span> <span class="n">E_best</span><span class="p">,</span> <span class="n">sa_partime</span><span class="o">=</span> <span class="n">sa</span><span class="o">.</span><span class="n">anneal</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">npop</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">NPOP</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">x_next</span><span class="p">,</span> 
+                                                                                                  <span class="n">E0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">E_next</span><span class="p">,</span> <span class="n">step0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">STEP0</span><span class="p">)</span>
+                    <span class="n">QSA</span><span class="o">.</span><span class="n">put</span><span class="p">((</span><span class="n">x_new</span><span class="p">,</span> <span class="n">E_new</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">acc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rej</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">imp</span><span class="p">,</span> <span class="n">x_best</span><span class="p">,</span> <span class="n">E_best</span><span class="p">,</span> <span class="n">sa_partime</span><span class="p">))</span>
+                <span class="k">def</span> <span class="nf">es_worker</span><span class="p">():</span>
+                    <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SEED</span><span class="p">)</span>
+                    <span class="n">pop_new</span><span class="p">,</span> <span class="n">es_partime</span><span class="o">=</span><span class="n">es</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">population</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pop_next</span><span class="p">,</span><span class="n">ngen</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">caseids</span><span class="o">=</span><span class="n">caseids</span><span class="p">)</span>
+                    <span class="n">QES</span><span class="o">.</span><span class="n">put</span><span class="p">((</span><span class="n">pop_new</span><span class="p">,</span> <span class="n">es_partime</span><span class="p">))</span>
+                <span class="k">def</span> <span class="nf">pso_worker</span><span class="p">():</span>
+                    <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SEED</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">gen</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">swm_new</span><span class="p">,</span> <span class="n">swm_pos_new</span><span class="p">,</span> <span class="n">swm_fit_new</span><span class="p">,</span> <span class="n">pso_partime</span><span class="o">=</span><span class="n">pso</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">swarm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">swm_next</span><span class="p">,</span> <span class="n">local_pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">local_pos_next</span><span class="p">,</span> <span class="n">local_fit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">local_fit_next</span><span class="p">,</span> 
+                                                                      <span class="n">swm_best</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">swm_pos</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">swm_fit</span><span class="p">],</span> <span class="n">mu</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">MU</span><span class="p">,</span> <span class="n">exstep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">STEP0</span><span class="p">,</span> <span class="n">exsteps</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">STEPS</span><span class="p">,</span> 
+                                                                      <span class="n">caseids</span><span class="o">=</span><span class="n">pso_caseids</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">swm_new</span><span class="p">,</span> <span class="n">swm_pos_new</span><span class="p">,</span> <span class="n">swm_fit_new</span><span class="p">,</span> <span class="n">pso_partime</span><span class="o">=</span><span class="n">pso</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">swarm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">swm_next</span><span class="p">,</span> <span class="n">local_pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">local_pos_next</span><span class="p">,</span> 
+                                                                      <span class="n">local_fit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">local_fit_next</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">MU</span><span class="p">,</span> <span class="n">exstep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">STEP0</span><span class="p">,</span> <span class="n">exsteps</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">STEPS</span><span class="p">,</span> 
+                                                                      <span class="n">caseids</span><span class="o">=</span><span class="n">pso_caseids</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                    <span class="n">QPSO</span><span class="o">.</span><span class="n">put</span><span class="p">((</span><span class="n">swm_new</span><span class="p">,</span> <span class="n">swm_pos_new</span><span class="p">,</span> <span class="n">swm_fit_new</span><span class="p">,</span> <span class="n">pso_partime</span><span class="p">))</span>
+                <span class="n">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">sa_worker</span><span class="p">)</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+                <span class="n">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">es_worker</span><span class="p">)</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+                
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pso_flag</span><span class="p">:</span>
+                    <span class="n">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">pso_worker</span><span class="p">)</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">swm_next</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">swm_pos</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">swm_fit</span><span class="p">,</span> <span class="n">pso_partime</span><span class="o">=</span><span class="n">QPSO</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">local_pos_next</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">swm_next</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">swm_next</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">local_fit_next</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">swm_next</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">swm_next</span><span class="p">]</span>
+                     
+                <span class="bp">self</span><span class="o">.</span><span class="n">x_next</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">E_next</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">acc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rej</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">imp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_best</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">E_best</span><span class="p">,</span> <span class="n">sa_partime</span><span class="o">=</span><span class="n">QSA</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pop_next</span><span class="p">,</span> <span class="n">es_partime</span><span class="o">=</span><span class="n">QES</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+                <span class="c1">#self.partime.append(time.time()-t0)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">partime</span><span class="p">[</span><span class="s1">&#39;pesa&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">t0</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">partime</span><span class="p">[</span><span class="s1">&#39;pso&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pso_partime</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">partime</span><span class="p">[</span><span class="s1">&#39;es&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">es_partime</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">partime</span><span class="p">[</span><span class="s1">&#39;sa&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sa_partime</span><span class="p">)</span>
+                
+                <span class="c1">#print(self.partime)</span>
+                
+            <span class="c1">#*********************************</span>
+            <span class="c1">#--Step 5B: Complete Serial calcs</span>
+            <span class="c1">#*********************************</span>
+            <span class="k">else</span><span class="p">:</span>  
+                <span class="bp">self</span><span class="o">.</span><span class="n">pop_next</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span><span class="n">es</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">population</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pop_next</span><span class="p">,</span><span class="n">ngen</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">caseids</span><span class="o">=</span><span class="n">caseids</span><span class="p">)</span> <span class="c1">#ES serial</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">x_next</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">E_next</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">acc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rej</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">imp</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_best</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">E_best</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">sa</span><span class="o">.</span><span class="n">anneal</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">npop</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">NPOP</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">x_next</span><span class="p">,</span> 
+                                                                                                     <span class="n">E0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">E_next</span><span class="p">,</span> <span class="n">step0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">STEP0</span><span class="p">)</span> <span class="c1">#SA serial</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pso_flag</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">swm_next</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">swm_pos</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">swm_fit</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span><span class="n">pso</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">swarm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">swm_next</span><span class="p">,</span> <span class="n">local_pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">local_pos_next</span><span class="p">,</span> 
+                                                                          <span class="n">local_fit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">local_fit_next</span><span class="p">,</span> <span class="n">exstep</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">STEP0</span><span class="p">,</span> <span class="n">exsteps</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">STEPS</span><span class="p">,</span>
+                                                                          <span class="n">caseids</span><span class="o">=</span><span class="n">pso_caseids</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">MU</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">local_pos_next</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">swm_next</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">swm_next</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">local_fit_next</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">swm_next</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">swm_next</span><span class="p">]</span>
+            
+
+            <span class="c1">#*********************************************************</span>
+            <span class="c1"># Step 5C: Obtain relevant statistics for this generation </span>
+            <span class="c1">#*********************************************************</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">STEP0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">STEP0</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">NPOP</span>  <span class="c1">#update step counter</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rwd</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pop_next</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pop_next</span><span class="p">],</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pop_next</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pop_next</span><span class="p">]</span>  <span class="c1">#ES statistics</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mean_strategy</span><span class="o">=</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pop_next</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pop_next</span><span class="p">]</span>  <span class="c1">#ES statistics </span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pso_flag</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pars</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fits</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">swm_next</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">swm_next</span><span class="p">],</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">swm_next</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">swm_next</span><span class="p">]</span>  <span class="c1">#PSO statistics </span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">mean_speed</span><span class="o">=</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">swm_next</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">swm_next</span><span class="p">]</span>
+                
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">printout</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">gen</span><span class="o">=</span><span class="n">gen</span><span class="p">)</span>
+            <span class="c1">#-------------------------------------------------------------------------------------------------------------------</span>
+            <span class="c1">#-------------------------------------------------------------------------------------------------------------------</span>
+            
+            <span class="c1">#-----------------------------</span>
+            <span class="c1"># Step 6: Update the memory</span>
+            <span class="c1">#-----------------------------</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">memory_update</span><span class="p">()</span>
+            
+            <span class="c1">#-----------------------------------------------------------------</span>
+            <span class="c1"># Step 7: Sample from the memory and prepare for next Generation </span>
+            <span class="c1">#-----------------------------------------------------------------</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">resample</span><span class="p">()</span>
+            
+            <span class="c1">#--------------------------------------------------------</span>
+            <span class="c1"># Step 8: Anneal Alpha if priortized replay is used</span>
+            <span class="c1">#--------------------------------------------------------</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">MODE</span><span class="o">==</span><span class="s1">&#39;prior&#39;</span><span class="p">:</span> <span class="c1">#anneal alpha between alpha0 (lower) and alpha1 (upper) </span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ALPHA</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">linear_anneal</span><span class="p">(</span><span class="n">step</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">STEP0</span><span class="p">,</span> <span class="n">total_steps</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">STEPS</span><span class="p">,</span> <span class="n">a0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ALPHA0</span><span class="p">,</span> <span class="n">a1</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ALPHA1</span><span class="p">)</span>
+            
+            <span class="c1">#--------------------------------------------------------</span>
+            <span class="c1"># Step 9: Calculate the memory best and print PESA summary </span>
+            <span class="c1">#--------------------------------------------------------</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pesa_best</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mymemory</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;greedy&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1">#`greedy` will sample the best in memory</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fit_hist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pesa_best</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">memory_size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mymemory</span><span class="o">.</span><span class="n">storage</span><span class="p">)</span> <span class="c1">#memory size so far</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>  <span class="c1">#print summary data to screen</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">printout</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">gen</span><span class="o">=</span><span class="n">gen</span><span class="p">)</span>
+                
+            <span class="c1">#--mir</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">==</span><span class="s1">&#39;min&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fitness_best</span><span class="o">=-</span><span class="bp">self</span><span class="o">.</span><span class="n">pesa_best</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fitness_best</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pesa_best</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        
+        <span class="c1">#--mir</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">==</span><span class="s1">&#39;min&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fit_hist</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit_hist</span><span class="p">]</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pesa_best</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitness_best</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit_hist</span></div>
+
+    <span class="k">def</span> <span class="nf">linear_anneal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">total_steps</span><span class="p">,</span> <span class="n">a0</span><span class="p">,</span> <span class="n">a1</span><span class="p">):</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="c1">#Anneal parameter between a0 and a1 </span>
+        <span class="c1">#:param step: current time step</span>
+        <span class="c1">#:param total_steps: total numbe of time steps</span>
+        <span class="c1">#:param a0: lower bound of alpha/parameter</span>
+        <span class="c1">#:param a0: upper bound of alpha/parameter</span>
+        <span class="c1">#:return</span>
+        <span class="c1">#  - annealed value of alpha/parameter</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="n">fraction</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">step</span><span class="p">)</span> <span class="o">/</span> <span class="n">total_steps</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">a0</span> <span class="o">+</span> <span class="n">fraction</span> <span class="o">*</span> <span class="p">(</span><span class="n">a1</span> <span class="o">-</span> <span class="n">a0</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">memory_update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="c1">#This function updates the replay memory with the samples of SA, ES, and PSO (if used)</span>
+        <span class="c1">#then remove the duplicates from the memory</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mymemory</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">xvec</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_next</span><span class="p">),</span> <span class="n">obj</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">E_next</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;na&#39;</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_next</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mymemory</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">xvec</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_best</span><span class="p">),</span> <span class="n">obj</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">E_best</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;na&#39;</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_best</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mymemory</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">xvec</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inds</span><span class="p">),</span> <span class="n">obj</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rwd</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;na&#39;</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inds</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pso_flag</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mymemory</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">xvec</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pars</span><span class="p">),</span> <span class="n">obj</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fits</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;na&#39;</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pars</span><span class="p">))</span>
+        <span class="c1">#self.mymemory.remove_duplicates()  #remove all duplicated samples in memory to avoid biased sampling</span>
+
+    <span class="k">def</span> <span class="nf">resample</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="c1">#This function samples data from the memory and prepares the chains for SA</span>
+        <span class="c1">#the population for ES, and the swarm for PSO for the next generation</span>
+        <span class="c1">#    -SA: initial guess for the parallel chains are sampled from the memroy</span>
+        <span class="c1">#    -ES: a total of ES_MEMORY (or MU) individuals are sampled from the memory and appended to ES population </span>
+        <span class="c1">#    -PSO: a total of PSO_MEMORY (or MU) particles are sampled from the memory and appended to PSO swarm </span>
+        <span class="c1">#For SA: x_next and E_next particpate in next generation</span>
+        <span class="c1">#For PSO: swm_next, local_pso_next, and local_fit_next particpate in next generation</span>
+        <span class="c1">#For ES: pop_next particpates in next generation</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="n">es_replay</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mymemory</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ES_MEMORY</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">MODE</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ALPHA</span><span class="p">)</span>
+        <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">MU</span>
+        <span class="k">for</span> <span class="n">sample</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ES_MEMORY</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pop_next</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">es_replay</span><span class="p">[</span><span class="n">sample</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pop_next</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SMIN</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">SMAX</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">)])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pop_next</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">es_replay</span><span class="p">[</span><span class="n">sample</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">index</span><span class="o">+=</span><span class="mi">1</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pso_flag</span><span class="p">:</span>
+            <span class="n">pso_replay</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mymemory</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">PSO_MEMORY</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">MODE</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ALPHA</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">swm_next</span><span class="p">:</span>
+                <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">swm_next</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">3</span><span class="p">:]</span>
+                
+            <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">MU</span>
+            <span class="k">for</span> <span class="n">sample</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">PSO_MEMORY</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">swm_next</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pso_replay</span><span class="p">[</span><span class="n">sample</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                <span class="c1">#self.swm_next[index].append([random.uniform(self.SPMIN,self.SPMAX) for _ in range(self.nx)])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">swm_next</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">v0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pso_replay</span><span class="p">[</span><span class="n">sample</span><span class="p">][</span><span class="mi">0</span><span class="p">])))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">swm_next</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pso_replay</span><span class="p">[</span><span class="n">sample</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">local_pos_next</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pso_replay</span><span class="p">[</span><span class="n">sample</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">local_fit_next</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pso_replay</span><span class="p">[</span><span class="n">sample</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">index</span><span class="o">+=</span><span class="mi">1</span>
+                
+        <span class="n">sa_replay</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mymemory</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">SA_MEMORY</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">MODE</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ALPHA</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_next</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">E_next</span><span class="o">=</span><span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sa_replay</span><span class="p">],</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sa_replay</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">init_guess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop0</span><span class="p">):</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="c1">#This function takes initial guess pop0 and returns initial guesses for SA, PSO, and ES </span>
+        <span class="c1">#to start PESA evolution</span>
+        <span class="c1">#inputs:</span>
+        <span class="c1">#    pop0 (dict): dictionary contains initial population to start with for all methods</span>
+        <span class="c1">#returns:</span>
+        <span class="c1">#    espop0 (dict): initial population for ES</span>
+        <span class="c1">#    swarm0 (dict): initial swarm for PSO </span>
+        <span class="c1">#    swm_pos (list), swm_fit (float): initial guess for swarm best position and fitness for PSO</span>
+        <span class="c1">#    local_pos (list of lists), local_fit (list): initial guesses for local best position of each particle and their fitness for PSO</span>
+        <span class="c1">#    x0 (list of lists), E0 (list): initial input vectors and their initial fitness for SA</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="n">pop0</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">pop0</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+        <span class="n">pop0</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">e</span><span class="p">:</span> <span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">sorted_sa</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">pop0</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">NCORES</span><span class="p">])</span>
+        <span class="c1">#sorted_dict=dict(sorted(pop0.items(), key=lambda e: e[1][2], reverse=True)[:self.NCORES]) # sort the initial samples for SA</span>
+        <span class="n">x0</span><span class="p">,</span> <span class="n">E0</span><span class="o">=</span><span class="p">[</span><span class="n">sorted_sa</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">sorted_sa</span><span class="p">],</span> <span class="p">[</span><span class="n">sorted_sa</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">sorted_sa</span><span class="p">]</span> <span class="c1"># initial guess for SA</span>
+        
+        <span class="c1">#sorted_pso=dict(sorted(pop0.items(), key=lambda e: e[1][2], reverse=True)[:self.NPAR]) # sort the initial samples for PSO</span>
+        <span class="c1">#sorted_es=dict(sorted(pop0.items(), key=lambda e: e[1][2], reverse=True)[:self.LAMBDA]) # sort the initial samples for ES</span>
+        <span class="n">sorted_pso</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">pop0</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">NPAR</span><span class="p">])</span>
+        <span class="n">sorted_es</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">pop0</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">LAMBDA</span><span class="p">])</span>
+        
+        <span class="n">swarm0</span><span class="o">=</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+        <span class="n">espop0</span><span class="o">=</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+        
+        <span class="n">local_pos</span><span class="o">=</span><span class="p">[]</span>
+        <span class="n">local_fit</span><span class="o">=</span><span class="p">[]</span>
+        <span class="n">index</span><span class="o">=</span><span class="mi">0</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">sorted_pso</span><span class="p">:</span>
+            <span class="n">swarm0</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sorted_pso</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">swarm0</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">v0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sorted_pso</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">])))</span>
+            <span class="n">swarm0</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sorted_pso</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">2</span><span class="p">])</span>
+            <span class="n">local_pos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sorted_pso</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">local_fit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sorted_pso</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">2</span><span class="p">])</span>
+            <span class="n">index</span><span class="o">+=</span><span class="mi">1</span>
+
+        <span class="n">swm_pos</span><span class="o">=</span><span class="n">swarm0</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">swm_fit</span><span class="o">=</span><span class="n">swarm0</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+        
+        <span class="n">index</span><span class="o">=</span><span class="mi">0</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">sorted_es</span><span class="p">:</span>
+            <span class="n">espop0</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sorted_es</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">espop0</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sorted_es</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">espop0</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sorted_es</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">2</span><span class="p">])</span>
+            <span class="n">index</span><span class="o">+=</span><span class="mi">1</span>
+            
+        <span class="k">return</span> <span class="n">espop0</span><span class="p">,</span> <span class="n">swarm0</span><span class="p">,</span> <span class="n">swm_pos</span><span class="p">,</span> <span class="n">swm_fit</span><span class="p">,</span> <span class="n">local_pos</span><span class="p">,</span> <span class="n">local_fit</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">E0</span>  
+
+    <span class="k">def</span> <span class="nf">printout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">gen</span><span class="p">):</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="c1">#Print statistics to screen</span>
+        <span class="c1">#inputs:</span>
+        <span class="c1">#    mode (int): 1 to print for individual algorathims and 2 to print for PESA </span>
+        <span class="c1">#    gen (int): current generation number </span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;***********************************************************************************************&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;############################################################&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ES step </span><span class="si">{}</span><span class="s1">/</span><span class="si">{}</span><span class="s1">, CX=</span><span class="si">{}</span><span class="s1">, MUT=</span><span class="si">{}</span><span class="s1">, MU=</span><span class="si">{}</span><span class="s1">, LAMBDA=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">STEP0</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">STEPS</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">CXPB</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">MUTPB</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">MU</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">LAMBDA</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;############################################################&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Statistics for generation </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gen</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best Fitness:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rwd</span><span class="p">),</span><span class="mi">4</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="ow">is</span> <span class="s1">&#39;max&#39;</span> <span class="k">else</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rwd</span><span class="p">),</span><span class="mi">4</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Max Strategy:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mean_strategy</span><span class="p">),</span><span class="mi">3</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Min Strategy:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mean_strategy</span><span class="p">),</span><span class="mi">3</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Average Strategy:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mean_strategy</span><span class="p">),</span><span class="mi">3</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;############################################################&#39;</span><span class="p">)</span>
+                  
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;************************************************************&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;SA step </span><span class="si">{}</span><span class="s1">/</span><span class="si">{}</span><span class="s1">, T=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">STEP0</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">STEPS</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">)))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;************************************************************&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Statistics for the </span><span class="si">{}</span><span class="s1"> parallel chains&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NCORES</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Fitness:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">E_next</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="ow">is</span> <span class="s1">&#39;max&#39;</span> <span class="k">else</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">E_next</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Acceptance Rate (%):&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">acc</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Rejection Rate (%):&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rej</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Improvment Rate (%):&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">imp</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;************************************************************&#39;</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pso_flag</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;PSO step </span><span class="si">{}</span><span class="s1">/</span><span class="si">{}</span><span class="s1">, C1=</span><span class="si">{}</span><span class="s1">, C2=</span><span class="si">{}</span><span class="s1">, Particles=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">STEP0</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">STEPS</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">C1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">C2</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">NPAR</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Statistics for generation </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gen</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best Swarm Fitness:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">swm_fit</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="ow">is</span> <span class="s1">&#39;max&#39;</span> <span class="k">else</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">swm_fit</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best Swarm Position:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">swm_pos</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Max Speed:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mean_speed</span><span class="p">),</span><span class="mi">3</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Min Speed:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mean_speed</span><span class="p">),</span><span class="mi">3</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Average Speed:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mean_speed</span><span class="p">),</span><span class="mi">3</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^&#39;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;------------------------------------------------------------&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;PESA step </span><span class="si">{}</span><span class="s1">/</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">STEP0</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">STEPS</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;------------------------------------------------------------&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;PESA statistics for generation </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gen</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best Fitness:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pesa_best</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="ow">is</span> <span class="s1">&#39;max&#39;</span> <span class="k">else</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">pesa_best</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best Individual:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pesa_best</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">2</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ALPHA:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ALPHA</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Memory Size:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">memory_size</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;------------------------------------------------------------&#39;</span><span class="p">)</span>
+            
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;***********************************************************************************************&#39;</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Exelon Corp. &amp; MIT.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -53,6 +53,11 @@ User Guide
   modules/es
   modules/pso
   modules/de
+  modules/xnes
+  modules/gwo
+  modules/pesa
+  modules/pesa2
+  modules/sa
 
 .. toctree::
   :maxdepth: 1
