@@ -26,7 +26,16 @@ neorl/evolu/runners/sa.py
 neorl/hybrid/__init__.py
 neorl/hybrid/pesa.py
 neorl/hybrid/pesa2.py
+neorl/hybrid/pesax.py
 neorl/hybrid/rles.py
+neorl/hybrid/pesacore/__init__.py
+neorl/hybrid/pesacore/de.py
+neorl/hybrid/pesacore/er.py
+neorl/hybrid/pesacore/es.py
+neorl/hybrid/pesacore/gwo.py
+neorl/hybrid/pesacore/pso.py
+neorl/hybrid/pesacore/sa.py
+neorl/hybrid/pesacore/xnes.py
 neorl/parsers/PARSER.py
 neorl/parsers/ParamList.py
 neorl/parsers/TuneChecker.py

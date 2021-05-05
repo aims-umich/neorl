@@ -25,14 +25,30 @@ class MyPool(multiprocessing.pool.Pool):
     Process = NoDaemonProcess
 
 class SA:
-    def __init__ (self, bounds, fit, npop=50, ncores=1, chi=0.1, cooling='fast', Tmax=10000, Tmin=1, seed=None):  
+    """
+    Parallel Simulated Annealing
+    
+    :param mode: (str) problem type, either "min" for minimization problem or "max" for maximization
+    :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: ``bounds={'x1': ['int', 1, 4], 'x2': ['float', 0.1, 0.8], 'x3': ['float', 2.2, 6.2]}``
+    :param fit: (function) the fitness function 
+    :param cooling: (str) cooling schedule, choose ``fast``, ``boltzmann``, ``cauchy``
+    :param Tmax: (int) initial/maximum temperature
+    :param Tmin: (int) final/minimum temperature
+    :param move_func: (function) self-defined function that controls how to perturb the input space during annealing (See **Notes** below)
+    :param chi: (float or list of floats) probability of perturbing every attribute of the input ``x``, only used if ``move_func=None``. 
+                For ``ncores > 1``, if a scalar is provided, constant value is used across all ``ncores``. If a list of size ``ncores``
+                is provided, each core/chain uses different value of ``chi`` (See **Notes** below)
+    :param ncores: (int) number of parallel processors
+    :param seed: (int) random seed for sampling
+    """
+    def __init__ (self, mode, bounds, fit, chi=0.1, Tmax=10000, Tmin=1, 
+                  cooling='fast', move_func=None, ncores=1, seed=None):  
         """
         Parallel SA:
         A Synchronous Approach with Occasional Enforcement of Best Solution-Fixed Intervals
         Inputs:
             bounds (dict): input paramter lower/upper bounds in dictionary form
             fit (function): fitness function 
-            npop (int): number of individuals in the population group (must be divisble by ncores)
             ncores (int): parallel cores
             chi (float/list): a float or list of floats representing perturbation probablity for each parallel chain 
                  if float, one chi used for all chains 
@@ -43,18 +59,29 @@ class SA:
             seed (int): random seeding for reproducibility
         """
         
+        
         if seed:
             random.seed(seed)
+            np.random.seed(seed)
             
         self.seed=seed
-        self.npop=npop
-        self.batch_size=10
+        #--mir
+        self.mode=mode
+        if mode == 'max':
+            self.fit=fit
+        elif mode == 'min':
+            def fitness_wrapper(*args, **kwargs):
+                return -fit(*args, **kwargs) 
+            self.fit=fitness_wrapper
+        else:
+            raise ValueError('--error: The mode entered by user is invalid, use either `min` or `max`')
+            
         self.bounds=bounds
         self.ncores=ncores
-        assert npop % self.ncores == 0, 'The number of population (npop) to run must be divisible by ncores, {} mod {} != 0'.format(npop,self.ncores)
+        #assert npop % self.ncores == 0, 'The number of population (npop) to run must be divisible by ncores, {} mod {} != 0'.format(npop,self.ncores)
         self.Tmax=Tmax
         self.Tmin=Tmin
-        if type(chi) == list:
+        if isinstance(chi, list):
             assert len(chi) == ncores, 'The list of chi values ({}) MUST equal ncores ({})'.format(len(chi),self.ncores) 
             self.chi=chi
         elif type(chi) == float or type(chi) == int:
@@ -62,23 +89,17 @@ class SA:
         else:
             raise Exception ('for chi, either list of floats or scalar float are allowed')
             
-        self.cooling=cooling
-        self.fit=fit
+        self.cooling=cooling      
         self.T=Tmax #initialize T
         
-        #chain statistics
-        self.accept=0
-        self.reject=0
-        self.improve=0
-        
     def GenInd(self, bounds):
-        """
-        Individual generator
-        Input: 
-            -bounds (dict): input paramter type and lower/upper bounds in dictionary form
-        Returns: 
-            -individual (list): individual position
-        """
+        #"""
+        #Individual generator
+        #Input: 
+        #    -bounds (dict): input paramter type and lower/upper bounds in dictionary form
+        #Returns: 
+        #    -individual (list): individual position
+        #"""
         content=[]
         for key in bounds:
             if bounds[key][0] == 'int':
@@ -93,10 +114,10 @@ class SA:
         return ind
 
     def sampler(self,bound):
-        """
-        This function takes input as [type, low, high] and returns a sample  
-        This is to sample the input parameters during optimisation
-        """
+        #"""
+        #This function takes input as [type, low, high] and returns a sample  
+        #This is to sample the input parameters during optimisation
+        #"""
         if bound[0] == 'int':
             sample=random.randint(bound[1], bound[2])
         elif bound[0] == 'float':
@@ -109,13 +130,13 @@ class SA:
         return sample
     
     def move(self, x, chi):
-        """
-        This function is to perturb x attributes by probability chi
-        Inputs:
-            x: input vector 
-            chi: perturbation probablity between 0 and 1
-        Returns: perturbed vector x
-        """
+        #"""
+        #This function is to perturb x attributes by probability chi
+        #Inputs:
+        #    x: input vector 
+        #    chi: perturbation probablity between 0 and 1
+        #Returns: perturbed vector x
+        #"""
         i=0
         for item in self.bounds:
             if random.random() < chi:
@@ -142,21 +163,21 @@ class SA:
         return T
     
     def chain_object (self,inp):
-        """
-        This function is a multiprocessing object, used to be passed to Pool, that respresents 
-        an individual SA chain. 
-        Input:
-            inp: a list contains the following inputs in order
-            inp[0] --> x0: initial guess to chain 
-            inp[1] --> E0: initial energy of x0
-            inp[2] --> min_step: min step to start this chain 
-            inp[3] --> max_step: max step to terminate this chain 
-            inp[4] --> core_seed: seed for this chain
-        returns: 
-            x_best, E_best: best obtained from this chain
-            T: last temperature for this chain
-            accepts, rejects, improves for this chain
-        """
+        #"""
+        #This function is a multiprocessing object, used to be passed to Pool, that respresents 
+        #an individual SA chain. 
+        #Input:
+        #    inp: a list contains the following inputs in order
+        #    inp[0] --> x0: initial guess to chain 
+        #    inp[1] --> E0: initial energy of x0
+        #    inp[2] --> min_step: min step to start this chain 
+        #    inp[3] --> max_step: max step to terminate this chain 
+        #    inp[4] --> core_seed: seed for this chain
+        #returns: 
+        #    x_best, E_best: best obtained from this chain
+        #    T: last temperature for this chain
+        #    accepts, rejects, improves for this chain
+        #"""
         
         x_prev=copy.deepcopy(inp[0])
         x_best=copy.deepcopy(x_prev)
@@ -201,17 +222,17 @@ class SA:
         return x_prev, E_prev, T, accepts, rejects, improves, x_best, E_best
         
     def chain(self, x0, E0, step0, npop):
-        """
-        This function creates ``ncores`` independent SA chains with same initial guess x0, E0 and 
-        runs them via multiprocessing Pool.
-        Input:
-            x0: initial input guess (comes from previous annealing chains or from replay memory)
-            E0: energy/fitness value of x0
-            step0: is the first time step to use for temperature annealing
-            npop: total number of individuals to be evaluated in this annealing stage
-        returns: 
-            x_best, E_best, and T obtained from this annealing stage from all chains
-        """
+        #"""
+        #This function creates ``ncores`` independent SA chains with same initial guess x0, E0 and 
+        #runs them via multiprocessing Pool.
+        #Input:
+        #    x0: initial input guess (comes from previous annealing chains or from replay memory)
+        #    E0: energy/fitness value of x0
+        #    step0: is the first time step to use for temperature annealing
+        #    npop: total number of individuals to be evaluated in this annealing stage
+        #returns: 
+        #    x_best, E_best, and T obtained from this annealing stage from all chains
+        #"""
         core_npop =int(npop/self.ncores)
         
         #Append and prepare the input list to be passed as input to Pool.map
@@ -280,11 +301,21 @@ class SA:
         
         return x0, E0 #return initial guess and initial fitness      
     
-    def anneal(self, ngen, x0=None, verbose=0):
+    def evolute(self, ngen, x0=None, verbose=True):
         """
-        Perform annealing over total ``ngen`` by updating chains every ``npop``
-        Returns the best ``x`` and ``E`` over the whole stage along with relvant statistics 
+        This function evolutes the SA algorithm for number of generations.
+        
+        :param ngen: (int) number of generations to evolute
+        :param x0: (list of lists) initial samples to start the evolution (``len(x0)`` must be equal to ``ncores``)
+        :param verbose: (int) print statistics to screen
+        
+        :return: (dict) dictionary containing major PESA search results
         """
+        #chain statistics
+        #self.accept=0
+        #self.reject=0
+        #self.improve=0
+        
         stat={'x':[], 'fitness':[], 'T':[], 'accept':[], 'reject':[], 'improve':[]}
         E_opt=-np.inf
         

@@ -10,39 +10,42 @@ import inspect
 import numpy as np
 import pandas as pd
 import joblib
+import matplotlib.pyplot as plt
 
 # Scikit-optimise
 from skopt import gp_minimize
 from skopt.space import Integer, Real, Categorical
-from skopt.plots import plot_convergence
 from skopt.utils import use_named_args
 
 class BAYESTUNE:
     """
     A module for Bayesian search for hyperparameter tuning
-
+    
     :param param_grid: (dict) the type and range of each hyperparameter in a dictionary form (types are ``int/discrete`` or ``float/continuous`` or ``grid/categorical``). Example: {'x1': [[40, 50, 60, 100], 'grid'], 'x2': [[0.2, 0.8], 'float'], 'x3': [['blend', 'cx2point'], 'grid'], 'x4': [[20, 80], 'int']}
     :param fit: (function) the self-defined fitness function that includes the hyperparameters as input and algorithm score as output
+    :param mode: (str) problem type, either "min" for minimization problem or "max" for maximization. Default: Bayesian tuner is set to minimize an objective
     :param ncases: (int) number of random hyperparameter cases to generate per core, ``ncases >= 11`` (see **Notes** for an important remark) 
     :param seed: (int) random seed for sampling reproducibility
     """
-    def __init__(self, param_grid, fit, ncases=50, seed=None):
+    def __init__(self, param_grid, fit, mode='min', ncases=50, seed=None):
+        self.mode=mode
+        assert self.mode in ['min', 'max'], '--error: The mode entered by user is invalid, use either `min` or `max`'
         self.param_grid=param_grid
         self.fit=fit
         self.ncases=ncases
         self.seed=seed
         if self.ncases < 11:
             self.ncases = 11 
-            print('--warning: ncases={} < 11 is given by the user, but ncases must be more than 11, reset ncases to 11'.format(self.ncases))
-                
+            print('--warning: ncases={} < 11 is given by the user, but ncases must be more than 11, reset ncases to 11'.format(self.ncases))  
+            
         self.full_grid()
         
     def get_func_args(self, f):
         #this function returns the argument names of the input function "f"
         return inspect.getfullargspec(f)[0]
     
-    def plot_results(self):
-        plot_convergence(self.search_result)
+#    def plot_results(self):
+#        plot_convergence(self.search_result)
 
     def full_grid(self):
         #This function parses the param_grid variable from the user and sets up the 
@@ -73,9 +76,14 @@ class BAYESTUNE:
     def worker(self,x):
         #This function setup a case worker to pass to the Parallel pool
         
-        @use_named_args(dimensions=self.dimensions)
-        def fitness_wrapper(*args, **kwargs):
-            return -self.fit(*args, **kwargs) 
+        if self.mode=='min':
+            @use_named_args(dimensions=self.dimensions)
+            def fitness_wrapper(*args, **kwargs):
+                return self.fit(*args, **kwargs)             
+        else:
+            @use_named_args(dimensions=self.dimensions)
+            def fitness_wrapper(*args, **kwargs):
+                return -self.fit(*args, **kwargs) 
         
         if self.seed:
             core_seed=self.seed + x
@@ -89,6 +97,20 @@ class BAYESTUNE:
                                     random_state=core_seed)
         
         return search_result.x_iters, list(search_result.func_vals)
+    
+    def plot_results(self, pngname=None):
+        if self.mode=='max':
+            plt.plot(pd.DataFrame.cummax(self.bayesres['score']), '-og')
+            plt.ylabel('Max score so far')
+        else:
+            plt.plot(pd.DataFrame.cummin(self.bayesres['score']), '-og')
+            plt.ylabel('Min score so far')
+            
+        plt.xlabel('Iteration')
+        plt.grid()
+        if pngname is not None:
+            plt.savefig(str(pngname)+'.png', dpi=200, format='png')
+        plt.show()
         
     def tune(self, nthreads=1, csvname=None, verbose=True):
         """
@@ -126,14 +148,20 @@ class BAYESTUNE:
             func_vals_flatten = [item for sublist in func_vals for item in sublist]
 
             assert len(func_vals_flatten) == len(x_vals_flatten), '--error: the length of func_vals_flatten and x_vals_flatten in parallel Bayesian search must be equal'
-            bayesres=pd.DataFrame(x_vals_flatten, columns = self.func_args)
-            bayesres['score'] = -np.array(func_vals_flatten)
+            self.bayesres=pd.DataFrame(x_vals_flatten, columns = self.func_args)
+            
+            self.bayesres['score'] = np.array(func_vals_flatten) if self.mode=='min' else -np.array(func_vals_flatten)
          
         else:
             
-            @use_named_args(dimensions=self.dimensions)
-            def fitness_wrapper(*args, **kwargs):
-                return -self.fit(*args, **kwargs)
+            if self.mode=='min':
+                @use_named_args(dimensions=self.dimensions)
+                def fitness_wrapper(*args, **kwargs):
+                    return self.fit(*args, **kwargs)             
+            else:
+                @use_named_args(dimensions=self.dimensions)
+                def fitness_wrapper(*args, **kwargs):
+                    return -self.fit(*args, **kwargs) 
             
             #Single core search
             self.search_result = gp_minimize(func=fitness_wrapper,
@@ -142,14 +170,13 @@ class BAYESTUNE:
                                             n_calls=self.ncases,
                                             random_state=self.seed)
 
-            bayesres = pd.DataFrame(self.search_result.x_iters, columns = self.func_args)
-            bayesres['score'] = -self.search_result.func_vals
+            self.bayesres = pd.DataFrame(self.search_result.x_iters, columns = self.func_args)
+            self.bayesres['score'] = self.search_result.func_vals if self.mode=='min' else -self.search_result.func_vals
 
-        bayesres.index+=1
-        #bayesres = bayesres.sort_values(['score'], axis='index', ascending=False)
+        self.bayesres.index+=1
         
         if self.csvlogger:
-            bayesres.index.name='id'
-            bayesres.to_csv(self.csvlogger)
+            self.bayesres.index.name='id'
+            self.bayesres.to_csv(self.csvlogger)
                 
-        return bayesres
+        return self.bayesres
