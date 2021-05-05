@@ -19,7 +19,7 @@ Copyright © 2021 Exelon Corporation (https://www.exeloncorp.com/) in collaborat
 
                        \n"""
                        
-#print(logo)
+print(logo)
 
 import os
 
