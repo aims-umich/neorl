@@ -33,7 +33,7 @@ def test_grid():
     'alpha': [0.1, 0.2, 0.3, 0.4]}  #alpha is third
     
     gtune=GRIDTUNE(param_grid=param_grid, fit=tune_fit)
-    gridres=gtune.tune(ncores=1, csvname='tune.csv')
+    gridres=gtune.tune(ncores=1)
     print(gridres)
 
 test_grid()

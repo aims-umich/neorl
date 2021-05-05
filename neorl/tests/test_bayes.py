@@ -35,7 +35,7 @@ def test_bayes():
     
     #setup a bayesian tune object
     btune=BAYESTUNE(param_grid=param_grid, fit=tune_fit, ncases=15)
-    bayesres=btune.tune(nthreads=1, csvname='bayestune.csv', verbose=True)
+    bayesres=btune.tune(nthreads=1, verbose=True)
     print(bayesres)   #the results are saved in dataframe and ranked from best to worst
 
 test_bayes()

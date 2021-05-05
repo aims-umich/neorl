@@ -178,7 +178,7 @@ setup(
     packages=[package for package in find_packages() if package.startswith('neorl')],
     include_package_data=True,
     package_data={'neorl': ['requirements.txt', 'version.txt']},
-    install_requires=['tensorflow==1.13.1',
+    install_requires=['tensorflow==1.14.0',
                       'numpy== 1.16.2',
                       'gym >= 0.15.4, < 0.17.0',
                       'scikit-optimize==0.8.1',
