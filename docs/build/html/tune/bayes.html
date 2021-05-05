@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Bayesian Search &mdash; NEORL 1.2.0b documentation</title>
+  <title>Bayesian Search &mdash; NEORL 1.3.0b documentation</title>
   
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                main (1.2.0b )
+                main (1.3.0b )
               </div>
             
           
@@ -226,13 +226,14 @@
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="neorl.tune.bayestune.BAYESTUNE">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">neorl.tune.bayestune.</span></code><code class="sig-name descname"><span class="pre">BAYESTUNE</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param_grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ncases</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/tune/bayestune.html#BAYESTUNE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.tune.bayestune.BAYESTUNE" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">neorl.tune.bayestune.</span></code><code class="sig-name descname"><span class="pre">BAYESTUNE</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param_grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'min'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ncases</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/tune/bayestune.html#BAYESTUNE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.tune.bayestune.BAYESTUNE" title="Permalink to this definition">¶</a></dt>
 <dd><p>A module for Bayesian search for hyperparameter tuning</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>param_grid</strong> – (dict) the type and range of each hyperparameter in a dictionary form (types are <code class="docutils literal notranslate"><span class="pre">int/discrete</span></code> or <code class="docutils literal notranslate"><span class="pre">float/continuous</span></code> or <code class="docutils literal notranslate"><span class="pre">grid/categorical</span></code>). Example: {‘x1’: [[40, 50, 60, 100], ‘grid’], ‘x2’: [[0.2, 0.8], ‘float’], ‘x3’: [[‘blend’, ‘cx2point’], ‘grid’], ‘x4’: [[20, 80], ‘int’]}</p></li>
 <li><p><strong>fit</strong> – (function) the self-defined fitness function that includes the hyperparameters as input and algorithm score as output</p></li>
+<li><p><strong>mode</strong> – (str) problem type, either “min” for minimization problem or “max” for maximization. Default: Bayesian tuner is set to minimize an objective</p></li>
 <li><p><strong>ncases</strong> – (int) number of random hyperparameter cases to generate per core, <code class="docutils literal notranslate"><span class="pre">ncases</span> <span class="pre">&gt;=</span> <span class="pre">11</span></code> (see <strong>Notes</strong> for an important remark)</p></li>
 <li><p><strong>seed</strong> – (int) random seed for sampling reproducibility</p></li>
 </ul>

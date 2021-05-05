@@ -45,7 +45,8 @@ param_grid={
 'cxmode':[['blend', 'cx2point'],'grid']}  #cxmode is fourth (grid with fixed values, type=grid/categorical)
 
 #setup a bayesian tune object
-btune=BAYESTUNE(param_grid=param_grid, fit=tune_fit, ncases=15)
+btune=BAYESTUNE(mode='min', param_grid=param_grid, fit=tune_fit, ncases=30)
 #tune the parameters with method .tune
 bayesres=btune.tune(nthreads=1, csvname='bayestune.csv', verbose=True)
 print(bayesres)
+btune.plot_results(pngname='bayes_conv')

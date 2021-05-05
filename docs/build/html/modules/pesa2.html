@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Modern PESA (PESA2) &mdash; NEORL 1.2.0b documentation</title>
+  <title>Modern PESA (PESA2) &mdash; NEORL 1.3.0b documentation</title>
   
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                main (1.2.0b )
+                main (1.3.0b )
               </div>
             
           
@@ -230,6 +230,7 @@ A hybrid algorithm of GWO, DE, and XNES</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
+<li><p><strong>mode</strong> – (str) problem type, either “min” for minimization problem or “max” for maximization</p></li>
 <li><p><strong>bounds</strong> – (dict) input parameter type and lower/upper bounds in dictionary form. Example: <code class="docutils literal notranslate"><span class="pre">bounds={'x1':</span> <span class="pre">['int',</span> <span class="pre">1,</span> <span class="pre">4],</span> <span class="pre">'x2':</span> <span class="pre">['float',</span> <span class="pre">0.1,</span> <span class="pre">0.8],</span> <span class="pre">'x3':</span> <span class="pre">['float',</span> <span class="pre">2.2,</span> <span class="pre">6.2]}</span></code></p></li>
 <li><p><strong>fit</strong> – (function) the fitness function</p></li>
 <li><p><strong>npop</strong> – (int) total number of individuals in DE and XNES populations</p></li>

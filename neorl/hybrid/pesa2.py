@@ -30,6 +30,7 @@ class PESA2(ExperienceReplay):
     
     *PESA2 Major Parameters*
     
+    :param mode: (str) problem type, either "min" for minimization problem or "max" for maximization
     :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: ``bounds={'x1': ['int', 1, 4], 'x2': ['float', 0.1, 0.8], 'x3': ['float', 2.2, 6.2]}``
     :param fit: (function) the fitness function 
     :param npop: (int) total number of individuals in DE and XNES populations
@@ -61,9 +62,6 @@ class PESA2(ExperienceReplay):
                   eta_mu=1.0, eta_sigma=None, eta_Bmat=None, adapt_sampling=True, #XNES parameters
                   ncores=1, seed=None): #misc parameters
         
-        #--------------------
-        #General Parameters
-        #--------------------
         if seed:
             random.seed(seed)
             np.random.seed(seed)

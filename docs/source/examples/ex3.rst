@@ -3,12 +3,12 @@
 Example 3
 ===========
 
-Example of solving the heavily-constrained engineering optimization problem "Welded-beam design" using NEORL with the ES algorithm tuned with Grid search.
+Example of solving the heavily-constrained engineering optimization problem "Welded-beam design" using NEORL with the ES algorithm tuned with Bayesian search.
 
 Summary
 --------------------
 
--  Algorithms: ES, Grid search for tuning
+-  Algorithms: ES, Bayesian search for tuning
 -  Type: Continuous, Single-objective, Constrained
 -  Field: Structural Engineering
 

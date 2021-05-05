@@ -6,11 +6,24 @@ Changelog
 Coming next
 --------------------------
 
-- To add a module for the hybrid algorithm PESA.
+- To add a module for Simulated Annealing.
 - To add Genetic/Evolutionary hyperparameter tuning with documentation.
-- To add a module for the hybrid PPO-ES algorithm.
+- To add a module for Harris Hawks Optimisation.
 - Adding a class for easy-to-use environment construction for RL optimization.
 - And more ...
+
+Release 1.3.1 (2021-05-4)
+---------------------------
+
+- Fixing miscellaneous bugs
+
+Release 1.3.0 (2021-05-1)
+---------------------------
+
+- Added a module for the hybrid algorithm PESA.
+- Added a module for the modern hybrid algorithm PESA2.
+- Added a GWO module. 
+- Adding min/max modes for all algorithms.
 
 Release 1.2.0 (2021-04-15)
 ---------------------------

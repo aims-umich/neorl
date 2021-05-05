@@ -114,7 +114,7 @@ The solution below is for a 10-dimensional Ackley function (:math:`d=10`)
 Results
 --------------------
 
-Result summary is below for the three methods in minimizing the Ackely function.
+Result summary is below for the three methods in minimizing the Ackley function.
 
 .. image:: ../images/ex2_fitness.png
    :scale: 30%

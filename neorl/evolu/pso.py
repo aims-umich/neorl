@@ -47,13 +47,13 @@ class PSO:
         
         #--mir
         self.mode=mode
-        if mode == 'max':
-            self.fit=fit
-        elif mode == 'min':
-            def fitness_wrapper(*args, **kwargs):
-                return -fit(*args, **kwargs) 
-            self.fit=fitness_wrapper
-        else:
+        if mode == 'max':	
+            self.fit=fit	
+        elif mode == 'min':	
+            def fitness_wrapper(*args, **kwargs):	
+                return -fit(*args, **kwargs) 	
+            self.fit=fitness_wrapper	
+        else:	
             raise ValueError('--error: The mode entered by user is invalid, use either `min` or `max`')
             
             
@@ -66,12 +66,6 @@ class PSO:
         self.low=[bounds[key][1] for key in bounds]
         self.up=[bounds[key][2] for key in bounds]
         self.v0=0.1 # factor to intialize the speed
-        #if not swm0:
-        self.swm_pos, _ =self.GenParticle(bounds=bounds)
-        self.swm_fit=self.fit(self.swm_pos)
-        #else:
-        #    self.swm_pos=swm0[0]
-        #    self.swm_fit=swm0[1]
         
         if self.speed_mech=='constric':
             phi=self.c1+self.c2
@@ -126,6 +120,8 @@ class PSO:
         #   
         #"""
         #initialize the swarm and velocity and run them in parallel (these samples will be used to initialize the swarm)
+
+            
         pop=defaultdict(list)
         # dict key runs from 0 to self.npar-1
         # index 0: individual, index 1: velocity, index 2: fitness 
@@ -309,6 +305,7 @@ class PSO:
         
         :return: (dict) dictionary containing major PSO search results
         """
+            
         self.best_scores=[]
         if x0:
             #get the initial swarm position from the user, it has to be 
@@ -320,6 +317,10 @@ class PSO:
             #generate the initial swarm internally, assign all variables
             swarm, self.local_pos, self.local_fit=self.InitSwarm()
         
+        swm0=self.select(swarm, k=1)
+        self.swm_pos=swm0[0][0]
+        self.swm_fit=swm0[0][2]
+
         #-----------------------------
         # Begin the evolution process
         #-----------------------------

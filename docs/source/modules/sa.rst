@@ -2,20 +2,15 @@
 
 .. automodule:: neorl.evolu.sa
 
-
 Simulated Annealing (SA)
 ==================================
-
+	
 Coming Soon!
 
 ..
-	A module for particle swarm optimisation with three different speed mechanisms. 
+	A module for parallel Simulated Annealing. A Synchronous Approach with Occasional Enforcement of Best Solution. 
 	
-	Original papers: 
-	
-	- Kennedy, J., Eberhart, R. (1995). Particle swarm optimization. In: Proceedings of ICNN'95-international conference on neural networks (Vol. 4, pp. 1942-1948), IEEE.
-	- Kennedy, J., & Eberhart, R. C. (1997). A discrete binary version of the particle swarm algorithm. In: 1997 IEEE International conference on systems, man, and cybernetics. Computational cybernetics and simulation (Vol. 5, pp. 4104-4108), IEEE.
-	- Clerc, M., Kennedy, J. (2002). The particle swarm-explosion, stability, and convergence in a multidimensional complex space. IEEE transactions on Evolutionary Computation, 6(1), 58-73.
+	Original paper: Onbaşoğlu, E., Özdamar, L. (2001). Parallel simulated annealing algorithms in global optimization. Journal of global optimization, 19(1), 27-50..
 	
 	What can you use?
 	--------------------
@@ -28,7 +23,7 @@ Coming Soon!
 	Parameters
 	----------
 	
-	.. autoclass:: PSO
+	.. autoclass:: SA
 	  :members:
 	  :inherited-members:
 	  

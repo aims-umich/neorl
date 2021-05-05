@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.hybrid.pesa2 &mdash; NEORL 1.2.0b documentation</title>
+  <title>neorl.hybrid.pesa2 &mdash; NEORL 1.3.0b documentation</title>
   
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                main (1.2.0b )
+                main (1.3.0b )
               </div>
             
           
@@ -229,6 +229,7 @@
 <span class="sd">    </span>
 <span class="sd">    *PESA2 Major Parameters*</span>
 <span class="sd">    </span>
+<span class="sd">    :param mode: (str) problem type, either &quot;min&quot; for minimization problem or &quot;max&quot; for maximization</span>
 <span class="sd">    :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: ``bounds={&#39;x1&#39;: [&#39;int&#39;, 1, 4], &#39;x2&#39;: [&#39;float&#39;, 0.1, 0.8], &#39;x3&#39;: [&#39;float&#39;, 2.2, 6.2]}``</span>
 <span class="sd">    :param fit: (function) the fitness function </span>
 <span class="sd">    :param npop: (int) total number of individuals in DE and XNES populations</span>
@@ -260,9 +261,6 @@
                   <span class="n">eta_mu</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">eta_sigma</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">eta_Bmat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">adapt_sampling</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="c1">#XNES parameters</span>
                   <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span> <span class="c1">#misc parameters</span>
         
-        <span class="c1">#--------------------</span>
-        <span class="c1">#General Parameters</span>
-        <span class="c1">#--------------------</span>
         <span class="k">if</span> <span class="n">seed</span><span class="p">:</span>
             <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
             <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
