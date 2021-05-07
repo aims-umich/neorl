@@ -8,6 +8,8 @@ import numpy as np
 import pickle
 import os
 
+print(os.path.join(os.path.dirname(__file__), 'data.pkl'))
+
 with open(os.path.join(os.path.dirname(__file__), 'data.pkl'), 'rb') as _pkl_file:
     _pkl = pickle.load(_pkl_file)
 
