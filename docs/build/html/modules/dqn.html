@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Deep Q Learning (DQN) &mdash; NEORL 1.3.0b documentation</title>
+  <title>Deep Q Learning (DQN) &mdash; NEORL 1.3.2b documentation</title>
   
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                main (1.3.0b )
+                main (1.3.2b )
               </div>
             
           
@@ -106,8 +106,8 @@
 <li class="toctree-l1"><a class="reference internal" href="a2c.html">Advantage Actor Critic (A2C)</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Deep Q Learning (DQN)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#what-can-you-use">What can you use?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#example">Example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example">Example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#acknowledgment">Acknowledgment</a></li>
 </ul>
 </li>
@@ -226,81 +226,6 @@ and its extensions (Double-DQN, Dueling-DQN, Prioritized Experience Replay).</p>
 <li><p>Continuous spaces: ❌</p></li>
 <li><p>Mixed Discrete/Continuous spaces: ❌</p></li>
 </ul>
-</div>
-<div class="section" id="example">
-<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gym</span>
-<span class="kn">from</span> <span class="nn">gym.spaces</span> <span class="kn">import</span> <span class="n">Discrete</span><span class="p">,</span> <span class="n">Box</span>
-<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">DQN</span>
-<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">DQNPolicy</span>
-<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">RLLogger</span>
-
-<span class="c1">#--------------------------------------------------------</span>
-<span class="c1"># Fitness class based on OpenAI Gym</span>
-<span class="c1">#--------------------------------------------------------</span>
-<span class="c1">#Define a Gym-class containing your function to optimise</span>
-<span class="c1">#see the template below for the Sphere function</span>
-<span class="c1">#We will build automatic templates for RL in the near future to simplify fitness definition</span>
-<span class="k">class</span> <span class="nc">IntegerSphere</span><span class="p">(</span><span class="n">gym</span><span class="o">.</span><span class="n">Env</span><span class="p">):</span>
-    <span class="c1">#An integer/discrete form of the sphere function</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">lb</span><span class="o">=-</span><span class="mi">100</span>
-        <span class="n">ub</span><span class="o">=</span><span class="mi">100</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="o">=</span><span class="mi">5</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">action_space</span> <span class="o">=</span> <span class="n">Discrete</span><span class="p">(</span><span class="mi">201</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">real_actions</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">lb</span><span class="p">,</span><span class="n">ub</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">observation_space</span> <span class="o">=</span> <span class="n">Box</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">real_actions</span><span class="p">),</span> <span class="n">high</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">real_actions</span><span class="p">),</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">episode_length</span><span class="o">=</span><span class="mi">50</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">done</span><span class="o">=</span><span class="kc">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
-
-    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
-        <span class="n">individual</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">real_actions</span><span class="p">[</span><span class="n">action</span><span class="p">]]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span>
-        <span class="n">reward</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">individual</span><span class="o">=</span><span class="n">individual</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">episode_length</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">done</span><span class="o">=</span><span class="kc">True</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
-
-        <span class="k">return</span> <span class="n">individual</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">done</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span><span class="n">individual</span><span class="p">}</span>
-
-    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">individual</span><span class="p">):</span>
-            <span class="sd">&quot;&quot;&quot;Sphere test objective function.</span>
-<span class="sd">                    F(x) = sum_{i=1}^d xi^2</span>
-<span class="sd">                    d=1,2,3,...</span>
-<span class="sd">                    Range: [-100,100]</span>
-<span class="sd">                    Minima: 0</span>
-<span class="sd">            &quot;&quot;&quot;</span>
-            <span class="c1">#-1 is used to convert minimization to maximization</span>
-            <span class="k">return</span> <span class="o">-</span><span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">individual</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">done</span><span class="o">=</span><span class="kc">False</span>
-        <span class="n">ac</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
-        <span class="n">individual</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">real_actions</span><span class="p">[</span><span class="n">ac</span><span class="p">]]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span>
-        <span class="k">return</span> <span class="n">individual</span>
-
-    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;human&#39;</span><span class="p">):</span>
-        <span class="k">pass</span>
-
-<span class="c1">#--------------------------------------------------------</span>
-<span class="c1"># RL Optimisation</span>
-<span class="c1">#--------------------------------------------------------</span>
-<span class="c1">#create an object from the class</span>
-<span class="n">env</span><span class="o">=</span><span class="n">IntegerSphere</span><span class="p">()</span>
-<span class="c1">#create a callback function to log data</span>
-<span class="n">cb</span><span class="o">=</span><span class="n">RLLogger</span><span class="p">(</span><span class="n">check_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="c1">#create an a2c object based on the env object</span>
-<span class="n">dqn</span> <span class="o">=</span> <span class="n">DQN</span><span class="p">(</span><span class="n">DQNPolicy</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span>
-<span class="c1">#optimise the enviroment class</span>
-<span class="n">dqn</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span><span class="n">total_timesteps</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">cb</span><span class="p">)</span>
-<span class="c1">#print the best results</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--------------- DQN results ---------------&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The best value of x found:&#39;</span><span class="p">,</span> <span class="n">cb</span><span class="o">.</span><span class="n">xbest</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The best value of y found:&#39;</span><span class="p">,</span> <span class="n">cb</span><span class="o">.</span><span class="n">rbest</span><span class="p">)</span>
-</pre></div>
-</div>
 </div>
 <div class="section" id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
@@ -432,6 +357,81 @@ file that can not be deserialized.</p></li>
 
 </dd></dl>
 
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gym</span>
+<span class="kn">from</span> <span class="nn">gym.spaces</span> <span class="kn">import</span> <span class="n">Discrete</span><span class="p">,</span> <span class="n">Box</span>
+<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">DQN</span>
+<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">DQNPolicy</span>
+<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">RLLogger</span>
+
+<span class="c1">#--------------------------------------------------------</span>
+<span class="c1"># Fitness class based on OpenAI Gym</span>
+<span class="c1">#--------------------------------------------------------</span>
+<span class="c1">#Define a Gym-class containing your function to optimise</span>
+<span class="c1">#see the template below for the Sphere function</span>
+<span class="c1">#We will build automatic templates for RL in the near future to simplify fitness definition</span>
+<span class="k">class</span> <span class="nc">IntegerSphere</span><span class="p">(</span><span class="n">gym</span><span class="o">.</span><span class="n">Env</span><span class="p">):</span>
+    <span class="c1">#An integer/discrete form of the sphere function</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">lb</span><span class="o">=-</span><span class="mi">100</span>
+        <span class="n">ub</span><span class="o">=</span><span class="mi">100</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="o">=</span><span class="mi">5</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">action_space</span> <span class="o">=</span> <span class="n">Discrete</span><span class="p">(</span><span class="mi">201</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">real_actions</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">lb</span><span class="p">,</span><span class="n">ub</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">observation_space</span> <span class="o">=</span> <span class="n">Box</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">real_actions</span><span class="p">),</span> <span class="n">high</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">real_actions</span><span class="p">),</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">episode_length</span><span class="o">=</span><span class="mi">50</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">done</span><span class="o">=</span><span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+        <span class="n">individual</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">real_actions</span><span class="p">[</span><span class="n">action</span><span class="p">]]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span>
+        <span class="n">reward</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">individual</span><span class="o">=</span><span class="n">individual</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">episode_length</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">done</span><span class="o">=</span><span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">return</span> <span class="n">individual</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">done</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span><span class="n">individual</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">individual</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;Sphere test objective function.</span>
+<span class="sd">                    F(x) = sum_{i=1}^d xi^2</span>
+<span class="sd">                    d=1,2,3,...</span>
+<span class="sd">                    Range: [-100,100]</span>
+<span class="sd">                    Minima: 0</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="c1">#-1 is used to convert minimization to maximization</span>
+            <span class="k">return</span> <span class="o">-</span><span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">individual</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">done</span><span class="o">=</span><span class="kc">False</span>
+        <span class="n">ac</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+        <span class="n">individual</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">real_actions</span><span class="p">[</span><span class="n">ac</span><span class="p">]]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span>
+        <span class="k">return</span> <span class="n">individual</span>
+
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;human&#39;</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+<span class="c1">#--------------------------------------------------------</span>
+<span class="c1"># RL Optimisation</span>
+<span class="c1">#--------------------------------------------------------</span>
+<span class="c1">#create an object from the class</span>
+<span class="n">env</span><span class="o">=</span><span class="n">IntegerSphere</span><span class="p">()</span>
+<span class="c1">#create a callback function to log data</span>
+<span class="n">cb</span><span class="o">=</span><span class="n">RLLogger</span><span class="p">(</span><span class="n">check_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1">#create an a2c object based on the env object</span>
+<span class="n">dqn</span> <span class="o">=</span> <span class="n">DQN</span><span class="p">(</span><span class="n">DQNPolicy</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span>
+<span class="c1">#optimise the enviroment class</span>
+<span class="n">dqn</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span><span class="n">total_timesteps</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">cb</span><span class="p">)</span>
+<span class="c1">#print the best results</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--------------- DQN results ---------------&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The best value of x found:&#39;</span><span class="p">,</span> <span class="n">cb</span><span class="o">.</span><span class="n">xbest</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The best value of y found:&#39;</span><span class="p">,</span> <span class="n">cb</span><span class="o">.</span><span class="n">rbest</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="acknowledgment">
 <h2>Acknowledgment<a class="headerlink" href="#acknowledgment" title="Permalink to this headline">¶</a></h2>

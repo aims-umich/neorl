@@ -1,4 +1,4 @@
-from neorl.benchmarks import sphere, ackley, cigar
+from neorl.benchmarks.classic import sphere, ackley, cigar
 
 def test_sphere():
     y=sphere([0,0,0,0,0])

@@ -21,6 +21,12 @@ What can you use?
 -  Continuous spaces: ✔️
 -  Mixed Discrete/Continuous spaces: ❌
 
+Parameters
+----------
+
+.. autoclass:: A2C
+  :members:
+  :inherited-members:
 
 Example
 -------
@@ -96,13 +102,6 @@ Train an A2C agent on to optimize the 5-D sphere function
 	print('--------------- A2C results ---------------')
 	print('The best value of x found:', cb.xbest)
 	print('The best value of y found:', cb.rbest)
-
-Parameters
-----------
-
-.. autoclass:: A2C
-  :members:
-  :inherited-members:
   
 Acknowledgment
 -----------------

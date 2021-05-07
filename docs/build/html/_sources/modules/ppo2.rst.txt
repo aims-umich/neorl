@@ -23,6 +23,13 @@ What can you use?
 -  Continuous spaces: ✔️
 -  Mixed Discrete/Continuous spaces: ❌
 
+Parameters
+----------
+
+.. autoclass:: PPO2
+  :members:
+  :inherited-members:
+
 Example
 -------
 
@@ -98,12 +105,6 @@ Train a PPO agent on to optimize the 5-D sphere function
 	print('The best value of x found:', cb.xbest)
 	print('The best value of y found:', cb.rbest)
 
-Parameters
-----------
-
-.. autoclass:: PPO2
-  :members:
-  :inherited-members:
 
 Acknowledgment
 -----------------

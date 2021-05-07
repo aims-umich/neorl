@@ -1,0 +1,375 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Example 4 &mdash; NEORL 1.3.2b documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Example 5" href="ex5.html" />
+    <link rel="prev" title="Example 3" href="ex3.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> NEORL
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                main (1.3.2b )
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">General Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guide/install.html">Quick Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/detinstall.html">Detailed Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/quickstart.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/rl.html">Reinforcement Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/evolu.html">Evolutionary Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/hyperparameter.html">Hyperparameter Tuning</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Algorithms</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules/a2c.html">Advantage Actor Critic (A2C)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/dqn.html">Deep Q Learning (DQN)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/ppo2.html">Proximal Policy Optimisation (PPO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/es.html">Evolution Strategies (<span class="math notranslate nohighlight">\(\mu,\lambda\)</span>) (ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pso.html">Particle Swarm Optimisation (PSO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/de.html">Differential Evolution (DE)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/xnes.html">Exponential Natural Evolution Strategies (XNES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/gwo.html">Grey Wolf Optimizer (GWO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pesa.html">Prioritized replay Evolutionary and Swarm Algorithm (PESA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pesa2.html">Modern PESA (PESA2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/sa.html">Simulated Annealing (SA)</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tune/grid.html">Grid Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/random.html">Random Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/bayes.html">Bayesian Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/evolu.html">Evolutionary Search</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ex1.html">Example 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ex2.html">Example 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ex3.html">Example 3</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Example 4</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#problem-description">Problem Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#neorl-script">NEORL script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#results">Results</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ex5.html">Example 5</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Misc</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../misc/changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/projects.html">Projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/contrib.html">Contributors</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEORL</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Example 4</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/examples/ex4.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="example-4">
+<span id="ex4"></span><h1>Example 4<a class="headerlink" href="#example-4" title="Permalink to this headline">¶</a></h1>
+<p>Example of accessing and plotting the built-in benchmark functions in NEORL.</p>
+<div class="section" id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Algorithms: No Algorithms</p></li>
+<li><p>Type: Continuous, Single-objective</p></li>
+<li><p>Field: Benchmarking, Mathematical Optimization</p></li>
+</ul>
+</div>
+<div class="section" id="problem-description">
+<h2>Problem Description<a class="headerlink" href="#problem-description" title="Permalink to this headline">¶</a></h2>
+<p>We present an overview of how to access the benchmark functions in NEORL to allow easy testing of different algorithms within the framework. For example, a long list of classical mathematical functions is saved within NEORL such as the Rosenbrock function</p>
+<div class="math notranslate nohighlight">
+\[f(\vec{x}) = \sum_{i=1}^{d-1} (1-x_i)^2 + 100 (x_{i+1} - x_i^2 )^2\]</div>
+<p>or Ackley function</p>
+<div class="math notranslate nohighlight">
+\[f(\vec{x}) = 20-20exp\Big(-0.2\sqrt{\frac{1}{d}\sum_{i=1}^{d}x_i^2}\Big)-exp\Big(\frac{1}{d}\sum_{i=1}^{d}cos(2\pi x_i)\Big) + exp(1)\]</div>
+<p>or Bohachevsky function</p>
+<div class="math notranslate nohighlight">
+\[f(\vec{x}) = \sum_{i=1}^{d-1}(x_i^2 + 2x_{i+1}^2 - 0.3\cos(3\pi x_i) - 0.4\cos(4\pi x_{i+1}) + 0.7)\]</div>
+<p>More recent and advanced benchmark functions were also developed such as the CEC’2017 test suite, which includes 30 benchmark functions divided into three groups: Simple (f1-f10), Hybrid (f11-f20), and Composition (f21-f30). The core of the CEC’2017 functions is similar to the classical functions listed above. However, CEC’2017 functions are rotated and shifted to make them more complex to optimise. <strong>CEC’2017 functions are only defined at specific dimensions, namely,</strong> <code class="docutils literal notranslate"><span class="pre">d=2,</span> <span class="pre">10,</span> <span class="pre">20,</span> <span class="pre">30,</span> <span class="pre">50</span> <span class="pre">or</span> <span class="pre">100</span></code>.</p>
+</div>
+<div class="section" id="neorl-script">
+<h2>NEORL script<a class="headerlink" href="#neorl-script" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">neorl.benchmarks.cec17</span> <span class="k">as</span> <span class="nn">functions</span>    <span class="c1">#import all cec17 functions</span>
+<span class="kn">import</span> <span class="nn">neorl.benchmarks.classic</span> <span class="k">as</span> <span class="nn">classics</span>   <span class="c1">#import all classical functions</span>
+<span class="kn">from</span> <span class="nn">neorl.benchmarks.classic</span> <span class="kn">import</span> <span class="n">ackley</span><span class="p">,</span> <span class="n">levy</span><span class="p">,</span> <span class="n">bohachevsky</span>  <span class="c1">#import specific functions</span>
+<span class="kn">from</span> <span class="nn">neorl.benchmarks.cec17</span> <span class="kn">import</span> <span class="n">f3</span><span class="p">,</span> <span class="n">f10</span><span class="p">,</span> <span class="n">f21</span>  <span class="c1">#import cec17 specific functions</span>
+<span class="kn">from</span> <span class="nn">neorl.benchmarks</span> <span class="kn">import</span> <span class="n">bench_2dplot</span>   <span class="c1">#import the built-in plotter</span>
+
+<span class="n">d1</span> <span class="o">=</span> <span class="mi">2</span> <span class="c1">#set dimension for classical functions</span>
+<span class="n">d2</span> <span class="o">=</span> <span class="mi">10</span> <span class="c1">#set dimension for cec functions (choose between 2, 10, 20, 30, 50 or 100)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;------------------------------------------------------&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Classical Functions&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;------------------------------------------------------&#39;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">classics</span><span class="o">.</span><span class="n">all_functions</span><span class="p">:</span>
+    <span class="n">sample</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">d1</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Function: </span><span class="si">{}</span><span class="s1">, x=</span><span class="si">{}</span><span class="s1">, y=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="mi">2</span><span class="p">)))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;------------------------------------------------------&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;CEC2017 Functions&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;------------------------------------------------------&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">functions</span><span class="o">.</span><span class="n">all_functions</span><span class="p">:</span>
+    <span class="n">sample</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="o">=-</span><span class="mi">10</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">d2</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Function: </span><span class="si">{}</span><span class="s1">, x=</span><span class="si">{}</span><span class="s1">, y=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="mi">2</span><span class="p">)))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;------------------------------------------------------&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Function Plotter&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;------------------------------------------------------&#39;</span><span class="p">)</span>
+<span class="n">bench_2dplot</span><span class="p">(</span><span class="n">f3</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">50</span><span class="p">,</span><span class="mi">50</span><span class="p">),</span> <span class="n">points</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+<span class="n">bench_2dplot</span><span class="p">(</span><span class="n">f10</span><span class="p">,</span> <span class="n">savepng</span><span class="o">=</span><span class="s1">&#39;ex4_f10.png&#39;</span><span class="p">)</span>
+<span class="n">bench_2dplot</span><span class="p">(</span><span class="n">f21</span><span class="p">,</span> <span class="n">savepng</span><span class="o">=</span><span class="s1">&#39;ex4_f21.png&#39;</span><span class="p">)</span>
+
+<span class="n">bench_2dplot</span><span class="p">(</span><span class="n">ackley</span><span class="p">,</span> <span class="n">savepng</span><span class="o">=</span><span class="s1">&#39;ex4_ackley.png&#39;</span><span class="p">)</span>
+<span class="n">bench_2dplot</span><span class="p">(</span><span class="n">levy</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">bench_2dplot</span><span class="p">(</span><span class="n">bohachevsky</span><span class="p">,</span> <span class="n">points</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+
+<span class="c1">#------------------------------------------------------------------------------</span>
+<span class="c1">#NOTE: CEC&#39;17 functions: f11-f20, f29, f30 are not defined for d=2 dimensions,</span>
+<span class="c1">#so the plotter will FAIL for these functions</span>
+<span class="c1">#------------------------------------------------------------------------------</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="results">
+<h2>Results<a class="headerlink" href="#results" title="Permalink to this headline">¶</a></h2>
+<p>Selected results from the script output are shown below, which indicates the function evaluation with a random sample</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">------------------------------------------------------</span>
+<span class="n">Classical</span> <span class="n">Functions</span>
+<span class="o">------------------------------------------------------</span>
+<span class="n">Function</span><span class="p">:</span> <span class="n">sphere</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mf">4.17</span> <span class="mf">7.2</span> <span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="mf">69.28</span>
+<span class="n">Function</span><span class="p">:</span> <span class="n">cigar</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mf">0.</span>   <span class="mf">3.02</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="mf">9140499.76</span>
+<span class="n">Function</span><span class="p">:</span> <span class="n">rosenbrock</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mf">1.47</span> <span class="mf">0.92</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="mf">151.59</span>
+<span class="n">Function</span><span class="p">:</span> <span class="n">bohachevsky</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mf">1.86</span> <span class="mf">3.46</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="mf">27.63</span>
+<span class="n">Function</span><span class="p">:</span> <span class="n">griewank</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mf">3.97</span> <span class="mf">5.39</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.48</span>
+<span class="n">Function</span><span class="p">:</span> <span class="n">rastrigin</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mf">4.19</span> <span class="mf">6.85</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="mf">74.97</span>
+<span class="n">Function</span><span class="p">:</span> <span class="n">ackley</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mf">2.04</span> <span class="mf">8.78</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="mf">15.35</span>
+<span class="o">.</span>
+<span class="o">.</span>
+<span class="o">.</span>
+
+<span class="o">------------------------------------------------------</span>
+<span class="n">CEC2017</span> <span class="n">Functions</span>
+<span class="o">------------------------------------------------------</span>
+<span class="n">Function</span><span class="p">:</span> <span class="n">f1</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span> <span class="mf">3.89</span> <span class="o">-</span><span class="mf">1.72</span> <span class="o">-</span><span class="mf">9.</span>    <span class="mf">0.72</span>  <span class="mf">3.28</span>  <span class="mf">0.3</span>   <span class="mf">8.89</span>  <span class="mf">1.73</span>  <span class="mf">8.07</span> <span class="o">-</span><span class="mf">7.25</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="mf">276294024527.33</span>
+<span class="n">Function</span><span class="p">:</span> <span class="n">f2</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">7.21</span>  <span class="mf">6.15</span> <span class="o">-</span><span class="mf">2.05</span> <span class="o">-</span><span class="mf">6.69</span>  <span class="mf">8.55</span> <span class="o">-</span><span class="mf">3.04</span>  <span class="mf">5.02</span>  <span class="mf">4.52</span>  <span class="mf">7.67</span>  <span class="mf">2.47</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.39057e+18</span>
+<span class="n">Function</span><span class="p">:</span> <span class="n">f3</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span> <span class="mf">5.02</span> <span class="o">-</span><span class="mf">3.02</span> <span class="o">-</span><span class="mf">4.6</span>   <span class="mf">7.92</span> <span class="o">-</span><span class="mf">1.44</span>  <span class="mf">9.3</span>   <span class="mf">3.27</span>  <span class="mf">2.43</span> <span class="o">-</span><span class="mf">7.71</span>  <span class="mf">8.99</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="mf">104499271.6</span>
+<span class="n">Function</span><span class="p">:</span> <span class="n">f4</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">1.</span>    <span class="mf">1.57</span> <span class="o">-</span><span class="mf">1.84</span> <span class="o">-</span><span class="mf">5.26</span>  <span class="mf">8.07</span>  <span class="mf">1.47</span> <span class="o">-</span><span class="mf">9.94</span>  <span class="mf">2.34</span> <span class="o">-</span><span class="mf">3.47</span>  <span class="mf">0.54</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="mf">6142.43</span>
+<span class="n">Function</span><span class="p">:</span> <span class="n">f5</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span> <span class="mf">7.72</span> <span class="o">-</span><span class="mf">2.85</span>  <span class="mf">8.17</span>  <span class="mf">2.47</span> <span class="o">-</span><span class="mf">9.68</span>  <span class="mf">8.59</span>  <span class="mf">3.82</span>  <span class="mf">9.95</span> <span class="o">-</span><span class="mf">6.55</span> <span class="o">-</span><span class="mf">7.26</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="mf">738.82</span>
+<span class="n">Function</span><span class="p">:</span> <span class="n">f6</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span> <span class="mf">8.65</span>  <span class="mf">3.94</span> <span class="o">-</span><span class="mf">8.68</span>  <span class="mf">5.11</span>  <span class="mf">5.08</span>  <span class="mf">8.46</span>  <span class="mf">4.23</span> <span class="o">-</span><span class="mf">7.51</span> <span class="o">-</span><span class="mf">9.6</span>  <span class="o">-</span><span class="mf">9.48</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="mf">817.43</span>
+<span class="n">Function</span><span class="p">:</span> <span class="n">f7</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">9.43</span> <span class="o">-</span><span class="mf">5.08</span>  <span class="mf">7.2</span>   <span class="mf">0.78</span>  <span class="mf">1.06</span>  <span class="mf">6.84</span> <span class="o">-</span><span class="mf">7.52</span> <span class="o">-</span><span class="mf">4.42</span>  <span class="mf">1.72</span>  <span class="mf">9.39</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="mf">916.24</span>
+<span class="o">.</span>
+<span class="o">.</span>
+<span class="o">.</span>
+<span class="o">------------------------------------------------------</span>
+<span class="n">Function</span> <span class="n">Plotter</span>
+<span class="o">------------------------------------------------------</span>
+<span class="o">.</span>
+<span class="o">.</span>
+<span class="o">.</span>
+</pre></div>
+</div>
+<p>Few samples from the function plots are shown below</p>
+<a class="reference internal image-reference" href="../_images/ex4_f10.png"><img alt="alternate text" class="align-center" src="../_images/ex4_f10.png" style="width: 600.0px; height: 400.0px;" /></a>
+<a class="reference internal image-reference" href="../_images/ex4_f21.png"><img alt="alternate text" class="align-center" src="../_images/ex4_f21.png" style="width: 600.0px; height: 400.0px;" /></a>
+<a class="reference internal image-reference" href="../_images/ex4_ackley.png"><img alt="alternate text" class="align-center" src="../_images/ex4_ackley.png" style="width: 600.0px; height: 400.0px;" /></a>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="ex5.html" class="btn btn-neutral float-right" title="Example 5" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="ex3.html" class="btn btn-neutral float-left" title="Example 3" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Exelon Corp. &amp; MIT.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

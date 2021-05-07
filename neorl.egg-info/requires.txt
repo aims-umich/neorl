@@ -1,4 +1,4 @@
-tensorflow==1.13.1
+tensorflow==1.14.0
 numpy==1.16.2
 gym<0.17.0,>=0.15.4
 scikit-optimize==0.8.1

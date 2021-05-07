@@ -12,7 +12,7 @@ NEORL is tested on ``python3 (3.5-3.7)`` with the development headers.
 
 .. note::
 
-    NEORL supports ``tensorflow`` versions from 1.8.0 to 1.14.0, **we do not support tensorflow >= 2.0**. Please, make sure to uninstall ``tensorflow`` if already installed on your environment or have a proper version. If ``tensorflow`` does not exist, NEORL will automatically install ``tensorflow-1.13.1`` for most stability.
+    NEORL supports ``tensorflow`` versions from 1.8.0 to 1.14.0, **we do not support tensorflow >= 2.0**. Please, make sure to uninstall ``tensorflow`` if already installed on your environment or have a proper version. If ``tensorflow`` does not exist, NEORL will automatically install ``tensorflow-1.14.0`` for most stability.
 
 Ubuntu Prerequisites
 ~~~~~~~~~~~~~~~~~~~~~~~~

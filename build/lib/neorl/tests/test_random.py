@@ -35,7 +35,7 @@ def test_random():
     
     #setup a random tune object
     rtune=RANDTUNE(param_grid=param_grid, fit=tune_fit, ncases=25, seed=1)
-    randres=rtune.tune(ncores=1, csvname='tune.csv')
+    randres=rtune.tune(ncores=1)
     print(randres)   #the results are saved in dataframe and ranked from best to worst
 
 test_random()

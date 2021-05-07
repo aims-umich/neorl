@@ -29,6 +29,13 @@ What can you use?
 -  Continuous spaces: ❌
 -  Mixed Discrete/Continuous spaces: ❌
 
+Parameters
+----------
+
+.. autoclass:: DQN
+  :members:
+  :inherited-members:
+
 Example
 -------
 
@@ -105,12 +112,6 @@ Example
 	print('The best value of x found:', cb.xbest)
 	print('The best value of y found:', cb.rbest)
 	
-Parameters
-----------
-
-.. autoclass:: DQN
-  :members:
-  :inherited-members:
 
 Acknowledgment
 -----------------
