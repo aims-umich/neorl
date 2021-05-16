@@ -7,20 +7,7 @@ import numpy as np
 from collections import defaultdict
 import copy
 import time
-import multiprocessing
-import multiprocessing.pool
-class NoDaemonProcess(multiprocessing.Process):
-    # make 'daemon' attribute always return False
-    def _get_daemon(self):
-        return False
-    def _set_daemon(self, value):
-        pass
-    daemon = property(_get_daemon, _set_daemon)
-
-# We sub-class multiprocessing.pool.Pool instead of multiprocessing.Pool
-# because the latter is only a wrapper function, not a proper class.
-class MyPool(multiprocessing.pool.Pool):
-    Process = NoDaemonProcess
+import joblib
 
 class PSO:
     """
@@ -55,8 +42,7 @@ class PSO:
             self.fit=fitness_wrapper	
         else:	
             raise ValueError('--error: The mode entered by user is invalid, use either `min` or `max`')
-            
-            
+              
         self.ncores=ncores
         self.speed_mech=speed_mech
         self.c1=c1
@@ -145,11 +131,10 @@ class PSO:
             core_list=[]
             for particle in pop:
                 core_list.append(pop[particle][0])
-           
-            p=MyPool(self.ncores)
-            fitness = p.map(self.gen_object, core_list)
-            p.close(); p.join()
-            
+
+            with joblib.Parallel(n_jobs=self.ncores) as parallel:
+                fitness=parallel(joblib.delayed(self.fit)(item) for item in core_list)
+                
             [pop[particle].append(fitness[particle]) for particle in range(len(pop))]
         
         else: #evaluate swarm in series
@@ -247,12 +232,6 @@ class PSO:
         #"""
         return 1 / (1 + np.exp(-x))
 
-    def gen_object(self, inp):
-        #"""
-        #Worker for pool process, just to run the fitness function
-        #"""
-        return self.fit(inp)
-
     def select(self, pop, k=1):
         #"""
         #Reorder the swarm and select the best `k` particles from it
@@ -291,7 +270,7 @@ class PSO:
         for i in range(len(swm)):
             
             offspring[i] = self.UpdateParticle(particle=swm[i], local_pos=self.local_pos[i], local_fit=self.local_fit[i])
-            offspring[i][2] = 0  #this fitness item is set to zero since it is not evaluated yet by self.fit
+            offspring[i][2] = 0  #this fitness item is set to zero since it is not evaluated yet by the fitness
     
         return offspring
 
@@ -338,10 +317,9 @@ class PSO:
                 core_list=[]
                 for key in offspring:
                     core_list.append(offspring[key][0])
-                #initialize a pool
-                p=MyPool(self.ncores)
-                fitness = p.map(self.gen_object, core_list)
-                p.close(); p.join()
+
+                with joblib.Parallel(n_jobs=self.ncores) as parallel:
+                    fitness=parallel(joblib.delayed(self.fit)(item) for item in core_list)
                 
                 self.partime=time.time()-t0
                 #print('PSO:', self.partime)

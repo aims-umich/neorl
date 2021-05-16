@@ -249,8 +249,6 @@ class RLLogger(BaseCallback):
                 print('----------------------------------------------------------------------------------')
                 print('RL callback at step {}/{}'.format(self.n_calls, self.locals['total_timesteps']))
             
-            
-            #
             try:
                 rwd=self.locals['rewards'][0] #A2C/PPO/.. cases
 
@@ -263,8 +261,11 @@ class RLLogger(BaseCallback):
             try:
                 x=self.locals['infos'][0]['x'] #A2C/PPO/.. cases
             except:
-                x=self.locals['info']['x']   #DQN case (special dict naming)
-                
+                try:
+                    x=self.locals['info']['x']   #DQN case (special dict naming)
+                except:
+                    x=self.locals['obs'][0]      #ACER case (special dict naming)
+            
             self.r_hist.append(rwd)  
             
             if self.save_model and not self.save_best_only:

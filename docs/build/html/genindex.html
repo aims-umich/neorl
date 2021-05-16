@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Index &mdash; NEORL 1.3.2b documentation</title>
+  <title>Index &mdash; NEORL 1.3.6b documentation</title>
   
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                main (1.3.2b )
+                main (1.3.6b )
               </div>
             
           
@@ -104,6 +104,8 @@
 <li class="toctree-l1"><a class="reference internal" href="modules/a2c.html">Advantage Actor Critic (A2C)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/dqn.html">Deep Q Learning (DQN)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/ppo2.html">Proximal Policy Optimisation (PPO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/acer.html">Actor-Critic with Experience Replay (ACER)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/acktr.html">Actor Critic using Kronecker-Factored Trust Region (ACKTR)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/es.html">Evolution Strategies (<span class="math notranslate nohighlight">\(\mu,\lambda\)</span>) (ES)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/pso.html">Particle Swarm Optimisation (PSO)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/de.html">Differential Evolution (DE)</a></li>
@@ -112,6 +114,8 @@
 <li class="toctree-l1"><a class="reference internal" href="modules/pesa.html">Prioritized replay Evolutionary and Swarm Algorithm (PESA)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/pesa2.html">Modern PESA (PESA2)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/sa.html">Simulated Annealing (SA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/ssa.html">Salp Swarm Algorithm (SSA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/woa.html">Whale Optimization Algorithm (WOA)</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
 <ul>
@@ -119,14 +123,15 @@
 <li class="toctree-l1"><a class="reference internal" href="tune/random.html">Random Search</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tune/bayes.html">Bayesian Search</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tune/evolu.html">Evolutionary Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tune/ash.html">Asynchronous Successive Halving</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="examples/ex1.html">Example 1</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples/ex2.html">Example 2</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples/ex3.html">Example 3</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples/ex4.html">Example 4</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples/ex5.html">Example 5</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex1.html">Example 1: RL Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex2.html">Example 2: Ackley with EA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex3.html">Example 3: Welded-beam design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex4.html">Example 4: Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex5.html">Example 5: CEC’2017 Test Suite</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Misc</span></p>
 <ul>
@@ -214,6 +219,7 @@
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
+ | <a href="#W"><strong>W</strong></a>
  | <a href="#X"><strong>X</strong></a>
  
 </div>
@@ -221,6 +227,12 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/a2c.html#neorl.rl.baselines.a2c.A2C">A2C (class in neorl.rl.baselines.a2c)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="modules/acer.html#neorl.rl.baselines.acer.ACER">ACER (class in neorl.rl.baselines.acer)</a>
+</li>
+      <li><a href="modules/acktr.html#neorl.rl.baselines.acktr.ACKTR">ACKTR (class in neorl.rl.baselines.acktr)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -250,6 +262,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/es.html#neorl.evolu.es.ES">ES (class in neorl.evolu.es)</a>
 </li>
+      <li><a href="tune/evolu.html#neorl.tune.estune.ESTUNE">ESTUNE (class in neorl.tune.estune)</a>
+</li>
       <li><a href="modules/de.html#neorl.evolu.de.DE.evolute">evolute() (neorl.evolu.de.DE method)</a>
 
       <ul>
@@ -258,6 +272,12 @@
         <li><a href="modules/gwo.html#neorl.evolu.gwo.GWO.evolute">(neorl.evolu.gwo.GWO method)</a>
 </li>
         <li><a href="modules/pso.html#neorl.evolu.pso.PSO.evolute">(neorl.evolu.pso.PSO method)</a>
+</li>
+        <li><a href="modules/sa.html#neorl.evolu.sa.SA.evolute">(neorl.evolu.sa.SA method)</a>
+</li>
+        <li><a href="modules/ssa.html#neorl.evolu.ssa.SSA.evolute">(neorl.evolu.ssa.SSA method)</a>
+</li>
+        <li><a href="modules/woa.html#neorl.evolu.woa.WOA.evolute">(neorl.evolu.woa.WOA method)</a>
 </li>
         <li><a href="modules/xnes.html#neorl.evolu.xnes.XNES.evolute">(neorl.evolu.xnes.XNES method)</a>
 </li>
@@ -287,6 +307,10 @@
       <li><a href="modules/a2c.html#neorl.rl.baselines.a2c.A2C.learn">learn() (neorl.rl.baselines.a2c.A2C method)</a>
 
       <ul>
+        <li><a href="modules/acer.html#neorl.rl.baselines.acer.ACER.learn">(neorl.rl.baselines.acer.ACER method)</a>
+</li>
+        <li><a href="modules/acktr.html#neorl.rl.baselines.acktr.ACKTR.learn">(neorl.rl.baselines.acktr.ACKTR method)</a>
+</li>
         <li><a href="modules/dqn.html#neorl.rl.baselines.deepq.DQN.learn">(neorl.rl.baselines.deepq.DQN method)</a>
 </li>
         <li><a href="modules/ppo2.html#neorl.rl.baselines.ppo2.PPO2.learn">(neorl.rl.baselines.ppo2.PPO2 method)</a>
@@ -297,6 +321,10 @@
       <li><a href="modules/a2c.html#neorl.rl.baselines.a2c.A2C.load">load() (neorl.rl.baselines.a2c.A2C class method)</a>
 
       <ul>
+        <li><a href="modules/acer.html#neorl.rl.baselines.acer.ACER.load">(neorl.rl.baselines.acer.ACER class method)</a>
+</li>
+        <li><a href="modules/acktr.html#neorl.rl.baselines.acktr.ACKTR.load">(neorl.rl.baselines.acktr.ACKTR class method)</a>
+</li>
         <li><a href="modules/dqn.html#neorl.rl.baselines.deepq.DQN.load">(neorl.rl.baselines.deepq.DQN class method)</a>
 </li>
         <li><a href="modules/ppo2.html#neorl.rl.baselines.ppo2.PPO2.load">(neorl.rl.baselines.ppo2.PPO2 class method)</a>
@@ -322,6 +350,10 @@
 </li>
         <li><a href="modules/sa.html#module-neorl.evolu.sa">neorl.evolu.sa</a>
 </li>
+        <li><a href="modules/ssa.html#module-neorl.evolu.ssa">neorl.evolu.ssa</a>
+</li>
+        <li><a href="modules/woa.html#module-neorl.evolu.woa">neorl.evolu.woa</a>
+</li>
         <li><a href="modules/xnes.html#module-neorl.evolu.xnes">neorl.evolu.xnes</a>
 </li>
         <li><a href="modules/pesa.html#module-neorl.hybrid.pesa">neorl.hybrid.pesa</a>
@@ -330,11 +362,19 @@
 </li>
         <li><a href="modules/a2c.html#module-neorl.rl.baselines.a2c">neorl.rl.baselines.a2c</a>
 </li>
+        <li><a href="modules/acer.html#module-neorl.rl.baselines.acer">neorl.rl.baselines.acer</a>
+</li>
+        <li><a href="modules/acktr.html#module-neorl.rl.baselines.acktr">neorl.rl.baselines.acktr</a>
+</li>
         <li><a href="modules/dqn.html#module-neorl.rl.baselines.deepq">neorl.rl.baselines.deepq</a>
 </li>
         <li><a href="modules/ppo2.html#module-neorl.rl.baselines.ppo2">neorl.rl.baselines.ppo2</a>
 </li>
+        <li><a href="tune/ash.html#module-neorl.tune.ashtune">neorl.tune.ashtune</a>
+</li>
         <li><a href="tune/bayes.html#module-neorl.tune.bayestune">neorl.tune.bayestune</a>
+</li>
+        <li><a href="tune/evolu.html#module-neorl.tune.estune">neorl.tune.estune</a>
 </li>
         <li><a href="tune/grid.html#module-neorl.tune.gridtune">neorl.tune.gridtune</a>
 </li>
@@ -383,6 +423,20 @@
 </li>
       </ul></li>
       <li>
+    neorl.evolu.ssa
+
+      <ul>
+        <li><a href="modules/ssa.html#module-neorl.evolu.ssa">module</a>
+</li>
+      </ul></li>
+      <li>
+    neorl.evolu.woa
+
+      <ul>
+        <li><a href="modules/woa.html#module-neorl.evolu.woa">module</a>
+</li>
+      </ul></li>
+      <li>
     neorl.evolu.xnes
 
       <ul>
@@ -396,8 +450,6 @@
         <li><a href="modules/pesa.html#module-neorl.hybrid.pesa">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     neorl.hybrid.pesa2
 
@@ -405,11 +457,27 @@
         <li><a href="modules/pesa2.html#module-neorl.hybrid.pesa2">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     neorl.rl.baselines.a2c
 
       <ul>
         <li><a href="modules/a2c.html#module-neorl.rl.baselines.a2c">module</a>
+</li>
+      </ul></li>
+      <li>
+    neorl.rl.baselines.acer
+
+      <ul>
+        <li><a href="modules/acer.html#module-neorl.rl.baselines.acer">module</a>
+</li>
+      </ul></li>
+      <li>
+    neorl.rl.baselines.acktr
+
+      <ul>
+        <li><a href="modules/acktr.html#module-neorl.rl.baselines.acktr">module</a>
 </li>
       </ul></li>
       <li>
@@ -427,10 +495,24 @@
 </li>
       </ul></li>
       <li>
+    neorl.tune.ashtune
+
+      <ul>
+        <li><a href="tune/ash.html#module-neorl.tune.ashtune">module</a>
+</li>
+      </ul></li>
+      <li>
     neorl.tune.bayestune
 
       <ul>
         <li><a href="tune/bayes.html#module-neorl.tune.bayestune">module</a>
+</li>
+      </ul></li>
+      <li>
+    neorl.tune.estune
+
+      <ul>
+        <li><a href="tune/evolu.html#module-neorl.tune.estune">module</a>
 </li>
       </ul></li>
       <li>
@@ -459,16 +541,20 @@
 </li>
       <li><a href="modules/ppo2.html#neorl.rl.baselines.ppo2.PPO2">PPO2 (class in neorl.rl.baselines.ppo2)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/a2c.html#neorl.rl.baselines.a2c.A2C.predict">predict() (neorl.rl.baselines.a2c.A2C method)</a>
 
       <ul>
+        <li><a href="modules/acer.html#neorl.rl.baselines.acer.ACER.predict">(neorl.rl.baselines.acer.ACER method)</a>
+</li>
+        <li><a href="modules/acktr.html#neorl.rl.baselines.acktr.ACKTR.predict">(neorl.rl.baselines.acktr.ACKTR method)</a>
+</li>
         <li><a href="modules/dqn.html#neorl.rl.baselines.deepq.DQN.predict">(neorl.rl.baselines.deepq.DQN method)</a>
 </li>
         <li><a href="modules/ppo2.html#neorl.rl.baselines.ppo2.PPO2.predict">(neorl.rl.baselines.ppo2.PPO2 method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/pso.html#neorl.evolu.pso.PSO">PSO (class in neorl.evolu.pso)</a>
 </li>
   </ul></td>
@@ -485,14 +571,24 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="modules/sa.html#neorl.evolu.sa.SA">SA (class in neorl.evolu.sa)</a>
+</li>
       <li><a href="modules/a2c.html#neorl.rl.baselines.a2c.A2C.save">save() (neorl.rl.baselines.a2c.A2C method)</a>
 
       <ul>
+        <li><a href="modules/acer.html#neorl.rl.baselines.acer.ACER.save">(neorl.rl.baselines.acer.ACER method)</a>
+</li>
+        <li><a href="modules/acktr.html#neorl.rl.baselines.acktr.ACKTR.save">(neorl.rl.baselines.acktr.ACKTR method)</a>
+</li>
         <li><a href="modules/dqn.html#neorl.rl.baselines.deepq.DQN.save">(neorl.rl.baselines.deepq.DQN method)</a>
 </li>
         <li><a href="modules/ppo2.html#neorl.rl.baselines.ppo2.PPO2.save">(neorl.rl.baselines.ppo2.PPO2 method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="modules/ssa.html#neorl.evolu.ssa.SSA">SSA (class in neorl.evolu.ssa)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -502,11 +598,21 @@
       <li><a href="tune/bayes.html#neorl.tune.bayestune.BAYESTUNE.tune">tune() (neorl.tune.bayestune.BAYESTUNE method)</a>
 
       <ul>
+        <li><a href="tune/evolu.html#neorl.tune.estune.ESTUNE.tune">(neorl.tune.estune.ESTUNE method)</a>
+</li>
         <li><a href="tune/grid.html#neorl.tune.gridtune.GRIDTUNE.tune">(neorl.tune.gridtune.GRIDTUNE method)</a>
 </li>
         <li><a href="tune/random.html#neorl.tune.randtune.RANDTUNE.tune">(neorl.tune.randtune.RANDTUNE method)</a>
 </li>
       </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="W">W</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="modules/woa.html#neorl.evolu.woa.WOA">WOA (class in neorl.evolu.woa)</a>
+</li>
   </ul></td>
 </tr></table>
 

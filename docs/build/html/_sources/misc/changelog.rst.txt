@@ -6,18 +6,36 @@ Changelog
 Coming next
 --------------------------
 
-- To add a module for Simulated Annealing.
-- To add Genetic/Evolutionary hyperparameter tuning with documentation.
 - To add a module for Harris Hawks Optimisation.
+- To add a module for Cuckoo search.
+- To add two modules for RL-informed EA optimization.
 - Adding a class for easy-to-use environment construction for RL optimization.
 - And more ...
 
-Release 1.3.1 (2021-05-4)
----------------------------
+Release 1.4.0b (2021-05-15)
+------------------------------------
+
+- Added a module for Simulated Annealing (SA).
+- Added a Genetic/Evolutionary hyperparameter tuning module.
+- Added ACER module for RL optimization.
+- Added ACKTR module for RL optimization.
+- Added a WOA module for evolutionary optimization. 
+- Added a SSA module for evolutionary optimization. 
+
+Release 1.3.5b (2021-05-10)
+------------------------------------
+
+- Added CEC'2017 Test Suite benchmarks
+- Added a set of classical mathematical functions
+- Added new Example (4) on the website on how to access the benchmarks
+- Added new Example (5) on the website on how to optimize the benchmarks
+
+Release 1.3.1b/1.3.2b (2021-05-4)
+------------------------------------
 
 - Fixing miscellaneous bugs
 
-Release 1.3.0 (2021-05-1)
+Release 1.3.0b (2021-05-1)
 ---------------------------
 
 - Added a module for the hybrid algorithm PESA.
@@ -25,12 +43,12 @@ Release 1.3.0 (2021-05-1)
 - Added a GWO module. 
 - Adding min/max modes for all algorithms.
 
-Release 1.2.0 (2021-04-15)
+Release 1.2.0b (2021-04-15)
 ---------------------------
 
 - **The first public open-source version of NEORL**
 - Added DE with serial implementation.
-- Added NES with parallel implementation. 
+- Added XNES with parallel implementation. 
 - Restructuring the input parameter space.
 - Detailed README file in the Github page. 
 - Added unit tests to NEORL.
@@ -46,11 +64,10 @@ Release 1.1.0-Private (2020-12-15)
 Release 1.0.0-Private (2020-09-15)
 -----------------------------------
 
-- Added parallel GA.
-- Added a PDF documentation. 
+- Added evolutionary strategies ES.
+- Added a local PDF documentation. 
 - Added parallel PSO.
 - Added Random search hyperparameter tuning.
-
 
 Release 0.1.1-Private (2020-03-15)
 -----------------------------------
@@ -58,7 +75,6 @@ Release 0.1.1-Private (2020-03-15)
 - A support for both classical (evolutionary) and modern (machine learning) optimization in the same package. Currently, DQN (serial), PPO (parallel), A2C (parallel), GA (serial), SA (serial) are supported. All RL algorithms are based upon ``stable-baselines``.
 -  Easy-to-use syntax and friendly interaction with the package.
 -  A support for parallel computing. 
--  Efficient on-the-fly progress monitoring and detailed output postprocessing for handy usage.
 -  Added grid search hyperparameter tuning.
 -  For developers: an organized implementation and source code structure to facilitate the job of future external contributors.
--  NEORL Examples are provided in the example directory.
+-  NEORL examples are provided in the "examples" directory.

@@ -1,9 +1,9 @@
 .. _ex2:
 
-Example 2
-===========
+Example 2: Ackley with EA
+============================
 
-Example of solving the popular continuous optimization function "Ackley" using NEORL with evolutionary algorithms.
+Example of solving the popular continuous optimization function "Ackley" using NEORL evolutionary algorithms.
 
 Summary
 --------------------
@@ -40,7 +40,7 @@ The function is usually evaluated on the hypercube :math:`x_i \in [-32, 32]`, fo
 NEORL script
 --------------------
 
-The solution below is for a 10-dimensional Ackley function (:math:`d=10`)
+The solution below is for a 8-dimensional Ackley function (:math:`d=10`)
 
 .. code-block:: python
 

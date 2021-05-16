@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Welcome to NEORL Website! &mdash; NEORL 1.3.2b documentation</title>
+  <title>Welcome to NEORL Website! &mdash; NEORL 1.3.6b documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                main (1.3.2b )
+                main (1.3.6b )
               </div>
             
           
@@ -105,6 +105,8 @@
 <li class="toctree-l1"><a class="reference internal" href="modules/a2c.html">Advantage Actor Critic (A2C)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/dqn.html">Deep Q Learning (DQN)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/ppo2.html">Proximal Policy Optimisation (PPO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/acer.html">Actor-Critic with Experience Replay (ACER)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/acktr.html">Actor Critic using Kronecker-Factored Trust Region (ACKTR)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/es.html">Evolution Strategies (<span class="math notranslate nohighlight">\(\mu,\lambda\)</span>) (ES)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/pso.html">Particle Swarm Optimisation (PSO)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/de.html">Differential Evolution (DE)</a></li>
@@ -113,6 +115,8 @@
 <li class="toctree-l1"><a class="reference internal" href="modules/pesa.html">Prioritized replay Evolutionary and Swarm Algorithm (PESA)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/pesa2.html">Modern PESA (PESA2)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/sa.html">Simulated Annealing (SA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/ssa.html">Salp Swarm Algorithm (SSA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/woa.html">Whale Optimization Algorithm (WOA)</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
 <ul>
@@ -120,14 +124,15 @@
 <li class="toctree-l1"><a class="reference internal" href="tune/random.html">Random Search</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tune/bayes.html">Bayesian Search</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tune/evolu.html">Evolutionary Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tune/ash.html">Asynchronous Successive Halving</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="examples/ex1.html">Example 1</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples/ex2.html">Example 2</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples/ex3.html">Example 3</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples/ex4.html">Example 4</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples/ex5.html">Example 5</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex1.html">Example 1: RL Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex2.html">Example 2: Ackley with EA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex3.html">Example 3: Welded-beam design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex4.html">Example 4: Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex5.html">Example 5: CEC’2017 Test Suite</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Misc</span></p>
 <ul>
@@ -203,12 +208,12 @@
             
   <div class="section" id="welcome-to-neorl-website">
 <h1>Welcome to NEORL Website!<a class="headerlink" href="#welcome-to-neorl-website" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="this-project-is-currently-in-beta-testing-please-contact-majdi-i-radaideh-on-radaideh-mit-edu-for-any-bugs-or-issues">
-<h2>–This project is currently in Beta Testing, please contact Majdi I. Radaideh on <a class="reference external" href="mailto:radaideh&#37;&#52;&#48;mit&#46;edu">radaideh<span>&#64;</span>mit<span>&#46;</span>edu</a> for any bugs or issues<a class="headerlink" href="#this-project-is-currently-in-beta-testing-please-contact-majdi-i-radaideh-on-radaideh-mit-edu-for-any-bugs-or-issues" title="Permalink to this headline">¶</a></h2>
+<p><em>This project is still under beta testing</em></p>
+<p><strong>Primary contact to report bugs/issues</strong>: Majdi I. Radaideh (<a class="reference external" href="mailto:radaideh&#37;&#52;&#48;mit&#46;edu">radaideh<span>&#64;</span>mit<span>&#46;</span>edu</a>)</p>
+<hr class="docutils" />
 <a class="reference internal image-reference" href="_images/logo.png"><img alt="alternate text" class="align-right" src="_images/logo.png" style="width: 266.09999999999997px; height: 188.4px;" /></a>
 <p>NEORL (<strong>N</strong>euro<strong>E</strong>volution <strong>O</strong>ptimisation with <strong>R</strong>einforcement <strong>L</strong>earning) is a set of implementations of hybrid algorithms combining neural networks and evolutionary computation based on a wide range of machine learning and evolutionary intelligence architectures. NEORL aims to solve large-scale optimisation problems relevant to operation &amp; optimisation research, engineering, business, and other disciplines.</p>
 <p>Github repository: <a class="reference external" href="https://github.com/mradaideh/neorl">https://github.com/mradaideh/neorl</a></p>
-</div>
 <div class="section" id="copyright">
 <h2>Copyright<a class="headerlink" href="#copyright" title="Permalink to this headline">¶</a></h2>
 <a class="reference internal image-reference" href="_images/copyright.png"><img alt="alternate text" class="align-right" src="_images/copyright.png" style="width: 492.40000000000003px; height: 96.0px;" /></a>
@@ -234,6 +239,8 @@
 <li class="toctree-l1"><a class="reference internal" href="modules/a2c.html">Advantage Actor Critic (A2C)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/dqn.html">Deep Q Learning (DQN)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/ppo2.html">Proximal Policy Optimisation (PPO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/acer.html">Actor-Critic with Experience Replay (ACER)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/acktr.html">Actor Critic using Kronecker-Factored Trust Region (ACKTR)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/es.html">Evolution Strategies (<span class="math notranslate nohighlight">\(\mu,\lambda\)</span>) (ES)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/pso.html">Particle Swarm Optimisation (PSO)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/de.html">Differential Evolution (DE)</a></li>
@@ -242,6 +249,8 @@
 <li class="toctree-l1"><a class="reference internal" href="modules/pesa.html">Prioritized replay Evolutionary and Swarm Algorithm (PESA)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/pesa2.html">Modern PESA (PESA2)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/sa.html">Simulated Annealing (SA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/ssa.html">Salp Swarm Algorithm (SSA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/woa.html">Whale Optimization Algorithm (WOA)</a></li>
 </ul>
 </div>
 <div class="toctree-wrapper compound">
@@ -251,16 +260,17 @@
 <li class="toctree-l1"><a class="reference internal" href="tune/random.html">Random Search</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tune/bayes.html">Bayesian Search</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tune/evolu.html">Evolutionary Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tune/ash.html">Asynchronous Successive Halving</a></li>
 </ul>
 </div>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Examples</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="examples/ex1.html">Example 1</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples/ex2.html">Example 2</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples/ex3.html">Example 3</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples/ex4.html">Example 4</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples/ex5.html">Example 5</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex1.html">Example 1: RL Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex2.html">Example 2: Ackley with EA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex3.html">Example 3: Welded-beam design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex4.html">Example 4: Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/ex5.html">Example 5: CEC’2017 Test Suite</a></li>
 </ul>
 </div>
 <div class="toctree-wrapper compound">

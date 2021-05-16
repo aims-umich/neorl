@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.evolu.es &mdash; NEORL 1.3.0b documentation</title>
+  <title>neorl.evolu.es &mdash; NEORL 1.3.5b documentation</title>
   
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                main (1.3.0b )
+                main (1.3.5b )
               </div>
             
           
@@ -104,6 +104,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/a2c.html">Advantage Actor Critic (A2C)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/dqn.html">Deep Q Learning (DQN)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/ppo2.html">Proximal Policy Optimisation (PPO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/acer.html">Actor-Critic with Experience Replay (ACER)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/acktr.html">Actor Critic using Kronecker-Factored Trust Region (ACKTR)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/es.html">Evolution Strategies (<span class="math notranslate nohighlight">\(\mu,\lambda\)</span>) (ES)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/pso.html">Particle Swarm Optimisation (PSO)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/de.html">Differential Evolution (DE)</a></li>
@@ -112,6 +114,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/pesa.html">Prioritized replay Evolutionary and Swarm Algorithm (PESA)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/pesa2.html">Modern PESA (PESA2)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/sa.html">Simulated Annealing (SA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/ssa.html">Salp Swarm Algorithm (SSA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/woa.html">Whale Optimization Algorithm (WOA)</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
 <ul>
@@ -119,12 +123,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../tune/random.html">Random Search</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tune/bayes.html">Bayesian Search</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tune/evolu.html">Evolutionary Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tune/ash.html">Asynchronous Successive Halving</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex1.html">Example 1</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex2.html">Example 2</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex3.html">Example 3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex1.html">Example 1: RL Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex2.html">Example 2: Ackley with EA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex3.html">Example 3: Welded-beam design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex4.html">Example 4: Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex5.html">Example 5: CEC’2017 Test Suite</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Misc</span></p>
 <ul>
@@ -209,29 +216,14 @@
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
 <span class="kn">import</span> <span class="nn">copy</span>
 <span class="kn">import</span> <span class="nn">time</span>
-
-<span class="kn">import</span> <span class="nn">multiprocessing</span>
-<span class="kn">import</span> <span class="nn">multiprocessing.pool</span>
+<span class="kn">import</span> <span class="nn">joblib</span>
 <span class="kn">from</span> <span class="nn">neorl.evolu.crossover</span> <span class="kn">import</span> <span class="n">cxES2point</span><span class="p">,</span> <span class="n">cxESBlend</span>
-
-<span class="k">class</span> <span class="nc">NoDaemonProcess</span><span class="p">(</span><span class="n">multiprocessing</span><span class="o">.</span><span class="n">Process</span><span class="p">):</span>
-    <span class="c1"># make &#39;daemon&#39; attribute always return False</span>
-    <span class="k">def</span> <span class="nf">_get_daemon</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="kc">False</span>
-    <span class="k">def</span> <span class="nf">_set_daemon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="k">pass</span>
-    <span class="n">daemon</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_daemon</span><span class="p">,</span> <span class="n">_set_daemon</span><span class="p">)</span>
-
-<span class="c1"># We sub-class multiprocessing.pool.Pool instead of multiprocessing.Pool</span>
-<span class="c1"># because the latter is only a wrapper function, not a proper class.</span>
-<span class="k">class</span> <span class="nc">MyPool</span><span class="p">(</span><span class="n">multiprocessing</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">Pool</span><span class="p">):</span>
-    <span class="n">Process</span> <span class="o">=</span> <span class="n">NoDaemonProcess</span>
 
 <div class="viewcode-block" id="ES"><a class="viewcode-back" href="../../../modules/es.html#neorl.evolu.es.ES">[docs]</a><span class="k">class</span> <span class="nc">ES</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parallel Evolution Strategies</span>
 <span class="sd">    </span>
-<span class="sd">    :param mode: (str) problem type, either &quot;min&quot; for minimization problem or &quot;max&quot; for maximization</span>
+<span class="sd">    :param mode: (str) problem type, either ``min`` for minimization problem or ``max`` for maximization</span>
 <span class="sd">    :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: ``bounds={&#39;x1&#39;: [&#39;int&#39;, 1, 4], &#39;x2&#39;: [&#39;float&#39;, 0.1, 0.8], &#39;x3&#39;: [&#39;float&#39;, 2.2, 6.2]}``</span>
 <span class="sd">    :param lambda\_: (int) total number of individuals in the population</span>
 <span class="sd">    :param mu: (int): number of individuals to survive to the next generation, mu &lt; lambda\_</span>
@@ -321,7 +313,6 @@
         <span class="c1">#     ... </span>
         <span class="c1">#     99: [[1.1,2.1,3.1,4.1,5.1], [0.1,0.2,0.3,0.4,0.5], 5.2]}</span>
         <span class="c1">#&quot;&quot;&quot;</span>
-        
         <span class="k">if</span> <span class="n">x0</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The first particle provided by the user:&#39;</span><span class="p">,</span> <span class="n">x0</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The last particle provided by the user:&#39;</span><span class="p">,</span> <span class="n">x0</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
@@ -340,10 +331,9 @@
             <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">pop</span><span class="p">:</span>
                 <span class="n">core_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
            
-            <span class="n">p</span><span class="o">=</span><span class="n">MyPool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">)</span>
-            <span class="n">fitness</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gen_object</span><span class="p">,</span> <span class="n">core_list</span><span class="p">)</span>
-            <span class="n">p</span><span class="o">.</span><span class="n">close</span><span class="p">();</span> <span class="n">p</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
-            
+            <span class="k">with</span> <span class="n">joblib</span><span class="o">.</span><span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">)</span> <span class="k">as</span> <span class="n">parallel</span><span class="p">:</span>
+                <span class="n">fitness</span><span class="o">=</span><span class="n">parallel</span><span class="p">(</span><span class="n">joblib</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">)(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">core_list</span><span class="p">)</span>
+                    
             <span class="p">[</span><span class="n">pop</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fitness</span><span class="p">[</span><span class="n">ind</span><span class="p">])</span> <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pop</span><span class="p">))]</span>
         
         <span class="k">else</span><span class="p">:</span> <span class="c1">#evaluate warmup in series</span>
@@ -352,16 +342,6 @@
                 <span class="n">pop</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fitness</span><span class="p">)</span>
         
         <span class="k">return</span> <span class="n">pop</span>  <span class="c1">#return final pop dictionary with ind, strategy, and fitness</span>
-
-    <span class="k">def</span> <span class="nf">gen_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inp</span><span class="p">):</span>
-        <span class="c1">#&quot;&quot;&quot;</span>
-        <span class="c1">#This is a worker for multiprocess Pool</span>
-        <span class="c1">#Inputs:</span>
-        <span class="c1">#    inp (list of lists): contains data for each core [[ind1, caseid1], ...,  [indN, caseidN]]</span>
-        <span class="c1">#Returns:</span>
-        <span class="c1">#    fitness value (float)</span>
-        <span class="c1">#&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">inp</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="c1">#&quot;&quot;&quot;</span>
@@ -531,7 +511,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y_opt</span><span class="o">=-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">best_scores</span><span class="o">=</span><span class="p">[]</span>
-        
+        <span class="bp">self</span><span class="o">.</span><span class="n">best_indvs</span><span class="o">=</span><span class="p">[]</span>
         <span class="k">if</span> <span class="n">x0</span><span class="p">:</span>    
             <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">lambda_</span><span class="p">,</span> <span class="s1">&#39;--error: the length of x0 (</span><span class="si">{}</span><span class="s1">) (initial population) must equal to the size of lambda (</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">lambda_</span><span class="p">)</span>
             <span class="n">population</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">init_pop</span><span class="p">(</span><span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="p">)</span>
@@ -550,11 +530,10 @@
                 <span class="n">core_list</span><span class="o">=</span><span class="p">[]</span>
                 <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">offspring</span><span class="p">:</span>
                     <span class="n">core_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">offspring</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-                <span class="c1">#initialize a pool</span>
-                <span class="n">p</span><span class="o">=</span><span class="n">MyPool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">)</span>
-                <span class="n">fitness</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gen_object</span><span class="p">,</span> <span class="n">core_list</span><span class="p">)</span>
-                <span class="n">p</span><span class="o">.</span><span class="n">close</span><span class="p">();</span> <span class="n">p</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
-                
+
+                <span class="k">with</span> <span class="n">joblib</span><span class="o">.</span><span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">)</span> <span class="k">as</span> <span class="n">parallel</span><span class="p">:</span>
+                    <span class="n">fitness</span><span class="o">=</span><span class="n">parallel</span><span class="p">(</span><span class="n">joblib</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">)(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">core_list</span><span class="p">)</span>
+                    
                 <span class="p">[</span><span class="n">offspring</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fitness</span><span class="p">[</span><span class="n">ind</span><span class="p">])</span> <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">offspring</span><span class="p">))]</span>
                 
             <span class="k">else</span><span class="p">:</span> <span class="c1">#serial calcs</span>
@@ -569,6 +548,7 @@
             <span class="n">inds</span><span class="p">,</span> <span class="n">rwd</span><span class="o">=</span><span class="p">[</span><span class="n">population</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">population</span><span class="p">],</span> <span class="p">[</span><span class="n">population</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">population</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">best_scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">rwd</span><span class="p">))</span>
             <span class="n">arg_max</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">rwd</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">best_indvs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inds</span><span class="p">[</span><span class="n">arg_max</span><span class="p">])</span>
             <span class="k">if</span> <span class="n">rwd</span><span class="p">[</span><span class="n">arg_max</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_opt</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">y_opt</span><span class="o">=</span><span class="n">rwd</span><span class="p">[</span><span class="n">arg_max</span><span class="p">]</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">x_opt</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">inds</span><span class="p">[</span><span class="n">arg_max</span><span class="p">])</span>

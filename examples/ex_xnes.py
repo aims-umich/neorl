@@ -18,5 +18,5 @@ for i in range(1,nx+1):
     BOUNDS['x'+str(i)]=['float', -100, 100]
 
 xnes=XNES(mode='min', bounds=BOUNDS, fit=FIT, npop=50, eta_mu=0.9, 
-          eta_sigma=0.25, adapt_sampling=True)
+          eta_sigma=0.25, adapt_sampling=True, ncores=1, seed=1)
 x_best, y_best, xnes_hist=xnes.evolute(ngen=100, x0=[25,25,25,25,25], verbose=1)

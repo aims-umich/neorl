@@ -3,7 +3,6 @@ pandas
 tensorflow==1.14.0
 numpy
 gym
-scikit-optimize
 cloudpickle
 scipy
 joblib

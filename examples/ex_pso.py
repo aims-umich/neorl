@@ -19,5 +19,5 @@ for i in range(1,nx+1):
 
 #setup and evolute PSO
 pso=PSO(mode='min', bounds=BOUNDS, fit=FIT, c1=2.05, c2=2.1, npar=50,
-                speed_mech='constric', ncores=4, seed=1)
+                speed_mech='constric', ncores=1, seed=1)
 x_best, y_best, pso_hist=pso.evolute(ngen=100, verbose=1)

@@ -39,6 +39,8 @@ Parameters
 Example
 -------
 
+Train an ACER agent to optimize the 5-D discrete sphere function
+
 .. code-block:: python
 
 	import gym
@@ -116,6 +118,6 @@ Example
 Acknowledgment
 -----------------
 
-Thanks to our fellows in `stable-baselines <https://github.com/hill-a/stable-baselines>`_, as we used their standalone RL implementation, which will be utilized later as a baseline to leverage advanced neuroevolution algorithms. 
+Thanks to our fellows in `stable-baselines <https://github.com/hill-a/stable-baselines>`_, as we used their standalone RL implementation, which is utilized as a baseline to leverage advanced neuroevolution algorithms. 
 
 Hill, Ashley, et al. "Stable baselines." (2018).

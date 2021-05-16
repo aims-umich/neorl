@@ -1,7 +1,7 @@
 .. _ex5:
 
-Example 5
-===========
+Example 5: CEC'2017 Test Suite
+===============================
 
 Example of solving the first 10 benchmark functions in CEC'2017 test suite with dimensionality ``d=2`` using Differential Evolution.  
 

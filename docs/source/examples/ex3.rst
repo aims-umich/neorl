@@ -1,7 +1,7 @@
 .. _ex3:
 
-Example 3
-===========
+Example 3: Welded-beam design
+===============================
 
 Example of solving the heavily-constrained engineering optimization problem "Welded-beam design" using NEORL with the ES algorithm tuned with Bayesian search.
 

@@ -17,8 +17,8 @@ class Sphere(gym.Env):
         lb=np.array([-5.12,-5.12,-5.12,-5.12,-5.12])
         ub=np.array([5.12,5.12,5.12,5.12,5.12])
         self.nx=len(lb)
-        self.action_space = Box(low=lb, high=ub, dtype=np.float32)
-        self.observation_space = Box(low=lb, high=ub, dtype=np.float32)
+        self.action_space = Box(low=lb, high=ub, dtype=float)
+        self.observation_space = Box(low=lb, high=ub, dtype=float)
         self.episode_length=5
         self.reset()
         self.done=False

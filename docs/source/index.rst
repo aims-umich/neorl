@@ -5,7 +5,11 @@
 
 Welcome to NEORL Website!
 =================================
---This project is currently in Beta Testing, please contact Majdi I. Radaideh on radaideh@mit.edu for any bugs or issues 
+
+*This project is still under beta testing*
+
+**Primary contact to report bugs/issues**: Majdi I. Radaideh (radaideh@mit.edu)
+
 ------------------------------------------------------------------------------------------------------------------------------
 
 .. image:: images/logo.png
@@ -50,6 +54,8 @@ User Guide
   modules/a2c
   modules/dqn
   modules/ppo2
+  modules/acer
+  modules/acktr
   modules/es
   modules/pso
   modules/de
@@ -58,6 +64,8 @@ User Guide
   modules/pesa
   modules/pesa2
   modules/sa
+  modules/ssa
+  modules/woa
 
 .. toctree::
   :maxdepth: 1
@@ -67,6 +75,7 @@ User Guide
   tune/random
   tune/bayes
   tune/evolu
+  tune/ash
   
 .. toctree::
   :maxdepth: 1

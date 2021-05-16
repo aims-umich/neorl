@@ -51,11 +51,16 @@ class BAYESTUNE:
         #This function parses the param_grid variable from the user and sets up the 
         #parameter space for Bayesian search
         
-        self.param_lst=[self.param_grid[item][0] for item in self.param_grid]
-        self.param_types=[self.param_grid[item][1] for item in self.param_grid]
+        self.param_types=[self.param_grid[item][0] for item in self.param_grid]
+        self.param_lst=[]
+        for i, item in enumerate(self.param_grid):
+            if self.param_types[i] in ['grid', 'categorical']:
+                self.param_lst.append(self.param_grid[item][1])
+            else:
+                self.param_lst.append(self.param_grid[item][1:])
+        
         self.param_names=[item for item in self.param_grid]
         self.dimensions=[]
-        
         self.func_args=self.get_func_args(self.fit)
         
         for types, vals, names in zip(self.param_types, self.param_lst, self.param_names):
@@ -112,7 +117,7 @@ class BAYESTUNE:
             plt.savefig(str(pngname)+'.png', dpi=200, format='png')
         plt.show()
         
-    def tune(self, nthreads=1, csvname=None, verbose=True):
+    def tune(self, ncores=1, csvname=None, verbose=True):
         """
         This function starts the tuning process with specified number of processors
     
@@ -120,7 +125,7 @@ class BAYESTUNE:
         :param csvname: (str) the name of the csv file name to save the tuning results (useful for expensive cases as the csv file is updated directly after the case is done)
         :param verbose: (bool) whether to print updates to the screen or not
         """
-        self.ncores=nthreads
+        self.ncores=ncores
         self.csvlogger=csvname
         self.verbose=verbose
 

@@ -8,62 +8,34 @@
 import random
 import numpy as np
 import copy
-import time
-import multiprocessing
-import multiprocessing.pool
-class NoDaemonProcess(multiprocessing.Process):
-    # make 'daemon' attribute always return False
-    def _get_daemon(self):
-        return False
-    def _set_daemon(self, value):
-        pass
-    daemon = property(_get_daemon, _set_daemon)
-
-# We sub-class multiprocessing.pool.Pool instead of multiprocessing.Pool
-# because the latter is only a wrapper function, not a proper class.
-class MyPool(multiprocessing.pool.Pool):
-    Process = NoDaemonProcess
+import joblib
 
 class SA:
     """
     Parallel Simulated Annealing
     
-    :param mode: (str) problem type, either "min" for minimization problem or "max" for maximization
+    :param mode: (str) problem type, either ``min`` for minimization problem or ``max`` for maximization
     :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: ``bounds={'x1': ['int', 1, 4], 'x2': ['float', 0.1, 0.8], 'x3': ['float', 2.2, 6.2]}``
     :param fit: (function) the fitness function 
     :param cooling: (str) cooling schedule, choose ``fast``, ``boltzmann``, ``cauchy``
+    :param chain_size: (int) number of individuals to evaluate in the chain every generation (e.g. like ``npop`` for other algorithms)
     :param Tmax: (int) initial/maximum temperature
     :param Tmin: (int) final/minimum temperature
-    :param move_func: (function) self-defined function that controls how to perturb the input space during annealing (See **Notes** below)
-    :param chi: (float or list of floats) probability of perturbing every attribute of the input ``x``, only used if ``move_func=None``. 
+    :param move_func: (function) custom self-defined function that controls how to perturb the input space during annealing (See **Notes** below)
+    :param reinforce_best: (bool) an option to start the chain every generation with the best individual from previous generation (See **Notes** below)
+    :param chi: (float or list of floats) probability of perturbing every attribute of the input ``x``, ONLY used if ``move_func=None``. 
                 For ``ncores > 1``, if a scalar is provided, constant value is used across all ``ncores``. If a list of size ``ncores``
                 is provided, each core/chain uses different value of ``chi`` (See **Notes** below)
     :param ncores: (int) number of parallel processors
     :param seed: (int) random seed for sampling
     """
-    def __init__ (self, mode, bounds, fit, chi=0.1, Tmax=10000, Tmin=1, 
-                  cooling='fast', move_func=None, ncores=1, seed=None):  
-        """
-        Parallel SA:
-        A Synchronous Approach with Occasional Enforcement of Best Solution-Fixed Intervals
-        Inputs:
-            bounds (dict): input paramter lower/upper bounds in dictionary form
-            fit (function): fitness function 
-            ncores (int): parallel cores
-            chi (float/list): a float or list of floats representing perturbation probablity for each parallel chain 
-                 if float, one chi used for all chains 
-                 else a list of chi's with size ``ncores`` are used for each chain
-            cooling (str): cooling schedule, either fast, boltzmann, or cauchy are allowed
-            Tmax (int): maximum temperature
-            Tmin (int): minimum temperature
-            seed (int): random seeding for reproducibility
-        """
-        
-        
+    def __init__ (self, mode, bounds, fit, chain_size=10, chi=0.1, Tmax=10000, Tmin=1, 
+                  cooling='fast', move_func=None, reinforce_best=False, ncores=1, seed=None):  
+
         if seed:
             random.seed(seed)
             np.random.seed(seed)
-            
+        
         self.seed=seed
         #--mir
         self.mode=mode
@@ -77,7 +49,9 @@ class SA:
             raise ValueError('--error: The mode entered by user is invalid, use either `min` or `max`')
             
         self.bounds=bounds
+        self.reinforce_best=reinforce_best
         self.ncores=ncores
+        self.npop=chain_size
         #assert npop % self.ncores == 0, 'The number of population (npop) to run must be divisible by ncores, {} mod {} != 0'.format(npop,self.ncores)
         self.Tmax=Tmax
         self.Tmin=Tmin
@@ -89,9 +63,14 @@ class SA:
         else:
             raise Exception ('for chi, either list of floats or scalar float are allowed')
             
-        self.cooling=cooling      
+        self.cooling=cooling 
         self.T=Tmax #initialize T
-        
+        self.move_func=move_func
+        if self.move_func is None:
+            self.move=self.def_move
+        else:
+            self.move=move_func
+            
     def GenInd(self, bounds):
         #"""
         #Individual generator
@@ -129,7 +108,7 @@ class SA:
                 
         return sample
     
-    def move(self, x, chi):
+    def def_move(self, x, chi):
         #"""
         #This function is to perturb x attributes by probability chi
         #Inputs:
@@ -148,7 +127,9 @@ class SA:
         return x
         
     def temp(self,step):
-        
+        #"""
+        # Function to anneal temperature
+        #"""
         
         if self.cooling=='fast':
             Tfac = -np.log(float(self.Tmax) / self.Tmin)
@@ -178,7 +159,6 @@ class SA:
         #    T: last temperature for this chain
         #    accepts, rejects, improves for this chain
         #"""
-        
         x_prev=copy.deepcopy(inp[0])
         x_best=copy.deepcopy(x_prev)
         E_prev=inp[1]
@@ -193,7 +173,10 @@ class SA:
         k=min_step
         while k <= max_step:
             T=self.temp(step=k)
-            x=copy.deepcopy(self.move(x=x_prev,chi=self.chi[core_seed-1]))
+            if self.move_func is None:
+                x=copy.deepcopy(self.move(x=x_prev,chi=self.chi[core_seed-1]))
+            else:
+                x=copy.deepcopy(self.move(x=x_prev))
             #SA is programmed to maximize reward
             E=self.fit(x)
             
@@ -221,7 +204,7 @@ class SA:
         
         return x_prev, E_prev, T, accepts, rejects, improves, x_best, E_best
         
-    def chain(self, x0, E0, step0, npop):
+    def chain(self, x0, E0, step0):
         #"""
         #This function creates ``ncores`` independent SA chains with same initial guess x0, E0 and 
         #runs them via multiprocessing Pool.
@@ -233,38 +216,32 @@ class SA:
         #returns: 
         #    x_best, E_best, and T obtained from this annealing stage from all chains
         #"""
-        core_npop =int(npop/self.ncores)
         
         #Append and prepare the input list to be passed as input to Pool.map
         core_list=[]
         core_step_min=step0
         for j in range(1,self.ncores+1):
-            core_step_max=step0+j*core_npop-1
+            core_step_max=step0+j*self.npop-1
             core_list.append([x0[j-1], E0[j-1], core_step_min, core_step_max, j])
             core_step_min=core_step_max+1
         
+        
         if self.ncores > 1:
-            # create and run the Pool
-            t0=time.time()
-            p=MyPool(self.ncores)
-            results = p.map(self.chain_object, core_list)
-            p.close()
-            p.join()
-            self.partime=time.time()-t0
-            #print('SA:', self.partime)
+
+            with joblib.Parallel(n_jobs=self.ncores) as parallel:
+                results=parallel(joblib.delayed(self.chain_object)(item) for item in core_list)
         else:
             results=[]
             results.append(list(self.chain_object(core_list[0])))
-            self.partime=0
                 
         # Determine the index and the best solution from all chains
         #best_index=[y[0] for y in results].index(min([y[0] for y in results]))
         self.x_last=[item[0] for item in results]
         self.E_last=[item[1] for item in results]
         self.T=results[-1][2] # get the temperature of the last chain
-        self.accepts=[np.round(item[3]/core_npop*100,1) for item in results] #convert to rate
-        self.rejects=[np.round(item[4]/core_npop*100,1) for item in results] #convert to rate
-        self.improves=[np.round(item[5]/core_npop*100,1) for item in results] #convert to rate
+        self.accepts=[np.round(item[3]/self.npop*100,1) for item in results] #convert to rate
+        self.rejects=[np.round(item[4]/self.npop*100,1) for item in results] #convert to rate
+        self.improves=[np.round(item[5]/self.npop*100,1) for item in results] #convert to rate
         
         self.x_best, self.E_best=[item[6] for item in results], [item[7] for item in results]
         
@@ -273,25 +250,23 @@ class SA:
     def InitChains(self, x0=None):
         
         #initialize the chain and run them in parallel (these samples will be used to initialize the annealing process)
-        
         #Establish the chain
         if x0:
-            print('The first individual provided by the user:', x0[0])
-            print('The last individual provided by the user:', x0[-1])
+            print('The first SA x0 individual provided by the user:', x0[0])
+            print('The last SA x0 individual provided by the user:', x0[-1])
         else:
             x0=[]
             for i in range (self.ncores):
                 x0.append(self.GenInd(self.bounds))
         
         #Evaluate the swarm
-        if self.ncores > 1:  #evaluate swarm in parallel
+        if self.ncores > 1:  #evaluate chain in parallel
             core_list=[]
             for ind in x0:
                 core_list.append(ind)
            
-            p=MyPool(self.ncores)
-            E0 = p.map(self.fit, core_list)
-            p.close(); p.join()
+            with joblib.Parallel(n_jobs=self.ncores) as parallel:
+                E0=parallel(joblib.delayed(self.fit)(item) for item in core_list)
             
         else: #evaluate swarm in series
             E0=[]
@@ -309,7 +284,7 @@ class SA:
         :param x0: (list of lists) initial samples to start the evolution (``len(x0)`` must be equal to ``ncores``)
         :param verbose: (int) print statistics to screen
         
-        :return: (dict) dictionary containing major PESA search results
+        :return: (dict) dictionary containing major SA search results
         """
         #chain statistics
         #self.accept=0
@@ -329,7 +304,8 @@ class SA:
             else:
                 x0=[x0]
                 
-            assert len(x0) == self.ncores, 'Length of initial guesses x0 ({}) for chains do not equal to ncores or # of chains ({})'.format(len(x0), self.ncores)
+            assert len(x0) == self.ncores, '--error: Length of initial guesses x0 ({}) for chains do not equal to ncores or # of chains ({})'.format(len(x0), self.ncores)
+            assert len(x0[0]) == len(self.bounds), '--error: Length of every list in x0 ({}) do not equal to the size of parameter space in bounds ({})'.format(len(x0[0]), len(self.bounds))
             xinit, Einit=self.InitChains(x0=x0)
         else:
             xinit, Einit=self.InitChains()
@@ -337,37 +313,49 @@ class SA:
         x_next=copy.deepcopy(xinit)
         E_next=copy.deepcopy(Einit)
         
+        ngen=int(ngen/self.ncores)
         for i in range (ngen):
-            x_next,E_next,self.T, acc, rej, imp, x_best, E_best=self.chain(x0=x_next, E0=E_next, step0=step0, npop=self.npop)
-            step0=step0+self.npop
+            x_next,E_next,self.T, acc, rej, imp, x_best, E_best=self.chain(x0=x_next, E0=E_next, step0=step0)
+            step0=step0+self.npop*self.ncores
             arg_max=np.argmax(E_best)
             stat['x'].append(x_best[arg_max])
-            stat['fitness'].append(E_best[arg_max])
+            if self.mode=='max':
+                stat['fitness'].append(E_best[arg_max])
+            else:
+                stat['fitness'].append(-E_best[arg_max])
             stat['T'].append(self.T)
             stat['accept'].append(acc[arg_max])
             stat['reject'].append(rej[arg_max])
             stat['improve'].append(imp[arg_max])
             
             if E_best[arg_max] > E_opt:
-                E_opt=E_best[arg_max]
+                E_opt=E_best[arg_max] if self.mode=='max' else -E_best[arg_max]
                 x_opt=copy.deepcopy(x_best[arg_max])
+            
+            if self.reinforce_best:
+                x_next=[x_opt]*self.ncores
+                E_next=[E_opt]*self.ncores
             
             if verbose:
                 print('************************************************************')
                 print('SA step {}/{}, T={}'.format(step0-1,self.steps,np.round(self.T)))
                 print('************************************************************')
                 print('Statistics for the {} parallel chains'.format(self.ncores))
-                print('Best fitness:', np.round(E_best,6))
+                if self.mode=='max': 
+                    print('Best fitness:', np.round(E_best,6))
+                else: 
+                    print('Best fitness:', -np.round(E_best,6))
                 print('Best individual:', x_best[arg_max])
                 print('Acceptance Rate (%):', acc)
                 print('Rejection Rate (%):', rej)
                 print('Improvment Rate (%):', imp)
                 print('************************************************************')
-        
-        print('------------------------ SA Summary --------------------------')
-        print('Best fitness (y) found:', E_opt)
-        print('Best individual (x) found:', x_opt)
-        print('--------------------------------------------------------------')
+                
+        if verbose:
+            print('------------------------ SA Summary --------------------------')
+            print('Best fitness (y) found:', E_opt)
+            print('Best individual (x) found:', x_opt)
+            print('--------------------------------------------------------------')
             
         return x_opt, E_opt, stat
 

@@ -31,7 +31,7 @@ Parameters
 Example
 -------
 
-Train an A2C agent on to optimize the 5-D sphere function
+Train an A2C agent to optimize the 5-D sphere function
 
 .. code-block:: python
 
@@ -54,8 +54,8 @@ Train an A2C agent on to optimize the 5-D sphere function
 	        lb=np.array([-5.12,-5.12,-5.12,-5.12,-5.12])
 	        ub=np.array([5.12,5.12,5.12,5.12,5.12])
 	        self.nx=len(lb)
-	        self.action_space = Box(low=lb, high=ub, dtype=np.float32)
-	        self.observation_space = Box(low=lb, high=ub, dtype=np.float32)
+	        self.action_space = Box(low=lb, high=ub, dtype=float)
+	        self.observation_space = Box(low=lb, high=ub, dtype=float)
 	        self.episode_length=5
 	        self.reset()
 	        self.done=False
@@ -106,7 +106,7 @@ Train an A2C agent on to optimize the 5-D sphere function
 Acknowledgment
 -----------------
 
-Thanks to our fellows in `stable-baselines <https://github.com/hill-a/stable-baselines>`_, as we used their standalone RL implementation, which will be utilized later as a baseline to leverage advanced neuroevolution algorithms. 
+Thanks to our fellows in `stable-baselines <https://github.com/hill-a/stable-baselines>`_, as we used their standalone RL implementation, which is utilized as a baseline to leverage advanced neuroevolution algorithms. 
 
 Hill, Ashley, et al. "Stable baselines." (2018).
 

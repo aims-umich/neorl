@@ -1,7 +1,7 @@
 .. _ex1:
 
-Example 1
-============
+Example 1: RL Optimization
+===========================
 
 Example of solving a combinatorial optimisation problem using NEORL in a small nuclear fuel assembly with reinforcement learning.
 

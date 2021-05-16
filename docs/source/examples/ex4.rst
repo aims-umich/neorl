@@ -1,7 +1,7 @@
 .. _ex4:
 
-Example 4
-===========
+Example 4: Benchmarks
+======================
 
 Example of accessing and plotting the built-in benchmark functions in NEORL. 
 

@@ -27,12 +27,15 @@ from neorl.rl.baselines.a2c import A2C
 from neorl.rl.baselines.acer import ACER
 from neorl.rl.baselines.deepq import DQN
 from neorl.rl.baselines.ppo2 import PPO2
+from neorl.rl.baselines.acktr import ACKTR
 from neorl.evolu.pso import PSO
 from neorl.evolu.sa import SA
 from neorl.evolu.de import DE
 from neorl.evolu.xnes import XNES
 from neorl.evolu.es import ES
 from neorl.evolu.gwo import GWO
+from neorl.evolu.ssa import SSA
+from neorl.evolu.woa import WOA
 from neorl.hybrid.pesa import PESA
 from neorl.hybrid.pesa2 import PESA2
 from neorl.rl.baselines.shared.policies import MlpPolicy

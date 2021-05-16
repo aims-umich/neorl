@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Wed Mar  4 11:51:22 2020
-
-@author: majdi
-"""
+#"""
+#Created on Wed Mar  4 11:51:22 2020
+#
+#@author: majdi
+#"""
 
 import numpy as np
 import pandas as pd
@@ -30,9 +30,10 @@ try:
 except ImportError:
     from collections import Sequence
 
-class GATUNE:
+class ASHTUNE:
     
     """
+	https://parameter-sherpa.readthedocs.io/en/latest/_modules/sherpa/algorithms/successive_halving.html#SuccessiveHalving
     A class to parse neorl input template and construct cases for genetic algorathim (GA) hyperparameter optimisation
 
     inputs: 

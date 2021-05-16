@@ -73,16 +73,17 @@ Example
 	#see tune_fit
 	param_grid={
 	#def tune_fit(cxpb, mu, alpha, cxmode):
-	'cxpb': [[0.1, 0.9],'float'],             #cxpb is first (low=0.1, high=0.8, type=float/continuous)
-	'mu':   [[30, 60],'int'],                 #mu is second (low=30, high=60, type=int/discrete)
-	'alpha':[[0.1, 0.2, 0.3, 0.4],'grid'],    #alpha is third (grid with fixed values, type=grid/categorical)
-	'cxmode':[['blend', 'cx2point'],'grid']}  #cxmode is fourth (grid with fixed values, type=grid/categorical)
+	'cxpb': ['float', 0.1, 0.9],             #cxpb is first (low=0.1, high=0.8, type=float/continuous)
+	'mu':   ['int', 30, 60],                 #mu is second (low=30, high=60, type=int/discrete)
+	'alpha':['grid', [0.1, 0.2, 0.3, 0.4]],    #alpha is third (grid with fixed values, type=grid/categorical)
+	'cxmode':['grid', ['blend', 'cx2point']]}  #cxmode is fourth (grid with fixed values, type=grid/categorical)
 	
 	#setup a bayesian tune object
-	btune=BAYESTUNE(param_grid=param_grid, fit=tune_fit, ncases=15)
+	btune=BAYESTUNE(mode='min', param_grid=param_grid, fit=tune_fit, ncases=30)
 	#tune the parameters with method .tune
-	bayesres=btune.tune(nthreads=1, csvname='bayestune.csv', verbose=True)
+	bayesres=btune.tune(ncores=1, csvname='bayestune.csv', verbose=True)
 	print(bayesres)
+	btune.plot_results(pngname='bayes_conv')
 
 Notes
 -----

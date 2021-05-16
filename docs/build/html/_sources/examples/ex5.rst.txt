@@ -1,7 +1,7 @@
 .. _ex5:
 
-Example 5
-===========
+Example 5: CEC'2017 Test Suite
+===============================
 
 Example of solving the first 10 benchmark functions in CEC'2017 test suite with dimensionality ``d=2`` using Differential Evolution.  
 
@@ -19,7 +19,7 @@ The following notes are appliable to all test functions in CEC'2017
 
 - All test functions in CEC'2017 are shifted by the vector :math:`\vec{o}`.
 - Search range for all functions is :math:`[-100,100]^d`.
-- :math:`\mathbf{M}_i`: rotation matrix. Different rotation matrices are assigned to each function in the test suite.
+- :math:`\mathbf{M}_i` is the rotation matrix. Different rotation matrices are assigned to each function in the test suite.
 - The shifted and rotated function is defined as :math:`F_i = f_i(\mathbf{M}(\vec{x}-\vec{o})) + F_i^*`
 
 Where :math:`f(.)` is the base function obtained from the classical functions group (e.g. Zakharov, Cigar, Rosenbrock). The list of the functions in CEC'2017 is shown below based on the reference indicated at the table bottom. 
@@ -60,7 +60,7 @@ NEORL script
 Results
 --------------------
 
-After running the script above, the output looks like below, which shows that DE was able to converge to optimal value for all functions, of course, because the problem is simple with ``d=2`` dimensions.  
+After running the script above, the output looks like below, which shows that DE was able to converge to the optimal value for all functions, of course, because the problem is simple with ``d=2`` dimensions.  
 
 .. code-block:: python
 

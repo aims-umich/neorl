@@ -10,29 +10,14 @@ import numpy as np
 from collections import defaultdict
 import copy
 import time
-
-import multiprocessing
-import multiprocessing.pool
+import joblib
 from neorl.evolu.crossover import cxES2point, cxESBlend
-
-class NoDaemonProcess(multiprocessing.Process):
-    # make 'daemon' attribute always return False
-    def _get_daemon(self):
-        return False
-    def _set_daemon(self, value):
-        pass
-    daemon = property(_get_daemon, _set_daemon)
-
-# We sub-class multiprocessing.pool.Pool instead of multiprocessing.Pool
-# because the latter is only a wrapper function, not a proper class.
-class MyPool(multiprocessing.pool.Pool):
-    Process = NoDaemonProcess
 
 class ES:
     """
     Parallel Evolution Strategies
     
-    :param mode: (str) problem type, either "min" for minimization problem or "max" for maximization
+    :param mode: (str) problem type, either ``min`` for minimization problem or ``max`` for maximization
     :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: ``bounds={'x1': ['int', 1, 4], 'x2': ['float', 0.1, 0.8], 'x3': ['float', 2.2, 6.2]}``
     :param lambda\_: (int) total number of individuals in the population
     :param mu: (int): number of individuals to survive to the next generation, mu < lambda\_
@@ -122,7 +107,6 @@ class ES:
         #     ... 
         #     99: [[1.1,2.1,3.1,4.1,5.1], [0.1,0.2,0.3,0.4,0.5], 5.2]}
         #"""
-        
         if x0:
             print('The first particle provided by the user:', x0[0])
             print('The last particle provided by the user:', x0[-1])
@@ -141,10 +125,9 @@ class ES:
             for key in pop:
                 core_list.append(pop[key][0])
            
-            p=MyPool(self.ncores)
-            fitness = p.map(self.gen_object, core_list)
-            p.close(); p.join()
-            
+            with joblib.Parallel(n_jobs=self.ncores) as parallel:
+                fitness=parallel(joblib.delayed(self.fit)(item) for item in core_list)
+                    
             [pop[ind].append(fitness[ind]) for ind in range(len(pop))]
         
         else: #evaluate warmup in series
@@ -153,16 +136,6 @@ class ES:
                 pop[key].append(fitness)
         
         return pop  #return final pop dictionary with ind, strategy, and fitness
-
-    def gen_object(self, inp):
-        #"""
-        #This is a worker for multiprocess Pool
-        #Inputs:
-        #    inp (list of lists): contains data for each core [[ind1, caseid1], ...,  [indN, caseidN]]
-        #Returns:
-        #    fitness value (float)
-        #"""
-        return self.fit(inp)
 
     def select(self, pop, k=1):
         #"""
@@ -332,7 +305,7 @@ class ES:
         """
         self.y_opt=-np.inf
         self.best_scores=[]
-        
+        self.best_indvs=[]
         if x0:    
             assert len(x0) == self.lambda_, '--error: the length of x0 ({}) (initial population) must equal to the size of lambda ({})'.format(len(x0), self.lambda_)
             population=self.init_pop(x0=x0)
@@ -351,11 +324,10 @@ class ES:
                 core_list=[]
                 for key in offspring:
                     core_list.append(offspring[key][0])
-                #initialize a pool
-                p=MyPool(self.ncores)
-                fitness = p.map(self.gen_object, core_list)
-                p.close(); p.join()
-                
+
+                with joblib.Parallel(n_jobs=self.ncores) as parallel:
+                    fitness=parallel(joblib.delayed(self.fit)(item) for item in core_list)
+                    
                 [offspring[ind].append(fitness[ind]) for ind in range(len(offspring))]
                 
             else: #serial calcs
@@ -370,6 +342,7 @@ class ES:
             inds, rwd=[population[i][0] for i in population], [population[i][2] for i in population]
             self.best_scores.append(np.max(rwd))
             arg_max=np.argmax(rwd)
+            self.best_indvs.append(inds[arg_max])
             if rwd[arg_max] > self.y_opt:
                 self.y_opt=rwd[arg_max]
                 self.x_opt=copy.deepcopy(inds[arg_max])
