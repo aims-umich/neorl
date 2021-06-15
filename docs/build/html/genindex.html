@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Index &mdash; NEORL 1.3.6b documentation</title>
+  <title>Index &mdash; NEORL 1.4.1b documentation</title>
   
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                main (1.3.6b )
+                main (1.4.1b )
               </div>
             
           
@@ -116,6 +116,8 @@
 <li class="toctree-l1"><a class="reference internal" href="modules/sa.html">Simulated Annealing (SA)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/ssa.html">Salp Swarm Algorithm (SSA)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/woa.html">Whale Optimization Algorithm (WOA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/mfo.html">Moth-flame Optimization (MFO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/jaya.html">JAYA Algorithm</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
 <ul>
@@ -212,6 +214,7 @@
  | <a href="#D"><strong>D</strong></a>
  | <a href="#E"><strong>E</strong></a>
  | <a href="#G"><strong>G</strong></a>
+ | <a href="#J"><strong>J</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
@@ -271,6 +274,10 @@
 </li>
         <li><a href="modules/gwo.html#neorl.evolu.gwo.GWO.evolute">(neorl.evolu.gwo.GWO method)</a>
 </li>
+        <li><a href="modules/jaya.html#neorl.evolu.jaya.JAYA.evolute">(neorl.evolu.jaya.JAYA method)</a>
+</li>
+        <li><a href="modules/mfo.html#neorl.evolu.mfo.MFO.evolute">(neorl.evolu.mfo.MFO method)</a>
+</li>
         <li><a href="modules/pso.html#neorl.evolu.pso.PSO.evolute">(neorl.evolu.pso.PSO method)</a>
 </li>
         <li><a href="modules/sa.html#neorl.evolu.sa.SA.evolute">(neorl.evolu.sa.SA method)</a>
@@ -297,6 +304,14 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/gwo.html#neorl.evolu.gwo.GWO">GWO (class in neorl.evolu.gwo)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="J">J</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="modules/jaya.html#neorl.evolu.jaya.JAYA">JAYA (class in neorl.evolu.jaya)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -336,6 +351,8 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="modules/mfo.html#neorl.evolu.mfo.MFO">MFO (class in neorl.evolu.mfo)</a>
+</li>
       <li>
     module
 
@@ -345,6 +362,10 @@
         <li><a href="modules/es.html#module-neorl.evolu.es">neorl.evolu.es</a>
 </li>
         <li><a href="modules/gwo.html#module-neorl.evolu.gwo">neorl.evolu.gwo</a>
+</li>
+        <li><a href="modules/jaya.html#module-neorl.evolu.jaya">neorl.evolu.jaya</a>
+</li>
+        <li><a href="modules/mfo.html#module-neorl.evolu.mfo">neorl.evolu.mfo</a>
 </li>
         <li><a href="modules/pso.html#module-neorl.evolu.pso">neorl.evolu.pso</a>
 </li>
@@ -409,6 +430,20 @@
 </li>
       </ul></li>
       <li>
+    neorl.evolu.jaya
+
+      <ul>
+        <li><a href="modules/jaya.html#module-neorl.evolu.jaya">module</a>
+</li>
+      </ul></li>
+      <li>
+    neorl.evolu.mfo
+
+      <ul>
+        <li><a href="modules/mfo.html#module-neorl.evolu.mfo">module</a>
+</li>
+      </ul></li>
+      <li>
     neorl.evolu.pso
 
       <ul>
@@ -450,6 +485,8 @@
         <li><a href="modules/pesa.html#module-neorl.hybrid.pesa">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     neorl.hybrid.pesa2
 
@@ -457,8 +494,6 @@
         <li><a href="modules/pesa2.html#module-neorl.hybrid.pesa2">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     neorl.rl.baselines.a2c
 

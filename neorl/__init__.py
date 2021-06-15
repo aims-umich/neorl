@@ -36,6 +36,8 @@ from neorl.evolu.es import ES
 from neorl.evolu.gwo import GWO
 from neorl.evolu.ssa import SSA
 from neorl.evolu.woa import WOA
+from neorl.evolu.jaya import JAYA
+from neorl.evolu.mfo import MFO
 from neorl.hybrid.pesa import PESA
 from neorl.hybrid.pesa2 import PESA2
 from neorl.rl.baselines.shared.policies import MlpPolicy

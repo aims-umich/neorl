@@ -181,7 +181,7 @@ setup(
     install_requires=['tensorflow==1.14.0',
                       'numpy== 1.16.2',
                       'gym >= 0.15.4, < 0.17.0',
-					  'scikit-optimize==0.8.1',
+                      'scikit-optimize==0.8.1',
                       'cloudpickle >= 1.2.2',
                       'scipy',
                       'joblib',

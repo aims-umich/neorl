@@ -12,6 +12,12 @@ Coming next
 - Adding a class for easy-to-use environment construction for RL optimization.
 - And more ...
 
+Release 1.4.1b (2021-06-15)
+------------------------------------
+
+- Added a module for JAYA.
+- Added a module for MFO.
+
 Release 1.4.0b (2021-05-15)
 ------------------------------------
 

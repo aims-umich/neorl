@@ -12,18 +12,7 @@ import copy
 import time
 import multiprocessing
 import multiprocessing.pool
-class NoDaemonProcess(multiprocessing.Process):
-    # make 'daemon' attribute always return False
-    def _get_daemon(self):
-        return False
-    def _set_daemon(self, value):
-        pass
-    daemon = property(_get_daemon, _set_daemon)
-
-# We sub-class multiprocessing.pool.Pool instead of multiprocessing.Pool
-# because the latter is only a wrapper function, not a proper class.
-class MyPool(multiprocessing.pool.Pool):
-    Process = NoDaemonProcess
+import joblib
 
 class PSOMod:
     def __init__ (self, bounds, fit, npar, swm0=None, ncores=1, c1=2.05, c2=2.05, speed_mech='constric'):  
@@ -308,9 +297,12 @@ class PSOMod:
                     core_list.append([offspring[key][0],caseids[case_idx]])
                     case_idx+=1
                 #initialize a pool
-                p=MyPool(self.ncores)
-                fitness = p.map(self.gen_object, core_list)
-                p.close(); p.join()
+                #p=MyPool(self.ncores)
+                #fitness = p.map(self.gen_object, core_list)
+                #p.close(); p.join()
+
+                with joblib.Parallel(n_jobs=self.ncores) as parallel:
+                    fitness=parallel(joblib.delayed(self.gen_object)(item) for item in core_list)
                 
                 self.partime=time.time()-t0
                 #print('PSO:', self.partime)

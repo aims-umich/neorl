@@ -66,6 +66,8 @@ User Guide
   modules/sa
   modules/ssa
   modules/woa
+  modules/mfo
+  modules/jaya
 
 .. toctree::
   :maxdepth: 1
