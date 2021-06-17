@@ -25,6 +25,8 @@ neorl/evolu/de.py
 neorl/evolu/es.py
 neorl/evolu/ga.py
 neorl/evolu/gwo.py
+neorl/evolu/jaya.py
+neorl/evolu/mfo.py
 neorl/evolu/mutation.py
 neorl/evolu/pso.py
 neorl/evolu/sa.py
@@ -143,6 +145,8 @@ neorl/tests/test_evolutune.py
 neorl/tests/test_globalmin.py
 neorl/tests/test_grid.py
 neorl/tests/test_gwo.py
+neorl/tests/test_jaya.py
+neorl/tests/test_mfo.py
 neorl/tests/test_pesa.py
 neorl/tests/test_ppo2.py
 neorl/tests/test_pso.py
@@ -151,8 +155,10 @@ neorl/tests/test_sa.py
 neorl/tests/test_ssa.py
 neorl/tests/test_woa.py
 neorl/tune/__init__.py
+neorl/tune/algs.py
 neorl/tune/ashtune.py
 neorl/tune/bayestune.py
+neorl/tune/core.py
 neorl/tune/estune.py
 neorl/tune/gridtune.py
 neorl/tune/randtune.py

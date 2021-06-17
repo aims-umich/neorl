@@ -201,7 +201,6 @@ class WOA(object):
             #----------------------
             fitness=self.eval_whales()
             
-            #Loop through the fitness list and update the score of alpha, beta, gamma, and omega!
             for i, fits in enumerate(fitness):
                 #save the best of the best!!!
                 if fits < self.best_fitness:
