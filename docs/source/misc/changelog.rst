@@ -12,6 +12,11 @@ Coming next
 - Adding a class for easy-to-use environment construction for RL optimization.
 - And more ...
 
+Release 1.4.3b (2021-06-24)
+------------------------------------
+
+- Added the BAT algorithm.
+
 Release 1.4.2b (2021-06-17)
 ------------------------------------
 

@@ -10,6 +10,10 @@ A module for the Salp Swarm Algorithm with parallel computing support.
 
 Original paper: Mirjalili, S., Gandomi, A. H., Mirjalili, S. Z., Saremi, S., Faris, H., & Mirjalili, S. M. (2017). Salp Swarm Algorithm: A bio-inspired optimizer for engineering design problems. Advances in Engineering Software, 114, 163-191.
 
+.. image:: ../images/ssa.jpg
+   :scale: 40%
+   :alt: alternate text
+   :align: center
 
 What can you use?
 --------------------
@@ -42,7 +46,7 @@ Example
 	                    Minima: 0
 	    """
 	    y=sum(x**2 for x in individual)
-	    return -y
+	    return y
 	
 	#Setup the parameter space (d=5)
 	nx=5
@@ -52,7 +56,7 @@ Example
 	
 	nsalps=20
 	#setup and evolute SSA
-	ssa=SSA(mode='max', bounds=BOUNDS, fit=FIT, nsalps=nsalps, c1=None, ncores=20, seed=1)
+	ssa=SSA(mode='min', bounds=BOUNDS, fit=FIT, nsalps=nsalps, c1=None, ncores=1, seed=1)
 	x_best, y_best, ssa_hist=ssa.evolute(ngen=100, verbose=1)
 
 Notes

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Salp Swarm Algorithm (SSA) &mdash; NEORL 1.4.1b documentation</title>
+  <title>Salp Swarm Algorithm (SSA) &mdash; NEORL 1.4.2b documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.4.1b )
+                main (1.4.2b )
               </div>
             
           
@@ -125,6 +125,8 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="woa.html">Whale Optimization Algorithm (WOA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mfo.html">Moth-flame Optimization (MFO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jaya.html">JAYA Algorithm</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
 <ul>
@@ -218,6 +220,7 @@
 <h1>Salp Swarm Algorithm (SSA)<a class="headerlink" href="#salp-swarm-algorithm-ssa" title="Permalink to this headline">¶</a></h1>
 <p>A module for the Salp Swarm Algorithm with parallel computing support.</p>
 <p>Original paper: Mirjalili, S., Gandomi, A. H., Mirjalili, S. Z., Saremi, S., Faris, H., &amp; Mirjalili, S. M. (2017). Salp Swarm Algorithm: A bio-inspired optimizer for engineering design problems. Advances in Engineering Software, 114, 163-191.</p>
+<a class="reference internal image-reference" href="../_images/ssa.jpg"><img alt="alternate text" class="align-center" src="../_images/ssa.jpg" style="width: 480.0px; height: 342.8px;" /></a>
 <div class="section" id="what-can-you-use">
 <h2>What can you use?<a class="headerlink" href="#what-can-you-use" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
@@ -281,7 +284,7 @@ If <code class="docutils literal notranslate"><span class="pre">None</span></cod
 <span class="sd">                    Minima: 0</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">y</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">individual</span><span class="p">)</span>
-    <span class="k">return</span> <span class="o">-</span><span class="n">y</span>
+    <span class="k">return</span> <span class="n">y</span>
 
 <span class="c1">#Setup the parameter space (d=5)</span>
 <span class="n">nx</span><span class="o">=</span><span class="mi">5</span>
@@ -291,7 +294,7 @@ If <code class="docutils literal notranslate"><span class="pre">None</span></cod
 
 <span class="n">nsalps</span><span class="o">=</span><span class="mi">20</span>
 <span class="c1">#setup and evolute SSA</span>
-<span class="n">ssa</span><span class="o">=</span><span class="n">SSA</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;max&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">FIT</span><span class="p">,</span> <span class="n">nsalps</span><span class="o">=</span><span class="n">nsalps</span><span class="p">,</span> <span class="n">c1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ssa</span><span class="o">=</span><span class="n">SSA</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">FIT</span><span class="p">,</span> <span class="n">nsalps</span><span class="o">=</span><span class="n">nsalps</span><span class="p">,</span> <span class="n">c1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">x_best</span><span class="p">,</span> <span class="n">y_best</span><span class="p">,</span> <span class="n">ssa_hist</span><span class="o">=</span><span class="n">ssa</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>

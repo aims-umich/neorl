@@ -10,7 +10,11 @@ A module for the evolution strategies (:math:`\mu,\lambda`) with adaptive strate
 
 Original paper: Bäck, T., Fogel, D. B., Michalewicz, Z. (Eds.). (2018). Evolutionary computation 1: Basic algorithms and operators. CRC press.
 
-
+.. image:: ../images/es.png
+   :scale: 35%
+   :alt: alternate text
+   :align: center
+   
 What can you use?
 --------------------
 

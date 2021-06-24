@@ -10,6 +10,11 @@ A module for the Moth-flame Optimization with parallel computing support.
 
 Original paper: Mirjalili, S. (2015). Moth-flame optimization algorithm: A novel nature-inspired heuristic paradigm. Knowledge-based systems, 89, 228-249.
 
+.. image:: ../images/mfo.jpg
+   :scale: 11%
+   :alt: alternate text
+   :align: center
+
 What can you use?
 --------------------
 

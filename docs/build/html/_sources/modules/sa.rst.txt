@@ -9,6 +9,11 @@ A module for parallel Simulated Annealing. A Synchronous Approach with Occasiona
 
 Original paper: Onbaşoğlu, E., Özdamar, L. (2001). Parallel simulated annealing algorithms in global optimization. Journal of global optimization, 19(1), 27-50..
 
+.. image:: ../images/sa.jpeg
+   :scale: 30%
+   :alt: alternate text
+   :align: center
+
 What can you use?
 --------------------
 

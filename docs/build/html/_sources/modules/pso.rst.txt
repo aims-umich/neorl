@@ -14,6 +14,11 @@ Original papers:
 - Kennedy, J., & Eberhart, R. C. (1997). A discrete binary version of the particle swarm algorithm. In: 1997 IEEE International conference on systems, man, and cybernetics. Computational cybernetics and simulation (Vol. 5, pp. 4104-4108), IEEE.
 - Clerc, M., Kennedy, J. (2002). The particle swarm-explosion, stability, and convergence in a multidimensional complex space. IEEE transactions on Evolutionary Computation, 6(1), 58-73.
 
+.. image:: ../images/pso.jpg
+   :scale: 45%
+   :alt: alternate text
+   :align: center
+
 What can you use?
 --------------------
 

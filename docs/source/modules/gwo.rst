@@ -10,6 +10,11 @@ A module for the Grey Wolf Optimizer with parallel computing support.
 
 Original paper: Mirjalili, S., Mirjalili, S. M., & Lewis, A. (2014). Grey wolf optimizer. Advances in engineering software, 69, 46-61.
 
+.. image:: ../images/gwo.jpg
+   :scale: 40%
+   :alt: alternate text
+   :align: center
+
 
 What can you use?
 --------------------

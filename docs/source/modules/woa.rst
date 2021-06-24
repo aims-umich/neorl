@@ -10,6 +10,10 @@ A module for the Whale Optimization Algorithm with parallel computing support.
 
 Original paper: Mirjalili, S., Lewis, A. (2016). The whale optimization algorithm. Advances in engineering software, 95, 51-67.
 
+.. image:: ../images/woa.jpg
+   :scale: 60%
+   :alt: alternate text
+   :align: center
 
 What can you use?
 --------------------

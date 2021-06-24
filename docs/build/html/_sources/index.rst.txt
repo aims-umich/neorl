@@ -68,6 +68,7 @@ User Guide
   modules/woa
   modules/mfo
   modules/jaya
+  modules/bat
 
 .. toctree::
   :maxdepth: 1
