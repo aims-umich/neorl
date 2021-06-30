@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Bat Algorithm (BAT) &mdash; NEORL 1.4.2b documentation</title>
+  <title>Bat Algorithm (BAT) &mdash; NEORL 1.4.3b documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.4.2b )
+                main (1.4.3b )
               </div>
             
           
@@ -316,7 +316,7 @@
 <li><p>BAT mimics the echolocation behavior of bats in nature. The bats emit a very loud and short sound pulse; the echo that reflects back from the surrounding objects is received by their big ears. This feedback information of echo is analyzed by the bats, which reveals the direction of the flight pathway. The echo also helps the bats to distinguish different insects and obstacles to hunt prey, where the search for the prey here is analogous to the search for global optima.</p></li>
 <li><p>The bats start with loudness value of <code class="docutils literal notranslate"><span class="pre">A</span></code>, and decay it by a factor of <code class="docutils literal notranslate"><span class="pre">alpha</span></code>. If the user chooses <code class="docutils literal notranslate"><span class="pre">alpha=1</span></code>, fixed value of <code class="docutils literal notranslate"><span class="pre">A</span></code> is used.</p></li>
 <li><p>Bats fly randomly to search for the prey with frequency varying between <code class="docutils literal notranslate"><span class="pre">fmin</span></code> and <code class="docutils literal notranslate"><span class="pre">fmax</span></code>.</p></li>
-<li><p>The bats emit pulses with emission rate represented by the asymptotic value (<code class="docutils literal notranslate"><span class="pre">r0</span></code>). The value of emission rate is updated in generation <code class="docutils literal notranslate"><span class="pre">i</span></code> according to <span class="math notranslate nohighlight">\(r_i = r_0(1-exp(-\gamma i))\)</span>, where <code class="docutils literal notranslate"><span class="pre">gamma</span></code> is the exponential factor of the pulse rate. <code class="docutils literal notranslate"><span class="pre">r_i</span></code> typically decreases abruptly at the beginning and then converges back to <code class="docutils literal notranslate"><span class="pre">r0</span></code> by the end of the evolution.</p></li>
+<li><p>The bats emit pulses with emission rate represented by the asymptotic value (<code class="docutils literal notranslate"><span class="pre">r0</span></code>). The value of emission rate is updated in generation <code class="docutils literal notranslate"><span class="pre">i</span></code> according to <span class="math notranslate nohighlight">\(r_i = r_0(1-exp(-\gamma i))\)</span>, where <code class="docutils literal notranslate"><span class="pre">gamma</span></code> is the exponential factor of the pulse rate. <code class="docutils literal notranslate"><span class="pre">r</span></code> typically decreases abruptly at the beginning and then converges back to <code class="docutils literal notranslate"><span class="pre">r0</span></code> by the end of the evolution.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">ncores</span></code> argument evaluates the fitness of all bats in parallel. Therefore, set <code class="docutils literal notranslate"><span class="pre">ncores</span> <span class="pre">&lt;=</span> <span class="pre">nbats</span></code> for most optimal resource allocation.</p></li>
 <li><p>Look for an optimal balance between <code class="docutils literal notranslate"><span class="pre">nbats</span></code> and <code class="docutils literal notranslate"><span class="pre">ngen</span></code>, it is recommended to minimize the number of <code class="docutils literal notranslate"><span class="pre">nbats</span></code> to allow for more updates and more generations.</p></li>
 <li><p>Total number of cost evaluations for BAT is <code class="docutils literal notranslate"><span class="pre">3*nbats</span></code> * <code class="docutils literal notranslate"><span class="pre">ngen</span></code>.</p></li>

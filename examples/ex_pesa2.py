@@ -17,5 +17,5 @@ BOUNDS={}
 for i in range(1,nx+1):
         BOUNDS['x'+str(i)]=['float', -100, 100]
 
-pesa2=PESA2(mode='min', bounds=BOUNDS, fit=FIT, npop=60, eta_mu=1.0, nwolves=5)
-x_best, y_best, pesa2_hist=pesa2.evolute(ngen=50, replay_every=2, verbose=1)
+pesa2=PESA2(mode='min', bounds=BOUNDS, fit=FIT, npop=50, nwolves=5, nwhales=5, ncores=1)
+x_best, y_best, pesa2_hist=pesa2.evolute(ngen=50, replay_every=2, verbose=2)

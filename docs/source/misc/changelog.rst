@@ -6,11 +6,17 @@ Changelog
 Coming next
 --------------------------
 
-- To add a module for Harris Hawks Optimisation.
 - To add a module for Cuckoo search.
 - To add two modules for RL-informed EA optimization.
 - Adding a class for easy-to-use environment construction for RL optimization.
 - And more ...
+
+Release 1.4.4b (2021-06-30)
+------------------------------------
+
+- Fixing PESA/PESA2 parallel mode.
+- Replacing XNES with WOA in modern PESA2.
+- Added a module for Harris Hawks Optimization
 
 Release 1.4.3b (2021-06-24)
 ------------------------------------

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.evolu.xnes &mdash; NEORL 1.3.5b documentation</title>
+  <title>neorl.evolu.xnes &mdash; NEORL 1.4.3b documentation</title>
   
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                main (1.3.5b )
+                main (1.4.3b )
               </div>
             
           
@@ -116,6 +116,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/sa.html">Simulated Annealing (SA)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/ssa.html">Salp Swarm Algorithm (SSA)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/woa.html">Whale Optimization Algorithm (WOA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/mfo.html">Moth-flame Optimization (MFO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/jaya.html">JAYA Algorithm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/bat.html">Bat Algorithm (BAT)</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
 <ul>
@@ -132,6 +135,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex3.html">Example 3: Welded-beam design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex4.html">Example 4: Benchmarks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex5.html">Example 5: CEC’2017 Test Suite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex6.html">Example 6: Three-bar Truss Design</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Misc</span></p>
 <ul>
@@ -212,8 +216,8 @@
 <span class="c1">#&quot;&quot;&quot;</span>
 
 
-<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">dot</span><span class="p">,</span> <span class="n">eye</span><span class="p">,</span> <span class="n">randn</span><span class="p">,</span> <span class="n">asarray</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">trace</span><span class="p">,</span> <span class="n">log</span><span class="p">,</span> <span class="n">exp</span><span class="p">,</span> <span class="n">sqrt</span> 
-<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">mean</span><span class="p">,</span> <span class="nb">sum</span><span class="p">,</span> <span class="n">argsort</span><span class="p">,</span> <span class="n">arange</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">dot</span><span class="p">,</span> <span class="n">eye</span><span class="p">,</span> <span class="n">asarray</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">trace</span><span class="p">,</span> <span class="n">exp</span> 
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">mean</span><span class="p">,</span> <span class="nb">sum</span><span class="p">,</span> <span class="n">argsort</span><span class="p">,</span> <span class="n">arange</span>
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">multivariate_normal</span><span class="p">,</span> <span class="n">norm</span>
 <span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">det</span><span class="p">,</span> <span class="n">expm</span>
 <span class="kn">import</span> <span class="nn">joblib</span>
@@ -274,9 +278,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">bmat</span> <span class="o">=</span> <span class="n">bmat</span>
 
         <span class="c1"># default population size and learning rates</span>
-        <span class="n">npop</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">4</span> <span class="o">+</span> <span class="mi">3</span><span class="o">*</span><span class="n">log</span><span class="p">(</span><span class="n">dim</span><span class="p">))</span> <span class="k">if</span> <span class="n">npop</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">npop</span>
-        <span class="n">eta_sigma</span> <span class="o">=</span> <span class="mi">3</span><span class="o">*</span><span class="p">(</span><span class="mi">3</span><span class="o">+</span><span class="n">log</span><span class="p">(</span><span class="n">dim</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="p">(</span><span class="mi">5</span><span class="o">*</span><span class="n">dim</span><span class="o">*</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dim</span><span class="p">)))</span> <span class="k">if</span> <span class="n">eta_sigma</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">eta_sigma</span>
-        <span class="n">eta_Bmat</span> <span class="o">=</span> <span class="mi">3</span><span class="o">*</span><span class="p">(</span><span class="mi">3</span><span class="o">+</span><span class="n">log</span><span class="p">(</span><span class="n">dim</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="p">(</span><span class="mi">5</span><span class="o">*</span><span class="n">dim</span><span class="o">*</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dim</span><span class="p">)))</span> <span class="k">if</span> <span class="n">eta_Bmat</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">eta_Bmat</span>
+        <span class="n">npop</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">4</span> <span class="o">+</span> <span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">dim</span><span class="p">))</span> <span class="k">if</span> <span class="n">npop</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">npop</span>
+        <span class="n">eta_sigma</span> <span class="o">=</span> <span class="mi">3</span><span class="o">*</span><span class="p">(</span><span class="mi">3</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">dim</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="p">(</span><span class="mi">5</span><span class="o">*</span><span class="n">dim</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dim</span><span class="p">)))</span> <span class="k">if</span> <span class="n">eta_sigma</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">eta_sigma</span>
+        <span class="n">eta_Bmat</span> <span class="o">=</span> <span class="mi">3</span><span class="o">*</span><span class="p">(</span><span class="mi">3</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">dim</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="p">(</span><span class="mi">5</span><span class="o">*</span><span class="n">dim</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dim</span><span class="p">)))</span> <span class="k">if</span> <span class="n">eta_Bmat</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">eta_Bmat</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">npop</span> <span class="o">=</span> <span class="n">npop</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">eta_sigma</span> <span class="o">=</span> <span class="n">eta_sigma</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">eta_bmat</span> <span class="o">=</span> <span class="n">eta_Bmat</span>
@@ -284,8 +288,8 @@
         <span class="n">use_fshape</span><span class="o">=</span><span class="kc">True</span>
         <span class="c1"># compute utilities if using fitness shaping</span>
         <span class="k">if</span> <span class="n">use_fshape</span><span class="p">:</span>
-            <span class="n">a</span> <span class="o">=</span> <span class="n">log</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mf">0.5</span><span class="o">*</span><span class="n">npop</span><span class="p">)</span>
-            <span class="n">utilities</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">a</span><span class="o">-</span><span class="n">log</span><span class="p">(</span><span class="n">k</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">npop</span><span class="o">+</span><span class="mi">1</span><span class="p">)])</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mf">0.5</span><span class="o">*</span><span class="n">npop</span><span class="p">)</span>
+            <span class="n">utilities</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">a</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">k</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">npop</span><span class="o">+</span><span class="mi">1</span><span class="p">)])</span>
             <span class="n">utilities</span> <span class="o">/=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">utilities</span><span class="p">)</span>
             <span class="n">utilities</span> <span class="o">-=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">npop</span>           <span class="c1"># broadcast</span>
             <span class="n">utilities</span> <span class="o">=</span> <span class="n">utilities</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># ascending order</span>
@@ -374,7 +378,7 @@
         <span class="k">with</span> <span class="n">joblib</span><span class="o">.</span><span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">)</span> <span class="k">as</span> <span class="n">parallel</span><span class="p">:</span>
 
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ngen</span><span class="p">):</span>
-                <span class="n">s_try</span> <span class="o">=</span> <span class="n">randn</span><span class="p">(</span><span class="n">npop</span><span class="p">,</span> <span class="n">dim</span><span class="p">)</span>
+                <span class="n">s_try</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">npop</span><span class="p">,</span> <span class="n">dim</span><span class="p">)</span>
                 <span class="n">z_try</span> <span class="o">=</span> <span class="n">mu</span> <span class="o">+</span> <span class="n">sigma</span> <span class="o">*</span> <span class="n">dot</span><span class="p">(</span><span class="n">s_try</span><span class="p">,</span> <span class="n">bmat</span><span class="p">)</span>     <span class="c1"># broadcast</span>
                 
                 <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">z_try</span><span class="p">)):</span>
@@ -474,7 +478,7 @@
 
         <span class="n">bbmat</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">bmat</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">bmat</span><span class="p">)</span>
         <span class="n">cov</span> <span class="o">=</span> <span class="n">sigma</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">bbmat</span>
-        <span class="n">sigma_</span> <span class="o">=</span> <span class="n">sigma</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">sigma</span><span class="o">*</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">sigma_old</span><span class="p">))</span>  <span class="c1"># increase by 1.5</span>
+        <span class="n">sigma_</span> <span class="o">=</span> <span class="n">sigma</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sigma</span><span class="o">*</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">sigma_old</span><span class="p">))</span>  <span class="c1"># increase by 1.5</span>
         <span class="n">cov_</span> <span class="o">=</span> <span class="n">sigma_</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">bbmat</span>
 
         <span class="n">p0</span> <span class="o">=</span> <span class="n">multivariate_normal</span><span class="o">.</span><span class="n">logpdf</span><span class="p">(</span><span class="n">z_try</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">cov</span><span class="o">=</span><span class="n">cov</span><span class="p">)</span>
@@ -487,7 +491,7 @@
         <span class="n">u_</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">w</span> <span class="o">*</span> <span class="p">(</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">+</span><span class="mf">0.5</span><span class="p">))</span>
 
         <span class="n">u_mu</span> <span class="o">=</span> <span class="n">n</span><span class="o">*</span><span class="n">n_</span><span class="o">*</span><span class="mf">0.5</span>
-        <span class="n">u_sigma</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">n</span><span class="o">*</span><span class="n">n_</span><span class="o">*</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="n">n_</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mf">12.</span><span class="p">)</span>
+        <span class="n">u_sigma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n</span><span class="o">*</span><span class="n">n_</span><span class="o">*</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="n">n_</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mf">12.</span><span class="p">)</span>
         <span class="n">cum</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">u_</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">u_mu</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">u_sigma</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">cum</span> <span class="o">&lt;</span> <span class="n">rho</span><span class="p">:</span>

@@ -20,6 +20,7 @@ neorl/benchmarks/tools/data.pkl
 neorl/benchmarks/tools/transforms.py
 neorl/benchmarks/tools/utils.py
 neorl/evolu/__init__.py
+neorl/evolu/bat.py
 neorl/evolu/crossover.py
 neorl/evolu/de.py
 neorl/evolu/es.py
@@ -135,6 +136,7 @@ neorl/tests/t_ppo.py
 neorl/tests/test_a2c.py
 neorl/tests/test_acer.py
 neorl/tests/test_acktr.py
+neorl/tests/test_bat.py
 neorl/tests/test_bayes.py
 neorl/tests/test_benchmarks.py
 neorl/tests/test_benchmarks2.py

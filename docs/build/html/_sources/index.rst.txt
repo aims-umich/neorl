@@ -69,6 +69,7 @@ User Guide
   modules/mfo
   modules/jaya
   modules/bat
+  modules/hho
 
 .. toctree::
   :maxdepth: 1
@@ -89,6 +90,7 @@ User Guide
   examples/ex3
   examples/ex4
   examples/ex5
+  examples/ex6
 
 .. toctree::
   :maxdepth: 1

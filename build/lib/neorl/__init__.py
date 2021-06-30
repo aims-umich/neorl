@@ -37,6 +37,7 @@ from neorl.rl.baselines.ppo2 import PPO2
 from neorl.rl.baselines.acktr import ACKTR
 from neorl.evolu.pso import PSO
 from neorl.evolu.sa import SA
+from neorl.evolu.bat import BAT
 from neorl.evolu.de import DE
 from neorl.evolu.xnes import XNES
 from neorl.evolu.es import ES

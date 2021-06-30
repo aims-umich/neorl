@@ -19,9 +19,9 @@ def test_pesa():
             BOUNDS['x'+str(i)]=['float', -100, 100]
     
     npop=60
-    pesa=PESA(mode='min', bounds=BOUNDS, fit=FIT, npop=npop, mu=40, alpha_init=0.2,
-              alpha_end=1.0, alpha_backdoor=0.1)
+    pesa=PESA(mode='min', bounds=BOUNDS, fit=FIT, npop=npop, mu=40, alpha_init=0.2, 
+              alpha_end=1.0, alpha_backdoor=0.1, ncores=1)
     x0=[[50,50,50,50,50] for i in range(npop)]  #initial guess
-    x_best, y_best, pesa_hist=pesa.evolute(ngen=50, x0=x0, verbose=0)
+    x_best, y_best, pesa_hist=pesa.evolute(ngen=50, x0=x0, verbose=1)
 
 test_pesa()

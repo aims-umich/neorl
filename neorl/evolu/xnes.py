@@ -6,8 +6,8 @@
 #"""
 
 
-from scipy import dot, eye, randn, asarray, array, trace, log, exp, sqrt 
-from scipy import mean, sum, argsort, arange
+from numpy import dot, eye, asarray, array, trace, exp 
+from numpy import mean, sum, argsort, arange
 from scipy.stats import multivariate_normal, norm
 from scipy.linalg import det, expm
 import joblib
@@ -68,9 +68,9 @@ class XNES(object):
         self.bmat = bmat
 
         # default population size and learning rates
-        npop = int(4 + 3*log(dim)) if npop is None else npop
-        eta_sigma = 3*(3+log(dim))*(1.0/(5*dim*sqrt(dim))) if eta_sigma is None else eta_sigma
-        eta_Bmat = 3*(3+log(dim))*(1.0/(5*dim*sqrt(dim))) if eta_Bmat is None else eta_Bmat
+        npop = int(4 + 3*np.log(dim)) if npop is None else npop
+        eta_sigma = 3*(3+np.log(dim))*(1.0/(5*dim*np.sqrt(dim))) if eta_sigma is None else eta_sigma
+        eta_Bmat = 3*(3+np.log(dim))*(1.0/(5*dim*np.sqrt(dim))) if eta_Bmat is None else eta_Bmat
         self.npop = npop
         self.eta_sigma = eta_sigma
         self.eta_bmat = eta_Bmat
@@ -78,8 +78,8 @@ class XNES(object):
         use_fshape=True
         # compute utilities if using fitness shaping
         if use_fshape:
-            a = log(1+0.5*npop)
-            utilities = array([max(0, a-log(k)) for k in range(1,npop+1)])
+            a = np.log(1+0.5*npop)
+            utilities = array([max(0, a-np.log(k)) for k in range(1,npop+1)])
             utilities /= sum(utilities)
             utilities -= 1.0/npop           # broadcast
             utilities = utilities[::-1]  # ascending order
@@ -168,7 +168,7 @@ class XNES(object):
         with joblib.Parallel(n_jobs=self.ncores) as parallel:
 
             for i in range(ngen):
-                s_try = randn(npop, dim)
+                s_try = np.random.randn(npop, dim)
                 z_try = mu + sigma * dot(s_try, bmat)     # broadcast
                 
                 for k in range (len(z_try)):
@@ -268,7 +268,7 @@ class XNES(object):
 
         bbmat = dot(bmat.T, bmat)
         cov = sigma**2 * bbmat
-        sigma_ = sigma * sqrt(sigma*(1./sigma_old))  # increase by 1.5
+        sigma_ = sigma * np.sqrt(sigma*(1./sigma_old))  # increase by 1.5
         cov_ = sigma_**2 * bbmat
 
         p0 = multivariate_normal.logpdf(z_try, mean=mu, cov=cov)
@@ -281,7 +281,7 @@ class XNES(object):
         u_ = sum(w * (arange(n)+0.5))
 
         u_mu = n*n_*0.5
-        u_sigma = sqrt(n*n_*(n+n_+1)/12.)
+        u_sigma = np.sqrt(n*n_*(n+n_+1)/12.)
         cum = norm.cdf(u_, loc=u_mu, scale=u_sigma)
 
         if cum < rho:
