@@ -4,7 +4,6 @@
 
 import random
 import numpy as np
-import joblib 
 from collections import defaultdict
 
 import multiprocessing
@@ -41,7 +40,7 @@ class DEmod:
             random.seed(self.seed)
             np.random.seed(self.seed)
         
-        assert npop > 3, '--error: size of npop must be more than 3'
+        assert npop > 4, '--error: size of npop must be more than 4'
         self.npop=npop
         self.bounds=bounds
         self.ncores=ncores
@@ -108,15 +107,7 @@ class DEmod:
         return pop
 
     def fit_worker(self, x):
-        #This worker is for parallel calculations of the GWO
-        
-        # Clip the wolf with position outside the lower/upper bounds and return same position
-        #x=self.ensure_bounds(x,self.bounds)
-        
-        def fitness_wrapper(*args, **kwargs):  #convert max to min problem, GWO is built to minimize
-            return -self.fit(*args, **kwargs) 
-        #fitness = fitness_wrapper(x)
-        
+                
         # Calculate objective function for each search agent
         fitness = self.fit(x)
         
@@ -145,7 +136,6 @@ class DEmod:
         else:
             population = self.InitPopulation()
                 
-        #with joblib.Parallel(n_jobs=self.ncores) as parallel:
         # loop through all generations
         best_scores=[]
         for gen in range(1,ngen+1):
@@ -198,7 +188,6 @@ class DEmod:
             #paralell evaluation
             if self.ncores > 1:
 
-                #with joblib.Parallel(n_jobs=self.ncores) as parallel:
                 p=MyPool(self.ncores)
                 score_trial_lst = p.map(self.fit_worker, v_trial_lst)
                 p.close(); p.join()
@@ -206,10 +195,7 @@ class DEmod:
                 p=MyPool(self.ncores)
                 score_target_lst = p.map(self.fit_worker, x_t_lst)
                 p.close(); p.join()
-                
-                #score_trial_lst=parallel(joblib.delayed(self.fit_worker)(item) for item in v_trial_lst)
-                #score_target_lst=parallel(joblib.delayed(self.fit_worker)(item) for item in x_t_lst)
-                    
+                                    
             else:
                 score_trial_lst=[]
                 score_target_lst=[]

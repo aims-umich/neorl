@@ -101,14 +101,15 @@ class SAMod(ExperienceReplay):
         Returns: perturbed vector x
         """
         i=0
+        x_new=x.copy()
         for item in self.bounds:
             if random.random() < chi:
                 sample = self.sampler(self.bounds[item])
-                while x[i] == sample and (self.bounds[item][1] != self.bounds[item][2]): 
+                while x_new[i] == sample and (self.bounds[item][1] != self.bounds[item][2]): 
                     sample = self.sampler(self.bounds[item])
-                x[i] = sample
+                x_new[i] = sample
             i+=1
-        return x
+        return x_new
         
     def temp(self,step):
         
@@ -192,7 +193,7 @@ class SAMod(ExperienceReplay):
             #if core_seed==1 or core_seed==10:
             #    print('E_prev '+str(core_seed), np.round(E_prev,2))
             #    print('memory_SA', len(self._memory.storage))
-            
+            #assert self.fit(x_prev) == E_prev
         return x_prev, E_prev, T, accepts, rejects, improves, x_best, E_best
         
     def chain(self, x0, E0, step0, npop):
@@ -275,4 +276,3 @@ class SAMod(ExperienceReplay):
                 print('************************************************************')
             
         return x_next, E_next, self.T, acc, rej, imp, x_best, E_best, self.partime
-

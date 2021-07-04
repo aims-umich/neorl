@@ -58,6 +58,15 @@ class ESMod:
         assert self.mu <= self.lambda_, "mu (selected population) must be less than lambda (full population)"
         assert (self.cxpb + self.mutpb) <= 1.0, "The sum of the cxpb and mutpb must be smaller or equal to 1.0"
         assert self.ncores >=1, "Number of cores must be more than or equal 1"
+
+        self.lb=[]
+        self.ub=[]
+        self.datatype=[]
+        
+        #infer variable types 
+        self.datatype = np.array([bounds[item][0] for item in bounds])
+        self.lb = np.array([self.bounds[item][1] for item in self.bounds])
+        self.ub = np.array([self.bounds[item][2] for item in self.bounds])
             
     def GenES(self, bounds):
         """
@@ -133,6 +142,31 @@ class ESMod:
                 pop[key].append(fitness)
         
         return pop  #return final pop dictionary with ind, strategy, and fitness
+
+    def ensure_bounds(self, vec): # bounds check
+
+        vec_new = []
+
+        for i, (key, val) in enumerate(self.bounds.items()):
+            # less than minimum 
+            if vec[i] < self.bounds[key][1]:
+                vec_new.append(self.bounds[key][1])
+            # more than maximum
+            if vec[i] > self.bounds[key][2]:
+                vec_new.append(self.bounds[key][2])
+            # fine
+            if self.bounds[key][1] <= vec[i] <= self.bounds[key][2]:
+                vec_new.append(vec[i])
+        
+        return vec_new
+
+    def ensure_discrete(self, ind):
+        
+        ind=self.ensure_bounds(ind)
+        for i in range(len(ind)):
+            if self.datatype[i] == 'int':
+                ind[i] = int(ind[i])
+        return ind
 
     def gen_object(self, inp):
         """
@@ -223,6 +257,8 @@ class ESMod:
         tau=1/np.sqrt(2*size)
         tau_prime=1/np.sqrt(2*np.sqrt(size))
         
+        ind=self.ensure_bounds(ind)  #keep it for choice.remove(x) to work
+        
         for i in range(size):
             #--------------------------
             # Discrete ES Mutation 
@@ -250,6 +286,8 @@ class ESMod:
                         choices.remove(ind[i])
                         # randint is NOT used here since it could re-draw the same integer value, choice is used instead
                         ind[i] = random.choice(choices)
+                else:
+                    ind[i]=int(ind[i])
             
             #--------------------------
             # Continuous ES Mutation 
@@ -268,6 +306,8 @@ class ESMod:
             else:
                 raise Exception ('ES mutation strategy works with either int/float datatypes, the type provided cannot be interpreted')
             
+        ind=self.ensure_bounds(ind)
+        strat=list(np.clip(strat, self.smin, self.smax))
             
         return ind, strat
 
@@ -297,6 +337,11 @@ class ESMod:
                 index1, index2 = random.sample(pop_indices,2)
                 ind1, ind2, strat1, strat2 = self.cx(ind1=list(pop[index1][0]),ind2=list(pop[index2][0]), 
                                                      strat1=list(pop[index1][1]),strat2=list(pop[index2][1]))
+            
+                ind1=self.ensure_bounds(ind1)
+                ind2=self.ensure_bounds(ind2)
+                ind1=self.ensure_discrete(ind1)  #check discrete variables after crossover
+                ind2=self.ensure_discrete(ind2)  #check discrete variables after crossover
                 offspring[i].append(ind1)
                 offspring[i].append(strat1)
                 #print('crossover is done for sample {} between {} and {}'.format(i,index1,index2))
@@ -314,9 +359,13 @@ class ESMod:
             #------------------------------
             else:                         
                 index=random.choice(pop_indices)
+                pop[index][0]=self.ensure_discrete(pop[index][0])
                 offspring[i].append(pop[index][0])
                 offspring[i].append(pop[index][1])
                 #print('reproduction is done for sample {} based on {}'.format(i,index))
+
+        for item in offspring:
+            offspring[item][1]=list(np.clip(offspring[item][1], self.smin, self.smax))
     
         return offspring
 
@@ -390,4 +439,3 @@ class ESMod:
                 print('Average Strategy:', np.round(np.mean(mean_strategy),3))
                 print('############################################################')
         return population, self.partime
-    

@@ -8,7 +8,7 @@
 from neorl.hybrid.pesacore.er import ExperienceReplay
 from neorl.hybrid.pesacore.gwo import GWOmod
 from neorl.hybrid.pesacore.de import DEmod
-from neorl.hybrid.pesacore.xnes import XNESmod
+from neorl.hybrid.pesacore.woa import WOAmod
 from neorl.hybrid.pesacore.es import ESMod
 from copy import deepcopy
 from multiprocessing import Process, Queue
@@ -16,38 +16,42 @@ import random
 import numpy as np
 from collections import defaultdict
 import time
+import sys
+import uuid
 
-import warnings
-warnings.filterwarnings("ignore", category=DeprecationWarning)
-warnings.filterwarnings("ignore", message=r"Passing", category=FutureWarning)
+#multiprocessing trick to paralllelize nested functions in python (un-picklable objects!)
+def globalize(func):
+  def result(*args, **kwargs):
+    return -func(*args, **kwargs)
+  result.__name__ = result.__qualname__ = uuid.uuid4().hex
+  setattr(sys.modules[result.__module__], result.__name__, result)
+  return result
 
 
 class PESA2(ExperienceReplay):
 
     """
     Prioritized replay for Evolutionary Swarm Algorithms: PESA 2 (Modern Version) 
-    A hybrid algorithm of GWO, DE, and XNES
+    A hybrid algorithm of GWO, DE, and WOA
     
     *PESA2 Major Parameters*
     
     :param mode: (str) problem type, either "min" for minimization problem or "max" for maximization
     :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: ``bounds={'x1': ['int', 1, 4], 'x2': ['float', 0.1, 0.8], 'x3': ['float', 2.2, 6.2]}``
     :param fit: (function) the fitness function 
-    :param npop: (int) total number of individuals in DE and XNES populations
-    :param R_frac: (int) fraction of ``npop``and ``nwolves`` to survive to the next generation.
+    :param R_frac: (int) fraction of ``npop``, ``nwolves``, ``nwhales`` to survive to the next generation.
                      Also, ``R_frac`` equals to the number of individuals to replay from the memory
     :param memory_size: (int) max size of the replay memory (if None, ``memory_size`` is built to accommodate all samples during search) 
     :param alpha_init: (float) initial value of the prioritized replay coefficient (See **Notes** below)
     :param alpha_end: (float) final value of the prioritized replay coefficient (See **Notes** below)
     
     *PESA2 Auxiliary Parameters (for the internal algorithms)*
-    
-    :param nwolves: (float) for **GWO**, number of wolves for GWO
+
+    :param npop: (int) for **DE**, total number of individuals in DE population
     :param CR: (float) for **DE**, crossover probability between [0,1]
     :param F: (float) for **DE**, differential/mutation weight between [0,2]
-    :param eta_mu: (float) for **XNES**, learning rate for updating the center of the search distribution ``mu``
-    :param eta_sigma: (float) for **XNES**, learning rate for updating the step size ``sigma`` (default: if None, an approximation is used)	
-    :param eta_Bmat: (float) for **XNES**, learning rate for updating the normalized transformation matrix ``B``  (default: if None, an approximation is used)
+    :param nwolves: (float) for **GWO**, number of wolves for GWO
+    :param nwhales: (float) for **WOA**, number of whales in the population of WOA
     
     *PESA2 Misc. Parameters*
     
@@ -55,11 +59,11 @@ class PESA2(ExperienceReplay):
     :param seed: (int) random seed for sampling
     """
     
-    def __init__ (self, mode, bounds, fit, npop, R_frac=0.5, #general parameters
+    def __init__ (self, mode, bounds, fit, R_frac=0.5, #general parameters
                   memory_size=None, alpha_init=0.1, alpha_end=1, #replay parameters
                   nwolves=5, #GOW parameters
-                  CR=0.7, F=0.5,  #DE parameters
-                  eta_mu=1.0, eta_sigma=None, eta_Bmat=None, adapt_sampling=True, #XNES parameters
+                  npop=50, CR=0.7, F=0.5,  #DE parameters
+                  nwhales=10, #WOA parameters
                   ncores=1, seed=None): #misc parameters
         
         if seed:
@@ -71,9 +75,7 @@ class PESA2(ExperienceReplay):
         if mode == 'max':
             self.FIT=fit
         elif mode == 'min':
-            def fitness_wrapper(*args, **kwargs):
-                return -fit(*args, **kwargs) 
-            self.FIT=fitness_wrapper
+            self.FIT = globalize(lambda x: fit(x))  #use the function globalize to serialize the nested fit
         else:
             raise ValueError('--error: The mode entered by user is invalid, use either `min` or `max`')
             
@@ -81,11 +83,24 @@ class PESA2(ExperienceReplay):
             if nwolves >= npop:
                 nwolves=npop
             else:
-                assert npop % nwolves==0, '--error: since ncores > 1, for max efficiency of PESA2, choose npop ({}) and nwolves ({}) that are either equal of divisible, e.g. npop=60, nwolves=5'.format(npop, nwolves)
+                assert npop % nwolves==0, '--error: since ncores > 1, for max efficiency of PESA2, choose npop ({}) and nwolves ({}) that are either equal or divisible, e.g. npop=60, nwolves=5'.format(npop, nwolves)
+           
+            if nwhales >= npop:
+                nwhales=npop
+            else:
+                assert npop % nwhales==0, '--error: since ncores > 1, for max efficiency of PESA2, choose npop ({}) and nwhales ({}) that are either equal or divisible, e.g. npop=60, nwhales=5'.format(npop, nwhales)
+
         
         self.GWO_gen=int(npop/nwolves)
+        self.WOA_gen=int(npop/nwhales)
+        if self.GWO_gen < 1:
+            self.GWO_gen=1
+        if self.WOA_gen < 1:
+            self.WOA_gen=1
+            
         self.BOUNDS=bounds
         self.NPOP=npop
+        self.ncores=ncores
 
         if ncores <= 3:
             self.NCORES=1
@@ -97,7 +112,6 @@ class PESA2(ExperienceReplay):
             self.NCORES=int(ncores/3)
             
         self.SEED=seed
-        
         #--------------------
         #Experience Replay
         #--------------------
@@ -110,12 +124,10 @@ class PESA2(ExperienceReplay):
         self.NWOLVES=nwolves
         
         #--------------------
-        # XNES HyperParameters
+        # WOA HyperParameters
         #--------------------
-        self.ETA_MU=eta_mu
-        self.ETA_SIGMA=eta_sigma   
-        self.ETA_BMAT=eta_Bmat
-        self.ADASAMP=adapt_sampling
+        self.NWHALES=nwhales
+
         #--------------------
         # DE HyperParameters
         #--------------------
@@ -126,7 +138,7 @@ class PESA2(ExperienceReplay):
         #-------------------------------        
         assert 0 <= R_frac <= 1, '--error: The value of R_frac ({}) MUST be between 0 and 1'.format(R_frac)
         self.MU_DE=int(R_frac*self.NPOP)
-        self.MU_XNES=int(R_frac*self.NPOP)
+        self.MU_WOA=int(R_frac*self.NWHALES)
         self.MU_GWO=int(R_frac*self.NWOLVES)
         #--------------------
         # Fixed/Derived parameters 
@@ -147,6 +159,8 @@ class PESA2(ExperienceReplay):
         :return: (dict) dictionary containing major PESA search results
         """
         
+        
+        
         self.verbose=verbose
         self.NGEN=int(ngen/replay_every)
         self.STEPS=self.NGEN*self.NPOP #all 
@@ -160,14 +174,14 @@ class PESA2(ExperienceReplay):
         #-------------------------------------------------------
         if x0: 
             # use provided initial guess
-            warm=ESMod(bounds=self.BOUNDS, fit=self.FIT, mu=self.NPOP, lambda_=self.LAMBDA, ncores=self.NCORES)
+            warm=ESMod(bounds=self.BOUNDS, fit=self.FIT, mu=self.NPOP, lambda_=self.LAMBDA, ncores=self.ncores)
             x0size=len(x0)
             assert x0size >= self.NPOP, 'the number of lists in x0 ({}) must be more than or equal npop ({})'.format(x0size, self.NPOP)
             self.pop0=warm.init_pop(warmup=x0size, x_known=x0)  #initial population for all methods (use external ES modules for initialization)
         else:
             #create initial guess 
-            assert warmup > self.NPOP, 'the number of warmup samples ({}) must be more than npop ({})'.format(warmup, self.NPOP)
-            warm=ESMod(bounds=self.BOUNDS, fit=self.FIT, mu=self.NPOP, lambda_=self.NPOP, ncores=self.NCORES)
+            assert warmup >= self.NPOP, 'the number of warmup samples ({}) must be more than or equal npop ({})'.format(warmup, self.NPOP)
+            warm=ESMod(bounds=self.BOUNDS, fit=self.FIT, mu=self.NPOP, lambda_=self.NPOP, ncores=self.ncores)
             self.pop0=warm.init_pop(warmup=warmup)  #initial population for all methods (use external ES modules for initialization)
         
         self.fit_hist=[]
@@ -182,14 +196,13 @@ class PESA2(ExperienceReplay):
         # Step 2: Initialize all methods
         #--------------------------------
         # Obtain initial population for all methods
-        x0_gwo, fit0_gwo, x0_de, fit0_de, x0_xnes, fit0_xnes=self.init_guess(pop0=self.pop0)
+        x0_gwo, fit0_gwo, x0_de, fit0_de, x0_woa, fit0_woa=self.init_guess(pop0=self.pop0)
         # Initialize GWO class
         gwo=GWOmod(mode='max', bounds=self.BOUNDS, fit=self.FIT, nwolves=self.NWOLVES, ncores=self.NCORES, seed=self.SEED)
         # Initialize DE class
         de=DEmod(bounds=self.BOUNDS, fit=self.FIT, npop=self.NPOP, F=self.F, CR=self.CR, ncores=self.NCORES, seed=self.SEED)
-        # Initialize XNES class
-        xnes=XNESmod(bounds=self.BOUNDS, fit=self.FIT, npop=self.NPOP, adapt_sampling=self.ADASAMP, 
-                       eta_mu=self.ETA_MU, eta_sigma=self.ETA_SIGMA, eta_Bmat=self.ETA_BMAT, 
+        # Initialize WOA class
+        woa=WOAmod(mode='max', bounds=self.BOUNDS, fit=self.FIT, nwhales=self.NWHALES,
                        ncores=self.NCORES, seed=self.SEED)
             
         #--------------------------------
@@ -198,8 +211,7 @@ class PESA2(ExperienceReplay):
         #Use initial samples as first guess
         self.gwo_next=deepcopy(x0_gwo)
         self.de_next=deepcopy(x0_de)
-        self.xnes_next=deepcopy(x0_xnes) 
-        #self.xnes_best=x0_xnes[0]
+        self.woa_next=deepcopy(x0_woa) 
         self.STEP0=1  #step counter
         self.ALPHA=self.ALPHA0  #set alpha to alpha0
         
@@ -215,10 +227,10 @@ class PESA2(ExperienceReplay):
             #--Step 5A: Complete PARALEL calcs 
             # via multiprocess.Process
             #*********************************
+            
             if self.PROC:
-                t0=time.time()
                 
-                QGWO = Queue(); QDE=Queue(); QXNES=Queue()
+                QGWO = Queue(); QDE=Queue(); QWOA=Queue()
                 def gwo_worker():
                     xgwo_best, ygwo_best, gwo_new= gwo.evolute(ngen=self.GWO_gen*replay_every, x0=self.gwo_next, verbose=0)
                                                                                                  
@@ -228,19 +240,19 @@ class PESA2(ExperienceReplay):
                     xde_best, yde_best, de_new=de.evolute(ngen=1*replay_every,x0=self.de_next, verbose=0)
                     QDE.put((xde_best, yde_best, de_new))
                 
-                def xnes_worker():
+                def woa_worker():
                     random.seed(self.SEED)
-                    xxnes_best, yxnes_best, xnes_new=xnes.evolute(ngen=1*replay_every,x0=self.xnes_next, verbose=0)
-                    QXNES.put((xxnes_best, yxnes_best, xnes_new))
+                    xwoa_best, ywoa_best, woa_new=woa.evolute(ngen=self.WOA_gen*replay_every,x0=self.woa_next, verbose=0)
+                    QWOA.put((xwoa_best, ywoa_best, woa_new))
                     
                 Process(target=gwo_worker).start()
                 Process(target=de_worker).start()
-                Process(target=xnes_worker).start()
+                Process(target=woa_worker).start()
                 
                 #get the values from the Queue
                 self.gwo_best, self.ygwo_best, self.gwo_next=QGWO.get()
                 self.de_best, self.yde_best, self.de_next=QDE.get()
-                self.xnes_best, self.yxnes_best, self.xnes_next=QXNES.get()
+                self.woa_best, self.ywoa_best, self.woa_next=QWOA.get()
                 
             #*********************************
             #--Step 5B: Complete Serial calcs
@@ -248,14 +260,14 @@ class PESA2(ExperienceReplay):
             else:  
                 self.gwo_best, self.ygwo_best, self.gwo_next= gwo.evolute(ngen=self.GWO_gen*replay_every, x0=self.gwo_next, verbose=0)
                 self.de_best, self.yde_best, self.de_next=de.evolute(ngen=1*replay_every,x0=self.de_next, verbose=0)
-                self.xnes_best, self.yxnes_best, self.xnes_next=xnes.evolute(ngen=1*replay_every, x0=self.xnes_next, verbose=0)
+                self.woa_best, self.ywoa_best, self.woa_next=woa.evolute(ngen=self.WOA_gen*replay_every, x0=self.woa_next, verbose=0)
             
             #*********************************************************
             # Step 5C: Obtain relevant statistics for this generation 
             #*********************************************************
             self.gwo_next=self.select(pop=self.gwo_next, k=self.MU_GWO)
             self.de_next=self.select(pop=self.de_next, k=self.MU_DE)
-            self.xnes_next=self.select(pop=self.xnes_next, k=self.MU_XNES)
+            self.woa_next=self.select(pop=self.woa_next, k=self.MU_WOA)
             
             self.STEP0=self.STEP0+self.NPOP  #update step counter
             if self.verbose==2:
@@ -339,15 +351,16 @@ class PESA2(ExperienceReplay):
     
     def memory_update(self):
         #"""
-        #This function updates the replay memory with the samples of GWO, DE, and XNES (if used)
+        #This function updates the replay memory with the samples of GWO, DE, and WOA (if used)
         #then remove the duplicates from the memory
         #"""
         gwo_x, gwo_y=[self.gwo_next[item][0] for item in self.gwo_next], [self.gwo_next[item][1] for item in self.gwo_next]
         de_x, de_y=[self.de_next[item][0] for item in self.de_next], [self.de_next[item][1] for item in self.de_next]
-        xnes_x, xnes_y=[self.xnes_next[item][0] for item in self.xnes_next], [self.xnes_next[item][1] for item in self.xnes_next]
+        woa_x, woa_y=[self.woa_next[item][0] for item in self.woa_next], [self.woa_next[item][1] for item in self.woa_next]
+        
         self.mymemory.add(xvec=tuple(gwo_x), obj=gwo_y, method=['gwo']*len(gwo_x))
         self.mymemory.add(xvec=tuple(de_x), obj=de_y, method=['de']*len(de_x))
-        self.mymemory.add(xvec=tuple(xnes_x), obj=xnes_y, method=['na']*len(xnes_x))
+        self.mymemory.add(xvec=tuple(woa_x), obj=woa_y, method=['woa']*len(woa_x))
 
     def resample(self):
         #"""
@@ -376,25 +389,22 @@ class PESA2(ExperienceReplay):
             self.de_next[index].append(de_replay[sample][1])
             index+=1
         
-        #update the dictionary with new samples for XNES
-        xnes_replay=self.mymemory.sample(batch_size=self.NPOP-self.MU_XNES,mode=self.MODE,alpha=self.ALPHA)
-        index=self.MU_XNES
-        for sample in range(self.NPOP-self.MU_XNES):
-            self.xnes_next[index].append(xnes_replay[sample][0])
-            self.xnes_next[index].append(xnes_replay[sample][1])
+        #update the dictionary with new samples for WOA
+        woa_replay=self.mymemory.sample(batch_size=self.NWHALES-self.MU_WOA,mode=self.MODE,alpha=self.ALPHA)
+        index=self.MU_WOA
+        for sample in range(self.NWHALES-self.MU_WOA):
+            self.woa_next[index].append(woa_replay[sample][0])
+            self.woa_next[index].append(woa_replay[sample][1])
             index+=1
-        
-        #self.xnes_next=self.select(self.xnes_next, k=1)
-         
+                 
         #get *_next back to a list of lists for the next loop
         self.gwo_next=[self.gwo_next[item][0] for item in self.gwo_next]    
         self.de_next=[self.de_next[item][0] for item in self.de_next]
-        self.xnes_next=[self.xnes_next[item][0] for item in self.xnes_next]
-        
+        self.woa_next=[self.woa_next[item][0] for item in self.woa_next]        
 
     def init_guess(self, pop0):
         #"""
-        #This function takes initial guess pop0 and returns initial guesses for GWO, DE, and XNES 
+        #This function takes initial guess pop0 and returns initial guesses for GWO, DE, and WOA 
         #to start PESA evolution
         #"""
         pop0=list(pop0.items())
@@ -405,10 +415,10 @@ class PESA2(ExperienceReplay):
         sorted_de=dict(pop0[:self.NPOP])
         x0_de, fit0_de=[sorted_de[key][0] for key in sorted_de], [sorted_de[key][2] for key in sorted_de] # initial guess for DE
         
-        sorted_xnes=dict(pop0[:self.NPOP])
-        x0_xnes, fit0_xnes=[sorted_xnes[key][0] for key in sorted_xnes], [sorted_xnes[key][2] for key in sorted_xnes] # initial guess for XNES
+        sorted_woa=dict(pop0[:self.NWHALES])
+        x0_woa, fit0_woa=[sorted_woa[key][0] for key in sorted_woa], [sorted_woa[key][2] for key in sorted_woa] # initial guess for WOA
         
-        return x0_gwo, fit0_gwo, x0_de, fit0_de, x0_xnes, fit0_xnes
+        return x0_gwo, fit0_gwo, x0_de, fit0_de, x0_woa, fit0_woa
 
     def printout(self, mode, gen):
         #"""
@@ -423,7 +433,7 @@ class PESA2(ExperienceReplay):
             print('GWO step {}/{}, NWolves={}, Ncores={}'.format(self.STEP0-1,self.STEPS, self.NWOLVES, self.NCORES))
             print('#############################################################################')
             print('Statistics for generation {}'.format(gen))
-            print('Best Wolf Fitness:', np.round(np.max(self.ygwo_best),4) if self.mode is 'max' else -np.round(np.max(self.ygwo_best),4))
+            print('Best Wolf Fitness:', np.round(np.max(self.ygwo_best),4) if self.mode == 'max' else -np.round(np.max(self.ygwo_best),4))
             print('Best Wolf Position:', np.round(self.gwo_best,3))
             print('#############################################################################')
                   
@@ -431,24 +441,24 @@ class PESA2(ExperienceReplay):
             print('DE step {}/{}, NPOP={}, F={}, CR={}, Ncores={}'.format(self.STEP0-1,self.STEPS,self.NPOP,np.round(self.F), self.CR, self.NCORES))
             print('****************************************************************************')
             print('Statistics for generation {}'.format(gen))
-            print('Best Individual Fitness:', np.round(np.max(self.yde_best),4) if self.mode is 'max' else -np.round(np.max(self.yde_best),4))
+            print('Best Individual Fitness:', np.round(np.max(self.yde_best),4) if self.mode == 'max' else -np.round(np.max(self.yde_best),4))
             print('Best Individual Position:', np.round(self.de_best),3)
             print('****************************************************************************')
             
             print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
-            print('XNES step {}/{}, NPOP={}, eta_B={}, eta_mu={}, eta_sigma={}'.format(self.STEP0-1,self.STEPS, self.NPOP, self.ETA_BMAT, self.ETA_MU, self.ETA_SIGMA))
+            print('WOA step {}/{}, NWhales={}, Ncores={}'.format(self.STEP0-1,self.STEPS, self.NWHALES, self.NCORES))
             print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
             print('Statistics for generation {}'.format(gen))
-            print('Best Individual Fitness:', np.round(np.max(self.yxnes_best),4) if self.mode is 'max' else -np.round(np.max(self.yxnes_best),4))
-            print('Best Individual Position:', np.round(self.xnes_best,3))
+            print('Best Whale Fitness:', np.round(np.max(self.ywoa_best),4) if self.mode == 'max' else -np.round(np.max(self.ywoa_best),4))
+            print('Best Whale Position:', np.round(self.woa_best,3))
             print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
         
         if mode == 2:
             print('------------------------------------------------------------')
-            print('PESA2 step {}/{}'.format(self.STEP0-1,self.STEPS))
+            print('PESA2 step {}/{}, Ncores={}'.format(self.STEP0-1,self.STEPS, self.ncores))
             print('------------------------------------------------------------')
             print('PESA statistics for generation {}'.format(gen))
-            print('Best Fitness:', self.pesa_best[1] if self.mode is 'max' else -self.pesa_best[1])
+            print('Best Fitness:', self.pesa_best[1] if self.mode == 'max' else -self.pesa_best[1])
             print('Best Individual:', np.round(self.pesa_best[0],2))
             print('ALPHA:', np.round(self.ALPHA,3))
             print('Memory Size:', self.memory_size)

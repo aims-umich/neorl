@@ -10,68 +10,57 @@ import random
 import numpy as np
 import math
 import time
-from collections import defaultdict
-import sys
-import uuid
+import joblib
 
-import multiprocessing
-import multiprocessing.pool
-class NoDaemonProcess(multiprocessing.Process):
-    # make 'daemon' attribute always return False
-    def _get_daemon(self):
-        return False
-    def _set_daemon(self, value):
-        pass
-    daemon = property(_get_daemon, _set_daemon)
-
-# We sub-class multiprocessing.pool.Pool instead of multiprocessing.Pool
-# because the latter is only a wrapper function, not a proper class.
-class MyPool(multiprocessing.pool.Pool):
-    Process = NoDaemonProcess
-
-#multiprocessing trick to paralllelize nested functions in python (un-picklable objects!)
-def globalize(func):
-  def result(*args, **kwargs):
-    return -func(*args, **kwargs)
-  result.__name__ = result.__qualname__ = uuid.uuid4().hex
-  setattr(sys.modules[result.__module__], result.__name__, result)
-  return result
-
-class WOAmod(object):
+class ABC(object):
     """
-    Whale Optimization Algorithm
+    Artificial Bee Colony
     
     :param mode: (str) problem type, either ``min`` for minimization problem or ``max`` for maximization
     :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: ``bounds={'x1': ['int', 1, 4], 'x2': ['float', 0.1, 0.8], 'x3': ['float', 2.2, 6.2]}``
     :param fit: (function) the fitness function 
-    :param nwhales: (int): number of whales in the population
-    :param a0: (float): initial value for coefficient ``a``, which is annealed from ``a0`` to 0 (see **Notes** below for more info).
-    :param b: (float): constant for defining the shape of the logarithmic spiral
+    :param nbees: (int): number of bees in the colony
+    :param scouts: (float): trial limit for scout bee to discard a food source and search for a new one. (see **Notes** below for more info).
     :param ncores: (int) number of parallel processors (must be ``<= nwhales``)
     :param seed: (int) random seed for sampling
     """
-    def __init__(self, mode, bounds, fit, nwhales=5, a0=2, b=1, ncores=1, seed=None):
+    def __init__(self, mode, bounds, fit, nbees=50, scouts=0.5, ncores=1, seed=None):
         
         if seed:
             random.seed(seed)
             np.random.seed(seed)
-                
+        
+        assert ncores <= nbees, '--error: ncores ({}) must be less than or equal than nbees ({})'.format(ncores, nbees)
+        assert nbees >= 4, '--error: size of nbees must be more than 4'
         #--mir
         self.mode=mode
         if mode == 'min':
             self.fit=fit
         elif mode == 'max':
-            self.fit = globalize(lambda x: fit(x))  #use the function globalize to serialize the nested fit
+            def fitness_wrapper(*args, **kwargs):
+                return -fit(*args, **kwargs) 
+            self.fit=fitness_wrapper
         else:
             raise ValueError('--error: The mode entered by user is invalid, use either `min` or `max`')
             
         self.bounds=bounds
         self.ncores = ncores
-        self.nwhales=nwhales
-        assert a0 > 0, '--error: a0 must be positive'
-        self.a0=a0
-        self.b=b
+        self.nbees=nbees
         self.dim = len(bounds)
+        
+        #number of employed and onlooker bees
+        self.nbees_real = int(nbees/2)
+        
+        if (scouts <= 0):
+            raise ValueError('--error: Choose a positive value for scouts not {}'.format(scouts))
+        elif (scouts < 1):
+            self.scout_limit = int(self.nbees_real * self.dim * scouts)
+        else:
+            self.scout_limit = int(scouts)
+            
+        self.scout_status = 0
+        self.iteration_status = 0
+        self.nan_status = 0
         
         self.lb=np.array([self.bounds[item][1] for item in self.bounds])
         self.ub=np.array([self.bounds[item][2] for item in self.bounds])
@@ -90,7 +79,7 @@ class WOAmod(object):
                 raise Exception ('unknown data type is given, either int, float, or grid are allowed for parameter bounds')   
         return indv
 
-    def eval_whales(self):
+    def eval_bees(self):
     
         #---------------------
         # Fitness calcs
@@ -100,11 +89,10 @@ class WOAmod(object):
             core_lst.append(self.Positions[case, :])
     
         if self.ncores > 1:
-            
-            p=MyPool(self.ncores)
-            fitness_lst = p.map(self.fit_worker, core_lst)
-            p.close(); p.join()  
-            
+
+            with joblib.Parallel(n_jobs=self.ncores) as parallel:
+                fitness_lst=parallel(joblib.delayed(self.fit_worker)(item) for item in core_lst)
+                
         else:
             fitness_lst=[]
             for item in core_lst:
@@ -120,22 +108,22 @@ class WOAmod(object):
         
         return best_pos, best_fit 
         
-    def ensure_bounds(self, vec):
+    def ensure_bounds(self, vec, bounds):
     
         vec_new = []
         # cycle through each variable in vector 
-        for i, (key, val) in enumerate(self.bounds.items()):
+        for i, (key, val) in enumerate(bounds.items()):
     
             # variable exceedes the minimum boundary
-            if vec[i] < self.bounds[key][1]:
-                vec_new.append(self.bounds[key][1])
+            if vec[i] < bounds[key][1]:
+                vec_new.append(bounds[key][1])
     
             # variable exceedes the maximum boundary
-            if vec[i] > self.bounds[key][2]:
-                vec_new.append(self.bounds[key][2])
+            if vec[i] > bounds[key][2]:
+                vec_new.append(bounds[key][2])
     
             # the variable is fine
-            if self.bounds[key][1] <= vec[i] <= self.bounds[key][2]:
+            if bounds[key][1] <= vec[i] <= bounds[key][2]:
                 vec_new.append(vec[i])
             
         return vec_new
@@ -144,7 +132,7 @@ class WOAmod(object):
         #This worker is for parallel calculations
         
         # Clip the whale with position outside the lower/upper bounds and return same position
-        x=self.ensure_bounds(x)
+        x=self.ensure_bounds(x,self.bounds)
         
         # Calculate objective function for each search agent
         fitness = self.fit(x)
@@ -177,9 +165,7 @@ class WOAmod(object):
                     distance2Leader = abs(self.best_position[j] - self.Positions[i, j])
                     self.Positions[i, j] = (distance2Leader * math.exp(self.b * l) 
                                             * math.cos(l * 2 * math.pi) + self.best_position[j])
-                    
-            self.Positions[i,:]=self.ensure_bounds(self.Positions[i,:])
-            
+
     def evolute(self, ngen, x0=None, verbose=True):
         """
         This function evolutes the WOA algorithm for number of generations.
@@ -193,39 +179,76 @@ class WOAmod(object):
         self.history = {'local_fitness':[], 'global_fitness':[], 'a': [], 'A': []}
         self.best_fitness=float("inf") 
         self.verbose=verbose
-        self.Positions = np.zeros((self.nwhales, self.dim))
+        self.Positions = np.zeros((self.nbees_real, self.dim))
         if x0:
-            assert len(x0) == self.nwhales, '--error: the length of x0 ({}) MUST equal the number of whales in the group ({})'.format(len(x0), self.nwhales)
-            for i in range(self.nwhales):
+            assert len(x0) == self.nbees, '--error: the length of x0 ({}) MUST equal the number of bees in the group ({})'.format(len(x0), self.nbees)
+            for i in range(self.nbees_real):
                 self.Positions[i,:] = x0[i]
         else:
-            #self.Positions=self.init_sample(self.bounds)  #TODO, update later for mixed-integer optimisation
-            # Initialize the positions of whales
-            
-            for i in range(self.dim):
-                self.Positions[:, i] = (np.random.uniform(0, 1, self.nwhales) * (self.ub[i] - self.lb[i]) + self.lb[i])
+            # Initialize the positions of bats
+            for i in range(self.nbees_real):
+                self.Positions[i,:]=self.init_sample(self.bounds)
         
-        fitness0=self.eval_whales()
+        fitness0=self.eval_bees()
         
         self.best_position, self.best_fitness = self.select(self.Positions, fitness0)
+        print(self.best_position)
+        print(self.best_fitness)
                        
         for k in range(0, ngen):
             
-            # a is annealed from 2 to 0
-            self.a = self.a0 - k * ((self.a0) / (ngen))
-            # fac is annealed from -1 to -2 to estimate l
-            self.fac = -1 + k * ((-1) / ngen)
-            #-----------------------------
-            # Update Whale Positions
-            #-----------------------------
-            self.UpdateWhales()
+            
+            #---------------------------------------------------------------
+            #Step 1: Food search 
+            #---------------------------------------------------------------
+            #Generate and evaluate a neighbor point to every food source
+            for i in range(self.nbees_real):
+                self.food_source_dance(i)
+                    
+            def food_source_dance(self, index):
+                
+                trial_counter=0
+                
+                #Generate a partner food source to generate a neighbor point to evaluate
+                while True: #Criterion from [1] geting another food source at random
+                    k = int(random.randrange(0, self.nbees_real))
+                    if (k != index):
+                        break
+                #self.foods[index].evaluate_neighbor(self.foods[d].position)
+                main_position=self.Positions[index,:]
+                partner_position=self.Positions[k,:]
+                
+                
+                #def evaluate_neighbor(self, partner_position):
+                #Randomize one coodinate (one dimension) to generate a neighbor point
+                j = random.randrange(0, self.dim)
+        
+                #eq. (2.2) [1] (new coordinate "x_j" to generate a neighbor point)
+                xj_new = main_position[j] + random.uniform(-1, 1)*(main_position[j] - partner_position[j])
+        
+                #Check boundaries
+                xj_new = self.ensure_bounds(xj_new, self.bounds)
+        
+                #Changes the coordinate "j" from food source to new "x_j" generating the neighbor point
+                neighbor_position = [(main_position[i] if (i != j) else xj_new) for i in range(self.dim)]
+                neighbor_fit = self.fit_worker(neighbor_position)
+        
+                #Greedy selection
+                if (neighbor_fit > self.fit):
+                    main_position = neighbor_position
+                    fit = neighbor_fit
+                    trial_counter = 0
+                else:
+                    trial_counter += 1
+                
+                return main_position, fit, self.trial_counter
                     
             #----------------------
             #  Evaluate New Whales
             #----------------------
-            self.fitness=self.eval_whales()
+            fitness=self.eval_whales()
             
-            for i, fits in enumerate(self.fitness):
+            for i, fits in enumerate(fitness):
                 #save the best of the best!!!
                 if fits < self.best_fitness:
                     self.best_fitness=fits
@@ -234,10 +257,10 @@ class WOAmod(object):
             #--mir
             if self.mode=='max':
                 self.fitness_best_correct=-self.best_fitness
-                self.local_fitness=-np.min(self.fitness)
+                self.local_fitness=-np.min(fitness)
             else:
                 self.fitness_best_correct=self.best_fitness
-                self.local_fitness=np.min(self.fitness)
+                self.local_fitness=np.min(fitness)
 
             self.history['local_fitness'].append(self.local_fitness)
             self.history['global_fitness'].append(self.fitness_best_correct)
@@ -260,17 +283,5 @@ class WOAmod(object):
             print('Best fitness (y) found:', self.fitness_best_correct)
             print('Best individual (x) found:', self.best_position)
             print('--------------------------------------------------------------')  
-
-        #-------------------------------------
-        #return population ranked for PESA2
-        #-------------------------------------
-        pesa_pop=defaultdict(list)
-
-        for i in range(0, self.Positions.shape[0]):
-            pesa_pop[i].append(list(self.Positions[i, :]))
-            if self.mode=='max':
-                pesa_pop[i].append(-self.fitness[i])
-            else:
-                pesa_pop[i].append(self.fitness[i])
             
-        return self.best_position, self.fitness_best_correct, pesa_pop
+        return self.best_position, self.fitness_best_correct, self.history

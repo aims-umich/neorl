@@ -15,6 +15,16 @@ import random
 import numpy as np
 from collections import defaultdict
 import time
+import sys
+import uuid
+
+#multiprocessing trick to paralllelize nested functions in python (un-picklable objects!)
+def globalize(func):
+  def result(*args, **kwargs):
+    return -func(*args, **kwargs)
+  result.__name__ = result.__qualname__ = uuid.uuid4().hex
+  setattr(sys.modules[result.__module__], result.__name__, result)
+  return result
 
 class PESA(ExperienceReplay):
 
@@ -70,14 +80,14 @@ class PESA(ExperienceReplay):
         if mode == 'max':
             self.FIT=fit
         elif mode == 'min':
-            def fitness_wrapper(*args, **kwargs):
-                return -fit(*args, **kwargs) 
-            self.FIT=fitness_wrapper
+            self.FIT = globalize(lambda x: fit(x))  #use the function globalize to serialize the nested fit
         else:
             raise ValueError('--error: The mode entered by user is invalid, use either `min` or `max`')
-            
+        
+        self.ncores=ncores
         self.NPOP=npop
         self.pso_flag=True
+        self.ncores=ncores
         if ncores <= 3:
             self.NCORES=1
             self.PROC=False
@@ -162,14 +172,14 @@ class PESA(ExperienceReplay):
         #-------------------------------------------------------
         if x0: 
             # use provided initial guess
-            warm=ESMod(bounds=self.BOUNDS, fit=self.FIT, mu=self.MU, lambda_=self.LAMBDA, ncores=self.NCORES)
+            warm=ESMod(bounds=self.BOUNDS, fit=self.FIT, mu=self.MU, lambda_=self.LAMBDA, ncores=self.ncores)
             x0size=len(x0)
             assert x0size >= self.NPOP, 'the number of lists in x0 ({}) must be more than or equal npop ({})'.format(x0size, self.NPOP)
             self.pop0=warm.init_pop(warmup=x0size, x_known=x0)  #initial population for ES
         else:
             #create initial guess 
             assert warmup > self.NPOP, 'the number of warmup samples ({}) must be more than npop ({})'.format(warmup, self.NPOP)
-            warm=ESMod(bounds=self.BOUNDS, fit=self.FIT, mu=self.MU, lambda_=self.LAMBDA, ncores=self.NCORES)
+            warm=ESMod(bounds=self.BOUNDS, fit=self.FIT, mu=self.MU, lambda_=self.LAMBDA, ncores=self.ncores)
             self.pop0=warm.init_pop(warmup=warmup)  #initial population for ES
             
         self.partime={}
@@ -461,7 +471,7 @@ class PESA(ExperienceReplay):
             print('ES step {}/{}, CX={}, MUT={}, MU={}, LAMBDA={}'.format(self.STEP0-1,self.STEPS, np.round(self.CXPB,2), np.round(self.MUTPB,2), self.MU, self.LAMBDA))
             print('############################################################')
             print('Statistics for generation {}'.format(gen))
-            print('Best Fitness:', np.round(np.max(self.rwd),4) if self.mode is 'max' else -np.round(np.max(self.rwd),4))
+            print('Best Fitness:', np.round(np.max(self.rwd),4) if self.mode == 'max' else -np.round(np.max(self.rwd),4))
             print('Max Strategy:', np.round(np.max(self.mean_strategy),3))
             print('Min Strategy:', np.round(np.min(self.mean_strategy),3))
             print('Average Strategy:', np.round(np.mean(self.mean_strategy),3))
@@ -471,7 +481,7 @@ class PESA(ExperienceReplay):
             print('SA step {}/{}, T={}'.format(self.STEP0-1,self.STEPS,np.round(self.T)))
             print('************************************************************')
             print('Statistics for the {} parallel chains'.format(self.NCORES))
-            print('Fitness:', np.round(self.E_next,4) if self.mode is 'max' else -np.round(self.E_next,4))
+            print('Fitness:', np.round(self.E_next,4) if self.mode == 'max' else -np.round(self.E_next,4))
             print('Acceptance Rate (%):', self.acc)
             print('Rejection Rate (%):', self.rej)
             print('Improvment Rate (%):', self.imp)
@@ -482,7 +492,7 @@ class PESA(ExperienceReplay):
                 print('PSO step {}/{}, C1={}, C2={}, Particles={}'.format(self.STEP0-1,self.STEPS, np.round(self.C1,2), np.round(self.C2,2), self.NPAR))
                 print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
                 print('Statistics for generation {}'.format(gen))
-                print('Best Swarm Fitness:', np.round(self.swm_fit,4) if self.mode is 'max' else -np.round(self.swm_fit,4))
+                print('Best Swarm Fitness:', np.round(self.swm_fit,4) if self.mode == 'max' else -np.round(self.swm_fit,4))
                 print('Best Swarm Position:', np.round(self.swm_pos,2))
                 print('Max Speed:', np.round(np.max(self.mean_speed),3))
                 print('Min Speed:', np.round(np.min(self.mean_speed),3))
@@ -491,10 +501,10 @@ class PESA(ExperienceReplay):
         
         if mode == 2:
             print('------------------------------------------------------------')
-            print('PESA step {}/{}'.format(self.STEP0-1,self.STEPS))
+            print('PESA step {}/{}, Ncores={}'.format(self.STEP0-1,self.STEPS, self.ncores))
             print('------------------------------------------------------------')
             print('PESA statistics for generation {}'.format(gen))
-            print('Best Fitness:', self.pesa_best[1] if self.mode is 'max' else -self.pesa_best[1])
+            print('Best Fitness:', self.pesa_best[1] if self.mode == 'max' else -self.pesa_best[1])
             print('Best Individual:', np.round(self.pesa_best[0],2))
             print('ALPHA:', np.round(self.ALPHA,3))
             print('Memory Size:', self.memory_size)

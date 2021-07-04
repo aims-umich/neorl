@@ -63,7 +63,7 @@ def mutGA(ind, strat, smin, smax, lb, ub, datatype):
                     ind[i] = int(lb[i])
                 else:
                     choices=list(range(int(lb[i]),int(ub[i]+1)))
-                    choices.remove(ind[i])
+                    choices.remove(int(ind[i]))
                     # randint is NOT used here since it could re-draw the same integer value, choice is used instead
                     ind[i] = random.choice(choices)
         
@@ -139,7 +139,7 @@ def mutES(ind, strat, smin, smax, lb, ub, datatype):
                     ind[i] = int(lb[i])
                 else:
                     choices=list(range(int(lb[i]),int(ub[i]+1)))
-                    choices.remove(ind[i])
+                    choices.remove(int(ind[i]))
                     # randint is NOT used here since it could re-draw the same integer value, choice is used instead
                     ind[i] = random.choice(choices)
         

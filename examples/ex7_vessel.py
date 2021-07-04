@@ -1,8 +1,8 @@
-from neorl import HHO
+from neorl import HHO, ES, PESA
 import math
-import numpy as np
+import matplotlib.pyplot as plt
 
-def Vessel(x):
+def Vessel(individual):
     """
     Pressure vesssel design
     x1: thickness (d1)  --> discrete value multiple of 0.0625 in 
@@ -10,6 +10,7 @@ def Vessel(x):
     x3: inner radius (r)  ---> cont. value between [10, 200]
     x4: length (L)  ---> cont. value between [10, 200]
     """
+    x=individual.copy()
     x[0] *= 0.0625   #convert d1 to "in" 
     x[1] *= 0.0625   #convert d2 to "in" 
 
@@ -38,6 +39,54 @@ bounds['x2'] = ['int', 1, 99]
 bounds['x3'] = ['float', 10, 200]
 bounds['x4'] = ['float', 10, 200]
 
-vessel_test = HHO(mode='min', bounds=bounds, fit=Vessel, nhawks=20, 
+########################
+# Setup and evolute HHO
+########################
+
+hho = HHO(mode='min', bounds=bounds, fit=Vessel, nhawks=30, 
                   int_transform='minmax', ncores=1, seed=1)
-x_best, y_best, hho_hist=vessel_test.evolute(ngen=100, verbose=True)
+x_hho, y_hho, hho_hist=hho.evolute(ngen=200, verbose=False)
+assert Vessel(x_hho) == y_hho
+
+########################
+# Setup and evolute ES 
+########################
+es = ES(mode='min', fit=Vessel, cxmode='cx2point', bounds=bounds, 
+                 lambda_=60, mu=30, cxpb=0.7, mutpb=0.2, seed=1)
+x_es, y_es, es_hist=es.evolute(ngen=200, verbose=False)
+assert Vessel(x_es) == y_es
+
+########################
+# Setup and evolute PESA
+########################
+pesa=PESA(mode='min', bounds=bounds, fit=Vessel, npop=60, mu=30, alpha_init=0.1,
+          alpha_end=1.0, cxpb=0.7, mutpb=0.2, alpha_backdoor=0.15, seed=1)
+x_pesa, y_pesa, pesa_hist=pesa.evolute(ngen=200, verbose=False)
+assert Vessel(x_pesa) == y_pesa
+
+########################
+# Plotting
+########################
+
+plt.figure()
+plt.plot(hho_hist['global_fitness'], label='HHO')
+plt.plot(es_hist, label='ES')
+plt.plot(pesa_hist, label='PESA')
+plt.xlabel('Generation')
+plt.ylabel('Fitness')
+#plt.ylim([0,10000]) #zoom in
+plt.legend()
+
+########################
+# Comparison
+########################
+
+print('---Best HHO Results---')
+print(x_hho)
+print(y_hho)
+print('---Best ES Results---')
+print(x_es)
+print(y_es)
+print('---Best PESA Results---')
+print(x_pesa)
+print(y_pesa)

@@ -96,22 +96,22 @@ class SSA(object):
         
         return best_pos, best_fit 
         
-    def ensure_bounds(self, vec, bounds):
+    def ensure_bounds(self, vec):
     
         vec_new = []
         # cycle through each variable in vector 
-        for i, (key, val) in enumerate(bounds.items()):
+        for i, (key, val) in enumerate(self.bounds.items()):
     
             # variable exceedes the minimum boundary
-            if vec[i] < bounds[key][1]:
-                vec_new.append(bounds[key][1])
+            if vec[i] < self.bounds[key][1]:
+                vec_new.append(self.bounds[key][1])
     
             # variable exceedes the maximum boundary
-            if vec[i] > bounds[key][2]:
-                vec_new.append(bounds[key][2])
+            if vec[i] > self.bounds[key][2]:
+                vec_new.append(self.bounds[key][2])
     
             # the variable is fine
-            if bounds[key][1] <= vec[i] <= bounds[key][2]:
+            if self.bounds[key][1] <= vec[i] <= self.bounds[key][2]:
                 vec_new.append(vec[i])
             
         return vec_new
@@ -120,7 +120,7 @@ class SSA(object):
         #This worker is for parallel calculations
         
         # Clip the salp with position outside the lower/upper bounds and return same position
-        x=self.ensure_bounds(x,self.bounds)
+        x=self.ensure_bounds(x)
         
         # Calculate objective function for each search agent
         fitness = self.fit(x)
@@ -147,8 +147,11 @@ class SSA(object):
                 point2 = self.Positions[:, i]
 
                 self.Positions[:, i] = (point2 + point1) / 2
-
+                
+            self.Positions[:,i]=self.ensure_bounds(self.Positions[:,i])
+                
             self.Positions = np.transpose(self.Positions)
+            
 
     def evolute(self, ngen, x0=None, verbose=True):
         """

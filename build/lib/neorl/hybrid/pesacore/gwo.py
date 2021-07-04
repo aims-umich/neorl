@@ -11,8 +11,9 @@ import numpy as np
 import math
 #from solution import solution
 import time
-import joblib
 from collections import defaultdict
+import sys
+import uuid
 
 import multiprocessing
 import multiprocessing.pool
@@ -28,6 +29,14 @@ class NoDaemonProcess(multiprocessing.Process):
 # because the latter is only a wrapper function, not a proper class.
 class MyPool(multiprocessing.pool.Pool):
     Process = NoDaemonProcess
+
+#multiprocessing trick to paralllelize nested functions in python (un-picklable objects!)
+def globalize(func):
+  def result(*args, **kwargs):
+    return -func(*args, **kwargs)
+  result.__name__ = result.__qualname__ = uuid.uuid4().hex
+  setattr(sys.modules[result.__module__], result.__name__, result)
+  return result
     
 class GWOmod(object):
     """
@@ -46,16 +55,12 @@ class GWOmod(object):
             random.seed(seed)
             np.random.seed(seed)
         
-        #assert ncores <= nwolves, '--error: ncores ({}) must be less than or equal than nwolves ({})'.format(ncores, nwolves)
-        
-        #--mir
+#        #--mir
         self.mode=mode
         if mode == 'min':
             self.fit=fit
         elif mode == 'max':
-            def fitness_wrapper(*args, **kwargs):
-                return -fit(*args, **kwargs) 
-            self.fit=fitness_wrapper
+            self.fit=globalize(lambda x: fit(x))  #use the function globalize to serialize the nested fit
         else:
             raise ValueError('--error: The mode entered by user is invalid, use either `min` or `max`')
             
@@ -146,132 +151,131 @@ class GWOmod(object):
     
         Delta_pos = np.zeros(self.dim)
         Delta_score = float("inf") #GWO is built to minimize
-           
-        with joblib.Parallel(n_jobs=self.ncores) as parallel:
+                       
+        for l in range(0, ngen):
             
-            for l in range(0, ngen):
-                
-                #---------------------
-                # Fitness calcs
-                #---------------------
-                self.x_lst=[]
-                for case in range (0, self.Positions.shape[0]):
-                    self.x_lst.append(list(self.Positions[case, :]))
-            
-                if self.ncores > 1:
-                    with joblib.Parallel(n_jobs=self.ncores) as parallel:
-                        self.fitness=parallel(joblib.delayed(self.fit_worker)(item) for item in self.x_lst) 
-                else:
-                    self.fitness=[]
-                    for item in self.x_lst:
-                        self.fitness.append(self.fit_worker(item))  
-                        
-                #----------------------
-                #  Update wolf scores
-                #----------------------
-                #Loop through the fitness list and update the score of alpha, beta, gamma, and omega!
-                for i, fits in enumerate(self.fitness):
-                    # Update Alpha, Beta, and Delta
-                    if fits < Alpha_score:
-                        Delta_score = Beta_score  # Update delte
-                        Delta_pos = Beta_pos.copy()
-                        Beta_score = Alpha_score  # Update beta
-                        Beta_pos = Alpha_pos.copy()
-                        Alpha_score = fits
-                        # Update alpha
-                        Alpha_pos = self.Positions[i, :].copy()
+            #---------------------
+            # Fitness calcs
+            #---------------------
+            self.x_lst=[]
+            for case in range (0, self.Positions.shape[0]):
+                self.x_lst.append(list(self.Positions[case, :]))
         
-                    if fits > Alpha_score and fits < Beta_score:
-                        Delta_score = Beta_score  # Update delte
-                        Delta_pos = Beta_pos.copy()
-                        Beta_score = fits  # Update beta
-                        Beta_pos = self.Positions[i, :].copy()
-        
-                    if fits > Alpha_score and fits > Beta_score and fits < Delta_score:
-                        Delta_score = fits  # Update delta
-                        Delta_pos = self.Positions[i, :].copy()
+            if self.ncores > 1:
+                p=MyPool(self.ncores)
+                self.fitness = p.map(self.fit_worker, self.x_lst)
+                p.close(); p.join()            
+            else:
+                self.fitness=[]
+                for item in self.x_lst:
+                    self.fitness.append(self.fit_worker(item))  
                     
-                    #save the best of the best!!!
-                    if fits < self.fitness_best:
-                        self.fitness_best=fits
-                        self.x_best=self.Positions[i, :].copy()
-                    
-                    
-                self.history['alpha_wolf'].append(Alpha_score)
-                self.history['beta_wolf'].append(Beta_score)
-                self.history['delta_wolf'].append(Delta_score)
-                
-                a = 2 - l * ((2) / ngen)
-                # a decreases linearly from 2 to 0
-                
-                #--------------------------------
-                # Position update loop
-                #--------------------------------
-                # Update the position of search wolves
-                for i in range(0, self.nwolves):
-                    for j in range(0, self.dim):
-        
-                        r1 = random.random()  # r1 is a random number in [0,1]
-                        r2 = random.random()  # r2 is a random number in [0,1]
-        
-                        A1 = 2 * a * r1 - a
-                        # Equation (3.3)
-                        C1 = 2 * r2
-                        # Equation (3.4)
-        
-                        D_alpha = abs(C1 * Alpha_pos[j] - self.Positions[i, j])
-                        # Equation (3.5)-part 1
-                        X1 = Alpha_pos[j] - A1 * D_alpha
-                        # Equation (3.6)-part 1
-        
-                        r1 = random.random()
-                        r2 = random.random()
-        
-                        A2 = 2 * a * r1 - a
-                        # Equation (3.3)
-                        C2 = 2 * r2
-                        # Equation (3.4)
-        
-                        D_beta = abs(C2 * Beta_pos[j] - self.Positions[i, j])
-                        # Equation (3.5)-part 2
-                        X2 = Beta_pos[j] - A2 * D_beta
-                        # Equation (3.6)-part 2
-        
-                        r1 = random.random()
-                        r2 = random.random()
-        
-                        A3 = 2 * a * r1 - a
-                        # Equation (3.3)
-                        C3 = 2 * r2
-                        # Equation (3.4)
-        
-                        D_delta = abs(C3 * Delta_pos[j] - self.Positions[i, j])
-                        # Equation (3.5)-part 3
-                        X3 = Delta_pos[j] - A3 * D_delta
-                        # Equation (3.5)-part 3
-        
-                        self.Positions[i, j] = (X1 + X2 + X3) / 3  # Equation (3.7)
-
-                #--mir
-                if self.mode=='max':
-                    self.fitness_best_correct=-self.fitness_best
-                else:
-                    self.fitness_best_correct=self.fitness_best
-                    
-                # Print statistics
-                if self.verbose and i % self.nwolves:
-                    print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
-                    print('GWO step {}/{}, nwolves={}, Ncores={}'.format((l+1)*self.nwolves, ngen*self.nwolves, self.nwolves, self.ncores))
-                    print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
-                    print('Best Group Fitness:', np.round(self.fitness_best_correct,6))
-                    print('Best Group Position:', np.round(self.x_best,6))
-                    print('Alpha wolf Fitness:', np.round(Alpha_score,6))
-                    print('Beta wolf Fitness:', np.round(Beta_score,6))
-                    print('Delta wolf Fitness:', np.round(Delta_score,6))
-                    print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
+            #----------------------
+            #  Update wolf scores
+            #----------------------
+            #Loop through the fitness list and update the score of alpha, beta, gamma, and omega!
+            for i, fits in enumerate(self.fitness):
+                # Update Alpha, Beta, and Delta
+                if fits < Alpha_score:
+                    Delta_score = Beta_score  # Update delte
+                    Delta_pos = Beta_pos.copy()
+                    Beta_score = Alpha_score  # Update beta
+                    Beta_pos = Alpha_pos.copy()
+                    Alpha_score = fits
+                    # Update alpha
+                    Alpha_pos = self.Positions[i, :].copy()
     
-        
-                self.history['fitness'].append(Alpha_score)
+                if fits > Alpha_score and fits < Beta_score:
+                    Delta_score = Beta_score  # Update delte
+                    Delta_pos = Beta_pos.copy()
+                    Beta_score = fits  # Update beta
+                    Beta_pos = self.Positions[i, :].copy()
+    
+                if fits > Alpha_score and fits > Beta_score and fits < Delta_score:
+                    Delta_score = fits  # Update delta
+                    Delta_pos = self.Positions[i, :].copy()
+                
+                #save the best of the best!!!
+                if fits < self.fitness_best:
+                    self.fitness_best=fits
+                    self.x_best=self.Positions[i, :].copy()
+                
+                
+            self.history['alpha_wolf'].append(Alpha_score)
+            self.history['beta_wolf'].append(Beta_score)
+            self.history['delta_wolf'].append(Delta_score)
+            
+            a = 2 - l * ((2) / ngen)
+            # a decreases linearly from 2 to 0
+            
+            #--------------------------------
+            # Position update loop
+            #--------------------------------
+            # Update the position of search wolves
+            for i in range(0, self.nwolves):
+                for j in range(0, self.dim):
+    
+                    r1 = random.random()  # r1 is a random number in [0,1]
+                    r2 = random.random()  # r2 is a random number in [0,1]
+    
+                    A1 = 2 * a * r1 - a
+                    # Equation (3.3)
+                    C1 = 2 * r2
+                    # Equation (3.4)
+    
+                    D_alpha = abs(C1 * Alpha_pos[j] - self.Positions[i, j])
+                    # Equation (3.5)-part 1
+                    X1 = Alpha_pos[j] - A1 * D_alpha
+                    # Equation (3.6)-part 1
+    
+                    r1 = random.random()
+                    r2 = random.random()
+    
+                    A2 = 2 * a * r1 - a
+                    # Equation (3.3)
+                    C2 = 2 * r2
+                    # Equation (3.4)
+    
+                    D_beta = abs(C2 * Beta_pos[j] - self.Positions[i, j])
+                    # Equation (3.5)-part 2
+                    X2 = Beta_pos[j] - A2 * D_beta
+                    # Equation (3.6)-part 2
+    
+                    r1 = random.random()
+                    r2 = random.random()
+    
+                    A3 = 2 * a * r1 - a
+                    # Equation (3.3)
+                    C3 = 2 * r2
+                    # Equation (3.4)
+    
+                    D_delta = abs(C3 * Delta_pos[j] - self.Positions[i, j])
+                    # Equation (3.5)-part 3
+                    X3 = Delta_pos[j] - A3 * D_delta
+                    # Equation (3.5)-part 3
+    
+                    self.Positions[i, j] = (X1 + X2 + X3) / 3  # Equation (3.7)
+
+            #--mir
+            if self.mode=='max':
+                self.fitness_best_correct=-self.fitness_best
+            else:
+                self.fitness_best_correct=self.fitness_best
+                
+            # Print statistics
+            if self.verbose and i % self.nwolves:
+                print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
+                print('GWO step {}/{}, nwolves={}, Ncores={}'.format((l+1)*self.nwolves, ngen*self.nwolves, self.nwolves, self.ncores))
+                print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
+                print('Best Group Fitness:', np.round(self.fitness_best_correct,6))
+                print('Best Group Position:', np.round(self.x_best,6))
+                print('Alpha wolf Fitness:', np.round(Alpha_score,6))
+                print('Beta wolf Fitness:', np.round(Beta_score,6))
+                print('Delta wolf Fitness:', np.round(Delta_score,6))
+                print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
+
+    
+            self.history['fitness'].append(Alpha_score)
 
         if self.verbose:
             print('------------------------ GWO Summary --------------------------')

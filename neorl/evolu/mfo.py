@@ -214,7 +214,10 @@ class MFO:
                         Moth_pos[i,j] = (
                             distance_to_flame*math.exp(self.b*t)*math.cos(t*2*math.pi)
                         + sorted_population[Flame_no,j] 
-                        )                      
+                        )
+            
+                
+                Moth_pos[i,:]=self.ensure_bounds(Moth_pos[i,:])
     
             #-----------------------------
             #Fitness saving 

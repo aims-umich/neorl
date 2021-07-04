@@ -107,24 +107,42 @@ class SA:
             raise Exception ('unknown data type is given, either int, float, or grid are allowed for parameter bounds')
                 
         return sample
+
+    def ensure_bounds(self, vec): # bounds check
+
+        vec_new = []
+
+        for i, (key, val) in enumerate(self.bounds.items()):
+            # less than minimum 
+            if vec[i] < self.bounds[key][1]:
+                vec_new.append(self.bounds[key][1])
+            # more than maximum
+            if vec[i] > self.bounds[key][2]:
+                vec_new.append(self.bounds[key][2])
+            # fine
+            if self.bounds[key][1] <= vec[i] <= self.bounds[key][2]:
+                vec_new.append(vec[i])
+        
+        return vec_new
     
     def def_move(self, x, chi):
-        #"""
-        #This function is to perturb x attributes by probability chi
-        #Inputs:
-        #    x: input vector 
-        #    chi: perturbation probablity between 0 and 1
-        #Returns: perturbed vector x
-        #"""
+        """
+        This function is to perturb x attributes by probability chi
+        Inputs:
+            x: input vector 
+            chi: perturbation probablity between 0 and 1
+        Returns: perturbed vector x
+        """
         i=0
+        x_new=x.copy()
         for item in self.bounds:
             if random.random() < chi:
                 sample = self.sampler(self.bounds[item])
-                while x[i] == sample and (self.bounds[item][1] != self.bounds[item][2]): 
+                while x_new[i] == sample and (self.bounds[item][1] != self.bounds[item][2]): 
                     sample = self.sampler(self.bounds[item])
-                x[i] = sample
+                x_new[i] = sample
             i+=1
-        return x
+        return x_new
         
     def temp(self,step):
         #"""
@@ -177,9 +195,10 @@ class SA:
                 x=copy.deepcopy(self.move(x=x_prev,chi=self.chi[core_seed-1]))
             else:
                 x=copy.deepcopy(self.move(x=x_prev))
+            
+            x=self.ensure_bounds(x)
             #SA is programmed to maximize reward
             E=self.fit(x)
-            
             dE = E - E_prev        
             #-----------------------------------
             # Improve/Accept/Reject
@@ -320,16 +339,16 @@ class SA:
             arg_max=np.argmax(E_best)
             stat['x'].append(x_best[arg_max])
             if self.mode=='max':
-                stat['fitness'].append(E_best[arg_max])
+                stat['fitness'].append(max(E_best))
             else:
-                stat['fitness'].append(-E_best[arg_max])
+                stat['fitness'].append(-max(E_best))
             stat['T'].append(self.T)
             stat['accept'].append(acc[arg_max])
             stat['reject'].append(rej[arg_max])
             stat['improve'].append(imp[arg_max])
             
-            if E_best[arg_max] > E_opt:
-                E_opt=E_best[arg_max] if self.mode=='max' else -E_best[arg_max]
+            if max(E_best) > E_opt:
+                E_opt=max(E_best)
                 x_opt=copy.deepcopy(x_best[arg_max])
             
             if self.reinforce_best:
@@ -342,20 +361,26 @@ class SA:
                 print('************************************************************')
                 print('Statistics for the {} parallel chains'.format(self.ncores))
                 if self.mode=='max': 
-                    print('Best fitness:', np.round(E_best,6))
+                    print('Best fitness:', np.round(max(E_best),6))
                 else: 
-                    print('Best fitness:', -np.round(E_best,6))
+                    print('Best fitness:', -np.round(max(E_best),6))
                 print('Best individual:', x_best[arg_max])
                 print('Acceptance Rate (%):', acc)
                 print('Rejection Rate (%):', rej)
                 print('Improvment Rate (%):', imp)
                 print('************************************************************')
+
+        #--mir
+        if self.mode=='max':
+            self.E_opt_correct=E_opt
+        else:
+            self.E_opt_correct=-E_opt
                 
         if verbose:
             print('------------------------ SA Summary --------------------------')
-            print('Best fitness (y) found:', E_opt)
+            print('Best fitness (y) found:', self.E_opt_correct)
             print('Best individual (x) found:', x_opt)
             print('--------------------------------------------------------------')
             
-        return x_opt, E_opt, stat
+        return x_opt, self.E_opt_correct, stat
 

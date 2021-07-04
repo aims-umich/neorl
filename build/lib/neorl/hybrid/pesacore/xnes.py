@@ -171,70 +171,72 @@ class XNESmod(object):
 
         eyemat = eye(dim)
 
-        with joblib.Parallel(n_jobs=self.ncores) as parallel:
+        for i in range(ngen):
+            s_try = randn(npop, dim)
+            z_try = mu + sigma * dot(s_try, bmat)     # broadcast
+            
+            for k in range (len(z_try)):
+                z_try[k] = self.ensure_bounds(vec=z_try[k], bounds=self.bounds)
 
-            for i in range(ngen):
-                s_try = randn(npop, dim)
-                z_try = mu + sigma * dot(s_try, bmat)     # broadcast
+            p=MyPool(self.ncores)
+            f_try = p.map(f, z_try)
+            p.close(); p.join()   
                 
-                for k in range (len(z_try)):
-                    z_try[k] = self.ensure_bounds(vec=z_try[k], bounds=self.bounds)
+            #f_try = parallel(joblib.delayed(f)(z) for z in z_try)
+            f_try = asarray(f_try)
+            
+            # save if best
+            fitness = mean(f_try)
+
+            isort = argsort(f_try)                
+            f_try = f_try[isort]
+            s_try = s_try[isort]
+            z_try = z_try[isort]
+            
+            for m in range (len(f_try)):
+                if f_try[m] > self.fitness_best:
+                    self.fitness_best=f_try[m]
+                    self.x_best=copy.deepcopy(z_try[m])
                     
-                f_try = parallel(joblib.delayed(f)(z) for z in z_try)
-                f_try = asarray(f_try)
-                
-                # save if best
-                fitness = mean(f_try)
+            if fitness - 1e-8 > self.fitness_best:
+                self.mu_best = mu.copy()
+                self.counter = 0
+            else: 
+                self.counter += 1
+            
+            u_try = self.utilities if self.use_fshape else f_try
 
-                isort = argsort(f_try)                
-                f_try = f_try[isort]
-                s_try = s_try[isort]
-                z_try = z_try[isort]
-                
-                for m in range (len(f_try)):
-                    if f_try[m] > self.fitness_best:
-                        self.fitness_best=f_try[m]
-                        self.x_best=copy.deepcopy(z_try[m])
-                        
-                if fitness - 1e-8 > self.fitness_best:
-                    self.mu_best = mu.copy()
-                    self.counter = 0
-                else: 
-                    self.counter += 1
-                
-                u_try = self.utilities if self.use_fshape else f_try
+            if self.use_adasam and sigma_old is not None:  # sigma_old must be available
+                eta_sigma = self.adasam(eta_sigma, mu, sigma, bmat, sigma_old, z_try)
 
-                if self.use_adasam and sigma_old is not None:  # sigma_old must be available
-                    eta_sigma = self.adasam(eta_sigma, mu, sigma, bmat, sigma_old, z_try)
+            dj_delta = dot(u_try, s_try)
+            dj_mmat = dot(s_try.T, s_try*u_try.reshape(npop,1)) - sum(u_try)*eyemat
+            dj_sigma = trace(dj_mmat)*(1.0/dim)
+            dj_bmat = dj_mmat - dj_sigma*eyemat
 
-                dj_delta = dot(u_try, s_try)
-                dj_mmat = dot(s_try.T, s_try*u_try.reshape(npop,1)) - sum(u_try)*eyemat
-                dj_sigma = trace(dj_mmat)*(1.0/dim)
-                dj_bmat = dj_mmat - dj_sigma*eyemat
+            sigma_old = sigma
 
-                sigma_old = sigma
+            # update
+            mu += eta_mu * sigma * dot(bmat, dj_delta)
+            sigma *= exp(0.5 * eta_sigma * dj_sigma)
+            bmat = dot(bmat, expm(0.5 * eta_bmat * dj_bmat))
 
-                # update
-                mu += eta_mu * sigma * dot(bmat, dj_delta)
-                sigma *= exp(0.5 * eta_sigma * dj_sigma)
-                bmat = dot(bmat, expm(0.5 * eta_bmat * dj_bmat))
+            # logging
+            self.history['fitness'].append(self.fitness_best)
+            self.history['sigma'].append(sigma)
+            self.history['eta_sigma'].append(eta_sigma)
 
-                # logging
-                self.history['fitness'].append(self.fitness_best)
-                self.history['sigma'].append(sigma)
-                self.history['eta_sigma'].append(eta_sigma)
-
-                # Print data
-                if self.verbose and i % self.npop:
-                    print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
-                    print('XNES step {}/{}, NPOP={}, ETA_MU={}, ETA_SIGMA={}, ETA_BMAT={}, Ncores={}'.format((i+1)*self.npop, ngen*self.npop, self.npop, np.round(self.eta_mu,2), np.round(self.eta_sigma,2), np.round(self.eta_bmat,2), self.ncores))
-                    print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
-                    print('Best Swarm Fitness:', np.round(self.fitness_best,6))
-                    print('Best Swarm Position:', np.round(self.x_best,6))
-                    print('MU:', np.round(mu,3))
-                    print('Sigma:', np.round(sigma,3))
-                    print('BMAT:', np.round(bmat,3))
-                    print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
+            # Print data
+            if self.verbose and i % self.npop:
+                print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
+                print('XNES step {}/{}, NPOP={}, ETA_MU={}, ETA_SIGMA={}, ETA_BMAT={}, Ncores={}'.format((i+1)*self.npop, ngen*self.npop, self.npop, np.round(self.eta_mu,2), np.round(self.eta_sigma,2), np.round(self.eta_bmat,2), self.ncores))
+                print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
+                print('Best Swarm Fitness:', np.round(self.fitness_best,6))
+                print('Best Swarm Position:', np.round(self.x_best,6))
+                print('MU:', np.round(mu,3))
+                print('Sigma:', np.round(sigma,3))
+                print('BMAT:', np.round(bmat,3))
+                print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
             
         # keep last results
         self.mu, self.sigma, self.bmat = mu, sigma, bmat

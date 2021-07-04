@@ -11,6 +11,20 @@ from collections import defaultdict
 import copy
 import time
 import joblib
+import multiprocessing
+import multiprocessing.pool
+class NoDaemonProcess(multiprocessing.Process):
+    # make 'daemon' attribute always return False
+    def _get_daemon(self):
+        return False
+    def _set_daemon(self, value):
+        pass
+    daemon = property(_get_daemon, _set_daemon)
+
+# We sub-class multiprocessing.pool.Pool instead of multiprocessing.Pool
+# because the latter is only a wrapper function, not a proper class.
+class MyPool(multiprocessing.pool.Pool):
+    Process = NoDaemonProcess
 
 class ESMod:
     def __init__ (self, bounds, fit, mu, lambda_, ncores=1, indpb=0.1, cxpb=0.6, mutpb=0.3, smin=0.01, smax=0.5):  
@@ -104,11 +118,11 @@ class ESMod:
                 caseid='es_gen{}_ind{}'.format(0,key+1) 
                 core_list.append([pop[key][0],caseid])
            
-            #p=MyPool(self.ncores)
-            #fitness = p.map(self.gen_object, core_list)
-            #p.close(); p.join()
-            with joblib.Parallel(n_jobs=self.ncores) as parallel:
-                fitness=parallel(joblib.delayed(self.gen_object)(item) for item in core_list)
+            p=MyPool(self.ncores)
+            fitness = p.map(self.gen_object, core_list)
+            p.close(); p.join()
+            #with joblib.Parallel(n_jobs=self.ncores) as parallel:
+            #    fitness=parallel(joblib.delayed(self.gen_object)(item) for item in core_list)
             
             [pop[ind].append(fitness[ind]) for ind in range(len(pop))]
         
@@ -336,12 +350,13 @@ class ESMod:
                 for key in offspring:
                     core_list.append([offspring[key][0],caseids[case_idx]])
                     case_idx+=1
+                
                 #initialize a pool
-                #p=MyPool(self.ncores)
-                #fitness = p.map(self.gen_object, core_list)
-                #p.close(); p.join()
-                with joblib.Parallel(n_jobs=self.ncores) as parallel:
-                    fitness=parallel(joblib.delayed(self.gen_object)(item) for item in core_list)
+                p=MyPool(self.ncores)
+                fitness = p.map(self.gen_object, core_list)
+                p.close(); p.join()
+                #with joblib.Parallel(n_jobs=self.ncores) as parallel:
+                #    fitness=parallel(joblib.delayed(self.gen_object)(item) for item in core_list)
                 
                 [offspring[ind].append(fitness[ind]) for ind in range(len(offspring))]
                 

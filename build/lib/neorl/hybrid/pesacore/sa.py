@@ -13,6 +13,18 @@ import time
 import multiprocessing
 import multiprocessing.pool
 import joblib
+class NoDaemonProcess(multiprocessing.Process):
+    # make 'daemon' attribute always return False
+    def _get_daemon(self):
+        return False
+    def _set_daemon(self, value):
+        pass
+    daemon = property(_get_daemon, _set_daemon)
+
+# We sub-class multiprocessing.pool.Pool instead of multiprocessing.Pool
+# because the latter is only a wrapper function, not a proper class.
+class MyPool(multiprocessing.pool.Pool):
+    Process = NoDaemonProcess
 
 class SAMod(ExperienceReplay):
     
@@ -209,12 +221,13 @@ class SAMod(ExperienceReplay):
         if self.ncores > 1:
             # create and run the Pool
             t0=time.time()
-            #p=MyPool(self.ncores)
-            #results = p.map(self.chain_object, core_list)
-            #p.close()
-            #p.join()
-            with joblib.Parallel(n_jobs=self.ncores) as parallel:
-                results=parallel(joblib.delayed(self.chain_object)(item) for item in core_list)
+            p=MyPool(self.ncores)
+            results = p.map(self.chain_object, core_list)
+            p.close()
+            p.join()
+            
+            #with joblib.Parallel(n_jobs=self.ncores) as parallel:
+            #    results=parallel(joblib.delayed(self.chain_object)(item) for item in core_list)
             self.partime=time.time()-t0
             #print('SA:', self.partime)
         else:

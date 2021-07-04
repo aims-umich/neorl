@@ -26,7 +26,7 @@ class DE:
             random.seed(self.seed)
             np.random.seed(self.seed)
         
-        assert npop > 3, '--error: size of npop must be more than 3'
+        assert npop > 4, '--error: size of npop must be more than 4'
         self.npop=npop
         self.bounds=bounds
         self.ncores=ncores
@@ -223,6 +223,7 @@ class DE:
                 #--mir
                 if self.mode=='min':
                     y_best_correct=-y_best
+                    gen_avg=-gen_avg
                 else:
                     y_best_correct=y_best
     
