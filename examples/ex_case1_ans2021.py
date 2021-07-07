@@ -1,3 +1,12 @@
+#----------------------------------------------------------------
+#                ANS Winter Meeting 2021
+# Paper: NEORL: An Open-source Python Framework for 
+#               Optimization with Machine Learning Neuroevolution
+# Section: Script for Case 1 (Ackley Function)
+# Contact: Majdi I. Radaideh (radaideh@mit.edu)
+# Last update: 7/7/2021
+#----------------------------------------------------------------
+
 #---------------------------------
 # Import packages
 #---------------------------------

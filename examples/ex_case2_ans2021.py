@@ -1,3 +1,16 @@
+#----------------------------------------------------------------
+#                 ANS Winter Meeting 2021
+# Paper: NEORL: An Open-source Python Framework for 
+#               Optimization with Machine Learning Neuroevolution
+# Section: Script for Case 2 (Pressure Vessel Design)
+# Contact: Majdi I. Radaideh (radaideh@mit.edu)
+# Last update: 7/7/2021
+#----------------------------------------------------------------
+
+#*****************************************************************************
+#NOTE: Change ncores=1 and ncases=10 if you like to run this example quickly 
+#*****************************************************************************
+
 from neorl import PESA
 from neorl.tune import RANDTUNE
 import math
@@ -81,9 +94,9 @@ param_grid={
 'mutpb':[[0.05, 0.2],'float']}
 
 #setup a random tune object
-rtune=RANDTUNE(param_grid=param_grid, fit=tune_fit, ncases=100, seed=1)
+rtune=RANDTUNE(param_grid=param_grid, fit=tune_fit, ncases=5, seed=1)
 #tune the parameters with method .tune
-randres=rtune.tune(ncores=30, csvname='tune.csv')
+randres=rtune.tune(ncores=1, csvname='tune.csv')
 #sort the results from best to worst
 sorted_res = randres.sort_values(['score'], axis='index', ascending=True)
 #print the top 10 hyperparameter sets
