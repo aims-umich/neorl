@@ -17,6 +17,8 @@ from collections import defaultdict
 import time
 import sys
 import uuid
+from neorl.evolu.discrete import encode_grid_to_discrete, decode_discrete_to_grid
+
 
 #multiprocessing trick to paralllelize nested functions in python (un-picklable objects!)
 def globalize(func):
@@ -72,9 +74,8 @@ class PESA(ExperienceReplay):
         if seed:
             random.seed(seed)
             np.random.seed(seed)
-            
-        self.BOUNDS=bounds
-
+        
+        self.bounds=bounds
         #--mir
         self.mode=mode
         if mode == 'max':
@@ -135,7 +136,7 @@ class PESA(ExperienceReplay):
         #--------------------
         # Fixed/Derived parameters 
         #--------------------
-        self.nx=len(self.BOUNDS)  #all
+        self.nx=len(bounds)  #all
         self.memory_size=memory_size
         
         self.COOLING='fast' #SA
@@ -146,6 +147,37 @@ class PESA(ExperienceReplay):
         self.SMAX = 0.5  #ES
         self.v0=0.1 #constant to initialize PSO speed, not very important
 
+        #infer variable types 
+        self.datatype = np.array([bounds[item][0] for item in bounds])
+        
+        #mir-grid
+        if "grid" in self.datatype:
+            self.grid_flag=True
+            self.orig_bounds=bounds  #keep original bounds for decoding
+            print('--debug: grid parameter type is found in the space')
+            self.bounds, self.bounds_map=encode_grid_to_discrete(self.bounds) #encoding grid to int
+            #define var_types again by converting grid to int
+            self.datatype = np.array([self.bounds[item][0] for item in self.bounds])
+        else:
+            self.grid_flag=False
+            self.bounds = bounds
+        
+        self.lb = np.array([self.bounds[item][1] for item in self.bounds])
+        self.ub = np.array([self.bounds[item][2] for item in self.bounds])
+
+    def fit_worker(self, x):
+        #"""
+        #Evaluates fitness of an individual.
+        #"""
+        
+        
+        #mir-grid
+        if self.grid_flag:
+            #decode the individual back to the int/float/grid mixed space
+            x=decode_discrete_to_grid(x,self.orig_bounds,self.bounds_map) 
+                    
+        fitness = self.FIT(x)
+        return fitness
 
     def evolute(self, ngen, x0=None, warmup=100, verbose=True):
         """
@@ -172,14 +204,14 @@ class PESA(ExperienceReplay):
         #-------------------------------------------------------
         if x0: 
             # use provided initial guess
-            warm=ESMod(bounds=self.BOUNDS, fit=self.FIT, mu=self.MU, lambda_=self.LAMBDA, ncores=self.ncores)
+            warm=ESMod(bounds=self.bounds, fit=self.fit_worker, mu=self.MU, lambda_=self.LAMBDA, ncores=self.ncores)
             x0size=len(x0)
             assert x0size >= self.NPOP, 'the number of lists in x0 ({}) must be more than or equal npop ({})'.format(x0size, self.NPOP)
             self.pop0=warm.init_pop(warmup=x0size, x_known=x0)  #initial population for ES
         else:
             #create initial guess 
             assert warmup > self.NPOP, 'the number of warmup samples ({}) must be more than npop ({})'.format(warmup, self.NPOP)
-            warm=ESMod(bounds=self.BOUNDS, fit=self.FIT, mu=self.MU, lambda_=self.LAMBDA, ncores=self.ncores)
+            warm=ESMod(bounds=self.bounds, fit=self.fit_worker, mu=self.MU, lambda_=self.LAMBDA, ncores=self.ncores)
             self.pop0=warm.init_pop(warmup=warmup)  #initial population for ES
             
         self.partime={}
@@ -201,14 +233,14 @@ class PESA(ExperienceReplay):
         # Obtain initial population for all methods
         espop0, swarm0, swm_pos0, swm_fit0, local_pos, local_fit, x0, E0=self.init_guess(pop0=self.pop0)
         # Initialize ES class
-        es=ESMod(bounds=self.BOUNDS, fit=self.FIT, mu=self.MU, lambda_=self.LAMBDA, ncores=self.NCORES, indpb=self.INDPB, 
+        es=ESMod(bounds=self.bounds, fit=self.fit_worker, mu=self.MU, lambda_=self.LAMBDA, ncores=self.NCORES, indpb=self.INDPB, 
                  cxpb=self.CXPB, mutpb=self.MUTPB, smin=self.SMIN, smax=self.SMAX)
         # Initialize SA class
-        sa=SAMod(bounds=self.BOUNDS, memory=self.mymemory, fit=self.FIT, steps=self.STEPS, ncores=self.NCORES, 
+        sa=SAMod(bounds=self.bounds, memory=self.mymemory, fit=self.fit_worker, steps=self.STEPS, ncores=self.NCORES, 
                  chi=self.CHI, replay_rate=self.REPLAY_RATE, cooling=self.COOLING, Tmax=self.TMAX, Tmin=self.TMIN)
         # Initialize PSO class (if USED)
         if self.pso_flag:
-            pso=PSOMod(bounds=self.BOUNDS, fit=self.FIT, npar=self.NPAR, swm0=[swm_pos0,swm_fit0], 
+            pso=PSOMod(bounds=self.bounds, fit=self.fit_worker, npar=self.NPAR, swm0=[swm_pos0,swm_fit0], 
                        ncores=self.NCORES, c1=self.C1, c2=self.C2, speed_mech=self.SPEED_MECH)
             
         #--------------------------------
@@ -276,9 +308,7 @@ class PESA(ExperienceReplay):
                 self.partime['pso'].append(pso_partime)
                 self.partime['es'].append(es_partime)
                 self.partime['sa'].append(sa_partime)
-                
-                #print(self.partime)
-                
+                                
             #*********************************
             #--Step 5B: Complete Serial calcs
             #*********************************
@@ -331,20 +361,27 @@ class PESA(ExperienceReplay):
             self.pesa_best=self.mymemory.sample(batch_size=1,mode='greedy')[0]  #`greedy` will sample the best in memory
             self.fit_hist.append(self.pesa_best[1])
             self.memory_size=len(self.mymemory.storage) #memory size so far
-            if self.verbose:  #print summary data to screen
-                self.printout(mode=2, gen=gen)
                 
             #--mir
             if self.mode=='min':
                 self.fitness_best=-self.pesa_best[1]
             else:
                 self.fitness_best=self.pesa_best[1]
-        
+            
+            #mir-grid
+            if self.grid_flag:
+                self.xbest_correct=decode_discrete_to_grid(self.pesa_best[0],self.orig_bounds,self.bounds_map)
+            else:
+                self.xbest_correct=self.pesa_best[0]
+                
+            if self.verbose:  #print summary data to screen
+                self.printout(mode=2, gen=gen)
+                
         #--mir
         if self.mode=='min':
             self.fit_hist=[-item for item in self.fit_hist]
         
-        return self.pesa_best[0], self.fitness_best, self.fit_hist
+        return self.xbest_correct, self.fitness_best, self.fit_hist
 
     def linear_anneal(self, step, total_steps, a0, a1):
         #"""
@@ -364,13 +401,13 @@ class PESA(ExperienceReplay):
         #This function updates the replay memory with the samples of SA, ES, and PSO (if used)
         #then remove the duplicates from the memory
         #"""
-        self.mymemory.add(xvec=tuple(self.x_next), obj=self.E_next, method=['na']*len(self.x_next))
-        self.mymemory.add(xvec=tuple(self.x_best), obj=self.E_best, method=['na']*len(self.x_best))
-        self.mymemory.add(xvec=tuple(self.inds), obj=self.rwd, method=['na']*len(self.inds))
+        self.mymemory.add(xvec=tuple(self.x_next), obj=self.E_next, method=['sanext']*len(self.x_next))
+        self.mymemory.add(xvec=tuple(self.x_best), obj=self.E_best, method=['sabest']*len(self.x_best))
+        self.mymemory.add(xvec=tuple(self.inds), obj=self.rwd, method=['es']*len(self.inds))
         if self.pso_flag:
-            self.mymemory.add(xvec=tuple(self.pars), obj=self.fits, method=['na']*len(self.pars))
+            self.mymemory.add(xvec=tuple(self.pars), obj=self.fits, method=['pso']*len(self.pars))
         #self.mymemory.remove_duplicates()  #remove all duplicated samples in memory to avoid biased sampling
-
+        
     def resample(self):
         #"""
         #This function samples data from the memory and prepares the chains for SA
@@ -407,7 +444,7 @@ class PESA(ExperienceReplay):
                 
         sa_replay=self.mymemory.sample(batch_size=self.SA_MEMORY,mode=self.MODE,alpha=self.ALPHA)
         self.x_next, self.E_next=[item[0] for item in sa_replay], [item[1] for item in sa_replay]
-
+        
     def init_guess(self, pop0):
         #"""
         #This function takes initial guess pop0 and returns initial guesses for SA, PSO, and ES 
@@ -493,7 +530,7 @@ class PESA(ExperienceReplay):
                 print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
                 print('Statistics for generation {}'.format(gen))
                 print('Best Swarm Fitness:', np.round(self.swm_fit,4) if self.mode == 'max' else -np.round(self.swm_fit,4))
-                print('Best Swarm Position:', np.round(self.swm_pos,2))
+                print('Best Swarm Position:', self.swm_pos if not self.grid_flag else decode_discrete_to_grid(self.swm_pos,self.orig_bounds,self.bounds_map))
                 print('Max Speed:', np.round(np.max(self.mean_speed),3))
                 print('Min Speed:', np.round(np.min(self.mean_speed),3))
                 print('Average Speed:', np.round(np.mean(self.mean_speed),3))
@@ -505,7 +542,7 @@ class PESA(ExperienceReplay):
             print('------------------------------------------------------------')
             print('PESA statistics for generation {}'.format(gen))
             print('Best Fitness:', self.pesa_best[1] if self.mode == 'max' else -self.pesa_best[1])
-            print('Best Individual:', np.round(self.pesa_best[0],2))
+            print('Best Individual:', self.xbest_correct)
             print('ALPHA:', np.round(self.ALPHA,3))
             print('Memory Size:', self.memory_size)
             print('------------------------------------------------------------')

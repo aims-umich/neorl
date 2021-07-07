@@ -11,6 +11,11 @@ Coming next
 - Adding a class for easy-to-use environment construction for RL optimization.
 - And more ...
 
+Release 1.4.5b (2021-07-05)
+------------------------------------
+
+- Fixing bounding issues in most evolutionary algorithms
+
 Release 1.4.4b (2021-06-30)
 ------------------------------------
 

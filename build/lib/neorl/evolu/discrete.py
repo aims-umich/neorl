@@ -106,4 +106,4 @@ def decode_discrete_to_grid(individual, bounds, bounds_map):
     return new_indv   
 
 x=[0.2, 45, 2, 1]
-decode_discrete_to_grid(x,bounds,bounds_map)    
+0

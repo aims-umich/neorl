@@ -154,19 +154,20 @@ class HHO(object):
                                            alpha=self.a,
                                            method=self.int_transform)
 
+        #mir-grid
+        if self.grid_flag:
+            self.rabbit_correct=decode_discrete_to_grid(self.rabbit_location,self.orig_bounds,self.bounds_map)
+        else:    
+            self.rabbit_correct=self.rabbit_location
+            
         if self.verbose:
             print('------------------------ HHO Summary --------------------------')
             print('Function:', self.fit.__name__)
             print('Best fitness (y) found:', self.best_global_fitness)
-            #mir-grid
-            if self.grid_flag:
-                self.rabbit_decoded=decode_discrete_to_grid(self.rabbit_location,self.orig_bounds,self.bounds_map)
-                print('Best individual (x) found:', self.rabbit_decoded)
-            else:    
-                print('Best individual (x) found:', self.rabbit_location)
+            print('Best individual (x) found:', self.rabbit_correct)
             print('-------------------------------------------------------------- \n \n')
 
-        return self.rabbit_location, self.best_global_fitness, self.history
+        return self.rabbit_correct, self.best_global_fitness, self.history
 
     def ensure_bounds(self, vec, bounds):
     
