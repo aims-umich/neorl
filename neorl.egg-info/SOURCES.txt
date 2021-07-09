@@ -20,8 +20,6 @@ neorl/benchmarks/tools/data.pkl
 neorl/benchmarks/tools/transforms.py
 neorl/benchmarks/tools/utils.py
 neorl/evolu/__init__.py
-neorl/evolu/abc.py
-neorl/evolu/abc_orig.py
 neorl/evolu/bat.py
 neorl/evolu/crossover.py
 neorl/evolu/de.py

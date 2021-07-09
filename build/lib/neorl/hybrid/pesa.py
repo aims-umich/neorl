@@ -376,6 +376,12 @@ class PESA(ExperienceReplay):
                 
             if self.verbose:  #print summary data to screen
                 self.printout(mode=2, gen=gen)
+
+        if self.verbose:
+            print('------------------------ PESA Summary --------------------------')
+            print('Best fitness (y) found:', self.fitness_best)
+            print('Best individual (x) found:', self.xbest_correct)
+            print('--------------------------------------------------------------') 
                 
         #--mir
         if self.mode=='min':

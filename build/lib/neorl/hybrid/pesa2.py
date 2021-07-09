@@ -308,6 +308,12 @@ class PESA2(ExperienceReplay):
         #--mir
         if self.mode=='min':
             self.fit_hist=[-item for item in self.fit_hist]
+
+        if self.verbose:
+            print('------------------------ PESA2 Summary --------------------------')
+            print('Best fitness (y) found:', self.fitness_best)
+            print('Best individual (x) found:', self.pesa_best[0])
+            print('--------------------------------------------------------------') 
         
         return self.pesa_best[0], self.fitness_best, self.fit_hist
 
