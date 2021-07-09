@@ -1,13 +1,15 @@
-#"""
-#Created on Fri Jun 18 19:45:06 2021
-#
-#@author: Devin Seyler and Majdi Radaideh
-#"""
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Jun 18 19:45:06 2021
+
+@author: Devin Seyler and Majdi Radaideh
+"""
 
 import random
 import numpy as np
 import math
 import joblib
+from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
 
 #Main reference of the BAT algorithm:
 #Xie, J., Zhou, Y., & Chen, H. (2013). A novel bat algorithm based on 
@@ -26,15 +28,16 @@ class BAT(object):
     :param fmax: (float): maximum value of the pulse frequency
     :param A: (float) initial value of the loudness rate
     :param r0: (float) asymptotic value of the pulse rate 
-    :param alpha: (float) decay factor of loudness ``A``, i.e. ``A`` approaches 0 by the end of evolution if ``alpha < 1``
-    :param gamma: (float) exponential factor of the pulse rate ``r``, i.e. ``r`` decreases abruptly at the beginning and then converges back to ``r0`` by the end of evolution
+    :param alpha: (float) decay factor of loudness ``A``, i.e. A approaches 0 by the end of evolution if ``alpha < 1``
+    :param gamma: (float) exponential factor of the pulse rate ``r``, i.e. ``r`` increases abruptly at the beginning and then converges to ``r0`` by the end of evolution
     :param levy: (bool): a flag to activate Levy flight steps of the bat to increase bat diversity
+    :param int_transform: (str): method of handling int/discrete variables, choose from: ``nearest_int``, ``sigmoid``, ``minmax``.
     :param ncores: (int) number of parallel processors (must be ``<= nbats``)
     :param seed: (int) random seed for sampling
     """
     def __init__(self, mode, bounds, fit, nbats=50, fmin=0, 
-                 fmax=1, A=1.0, r0=0.5, alpha=1.0, gamma=0.9, 
-                 levy='False', ncores=1, seed=None):
+                 fmax=1, A=0.5, r0=0.5, alpha=1.0, gamma=0.9, 
+                 levy='False', int_transform='nearest_int', ncores=1, seed=None):
         
         if seed:
             random.seed(seed)
@@ -53,6 +56,10 @@ class BAT(object):
             self.fit=fitness_wrapper
         else:
             raise ValueError('--error: The mode entered by user is invalid, use either `min` or `max`')
+        
+        self.int_transform=int_transform
+        if int_transform not in ["nearest_int", "sigmoid", "minmax"]:
+            raise ValueError('--error: int_transform entered by user is invalid, must be `nearest_int`, `sigmoid`, or `minmax`')
             
         self.bounds=bounds
         self.ncores = ncores
@@ -66,6 +73,21 @@ class BAT(object):
         self.r0=r0
         self.levy_flight=levy
         
+        #infer variable types 
+        self.var_type = np.array([bounds[item][0] for item in bounds])
+        
+        #mir-grid
+        if "grid" in self.var_type:
+            self.grid_flag=True
+            self.orig_bounds=bounds  #keep original bounds for decoding
+            print('--debug: grid parameter type is found in the space')
+            self.bounds, self.bounds_map=encode_grid_to_discrete(self.bounds) #encoding grid to int
+            #define var_types again by converting grid to int
+            self.var_type = np.array([self.bounds[item][0] for item in self.bounds])
+        else:
+            self.grid_flag=False
+            self.bounds = bounds
+        
         self.dim = len(bounds)
         self.lb=np.array([self.bounds[item][1] for item in self.bounds])
         self.ub=np.array([self.bounds[item][2] for item in self.bounds])
@@ -78,12 +100,12 @@ class BAT(object):
                 indv.append(random.randint(bounds[key][1], bounds[key][2]))
             elif bounds[key][0] == 'float':
                 indv.append(random.uniform(bounds[key][1], bounds[key][2]))
-            elif bounds[key][0] == 'grid':
-                indv.append(random.sample(bounds[key][1],1)[0])
+           # elif bounds[key][0] == 'grid':
+           #     indv.append(random.sample(bounds[key][1],1)[0])
             else:
                 raise Exception ('unknown data type is given, either int, float, or grid are allowed for parameter bounds')   
-        return indv
-
+        return np.array(indv)
+   
     def eval_bats(self, position_array):
         #---------------------
         # Fitness calcs
@@ -138,11 +160,40 @@ class BAT(object):
         # Clip the bat with position outside the lower/upper bounds and return same position
         x=self.ensure_bounds(x,self.bounds)
         
+        if self.grid_flag:
+            #decode the individual back to the int/float/grid mixed space
+            x=decode_discrete_to_grid(x,self.orig_bounds,self.bounds_map)
+        
         # Calculate objective function for each search agent
         fitness = self.fit(x)
         
         return fitness
+    
+    def ensure_discrete(self, vec):
+        #"""
+        #to mutate a vector if discrete variables exist 
+        #handy function to be used three times within BAT phases
 
+        #Params:
+        #vec - bat position in vector/list form
+
+        #Return:
+        #vec - updated bat position vector with discrete values
+        #"""
+        
+        for dim in range(self.dim):
+            if self.var_type[dim] == 'int':
+                vec[dim] = mutate_discrete(x_ij=vec[dim], 
+                                               x_min=min(vec),
+                                               x_max=max(vec),
+                                               lb=self.lb[dim], 
+                                               ub=self.ub[dim],
+                                               alpha=self.a,
+                                               method=self.int_transform,
+                                               )
+        
+        return vec
+    
     def Levy(self, dim):
         #function to return levy step
         beta = 1.5
@@ -188,6 +239,7 @@ class BAT(object):
         
         # Main BAT loop
         for l in range(0, ngen):
+            self.a= 1 - l * ((1) / ngen)  #mir: a decreases linearly between 1 to 0, for discrete mutation
             #------------------------------------------------------
             # Stage 1A: Loop over all bats to update the positions
             #------------------------------------------------------
@@ -204,6 +256,7 @@ class BAT(object):
                 self.Positions[i, :]=self.xbest+f1*(self.Positions[betas[0],:]-self.Positions[betas[1],:])
                 +f2*(self.Positions[betas[2],:]-self.Positions[betas[3],:])
                 self.Positions[i, :] = self.ensure_bounds(self.Positions[i , :], self.bounds)
+                self.Positions[i, :] = self.ensure_discrete(self.Positions[i , :])
             #-----------------------
             #Stage 1B: evaluation
             #-----------------------
@@ -220,6 +273,7 @@ class BAT(object):
                 if random.random() > self.r:
                     self.Positions[i, :] = self.xbest + self.A * np.random.uniform(-1,1,self.dim)
                 self.Positions[i, :] = self.ensure_bounds(self.Positions[i , :], self.bounds)
+                self.Positions[i, :] = self.ensure_discrete(self.Positions[i , :])
             #-----------------------
             #Stage 2B: evaluation
             #-----------------------
@@ -236,6 +290,7 @@ class BAT(object):
                 if random.random() < self.A:
                     self.Positions[i, :] = self.xbest + self.r * np.random.uniform(-1,1,self.dim)
                 self.Positions[i, :] = self.ensure_bounds(self.Positions[i , :], self.bounds)
+                self.Positions[i, :] = self.ensure_discrete(self.Positions[i , :])
             #-----------------------
             #Stage 3B: evaluation
             #-----------------------
@@ -272,19 +327,28 @@ class BAT(object):
             # Print statistics
             if self.verbose and i % self.nbats:
                 print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
-                print('BAT step {}/{}, nbats={}, Ncores={}'.format((l)*self.nbats, ngen*self.nbats, self.nbats, self.ncores))
+                print('BAT step {}/{}, nbats={}, Ncores={}'.format((l+1)*self.nbats, ngen*self.nbats, self.nbats, self.ncores))
                 print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
                 print('Best Bat Fitness:', np.round(self.fitness_best_correct,6))
-                print('Best Bat Position:', np.round(self.best_position,6))
+                if self.grid_flag:
+                    self.bat_decoded = decode_discrete_to_grid(self.best_position, self.orig_bounds, self.bounds_map)
+                    print('Best Bat Position:', np.round(self.bat_decoded,6))
+                else:
+                    print('Best Bat Position:', np.round(self.best_position,6))
                 print('Loudness A:', self.A)
                 print('Pulse rate r:', self.r)
                 print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
-
+        
+        #mir-grid
+        if self.grid_flag:
+            self.bat_correct = decode_discrete_to_grid(self.best_position, self.orig_bounds, self.bounds_map)
+        else:
+            self.bat_correct = self.best_position
+                
         if self.verbose:
             print('------------------------ BAT Summary --------------------------')
             print('Best fitness (y) found:', self.fitness_best_correct)
-            print('Best individual (x) found:', self.best_position)
+            print('Best individual (x) found:', self.bat_correct)
             print('--------------------------------------------------------------')  
             
-        return self.best_position, self.fitness_best_correct, self.history
-
+        return self.bat_correct, self.fitness_best_correct, self.history

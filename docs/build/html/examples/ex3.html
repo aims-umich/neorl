@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Example 3: Welded-beam design &mdash; NEORL 1.4.3b documentation</title>
+  <title>Example 3: Welded-beam design &mdash; NEORL 1.4.5b documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.4.3b )
+                main (1.4.5b )
               </div>
             
           
@@ -122,6 +122,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../modules/mfo.html">Moth-flame Optimization (MFO)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../modules/jaya.html">JAYA Algorithm</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../modules/bat.html">Bat Algorithm (BAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/hho.html">Harris Hawks Optimization (HHO)</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
 <ul>
@@ -144,6 +145,10 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="ex4.html">Example 4: Benchmarks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ex5.html">Example 5: CEC’2017 Test Suite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ex6.html">Example 6: Three-bar Truss Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ex7.html">Example 7: Pressure Vessel Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ex8.html">Example 8: Pressure Vessel Design with Demonstration of Categorical Parameter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ex9.html">Example 9: Cantilever Stepped Beam</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Misc</span></p>
 <ul>
@@ -235,10 +240,10 @@
 <p>The cost of the welded beam is formulated as</p>
 <div class="math notranslate nohighlight">
 \[\min_{\vec{x}} f (\vec{x}) = 1.10471x_1^2x_2 + 0.04811x_3x_4 (14+x_2),\]</div>
-<p>subject to 7 rules/constraints, the first on the shear stress ($tau$)</p>
+<p>subject to 7 rules/constraints, the first on the shear stress (<span class="math notranslate nohighlight">\(\tau\)</span>)</p>
 <div class="math notranslate nohighlight">
 \[g_1(\vec{x}) = \tau(\vec{x}) - \tau_{max} \leq 0,\]</div>
-<p>the second on the bending stress ($sigma$)</p>
+<p>the second on the bending stress (<span class="math notranslate nohighlight">\(\sigma\)</span>)</p>
 <div class="math notranslate nohighlight">
 \[g_2(\vec{x}) = \sigma(\vec{x}) - \sigma_{max} \leq 0,\]</div>
 <p>three side constraints</p>
@@ -248,10 +253,10 @@
 \[g_4(\vec{x}) = 0.10471x_1^2 + 0.04811x_3x_4 (14+x_2) - 5 \leq 0,\]</div>
 <div class="math notranslate nohighlight">
 \[g_5(\vec{x}) = 0.125 - x_1 \leq 0,\]</div>
-<p>the sixth on the end deflection of the beam ($delta$)</p>
+<p>the sixth on the end deflection of the beam (<span class="math notranslate nohighlight">\(\delta\)</span>)</p>
 <div class="math notranslate nohighlight">
 \[g_6(\vec{x}) = \delta(\vec{x}) - \delta_{max} \leq 0,\]</div>
-<p>and the last on the buckling load on the bar ($P_c$)</p>
+<p>and the last on the buckling load on the bar (<span class="math notranslate nohighlight">\(P_c\)</span>)</p>
 <div class="math notranslate nohighlight">
 \[g_7(\vec{x}) = P - P_{c}(\vec{x}) \leq 0,\]</div>
 <p>while the range of the design variables are:</p>
@@ -260,7 +265,7 @@
      0.1 \leq x_1 \leq 2 &amp;, \quad 0.1 \leq x_2 \leq 10, \\
      0.1 \leq x_3 \leq 10 &amp;, \quad 0.1 \leq x_4 \leq 2. \\
 \end{split}\end{split}\]</div>
-<p>The derived variables and their related constants are expressed as follows cite{coello2000use}:</p>
+<p>The derived variables and their related constants are expressed as follows:</p>
 <div class="math notranslate nohighlight">
 \[\tau(\vec{x}) = \sqrt{(\tau')^2 + 2\tau' \tau'' \frac{x_2}{2R}+(\tau'')^2},\]</div>
 <div class="math notranslate nohighlight">

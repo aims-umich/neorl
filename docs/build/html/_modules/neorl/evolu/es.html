@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.evolu.es &mdash; NEORL 1.3.5b documentation</title>
+  <title>neorl.evolu.es &mdash; NEORL 1.4.5b documentation</title>
   
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                main (1.3.5b )
+                main (1.4.5b )
               </div>
             
           
@@ -116,6 +116,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/sa.html">Simulated Annealing (SA)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/ssa.html">Salp Swarm Algorithm (SSA)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/woa.html">Whale Optimization Algorithm (WOA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/mfo.html">Moth-flame Optimization (MFO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/jaya.html">JAYA Algorithm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/bat.html">Bat Algorithm (BAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/hho.html">Harris Hawks Optimization (HHO)</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
 <ul>
@@ -132,6 +136,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex3.html">Example 3: Welded-beam design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex4.html">Example 4: Benchmarks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex5.html">Example 5: CEC’2017 Test Suite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex6.html">Example 6: Three-bar Truss Design</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Misc</span></p>
 <ul>
@@ -215,9 +220,9 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
 <span class="kn">import</span> <span class="nn">copy</span>
-<span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">joblib</span>
 <span class="kn">from</span> <span class="nn">neorl.evolu.crossover</span> <span class="kn">import</span> <span class="n">cxES2point</span><span class="p">,</span> <span class="n">cxESBlend</span>
+<span class="kn">from</span> <span class="nn">neorl.evolu.discrete</span> <span class="kn">import</span> <span class="n">encode_grid_to_discrete</span><span class="p">,</span> <span class="n">decode_discrete_to_grid</span>
 
 <div class="viewcode-block" id="ES"><a class="viewcode-back" href="../../../modules/es.html#neorl.evolu.es.ES">[docs]</a><span class="k">class</span> <span class="nc">ES</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -237,7 +242,7 @@
 <span class="sd">    :param seed: (int) random seed for sampling</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">lambda_</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">cxmode</span><span class="o">=</span><span class="s1">&#39;cx2point&#39;</span><span class="p">,</span> 
-                  <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">cxpb</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">mutpb</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">smin</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">smax</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  
+                  <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">cxpb</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">mutpb</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">smin</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">smax</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">clip</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  
         <span class="k">if</span> <span class="n">seed</span><span class="p">:</span>
             <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span>
@@ -263,12 +268,35 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="o">=</span><span class="n">mu</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lambda_</span><span class="o">=</span><span class="n">lambda_</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cxmode</span><span class="o">=</span><span class="n">cxmode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clip</span><span class="o">=</span><span class="n">clip</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">cxmode</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;cx2point&#39;</span><span class="p">,</span> <span class="s1">&#39;blend&#39;</span><span class="p">]:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;--error: the cxmode selected (`</span><span class="si">{}</span><span class="s1">`) is not available in ES, either choose `cx2point` or `blend`&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cxmode</span><span class="p">))</span>
 
         <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lambda_</span><span class="p">,</span> <span class="s2">&quot;mu (selected population) must be less than lambda (full population)&quot;</span>
         <span class="k">assert</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cxpb</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mutpb</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s2">&quot;The sum of the cxpb and mutpb must be smaller or equal to 1.0&quot;</span>
         <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span> <span class="o">&gt;=</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Number of cores must be more than or equal 1&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb</span><span class="o">=</span><span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ub</span><span class="o">=</span><span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">datatype</span><span class="o">=</span><span class="p">[]</span>
+        
+        <span class="c1">#infer variable types </span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">datatype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">bounds</span><span class="p">])</span>
+        
+        <span class="c1">#mir-grid</span>
+        <span class="k">if</span> <span class="s2">&quot;grid&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">datatype</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="o">=</span><span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="o">=</span><span class="n">bounds</span>  <span class="c1">#keep original bounds for decoding</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--debug: grid parameter type is found in the space&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="o">=</span><span class="n">encode_grid_to_discrete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span> <span class="c1">#encoding grid to int</span>
+            <span class="c1">#define var_types again by converting grid to int</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">datatype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="o">=</span><span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span> <span class="o">=</span> <span class="n">bounds</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ub</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">])</span>
             
     <span class="k">def</span> <span class="nf">GenES</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bounds</span><span class="p">):</span>
         <span class="c1">#&quot;&quot;&quot;</span>
@@ -332,17 +360,56 @@
                 <span class="n">core_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
            
             <span class="k">with</span> <span class="n">joblib</span><span class="o">.</span><span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">)</span> <span class="k">as</span> <span class="n">parallel</span><span class="p">:</span>
-                <span class="n">fitness</span><span class="o">=</span><span class="n">parallel</span><span class="p">(</span><span class="n">joblib</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">)(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">core_list</span><span class="p">)</span>
+                <span class="n">fitness</span><span class="o">=</span><span class="n">parallel</span><span class="p">(</span><span class="n">joblib</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fit_worker</span><span class="p">)(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">core_list</span><span class="p">)</span>
                     
             <span class="p">[</span><span class="n">pop</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fitness</span><span class="p">[</span><span class="n">ind</span><span class="p">])</span> <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pop</span><span class="p">))]</span>
         
         <span class="k">else</span><span class="p">:</span> <span class="c1">#evaluate warmup in series</span>
             <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">pop</span><span class="p">:</span>
-                <span class="n">fitness</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">pop</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">fitness</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fit_worker</span><span class="p">(</span><span class="n">pop</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
                 <span class="n">pop</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fitness</span><span class="p">)</span>
         
         <span class="k">return</span> <span class="n">pop</span>  <span class="c1">#return final pop dictionary with ind, strategy, and fitness</span>
 
+    <span class="k">def</span> <span class="nf">ensure_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vec</span><span class="p">):</span> <span class="c1"># bounds check</span>
+
+        <span class="n">vec_new</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+            <span class="c1"># less than minimum </span>
+            <span class="k">if</span> <span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">vec_new</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+            <span class="c1"># more than maximum</span>
+            <span class="k">if</span> <span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">2</span><span class="p">]:</span>
+                <span class="n">vec_new</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">2</span><span class="p">])</span>
+            <span class="c1"># fine</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">2</span><span class="p">]:</span>
+                <span class="n">vec_new</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        
+        <span class="k">return</span> <span class="n">vec_new</span>
+
+    <span class="k">def</span> <span class="nf">ensure_discrete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ind</span><span class="p">):</span>
+        
+        <span class="n">ind</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ensure_bounds</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ind</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">datatype</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;int&#39;</span><span class="p">:</span>
+                <span class="n">ind</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ind</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">ind</span>
+
+    <span class="k">def</span> <span class="nf">fit_worker</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="c1">#Evaluates fitness of an individual.</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        
+        
+        <span class="c1">#mir-grid</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="p">:</span>
+            <span class="c1">#decode the individual back to the int/float/grid mixed space</span>
+            <span class="n">x</span><span class="o">=</span><span class="n">decode_discrete_to_grid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="p">)</span> 
+                    
+        <span class="n">fitness</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fitness</span>
+            
     <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="c1">#&quot;&quot;&quot;</span>
         <span class="c1">#Select function sorts the population from max to min based on fitness and select k best</span>
@@ -384,21 +451,20 @@
         
         <span class="c1">#&quot;&quot;&quot;</span>
         <span class="c1"># Infer the datatype, lower/upper bounds from self.bounds for flexible usage </span>
-        <span class="n">lb</span><span class="o">=</span><span class="p">[];</span> <span class="n">ub</span><span class="o">=</span><span class="p">[];</span> <span class="n">datatype</span><span class="o">=</span><span class="p">[]</span>
-        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">:</span>
-            <span class="n">datatype</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-            <span class="n">lb</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
-            <span class="n">ub</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">2</span><span class="p">])</span>
             
         <span class="n">size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span>
         <span class="n">tau</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">size</span><span class="p">)</span>
         <span class="n">tau_prime</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">size</span><span class="p">))</span>
         
+        <span class="n">ind</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ensure_bounds</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span>  <span class="c1">#keep it for choice.remove(x) to work</span>
+        
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">):</span>
             <span class="c1">#--------------------------</span>
             <span class="c1"># Discrete ES Mutation </span>
             <span class="c1">#--------------------------</span>
-            <span class="k">if</span> <span class="n">datatype</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;int&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">datatype</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;int&#39;</span><span class="p">:</span>
+                
+                <span class="c1">#check first the integers falls within lower/upper boundaries</span>
                 <span class="n">norm</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">gauss</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
                 <span class="c1"># modify the ind strategy</span>
                 <span class="n">strat</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">strat</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">/</span><span class="n">strat</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">tau</span><span class="o">*</span><span class="n">norm</span><span class="o">-</span><span class="n">tau_prime</span><span class="o">*</span><span class="n">random</span><span class="o">.</span><span class="n">gauss</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)))</span>
@@ -413,33 +479,34 @@
                 <span class="c1"># check if this attribute is mutated based on the updated strategy</span>
                 <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">strat</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
                     
-                    <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">lb</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="n">ub</span><span class="p">[</span><span class="n">i</span><span class="p">]):</span>
-                        <span class="n">ind</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">lb</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ub</span><span class="p">[</span><span class="n">i</span><span class="p">]):</span>
+                        <span class="n">ind</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="c1"># make a list of possiblities after excluding the current value to enforce mutation</span>
-                        <span class="n">choices</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">lb</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">ub</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
-                        <span class="n">choices</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">ind</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                        <span class="n">choices</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">ub</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+                        <span class="n">choices</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">ind</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
                         <span class="c1"># randint is NOT used here since it could re-draw the same integer value, choice is used instead</span>
                         <span class="n">ind</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">choices</span><span class="p">)</span>
-            
+                
+                <span class="k">else</span><span class="p">:</span>
+
+                    <span class="n">ind</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">ind</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                            
             <span class="c1">#--------------------------</span>
             <span class="c1"># Continuous ES Mutation </span>
             <span class="c1">#--------------------------</span>
-            <span class="k">elif</span> <span class="n">datatype</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;float&#39;</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">datatype</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;float&#39;</span><span class="p">:</span>
                 <span class="n">norm</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">gauss</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
                 <span class="n">strat</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">tau</span><span class="o">*</span><span class="n">norm</span> <span class="o">+</span> <span class="n">tau_prime</span> <span class="o">*</span> <span class="n">random</span><span class="o">.</span><span class="n">gauss</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> <span class="c1">#normal mutation of strategy</span>
                 <span class="n">ind</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">strat</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">random</span><span class="o">.</span><span class="n">gauss</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="c1"># update the individual position</span>
                 
-                <span class="c1">#check the new individual falls within lower/upper boundaries</span>
-                <span class="k">if</span> <span class="n">ind</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">lb</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
-                    <span class="n">ind</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">lb</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                <span class="k">if</span> <span class="n">ind</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">ub</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
-                    <span class="n">ind</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ub</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                
             
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">Exception</span> <span class="p">(</span><span class="s1">&#39;ES mutation strategy works with either int/float datatypes, the type provided cannot be interpreted&#39;</span><span class="p">)</span>
-            
-            
+        
+        <span class="n">ind</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ensure_bounds</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span>
+        <span class="n">strat</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">strat</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">smin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">smax</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">ind</span><span class="p">,</span> <span class="n">strat</span>
 
     <span class="k">def</span> <span class="nf">GenOffspring</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">):</span>
@@ -476,6 +543,12 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;--error: the cxmode selected (`</span><span class="si">{}</span><span class="s1">`) is not available in ES, either choose `cx2point` or `blend`&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cxmode</span><span class="p">))</span>
                 
+                <span class="n">ind1</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ensure_bounds</span><span class="p">(</span><span class="n">ind1</span><span class="p">)</span>
+                <span class="n">ind2</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ensure_bounds</span><span class="p">(</span><span class="n">ind2</span><span class="p">)</span>
+                
+                <span class="n">ind1</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ensure_discrete</span><span class="p">(</span><span class="n">ind1</span><span class="p">)</span>  <span class="c1">#check discrete variables after crossover</span>
+                <span class="n">ind2</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ensure_discrete</span><span class="p">(</span><span class="n">ind2</span><span class="p">)</span>  <span class="c1">#check discrete variables after crossover</span>
+                
                 <span class="n">offspring</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ind1</span><span class="p">)</span>
                 <span class="n">offspring</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">strat1</span><span class="p">)</span>
                 <span class="c1">#print(&#39;crossover is done for sample {} between {} and {}&#39;.format(i,index1,index2))</span>
@@ -493,10 +566,15 @@
             <span class="c1">#------------------------------</span>
             <span class="k">else</span><span class="p">:</span>                         
                 <span class="n">index</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">pop_indices</span><span class="p">)</span>
+                <span class="n">pop</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ensure_discrete</span><span class="p">(</span><span class="n">pop</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
                 <span class="n">offspring</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
                 <span class="n">offspring</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
                 <span class="c1">#print(&#39;reproduction is done for sample {} based on {}&#39;.format(i,index))</span>
-    
+                
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">clip</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">offspring</span><span class="p">:</span>
+                <span class="n">offspring</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">offspring</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">smin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">smax</span><span class="p">))</span>
+        
         <span class="k">return</span> <span class="n">offspring</span>
 
 <div class="viewcode-block" id="ES.evolute"><a class="viewcode-back" href="../../../modules/es.html#neorl.evolu.es.ES.evolute">[docs]</a>    <span class="k">def</span> <span class="nf">evolute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ngen</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
@@ -532,19 +610,21 @@
                     <span class="n">core_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">offspring</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
 
                 <span class="k">with</span> <span class="n">joblib</span><span class="o">.</span><span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">)</span> <span class="k">as</span> <span class="n">parallel</span><span class="p">:</span>
-                    <span class="n">fitness</span><span class="o">=</span><span class="n">parallel</span><span class="p">(</span><span class="n">joblib</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">)(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">core_list</span><span class="p">)</span>
+                    <span class="n">fitness</span><span class="o">=</span><span class="n">parallel</span><span class="p">(</span><span class="n">joblib</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fit_worker</span><span class="p">)(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">core_list</span><span class="p">)</span>
                     
                 <span class="p">[</span><span class="n">offspring</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fitness</span><span class="p">[</span><span class="n">ind</span><span class="p">])</span> <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">offspring</span><span class="p">))]</span>
                 
             <span class="k">else</span><span class="p">:</span> <span class="c1">#serial calcs</span>
                 
                 <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">offspring</span><span class="p">)):</span>
-                    <span class="n">fitness</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">offspring</span><span class="p">[</span><span class="n">ind</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">fitness</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fit_worker</span><span class="p">(</span><span class="n">offspring</span><span class="p">[</span><span class="n">ind</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
                     <span class="n">offspring</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fitness</span><span class="p">)</span>
         
                 
             <span class="c1"># Select the next generation population</span>
+            <span class="c1">#print(offspring)</span>
             <span class="n">population</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">pop</span><span class="o">=</span><span class="n">offspring</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">))</span>
+            <span class="c1">#print(population)</span>
             <span class="n">inds</span><span class="p">,</span> <span class="n">rwd</span><span class="o">=</span><span class="p">[</span><span class="n">population</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">population</span><span class="p">],</span> <span class="p">[</span><span class="n">population</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">population</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">best_scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">rwd</span><span class="p">))</span>
             <span class="n">arg_max</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">rwd</span><span class="p">)</span>
@@ -558,6 +638,12 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">y_opt_correct</span><span class="o">=-</span><span class="bp">self</span><span class="o">.</span><span class="n">y_opt</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">y_opt_correct</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">y_opt</span>
+
+            <span class="c1">#mir-grid</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">x_opt_correct</span><span class="o">=</span><span class="n">decode_discrete_to_grid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_opt</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">x_opt_correct</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">x_opt</span>
                 
             <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
                 <span class="n">mean_strategy</span><span class="o">=</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">population</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">population</span><span class="p">]</span>
@@ -565,8 +651,8 @@
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ES step </span><span class="si">{}</span><span class="s1">/</span><span class="si">{}</span><span class="s1">, CX=</span><span class="si">{}</span><span class="s1">, MUT=</span><span class="si">{}</span><span class="s1">, MU=</span><span class="si">{}</span><span class="s1">, LAMBDA=</span><span class="si">{}</span><span class="s1">, Ncores=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gen</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">lambda_</span><span class="p">,</span><span class="n">ngen</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">lambda_</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cxpb</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mutpb</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lambda_</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">))</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;##############################################################################&#39;</span><span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Statistics for generation </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gen</span><span class="p">))</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best Fitness:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">rwd</span><span class="p">),</span><span class="mi">6</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="ow">is</span> <span class="s1">&#39;max&#39;</span> <span class="k">else</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">rwd</span><span class="p">),</span><span class="mi">6</span><span class="p">))</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best Individual:&#39;</span><span class="p">,</span> <span class="n">inds</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best Fitness:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">rwd</span><span class="p">),</span><span class="mi">6</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;max&#39;</span> <span class="k">else</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">rwd</span><span class="p">),</span><span class="mi">6</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best Individual:&#39;</span><span class="p">,</span> <span class="n">inds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span> <span class="k">else</span> <span class="n">decode_discrete_to_grid</span><span class="p">(</span><span class="n">inds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="p">))</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Max Strategy:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">mean_strategy</span><span class="p">),</span><span class="mi">3</span><span class="p">))</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Min Strategy:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">mean_strategy</span><span class="p">),</span><span class="mi">3</span><span class="p">))</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Average Strategy:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">mean_strategy</span><span class="p">),</span><span class="mi">3</span><span class="p">))</span>
@@ -575,14 +661,14 @@
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;------------------------ ES Summary --------------------------&#39;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best fitness (y) found:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_opt_correct</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best individual (x) found:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_opt</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best individual (x) found:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_opt_correct</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--------------------------------------------------------------&#39;</span><span class="p">)</span> 
 
         <span class="c1">#--mir</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">==</span><span class="s1">&#39;min&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">best_scores</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_scores</span><span class="p">]</span>
             
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_opt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_opt_correct</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_scores</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_opt_correct</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_opt_correct</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_scores</span></div></div>
     
 </pre></div>
 

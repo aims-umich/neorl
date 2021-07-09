@@ -11,12 +11,25 @@ Coming next
 - Adding a class for easy-to-use environment construction for RL optimization.
 - And more ...
 
-Release 1.4.4b (2021-06-29)
+Release 1.4.6b (2021-07-09)
+------------------------------------
+
+- Modifying Bat algorithm to handle mixed spaces. 
+- Added Example 6 on three-bar truss design.
+- Added Examples 7 and 8 on pressure vessel design. 
+- Added Example 9 on cantilever stepped beam.
+
+Release 1.4.5b (2021-07-05)
+------------------------------------
+
+- Fixing bounding issues in most evolutionary algorithms.
+
+Release 1.4.4b (2021-06-30)
 ------------------------------------
 
 - Fixing PESA/PESA2 parallel mode.
 - Replacing XNES with WOA in modern PESA2.
-- Added a module for Harris Hawks Optimization
+- Added a module for Harris Hawks Optimization.
 
 Release 1.4.3b (2021-06-24)
 ------------------------------------

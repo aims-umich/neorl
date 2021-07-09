@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.evolu.bat &mdash; NEORL 1.4.2b documentation</title>
+  <title>neorl.evolu.bat &mdash; NEORL 1.4.5b documentation</title>
   
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                main (1.4.2b )
+                main (1.4.5b )
               </div>
             
           
@@ -119,6 +119,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/mfo.html">Moth-flame Optimization (MFO)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/jaya.html">JAYA Algorithm</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/bat.html">Bat Algorithm (BAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/hho.html">Harris Hawks Optimization (HHO)</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
 <ul>
@@ -135,6 +136,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex3.html">Example 3: Welded-beam design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex4.html">Example 4: Benchmarks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex5.html">Example 5: CEC’2017 Test Suite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex6.html">Example 6: Three-bar Truss Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex9.html">Example 9: Cantilever Stepped Beam</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Misc</span></p>
 <ul>
@@ -207,16 +210,18 @@
            <div itemprop="articleBody">
             
   <h1>Source code for neorl.evolu.bat</h1><div class="highlight"><pre>
-<span></span><span class="c1">#&quot;&quot;&quot;</span>
-<span class="c1">#Created on Fri Jun 18 19:45:06 2021</span>
-<span class="c1">#</span>
-<span class="c1">#@author: Devin Seyler and Majdi Radaideh</span>
-<span class="c1">#&quot;&quot;&quot;</span>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Created on Fri Jun 18 19:45:06 2021</span>
+
+<span class="sd">@author: Devin Seyler and Majdi Radaideh</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">joblib</span>
+<span class="kn">from</span> <span class="nn">neorl.evolu.discrete</span> <span class="kn">import</span> <span class="n">mutate_discrete</span><span class="p">,</span> <span class="n">encode_grid_to_discrete</span><span class="p">,</span> <span class="n">decode_discrete_to_grid</span>
 
 <span class="c1">#Main reference of the BAT algorithm:</span>
 <span class="c1">#Xie, J., Zhou, Y., &amp; Chen, H. (2013). A novel bat algorithm based on </span>
@@ -235,15 +240,16 @@
 <span class="sd">    :param fmax: (float): maximum value of the pulse frequency</span>
 <span class="sd">    :param A: (float) initial value of the loudness rate</span>
 <span class="sd">    :param r0: (float) asymptotic value of the pulse rate </span>
-<span class="sd">    :param alpha: (float) decay factor of loudness ``A``, i.e. ``A`` approaches 0 by the end of evolution if ``alpha &lt; 1``</span>
-<span class="sd">    :param gamma: (float) exponential factor of the pulse rate ``r``, i.e. ``r`` decreases abruptly at the beginning and then converges back to ``r0`` by the end of evolution</span>
+<span class="sd">    :param alpha: (float) decay factor of loudness ``A``, i.e. A approaches 0 by the end of evolution if ``alpha &lt; 1``</span>
+<span class="sd">    :param gamma: (float) exponential factor of the pulse rate ``r``, i.e. ``r`` increases abruptly at the beginning and then converges to ``r0`` by the end of evolution</span>
 <span class="sd">    :param levy: (bool): a flag to activate Levy flight steps of the bat to increase bat diversity</span>
+<span class="sd">    :param int_transform: (str): method of handling int/discrete variables, choose from: ``nearest_int``, ``sigmoid``, ``minmax``.</span>
 <span class="sd">    :param ncores: (int) number of parallel processors (must be ``&lt;= nbats``)</span>
 <span class="sd">    :param seed: (int) random seed for sampling</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">nbats</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> 
-                 <span class="n">fmax</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">r0</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> 
-                 <span class="n">levy</span><span class="o">=</span><span class="s1">&#39;False&#39;</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                 <span class="n">fmax</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">r0</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> 
+                 <span class="n">levy</span><span class="o">=</span><span class="s1">&#39;False&#39;</span><span class="p">,</span> <span class="n">int_transform</span><span class="o">=</span><span class="s1">&#39;nearest_int&#39;</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         
         <span class="k">if</span> <span class="n">seed</span><span class="p">:</span>
             <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
@@ -262,6 +268,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="o">=</span><span class="n">fitness_wrapper</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;--error: The mode entered by user is invalid, use either `min` or `max`&#39;</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">int_transform</span><span class="o">=</span><span class="n">int_transform</span>
+        <span class="k">if</span> <span class="n">int_transform</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;nearest_int&quot;</span><span class="p">,</span> <span class="s2">&quot;sigmoid&quot;</span><span class="p">,</span> <span class="s2">&quot;minmax&quot;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;--error: int_transform entered by user is invalid, must be `nearest_int`, `sigmoid`, or `minmax`&#39;</span><span class="p">)</span>
             
         <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span> <span class="o">=</span> <span class="n">ncores</span>
@@ -275,6 +285,21 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">r0</span><span class="o">=</span><span class="n">r0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">levy_flight</span><span class="o">=</span><span class="n">levy</span>
         
+        <span class="c1">#infer variable types </span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">bounds</span><span class="p">])</span>
+        
+        <span class="c1">#mir-grid</span>
+        <span class="k">if</span> <span class="s2">&quot;grid&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="o">=</span><span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="o">=</span><span class="n">bounds</span>  <span class="c1">#keep original bounds for decoding</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--debug: grid parameter type is found in the space&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="o">=</span><span class="n">encode_grid_to_discrete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span> <span class="c1">#encoding grid to int</span>
+            <span class="c1">#define var_types again by converting grid to int</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="o">=</span><span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span> <span class="o">=</span> <span class="n">bounds</span>
+        
         <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">bounds</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lb</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ub</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">])</span>
@@ -287,12 +312,12 @@
                 <span class="n">indv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">2</span><span class="p">]))</span>
             <span class="k">elif</span> <span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;float&#39;</span><span class="p">:</span>
                 <span class="n">indv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">2</span><span class="p">]))</span>
-            <span class="k">elif</span> <span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;grid&#39;</span><span class="p">:</span>
-                <span class="n">indv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+           <span class="c1"># elif bounds[key][0] == &#39;grid&#39;:</span>
+           <span class="c1">#     indv.append(random.sample(bounds[key][1],1)[0])</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">Exception</span> <span class="p">(</span><span class="s1">&#39;unknown data type is given, either int, float, or grid are allowed for parameter bounds&#39;</span><span class="p">)</span>   
-        <span class="k">return</span> <span class="n">indv</span>
-
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">indv</span><span class="p">)</span>
+   
     <span class="k">def</span> <span class="nf">eval_bats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position_array</span><span class="p">):</span>
         <span class="c1">#---------------------</span>
         <span class="c1"># Fitness calcs</span>
@@ -347,11 +372,40 @@
         <span class="c1"># Clip the bat with position outside the lower/upper bounds and return same position</span>
         <span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ensure_bounds</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span>
         
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="p">:</span>
+            <span class="c1">#decode the individual back to the int/float/grid mixed space</span>
+            <span class="n">x</span><span class="o">=</span><span class="n">decode_discrete_to_grid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="p">)</span>
+        
         <span class="c1"># Calculate objective function for each search agent</span>
         <span class="n">fitness</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         
         <span class="k">return</span> <span class="n">fitness</span>
+    
+    <span class="k">def</span> <span class="nf">ensure_discrete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vec</span><span class="p">):</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="c1">#to mutate a vector if discrete variables exist </span>
+        <span class="c1">#handy function to be used three times within BAT phases</span>
 
+        <span class="c1">#Params:</span>
+        <span class="c1">#vec - bat position in vector/list form</span>
+
+        <span class="c1">#Return:</span>
+        <span class="c1">#vec - updated bat position vector with discrete values</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        
+        <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;int&#39;</span><span class="p">:</span>
+                <span class="n">vec</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span> <span class="o">=</span> <span class="n">mutate_discrete</span><span class="p">(</span><span class="n">x_ij</span><span class="o">=</span><span class="n">vec</span><span class="p">[</span><span class="n">dim</span><span class="p">],</span> 
+                                               <span class="n">x_min</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="n">vec</span><span class="p">),</span>
+                                               <span class="n">x_max</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="n">vec</span><span class="p">),</span>
+                                               <span class="n">lb</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lb</span><span class="p">[</span><span class="n">dim</span><span class="p">],</span> 
+                                               <span class="n">ub</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ub</span><span class="p">[</span><span class="n">dim</span><span class="p">],</span>
+                                               <span class="n">alpha</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span>
+                                               <span class="n">method</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">int_transform</span><span class="p">,</span>
+                                               <span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">vec</span>
+    
     <span class="k">def</span> <span class="nf">Levy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dim</span><span class="p">):</span>
         <span class="c1">#function to return levy step</span>
         <span class="n">beta</span> <span class="o">=</span> <span class="mf">1.5</span>
@@ -397,6 +451,7 @@
         
         <span class="c1"># Main BAT loop</span>
         <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ngen</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">l</span> <span class="o">*</span> <span class="p">((</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">ngen</span><span class="p">)</span>  <span class="c1">#mir: a decreases linearly between 1 to 0, for discrete mutation</span>
             <span class="c1">#------------------------------------------------------</span>
             <span class="c1"># Stage 1A: Loop over all bats to update the positions</span>
             <span class="c1">#------------------------------------------------------</span>
@@ -413,6 +468,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">xbest</span><span class="o">+</span><span class="n">f1</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">betas</span><span class="p">[</span><span class="mi">0</span><span class="p">],:]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">betas</span><span class="p">[</span><span class="mi">1</span><span class="p">],:])</span>
                 <span class="o">+</span><span class="n">f2</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">betas</span><span class="p">[</span><span class="mi">2</span><span class="p">],:]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">betas</span><span class="p">[</span><span class="mi">3</span><span class="p">],:])</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensure_bounds</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">i</span> <span class="p">,</span> <span class="p">:],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensure_discrete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">i</span> <span class="p">,</span> <span class="p">:])</span>
             <span class="c1">#-----------------------</span>
             <span class="c1">#Stage 1B: evaluation</span>
             <span class="c1">#-----------------------</span>
@@ -429,6 +485,7 @@
                 <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xbest</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">A</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensure_bounds</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">i</span> <span class="p">,</span> <span class="p">:],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensure_discrete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">i</span> <span class="p">,</span> <span class="p">:])</span>
             <span class="c1">#-----------------------</span>
             <span class="c1">#Stage 2B: evaluation</span>
             <span class="c1">#-----------------------</span>
@@ -445,6 +502,7 @@
                 <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xbest</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensure_bounds</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">i</span> <span class="p">,</span> <span class="p">:],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensure_discrete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">i</span> <span class="p">,</span> <span class="p">:])</span>
             <span class="c1">#-----------------------</span>
             <span class="c1">#Stage 3B: evaluation</span>
             <span class="c1">#-----------------------</span>
@@ -481,22 +539,31 @@
             <span class="c1"># Print statistics</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbats</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^&#39;</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;BAT step </span><span class="si">{}</span><span class="s1">/</span><span class="si">{}</span><span class="s1">, nbats=</span><span class="si">{}</span><span class="s1">, Ncores=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">((</span><span class="n">l</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">nbats</span><span class="p">,</span> <span class="n">ngen</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">nbats</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbats</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;BAT step </span><span class="si">{}</span><span class="s1">/</span><span class="si">{}</span><span class="s1">, nbats=</span><span class="si">{}</span><span class="s1">, Ncores=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">((</span><span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">nbats</span><span class="p">,</span> <span class="n">ngen</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">nbats</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbats</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">))</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^&#39;</span><span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best Bat Fitness:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitness_best_correct</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best Bat Position:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">best_position</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">bat_decoded</span> <span class="o">=</span> <span class="n">decode_discrete_to_grid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">best_position</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best Bat Position:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bat_decoded</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best Bat Position:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">best_position</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Loudness A:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Pulse rate r:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^&#39;</span><span class="p">)</span>
-
+        
+        <span class="c1">#mir-grid</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bat_correct</span> <span class="o">=</span> <span class="n">decode_discrete_to_grid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">best_position</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bat_correct</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_position</span>
+                
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;------------------------ BAT Summary --------------------------&#39;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best fitness (y) found:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitness_best_correct</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best individual (x) found:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_position</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best individual (x) found:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bat_correct</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--------------------------------------------------------------&#39;</span><span class="p">)</span>  
             
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_position</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitness_best_correct</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span></div></div>
-
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bat_correct</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitness_best_correct</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span></div></div>
 </pre></div>
 
            </div>

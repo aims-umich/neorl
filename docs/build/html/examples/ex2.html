@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Example 2: Ackley with EA &mdash; NEORL 1.4.3b documentation</title>
+  <title>Example 2: Ackley with EA &mdash; NEORL 1.4.5b documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.4.3b )
+                main (1.4.5b )
               </div>
             
           
@@ -122,6 +122,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../modules/mfo.html">Moth-flame Optimization (MFO)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../modules/jaya.html">JAYA Algorithm</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../modules/bat.html">Bat Algorithm (BAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/hho.html">Harris Hawks Optimization (HHO)</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
 <ul>
@@ -144,6 +145,7 @@
 <li class="toctree-l1"><a class="reference internal" href="ex3.html">Example 3: Welded-beam design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ex4.html">Example 4: Benchmarks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ex5.html">Example 5: CEC’2017 Test Suite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ex6.html">Example 6: Three-bar Truss Design</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Misc</span></p>
 <ul>
@@ -232,7 +234,7 @@
 <h2>Problem Description<a class="headerlink" href="#problem-description" title="Permalink to this headline">¶</a></h2>
 <p>The mathematical definition of Ackley is:</p>
 <div class="math notranslate nohighlight">
-\[f(\vec{x}) = 20-20exp\Big(-0.2\sqrt{\frac{1}{n}\sum_{i=1}^{n}x_i^2}\Big)-exp\Big(\frac{1}{n}\sum_{i=1}^{n}cos(2\pi x_i)\Big) + exp(1)\]</div>
+\[f(\vec{x}) = 20-20exp\Big(-0.2\sqrt{\frac{1}{d}\sum_{i=1}^{d}x_i^2}\Big)-exp\Big(\frac{1}{d}\sum_{i=1}^{d}cos(2\pi x_i)\Big) + exp(1)\]</div>
 <p>The Ackley function is continuous, non-convex and multimodal. This plot shows Ackley in two-dimensional (<span class="math notranslate nohighlight">\(d=2\)</span>) form.</p>
 <a class="reference internal image-reference" href="../_images/ackley.png"><img alt="alternate text" class="align-center" src="../_images/ackley.png" style="width: 420.0px; height: 315.0px;" /></a>
 <p><span class="math notranslate nohighlight">\(\vec{x}\)</span> domain:

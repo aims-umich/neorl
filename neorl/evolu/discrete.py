@@ -3,7 +3,7 @@
 """
 Created on Tue Feb 25 14:42:24 2020
 
-@author: Katelin and Majdi
+@author: Katelin, Majdi, Devin
 """
 
 import warnings
@@ -34,9 +34,15 @@ def mutate_discrete(x_ij, x_min, x_max, lb, ub, alpha, method):
         rand = random.random()
         sig_a=0 #support for sigmoid min
         sig_b=2 #support for sigmoid max
-        norm = (sig_b-sig_a)*(x_ij - x_min) / (x_max - x_min) + sig_a  
-        sig = 1 / (1 + math.exp(norm))
-        if rand < sig and rand < alpha:
+        if x_max == x_min:
+            flag = True #force perturbation
+            sig = 0
+        else:
+            norm = (sig_b-sig_a)*(x_ij - x_min) / (x_max - x_min) + sig_a  
+            sig = 1 / (1 + math.exp(norm))
+            flag=False
+    
+        if (rand < sig and rand < alpha) or flag:
             choices = list(range(lb, ub+1)) # each <class 'int'>
             choices.remove(int(x_ij))
             to_ret = random.choice(choices)
@@ -106,4 +112,4 @@ def decode_discrete_to_grid(individual, bounds, bounds_map):
     return new_indv   
 
 x=[0.2, 45, 2, 1]
-0
+decode_discrete_to_grid(x, bounds, bounds_map)

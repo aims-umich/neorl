@@ -1,7 +1,15 @@
-from neorl import HHO, ES, PESA
+########################
+# Import Packages
+########################
+
+from neorl import HHO, ES, PESA, BAT
 import math
 import matplotlib.pyplot as plt
 
+#############################
+# Define Vessel Function 
+#(Mixed discrete/continuous)
+#############################
 def Vessel(individual):
     """
     Pressure vesssel design
@@ -65,6 +73,14 @@ x_pesa, y_pesa, pesa_hist=pesa.evolute(ngen=200, verbose=False)
 assert Vessel(x_pesa) == y_pesa
 
 ########################
+# Setup and evolute BAT
+########################
+bat=BAT(mode='min', bounds=bounds, fit=Vessel, nbats=50, fmin = 0 , fmax = 1, 
+        A=0.5, r0=0.5, levy = True, seed = 1, ncores=1)
+x_bat, y_bat, bat_hist=bat.evolute(ngen=200, verbose=1)
+assert Vessel(x_bat) == y_bat
+
+########################
 # Plotting
 ########################
 
@@ -72,10 +88,12 @@ plt.figure()
 plt.plot(hho_hist['global_fitness'], label='HHO')
 plt.plot(es_hist, label='ES')
 plt.plot(pesa_hist, label='PESA')
+plt.plot(bat_hist['global_fitness'], label='BAT')
 plt.xlabel('Generation')
 plt.ylabel('Fitness')
 #plt.ylim([0,10000]) #zoom in
 plt.legend()
+plt.savefig('ex7_pv_fitness.png',format='png', dpi=300, bbox_inches="tight")
 
 ########################
 # Comparison
@@ -90,3 +108,6 @@ print(y_es)
 print('---Best PESA Results---')
 print(x_pesa)
 print(y_pesa)
+print('---Best BAT Results---')
+print(x_bat)
+print(y_bat)

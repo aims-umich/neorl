@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.evolu.sa &mdash; NEORL 1.3.5b documentation</title>
+  <title>neorl.evolu.sa &mdash; NEORL 1.4.5b documentation</title>
   
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                main (1.3.5b )
+                main (1.4.5b )
               </div>
             
           
@@ -116,6 +116,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/sa.html">Simulated Annealing (SA)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/ssa.html">Salp Swarm Algorithm (SSA)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/woa.html">Whale Optimization Algorithm (WOA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/mfo.html">Moth-flame Optimization (MFO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/jaya.html">JAYA Algorithm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/bat.html">Bat Algorithm (BAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/hho.html">Harris Hawks Optimization (HHO)</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
 <ul>
@@ -132,6 +136,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex3.html">Example 3: Welded-beam design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex4.html">Example 4: Benchmarks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex5.html">Example 5: CEC’2017 Test Suite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex6.html">Example 6: Three-bar Truss Design</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Misc</span></p>
 <ul>
@@ -313,24 +318,42 @@
             <span class="k">raise</span> <span class="ne">Exception</span> <span class="p">(</span><span class="s1">&#39;unknown data type is given, either int, float, or grid are allowed for parameter bounds&#39;</span><span class="p">)</span>
                 
         <span class="k">return</span> <span class="n">sample</span>
+
+    <span class="k">def</span> <span class="nf">ensure_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vec</span><span class="p">):</span> <span class="c1"># bounds check</span>
+
+        <span class="n">vec_new</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+            <span class="c1"># less than minimum </span>
+            <span class="k">if</span> <span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">vec_new</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+            <span class="c1"># more than maximum</span>
+            <span class="k">if</span> <span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">2</span><span class="p">]:</span>
+                <span class="n">vec_new</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">2</span><span class="p">])</span>
+            <span class="c1"># fine</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">2</span><span class="p">]:</span>
+                <span class="n">vec_new</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        
+        <span class="k">return</span> <span class="n">vec_new</span>
     
-    <span class="k">def</span> <span class="nf">def_move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">chi</span><span class="p">):</span>
-        <span class="c1">#&quot;&quot;&quot;</span>
-        <span class="c1">#This function is to perturb x attributes by probability chi</span>
-        <span class="c1">#Inputs:</span>
-        <span class="c1">#    x: input vector </span>
-        <span class="c1">#    chi: perturbation probablity between 0 and 1</span>
-        <span class="c1">#Returns: perturbed vector x</span>
-        <span class="c1">#&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="SA.def_move"><a class="viewcode-back" href="../../../modules/sa.html#neorl.evolu.sa.SA.def_move">[docs]</a>    <span class="k">def</span> <span class="nf">def_move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">chi</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function is to perturb x attributes by probability chi</span>
+<span class="sd">        Inputs:</span>
+<span class="sd">            x: input vector </span>
+<span class="sd">            chi: perturbation probablity between 0 and 1</span>
+<span class="sd">        Returns: perturbed vector x</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">i</span><span class="o">=</span><span class="mi">0</span>
+        <span class="n">x_new</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">chi</span><span class="p">:</span>
                 <span class="n">sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">])</span>
-                <span class="k">while</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">sample</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">2</span><span class="p">]):</span> 
+                <span class="k">while</span> <span class="n">x_new</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">sample</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">2</span><span class="p">]):</span> 
                     <span class="n">sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">])</span>
-                <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sample</span>
+                <span class="n">x_new</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sample</span>
             <span class="n">i</span><span class="o">+=</span><span class="mi">1</span>
-        <span class="k">return</span> <span class="n">x</span>
+        <span class="k">return</span> <span class="n">x_new</span></div>
         
     <span class="k">def</span> <span class="nf">temp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">step</span><span class="p">):</span>
         <span class="c1">#&quot;&quot;&quot;</span>
@@ -383,9 +406,10 @@
                 <span class="n">x</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_prev</span><span class="p">,</span><span class="n">chi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">chi</span><span class="p">[</span><span class="n">core_seed</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">x</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_prev</span><span class="p">))</span>
+            
+            <span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ensure_bounds</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
             <span class="c1">#SA is programmed to maximize reward</span>
             <span class="n">E</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-            
             <span class="n">dE</span> <span class="o">=</span> <span class="n">E</span> <span class="o">-</span> <span class="n">E_prev</span>        
             <span class="c1">#-----------------------------------</span>
             <span class="c1"># Improve/Accept/Reject</span>
@@ -526,16 +550,16 @@
             <span class="n">arg_max</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">E_best</span><span class="p">)</span>
             <span class="n">stat</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x_best</span><span class="p">[</span><span class="n">arg_max</span><span class="p">])</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">==</span><span class="s1">&#39;max&#39;</span><span class="p">:</span>
-                <span class="n">stat</span><span class="p">[</span><span class="s1">&#39;fitness&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">E_best</span><span class="p">[</span><span class="n">arg_max</span><span class="p">])</span>
+                <span class="n">stat</span><span class="p">[</span><span class="s1">&#39;fitness&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">E_best</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">stat</span><span class="p">[</span><span class="s1">&#39;fitness&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="n">E_best</span><span class="p">[</span><span class="n">arg_max</span><span class="p">])</span>
+                <span class="n">stat</span><span class="p">[</span><span class="s1">&#39;fitness&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="nb">max</span><span class="p">(</span><span class="n">E_best</span><span class="p">))</span>
             <span class="n">stat</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
             <span class="n">stat</span><span class="p">[</span><span class="s1">&#39;accept&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">acc</span><span class="p">[</span><span class="n">arg_max</span><span class="p">])</span>
             <span class="n">stat</span><span class="p">[</span><span class="s1">&#39;reject&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rej</span><span class="p">[</span><span class="n">arg_max</span><span class="p">])</span>
             <span class="n">stat</span><span class="p">[</span><span class="s1">&#39;improve&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">imp</span><span class="p">[</span><span class="n">arg_max</span><span class="p">])</span>
             
-            <span class="k">if</span> <span class="n">E_best</span><span class="p">[</span><span class="n">arg_max</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">E_opt</span><span class="p">:</span>
-                <span class="n">E_opt</span><span class="o">=</span><span class="n">E_best</span><span class="p">[</span><span class="n">arg_max</span><span class="p">]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">==</span><span class="s1">&#39;max&#39;</span> <span class="k">else</span> <span class="o">-</span><span class="n">E_best</span><span class="p">[</span><span class="n">arg_max</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="n">E_best</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">E_opt</span><span class="p">:</span>
+                <span class="n">E_opt</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="n">E_best</span><span class="p">)</span>
                 <span class="n">x_opt</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">x_best</span><span class="p">[</span><span class="n">arg_max</span><span class="p">])</span>
             
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">reinforce_best</span><span class="p">:</span>
@@ -548,22 +572,28 @@
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;************************************************************&#39;</span><span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Statistics for the </span><span class="si">{}</span><span class="s1"> parallel chains&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">))</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">==</span><span class="s1">&#39;max&#39;</span><span class="p">:</span> 
-                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best fitness:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">E_best</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best fitness:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">E_best</span><span class="p">),</span><span class="mi">6</span><span class="p">))</span>
                 <span class="k">else</span><span class="p">:</span> 
-                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best fitness:&#39;</span><span class="p">,</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">E_best</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best fitness:&#39;</span><span class="p">,</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">E_best</span><span class="p">),</span><span class="mi">6</span><span class="p">))</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best individual:&#39;</span><span class="p">,</span> <span class="n">x_best</span><span class="p">[</span><span class="n">arg_max</span><span class="p">])</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Acceptance Rate (%):&#39;</span><span class="p">,</span> <span class="n">acc</span><span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Rejection Rate (%):&#39;</span><span class="p">,</span> <span class="n">rej</span><span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Improvment Rate (%):&#39;</span><span class="p">,</span> <span class="n">imp</span><span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;************************************************************&#39;</span><span class="p">)</span>
+
+        <span class="c1">#--mir</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">==</span><span class="s1">&#39;max&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">E_opt_correct</span><span class="o">=</span><span class="n">E_opt</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">E_opt_correct</span><span class="o">=-</span><span class="n">E_opt</span>
                 
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;------------------------ SA Summary --------------------------&#39;</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best fitness (y) found:&#39;</span><span class="p">,</span> <span class="n">E_opt</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best fitness (y) found:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">E_opt_correct</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best individual (x) found:&#39;</span><span class="p">,</span> <span class="n">x_opt</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--------------------------------------------------------------&#39;</span><span class="p">)</span>
             
-        <span class="k">return</span> <span class="n">x_opt</span><span class="p">,</span> <span class="n">E_opt</span><span class="p">,</span> <span class="n">stat</span></div></div>
+        <span class="k">return</span> <span class="n">x_opt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">E_opt_correct</span><span class="p">,</span> <span class="n">stat</span></div></div>
 
 </pre></div>
 

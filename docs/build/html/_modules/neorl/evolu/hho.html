@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.evolu.hho &mdash; NEORL 1.4.3b documentation</title>
+  <title>neorl.evolu.hho &mdash; NEORL 1.4.5b documentation</title>
   
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                main (1.4.3b )
+                main (1.4.5b )
               </div>
             
           
@@ -365,19 +365,20 @@
                                            <span class="n">alpha</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span>
                                            <span class="n">method</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">int_transform</span><span class="p">)</span>
 
+        <span class="c1">#mir-grid</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rabbit_correct</span><span class="o">=</span><span class="n">decode_discrete_to_grid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rabbit_location</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>    
+            <span class="bp">self</span><span class="o">.</span><span class="n">rabbit_correct</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rabbit_location</span>
+            
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;------------------------ HHO Summary --------------------------&#39;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Function:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best fitness (y) found:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_global_fitness</span><span class="p">)</span>
-            <span class="c1">#mir-grid</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">rabbit_decoded</span><span class="o">=</span><span class="n">decode_discrete_to_grid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rabbit_location</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best individual (x) found:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rabbit_decoded</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>    
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best individual (x) found:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rabbit_location</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best individual (x) found:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rabbit_correct</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;-------------------------------------------------------------- </span><span class="se">\n</span><span class="s1"> </span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rabbit_location</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_global_fitness</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rabbit_correct</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_global_fitness</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span></div>
 
     <span class="k">def</span> <span class="nf">ensure_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vec</span><span class="p">,</span> <span class="n">bounds</span><span class="p">):</span>
     

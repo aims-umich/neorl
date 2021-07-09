@@ -23,9 +23,9 @@ What can you use?
 --------------------
 
 -  Multi processing: ✔️
--  Discrete spaces: ❌
+-  Discrete spaces: ✔️
 -  Continuous spaces: ✔️
--  Mixed Discrete/Continuous spaces: ❌
+-  Mixed Discrete/Continuous spaces: ✔️
 
 Parameters
 ----------
@@ -71,6 +71,7 @@ Notes
 - The bats start with loudness value of ``A``, and decay it by a factor of ``alpha``. If the user chooses ``alpha=1``, fixed value of ``A`` is used. 
 - Bats fly randomly to search for the prey with frequency varying between ``fmin`` and ``fmax``.
 - The bats emit pulses with emission rate represented by the asymptotic value (``r0``). The value of emission rate is updated in generation ``i`` according to :math:`r_i = r_0(1-exp(-\gamma i))`, where ``gamma`` is the exponential factor of the pulse rate. ``r`` typically decreases abruptly at the beginning and then converges back to ``r0`` by the end of the evolution. 
+- We provide a flexible BAT implemetation that can handle continuous (``float``), discrete (``int``), and categorical (``grid``) spaces and their mix. The user can control the type of discrete transformation via the argument ``int_transform``. 
 - ``ncores`` argument evaluates the fitness of all bats in parallel. Therefore, set ``ncores <= nbats`` for most optimal resource allocation.
 - Look for an optimal balance between ``nbats`` and ``ngen``, it is recommended to minimize the number of ``nbats`` to allow for more updates and more generations.
 - Total number of cost evaluations for BAT is ``3*nbats`` * ``ngen``.

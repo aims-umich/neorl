@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Bat Algorithm (BAT) &mdash; NEORL 1.4.3b documentation</title>
+  <title>Bat Algorithm (BAT) &mdash; NEORL 1.4.5b documentation</title>
   
 
   
@@ -40,7 +40,7 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Grid Search" href="../tune/grid.html" />
+    <link rel="next" title="Harris Hawks Optimization (HHO)" href="hho.html" />
     <link rel="prev" title="JAYA Algorithm" href="jaya.html" /> 
 </head>
 
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.4.3b )
+                main (1.4.5b )
               </div>
             
           
@@ -128,6 +128,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#notes">Notes</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="hho.html">Harris Hawks Optimization (HHO)</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
 <ul>
@@ -144,6 +145,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../examples/ex3.html">Example 3: Welded-beam design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/ex4.html">Example 4: Benchmarks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/ex5.html">Example 5: CEC’2017 Test Suite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex6.html">Example 6: Three-bar Truss Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex7.html">Example 7: Pressure Vessel Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex8.html">Example 8: Pressure Vessel Design with Demonstration of Categorical Parameter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex9.html">Example 9: Cantilever Stepped Beam</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Misc</span></p>
 <ul>
@@ -217,7 +222,9 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <span class="target" id="module-neorl.evolu.bat"><span id="bat"></span></span><div class="section" id="bat-algorithm-bat">
+  <span class="target" id="module-neorl.evolu.bat"><span id="bat"></span></span><p>Created on Fri Jun 18 19:45:06 2021</p>
+<p>&#64;author: Devin Seyler and Majdi Radaideh</p>
+<div class="section" id="bat-algorithm-bat">
 <h1>Bat Algorithm (BAT)<a class="headerlink" href="#bat-algorithm-bat" title="Permalink to this headline">¶</a></h1>
 <p>A module for the bat optimization algorithm with differential operator, Levy flights trajectory, and parallel computing support.</p>
 <p>Original papers:</p>
@@ -230,16 +237,16 @@
 <h2>What can you use?<a class="headerlink" href="#what-can-you-use" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>Multi processing: ✔️</p></li>
-<li><p>Discrete spaces: ❌</p></li>
+<li><p>Discrete spaces: ✔️</p></li>
 <li><p>Continuous spaces: ✔️</p></li>
-<li><p>Mixed Discrete/Continuous spaces: ❌</p></li>
+<li><p>Mixed Discrete/Continuous spaces: ✔️</p></li>
 </ul>
 </div>
 <div class="section" id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="neorl.evolu.bat.BAT">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">neorl.evolu.bat.</span></code><code class="sig-name descname"><span class="pre">BAT</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nbats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">levy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'False'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ncores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/evolu/bat.html#BAT"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.evolu.bat.BAT" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">neorl.evolu.bat.</span></code><code class="sig-name descname"><span class="pre">BAT</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nbats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">levy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'False'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int_transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'nearest_int'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ncores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/evolu/bat.html#BAT"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.evolu.bat.BAT" title="Permalink to this definition">¶</a></dt>
 <dd><p>BAT Algorithm</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -252,9 +259,10 @@
 <li><p><strong>fmax</strong> – (float): maximum value of the pulse frequency</p></li>
 <li><p><strong>A</strong> – (float) initial value of the loudness rate</p></li>
 <li><p><strong>r0</strong> – (float) asymptotic value of the pulse rate</p></li>
-<li><p><strong>alpha</strong> – (float) decay factor of loudness <code class="docutils literal notranslate"><span class="pre">A</span></code>, i.e. <code class="docutils literal notranslate"><span class="pre">A</span></code> approaches 0 by the end of evolution if <code class="docutils literal notranslate"><span class="pre">alpha</span> <span class="pre">&lt;</span> <span class="pre">1</span></code></p></li>
-<li><p><strong>gamma</strong> – (float) exponential factor of the pulse rate <code class="docutils literal notranslate"><span class="pre">r</span></code>, i.e. <code class="docutils literal notranslate"><span class="pre">r</span></code> decreases abruptly at the beginning and then converges back to <code class="docutils literal notranslate"><span class="pre">r0</span></code> by the end of evolution</p></li>
+<li><p><strong>alpha</strong> – (float) decay factor of loudness <code class="docutils literal notranslate"><span class="pre">A</span></code>, i.e. A approaches 0 by the end of evolution if <code class="docutils literal notranslate"><span class="pre">alpha</span> <span class="pre">&lt;</span> <span class="pre">1</span></code></p></li>
+<li><p><strong>gamma</strong> – (float) exponential factor of the pulse rate <code class="docutils literal notranslate"><span class="pre">r</span></code>, i.e. <code class="docutils literal notranslate"><span class="pre">r</span></code> increases abruptly at the beginning and then converges to <code class="docutils literal notranslate"><span class="pre">r0</span></code> by the end of evolution</p></li>
 <li><p><strong>levy</strong> – (bool): a flag to activate Levy flight steps of the bat to increase bat diversity</p></li>
+<li><p><strong>int_transform</strong> – (str): method of handling int/discrete variables, choose from: <code class="docutils literal notranslate"><span class="pre">nearest_int</span></code>, <code class="docutils literal notranslate"><span class="pre">sigmoid</span></code>, <code class="docutils literal notranslate"><span class="pre">minmax</span></code>.</p></li>
 <li><p><strong>ncores</strong> – (int) number of parallel processors (must be <code class="docutils literal notranslate"><span class="pre">&lt;=</span> <span class="pre">nbats</span></code>)</p></li>
 <li><p><strong>seed</strong> – (int) random seed for sampling</p></li>
 </ul>
@@ -317,6 +325,7 @@
 <li><p>The bats start with loudness value of <code class="docutils literal notranslate"><span class="pre">A</span></code>, and decay it by a factor of <code class="docutils literal notranslate"><span class="pre">alpha</span></code>. If the user chooses <code class="docutils literal notranslate"><span class="pre">alpha=1</span></code>, fixed value of <code class="docutils literal notranslate"><span class="pre">A</span></code> is used.</p></li>
 <li><p>Bats fly randomly to search for the prey with frequency varying between <code class="docutils literal notranslate"><span class="pre">fmin</span></code> and <code class="docutils literal notranslate"><span class="pre">fmax</span></code>.</p></li>
 <li><p>The bats emit pulses with emission rate represented by the asymptotic value (<code class="docutils literal notranslate"><span class="pre">r0</span></code>). The value of emission rate is updated in generation <code class="docutils literal notranslate"><span class="pre">i</span></code> according to <span class="math notranslate nohighlight">\(r_i = r_0(1-exp(-\gamma i))\)</span>, where <code class="docutils literal notranslate"><span class="pre">gamma</span></code> is the exponential factor of the pulse rate. <code class="docutils literal notranslate"><span class="pre">r</span></code> typically decreases abruptly at the beginning and then converges back to <code class="docutils literal notranslate"><span class="pre">r0</span></code> by the end of the evolution.</p></li>
+<li><p>We provide a flexible BAT implemetation that can handle continuous (<code class="docutils literal notranslate"><span class="pre">float</span></code>), discrete (<code class="docutils literal notranslate"><span class="pre">int</span></code>), and categorical (<code class="docutils literal notranslate"><span class="pre">grid</span></code>) spaces and their mix. The user can control the type of discrete transformation via the argument <code class="docutils literal notranslate"><span class="pre">int_transform</span></code>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">ncores</span></code> argument evaluates the fitness of all bats in parallel. Therefore, set <code class="docutils literal notranslate"><span class="pre">ncores</span> <span class="pre">&lt;=</span> <span class="pre">nbats</span></code> for most optimal resource allocation.</p></li>
 <li><p>Look for an optimal balance between <code class="docutils literal notranslate"><span class="pre">nbats</span></code> and <code class="docutils literal notranslate"><span class="pre">ngen</span></code>, it is recommended to minimize the number of <code class="docutils literal notranslate"><span class="pre">nbats</span></code> to allow for more updates and more generations.</p></li>
 <li><p>Total number of cost evaluations for BAT is <code class="docutils literal notranslate"><span class="pre">3*nbats</span></code> * <code class="docutils literal notranslate"><span class="pre">ngen</span></code>.</p></li>
@@ -330,7 +339,7 @@
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="../tune/grid.html" class="btn btn-neutral float-right" title="Grid Search" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="hho.html" class="btn btn-neutral float-right" title="Harris Hawks Optimization (HHO)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
         <a href="jaya.html" class="btn btn-neutral float-left" title="JAYA Algorithm" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 

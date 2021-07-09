@@ -20,7 +20,7 @@ The mathematical definition of Ackley is:
 
 .. math::
 
-   f(\vec{x}) = 20-20exp\Big(-0.2\sqrt{\frac{1}{n}\sum_{i=1}^{n}x_i^2}\Big)-exp\Big(\frac{1}{n}\sum_{i=1}^{n}cos(2\pi x_i)\Big) + exp(1) 
+   f(\vec{x}) = 20-20exp\Big(-0.2\sqrt{\frac{1}{d}\sum_{i=1}^{d}x_i^2}\Big)-exp\Big(\frac{1}{d}\sum_{i=1}^{d}cos(2\pi x_i)\Big) + exp(1) 
 
 The Ackley function is continuous, non-convex and multimodal. This plot shows Ackley in two-dimensional (:math:`d=2`) form.
 

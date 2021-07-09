@@ -29,13 +29,13 @@ The cost of the welded beam is formulated as
 
 	\min_{\vec{x}} f (\vec{x}) = 1.10471x_1^2x_2 + 0.04811x_3x_4 (14+x_2),
 
-subject to 7 rules/constraints, the first on the shear stress ($\tau$)
+subject to 7 rules/constraints, the first on the shear stress (:math:`\tau`)
 	
 .. math::
 
 	g_1(\vec{x}) = \tau(\vec{x}) - \tau_{max} \leq 0, 
 
-the second on the bending stress ($\sigma$)
+the second on the bending stress (:math:`\sigma`)
 
 .. math::
 	
@@ -57,13 +57,13 @@ three side constraints
 
 	g_5(\vec{x}) = 0.125 - x_1 \leq 0,  
 	
-the sixth on the end deflection of the beam ($\delta$)
+the sixth on the end deflection of the beam (:math:`\delta`)
 	
 .. math::
 	g_6(\vec{x}) = \delta(\vec{x}) - \delta_{max} \leq 0, 
 	
 
-and the last on the buckling load on the bar ($P_c$)
+and the last on the buckling load on the bar (:math:`P_c`)
 	
 .. math::
 	
@@ -78,7 +78,7 @@ while the range of the design variables are:
 	    \end{split}
 
 	
-The derived variables and their related constants are expressed as follows \cite{coello2000use}:
+The derived variables and their related constants are expressed as follows:
 	
 .. math::
 
