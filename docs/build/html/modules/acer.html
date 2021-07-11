@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Actor-Critic with Experience Replay (ACER) &mdash; NEORL 1.4.6b documentation</title>
+  <title>Actor-Critic with Experience Replay (ACER) &mdash; NEORL 1.4.7b documentation</title>
   
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                main (1.4.6b )
+                main (1.4.7b )
               </div>
             
           
@@ -238,8 +238,8 @@
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="neorl.rl.baselines.acer.ACER">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">neorl.rl.baselines.acer.</span></code><code class="sig-name descname"><span class="pre">ACER</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">policy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_procs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_coef</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ent_coef</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_grad_norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0007</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr_schedule</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'linear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rprop_alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rprop_epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replay_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replay_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correction_term</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trust_region</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tensorboard_log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_init_setup_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">policy_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_tensorboard_log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_cpu_tf_sess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/rl/baselines/acer/acer_simple.html#ACER"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.rl.baselines.acer.ACER" title="Permalink to this definition">¶</a></dt>
-<dd><p>The ACER (Actor-Critic with Experience Replay) model class, <a class="reference external" href="https://arxiv.org/abs/1611.01224">https://arxiv.org/abs/1611.01224</a></p>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">neorl.rl.baselines.acer.</span></code><code class="sig-name descname"><span class="pre">ACER</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">policy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_coef</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ent_coef</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_grad_norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0007</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr_schedule</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'linear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replay_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replay_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/rl/baselines/acer/acer_simple.html#ACER"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.rl.baselines.acer.ACER" title="Permalink to this definition">¶</a></dt>
+<dd><p>The ACER (Actor-Critic with Experience Replay) model class</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -248,40 +248,19 @@
 <li><p><strong>gamma</strong> – (float) The discount value</p></li>
 <li><p><strong>n_steps</strong> – (int) The number of steps to run for each environment per update
 (i.e. batch size is n_steps * n_env where n_env is number of environment copies running in parallel)</p></li>
-<li><p><strong>num_procs</strong> – <p>(int) The number of threads for TensorFlow operations</p>
-<div class="deprecated">
-<p><span class="versionmodified deprecated">Deprecated since version 2.9.0: </span>Use <cite>n_cpu_tf_sess</cite> instead.</p>
-</div>
-</p></li>
 <li><p><strong>q_coef</strong> – (float) The weight for the loss on the Q value</p></li>
 <li><p><strong>ent_coef</strong> – (float) The weight for the entropy loss</p></li>
 <li><p><strong>max_grad_norm</strong> – (float) The clipping value for the maximum gradient</p></li>
 <li><p><strong>learning_rate</strong> – (float) The initial learning rate for the RMS prop optimizer</p></li>
 <li><p><strong>lr_schedule</strong> – (str) The type of scheduler for the learning rate update (‘linear’, ‘constant’,
 ‘double_linear_con’, ‘middle_drop’ or ‘double_middle_drop’)</p></li>
-<li><p><strong>rprop_epsilon</strong> – (float) RMSProp epsilon (stabilizes square root computation in denominator of RMSProp update)
-(default: 1e-5)</p></li>
-<li><p><strong>rprop_alpha</strong> – (float) RMSProp decay parameter (default: 0.99)</p></li>
 <li><p><strong>buffer_size</strong> – (int) The buffer size in number of steps</p></li>
 <li><p><strong>replay_ratio</strong> – (float) The number of replay learning per on policy learning on average,
 using a poisson distribution</p></li>
-<li><p><strong>replay_start</strong> – (int) The minimum number of steps in the buffer, before learning replay</p></li>
-<li><p><strong>correction_term</strong> – (float) Importance weight clipping factor (default: 10)</p></li>
-<li><p><strong>trust_region</strong> – (bool) Whether or not algorithms estimates the gradient KL divergence
-between the old and updated policy and uses it to determine step size  (default: True)</p></li>
-<li><p><strong>alpha</strong> – (float) The decay rate for the Exponential moving average of the parameters</p></li>
-<li><p><strong>delta</strong> – (float) max KL divergence between the old policy and updated policy (default: 1)</p></li>
+<li><p><strong>replay_start</strong> – (int) The minimum number of steps in the buffer, before experience replay starts</p></li>
 <li><p><strong>verbose</strong> – (int) the verbosity level: 0 none, 1 training information, 2 tensorflow debug</p></li>
-<li><p><strong>tensorboard_log</strong> – (str) the log location for tensorboard (if None, no logging)</p></li>
-<li><p><strong>_init_setup_model</strong> – (bool) Whether or not to build the network at the creation of the instance</p></li>
-<li><p><strong>policy_kwargs</strong> – (dict) additional arguments to be passed to the policy on creation</p></li>
-<li><p><strong>full_tensorboard_log</strong> – (bool) enable additional logging when using tensorboard
-WARNING: this logging can take a lot of space quickly</p></li>
 <li><p><strong>seed</strong> – (int) Seed for the pseudo-random generators (python, numpy, tensorflow).
-If None (default), use random seed. Note that if you want completely deterministic
-results, you must set <cite>n_cpu_tf_sess</cite> to 1.</p></li>
-<li><p><strong>n_cpu_tf_sess</strong> – (int) The number of threads for TensorFlow operations
-If None, the number of cpu of the current machine will be used.</p></li>
+If None (default), use random seed.</p></li>
 </ul>
 </dd>
 </dl>

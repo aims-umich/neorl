@@ -272,7 +272,7 @@ class ES:
                         ind[i] = int(self.lb[i])
                     else:
                         # make a list of possiblities after excluding the current value to enforce mutation
-                        choices=list(range(self.lb[i],self.ub[i]+1))
+                        choices=list(range(int(self.lb[i]),int(self.ub[i])+1))
                         choices.remove(int(ind[i]))
                         # randint is NOT used here since it could re-draw the same integer value, choice is used instead
                         ind[i] = random.choice(choices)

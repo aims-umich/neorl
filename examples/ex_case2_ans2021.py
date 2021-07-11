@@ -4,20 +4,19 @@
 #               Optimization with Machine Learning Neuroevolution
 # Section: Script for Case 2 (Pressure Vessel Design)
 # Contact: Majdi I. Radaideh (radaideh@mit.edu)
-# Last update: 7/7/2021
+# Last update: 7/11/2021
 #----------------------------------------------------------------
 
 #*****************************************************************************
-#NOTE: Change ncores=1 and ncases=10 if you like to run this example quickly 
+#NOTE: Change `ncores` to 1 and `ncases` to 10 to run this example quickly 
 #*****************************************************************************
 
-from neorl import PESA
+from neorl import PESA, ES
 from neorl.tune import RANDTUNE
 import math
 import matplotlib.pyplot as plt
 import random
 random.seed(1)
-
 #***************************************************************
 # Part I: Define original fitness function (pressure vessel)
 #***************************************************************
@@ -94,9 +93,9 @@ param_grid={
 'mutpb':[[0.05, 0.2],'float']}
 
 #setup a random tune object
-rtune=RANDTUNE(param_grid=param_grid, fit=tune_fit, ncases=5, seed=1)
+rtune=RANDTUNE(param_grid=param_grid, fit=tune_fit, ncases=100, seed=1)
 #tune the parameters with method .tune
-randres=rtune.tune(ncores=1, csvname='tune.csv')
+randres=rtune.tune(ncores=30, csvname='tune.csv')
 #sort the results from best to worst
 sorted_res = randres.sort_values(['score'], axis='index', ascending=True)
 #print the top 10 hyperparameter sets
@@ -118,12 +117,28 @@ pesa=PESA(mode='min', bounds=bounds, fit=Vessel,
           seed=1)
 x_pesa, y_pesa, pesa_hist=pesa.evolute(ngen=300, x0=x0, verbose=False)
 
+#Run GA
+#use same optimized hyperparameters from PESA (or repeat tuning again for GA)
+ga=ES(mode='min', bounds=bounds, fit=Vessel, cxmode='cx2point',
+      lambda_=sorted_res['npop'].iloc[0], 
+      mu=int(sorted_res['frac'].iloc[0]*sorted_res['npop'].iloc[0]), 
+      mutpb=sorted_res['mutpb'].iloc[0],
+      cxpb=sorted_res['cxpb'].iloc[0], 
+      ncores=1, seed=1)
+
+#filter initial guess for GA
+#lambda_=int(sorted_res['npop'].iloc[0])
+#x0_ga=x0[:lambda_]
+x_ga, y_ga, ga_hist=ga.evolute(ngen=300, x0=None, verbose=0)  #or use x0_ga if you like 
+                                                              #(random guess seems to be better)
+
 #*************************************************************
 # Part VI: Post-processing
 #*************************************************************
 #plot results
 plt.figure()
 plt.plot(pesa_hist, label='PESA')
+plt.plot(ga_hist, label='GA')
 plt.xlabel('Generation')
 plt.ylabel('Fitness')
 plt.legend()
@@ -133,3 +148,7 @@ plt.savefig('ex2_ans21_fitness.png',format='png', dpi=300, bbox_inches="tight")
 print('---Best PESA Results---')
 print(x_pesa)
 print(y_pesa)
+
+print('---Best GA Results---')
+print(x_ga)
+print(y_ga)

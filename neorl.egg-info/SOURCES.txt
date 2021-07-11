@@ -134,6 +134,7 @@ neorl/rl/runners/dqn.py
 neorl/rl/runners/ppo2.py
 neorl/tests/__init__.py
 neorl/tests/t_deepq.py
+neorl/tests/t_evolutune.py
 neorl/tests/t_ppo.py
 neorl/tests/test_a2c.py
 neorl/tests/test_acer.py
@@ -145,7 +146,6 @@ neorl/tests/test_benchmarks2.py
 neorl/tests/test_de.py
 neorl/tests/test_dqn.py
 neorl/tests/test_es.py
-neorl/tests/test_evolutune.py
 neorl/tests/test_globalmin.py
 neorl/tests/test_grid.py
 neorl/tests/test_gwo.py

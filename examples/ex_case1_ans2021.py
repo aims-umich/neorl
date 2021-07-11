@@ -4,7 +4,7 @@
 #               Optimization with Machine Learning Neuroevolution
 # Section: Script for Case 1 (Ackley Function)
 # Contact: Majdi I. Radaideh (radaideh@mit.edu)
-# Last update: 7/7/2021
+# Last update: 7/11/2021
 #----------------------------------------------------------------
 
 #---------------------------------
@@ -12,7 +12,7 @@
 #---------------------------------
 import numpy as np
 import matplotlib.pyplot as plt
-from neorl import PSO, GWO, WOA
+from neorl import ES, GWO, WOA
 from math import exp, sqrt, cos, pi
 
 #---------------------------------
@@ -34,11 +34,11 @@ for i in range(1,d+1):
     space['x'+str(i)]=['float', -32, 32]
 
 #---------------------------------
-# PSO
+# GA
 #---------------------------------
-pso=PSO(mode='min', bounds=space, fit=ACKLEY, npar=50, 
-        c1=2.05, c2=2.1, speed_mech='constric', seed=1)
-x_pso, y_pso, pso_hist=pso.evolute(ngen=150, verbose=0)
+ga=ES(mode='min', bounds=space, fit=ACKLEY, lambda_=50, mu=25, mutpb=0.15, alpha=0.5,
+     cxmode='blend', cxpb=0.85, ncores=1, seed=1)
+x_ga, y_ga, ga_hist=ga.evolute(ngen=150, verbose=0)
 
 #---------------------------------
 # GWO
@@ -57,7 +57,7 @@ x_woa, y_woa, woa_hist=woa.evolute(ngen=150, verbose=0)
 #---------------------------------
 #Plot fitness for both methods
 plt.figure()
-plt.plot(np.array(pso_hist), label='PSO')           
+plt.plot(np.array(ga_hist), label='GA')           
 plt.plot(np.array(gwo_hist['fitness']), '--', label='GWO')            
 plt.plot(np.array(woa_hist['global_fitness']), '-.', label='WOA')
 plt.xlabel('Generation')
@@ -69,9 +69,9 @@ plt.show()
 #---------------------------------
 # Comparison
 #---------------------------------
-print('---Best PSO Results---')
-print('Best x:', np.round(x_pso,4))
-print('Best y:', y_pso)
+print('---Best GA Results---')
+print('Best x:', np.round(x_ga,4))
+print('Best y:', y_ga)
 print('---Best GWO Results---')
 print('Best x:', np.round(x_gwo,4))
 print('Best y:', y_gwo)

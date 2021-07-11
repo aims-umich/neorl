@@ -87,18 +87,11 @@ class ACERAgent(InputChecker):
                         q_coef=self.inp.acer_dict['q_coef'][0], 
                         max_grad_norm=self.inp.acer_dict['max_grad_norm'][0], 
                         ent_coef=self.inp.acer_dict['ent_coef'][0], 
-                        alpha=self.inp.acer_dict['alpha'][0],
                         lr_schedule=self.inp.acer_dict['lr_schedule'][0],
-                        rprop_alpha=self.inp.acer_dict['rprop_alpha'][0], 
-                        rprop_epsilon=self.inp.acer_dict['rprop_epsilon'][0], 
                         buffer_size=self.inp.acer_dict['buffer_size'][0], 
                         replay_ratio=self.inp.acer_dict['replay_ratio'][0], 
                         replay_start=self.inp.acer_dict['replay_start'][0], 
-                        correction_term=self.inp.acer_dict['correction_term'][0], 
-                        trust_region=self.inp.acer_dict['trust_region'][0], 
-                        delta=self.inp.acer_dict['delta'][0], 
-                        verbose=1,
-                        tensorboard_log=tensorboard_log, seed=2, n_cpu_tf_sess=1)
+                        verbose=1,seed=2)
             model.learn(total_timesteps=self.inp.acer_dict['time_steps'][0], callback=self.callback)
             model.save(self.log_dir+self.inp.acer_dict['casename'][0]+'_model_last.pkl')
         
@@ -111,18 +104,11 @@ class ACERAgent(InputChecker):
                         q_coef=self.inp.acer_dict['q_coef'][0], 
                         max_grad_norm=self.inp.acer_dict['max_grad_norm'][0], 
                         ent_coef=self.inp.acer_dict['ent_coef'][0], 
-                        alpha=self.inp.acer_dict['alpha'][0],
                         lr_schedule=self.inp.acer_dict['lr_schedule'][0],
-                        rprop_alpha=self.inp.acer_dict['rprop_alpha'][0], 
-                        rprop_epsilon=self.inp.acer_dict['rprop_epsilon'][0], 
                         buffer_size=self.inp.acer_dict['buffer_size'][0], 
                         replay_ratio=self.inp.acer_dict['replay_ratio'][0], 
                         replay_start=self.inp.acer_dict['replay_start'][0], 
-                        correction_term=self.inp.acer_dict['correction_term'][0], 
-                        trust_region=self.inp.acer_dict['trust_region'][0], 
-                        delta=self.inp.acer_dict['delta'][0],
-                        verbose=1,
-                        tensorboard_log=tensorboard_log, seed=2, n_cpu_tf_sess=1)
+                        verbose=1,seed=2)
             model.learn(total_timesteps=self.inp.acer_dict['time_steps'][0], callback=self.callback)
             model.save(self.log_dir+self.inp.acer_dict['casename'][0]+'_lastmodel.pkl')
 

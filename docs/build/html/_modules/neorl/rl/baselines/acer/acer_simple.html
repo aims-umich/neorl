@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.rl.baselines.acer.acer_simple &mdash; NEORL 1.3.5b documentation</title>
+  <title>neorl.rl.baselines.acer.acer_simple &mdash; NEORL 1.4.7b documentation</title>
   
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                main (1.3.5b )
+                main (1.4.7b )
               </div>
             
           
@@ -116,6 +116,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../modules/sa.html">Simulated Annealing (SA)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../modules/ssa.html">Salp Swarm Algorithm (SSA)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../modules/woa.html">Whale Optimization Algorithm (WOA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules/mfo.html">Moth-flame Optimization (MFO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules/jaya.html">JAYA Algorithm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules/bat.html">Bat Algorithm (BAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules/hho.html">Harris Hawks Optimization (HHO)</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
 <ul>
@@ -132,6 +136,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../examples/ex3.html">Example 3: Welded-beam design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../examples/ex4.html">Example 4: Benchmarks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../examples/ex5.html">Example 5: CEC’2017 Test Suite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../examples/ex6.html">Example 6: Three-bar Truss Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../examples/ex7.html">Example 7: Pressure Vessel Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../examples/ex8.html">Example 8: Pressure Vessel Design with Demonstration of Categorical Parameter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../examples/ex9.html">Example 9: Cantilever Stepped Beam</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Misc</span></p>
 <ul>
@@ -345,79 +353,64 @@
 
 <div class="viewcode-block" id="ACER"><a class="viewcode-back" href="../../../../../modules/acer.html#neorl.rl.baselines.acer.ACER">[docs]</a><span class="k">class</span> <span class="nc">ACER</span><span class="p">(</span><span class="n">ActorCriticRLModel</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    The ACER (Actor-Critic with Experience Replay) model class, https://arxiv.org/abs/1611.01224</span>
+<span class="sd">    The ACER (Actor-Critic with Experience Replay) model class</span>
 
 <span class="sd">    :param policy: (ActorCriticPolicy or str) The policy model to use (MlpPolicy, CnnPolicy, CnnLstmPolicy, ...)</span>
 <span class="sd">    :param env: (Gym environment or str) The environment to learn from (if registered in Gym, can be str)</span>
 <span class="sd">    :param gamma: (float) The discount value</span>
 <span class="sd">    :param n_steps: (int) The number of steps to run for each environment per update</span>
 <span class="sd">        (i.e. batch size is n_steps * n_env where n_env is number of environment copies running in parallel)</span>
-<span class="sd">    :param num_procs: (int) The number of threads for TensorFlow operations</span>
-
-<span class="sd">        .. deprecated:: 2.9.0</span>
-<span class="sd">            Use `n_cpu_tf_sess` instead.</span>
-
 <span class="sd">    :param q_coef: (float) The weight for the loss on the Q value</span>
 <span class="sd">    :param ent_coef: (float) The weight for the entropy loss</span>
 <span class="sd">    :param max_grad_norm: (float) The clipping value for the maximum gradient</span>
 <span class="sd">    :param learning_rate: (float) The initial learning rate for the RMS prop optimizer</span>
 <span class="sd">    :param lr_schedule: (str) The type of scheduler for the learning rate update (&#39;linear&#39;, &#39;constant&#39;,</span>
 <span class="sd">                              &#39;double_linear_con&#39;, &#39;middle_drop&#39; or &#39;double_middle_drop&#39;)</span>
-<span class="sd">    :param rprop_epsilon: (float) RMSProp epsilon (stabilizes square root computation in denominator of RMSProp update)</span>
-<span class="sd">        (default: 1e-5)</span>
-<span class="sd">    :param rprop_alpha: (float) RMSProp decay parameter (default: 0.99)</span>
 <span class="sd">    :param buffer_size: (int) The buffer size in number of steps</span>
 <span class="sd">    :param replay_ratio: (float) The number of replay learning per on policy learning on average,</span>
 <span class="sd">                         using a poisson distribution</span>
-<span class="sd">    :param replay_start: (int) The minimum number of steps in the buffer, before learning replay</span>
-<span class="sd">    :param correction_term: (float) Importance weight clipping factor (default: 10)</span>
-<span class="sd">    :param trust_region: (bool) Whether or not algorithms estimates the gradient KL divergence</span>
-<span class="sd">        between the old and updated policy and uses it to determine step size  (default: True)</span>
-<span class="sd">    :param alpha: (float) The decay rate for the Exponential moving average of the parameters</span>
-<span class="sd">    :param delta: (float) max KL divergence between the old policy and updated policy (default: 1)</span>
+<span class="sd">    :param replay_start: (int) The minimum number of steps in the buffer, before experience replay starts</span>
 <span class="sd">    :param verbose: (int) the verbosity level: 0 none, 1 training information, 2 tensorflow debug</span>
-<span class="sd">    :param tensorboard_log: (str) the log location for tensorboard (if None, no logging)</span>
-<span class="sd">    :param _init_setup_model: (bool) Whether or not to build the network at the creation of the instance</span>
-<span class="sd">    :param policy_kwargs: (dict) additional arguments to be passed to the policy on creation</span>
-<span class="sd">    :param full_tensorboard_log: (bool) enable additional logging when using tensorboard</span>
-<span class="sd">        WARNING: this logging can take a lot of space quickly</span>
 <span class="sd">    :param seed: (int) Seed for the pseudo-random generators (python, numpy, tensorflow).</span>
-<span class="sd">        If None (default), use random seed. Note that if you want completely deterministic</span>
-<span class="sd">        results, you must set `n_cpu_tf_sess` to 1.</span>
-<span class="sd">    :param n_cpu_tf_sess: (int) The number of threads for TensorFlow operations</span>
-<span class="sd">        If None, the number of cpu of the current machine will be used.</span>
+<span class="sd">        If None (default), use random seed.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">#:param alpha: (float) The decay rate for the Exponential moving average of the parameters</span>
+    <span class="c1">#:param correction_term: (float) Importance weight clipping factor (default: 10)</span>
+    <span class="c1">#:param delta: (float) max KL divergence between the old policy and updated policy (default: 1)</span>
+    <span class="c1">#:param trust_region: (bool) Whether or not algorithms estimates the gradient KL divergence</span>
+    <span class="c1">#    between the old and updated policy and uses it to determine step size  (default: True) </span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">policy</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span> <span class="n">n_steps</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">q_coef</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">ent_coef</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">max_grad_norm</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                 <span class="n">learning_rate</span><span class="o">=</span><span class="mf">7e-4</span><span class="p">,</span> <span class="n">lr_schedule</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">buffer_size</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span>
+                 <span class="n">replay_ratio</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">replay_start</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">policy</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span> <span class="n">n_steps</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">num_procs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">q_coef</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">ent_coef</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">max_grad_norm</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-                 <span class="n">learning_rate</span><span class="o">=</span><span class="mf">7e-4</span><span class="p">,</span> <span class="n">lr_schedule</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">rprop_alpha</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span> <span class="n">rprop_epsilon</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">buffer_size</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span>
-                 <span class="n">replay_ratio</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">replay_start</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">correction_term</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">trust_region</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                 <span class="n">alpha</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tensorboard_log</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">_init_setup_model</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">policy_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">full_tensorboard_log</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_cpu_tf_sess</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-
-        <span class="k">if</span> <span class="n">num_procs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;num_procs will be removed in a future version (v3.x.x) &quot;</span>
-                          <span class="s2">&quot;use n_cpu_tf_sess instead&quot;</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">)</span>
-            <span class="n">n_cpu_tf_sess</span> <span class="o">=</span> <span class="n">num_procs</span>
+        <span class="c1">#if num_procs is not None:</span>
+        <span class="c1">#    warnings.warn(&quot;num_procs will be removed in a future version (v3.x.x) &quot;</span>
+        <span class="c1">#                  &quot;use n_cpu_tf_sess instead&quot;, DeprecationWarning)</span>
+        <span class="c1">#    n_cpu_tf_sess = num_procs</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">n_steps</span> <span class="o">=</span> <span class="n">n_steps</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">replay_ratio</span> <span class="o">=</span> <span class="n">replay_ratio</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">buffer_size</span> <span class="o">=</span> <span class="n">buffer_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">replay_start</span> <span class="o">=</span> <span class="n">replay_start</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="n">gamma</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">correction_term</span> <span class="o">=</span> <span class="n">correction_term</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.99</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">correction_term</span> <span class="o">=</span> <span class="mf">10.0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">q_coef</span> <span class="o">=</span> <span class="n">q_coef</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ent_coef</span> <span class="o">=</span> <span class="n">ent_coef</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">trust_region</span> <span class="o">=</span> <span class="n">trust_region</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">delta</span> <span class="o">=</span> <span class="n">delta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trust_region</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delta</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_grad_norm</span> <span class="o">=</span> <span class="n">max_grad_norm</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rprop_alpha</span> <span class="o">=</span> <span class="n">rprop_alpha</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rprop_epsilon</span> <span class="o">=</span> <span class="n">rprop_epsilon</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rprop_alpha</span> <span class="o">=</span> <span class="mf">0.99</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rprop_epsilon</span> <span class="o">=</span> <span class="mf">1e-5</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">learning_rate</span> <span class="o">=</span> <span class="n">learning_rate</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lr_schedule</span> <span class="o">=</span> <span class="n">lr_schedule</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tensorboard_log</span> <span class="o">=</span> <span class="n">tensorboard_log</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">full_tensorboard_log</span> <span class="o">=</span> <span class="n">full_tensorboard_log</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tensorboard_log</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">full_tensorboard_log</span> <span class="o">=</span> <span class="kc">False</span>
+        
+        <span class="n">policy_kwargs</span><span class="o">=</span><span class="kc">None</span>
+        <span class="n">_init_setup_model</span><span class="o">=</span><span class="kc">True</span>
+        <span class="n">n_cpu_tf_sess</span><span class="o">=</span><span class="mi">1</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">action_ph</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">done_ph</span> <span class="o">=</span> <span class="kc">None</span>

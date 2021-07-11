@@ -82,7 +82,6 @@ class PPOAgent(InputChecker):
         
         
         if self.mode == 'train':
-            t0=time.time()
             # Train from scratch, initialize the model and then learn, and save the last model.
             # Callbacks are used if provided 
             model = PPO2(MlpPolicy, self.env,
@@ -96,9 +95,7 @@ class PPOAgent(InputChecker):
                         nminibatches=self.inp.ppo_dict['nminibatches'][0], 
                         noptepochs=self.inp.ppo_dict['noptepochs'][0], 
                         cliprange=self.inp.ppo_dict['cliprange'][0],
-                        cliprange_vf=self.inp.ppo_dict['cliprange_vf'][0],
-                        verbose=1,
-                        tensorboard_log=tensorboard_log, seed=3, n_cpu_tf_sess=1)
+                        verbose=1,seed=3)
             model.learn(total_timesteps=self.inp.ppo_dict['time_steps'][0], callback=self.callback)
             model.save(self.log_dir+self.inp.ppo_dict['casename'][0]+'_lastmodel.pkl')
             
@@ -115,9 +112,7 @@ class PPOAgent(InputChecker):
                         nminibatches=self.inp.ppo_dict['nminibatches'][0], 
                         noptepochs=self.inp.ppo_dict['noptepochs'][0], 
                         cliprange=self.inp.ppo_dict['cliprange'][0],
-                        cliprange_vf=self.inp.ppo_dict['cliprange_vf'][0],
-                        verbose=1,
-                        tensorboard_log=tensorboard_log, seed=3, n_cpu_tf_sess=1)
+                        verbose=1,seed=3)
             model.learn(total_timesteps=self.inp.ppo_dict['time_steps'][0], callback=self.callback)
             model.save(self.log_dir+self.inp.ppo_dict['casename'][0]+'_lastmodel.pkl')
             
