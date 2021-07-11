@@ -15,10 +15,9 @@ from neorl.rl.baselines.shared.math_util import safe_mean
 
 class PPO2(ActorCriticRLModel):
     """
-    Proximal Policy Optimization algorithm (GPU version).
-    Paper: https://arxiv.org/abs/1707.06347
-
-    :param policy: (ActorCriticPolicy or str) The policy model to use (MlpPolicy, CnnPolicy, CnnLstmPolicy, ...)
+    Proximal Policy Optimization algorithm
+    
+    :param policy: (ActorCriticPolicy or str) The policy model to use (e.g. MlpPolicy)
     :param env: (Gym environment or str) The environment to learn from (if registered in Gym, can be str)
     :param gamma: (float) Discount factor
     :param n_steps: (int) The number of steps to run for each environment per update
@@ -32,32 +31,16 @@ class PPO2(ActorCriticRLModel):
         the number of environments run in parallel should be a multiple of nminibatches.
     :param noptepochs: (int) Number of epoch when optimizing the surrogate
     :param cliprange: (float or callable) Clipping parameter, it can be a function
-    :param cliprange_vf: (float or callable) Clipping parameter for the value function, it can be a function.
-        This is a parameter specific to the OpenAI implementation. If None is passed (default),
-        then `cliprange` (that is used for the policy) will be used.
-        IMPORTANT: this clipping depends on the reward scaling.
-        To deactivate value function clipping (and recover the original PPO implementation),
-        you have to pass a negative value (e.g. -1).
     :param verbose: (int) the verbosity level: 0 none, 1 training information, 2 tensorflow debug
-    :param tensorboard_log: (str) the log location for tensorboard (if None, no logging)
-    :param _init_setup_model: (bool) Whether or not to build the network at the creation of the instance
-    :param policy_kwargs: (dict) additional arguments to be passed to the policy on creation
-    :param full_tensorboard_log: (bool) enable additional logging when using tensorboard
-        WARNING: this logging can take a lot of space quickly
     :param seed: (int) Seed for the pseudo-random generators (python, numpy, tensorflow).
-        If None (default), use random seed. Note that if you want completely deterministic
-        results, you must set `n_cpu_tf_sess` to 1.
-    :param n_cpu_tf_sess: (int) The number of threads for TensorFlow operations
-        If None, the number of cpu of the current machine will be used.
-    """
+        If None (default), use random seed."""
     def __init__(self, policy, env, gamma=0.99, n_steps=128, ent_coef=0.01, learning_rate=2.5e-4, vf_coef=0.5,
-                 max_grad_norm=0.5, lam=0.95, nminibatches=4, noptepochs=4, cliprange=0.2, cliprange_vf=None,
-                 verbose=0, tensorboard_log=None, _init_setup_model=True, policy_kwargs=None,
-                 full_tensorboard_log=False, seed=None, n_cpu_tf_sess=None):
+                 max_grad_norm=0.5, lam=0.95, nminibatches=4, noptepochs=4, cliprange=0.2,
+                 verbose=0, seed=None):
 
         self.learning_rate = learning_rate
         self.cliprange = cliprange
-        self.cliprange_vf = cliprange_vf
+        self.cliprange_vf = None
         self.n_steps = n_steps
         self.ent_coef = ent_coef
         self.vf_coef = vf_coef
@@ -66,8 +49,12 @@ class PPO2(ActorCriticRLModel):
         self.lam = lam
         self.nminibatches = nminibatches
         self.noptepochs = noptepochs
-        self.tensorboard_log = tensorboard_log
-        self.full_tensorboard_log = full_tensorboard_log
+        self.tensorboard_log = None
+        self.full_tensorboard_log = False
+        
+        policy_kwargs=None
+        _init_setup_model=True
+        n_cpu_tf_sess=1
 
         self.action_ph = None
         self.advs_ph = None

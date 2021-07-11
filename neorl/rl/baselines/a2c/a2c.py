@@ -32,7 +32,7 @@ def discount_with_dones(rewards, dones, gamma):
 
 class A2C(ActorCriticRLModel):
     """
-    The A2C (Advantage Actor Critic) model class, https://arxiv.org/abs/1602.01783
+    The A2C (Advantage Actor Critic) model class
 
     :param policy: (ActorCriticPolicy or str) The policy model to use (MlpPolicy, CnnPolicy, CnnLstmPolicy, ...)
     :param env: (Gym environment or str) The environment to learn from (if registered in Gym, can be str)
@@ -44,43 +44,34 @@ class A2C(ActorCriticRLModel):
     :param max_grad_norm: (float) The maximum value for the gradient clipping
     :param learning_rate: (float) The learning rate
     :param alpha: (float)  RMSProp decay parameter (default: 0.99)
-    :param momentum: (float) RMSProp momentum parameter (default: 0.0)
-    :param epsilon: (float) RMSProp epsilon (stabilizes square root computation in denominator of RMSProp update)
-        (default: 1e-5)
     :param lr_schedule: (str) The type of scheduler for the learning rate update ('linear', 'constant',
                               'double_linear_con', 'middle_drop' or 'double_middle_drop')
     :param verbose: (int) the verbosity level: 0 none, 1 training information, 2 tensorflow debug
-    :param tensorboard_log: (str) the log location for tensorboard (if None, no logging)
-    :param _init_setup_model: (bool) Whether or not to build the network at the creation of the instance
-                              (used only for loading)
-    :param policy_kwargs: (dict) additional arguments to be passed to the policy on creation
-    :param full_tensorboard_log: (bool) enable additional logging when using tensorboard
-        WARNING: this logging can take a lot of space quickly
     :param seed: (int) Seed for the pseudo-random generators (python, numpy, tensorflow).
-        If None (default), use random seed. Note that if you want completely deterministic
-        results, you must set `n_cpu_tf_sess` to 1.
-    :param n_cpu_tf_sess: (int) The number of threads for TensorFlow operations
-        If None, the number of cpu of the current machine will be used.
+        If None (default), use random seed.
     """
 
     def __init__(self, policy, env, gamma=0.99, n_steps=5, vf_coef=0.25, ent_coef=0.01, max_grad_norm=0.5,
-                 learning_rate=7e-4, alpha=0.99, momentum=0.0, epsilon=1e-5, lr_schedule='constant',
-                 verbose=0, tensorboard_log=None, _init_setup_model=True, policy_kwargs=None,
-                 full_tensorboard_log=False, seed=None, n_cpu_tf_sess=None):
-
+                 learning_rate=7e-4, alpha=0.99, lr_schedule='constant',
+                 verbose=0, seed=None):
+        
         self.n_steps = n_steps
         self.gamma = gamma
         self.vf_coef = vf_coef
         self.ent_coef = ent_coef
         self.max_grad_norm = max_grad_norm
         self.alpha = alpha
-        self.momentum = momentum
-        self.epsilon = epsilon
+        self.momentum =0.0
+        self.epsilon = 1e-5
         self.lr_schedule = lr_schedule
         self.learning_rate = learning_rate
-        self.tensorboard_log = tensorboard_log
-        self.full_tensorboard_log = full_tensorboard_log
-
+        self.tensorboard_log = None
+        self.full_tensorboard_log = False
+        
+        policy_kwargs=None
+        _init_setup_model=True
+        n_cpu_tf_sess=1
+        
         self.learning_rate_ph = None
         self.n_batch = None
         self.actions_ph = None

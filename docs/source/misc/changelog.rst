@@ -11,13 +11,14 @@ Coming next
 - Adding a class for easy-to-use environment construction for RL optimization.
 - And more ...
 
-Release 1.4.6b (2021-07-09)
+Release 1.4.6b-1.4.7b (2021-07-09)
 ------------------------------------
 
 - Modifying Bat algorithm to handle mixed spaces. 
 - Added Example 6 on three-bar truss design.
 - Added Examples 7 and 8 on pressure vessel design. 
 - Added Example 9 on cantilever stepped beam.
+- Fixing bugs after 1.4.6b.
 
 Release 1.4.5b (2021-07-05)
 ------------------------------------

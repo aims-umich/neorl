@@ -17,16 +17,11 @@ from neorl.rl.baselines.shared.math_util import safe_mean
 
 class ACKTR(ActorCriticRLModel):
     """
-    The ACKTR (Actor Critic using Kronecker-Factored Trust Region) model class, https://arxiv.org/abs/1708.05144
+    The ACKTR (Actor Critic using Kronecker-Factored Trust Region) model class4
 
-    :param policy: (ActorCriticPolicy or str) The policy model to use (MlpPolicy, CnnPolicy, CnnLstmPolicy, ...)
+    :param policy: (ActorCriticPolicy or str) The policy model to use (e.g. MlpPolicy)
     :param env: (Gym environment or str) The environment to learn from (if registered in Gym, can be str)
     :param gamma: (float) Discount factor
-    :param nprocs: (int) The number of threads for TensorFlow operations
-
-        .. deprecated:: 2.9.0
-            Use `n_cpu_tf_sess` instead.
-
     :param n_steps: (int) The number of steps to run for each environment
     :param ent_coef: (float) The weight for the entropy loss
     :param vf_coef: (float) The weight for the loss on the value function
@@ -37,31 +32,17 @@ class ACKTR(ActorCriticRLModel):
     :param lr_schedule: (str) The type of scheduler for the learning rate update ('linear', 'constant',
                         'double_linear_con', 'middle_drop' or 'double_middle_drop')
     :param verbose: (int) the verbosity level: 0 none, 1 training information, 2 tensorflow debug
-    :param tensorboard_log: (str) the log location for tensorboard (if None, no logging)
-    :param _init_setup_model: (bool) Whether or not to build the network at the creation of the instance
-    :param async_eigen_decomp: (bool) Use async eigen decomposition
-    :param kfac_update: (int) update kfac after kfac_update steps
-    :param policy_kwargs: (dict) additional arguments to be passed to the policy on creation
-    :param gae_lambda: (float) Factor for trade-off of bias vs variance for Generalized Advantage Estimator
-        If None (default), then the classic advantage will be used instead of GAE
-    :param full_tensorboard_log: (bool) enable additional logging when using tensorboard
-        WARNING: this logging can take a lot of space quickly
     :param seed: (int) Seed for the pseudo-random generators (python, numpy, tensorflow).
-        If None (default), use random seed. Note that if you want completely deterministic
-        results, you must set `n_cpu_tf_sess` to 1.
-    :param n_cpu_tf_sess: (int) The number of threads for TensorFlow operations
-        If None, the number of cpu of the current machine will be used.
+        If None (default), use random seed.
     """
+    #:param async_eigen_decomp: (bool) Use async eigen decomposition
+    #:param kfac_update: (int) update kfac after kfac_update steps
+    #:param gae_lambda: (float) Factor for trade-off of bias vs variance for Generalized Advantage Estimator
+    #    If None (default), then the classic advantage will be used instead of GAE
 
-    def __init__(self, policy, env, gamma=0.99, nprocs=None, n_steps=20, ent_coef=0.01, vf_coef=0.25, vf_fisher_coef=1.0,
-                 learning_rate=0.25, max_grad_norm=0.5, kfac_clip=0.001, lr_schedule='linear', verbose=0,
-                 tensorboard_log=None, _init_setup_model=True, async_eigen_decomp=False, kfac_update=1,
-                 gae_lambda=None, policy_kwargs=None, full_tensorboard_log=False, seed=None, n_cpu_tf_sess=1):
-
-        if nprocs is not None:
-            warnings.warn("nprocs will be removed in a future version (v3.x.x) "
-                          "use n_cpu_tf_sess instead", DeprecationWarning)
-            n_cpu_tf_sess = nprocs
+    def __init__(self, policy, env, gamma=0.99, n_steps=20, ent_coef=0.01, 
+                 vf_coef=0.25, vf_fisher_coef=1.0, learning_rate=0.25, max_grad_norm=0.5, 
+                 kfac_clip=0.001, lr_schedule='linear', verbose=0, seed=None):
 
         self.n_steps = n_steps
         self.gamma = gamma
@@ -73,11 +54,16 @@ class ACKTR(ActorCriticRLModel):
         self.learning_rate = learning_rate
         self.lr_schedule = lr_schedule
 
-        self.tensorboard_log = tensorboard_log
-        self.async_eigen_decomp = async_eigen_decomp
-        self.full_tensorboard_log = full_tensorboard_log
-        self.kfac_update = kfac_update
-        self.gae_lambda = gae_lambda
+        self.tensorboard_log = None
+        self.full_tensorboard_log = False
+        
+        policy_kwargs=None
+        _init_setup_model=True
+        n_cpu_tf_sess=1
+        
+        self.async_eigen_decomp = False
+        self.kfac_update = 1
+        self.gae_lambda = None
 
         self.actions_ph = None
         self.advs_ph = None

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.evolu.sa &mdash; NEORL 1.4.5b documentation</title>
+  <title>neorl.evolu.sa &mdash; NEORL 1.4.6b documentation</title>
   
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                main (1.4.5b )
+                main (1.4.6b )
               </div>
             
           
@@ -137,6 +137,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex4.html">Example 4: Benchmarks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex5.html">Example 5: CEC’2017 Test Suite</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex6.html">Example 6: Three-bar Truss Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex7.html">Example 7: Pressure Vessel Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex8.html">Example 8: Pressure Vessel Design with Demonstration of Categorical Parameter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex9.html">Example 9: Cantilever Stepped Beam</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Misc</span></p>
 <ul>
@@ -336,14 +339,14 @@
         
         <span class="k">return</span> <span class="n">vec_new</span>
     
-<div class="viewcode-block" id="SA.def_move"><a class="viewcode-back" href="../../../modules/sa.html#neorl.evolu.sa.SA.def_move">[docs]</a>    <span class="k">def</span> <span class="nf">def_move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">chi</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        This function is to perturb x attributes by probability chi</span>
-<span class="sd">        Inputs:</span>
-<span class="sd">            x: input vector </span>
-<span class="sd">            chi: perturbation probablity between 0 and 1</span>
-<span class="sd">        Returns: perturbed vector x</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">def_move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">chi</span><span class="p">):</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="c1">#This function is to perturb x attributes by probability chi</span>
+        <span class="c1">#Inputs:</span>
+        <span class="c1">#    x: input vector </span>
+        <span class="c1">#    chi: perturbation probablity between 0 and 1</span>
+        <span class="c1">#Returns: perturbed vector x</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
         <span class="n">i</span><span class="o">=</span><span class="mi">0</span>
         <span class="n">x_new</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">:</span>
@@ -353,7 +356,7 @@
                     <span class="n">sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">])</span>
                 <span class="n">x_new</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sample</span>
             <span class="n">i</span><span class="o">+=</span><span class="mi">1</span>
-        <span class="k">return</span> <span class="n">x_new</span></div>
+        <span class="k">return</span> <span class="n">x_new</span>
         
     <span class="k">def</span> <span class="nf">temp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">step</span><span class="p">):</span>
         <span class="c1">#&quot;&quot;&quot;</span>

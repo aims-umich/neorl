@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Advantage Actor Critic (A2C) &mdash; NEORL 1.4.5b documentation</title>
+  <title>Advantage Actor Critic (A2C) &mdash; NEORL 1.4.6b documentation</title>
   
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                main (1.4.5b )
+                main (1.4.6b )
               </div>
             
           
@@ -145,6 +145,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../examples/ex4.html">Example 4: Benchmarks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/ex5.html">Example 5: CEC’2017 Test Suite</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/ex6.html">Example 6: Three-bar Truss Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex7.html">Example 7: Pressure Vessel Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex8.html">Example 8: Pressure Vessel Design with Demonstration of Categorical Parameter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex9.html">Example 9: Cantilever Stepped Beam</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Misc</span></p>
 <ul>
@@ -237,8 +240,8 @@ It uses multiple workers to avoid the use of a replay buffer.</p>
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="neorl.rl.baselines.a2c.A2C">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">neorl.rl.baselines.a2c.</span></code><code class="sig-name descname"><span class="pre">A2C</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">policy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vf_coef</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ent_coef</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_grad_norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0007</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">momentum</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr_schedule</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'constant'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tensorboard_log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_init_setup_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">policy_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_tensorboard_log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_cpu_tf_sess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/rl/baselines/a2c/a2c.html#A2C"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.rl.baselines.a2c.A2C" title="Permalink to this definition">¶</a></dt>
-<dd><p>The A2C (Advantage Actor Critic) model class, <a class="reference external" href="https://arxiv.org/abs/1602.01783">https://arxiv.org/abs/1602.01783</a></p>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">neorl.rl.baselines.a2c.</span></code><code class="sig-name descname"><span class="pre">A2C</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">policy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vf_coef</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ent_coef</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_grad_norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0007</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr_schedule</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'constant'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/rl/baselines/a2c/a2c.html#A2C"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.rl.baselines.a2c.A2C" title="Permalink to this definition">¶</a></dt>
+<dd><p>The A2C (Advantage Actor Critic) model class</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -252,23 +255,11 @@ It uses multiple workers to avoid the use of a replay buffer.</p>
 <li><p><strong>max_grad_norm</strong> – (float) The maximum value for the gradient clipping</p></li>
 <li><p><strong>learning_rate</strong> – (float) The learning rate</p></li>
 <li><p><strong>alpha</strong> – (float)  RMSProp decay parameter (default: 0.99)</p></li>
-<li><p><strong>momentum</strong> – (float) RMSProp momentum parameter (default: 0.0)</p></li>
-<li><p><strong>epsilon</strong> – (float) RMSProp epsilon (stabilizes square root computation in denominator of RMSProp update)
-(default: 1e-5)</p></li>
 <li><p><strong>lr_schedule</strong> – (str) The type of scheduler for the learning rate update (‘linear’, ‘constant’,
 ‘double_linear_con’, ‘middle_drop’ or ‘double_middle_drop’)</p></li>
 <li><p><strong>verbose</strong> – (int) the verbosity level: 0 none, 1 training information, 2 tensorflow debug</p></li>
-<li><p><strong>tensorboard_log</strong> – (str) the log location for tensorboard (if None, no logging)</p></li>
-<li><p><strong>_init_setup_model</strong> – (bool) Whether or not to build the network at the creation of the instance
-(used only for loading)</p></li>
-<li><p><strong>policy_kwargs</strong> – (dict) additional arguments to be passed to the policy on creation</p></li>
-<li><p><strong>full_tensorboard_log</strong> – (bool) enable additional logging when using tensorboard
-WARNING: this logging can take a lot of space quickly</p></li>
 <li><p><strong>seed</strong> – (int) Seed for the pseudo-random generators (python, numpy, tensorflow).
-If None (default), use random seed. Note that if you want completely deterministic
-results, you must set <cite>n_cpu_tf_sess</cite> to 1.</p></li>
-<li><p><strong>n_cpu_tf_sess</strong> – (int) The number of threads for TensorFlow operations
-If None, the number of cpu of the current machine will be used.</p></li>
+If None (default), use random seed.</p></li>
 </ul>
 </dd>
 </dl>

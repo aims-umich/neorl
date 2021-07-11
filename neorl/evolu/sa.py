@@ -126,13 +126,13 @@ class SA:
         return vec_new
     
     def def_move(self, x, chi):
-        """
-        This function is to perturb x attributes by probability chi
-        Inputs:
-            x: input vector 
-            chi: perturbation probablity between 0 and 1
-        Returns: perturbed vector x
-        """
+        #"""
+        #This function is to perturb x attributes by probability chi
+        #Inputs:
+        #    x: input vector 
+        #    chi: perturbation probablity between 0 and 1
+        #Returns: perturbed vector x
+        #"""
         i=0
         x_new=x.copy()
         for item in self.bounds:

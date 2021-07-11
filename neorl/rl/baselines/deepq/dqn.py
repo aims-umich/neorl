@@ -32,7 +32,6 @@ class DQN(OffPolicyRLModel):
     :param exploration_initial_eps: (float) initial value of random action probability
     :param train_freq: (int) update the model every `train_freq` steps. set to None to disable printing
     :param batch_size: (int) size of a batched sampled from replay buffer for training
-    :param double_q: (bool) Whether to enable Double-Q learning or not.
     :param learning_starts: (int) how many steps of the model to collect transitions for before learning starts
     :param target_network_update_freq: (int) update the target network every `target_network_update_freq` steps.
     :param prioritized_replay: (bool) if True prioritized replay buffer will be used.
@@ -42,31 +41,21 @@ class DQN(OffPolicyRLModel):
     :param prioritized_replay_beta_iters: (int) number of iterations over which beta will be annealed from initial
             value to 1.0. If set to None equals to max_timesteps.
     :param prioritized_replay_eps: (float) epsilon to add to the TD errors when updating priorities.
-    :param param_noise: (bool) Whether or not to apply noise to the parameters of the policy.
     :param verbose: (int) the verbosity level: 0 none, 1 training information, 2 tensorflow debug
-    :param tensorboard_log: (str) the log location for tensorboard (if None, no logging)
-    :param _init_setup_model: (bool) Whether or not to build the network at the creation of the instance
-    :param full_tensorboard_log: (bool) enable additional logging when using tensorboard
-        WARNING: this logging can take a lot of space quickly
     :param seed: (int) Seed for the pseudo-random generators (python, numpy, tensorflow).
-        If None (default), use random seed. Note that if you want completely deterministic
-        results, you must set `n_cpu_tf_sess` to 1.
-    :param n_cpu_tf_sess: (int) The number of threads for TensorFlow operations
-        If None, the number of cpu of the current machine will be used.
+        If None (default), use random seed.
     """
     def __init__(self, policy, env, gamma=0.99, learning_rate=5e-4, buffer_size=50000, exploration_fraction=0.1,
-                 exploration_final_eps=0.02, exploration_initial_eps=1.0, train_freq=1, batch_size=32, double_q=True,
+                 exploration_final_eps=0.02, exploration_initial_eps=1.0, train_freq=1, batch_size=32,
                  learning_starts=1000, target_network_update_freq=500, prioritized_replay=False,
                  prioritized_replay_alpha=0.6, prioritized_replay_beta0=0.4, prioritized_replay_beta_iters=None,
-                 prioritized_replay_eps=1e-6, param_noise=False,
-                 n_cpu_tf_sess=None, verbose=0, tensorboard_log=None,
-                 _init_setup_model=True, policy_kwargs=None, full_tensorboard_log=False, seed=None):
-
+                 prioritized_replay_eps=1e-6, verbose=0, seed=None):
+        
         # TODO: replay_buffer refactoring
         super(DQN, self).__init__(policy=policy, env=env, replay_buffer=None, verbose=verbose, policy_base=DQNPolicy,
-                                  requires_vec_env=False, policy_kwargs=policy_kwargs, seed=seed, n_cpu_tf_sess=n_cpu_tf_sess)
+                                  requires_vec_env=False, policy_kwargs=None, seed=seed, n_cpu_tf_sess=1)
 
-        self.param_noise = param_noise
+        self.param_noise = False
         self.learning_starts = learning_starts
         self.train_freq = train_freq
         self.prioritized_replay = prioritized_replay
@@ -82,9 +71,10 @@ class DQN(OffPolicyRLModel):
         self.buffer_size = buffer_size
         self.learning_rate = learning_rate
         self.gamma = gamma
-        self.tensorboard_log = tensorboard_log
-        self.full_tensorboard_log = full_tensorboard_log
-        self.double_q = double_q
+        self.tensorboard_log = None
+        self.full_tensorboard_log = False
+        _init_setup_model=True
+        self.double_q = True
 
         self.graph = None
         self.sess = None
