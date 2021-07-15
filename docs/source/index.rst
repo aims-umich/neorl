@@ -79,7 +79,6 @@ User Guide
   tune/random
   tune/bayes
   tune/evolu
-  tune/ash
   
 .. toctree::
   :maxdepth: 1

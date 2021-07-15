@@ -52,3 +52,4 @@ from neorl.hybrid.pesa2 import PESA2
 from neorl.rl.baselines.shared.policies import MlpPolicy
 from neorl.rl.baselines.deepq.policies import MlpPolicy as DQNPolicy
 from neorl.utils.neorlcalls import RLLogger
+from neorl.rl.make_env import CreateEnvironment

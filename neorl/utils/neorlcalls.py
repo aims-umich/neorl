@@ -216,7 +216,16 @@ class SavePlotCallback(BaseCallback):
         else:
             raise Exception ('the plot mode defined by the user does not exist')
 			
-
+def Sphere(individual):
+        """Sphere test objective function.
+                F(x) = sum_{i=1}^d xi^2
+                d=1,2,3,...
+                Range: [-100,100]
+                Minima: 0
+        """
+        #print(individual)
+        return sum(x**2 for x in individual)
+    
 class RLLogger(BaseCallback):
     """
     Callback for logging data of RL algorathims (x,y data) and saving a model (the check is done every ``check_freq`` steps)
@@ -226,15 +235,22 @@ class RLLogger(BaseCallback):
     :param verbose: (int) print updates to the screen
     :param save_model: (bool) whether or not to save the RL neural network model
     """
-    def __init__(self, check_freq=1, log_dir='rl_log', save_model=False, save_best_only=True, verbose=False):
+    def __init__(self, check_freq=1, mode='max', log_dir='rl_log', plot_freq=None, n_avg_steps=10, pngname='history', save_model=False, save_best_only=True, verbose=False):
         super(RLLogger, self).__init__(verbose)
         self.check_freq = check_freq
+        self.plot_freq=plot_freq
+        self.pngname=pngname
+        self.n_avg_steps=n_avg_steps
+        if mode not in ['min', 'max']:
+            raise ValueError('--error: The mode entered by user is invalid, use either `min` or `max`')
+        self.mode=mode
         self.log_dir = log_dir
         self.save_model=save_model
         self.verbose=verbose
         self.save_best_only=save_best_only
         self.save_path = os.path.join(log_dir, 'best_model.pkl')
         self.rbest = -np.inf
+        self.rbest_maxonly = -np.inf
         self.r_hist=[]
     def _init_callback(self) -> None:
         # Create folder if needed
@@ -250,40 +266,76 @@ class RLLogger(BaseCallback):
                 print('RL callback at step {}/{}'.format(self.n_calls, self.locals['total_timesteps']))
             
             try:
-                rwd=self.locals['rewards'][0] #A2C/PPO/.. cases
-
+                rwd=self.locals['rew']   #DQN case (special dict naming)
             except:
-                try:
-                    rwd=self.locals['rewards'][0] #A2C/PPO/.. alternative
-                except:
-                    rwd=self.locals['rew']   #DQN case (special dict naming)
+                rwd=self.locals['rewards'][0] #A2C/PPO/ACER/ACKTR
                 
             try:
                 x=self.locals['infos'][0]['x'] #A2C/PPO/.. cases
             except:
-                try:
+                if 'mus' in list(self.locals.keys()):
+                    x=self.locals['_'][0]['x']     #ACER case (special dict naming)
+                else:
                     x=self.locals['info']['x']   #DQN case (special dict naming)
-                except:
-                    x=self.locals['obs'][0]      #ACER case (special dict naming)
-            
-            self.r_hist.append(rwd)  
-            
+                    
             if self.save_model and not self.save_best_only:
                 self.model.save(self.save_path)
                 if self.verbose:
                     print('A new model is saved to {}'.format(self.save_path))
                 
-            if rwd > self.rbest:
+            if rwd > self.rbest_maxonly:
                 self.xbest=x.copy()
-                self.rbest=rwd
+                self.rbest_maxonly=rwd
                 
+                if self.mode=='max':
+                    self.rbest=self.rbest_maxonly
+                else:
+                    self.rbest=-self.rbest_maxonly
+                
+            
                 if self.save_model and self.save_best_only:
                     self.model.save(self.save_path)
                     if self.verbose:
                         print('An improvement is observed, new model is saved to {}'.format(self.save_path))
-                        
+            
+            if self.mode=='max':
+                self.r_hist.append(rwd)
+            else:
+                self.r_hist.append(-rwd)  
+            
+            if self.plot_freq:
+                if self.n_calls % self.plot_freq == 0:
+                    self.plot_progress()
                 
             
             if self.verbose:
                 print('----------------------------------------------------------------------------------')
         return True
+    
+    def plot_progress(self): 
+    
+        plt.figure()
+        
+        ravg, rstd, rmax, rmin=self.calc_cumavg(self.r_hist,self.n_avg_steps)
+        epochs=np.array(range(1,len(ravg)+1),dtype=int)
+        plt.plot(epochs, ravg,'-o', c='g', label='Average per epoch')
+        
+        plt.fill_between(epochs,[a_i - b_i for a_i, b_i in zip(ravg, rstd)], [a_i + b_i for a_i, b_i in zip(ravg, rstd)],
+        alpha=0.2, edgecolor='g', facecolor='g', label=r'$1-\sigma$ per epoch')
+        
+        plt.plot(epochs, rmax,'s', c='k', label='Max per epoch', markersize=4)
+        plt.plot(epochs,rmin,'d', c='k', label='Min per epoch', markersize=4)
+        plt.legend()
+        plt.xlabel('Epoch')
+        plt.ylabel('Fitness')
+        plt.savefig(self.pngname+'.png',format='png' ,dpi=300, bbox_inches="tight")
+        plt.close()
+
+    def calc_cumavg(self, data, N):
+    
+        cum_aves=[np.mean(data[i:i+N]) for i in range(0,len(data),N)]
+        cum_std=[np.std(data[i:i+N]) for i in range(0,len(data),N)]
+        cum_max=[np.max(data[i:i+N]) for i in range(0,len(data),N)]
+        cum_min=[np.min(data[i:i+N]) for i in range(0,len(data),N)]
+    
+        return cum_aves, cum_std, cum_max, cum_min

@@ -1,3 +1,5 @@
+from neorl.benchmarks.tsp import TSP
+
 def bench_2dplot(function, domain=(-100,100), points=30, savepng=None):
     """
     Creates a 2D surface plot of a function.
