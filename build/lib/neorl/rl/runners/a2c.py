@@ -88,10 +88,8 @@ class A2CAgent(InputChecker):
                         max_grad_norm=self.inp.a2c_dict['max_grad_norm'][0], 
                         ent_coef=self.inp.a2c_dict['ent_coef'][0], 
                         alpha=self.inp.a2c_dict['alpha'][0], 
-                        epsilon=self.inp.a2c_dict['epsilon'][0], 
                         lr_schedule=self.inp.a2c_dict['lr_schedule'][0],
-                        verbose=1,
-                        tensorboard_log=tensorboard_log, seed=2, n_cpu_tf_sess=1)
+                        verbose=1, seed=2)
             model.learn(total_timesteps=self.inp.a2c_dict['time_steps'][0], callback=self.callback)
             model.save(self.log_dir+self.inp.a2c_dict['casename'][0]+'_model_last.pkl')
         
@@ -105,10 +103,8 @@ class A2CAgent(InputChecker):
                         max_grad_norm=self.inp.a2c_dict['max_grad_norm'][0], 
                         ent_coef=self.inp.a2c_dict['ent_coef'][0], 
                         alpha=self.inp.a2c_dict['alpha'][0], 
-                        epsilon=self.inp.a2c_dict['epsilon'][0], 
                         lr_schedule=self.inp.a2c_dict['lr_schedule'][0],
-                        verbose=1,
-                        tensorboard_log=tensorboard_log, seed=2, n_cpu_tf_sess=1)
+                        verbose=1, seed=2)
             model.learn(total_timesteps=self.inp.a2c_dict['time_steps'][0], callback=self.callback)
             model.save(self.log_dir+self.inp.a2c_dict['casename'][0]+'_lastmodel.pkl')
 

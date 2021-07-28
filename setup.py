@@ -183,6 +183,7 @@ setup(
                       'gym >= 0.15.4, < 0.17.0',
                       'scikit-optimize==0.8.1',
                       'cloudpickle >= 1.2.2',
+                      'neat-python', 
                       'scipy',
                       'joblib',
                       'pandas',

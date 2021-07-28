@@ -58,7 +58,7 @@ def convert_multidiscrete_discrete(bounds):
     """
     For DQN/ACER, convert the multidiscrete vector to a single discrete one
     to be compatible with DQN/ACER.
-    Provide the bounds dict for all variables.
+    Input: Provide the bounds dict for all variables.
     """
     discrete_list=[]
     for item in bounds:
@@ -70,6 +70,41 @@ def convert_multidiscrete_discrete(bounds):
         bounds_map[i]=space[i]
         
     return bounds_map
+
+def convert_actions_multidiscrete(bounds):
+    """
+    For PPO/ACKTR/A2C, convert the action provided by the user to a multidiscrete vector
+    to be compatible with OpenAI gym multidiscrete space.
+    Input: Provide the bounds dict for all variables.
+    Returns: action_bounds (list) for encoding and bounds_map (dict) for decoding
+    """
+    action_bounds=[]
+    
+    for item in bounds:
+        action_bounds.append(len(list(range(bounds[item][1],bounds[item][2]+1))))
+    
+    bounds_map={}
+    for var, act in zip(bounds,action_bounds):
+        bounds_map[var]={}
+        act_list=list(range(bounds[var][1],bounds[var][2]+1))
+        for i in range(act):
+            bounds_map[var][i] = act_list[i]
+    
+    return action_bounds, bounds_map 
+
+def convert_multidiscrete_actions(action, int_bounds_map):
+    """
+    For PPO/ACKTR/A2C, convert the action in multidiscrete form 
+    to the real action space defined by the user
+    Input: Provide the action in multidiscrete, and the integer bounds map
+    Returns: decoded action (list)
+    """
+    decoded_action=[]
+    
+    for act, key in zip(action, int_bounds_map):
+        decoded_action.append(int_bounds_map[key][act])
+        
+    return decoded_action 
 
 class CreateEnvironment(gym.Env):
 
@@ -101,24 +136,29 @@ class CreateEnvironment(gym.Env):
         #Recommended---> -1/1 or -2/2        
         self.lb_norm=-1
         self.ub_norm=1
-        if all([item == 'int' for item in self.var_type]):
+        if all([item == 'int' for item in self.var_type]):   #discrete optimization
             if method in ['ppo', 'a2c', 'acktr', 'neat']:
-                self.action_space = MultiDiscrete([100,100,100,100,100])
+                self.action_bounds, self.int_bounds_map=convert_actions_multidiscrete(self.bounds)
+                self.action_space = MultiDiscrete(self.action_bounds)   #XXX
                 self.observation_space = Box(low=self.lb, high=self.ub, dtype=int)
-                self.map_flag=False
+                self.cont_map_flag=False
+                self.int_map_flag=True
             elif method in ['acer', 'dqn']:
                 self.discrete_map=convert_multidiscrete_discrete(self.bounds)
                 self.action_space = Discrete(len(self.discrete_map))
                 self.observation_space = Box(low=self.lb, high=self.ub, dtype=int)
-                self.map_flag=False
+                self.cont_map_flag=False
+                self.int_map_flag=False
         else:
             if method in ['ppo', 'a2c', 'acktr', 'neat']:
                 self.action_space = Box(low=self.lb_norm, high=self.ub_norm, shape=(self.nx,))
                 self.observation_space = Box(low=self.lb, high=self.ub)
-                self.map_flag=True
+                self.cont_map_flag=True
+                self.int_map_flag=False
             elif method in ['acer', 'dqn']:
-                self.map_flag=False
-                raise Exception ('--error: the method {} does not support continious spaces, please use ppo, a2c, or acktr'.format(method))
+                self.cont_map_flag=False
+                self.int_map_flag=False
+                raise Exception ('--error: the method {} does not support continuous spaces, please use ppo, a2c, or acktr'.format(method))
                 
         #--mir
         self.mode=mode
@@ -165,10 +205,15 @@ class CreateEnvironment(gym.Env):
             #--------------------------
             # cont./discrete methods
             #---------------------------
-            if self.map_flag:
+            if self.cont_map_flag:
                 action=action_map(norm_action=action, 
                                   lb=self.lb, ub=self.ub, 
                                   lb_norm=self.lb_norm, ub_norm=self.ub_norm)
+                
+            if self.int_map_flag:  #this flag converts multidiscrete action to the real space
+                action=convert_multidiscrete_actions(action=action, int_bounds_map=self.int_bounds_map)
+                #action=decode_action()
+                
             if 'int' in self.var_type:
                 action=ensure_discrete(action=action, var_type=self.var_type)
             if self.grid_flag:

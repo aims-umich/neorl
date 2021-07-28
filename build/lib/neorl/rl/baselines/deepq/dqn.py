@@ -12,14 +12,24 @@ from neorl.rl.baselines.shared.buffers import ReplayBuffer, PrioritizedReplayBuf
 from neorl.rl.baselines.deepq.build_graph import build_train
 from neorl.rl.baselines.deepq.policies import DQNPolicy
 
+# Filter tensorflow version warnings
+import os
+# https://stackoverflow.com/questions/40426502/is-there-a-way-to-suppress-the-messages-tensorflow-prints/40426709
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # or any {'0', '1', '2'}
+import warnings
+# https://stackoverflow.com/questions/15777951/how-to-suppress-pandas-future-warning
+warnings.simplefilter(action='ignore', category=FutureWarning)
+warnings.simplefilter(action='ignore', category=Warning)
+import tensorflow as tf
+tf.get_logger().setLevel('INFO')
+tf.autograph.set_verbosity(0)
+import logging
+tf.get_logger().setLevel(logging.ERROR)
+
 
 class DQN(OffPolicyRLModel):
     """
-    The DQN model class.
-    DQN paper: https://arxiv.org/abs/1312.5602
-    Dueling DQN: https://arxiv.org/abs/1511.06581
-    Double-Q Learning: https://arxiv.org/abs/1509.06461
-    Prioritized Experience Replay: https://arxiv.org/abs/1511.05952
+    The DQN model class
 
     :param policy: (DQNPolicy or str) The policy model to use (MlpPolicy, CnnPolicy, LnMlpPolicy, ...)
     :param env: (Gym environment or str) The environment to learn from (if registered in Gym, can be str)
@@ -28,28 +38,26 @@ class DQN(OffPolicyRLModel):
     :param buffer_size: (int) size of the replay buffer
     :param exploration_fraction: (float) fraction of entire training period over which the exploration rate is
             annealed
-    :param exploration_final_eps: (float) final value of random action probability
-    :param exploration_initial_eps: (float) initial value of random action probability
+    :param eps_final: (float) final value of random action probability (e.g. 0.05)
+    :param eps_init: (float) initial value of random action probability (e.g. 1.0)
     :param train_freq: (int) update the model every `train_freq` steps. set to None to disable printing
     :param batch_size: (int) size of a batched sampled from replay buffer for training
     :param learning_starts: (int) how many steps of the model to collect transitions for before learning starts
     :param target_network_update_freq: (int) update the target network every `target_network_update_freq` steps.
-    :param prioritized_replay: (bool) if True prioritized replay buffer will be used.
-    :param prioritized_replay_alpha: (float)alpha parameter for prioritized replay buffer.
-        It determines how much prioritization is used, with alpha=0 corresponding to the uniform case.
-    :param prioritized_replay_beta0: (float) initial value of beta for prioritized replay buffer
-    :param prioritized_replay_beta_iters: (int) number of iterations over which beta will be annealed from initial
-            value to 1.0. If set to None equals to max_timesteps.
-    :param prioritized_replay_eps: (float) epsilon to add to the TD errors when updating priorities.
+    :param prioritized_replay: (bool) if True prioritized experience replay buffer will be used.
     :param verbose: (int) the verbosity level: 0 none, 1 training information, 2 tensorflow debug
     :param seed: (int) Seed for the pseudo-random generators (python, numpy, tensorflow).
         If None (default), use random seed.
     """
+#    :param prioritized_replay_alpha: (float)alpha parameter for prioritized replay buffer.
+#        It determines how much prioritization is used, with alpha=0 corresponding to the uniform case.
+#    :param prioritized_replay_beta0: (float) initial value of beta for prioritized replay buffer
+#    :param prioritized_replay_beta_iters: (int) number of iterations over which beta will be annealed from initial
+#            value to 1.0. If set to None equals to max_timesteps.
+#    :param prioritized_replay_eps: (float) epsilon to add to the TD errors when updating priorities.
     def __init__(self, policy, env, gamma=0.99, learning_rate=5e-4, buffer_size=50000, exploration_fraction=0.1,
-                 exploration_final_eps=0.02, exploration_initial_eps=1.0, train_freq=1, batch_size=32,
-                 learning_starts=1000, target_network_update_freq=500, prioritized_replay=False,
-                 prioritized_replay_alpha=0.6, prioritized_replay_beta0=0.4, prioritized_replay_beta_iters=None,
-                 prioritized_replay_eps=1e-6, verbose=0, seed=None):
+                 eps_final=0.02, eps_init=1.0, train_freq=1, batch_size=32,
+                 learning_starts=1000, target_network_update_freq=500, prioritized_replay=True, verbose=0, seed=None):
         
         # TODO: replay_buffer refactoring
         super(DQN, self).__init__(policy=policy, env=env, replay_buffer=None, verbose=verbose, policy_base=DQNPolicy,
@@ -59,14 +67,14 @@ class DQN(OffPolicyRLModel):
         self.learning_starts = learning_starts
         self.train_freq = train_freq
         self.prioritized_replay = prioritized_replay
-        self.prioritized_replay_eps = prioritized_replay_eps
+        self.prioritized_replay_eps = 1e-6
         self.batch_size = batch_size
         self.target_network_update_freq = target_network_update_freq
-        self.prioritized_replay_alpha = prioritized_replay_alpha
-        self.prioritized_replay_beta0 = prioritized_replay_beta0
-        self.prioritized_replay_beta_iters = prioritized_replay_beta_iters
-        self.exploration_final_eps = exploration_final_eps
-        self.exploration_initial_eps = exploration_initial_eps
+        self.prioritized_replay_alpha = 0.6
+        self.prioritized_replay_beta0 = 0.4
+        self.prioritized_replay_beta_iters = None
+        self.exploration_final_eps = eps_final
+        self.exploration_initial_eps = eps_init
         self.exploration_fraction = exploration_fraction
         self.buffer_size = buffer_size
         self.learning_rate = learning_rate

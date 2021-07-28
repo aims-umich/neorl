@@ -191,6 +191,7 @@ class JAYA:
             #--mir  show the value wrt min/max
             if self.mode=='min':
                 y_best_correct=-y_best
+                gen_avg=-gen_avg
             else:
                 y_best_correct=y_best
 

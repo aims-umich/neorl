@@ -191,6 +191,8 @@ class SSA(object):
             elif isinstance(self.c1, (list)):
                 assert len(self.c1) == ngen, '--error: if c1 is a list of values, it must have equal size ({}) as ngen ({})'.format(len(self.c1), ngen)
                 self.c1r=self.c1[l-1]
+            else:
+                raise ValueError ('--error: c1 should be either None, a scalar, or a vector of size ngen')
             #-----------------------------
             # Update Salp Positions
             #-----------------------------

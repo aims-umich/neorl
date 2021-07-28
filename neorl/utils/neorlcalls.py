@@ -271,7 +271,7 @@ class RLLogger(BaseCallback):
                 rwd=self.locals['rewards'][0] #A2C/PPO/ACER/ACKTR
                 
             try:
-                x=self.locals['infos'][0]['x'] #A2C/PPO/.. cases
+                x=self.locals['infos'][0]['x'] #A2C/PPO/ACKTR cases
             except:
                 if 'mus' in list(self.locals.keys()):
                     x=self.locals['_'][0]['x']     #ACER case (special dict naming)

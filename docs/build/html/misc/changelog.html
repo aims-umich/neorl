@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Changelog &mdash; NEORL 1.4.7b documentation</title>
+  <title>Changelog &mdash; NEORL 1.4.8b documentation</title>
   
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                main (1.4.7b )
+                main (1.4.8b )
               </div>
             
           
@@ -104,10 +104,10 @@
 <p class="caption"><span class="caption-text">Algorithms</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../modules/a2c.html">Advantage Actor Critic (A2C)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../modules/dqn.html">Deep Q Learning (DQN)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../modules/ppo2.html">Proximal Policy Optimisation (PPO)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../modules/acer.html">Actor-Critic with Experience Replay (ACER)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../modules/acktr.html">Actor Critic using Kronecker-Factored Trust Region (ACKTR)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/dqn.html">Deep Q Learning (DQN)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/ppo2.html">Proximal Policy Optimisation (PPO)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../modules/es.html">Evolution Strategies (<span class="math notranslate nohighlight">\(\mu,\lambda\)</span>) (ES)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../modules/pso.html">Particle Swarm Optimisation (PSO)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../modules/de.html">Differential Evolution (DE)</a></li>
@@ -129,7 +129,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../tune/random.html">Random Search</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tune/bayes.html">Bayesian Search</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tune/evolu.html">Evolutionary Search</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tune/ash.html">Asynchronous Successive Halving</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
 <ul>
@@ -147,6 +146,7 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#coming-next">Coming next</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#release-1-4-8b-2021-07-14">Release 1.4.8b (2021-07-14)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#release-1-4-6b-1-4-7b-2021-07-09">Release 1.4.6b-1.4.7b (2021-07-09)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#release-1-4-5b-2021-07-05">Release 1.4.5b (2021-07-05)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#release-1-4-4b-2021-06-30">Release 1.4.4b (2021-06-30)</a></li>
@@ -239,8 +239,15 @@
 <ul class="simple">
 <li><p>To add a module for Cuckoo search.</p></li>
 <li><p>To add two modules for RL-informed EA optimization.</p></li>
-<li><p>Adding a class for easy-to-use environment construction for RL optimization.</p></li>
 <li><p>And more …</p></li>
+</ul>
+</div>
+<div class="section" id="release-1-4-8b-2021-07-14">
+<h2>Release 1.4.8b (2021-07-14)<a class="headerlink" href="#release-1-4-8b-2021-07-14" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Added environment class constructor for DQN, ACER, PPO, ACKTR, A2C</p></li>
+<li><p>Added mixed discrete/continuous optimization for PPO, ACKTR, A2C</p></li>
+<li><p>Added categorical/discrete optimization for ACER, DQN.</p></li>
 </ul>
 </div>
 <div class="section" id="release-1-4-6b-1-4-7b-2021-07-09">

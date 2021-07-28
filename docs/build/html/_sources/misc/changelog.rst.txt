@@ -8,8 +8,14 @@ Coming next
 
 - To add a module for Cuckoo search.
 - To add two modules for RL-informed EA optimization.
-- Adding a class for easy-to-use environment construction for RL optimization.
 - And more ...
+
+Release 1.4.8b (2021-07-14)
+------------------------------------
+
+- Added environment class constructor for DQN, ACER, PPO, ACKTR, A2C
+- Added mixed discrete/continuous optimization for PPO, ACKTR, A2C
+- Added categorical/discrete optimization for ACER, DQN.
 
 Release 1.4.6b-1.4.7b (2021-07-09)
 ------------------------------------

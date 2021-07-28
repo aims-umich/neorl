@@ -15,6 +15,19 @@ from neorl.rl.baselines.shared import ActorCriticRLModel, tf_util, SetVerbosity,
 from neorl.rl.baselines.shared.runners import AbstractEnvRunner
 from neorl.rl.baselines.shared.policies import ActorCriticPolicy, RecurrentActorCriticPolicy
 
+# Filter tensorflow version warnings
+import os
+# https://stackoverflow.com/questions/40426502/is-there-a-way-to-suppress-the-messages-tensorflow-prints/40426709
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # or any {'0', '1', '2'}
+import warnings
+# https://stackoverflow.com/questions/15777951/how-to-suppress-pandas-future-warning
+warnings.simplefilter(action='ignore', category=FutureWarning)
+warnings.simplefilter(action='ignore', category=Warning)
+import tensorflow as tf
+tf.get_logger().setLevel('INFO')
+tf.autograph.set_verbosity(0)
+import logging
+tf.get_logger().setLevel(logging.ERROR)
 
 # For ACER
 def get_by_index(input_tensor, idx):
@@ -139,79 +152,64 @@ class EpisodeStats:
 
 class ACER(ActorCriticRLModel):
     """
-    The ACER (Actor-Critic with Experience Replay) model class, https://arxiv.org/abs/1611.01224
+    The ACER (Actor-Critic with Experience Replay) model class
 
     :param policy: (ActorCriticPolicy or str) The policy model to use (MlpPolicy, CnnPolicy, CnnLstmPolicy, ...)
     :param env: (Gym environment or str) The environment to learn from (if registered in Gym, can be str)
     :param gamma: (float) The discount value
     :param n_steps: (int) The number of steps to run for each environment per update
         (i.e. batch size is n_steps * n_env where n_env is number of environment copies running in parallel)
-    :param num_procs: (int) The number of threads for TensorFlow operations
-
-        .. deprecated:: 2.9.0
-            Use `n_cpu_tf_sess` instead.
-
     :param q_coef: (float) The weight for the loss on the Q value
     :param ent_coef: (float) The weight for the entropy loss
     :param max_grad_norm: (float) The clipping value for the maximum gradient
     :param learning_rate: (float) The initial learning rate for the RMS prop optimizer
     :param lr_schedule: (str) The type of scheduler for the learning rate update ('linear', 'constant',
                               'double_linear_con', 'middle_drop' or 'double_middle_drop')
-    :param rprop_epsilon: (float) RMSProp epsilon (stabilizes square root computation in denominator of RMSProp update)
-        (default: 1e-5)
-    :param rprop_alpha: (float) RMSProp decay parameter (default: 0.99)
     :param buffer_size: (int) The buffer size in number of steps
     :param replay_ratio: (float) The number of replay learning per on policy learning on average,
                          using a poisson distribution
-    :param replay_start: (int) The minimum number of steps in the buffer, before learning replay
-    :param correction_term: (float) Importance weight clipping factor (default: 10)
-    :param trust_region: (bool) Whether or not algorithms estimates the gradient KL divergence
-        between the old and updated policy and uses it to determine step size  (default: True)
-    :param alpha: (float) The decay rate for the Exponential moving average of the parameters
-    :param delta: (float) max KL divergence between the old policy and updated policy (default: 1)
+    :param replay_start: (int) The minimum number of steps in the buffer, before experience replay starts
     :param verbose: (int) the verbosity level: 0 none, 1 training information, 2 tensorflow debug
-    :param tensorboard_log: (str) the log location for tensorboard (if None, no logging)
-    :param _init_setup_model: (bool) Whether or not to build the network at the creation of the instance
-    :param policy_kwargs: (dict) additional arguments to be passed to the policy on creation
-    :param full_tensorboard_log: (bool) enable additional logging when using tensorboard
-        WARNING: this logging can take a lot of space quickly
     :param seed: (int) Seed for the pseudo-random generators (python, numpy, tensorflow).
-        If None (default), use random seed. Note that if you want completely deterministic
-        results, you must set `n_cpu_tf_sess` to 1.
-    :param n_cpu_tf_sess: (int) The number of threads for TensorFlow operations
-        If None, the number of cpu of the current machine will be used.
+        If None (default), use random seed.
     """
+    #:param alpha: (float) The decay rate for the Exponential moving average of the parameters
+    #:param correction_term: (float) Importance weight clipping factor (default: 10)
+    #:param delta: (float) max KL divergence between the old policy and updated policy (default: 1)
+    #:param trust_region: (bool) Whether or not algorithms estimates the gradient KL divergence
+    #    between the old and updated policy and uses it to determine step size  (default: True) 
+    
+    def __init__(self, policy, env, gamma=0.99, n_steps=20, q_coef=0.5, ent_coef=0.01, max_grad_norm=10,
+                 learning_rate=7e-4, lr_schedule='linear', buffer_size=5000,
+                 replay_ratio=4, replay_start=1000, verbose=0, seed=None):
 
-    def __init__(self, policy, env, gamma=0.99, n_steps=20, num_procs=None, q_coef=0.5, ent_coef=0.01, max_grad_norm=10,
-                 learning_rate=7e-4, lr_schedule='linear', rprop_alpha=0.99, rprop_epsilon=1e-5, buffer_size=5000,
-                 replay_ratio=4, replay_start=1000, correction_term=10.0, trust_region=True,
-                 alpha=0.99, delta=1, verbose=0, tensorboard_log=None,
-                 _init_setup_model=True, policy_kwargs=None,
-                 full_tensorboard_log=False, seed=None, n_cpu_tf_sess=1):
-
-        if num_procs is not None:
-            warnings.warn("num_procs will be removed in a future version (v3.x.x) "
-                          "use n_cpu_tf_sess instead", DeprecationWarning)
-            n_cpu_tf_sess = num_procs
+        #if num_procs is not None:
+        #    warnings.warn("num_procs will be removed in a future version (v3.x.x) "
+        #                  "use n_cpu_tf_sess instead", DeprecationWarning)
+        #    n_cpu_tf_sess = num_procs
 
         self.n_steps = n_steps
         self.replay_ratio = replay_ratio
         self.buffer_size = buffer_size
         self.replay_start = replay_start
         self.gamma = gamma
-        self.alpha = alpha
-        self.correction_term = correction_term
+        self.alpha = 0.99
+        self.correction_term = 10.0
         self.q_coef = q_coef
         self.ent_coef = ent_coef
-        self.trust_region = trust_region
-        self.delta = delta
+        self.trust_region = True
+        self.delta = 1
         self.max_grad_norm = max_grad_norm
-        self.rprop_alpha = rprop_alpha
-        self.rprop_epsilon = rprop_epsilon
+        self.rprop_alpha = 0.99
+        self.rprop_epsilon = 1e-5
         self.learning_rate = learning_rate
         self.lr_schedule = lr_schedule
-        self.tensorboard_log = tensorboard_log
-        self.full_tensorboard_log = full_tensorboard_log
+        self.tensorboard_log = None
+        self.full_tensorboard_log = False
+        
+        policy_kwargs=None
+        _init_setup_model=True
+        n_cpu_tf_sess=1
 
         self.action_ph = None
         self.done_ph = None

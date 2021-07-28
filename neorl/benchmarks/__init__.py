@@ -1,4 +1,5 @@
 from neorl.benchmarks.tsp import TSP
+from neorl.benchmarks.kp import KP
 
 def bench_2dplot(function, domain=(-100,100), points=30, savepng=None):
     """

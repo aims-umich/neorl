@@ -52,10 +52,10 @@ User Guide
   :caption: Algorithms
   
   modules/a2c
-  modules/dqn
-  modules/ppo2
   modules/acer
   modules/acktr
+  modules/dqn
+  modules/ppo2
   modules/es
   modules/pso
   modules/de
@@ -93,6 +93,7 @@ User Guide
   examples/ex7
   examples/ex8
   examples/ex9
+  examples/ex10
 
 .. toctree::
   :maxdepth: 1

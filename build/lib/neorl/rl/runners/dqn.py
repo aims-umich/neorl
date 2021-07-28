@@ -73,41 +73,32 @@ class DQNAgent(InputChecker):
                         learning_rate=self.inp.dqn_dict['learning_rate'][0], 
                         buffer_size=self.inp.dqn_dict['buffer_size'][0], 
                         exploration_fraction=self.inp.dqn_dict['exploration_fraction'][0], 
-                        exploration_final_eps=self.inp.dqn_dict['exploration_final_eps'][0], 
+                        eps_final=self.inp.dqn_dict['eps_final'][0], 
                         learning_starts=self.inp.dqn_dict['learning_starts'][0], 
                         batch_size=self.inp.dqn_dict['batch_size'][0], 
                         target_network_update_freq=self.inp.dqn_dict['target_network_update_freq'][0],
-                        exploration_initial_eps=self.inp.dqn_dict['exploration_initial_eps'][0],
+                        eps_init=self.inp.dqn_dict['eps_init'][0],
                         train_freq=self.inp.dqn_dict['train_freq'][0],
-                        double_q=self.inp.dqn_dict['double_q'][0],
                         prioritized_replay=self.inp.dqn_dict['prioritized_replay'][0],
-                        prioritized_replay_alpha=self.inp.dqn_dict['prioritized_replay_alpha'][0],
-                        prioritized_replay_beta0=self.inp.dqn_dict['prioritized_replay_beta0'][0],
-                        verbose=2,
-                        tensorboard_log=tensorboard_log,
-                        n_cpu_tf_sess=1, seed=1)
+                        verbose=2, seed=1)
             model.learn(total_timesteps=self.inp.dqn_dict['time_steps'][0], callback=self.callback)
             model.save(self.log_dir+self.inp.dqn_dict['casename'][0]+'_lastmodel.pkl')
         
         if self.mode=='continue':
             # load, contine learning, and save last model
-            model = DQN.load(self.inp.dqn_dict['model_load_path'][0], env=self.env,gamma=self.inp.dqn_dict['gamma'][0], 
+            model = DQN.load(self.inp.dqn_dict['model_load_path'][0], env=self.env,
+                        gamma=self.inp.dqn_dict['gamma'][0], 
                         learning_rate=self.inp.dqn_dict['learning_rate'][0], 
                         buffer_size=self.inp.dqn_dict['buffer_size'][0], 
                         exploration_fraction=self.inp.dqn_dict['exploration_fraction'][0], 
-                        exploration_final_eps=self.inp.dqn_dict['exploration_final_eps'][0], 
+                        eps_final=self.inp.dqn_dict['eps_final'][0], 
                         learning_starts=self.inp.dqn_dict['learning_starts'][0], 
                         batch_size=self.inp.dqn_dict['batch_size'][0], 
                         target_network_update_freq=self.inp.dqn_dict['target_network_update_freq'][0],
-                        exploration_initial_eps=self.inp.dqn_dict['exploration_initial_eps'][0],
+                        eps_init=self.inp.dqn_dict['eps_init'][0],
                         train_freq=self.inp.dqn_dict['train_freq'][0],
-                        double_q=self.inp.dqn_dict['double_q'][0],
                         prioritized_replay=self.inp.dqn_dict['prioritized_replay'][0],
-                        prioritized_replay_alpha=self.inp.dqn_dict['prioritized_replay_alpha'][0],
-                        prioritized_replay_beta0=self.inp.dqn_dict['prioritized_replay_beta0'][0],
-                        verbose=2,
-                        tensorboard_log=tensorboard_log,
-                        n_cpu_tf_sess=1, seed=1)
+                        verbose=2, seed=1)
 
             model.learn(total_timesteps=self.inp.dqn_dict['time_steps'][0], callback=self.callback)
             model.save(self.log_dir+self.inp.dqn_dict['casename'][0]+'_lastmodel.pkl')
