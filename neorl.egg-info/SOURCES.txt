@@ -44,6 +44,7 @@ neorl/evolu/runners/__init__.py
 neorl/evolu/runners/ga.py
 neorl/evolu/runners/sa.py
 neorl/hybrid/__init__.py
+neorl/hybrid/fneat.py
 neorl/hybrid/pesa.py
 neorl/hybrid/pesa2.py
 neorl/hybrid/pesax.py
@@ -152,12 +153,14 @@ neorl/tests/test_de.py
 neorl/tests/test_dqn.py
 neorl/tests/test_es.py
 neorl/tests/test_evolutune.py
+neorl/tests/test_fneat.py
 neorl/tests/test_globalmin.py
 neorl/tests/test_grid.py
 neorl/tests/test_gwo.py
 neorl/tests/test_hho.py
 neorl/tests/test_jaya.py
 neorl/tests/test_mfo.py
+neorl/tests/test_mixedea.py
 neorl/tests/test_mixedrl.py
 neorl/tests/test_parallel_pesa.py
 neorl/tests/test_pesa.py

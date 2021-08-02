@@ -2,6 +2,7 @@ gym
 pandas
 tensorflow==1.14.0
 numpy
+neat-python
 gym
 cloudpickle
 scipy
