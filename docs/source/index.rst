@@ -70,6 +70,8 @@ User Guide
   modules/jaya
   modules/bat
   modules/hho
+  modules/fneat
+  modules/rneat
 
 .. toctree::
   :maxdepth: 1

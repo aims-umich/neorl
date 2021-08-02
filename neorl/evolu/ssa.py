@@ -11,6 +11,7 @@ import numpy as np
 import math
 import time
 import joblib
+from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
 
 class SSA(object):
     """
@@ -22,10 +23,11 @@ class SSA(object):
     :param nsalps: (int): number of salps in the swarm
     :param c1: (float/list): a scalar value or a list of values with size ``ngen`` for the coefficient that controls exploration/exploitation. 
                             If ``None``, default annealing formula for ``c1`` is used (see **Notes** below for more info).
+    :param int_transform: (str): method of handling int/discrete variables, choose from: ``nearest_int``, ``sigmoid``, ``minmax``.
     :param ncores: (int) number of parallel processors (must be ``<= nsalps``)
     :param seed: (int) random seed for sampling
     """
-    def __init__(self, mode, bounds, fit, nsalps=5, c1=None, ncores=1, seed=None):
+    def __init__(self, mode, bounds, fit, nsalps=5, c1=None, int_transform='nearest_int', ncores=1, seed=None):
         
         if seed:
             random.seed(seed)
@@ -43,13 +45,32 @@ class SSA(object):
             self.fit=fitness_wrapper
         else:
             raise ValueError('--error: The mode entered by user is invalid, use either `min` or `max`')
+          
+        self.int_transform=int_transform
+        if int_transform not in ["nearest_int", "sigmoid", "minmax"]:
+            raise ValueError('--error: int_transform entered by user is invalid, must be `nearest_int`, `sigmoid`, or `minmax`')
             
         self.bounds=bounds
         self.ncores = ncores
         self.nsalps=nsalps
         self.c1=c1
-        self.dim = len(bounds)
         
+        #infer variable types 
+        self.var_type = np.array([bounds[item][0] for item in bounds])
+        
+        #mir-grid
+        if "grid" in self.var_type:
+            self.grid_flag=True
+            self.orig_bounds=bounds  #keep original bounds for decoding
+            print('--debug: grid parameter type is found in the space')
+            self.bounds, self.bounds_map=encode_grid_to_discrete(self.bounds) #encoding grid to int
+            #define var_types again by converting grid to int
+            self.var_type = np.array([self.bounds[item][0] for item in self.bounds])
+        else:
+            self.grid_flag=False
+            self.bounds = bounds
+        
+        self.dim = len(bounds)
         self.lb=np.array([self.bounds[item][1] for item in self.bounds])
         self.ub=np.array([self.bounds[item][2] for item in self.bounds])
 
@@ -61,11 +82,11 @@ class SSA(object):
                 indv.append(random.randint(bounds[key][1], bounds[key][2]))
             elif bounds[key][0] == 'float':
                 indv.append(random.uniform(bounds[key][1], bounds[key][2]))
-            elif bounds[key][0] == 'grid':
-                indv.append(random.sample(bounds[key][1],1)[0])
+            #elif bounds[key][0] == 'grid':
+            #    indv.append(random.sample(bounds[key][1],1)[0])
             else:
                 raise Exception ('unknown data type is given, either int, float, or grid are allowed for parameter bounds')   
-        return indv
+        return np.array(indv)
 
     def eval_salps(self):
     
@@ -92,7 +113,7 @@ class SSA(object):
         
         best_fit=np.min(fit)
         min_idx=np.argmin(fit)
-        best_pos=pos[min_idx,:]
+        best_pos=pos[min_idx,:].copy()
         
         return best_pos, best_fit 
         
@@ -122,10 +143,39 @@ class SSA(object):
         # Clip the salp with position outside the lower/upper bounds and return same position
         x=self.ensure_bounds(x)
         
+        if self.grid_flag:
+            #decode the individual back to the int/float/grid mixed space
+            x=decode_discrete_to_grid(x,self.orig_bounds,self.bounds_map)
+        
         # Calculate objective function for each search agent
         fitness = self.fit(x)
         
         return fitness
+    
+    def ensure_discrete(self, vec):
+        #"""
+        #to mutate a vector if discrete variables exist 
+        #handy function to be used within SSA phases
+
+        #Params:
+        #vec - salp position in vector/list form
+
+        #Return:
+        #vec - updated salp position vector with discrete values
+        #"""
+        
+        for dim in range(self.dim):
+            if self.var_type[dim] == 'int':
+                vec[dim] = mutate_discrete(x_ij=vec[dim], 
+                                               x_min=min(vec),
+                                               x_max=max(vec),
+                                               lb=self.lb[dim], 
+                                               ub=self.ub[dim],
+                                               alpha=self.a,
+                                               method=self.int_transform,
+                                               )
+        
+        return vec
 
     def UpdateSalps(self):
 
@@ -149,6 +199,7 @@ class SSA(object):
                 self.Positions[:, i] = (point2 + point1) / 2
                 
             self.Positions[:,i]=self.ensure_bounds(self.Positions[:,i])
+            self.Positions[:, i] = self.ensure_discrete(self.Positions[: , i])
                 
             self.Positions = np.transpose(self.Positions)
             
@@ -175,14 +226,15 @@ class SSA(object):
             #self.Positions=self.init_sample(self.bounds)  #TODO, update later for mixed-integer optimisation
             # Initialize the positions of salps
             
-            for i in range(self.dim):
-                self.Positions[:, i] = (np.random.uniform(0, 1, self.nsalps) * (self.ub[i] - self.lb[i]) + self.lb[i])
+            for i in range(self.nsalps):
+                self.Positions[i,:]=self.init_sample(self.bounds)
         
         fitness0=self.eval_salps()
         
         self.best_position, self.best_fitness = self.select(self.Positions, fitness0)
                        
         for l in range(1, ngen+1):
+            self.a= 1 - l * ((1) / ngen)  #mir: a decreases linearly between 1 to 0, for discrete mutation
             
             if self.c1 is None:
                 self.c1r = 2 * math.exp(-((4 * l / ngen) ** 2))
@@ -193,6 +245,7 @@ class SSA(object):
                 self.c1r=self.c1[l-1]
             else:
                 raise ValueError ('--error: c1 should be either None, a scalar, or a vector of size ngen')
+                
             #-----------------------------
             # Update Salp Positions
             #-----------------------------
@@ -202,7 +255,6 @@ class SSA(object):
             #  Evaluate New Salps
             #----------------------
             fitness=self.eval_salps()
-            
             for i, fits in enumerate(fitness):
                 #save the best of the best!!!
                 if fits < self.best_fitness:
@@ -216,7 +268,7 @@ class SSA(object):
             else:
                 self.fitness_best_correct=self.best_fitness
                 self.local_fitness=np.min(fitness)
-
+            
             self.history['local_fitness'].append(self.local_fitness)
             self.history['global_fitness'].append(self.fitness_best_correct)
             self.history['c1'].append(self.c1r)
@@ -227,14 +279,25 @@ class SSA(object):
                 print('SSA step {}/{}, nsalps={}, Ncores={}'.format((l)*self.nsalps, ngen*self.nsalps, self.nsalps, self.ncores))
                 print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
                 print('Best Salp Fitness:', np.round(self.fitness_best_correct,6))
-                print('Best Salp Position:', np.round(self.best_position,6))
+                if self.grid_flag:
+                    self.salp_decoded = decode_discrete_to_grid(self.best_position, self.orig_bounds, self.bounds_map)
+                    print('Best Salp Position:', self.salp_decoded)
+                else:
+                    print('Best Salp Position:', self.best_position)
                 print('c1:', self.c1r)
                 print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
+
+        #mir-grid
+        if self.grid_flag:
+            self.salp_correct = decode_discrete_to_grid(self.best_position, self.orig_bounds, self.bounds_map)
+        else:
+            self.salp_correct = self.best_position                
 
         if self.verbose:
             print('------------------------ SSA Summary --------------------------')
             print('Best fitness (y) found:', self.fitness_best_correct)
-            print('Best individual (x) found:', self.best_position)
+            print('Best individual (x) found:', self.salp_correct)
             print('--------------------------------------------------------------')  
             
-        return self.best_position, self.fitness_best_correct, self.history
+        return self.salp_correct, self.fitness_best_correct, self.history
+

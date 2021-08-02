@@ -332,9 +332,9 @@ class BAT(object):
                 print('Best Bat Fitness:', np.round(self.fitness_best_correct,6))
                 if self.grid_flag:
                     self.bat_decoded = decode_discrete_to_grid(self.best_position, self.orig_bounds, self.bounds_map)
-                    print('Best Bat Position:', np.round(self.bat_decoded,6))
+                    print('Best Bat Position:', self.bat_decoded)
                 else:
-                    print('Best Bat Position:', np.round(self.best_position,6))
+                    print('Best Bat Position:', self.best_position)
                 print('Loudness A:', self.A)
                 print('Pulse rate r:', self.r)
                 print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')

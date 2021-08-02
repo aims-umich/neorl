@@ -1,0 +1,670 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>neorl.hybrid.fneat &mdash; NEORL 1.5.0b documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> NEORL
+          
+
+          
+            
+            <img src="../../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                main (1.5.0b )
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">General Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/install.html">Quick Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/detinstall.html">Detailed Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/quickstart.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/rl.html">Reinforcement Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/evolu.html">Evolutionary Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/hyperparameter.html">Hyperparameter Tuning</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Algorithms</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/a2c.html">Advantage Actor Critic (A2C)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/acer.html">Actor-Critic with Experience Replay (ACER)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/acktr.html">Actor Critic using Kronecker-Factored Trust Region (ACKTR)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/dqn.html">Deep Q Learning (DQN)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/ppo2.html">Proximal Policy Optimisation (PPO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/es.html">Evolution Strategies (<span class="math notranslate nohighlight">\(\mu,\lambda\)</span>) (ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/pso.html">Particle Swarm Optimisation (PSO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/de.html">Differential Evolution (DE)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/xnes.html">Exponential Natural Evolution Strategies (XNES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/gwo.html">Grey Wolf Optimizer (GWO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/pesa.html">Prioritized replay Evolutionary and Swarm Algorithm (PESA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/pesa2.html">Modern PESA (PESA2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/sa.html">Simulated Annealing (SA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/ssa.html">Salp Swarm Algorithm (SSA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/woa.html">Whale Optimization Algorithm (WOA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/mfo.html">Moth-flame Optimization (MFO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/jaya.html">JAYA Algorithm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/bat.html">Bat Algorithm (BAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/hho.html">Harris Hawks Optimization (HHO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/fneat.html">Feedforward Neuroevolution of Augmenting Topologies (FNEAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/rneat.html">Recurrent Neuroevolution of Augmenting Topologies (RNEAT)</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../tune/grid.html">Grid Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tune/random.html">Random Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tune/bayes.html">Bayesian Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tune/evolu.html">Evolutionary Search</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex1.html">Example 1: Traveling Salesman Problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex2.html">Example 2: Ackley with EA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex3.html">Example 3: Welded-beam design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex4.html">Example 4: Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex5.html">Example 5: CEC’2017 Test Suite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex6.html">Example 6: Three-bar Truss Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex7.html">Example 7: Pressure Vessel Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex8.html">Example 8: Pressure Vessel Design with Demonstration of Categorical Parameter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex9.html">Example 9: Cantilever Stepped Beam</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex10.html">Example 10: Knapsack Problem</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Misc</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../misc/changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../misc/projects.html">Projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../misc/contrib.html">Contributors</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">NEORL</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>neorl.hybrid.fneat</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for neorl.hybrid.fneat</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- encoding: utf-8 -*-</span>
+<span class="c1">#&#39;&#39;&#39;</span>
+<span class="c1">#@File    :   FNEAT Class based on RNEAT </span>
+<span class="c1">#@Time    :   2021/07/27 10:17:37</span>
+<span class="c1">#@Author  :   Xubo GU </span>
+<span class="c1">#@Email   :   guxubo@alumni.sjtu.edu.cn</span>
+<span class="c1">#&#39;&#39;&#39;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>  
+<span class="kn">import</span> <span class="nn">neat</span>        
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Pool</span>
+<span class="kn">from</span> <span class="nn">neorl.rl.make_env</span> <span class="kn">import</span> <span class="n">CreateEnvironment</span>
+
+<div class="viewcode-block" id="FNEAT"><a class="viewcode-back" href="../../../modules/fneat.html#neorl.hybrid.fneat.FNEAT">[docs]</a><span class="k">class</span> <span class="nc">FNEAT</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Feedforward NeuroEvolution of Augmenting Topologies (FNEAT)</span>
+<span class="sd">    </span>
+<span class="sd">    :param mode: (str) problem type, either ``min`` for minimization problem or ``max`` for maximization (RL is default to ``max``)       </span>
+<span class="sd">    :param fit: (function) the fitness function</span>
+<span class="sd">    :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: ``bounds={&#39;x1&#39;: [&#39;int&#39;, 1, 4], &#39;x2&#39;: [&#39;float&#39;, 0.1, 0.8], &#39;x3&#39;: [&#39;float&#39;, 2.2, 6.2]}``</span>
+<span class="sd">    :param config: (dict) dictionary of RNEAT hyperparameters, see **Notes** below for available hyperparameters to change</span>
+<span class="sd">    :param ncores: (int) number of parallel processors</span>
+<span class="sd">    :param seed: (int) random seed for sampling</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">seed</span><span class="p">:</span>
+            <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="o">=</span><span class="n">ncores</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span> <span class="o">=</span> <span class="n">bounds</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="o">=</span><span class="n">fit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span>
+        <span class="n">default_config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">basic_config</span><span class="p">()</span>  <span class="c1">#construct the default config file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">modify_config</span><span class="p">(</span><span class="n">default_config</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span> <span class="c1">#modify the config based on user input</span>
+        <span class="c1">#force the required NEAT variables (Do not change)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;NEAT&#39;</span><span class="p">][</span><span class="s1">&#39;fitness_criterion&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;max&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;DefaultGenome&#39;</span><span class="p">][</span><span class="s1">&#39;num_inputs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nx</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;DefaultGenome&#39;</span><span class="p">][</span><span class="s1">&#39;num_outputs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nx</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">episode_length</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;NEAT&#39;</span><span class="p">][</span><span class="s1">&#39;pop_size&#39;</span><span class="p">]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">=</span><span class="n">CreateEnvironment</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;rneat&#39;</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
+                      <span class="n">bounds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span> <span class="n">episode_length</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">episode_length</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">eval_genomes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">genomes</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+
+        <span class="k">for</span> <span class="n">genome_id</span><span class="p">,</span> <span class="n">genome</span> <span class="ow">in</span> <span class="n">genomes</span><span class="p">:</span>
+            
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">x0</span><span class="p">:</span> <span class="c1"># input user&#39;s data </span>
+                <span class="n">ob</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">x0</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span> <span class="c1"># no user&#39;s data </span>
+                <span class="n">ob</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+                
+            <span class="n">net</span> <span class="o">=</span> <span class="n">neat</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">FeedForwardNetwork</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">genome</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+            <span class="n">local_fit</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">)</span>
+            <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">xpos</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
+            
+            <span class="k">while</span> <span class="ow">not</span> <span class="n">done</span><span class="p">:</span>
+                
+                <span class="n">nnOutput</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="n">ob</span><span class="p">)</span>
+                <span class="n">ob</span><span class="p">,</span> <span class="n">rew</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">nnOutput</span><span class="p">)</span>
+                <span class="n">xpos</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>  
+                                
+                <span class="k">if</span> <span class="n">rew</span> <span class="o">&gt;</span> <span class="n">local_fit</span><span class="p">:</span>
+                    <span class="n">local_fit</span> <span class="o">=</span> <span class="n">rew</span>
+                    <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+                
+                <span class="k">if</span> <span class="n">rew</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_fit</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">best_fit</span><span class="o">=</span><span class="n">rew</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">best_x</span><span class="o">=</span><span class="n">xpos</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+                <span class="c1">#--mir</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">==</span><span class="s1">&#39;max&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">best_fit_correct</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">best_fit</span>
+                    <span class="n">local_fit_correct</span><span class="o">=</span><span class="n">local_fit</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">best_fit_correct</span><span class="o">=-</span><span class="bp">self</span><span class="o">.</span><span class="n">best_fit</span>
+                    <span class="n">local_fit_correct</span><span class="o">=-</span><span class="n">local_fit</span>
+                
+                <span class="k">if</span> <span class="n">done</span> <span class="ow">or</span> <span class="n">counter</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">episode_length</span><span class="p">:</span>
+                    <span class="n">done</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;global_fitness&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">best_fit_correct</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;local_fitness&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">local_fit_correct</span><span class="p">)</span>        
+                    <span class="c1">#print(&#39;best fit:&#39;, self.best_fit_correct)</span>
+                    
+                <span class="n">genome</span><span class="o">.</span><span class="n">fitness</span> <span class="o">=</span> <span class="n">rew</span>
+
+    <span class="k">def</span> <span class="nf">genome_worker</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">genome</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="c1"># parallel worker that passes different eval_genomes to diffrent cores</span>
+        <span class="n">worker</span> <span class="o">=</span> <span class="n">NEATWorker</span><span class="p">(</span><span class="n">genome</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">episode_length</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x0</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">)</span>
+        <span class="n">fitness</span><span class="p">,</span> <span class="n">local_fit</span><span class="p">,</span> <span class="n">xpos</span><span class="o">=</span><span class="n">worker</span><span class="o">.</span><span class="n">work</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">fitness</span><span class="p">,</span> <span class="n">local_fit</span><span class="p">,</span> <span class="n">xpos</span>
+             
+<div class="viewcode-block" id="FNEAT.evolute"><a class="viewcode-back" href="../../../modules/fneat.html#neorl.hybrid.fneat.FNEAT.evolute">[docs]</a>    <span class="k">def</span> <span class="nf">evolute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ngen</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_best_net</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">checkpoint_itv</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">startpoint</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function evolutes the FNEAT algorithm for number of generations.</span>
+<span class="sd">        </span>
+<span class="sd">        :param ngen: (int) number of generations to evolute</span>
+<span class="sd">        :param x0: (list) initial position of the NEAT (must have same size as the ``x`` variable)</span>
+<span class="sd">        :param save_best_net: (bool) save the winner neural network to a pickle file</span>
+<span class="sd">        :param checkpoint_itv: (int) generation frequency to save checkpoints for restarting purposes (e.g. 1: save every generation, 10: save every 10 generations)</span>
+<span class="sd">        :param startpoint: (str) name/path to the checkpoint file to use to start the search (the checkpoint file can be saved by invoking the argument ``checkpoint_itv``) </span>
+<span class="sd">        :param verbose: (bool) print statistics to screen</span>
+<span class="sd">        </span>
+<span class="sd">        :return: (vector, float, dict) best :math:`x`, best fitness, logging dictionary</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;global_fitness&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s1">&#39;local_fitness&#39;</span><span class="p">:[]}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">best_fit</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span>        
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">x0</span><span class="o">=</span><span class="n">x0</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">x0</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x0</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x0</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x0</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">,</span> <span class="s1">&#39;--error: the length of x0 (</span><span class="si">{}</span><span class="s1">) MUST equal the size of the bounds variable (</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x0</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">)</span>
+        
+        <span class="c1"># transfer dict-type config to neat type</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+        <span class="n">file_data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">section</span><span class="p">,</span> <span class="n">content</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">file_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">file_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;[&#39;</span> <span class="o">+</span> <span class="n">section</span> <span class="o">+</span> <span class="s1">&#39;]&#39;</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">content</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">file_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;=&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="n">tmp_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;tmp_config&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">tmp_file</span><span class="p">):</span>
+            <span class="n">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">tmp_file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--debug: Temporary config file created ... &#39;</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">tmp_file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ft</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">file_data</span><span class="p">:</span>
+                <span class="n">ft</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--debug: Modified config has been written ... &#39;</span><span class="p">)</span> 
+
+        <span class="n">config</span> <span class="o">=</span> <span class="n">neat</span><span class="o">.</span><span class="n">Config</span><span class="p">(</span><span class="n">neat</span><span class="o">.</span><span class="n">DefaultGenome</span><span class="p">,</span> <span class="n">neat</span><span class="o">.</span><span class="n">DefaultReproduction</span><span class="p">,</span>
+                             <span class="n">neat</span><span class="o">.</span><span class="n">DefaultSpeciesSet</span><span class="p">,</span> <span class="n">neat</span><span class="o">.</span><span class="n">DefaultStagnation</span><span class="p">,</span>
+                             <span class="n">tmp_file</span><span class="p">)</span>
+        
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">tmp_file</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--debug: Temporary config file removed ...&#39;</span><span class="p">)</span>
+
+        <span class="n">p</span> <span class="o">=</span> <span class="n">neat</span><span class="o">.</span><span class="n">Population</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+        <span class="c1"># train from start or checkpoint</span>
+        <span class="k">if</span> <span class="n">startpoint</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Train model from </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">startpoint</span><span class="p">))</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">neat</span><span class="o">.</span><span class="n">Checkpointer</span><span class="o">.</span><span class="n">restore_checkpoint</span><span class="p">(</span><span class="n">startpoint</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">add_reporter</span><span class="p">(</span><span class="n">neat</span><span class="o">.</span><span class="n">StdOutReporter</span><span class="p">(</span><span class="kc">True</span><span class="p">))</span>
+                <span class="n">stats</span> <span class="o">=</span> <span class="n">neat</span><span class="o">.</span><span class="n">StatisticsReporter</span><span class="p">()</span> 
+                <span class="n">p</span><span class="o">.</span><span class="n">add_reporter</span><span class="p">(</span><span class="n">stats</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">checkpoint_itv</span><span class="p">:</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">add_reporter</span><span class="p">(</span><span class="n">neat</span><span class="o">.</span><span class="n">Checkpointer</span><span class="p">(</span><span class="n">checkpoint_itv</span><span class="p">))</span>
+
+            <span class="c1">#winner = p.run(self.eval_genomes, ngen) # total gen = startpoint+ngen</span>
+
+        <span class="k">else</span><span class="p">:</span> 
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">--debug: Train model from the start.&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">add_reporter</span><span class="p">(</span><span class="n">neat</span><span class="o">.</span><span class="n">StdOutReporter</span><span class="p">(</span><span class="kc">True</span><span class="p">))</span>
+                <span class="n">stats</span> <span class="o">=</span> <span class="n">neat</span><span class="o">.</span><span class="n">StatisticsReporter</span><span class="p">()</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">add_reporter</span><span class="p">(</span><span class="n">stats</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">checkpoint_itv</span><span class="p">:</span> <span class="c1"># checkpoint saving interval</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">--debug: Save model every </span><span class="si">{}</span><span class="s1"> epochs&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">checkpoint_itv</span><span class="p">))</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">add_reporter</span><span class="p">(</span><span class="n">neat</span><span class="o">.</span><span class="n">Checkpointer</span><span class="p">(</span><span class="n">checkpoint_itv</span><span class="p">))</span>
+            <span class="c1">#winner = p.run(self.eval_genomes, ngen)</span>
+        
+        <span class="c1">#parallel runner</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--debug: FNEAT is running in parallel with </span><span class="si">{}</span><span class="s1"> cores ...&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">))</span>
+            <span class="n">pe</span> <span class="o">=</span> <span class="n">ParallelEvaluator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">genome_worker</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">)</span>
+            <span class="n">winner</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">pe</span><span class="o">.</span><span class="n">evaluate</span><span class="p">,</span> <span class="n">ngen</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">best_fit_correct</span><span class="o">=</span><span class="n">pe</span><span class="o">.</span><span class="n">best_fit_correct</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">best_x</span><span class="o">=</span><span class="n">pe</span><span class="o">.</span><span class="n">best_x</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">=</span><span class="n">pe</span><span class="o">.</span><span class="n">history</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">winner</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eval_genomes</span><span class="p">,</span> <span class="n">ngen</span><span class="p">)</span>
+            
+        
+        <span class="k">if</span> <span class="n">save_best_net</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;winner-net&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">output</span><span class="p">:</span>
+                <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">winner</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--debug: Winner net saved ...&#39;</span><span class="p">)</span>
+            
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;------------------------ FNEAT Summary --------------------------&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best fitness (y) found:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_fit_correct</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best individual (x) found:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_x</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--------------------------------------------------------------&#39;</span><span class="p">)</span>
+            
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_fit_correct</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span></div>
+
+    <span class="k">def</span> <span class="nf">modify_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_basic</span><span class="p">,</span> <span class="n">config_modify_dict</span><span class="p">):</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="c1">#config_basic: NEAT&#39;s basic configs, type: dict</span>
+        <span class="c1">#config_modify_dict: storing configs to be changed, type: dict</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        
+        <span class="n">para_change_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">config_modify_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span> <span class="c1"># parameters changed </span>
+        
+        <span class="k">for</span> <span class="n">section</span><span class="p">,</span> <span class="n">paras</span> <span class="ow">in</span> <span class="n">config_basic</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--debug: Dealing with section [</span><span class="si">{}</span><span class="s1">] ...&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">section</span><span class="p">)))</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">paras</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">para_change_list</span><span class="p">:</span>
+                    <span class="c1"># idx = para_change_list.index(key)</span>
+                    <span class="n">config_basic</span><span class="p">[</span><span class="n">section</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">config_modify_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--debug: Change parameter &quot;</span><span class="si">{}</span><span class="s1">&quot; to &quot;</span><span class="si">{}</span><span class="s1">&quot; successfully!&#39;</span>\
+                        <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">),</span><span class="nb">str</span><span class="p">(</span><span class="n">config_modify_dict</span><span class="p">[</span><span class="n">key</span><span class="p">])))</span>
+    
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--debug: ************NEAT config file is constructed!************&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">config_basic</span>
+
+    <span class="k">def</span> <span class="nf">basic_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># This function builds the default NEAT config file.</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;NEAT&#39;</span><span class="p">:{</span>
+            <span class="s1">&#39;fitness_criterion&#39;</span><span class="p">:</span><span class="s1">&#39;max&#39;</span><span class="p">,</span>  <span class="c1">#mir: default is max</span>
+            <span class="s1">&#39;fitness_threshold&#39;</span><span class="p">:</span> <span class="mf">1e5</span><span class="p">,</span>
+            <span class="s1">&#39;pop_size&#39;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
+            <span class="s1">&#39;reset_on_extinction&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s1">&#39;no_fitness_termination&#39;</span><span class="p">:</span> <span class="kc">False</span>
+            <span class="p">},</span>
+    
+            <span class="s1">&#39;DefaultGenome&#39;</span><span class="p">:{</span>
+            <span class="s1">&#39;activation_default&#39;</span><span class="p">:</span><span class="s1">&#39;identity&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;activation_mutate_rate&#39;</span><span class="p">:</span><span class="mf">0.05</span><span class="p">,</span>
+            <span class="s1">&#39;activation_options&#39;</span><span class="p">:</span> <span class="s1">&#39;sigmoid&#39;</span><span class="p">,</span>
+    
+            <span class="s1">&#39;aggregation_default&#39;</span><span class="p">:</span> <span class="s1">&#39;random&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;aggregation_mutate_rate&#39;</span><span class="p">:</span><span class="mf">0.05</span><span class="p">,</span>
+            <span class="s1">&#39;aggregation_options&#39;</span><span class="p">:</span> <span class="s1">&#39;sum product min max mean median maxabs&#39;</span><span class="p">,</span>
+            
+            <span class="s1">&#39;single_structural_mutation&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="s1">&#39;structural_mutation_surer&#39;</span><span class="p">:</span> <span class="s1">&#39;default&#39;</span><span class="p">,</span>
+            
+            <span class="s1">&#39;bias_init_type&#39;</span><span class="p">:</span> <span class="s1">&#39;gaussian&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;bias_init_mean&#39;</span><span class="p">:</span> <span class="mf">0.05</span><span class="p">,</span>
+            <span class="s1">&#39;bias_init_stdev&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+            <span class="s1">&#39;bias_max_value&#39;</span><span class="p">:</span> <span class="mf">30.0</span><span class="p">,</span>
+            <span class="s1">&#39;bias_min_value&#39;</span><span class="p">:</span>  <span class="o">-</span><span class="mf">30.0</span><span class="p">,</span>
+            <span class="s1">&#39;bias_mutate_power&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+            <span class="s1">&#39;bias_mutate_rate&#39;</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">,</span>
+            <span class="s1">&#39;bias_replace_rate&#39;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+    
+            <span class="s1">&#39;compatibility_disjoint_coefficient&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+            <span class="s1">&#39;compatibility_weight_coefficient&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+    
+            <span class="s1">&#39;conn_add_prob&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+            <span class="s1">&#39;conn_delete_prob&#39;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+    
+            <span class="s1">&#39;enabled_default&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s1">&#39;enabled_mutate_rate&#39;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span>
+            <span class="s1">&#39;enabled_rate_to_true_add&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+            <span class="s1">&#39;enabled_rate_to_false_add&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+    
+            <span class="s1">&#39;feed_forward&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s1">&#39;initial_connection&#39;</span><span class="p">:</span> <span class="s1">&#39;partial_nodirect 0.5&#39;</span><span class="p">,</span>
+    
+            <span class="s1">&#39;node_add_prob&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+            <span class="s1">&#39;node_delete_prob&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+    
+            <span class="s1">&#39;num_hidden&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s1">&#39;num_inputs&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>  <span class="c1">#mir: must be defined by the developer</span>
+            <span class="s1">&#39;num_outputs&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>  <span class="c1">#mir: must be defined by the developer</span>
+            
+            <span class="s1">&#39;response_init_type&#39;</span><span class="p">:</span> <span class="s1">&#39;gaussian&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;response_init_mean&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+            <span class="s1">&#39;response_init_stdev&#39;</span><span class="p">:</span> <span class="mf">0.05</span><span class="p">,</span>
+            <span class="s1">&#39;response_max_value&#39;</span><span class="p">:</span> <span class="mf">30.0</span><span class="p">,</span>
+            <span class="s1">&#39;response_min_value&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">30.0</span><span class="p">,</span>
+            <span class="s1">&#39;response_mutate_power&#39;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+            <span class="s1">&#39;response_mutate_rate&#39;</span><span class="p">:</span> <span class="mf">0.75</span><span class="p">,</span>
+            <span class="s1">&#39;response_replace_rate&#39;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+            
+            <span class="s1">&#39;weight_init_type&#39;</span><span class="p">:</span> <span class="s1">&#39;gaussian&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;weight_init_mean&#39;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+            <span class="s1">&#39;weight_init_stdev&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+            <span class="s1">&#39;weight_max_value&#39;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
+            <span class="s1">&#39;weight_min_value&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">30</span><span class="p">,</span>
+            <span class="s1">&#39;weight_mutate_power&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>   
+            <span class="s1">&#39;weight_mutate_rate&#39;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span>
+            <span class="s1">&#39;weight_replace_rate&#39;</span><span class="p">:</span> <span class="mf">0.1</span>
+            <span class="p">},</span>
+    
+            <span class="s1">&#39;DefaultSpeciesSet&#39;</span><span class="p">:{</span>
+            <span class="s1">&#39;compatibility_threshold&#39;</span><span class="p">:</span> <span class="mf">2.5</span>
+            <span class="p">},</span>
+    
+            <span class="s1">&#39;DefaultStagnation&#39;</span><span class="p">:{</span>
+            <span class="s1">&#39;species_fitness_func&#39;</span><span class="p">:</span> <span class="s1">&#39;max&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;max_stagnation&#39;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+            <span class="s1">&#39;species_elitism&#39;</span><span class="p">:</span> <span class="mi">0</span>
+            <span class="p">},</span>
+    
+            <span class="s1">&#39;DefaultReproduction&#39;</span><span class="p">:{</span>
+            <span class="s1">&#39;elitism&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s1">&#39;survival_threshold&#39;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span>
+            <span class="s1">&#39;min_species_size&#39;</span><span class="p">:</span> <span class="mi">2</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    
+        <span class="k">return</span> <span class="n">a</span></div>
+
+<span class="k">class</span> <span class="nc">NEATWorker</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="c1">#This class provides a path to allow passing </span>
+    <span class="c1">#different workers with different genomes and configs</span>
+    <span class="c1">#Inputs:</span>
+        <span class="c1">#genome: genome structure</span>
+        <span class="c1">#config: config for the genome</span>
+        <span class="c1">#episode_length: epsiode length for logging if defined in the original FNEAT class</span>
+        <span class="c1">#x0: initial guess if defined in the original FNEAT class</span>
+        <span class="c1">#env: enviroment class</span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">genome</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">episode_length</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">genome</span> <span class="o">=</span> <span class="n">genome</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">episode_length</span><span class="o">=</span><span class="n">episode_length</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x0</span><span class="o">=</span><span class="n">x0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">=</span><span class="n">env</span>
+        
+    <span class="k">def</span> <span class="nf">work</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">x0</span><span class="p">:</span> <span class="c1"># input user&#39;s data </span>
+            <span class="n">ob</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">x0</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span> <span class="c1"># no user&#39;s data </span>
+            <span class="n">ob</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+            
+        <span class="n">net</span> <span class="o">=</span> <span class="n">neat</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">FeedForwardNetwork</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">genome</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
+        <span class="n">local_fit</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">)</span>
+        <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">xpos</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
+        
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">done</span><span class="p">:</span>
+            
+            <span class="n">nnOutput</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="n">ob</span><span class="p">)</span>
+            <span class="n">ob</span><span class="p">,</span> <span class="n">rew</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">nnOutput</span><span class="p">)</span>
+            <span class="n">xpos</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>  
+                            
+            <span class="k">if</span> <span class="n">rew</span> <span class="o">&gt;</span> <span class="n">local_fit</span><span class="p">:</span>
+                <span class="n">local_fit</span> <span class="o">=</span> <span class="n">rew</span>
+                <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">done</span> <span class="ow">or</span> <span class="n">counter</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">episode_length</span><span class="p">:</span>
+            <span class="n">done</span> <span class="o">=</span> <span class="kc">True</span>
+                
+        <span class="k">return</span> <span class="n">rew</span><span class="p">,</span> <span class="n">local_fit</span><span class="p">,</span> <span class="n">xpos</span>
+    
+
+
+<span class="k">class</span> <span class="nc">ParallelEvaluator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_workers</span><span class="p">,</span> <span class="n">eval_function</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="c1">#Runs evaluation functions in parallel subprocesses</span>
+        <span class="c1">#in order to evaluate multiple genomes at once.</span>
+        
+        <span class="c1">#eval_function should take one argument, a tuple of</span>
+        <span class="c1">#(genome object, config object), and return</span>
+        <span class="c1">#a single float (the genome&#39;s fitness).</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_workers</span> <span class="o">=</span> <span class="n">num_workers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eval_function</span> <span class="o">=</span> <span class="n">eval_function</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="n">timeout</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pool</span> <span class="o">=</span> <span class="n">Pool</span><span class="p">(</span><span class="n">num_workers</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;global_fitness&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s1">&#39;local_fitness&#39;</span><span class="p">:[]}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">best_fit</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span>
+        
+    <span class="k">def</span> <span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">close</span><span class="p">()</span> <span class="c1"># should this be terminate?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">genomes</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="n">jobs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">ignored_genome_id</span><span class="p">,</span> <span class="n">genome</span> <span class="ow">in</span> <span class="n">genomes</span><span class="p">:</span>
+            <span class="n">jobs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">apply_async</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eval_function</span><span class="p">,</span> <span class="p">(</span><span class="n">genome</span><span class="p">,</span> <span class="n">config</span><span class="p">)))</span>
+
+        <span class="c1"># assign the fitness back to each genome</span>
+        <span class="k">for</span> <span class="n">job</span><span class="p">,</span> <span class="p">(</span><span class="n">ignored_genome_id</span><span class="p">,</span> <span class="n">genome</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">jobs</span><span class="p">,</span> <span class="n">genomes</span><span class="p">):</span>
+            <span class="n">genome</span><span class="o">.</span><span class="n">fitness</span><span class="p">,</span> <span class="n">local_fit</span><span class="p">,</span> <span class="n">xpos</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span>
+        
+            <span class="k">if</span> <span class="n">genome</span><span class="o">.</span><span class="n">fitness</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_fit</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">best_fit</span><span class="o">=</span><span class="n">genome</span><span class="o">.</span><span class="n">fitness</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">best_x</span><span class="o">=</span><span class="n">xpos</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    
+            <span class="c1">#--mir</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">==</span><span class="s1">&#39;max&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">best_fit_correct</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">best_fit</span>
+                <span class="n">local_fit_correct</span><span class="o">=</span><span class="n">local_fit</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">best_fit_correct</span><span class="o">=-</span><span class="bp">self</span><span class="o">.</span><span class="n">best_fit</span>
+                <span class="n">local_fit_correct</span><span class="o">=-</span><span class="n">local_fit</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;global_fitness&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">best_fit_correct</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;local_fitness&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">local_fit_correct</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Exelon Corp. &amp; MIT.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

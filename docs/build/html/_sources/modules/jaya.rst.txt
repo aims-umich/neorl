@@ -15,9 +15,9 @@ What can you use?
 --------------------
 
 -  Multi processing: ✔️
--  Discrete spaces: ❌
+-  Discrete spaces: ✔️
 -  Continuous spaces: ✔️
--  Mixed Discrete/Continuous spaces: ❌
+-  Mixed Discrete/Continuous spaces: ✔️
 
 Parameters
 ----------

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Grey Wolf Optimizer (GWO) &mdash; NEORL 1.4.8b documentation</title>
+  <title>Grey Wolf Optimizer (GWO) &mdash; NEORL 1.5.0b documentation</title>
   
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                main (1.4.8b )
+                main (1.5.0b )
               </div>
             
           
@@ -128,6 +128,8 @@
 <li class="toctree-l1"><a class="reference internal" href="jaya.html">JAYA Algorithm</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bat.html">Bat Algorithm (BAT)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hho.html">Harris Hawks Optimization (HHO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fneat.html">Feedforward Neuroevolution of Augmenting Topologies (FNEAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rneat.html">Recurrent Neuroevolution of Augmenting Topologies (RNEAT)</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
 <ul>
@@ -138,7 +140,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../examples/ex1.html">Example 1: RL Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex1.html">Example 1: Traveling Salesman Problem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/ex2.html">Example 2: Ackley with EA</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/ex3.html">Example 3: Welded-beam design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/ex4.html">Example 4: Benchmarks</a></li>
@@ -147,6 +149,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../examples/ex7.html">Example 7: Pressure Vessel Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/ex8.html">Example 8: Pressure Vessel Design with Demonstration of Categorical Parameter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/ex9.html">Example 9: Cantilever Stepped Beam</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex10.html">Example 10: Knapsack Problem</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Misc</span></p>
 <ul>
@@ -229,16 +232,16 @@
 <h2>What can you use?<a class="headerlink" href="#what-can-you-use" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>Multi processing: ✔️</p></li>
-<li><p>Discrete spaces: ❌</p></li>
+<li><p>Discrete spaces: ✔️</p></li>
 <li><p>Continuous spaces: ✔️</p></li>
-<li><p>Mixed Discrete/Continuous spaces: ❌</p></li>
+<li><p>Mixed Discrete/Continuous spaces: ✔️</p></li>
 </ul>
 </div>
 <div class="section" id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="neorl.evolu.gwo.GWO">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">neorl.evolu.gwo.</span></code><code class="sig-name descname"><span class="pre">GWO</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nwolves</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ncores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/evolu/gwo.html#GWO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.evolu.gwo.GWO" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">neorl.evolu.gwo.</span></code><code class="sig-name descname"><span class="pre">GWO</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nwolves</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int_transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'nearest_int'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ncores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/evolu/gwo.html#GWO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.evolu.gwo.GWO" title="Permalink to this definition">¶</a></dt>
 <dd><p>Grey Wolf Optimizer</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -247,6 +250,7 @@
 <li><p><strong>bounds</strong> – (dict) input parameter type and lower/upper bounds in dictionary form. Example: <code class="docutils literal notranslate"><span class="pre">bounds={'x1':</span> <span class="pre">['int',</span> <span class="pre">1,</span> <span class="pre">4],</span> <span class="pre">'x2':</span> <span class="pre">['float',</span> <span class="pre">0.1,</span> <span class="pre">0.8],</span> <span class="pre">'x3':</span> <span class="pre">['float',</span> <span class="pre">2.2,</span> <span class="pre">6.2]}</span></code></p></li>
 <li><p><strong>fit</strong> – (function) the fitness function</p></li>
 <li><p><strong>nwolves</strong> – (int): number of the grey wolves in the group</p></li>
+<li><p><strong>int_transform</strong> – (str): method of handling int/discrete variables, choose from: <code class="docutils literal notranslate"><span class="pre">nearest_int</span></code>, <code class="docutils literal notranslate"><span class="pre">sigmoid</span></code>, <code class="docutils literal notranslate"><span class="pre">minmax</span></code>.</p></li>
 <li><p><strong>ncores</strong> – (int) number of parallel processors (must be <code class="docutils literal notranslate"><span class="pre">&lt;=</span> <span class="pre">nwolves</span></code>)</p></li>
 <li><p><strong>seed</strong> – (int) random seed for sampling</p></li>
 </ul>

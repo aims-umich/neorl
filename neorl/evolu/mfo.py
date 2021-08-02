@@ -7,6 +7,7 @@ import random
 import numpy as np
 import math
 import joblib
+from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
 
 class MFO:
     """
@@ -17,22 +18,20 @@ class MFO:
     :param fit: (function) the fitness function 
     :param nmoths: (int) number of moths in the population
     :param b: (float) constant for defining the shape of the logarithmic spiral
+    :param int_transform: (str): method of handling int/discrete variables, choose from: ``nearest_int``, ``sigmoid``, ``minmax``.
     :param ncores: (int) number of parallel processors
     :param seed: (int) random seed for sampling
     """
     
-    def __init__(self, mode, bounds, fit, nmoths=50, b=1, ncores=1, seed=None):
+    def __init__(self, mode, bounds, fit, nmoths=50, b=1, int_transform='nearest_int', ncores=1, seed=None):
 
         self.seed=seed
         if self.seed:
             random.seed(self.seed)
             np.random.seed(self.seed)
 
+        assert ncores <= nmoths, '--error: ncores ({}) must be less than or equal to nmoths ({})'.format(ncores, nmoths)
         assert nmoths > 3, '--eror: size of nmoths must be more than 3'
-        self.npop= nmoths
-        self.bounds=bounds
-        self.ncores=ncores
-        self.b=b
 
         self.mode=mode
         if mode == 'min':
@@ -44,6 +43,34 @@ class MFO:
         else:
             raise ValueError('--error: The mode entered by user is invalid, use either `min` or `max`')
 
+        self.int_transform=int_transform
+        if int_transform not in ["nearest_int", "sigmoid", "minmax"]:
+            raise ValueError('--error: int_transform entered by user is invalid, must be `nearest_int`, `sigmoid`, or `minmax`')
+          
+        self.npop= nmoths
+        self.bounds=bounds
+        self.ncores=ncores
+        self.b=b
+        
+        #infer variable types 
+        self.var_type = np.array([bounds[item][0] for item in bounds])
+        
+        #mir-grid
+        if "grid" in self.var_type:
+            self.grid_flag=True
+            self.orig_bounds=bounds  #keep original bounds for decoding
+            print('--debug: grid parameter type is found in the space')
+            self.bounds, self.bounds_map=encode_grid_to_discrete(self.bounds) #encoding grid to int
+            #define var_types again by converting grid to int
+            self.var_type = np.array([self.bounds[item][0] for item in self.bounds])
+        else:
+            self.grid_flag=False
+            self.bounds = bounds
+        
+        self.dim = len(bounds)
+        self.lb=np.array([self.bounds[item][1] for item in self.bounds])
+        self.ub=np.array([self.bounds[item][2] for item in self.bounds])
+        
     def gen_indv(self, bounds): # individual 
 
         indv = []
@@ -52,14 +79,16 @@ class MFO:
                 indv.append(random.randint(bounds[key][1], bounds[key][2]))
             elif bounds[key][0] == 'float':
                 indv.append(random.uniform(bounds[key][1], bounds[key][2]))
-            elif bounds[key][0] == 'grid':
-                indv.append(random.sample(bounds[key][1],1)[0])
+            #elif bounds[key][0] == 'grid':
+            #    indv.append(random.sample(bounds[key][1],1)[0])
+            else:
+                raise Exception ('unknown data type is given, either int, float, or grid are allowed for parameter bounds')   
         return indv
 
     def init_population(self, x0=None): # population
 
         pop = []
-        if x0: # have premary solution
+        if x0: # have primary solution
             print('The first individual provided by the user:', x0[0])
             print('The last individual provided by the user:', x0[-1])
             for i in range(len(x0)):
@@ -94,10 +123,39 @@ class MFO:
     def fit_worker(self, x):
         
         xchecked=self.ensure_bounds(x)
+        
+        if self.grid_flag:
+            #decode the individual back to the int/float/grid mixed space
+            xchecked=decode_discrete_to_grid(xchecked,self.orig_bounds,self.bounds_map)
 
         fitness = self.fit(xchecked)
 
         return fitness
+    
+    def ensure_discrete(self, vec):
+        #"""
+        #to mutate a vector if discrete variables exist 
+        #handy function to be used within MFO phases
+
+        #Params:
+        #vec - moth position in vector/list form
+
+        #Return:
+        #vec - updated moth position vector with discrete values
+        #"""
+        
+        for dim in range(self.dim):
+            if self.var_type[dim] == 'int':
+                vec[dim] = mutate_discrete(x_ij=vec[dim], 
+                                               x_min=min(vec),
+                                               x_max=max(vec),
+                                               lb=self.lb[dim], 
+                                               ub=self.ub[dim],
+                                               alpha=self.a,
+                                               method=self.int_transform,
+                                               )
+        
+        return vec
 
     def evolute(self, ngen, x0=None, verbose=0):
         """
@@ -146,7 +204,7 @@ class MFO:
         ## main loop
         best_scores = []
         for gen in range(1, ngen+1):
-
+            self.a= 1 - gen * ((1) / ngen)  #mir: a decreases linearly between 1 to 0, for discrete mutation
             Flame_no = round(N - gen*((N-1) / (ngen+1)))
 
             if self.ncores > 1: 
@@ -218,6 +276,7 @@ class MFO:
             
                 
                 Moth_pos[i,:]=self.ensure_bounds(Moth_pos[i,:])
+                Moth_pos[i, :] = self.ensure_discrete(Moth_pos[i, :])
     
             #-----------------------------
             #Fitness saving 
@@ -249,15 +308,25 @@ class MFO:
                 print('MFO step {}/{}, Ncores={}'.format(gen*self.npop, ngen*self.npop, self.ncores))
                 print('************************************************************')
                 print('Best fitness:', np.round(self.fitness_best_correct,6))
-                print('Best individual:', self.best_position)
+                if self.grid_flag:
+                    self.moth_decoded = decode_discrete_to_grid(self.best_position, self.orig_bounds, self.bounds_map)
+                    print('Best individual:', self.moth_decoded)
+                else:
+                    print('Best individual:', self.best_position)
                 print('Average fitness:', np.round(gen_avg,6))
                 print('************************************************************')
 
+        #mir-grid
+        if self.grid_flag:
+            self.moth_correct = decode_discrete_to_grid(self.best_position, self.orig_bounds, self.bounds_map)
+        else:
+            self.moth_correct = self.best_position
 
         if verbose:
             print('------------------------ MFO Summary --------------------------')
             print('Best fitness (y) found:', self.fitness_best_correct)
-            print('Best individual (x) found:', self.best_position)
+            print('Best individual (x) found:', self.moth_correct)
             print('--------------------------------------------------------------')
                 
-        return self.best_position, self.fitness_best_correct, self.history
+        return self.moth_correct, self.fitness_best_correct, self.history
+

@@ -5,10 +5,6 @@ from neorl import RLLogger
 from neorl import CreateEnvironment
 import math
 
-#---------------------------------
-# Fitness function
-#---------------------------------
-
 def Vessel(individual):
     """
     Pressure vesssel design
@@ -39,79 +35,124 @@ def Vessel(individual):
         fitness=y
     return fitness
 
-#---------------------------------
-# Mixed int/float/grid space
-#---------------------------------
-bounds = {}
-bounds['x1'] = ['int', 1, 99]
-bounds['x2'] = ['grid', (0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625)]
-bounds['x3'] = ['float', 10, 200]
-bounds['x4'] = ['float', 10, 200]
+for item in ['float', 'int', 'grid', 'float/int', 'float/grid', 'int/grid', 'mixed']:
+    bounds = {}
+    t=60
+    btype=item  #float, int, grid, float/int, float/grid, int/grid, mixed. 
     
-#---------------------------------
-# PPO
-#---------------------------------
-env=CreateEnvironment(method='ppo', fit=Vessel, bounds=bounds, mode='min', episode_length=50)
-cb=RLLogger(check_freq=1, mode='min')
-ppo = PPO2(policy=MlpPolicy, env=env, n_steps=20, seed=1)
-ppo.learn(total_timesteps=1000, callback=cb)
-print('--------------- PPO results ---------------')
-print('The best value of x found:', cb.xbest)
-print('The best value of y found:', cb.rbest)
-
-assert Vessel(cb.xbest) - cb.rbest < 1e-3
-
-#---------------------------------
-# A2C
-#---------------------------------
-cb=RLLogger(check_freq=1, mode='min')
-a2c = A2C(policy=MlpPolicy, env=env, n_steps=20, seed=1)
-a2c.learn(total_timesteps=1000, callback=cb)
-print('--------------- A2C results ---------------')
-print('The best value of x found:', cb.xbest)
-print('The best value of y found:', cb.rbest)
-assert Vessel(cb.xbest) - cb.rbest < 1e-3
-
-#---------------------------------
-# ACKTR
-#---------------------------------
-cb=RLLogger(check_freq=1, mode='min')
-acktr = ACKTR(policy=MlpPolicy, env=env, n_steps=20)
-acktr.learn(total_timesteps=1000, callback=cb)
-print('--------------- ACKTR results ---------------')
-print('The best value of x found:', cb.xbest)
-print('The best value of y found:', cb.rbest)
-assert Vessel(cb.xbest) - cb.rbest < 1e-3
-
-#---------------------------------
-# Mixed int/grid
-#---------------------------------
-bounds = {}
-bounds['x1'] = ['int', 1, 20]
-bounds['x2'] = ['grid', (0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625)]
-bounds['x3'] = ['int', 10, 200]
-bounds['x4'] = ['int', 10, 200]
-
-#---------------------------------
-# ACER
-#---------------------------------
-disc_env=CreateEnvironment(method='acer', fit=Vessel, mode='min', 
-                           bounds=bounds, episode_length=50)
-cb=RLLogger(check_freq=1, mode='min')
-acer = ACER(MlpPolicy, env=disc_env, n_steps=25)
-acer.learn(total_timesteps=2000, callback=cb)
-print('--------------- ACER results ---------------')
-print('The best value of x found:', cb.xbest)
-print('The best value of y found:', cb.rbest)
-assert Vessel(cb.xbest) - cb.rbest < 1e-3
-
-#---------------------------------
-# DQN
-#---------------------------------
-cb=RLLogger(check_freq=1, mode='min')
-dqn = DQN(DQNPolicy, env=disc_env)
-dqn.learn(total_timesteps=1000, callback=cb)
-print('--------------- DQN results ---------------')
-print('The best value of x found:', cb.xbest)
-print('The best value of y found:', cb.rbest)
-assert Vessel(cb.xbest) - cb.rbest < 1e-3
+    if btype=='mixed':
+        bounds['x1'] = ['int', 1, 99]
+        bounds['x2'] = ['grid', (0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625)]
+        bounds['x3'] = ['float', 10, 200]
+        bounds['x4'] = ['float', 10, 200]
+        bounds['x5'] = ['grid', ('Hi', 'Bye', 'New')]
+        bounds['x6'] = ['int', -5, 5]
+    
+    elif btype=='int/grid':      
+        bounds['x1'] = ['int', 1, 20]
+        bounds['x2'] = ['grid', (0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625)]
+        bounds['x3'] = ['int', 10, 200]
+        bounds['x4'] = ['int', 10, 200]
+        bounds['x5'] = ['grid', ('Hi', 'Bye', 'New')]
+        bounds['x6'] = ['int', -5, 5]
+    
+    elif btype=='float/grid':      
+        bounds['x1'] = ['float', 1, 20]
+        bounds['x2'] = ['grid', (0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625)]
+        bounds['x3'] = ['float', 10, 200]
+        bounds['x4'] = ['float', 10, 200]
+        bounds['x5'] = ['grid', ('Hi', 'Bye', 'New')]
+        bounds['x6'] = ['float', -5, 5]
+        
+    elif btype=='float/int':      
+        bounds['x1'] = ['int', 1, 20]
+        bounds['x2'] = ['float', 1, 20]
+        bounds['x3'] = ['int', 10, 200]
+        bounds['x4'] = ['float', 10, 200]
+        bounds['x5'] = ['float', -5, 5]
+        bounds['x6'] = ['int', -5, 5]
+    
+    elif btype=='float':      
+        bounds['x1'] = ['float', 1, 20]
+        bounds['x2'] = ['float', 1, 20]
+        bounds['x3'] = ['float', 10, 200]
+        bounds['x4'] = ['float', 10, 200]
+        bounds['x5'] = ['float', -5, 5]
+        bounds['x6'] = ['float', -5, 5]
+        
+    elif btype=='int':      
+        bounds['x1'] = ['int', 1, 20]
+        bounds['x2'] = ['int', 1, 20]
+        bounds['x3'] = ['int', 10, 200]
+        bounds['x4'] = ['int', 10, 200]
+        bounds['x5'] = ['int', -5, 5]
+        bounds['x6'] = ['int', -5, 5]
+        
+    elif btype=='grid':      
+        bounds['x1'] = ['grid', (0.0625, 0.125, 0.375, 0.4375, 0.5625, 0.625)]
+        bounds['x2'] = ['grid', (0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625)]
+        bounds['x3'] = ['grid', (1,2,3,4,5)]
+        bounds['x4'] = ['grid', (32,64,128)]
+        bounds['x5'] = ['grid', ('Hi', 'Bye', 'New')]
+        bounds['x6'] = ['grid', ('Cat', 'Dog', 'Bird', 'Fish')]
+    
+    #---------------------------------
+    # PPO
+    #---------------------------------
+    env=CreateEnvironment(method='ppo', fit=Vessel, bounds=bounds, mode='min', episode_length=50)
+    cb=RLLogger(check_freq=1, mode='min')
+    ppo = PPO2(policy=MlpPolicy, env=env, n_steps=4, seed=1)
+    ppo.learn(total_timesteps=t, callback=cb)
+    print('--------------- PPO results ---------------')
+    print('The best value of x found:', cb.xbest)
+    print('The best value of y found:', cb.rbest)
+    
+    assert Vessel(cb.xbest) - cb.rbest < 1
+    
+    #---------------------------------
+    # A2C
+    #---------------------------------
+    cb=RLLogger(check_freq=1, mode='min')
+    a2c = A2C(policy=MlpPolicy, env=env, n_steps=4, seed=1)
+    a2c.learn(total_timesteps=t, callback=cb)
+    print('--------------- A2C results ---------------')
+    print('The best value of x found:', cb.xbest)
+    print('The best value of y found:', cb.rbest)
+    assert Vessel(cb.xbest) - cb.rbest < 1
+    
+    #---------------------------------
+    # ACKTR
+    #---------------------------------
+    cb=RLLogger(check_freq=1, mode='min')
+    acktr = ACKTR(policy=MlpPolicy, env=env, n_steps=4)
+    acktr.learn(total_timesteps=t, callback=cb)
+    print('--------------- ACKTR results ---------------')
+    print('The best value of x found:', cb.xbest)
+    print('The best value of y found:', cb.rbest)
+    assert Vessel(cb.xbest) - cb.rbest < 1
+    
+    
+    if btype in ['int', 'grid', 'int/grid']:
+        #---------------------------------
+        # ACER
+        #---------------------------------
+        disc_env=CreateEnvironment(method='acer', fit=Vessel, mode='min', 
+                                   bounds=bounds, episode_length=50)
+        cb=RLLogger(check_freq=1, mode='min')
+        acer = ACER(MlpPolicy, env=disc_env, n_steps=4)
+        acer.learn(total_timesteps=t, callback=cb)
+        print('--------------- ACER results ---------------')
+        print('The best value of x found:', cb.xbest)
+        print('The best value of y found:', cb.rbest)
+        assert Vessel(cb.xbest) - cb.rbest < 1
+        
+        #---------------------------------
+        # DQN
+        #---------------------------------
+        cb=RLLogger(check_freq=1, mode='min')
+        dqn = DQN(DQNPolicy, env=disc_env)
+        dqn.learn(total_timesteps=t, callback=cb)
+        print('--------------- DQN results ---------------')
+        print('The best value of x found:', cb.xbest)
+        print('The best value of y found:', cb.rbest)
+        assert Vessel(cb.xbest) - cb.rbest < 1

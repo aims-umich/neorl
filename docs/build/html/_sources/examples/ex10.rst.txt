@@ -28,7 +28,7 @@ Formally, with :math:`i = 1,...,n` items, each characterized by their values and
 
     &\max \sum_{i=1}^n\nu_ix_i \\
     &s.t. \quad \sum_{i=1}^nw_ix_i \le W \\
-    &x_j \in \{0,1\}
+    &x_i \in \{0,1\}
 
 where :math:`x_i=1` if the item :math:`i` is in the bag, otherwise :math:`x_i=0`. This is called the 0-1 Knapsack Problem. The constraint characterizes the fact that the capacity of the bag is limited by :math:`W`, hence the sum of the weights :math:`\sum_{i=1}^nw_ix_i` of the items should not exceed :math:`W`.
 

@@ -1,42 +1,56 @@
+# -*- coding: utf-8 -*-
+#"""
+#Created on Thu Dec  3 14:42:29 2021
+#
+#@author: Majdi Radaideh and Xubo Gu
+#"""
+
 import numpy as np  
 import neat        
 import pickle
 import random
 import os
 from multiprocessing import Pool
+from neorl.rl.make_env import CreateEnvironment
 
 class RNEAT(object):
-    def __init__(self, env, config, ncores=1, seed=None):
-        """
-        Recurrent NeuroEvolution of Augmenting Topologies (R-NEAT)
-        
-        :param env: (int) environment object constructed by the NEORL method ``CreateEnvironment``
-        :param config: (dict) dictionary of R-NEAT hyperparameters, see **Notes** below for available hyperparameters to change)
-        """
+    """
+    Recurrent NeuroEvolution of Augmenting Topologies (RNEAT)
+    
+    :param mode: (str) problem type, either ``min`` for minimization problem or ``max`` for maximization (RL is default to ``max``)       
+    :param fit: (function) the fitness function
+    :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: ``bounds={'x1': ['int', 1, 4], 'x2': ['float', 0.1, 0.8], 'x3': ['float', 2.2, 6.2]}``
+    :param config: (dict) dictionary of RNEAT hyperparameters, see **Notes** below for available hyperparameters to change
+    :param ncores: (int) number of parallel processors
+    :param seed: (int) random seed for sampling
+    """
+    def __init__(self, mode, fit, bounds, config, ncores=1, seed=None):
         if seed:
             random.seed(seed)
             np.random.seed(seed)
-            
+        
         self.ncores=ncores
-        self.episode_length=env.episode_length
-        self.mode=env.mode
-        self.bounds = env.bounds
+        self.mode=mode
+        self.bounds = bounds
+        self.fit=fit
         self.nx=len(self.bounds)
         default_config = self.basic_config()  #construct the default config file
         self.config = self.modify_config(default_config, config) #modify the config based on user input
-        #force the required NEAT variables
+        #force the required NEAT variables (Do not change)
         self.config['NEAT']['fitness_criterion'] = "max"
         self.config['DefaultGenome']['num_inputs'] = self.nx
         self.config['DefaultGenome']['num_outputs'] = self.nx
-        self.env=env
+        self.episode_length=self.config['NEAT']['pop_size']
+        
+        self.env=CreateEnvironment(method='rneat', fit=self.fit, ncores=1, 
+                      bounds=self.bounds, mode=self.mode, episode_length=self.episode_length)
         
     def eval_genomes(self, genomes, config):
 
         for genome_id, genome in genomes:
-            try: 
-                if list(self.x0):# input user's data 
-                    ob=self.x0.copy()
-            except: # no user's data 
+            if self.x0: # input user's data 
+                ob=self.x0.copy()
+            else: # no user's data 
                 ob = self.env.reset()
                 
             net = neat.nn.recurrent.RecurrentNetwork.create(genome, config)
@@ -83,22 +97,27 @@ class RNEAT(object):
         fitness, local_fit, xpos=worker.work()
         return fitness, local_fit, xpos
              
-    def evolute(self, ngen, x0=None, verbose=False, checkpoint_itv=None, startpoint=None):
+    def evolute(self, ngen, x0=None, save_best_net=False, checkpoint_itv=None, startpoint=None, verbose=False):
         """
-        This function evolutes the R-NEAT algorithm for number of generations.
+        This function evolutes the RNEAT algorithm for number of generations.
         
         :param ngen: (int) number of generations to evolute
         :param x0: (list) initial position of the NEAT (must have same size as the ``x`` variable)
+        :param save_best_net: (bool) save the winner neural network to a pickle file
         :param checkpoint_itv: (int) generation frequency to save checkpoints for restarting purposes (e.g. 1: save every generation, 10: save every 10 generations)
         :param startpoint: (str) name/path to the checkpoint file to use to start the search (the checkpoint file can be saved by invoking the argument ``checkpoint_itv``) 
         :param verbose: (bool) print statistics to screen
         
-        :return: (vector, float, dict) best :math:`\vec{x}`, best fitness, logging dictionary
+        :return: (vector, float, dict) best :math:`x`, best fitness, logging dictionary
         """
+        
         self.history={'global_fitness': [], 'local_fitness':[]}
         self.best_fit=float("-inf")
-        self.verbose=verbose        
-        self.x0 = x0
+        self.verbose=verbose    
+        self.x0=x0
+        if self.x0 is not None:
+            self.x0 = list(self.x0)
+            assert len(self.x0) == self.nx, '--error: the length of x0 ({}) MUST equal the size of the bounds variable ({})'.format(len(self.x0), self.nx)
 
         # transfer dict-type config to neat type
         path = os.path.dirname(__file__)
@@ -156,7 +175,7 @@ class RNEAT(object):
         
         #parallel runner
         if self.ncores > 1:
-            print('--debug: R-NEAT is running in parallel with {} cores ...'.format(self.ncores))
+            print('--debug: RNEAT is running in parallel with {} cores ...'.format(self.ncores))
             pe = ParallelEvaluator(self.ncores, self.genome_worker, self.mode)
             winner = p.run(pe.evaluate, ngen)
             self.best_fit_correct=pe.best_fit_correct
@@ -165,13 +184,13 @@ class RNEAT(object):
         else:
             winner = p.run(self.eval_genomes, ngen)
             
-
-        with open('winner-net', 'wb') as output:
-            pickle.dump(winner, output, 1)
-            print('--debug: Winner net saved ...')
+        if save_best_net:
+            with open('winner-net', 'wb') as output:
+                pickle.dump(winner, output, 1)
+                print('--debug: Winner net saved ...')
             
         if verbose:
-            print('------------------------ R-NEAT Summary --------------------------')
+            print('------------------------ RNEAT Summary --------------------------')
             print('Best fitness (y) found:', self.best_fit_correct)
             print('Best individual (x) found:', self.best_x)
             print('--------------------------------------------------------------')
@@ -205,7 +224,8 @@ class RNEAT(object):
             'fitness_criterion':'max',  #mir: default is max
             'fitness_threshold': 1e5,
             'pop_size': 30,
-            'reset_on_extinction': True
+            'reset_on_extinction': True,
+            'no_fitness_termination': False
             },
     
             'DefaultGenome':{
@@ -216,7 +236,11 @@ class RNEAT(object):
             'aggregation_default': 'random',
             'aggregation_mutate_rate':0.05,
             'aggregation_options': 'sum product min max mean median maxabs',
-    
+            
+            'single_structural_mutation': False,
+            'structural_mutation_surer': 'default',
+            
+            'bias_init_type': 'gaussian',
             'bias_init_mean': 0.05,
             'bias_init_stdev': 1.0,
             'bias_max_value': 30.0,
@@ -233,6 +257,8 @@ class RNEAT(object):
     
             'enabled_default': True,
             'enabled_mutate_rate': 0.2,
+            'enabled_rate_to_true_add': 0.0,
+            'enabled_rate_to_false_add': 0.0,
     
             'feed_forward': False,
             'initial_connection': 'partial_nodirect 0.5',
@@ -240,10 +266,11 @@ class RNEAT(object):
             'node_add_prob': 0.5,
             'node_delete_prob': 0.5,
     
-            'num_hidden': 0,
+            'num_hidden': 1,
             'num_inputs': None,  #mir: must be defined by the developer
             'num_outputs': None,  #mir: must be defined by the developer
-    
+            
+            'response_init_type': 'gaussian',
             'response_init_mean': 1.0,
             'response_init_stdev': 0.05,
             'response_max_value': 30.0,
@@ -251,7 +278,8 @@ class RNEAT(object):
             'response_mutate_power': 0.1,
             'response_mutate_rate': 0.75,
             'response_replace_rate': 0.1,
-    
+            
+            'weight_init_type': 'gaussian', 
             'weight_init_mean': 0.1,
             'weight_init_stdev': 1.0,
             'weight_max_value': 30,
@@ -273,7 +301,8 @@ class RNEAT(object):
     
             'DefaultReproduction':{
             'elitism': 1,
-            'survival_threshold': 0.3
+            'survival_threshold': 0.3,
+            'min_species_size': 2
             }
         }
     
@@ -298,10 +327,9 @@ class NEATWorker(object):
         
     def work(self):
         
-        try: 
-            if list(self.x0):# input user's data 
-                ob=self.x0.copy()
-        except: # no user's data 
+        if self.x0: # input user's data 
+            ob=self.x0.copy()
+        else: # no user's data 
             ob = self.env.reset()
             
         net = neat.nn.recurrent.RecurrentNetwork.create(self.genome, self.config)

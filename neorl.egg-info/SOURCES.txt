@@ -11,13 +11,16 @@ neorl.egg-info/entry_points.txt
 neorl.egg-info/requires.txt
 neorl.egg-info/top_level.txt
 neorl/benchmarks/__init__.py
+neorl/benchmarks/cec08.py
 neorl/benchmarks/cec17.py
 neorl/benchmarks/classic.py
+neorl/benchmarks/kp.py
 neorl/benchmarks/tsp.py
 neorl/benchmarks/utils.py
 neorl/benchmarks/tools/__init__.py
 neorl/benchmarks/tools/basic.py
 neorl/benchmarks/tools/data.pkl
+neorl/benchmarks/tools/data08.csv
 neorl/benchmarks/tools/transforms.py
 neorl/benchmarks/tools/utils.py
 neorl/evolu/__init__.py
@@ -45,6 +48,7 @@ neorl/hybrid/pesa.py
 neorl/hybrid/pesa2.py
 neorl/hybrid/pesax.py
 neorl/hybrid/rles.py
+neorl/hybrid/rneat.py
 neorl/hybrid/pesacore/__init__.py
 neorl/hybrid/pesacore/de.py
 neorl/hybrid/pesacore/er.py
@@ -161,6 +165,7 @@ neorl/tests/test_pesa2.py
 neorl/tests/test_ppo2.py
 neorl/tests/test_pso.py
 neorl/tests/test_random.py
+neorl/tests/test_rneat.py
 neorl/tests/test_sa.py
 neorl/tests/test_ssa.py
 neorl/tests/test_woa.py

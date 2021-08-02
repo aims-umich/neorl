@@ -10,6 +10,13 @@ Coming next
 - To add two modules for RL-informed EA optimization.
 - And more ...
 
+Release 1.5.1b (2021-08-01)
+------------------------------------
+
+- Added RNEAT and FNEAT with full documentation.
+- Added mixed discrete optimization to WOA, GWO, SSA, DE, MFO, JAYA, PESA2
+- Added friendly implementation to construct parallel environments for RL: DQN, ACKTR, A2C, PPO
+
 Release 1.5.0b (2021-07-28)
 ------------------------------------
 

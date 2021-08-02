@@ -16,6 +16,8 @@ import uuid
 
 import multiprocessing
 import multiprocessing.pool
+from neorl.evolu.discrete import mutate_discrete
+
 class NoDaemonProcess(multiprocessing.Process):
     # make 'daemon' attribute always return False
     def _get_daemon(self):
@@ -50,7 +52,7 @@ class WOAmod(object):
     :param ncores: (int) number of parallel processors (must be ``<= nwhales``)
     :param seed: (int) random seed for sampling
     """
-    def __init__(self, mode, bounds, fit, nwhales=5, a0=2, b=1, ncores=1, seed=None):
+    def __init__(self, mode, bounds, fit, nwhales=5, a0=2, b=1, int_transform ='nearest_int', ncores=1, seed=None):
         
         if seed:
             random.seed(seed)
@@ -68,11 +70,13 @@ class WOAmod(object):
         self.bounds=bounds
         self.ncores = ncores
         self.nwhales=nwhales
+        self.int_transform=int_transform
         assert a0 > 0, '--error: a0 must be positive'
         self.a0=a0
         self.b=b
         self.dim = len(bounds)
         
+        self.var_type = np.array([bounds[item][0] for item in bounds])
         self.lb=np.array([self.bounds[item][1] for item in self.bounds])
         self.ub=np.array([self.bounds[item][2] for item in self.bounds])
 
@@ -84,8 +88,8 @@ class WOAmod(object):
                 indv.append(random.randint(bounds[key][1], bounds[key][2]))
             elif bounds[key][0] == 'float':
                 indv.append(random.uniform(bounds[key][1], bounds[key][2]))
-            elif bounds[key][0] == 'grid':
-                indv.append(random.sample(bounds[key][1],1)[0])
+            #elif bounds[key][0] == 'grid':
+            #    indv.append(random.sample(bounds[key][1],1)[0])
             else:
                 raise Exception ('unknown data type is given, either int, float, or grid are allowed for parameter bounds')   
         return indv
@@ -102,21 +106,45 @@ class WOAmod(object):
         if self.ncores > 1:
             
             p=MyPool(self.ncores)
-            fitness_lst = p.map(self.fit_worker, core_lst)
+            fitness_lst = p.map(self.fit, core_lst)
             p.close(); p.join()  
             
         else:
             fitness_lst=[]
             for item in core_lst:
-                fitness_lst.append(self.fit_worker(item))
+                fitness_lst.append(self.fit(item))
         
         return fitness_lst
+
+    def ensure_discrete(self, vec):
+        #"""
+        #to mutate a vector if discrete variables exist 
+        #handy function to be used three times within BAT phases
+
+        #Params:
+        #vec - position in vector/list form
+
+        #Return:
+        #vec - updated position vector with discrete values
+        #"""
+        
+        for dim in range(self.dim):
+            if self.var_type[dim] == 'int':
+                vec[dim] = mutate_discrete(x_ij=vec[dim], 
+                                               x_min=min(vec),
+                                               x_max=max(vec),
+                                               lb=self.lb[dim], 
+                                               ub=self.ub[dim],
+                                               alpha=self.alpha,
+                                               method=self.int_transform,
+                                               )
+        return vec
 
     def select(self, pos, fit):
         
         best_fit=np.min(fit)
         min_idx=np.argmin(fit)
-        best_pos=pos[min_idx,:]
+        best_pos=pos[min_idx,:].copy()
         
         return best_pos, best_fit 
         
@@ -139,17 +167,6 @@ class WOAmod(object):
                 vec_new.append(vec[i])
             
         return vec_new
-    
-    def fit_worker(self, x):
-        #This worker is for parallel calculations
-        
-        # Clip the whale with position outside the lower/upper bounds and return same position
-        x=self.ensure_bounds(x)
-        
-        # Calculate objective function for each search agent
-        fitness = self.fit(x)
-        
-        return fitness
 
     def UpdateWhales(self):
 
@@ -179,6 +196,7 @@ class WOAmod(object):
                                             * math.cos(l * 2 * math.pi) + self.best_position[j])
                     
             self.Positions[i,:]=self.ensure_bounds(self.Positions[i,:])
+            self.Positions[i, :] = self.ensure_discrete(self.Positions[i,:])
             
     def evolute(self, ngen, x0=None, verbose=True):
         """
@@ -211,6 +229,7 @@ class WOAmod(object):
                        
         for k in range(0, ngen):
             
+            self.alpha= 1 - k * ((1) / ngen)  #mir: alpha decreases linearly between 1 to 0, for discrete mutation
             # a is annealed from 2 to 0
             self.a = self.a0 - k * ((self.a0) / (ngen))
             # fac is annealed from -1 to -2 to estimate l

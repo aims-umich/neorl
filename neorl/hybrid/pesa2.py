@@ -18,6 +18,8 @@ from collections import defaultdict
 import time
 import sys
 import uuid
+from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
+
 
 #multiprocessing trick to paralllelize nested functions in python (un-picklable objects!)
 def globalize(func):
@@ -55,6 +57,7 @@ class PESA2(ExperienceReplay):
     
     *PESA2 Misc. Parameters*
     
+    :param int_transform: (str): method of handling int/discrete variables, choose from: ``nearest_int``, ``sigmoid``, ``minmax``.    
     :param ncores: (int) number of parallel processors
     :param seed: (int) random seed for sampling
     """
@@ -64,7 +67,7 @@ class PESA2(ExperienceReplay):
                   nwolves=5, #GOW parameters
                   npop=50, CR=0.7, F=0.5,  #DE parameters
                   nwhales=10, #WOA parameters
-                  ncores=1, seed=None): #misc parameters
+                  int_transform ='nearest_int', ncores=1, seed=None): #misc parameters
         
         if seed:
             random.seed(seed)
@@ -78,6 +81,10 @@ class PESA2(ExperienceReplay):
             self.FIT = globalize(lambda x: fit(x))  #use the function globalize to serialize the nested fit
         else:
             raise ValueError('--error: The mode entered by user is invalid, use either `min` or `max`')
+
+        self.int_transform=int_transform
+        if int_transform not in ["nearest_int", "sigmoid", "minmax"]:
+            raise ValueError('--error: int_transform entered by user is invalid, must be `nearest_int`, `sigmoid`, or `minmax`')
             
         if ncores > 1:
             if nwolves >= npop:
@@ -98,7 +105,7 @@ class PESA2(ExperienceReplay):
         if self.WOA_gen < 1:
             self.WOA_gen=1
             
-        self.BOUNDS=bounds
+        self.bounds=bounds
         self.NPOP=npop
         self.ncores=ncores
 
@@ -143,8 +150,61 @@ class PESA2(ExperienceReplay):
         #--------------------
         # Fixed/Derived parameters 
         #--------------------
-        self.nx=len(self.BOUNDS)  #all
+        self.nx=len(self.bounds)  #all
         self.memory_size=memory_size
+        
+        #infer variable types 
+        self.datatype = np.array([bounds[item][0] for item in bounds])
+        
+        #mir-grid
+        if "grid" in self.datatype:
+            self.grid_flag=True
+            self.orig_bounds=bounds  #keep original bounds for decoding
+            print('--debug: grid parameter type is found in the space')
+            self.bounds, self.bounds_map=encode_grid_to_discrete(self.bounds) #encoding grid to int
+            #define var_types again by converting grid to int
+            self.datatype = np.array([self.bounds[item][0] for item in self.bounds])
+        else:
+            self.grid_flag=False
+            self.bounds = bounds
+        
+        self.lb = np.array([self.bounds[item][1] for item in self.bounds])
+        self.ub = np.array([self.bounds[item][2] for item in self.bounds])
+
+    def ensure_bounds(self, vec):
+    
+        vec_new = []
+        # cycle through each variable in vector 
+        for i, (key, val) in enumerate(self.bounds.items()):
+    
+            # variable exceedes the minimum boundary
+            if vec[i] < self.bounds[key][1]:
+                vec_new.append(self.bounds[key][1])
+    
+            # variable exceedes the maximum boundary
+            if vec[i] > self.bounds[key][2]:
+                vec_new.append(self.bounds[key][2])
+    
+            # the variable is fine
+            if self.bounds[key][1] <= vec[i] <= self.bounds[key][2]:
+                vec_new.append(vec[i])
+            
+        return vec_new
+    
+    def fit_worker(self, x):
+        #"""
+        #Evaluates fitness of an individual.
+        #"""
+        
+        x=self.ensure_bounds(x)
+        
+        #mir-grid
+        if self.grid_flag:
+            #decode the individual back to the int/float/grid mixed space
+            x=decode_discrete_to_grid(x,self.orig_bounds,self.bounds_map) 
+                    
+        fitness = self.FIT(x)
+        return fitness
         
     def evolute(self, ngen, x0=None, replay_every=1, warmup=100, verbose=True):
         """
@@ -160,6 +220,7 @@ class PESA2(ExperienceReplay):
         """
         
         
+        assert ngen >= 2, '--error: use ngen > 2 for PESA2'
         
         self.verbose=verbose
         self.NGEN=int(ngen/replay_every)
@@ -174,14 +235,14 @@ class PESA2(ExperienceReplay):
         #-------------------------------------------------------
         if x0: 
             # use provided initial guess
-            warm=ESMod(bounds=self.BOUNDS, fit=self.FIT, mu=self.NPOP, lambda_=self.LAMBDA, ncores=self.ncores)
+            warm=ESMod(bounds=self.bounds, fit=self.fit_worker, mu=self.NPOP, lambda_=self.LAMBDA, ncores=self.ncores)
             x0size=len(x0)
             assert x0size >= self.NPOP, 'the number of lists in x0 ({}) must be more than or equal npop ({})'.format(x0size, self.NPOP)
             self.pop0=warm.init_pop(warmup=x0size, x_known=x0)  #initial population for all methods (use external ES modules for initialization)
         else:
             #create initial guess 
             assert warmup >= self.NPOP, 'the number of warmup samples ({}) must be more than or equal npop ({})'.format(warmup, self.NPOP)
-            warm=ESMod(bounds=self.BOUNDS, fit=self.FIT, mu=self.NPOP, lambda_=self.NPOP, ncores=self.ncores)
+            warm=ESMod(bounds=self.bounds, fit=self.fit_worker, mu=self.NPOP, lambda_=self.NPOP, ncores=self.ncores)
             self.pop0=warm.init_pop(warmup=warmup)  #initial population for all methods (use external ES modules for initialization)
         
         self.fit_hist=[]
@@ -198,12 +259,15 @@ class PESA2(ExperienceReplay):
         # Obtain initial population for all methods
         x0_gwo, fit0_gwo, x0_de, fit0_de, x0_woa, fit0_woa=self.init_guess(pop0=self.pop0)
         # Initialize GWO class
-        gwo=GWOmod(mode='max', bounds=self.BOUNDS, fit=self.FIT, nwolves=self.NWOLVES, ncores=self.NCORES, seed=self.SEED)
+        gwo=GWOmod(mode='max', bounds=self.bounds, fit=self.fit_worker, int_transform=self.int_transform,
+                   nwolves=self.NWOLVES, ncores=self.NCORES, seed=self.SEED)
         # Initialize DE class
-        de=DEmod(bounds=self.BOUNDS, fit=self.FIT, npop=self.NPOP, F=self.F, CR=self.CR, ncores=self.NCORES, seed=self.SEED)
+        de=DEmod(bounds=self.bounds, fit=self.fit_worker, npop=self.NPOP, 
+                 F=self.F, int_transform=self.int_transform,
+                 CR=self.CR, ncores=self.NCORES, seed=self.SEED)
         # Initialize WOA class
-        woa=WOAmod(mode='max', bounds=self.BOUNDS, fit=self.FIT, nwhales=self.NWHALES,
-                       ncores=self.NCORES, seed=self.SEED)
+        woa=WOAmod(mode='max', bounds=self.bounds, fit=self.fit_worker, int_transform=self.int_transform,
+                   nwhales=self.NWHALES, ncores=self.NCORES, seed=self.SEED)
             
         #--------------------------------
         # Step 3: Initialize PESA engine
@@ -219,7 +283,6 @@ class PESA2(ExperienceReplay):
         # Step 4: PESA evolution
         #--------------------------------
         for gen in range(1,self.NGEN+1):
-            
             #-------------------------------------------------------------------------------------------------------------------
             # Step 5: evolute all methods for 1 generation 
             #-------------------------------------------------------------------------------------------------------------------
@@ -297,14 +360,23 @@ class PESA2(ExperienceReplay):
             self.pesa_best=self.mymemory.sample(batch_size=1,mode='greedy')[0]  #`greedy` will sample the best in memory
             self.fit_hist.append(self.pesa_best[1])
             self.memory_size=len(self.mymemory.storage) #memory size so far
-            if self.verbose:  #print summary data to screen
-                self.printout(mode=2, gen=gen)
-
+            
+            
             #--mir
             if self.mode=='min':
                 self.fitness_best=-self.pesa_best[1]
             else:
                 self.fitness_best=self.pesa_best[1]
+
+            #mir-grid
+            if self.grid_flag:
+                self.xbest_correct=decode_discrete_to_grid(self.pesa_best[0],self.orig_bounds,self.bounds_map)
+            else:
+                self.xbest_correct=self.pesa_best[0]
+
+            if self.verbose:  #print summary data to screen
+                self.printout(mode=2, gen=gen)
+            
         #--mir
         if self.mode=='min':
             self.fit_hist=[-item for item in self.fit_hist]
@@ -312,10 +384,10 @@ class PESA2(ExperienceReplay):
         if self.verbose:
             print('------------------------ PESA2 Summary --------------------------')
             print('Best fitness (y) found:', self.fitness_best)
-            print('Best individual (x) found:', self.pesa_best[0])
+            print('Best individual (x) found:', self.xbest_correct)
             print('--------------------------------------------------------------') 
         
-        return self.pesa_best[0], self.fitness_best, self.fit_hist
+        return self.xbest_correct, self.fitness_best, self.fit_hist
 
     def linear_anneal(self, step, total_steps, a0, a1):
         #"""
@@ -440,7 +512,7 @@ class PESA2(ExperienceReplay):
             print('#############################################################################')
             print('Statistics for generation {}'.format(gen))
             print('Best Wolf Fitness:', np.round(np.max(self.ygwo_best),4) if self.mode == 'max' else -np.round(np.max(self.ygwo_best),4))
-            print('Best Wolf Position:', np.round(self.gwo_best,3))
+            print('Best Wolf Position:', np.round(self.gwo_best,3) if not self.grid_flag else decode_discrete_to_grid(self.gwo_best,self.orig_bounds,self.bounds_map))
             print('#############################################################################')
                   
             print('*****************************************************************************')
@@ -448,7 +520,7 @@ class PESA2(ExperienceReplay):
             print('****************************************************************************')
             print('Statistics for generation {}'.format(gen))
             print('Best Individual Fitness:', np.round(np.max(self.yde_best),4) if self.mode == 'max' else -np.round(np.max(self.yde_best),4))
-            print('Best Individual Position:', np.round(self.de_best),3)
+            print('Best Individual Position:', np.round(self.de_best,3) if not self.grid_flag else decode_discrete_to_grid(self.de_best,self.orig_bounds,self.bounds_map))
             print('****************************************************************************')
             
             print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
@@ -456,7 +528,7 @@ class PESA2(ExperienceReplay):
             print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
             print('Statistics for generation {}'.format(gen))
             print('Best Whale Fitness:', np.round(np.max(self.ywoa_best),4) if self.mode == 'max' else -np.round(np.max(self.ywoa_best),4))
-            print('Best Whale Position:', np.round(self.woa_best,3))
+            print('Best Whale Position:', np.round(self.woa_best,3) if not self.grid_flag else decode_discrete_to_grid(self.woa_best,self.orig_bounds,self.bounds_map)) 
             print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
         
         if mode == 2:
@@ -464,8 +536,8 @@ class PESA2(ExperienceReplay):
             print('PESA2 step {}/{}, Ncores={}'.format(self.STEP0-1,self.STEPS, self.ncores))
             print('------------------------------------------------------------')
             print('PESA statistics for generation {}'.format(gen))
-            print('Best Fitness:', self.pesa_best[1] if self.mode == 'max' else -self.pesa_best[1])
-            print('Best Individual:', np.round(self.pesa_best[0],2))
+            print('Best Fitness:', self.fitness_best)
+            print('Best Individual:', self.xbest_correct)
             print('ALPHA:', np.round(self.ALPHA,3))
             print('Memory Size:', self.memory_size)
             print('------------------------------------------------------------')

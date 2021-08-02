@@ -102,7 +102,7 @@ NEORL script
 	#--------------------------------------------------------
 	# User Parameters for RL Optimisation
 	#--------------------------------------------------------
-	total_steps=500   #total time steps to run all optimizers
+	total_steps=400   #total time steps to run all optimizers
 	n_steps=12        #update frequency for A2C, ACKTR, PPO
 	n_city=51         #number of cities: choose 51 or 100
 	

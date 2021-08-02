@@ -17,6 +17,8 @@ import uuid
 
 import multiprocessing
 import multiprocessing.pool
+from neorl.evolu.discrete import mutate_discrete
+
 class NoDaemonProcess(multiprocessing.Process):
     # make 'daemon' attribute always return False
     def _get_daemon(self):
@@ -49,7 +51,7 @@ class GWOmod(object):
     :param ncores: (int) number of parallel processors (must be ``<= nwolves``)
     :param seed: (int) random seed for sampling
     """
-    def __init__(self, mode, bounds, fit, nwolves=5, ncores=1, seed=None):
+    def __init__(self, mode, bounds, fit, nwolves=5, int_transform ='nearest_int', ncores=1, seed=None):
         
         if seed:
             random.seed(seed)
@@ -68,7 +70,9 @@ class GWOmod(object):
         self.ncores = ncores
         self.nwolves=nwolves
         self.dim = len(bounds)
+        self.int_transform=int_transform
         
+        self.var_type = np.array([bounds[item][0] for item in bounds])
         self.lb=[self.bounds[item][1] for item in self.bounds]
         self.ub=[self.bounds[item][2] for item in self.bounds]
 
@@ -80,8 +84,8 @@ class GWOmod(object):
                 indv.append(random.randint(bounds[key][1], bounds[key][2]))
             elif bounds[key][0] == 'float':
                 indv.append(random.uniform(bounds[key][1], bounds[key][2]))
-            elif bounds[key][0] == 'grid':
-                indv.append(random.sample(bounds[key][1],1)[0])
+            #elif bounds[key][0] == 'grid':
+            #    indv.append(random.sample(bounds[key][1],1)[0])
             else:
                 raise Exception ('unknown data type is given, either int, float, or grid are allowed for parameter bounds')   
         return indv
@@ -106,16 +110,29 @@ class GWOmod(object):
             
         return vec_new
     
-    def fit_worker(self, x):
-        #This worker is for parallel calculations of the GWO
+    def ensure_discrete(self, vec):
+        #"""
+        #to mutate a vector if discrete variables exist 
+
+        #Params:
+        #vec - position in vector/list form
+
+        #Return:
+        #vec - updated position vector with discrete values
+        #"""
         
-        # Clip the wolf with position outside the lower/upper bounds and return same position
-        x=self.ensure_bounds(x)
+        for dim in range(self.dim):
+            if self.var_type[dim] == 'int':
+                vec[dim] = mutate_discrete(x_ij=vec[dim], 
+                                               x_min=min(vec),
+                                               x_max=max(vec),
+                                               lb=self.lb[dim], 
+                                               ub=self.ub[dim],
+                                               alpha=self.b,
+                                               method=self.int_transform,
+                                               )
         
-        # Calculate objective function for each search agent
-        fitness = self.fit(x)
-        
-        return fitness
+        return vec
 
     def evolute(self, ngen, x0=None, verbose=True):
         """
@@ -153,7 +170,7 @@ class GWOmod(object):
         Delta_score = float("inf") #GWO is built to minimize
                        
         for l in range(0, ngen):
-            
+            self.b= 1 - l * ((1) / ngen)  #mir: b decreases linearly between 1 to 0, for discrete mutation
             #---------------------
             # Fitness calcs
             #---------------------
@@ -163,12 +180,12 @@ class GWOmod(object):
         
             if self.ncores > 1:
                 p=MyPool(self.ncores)
-                self.fitness = p.map(self.fit_worker, self.x_lst)
+                self.fitness = p.map(self.fit, self.x_lst)
                 p.close(); p.join()            
             else:
                 self.fitness=[]
                 for item in self.x_lst:
-                    self.fitness.append(self.fit_worker(item))  
+                    self.fitness.append(self.fit(item))  
                     
             #----------------------
             #  Update wolf scores
@@ -257,6 +274,7 @@ class GWOmod(object):
                     self.Positions[i, j] = (X1 + X2 + X3) / 3  # Equation (3.7)
                 
                 self.Positions[i,:]=self.ensure_bounds(self.Positions[i,:])
+                self.Positions[i, :] = self.ensure_discrete(self.Positions[i, :])
 
             #--mir
             if self.mode=='max':

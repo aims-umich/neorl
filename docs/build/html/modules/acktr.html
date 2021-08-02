@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Actor Critic using Kronecker-Factored Trust Region (ACKTR) &mdash; NEORL 1.4.8b documentation</title>
+  <title>Actor Critic using Kronecker-Factored Trust Region (ACKTR) &mdash; NEORL 1.5.0b documentation</title>
   
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                main (1.4.8b )
+                main (1.5.0b )
               </div>
             
           
@@ -128,6 +128,8 @@
 <li class="toctree-l1"><a class="reference internal" href="jaya.html">JAYA Algorithm</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bat.html">Bat Algorithm (BAT)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hho.html">Harris Hawks Optimization (HHO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fneat.html">Feedforward Neuroevolution of Augmenting Topologies (FNEAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rneat.html">Recurrent Neuroevolution of Augmenting Topologies (RNEAT)</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
 <ul>
@@ -138,7 +140,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../examples/ex1.html">Example 1: RL Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex1.html">Example 1: Traveling Salesman Problem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/ex2.html">Example 2: Ackley with EA</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/ex3.html">Example 3: Welded-beam design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/ex4.html">Example 4: Benchmarks</a></li>
@@ -147,6 +149,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../examples/ex7.html">Example 7: Pressure Vessel Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/ex8.html">Example 8: Pressure Vessel Design with Demonstration of Categorical Parameter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/ex9.html">Example 9: Cantilever Stepped Beam</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex10.html">Example 10: Knapsack Problem</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Misc</span></p>
 <ul>
@@ -378,6 +381,43 @@ file that can not be deserialized.</p></li>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--------------- ACKTR results ---------------&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The best value of x found:&#39;</span><span class="p">,</span> <span class="n">cb</span><span class="o">.</span><span class="n">xbest</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The best value of y found:&#39;</span><span class="p">,</span> <span class="n">cb</span><span class="o">.</span><span class="n">rbest</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here is an example for a parallel ACKTR</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">ACKTR</span>
+<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">MlpPolicy</span>
+<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">RLLogger</span>
+<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">CreateEnvironment</span>
+
+<span class="k">def</span> <span class="nf">Sphere</span><span class="p">(</span><span class="n">individual</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sphere test objective function.</span>
+<span class="sd">                F(x) = sum_{i=1}^d xi^2</span>
+<span class="sd">                d=1,2,3,...</span>
+<span class="sd">                Range: [-100,100]</span>
+<span class="sd">                Minima: 0</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">individual</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span><span class="o">==</span><span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">nx</span><span class="o">=</span><span class="mi">5</span>
+    <span class="n">bounds</span><span class="o">=</span><span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">nx</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
+
+    <span class="c1">#create an environment class</span>
+    <span class="n">env</span><span class="o">=</span><span class="n">CreateEnvironment</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;acktr&#39;</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">Sphere</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+                          <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">episode_length</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+
+    <span class="c1">#create a callback function to log data</span>
+    <span class="n">cb</span><span class="o">=</span><span class="n">RLLogger</span><span class="p">(</span><span class="n">check_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">)</span>
+    <span class="c1">#create a RL object based on the env object</span>
+    <span class="n">acktr</span> <span class="o">=</span> <span class="n">ACKTR</span><span class="p">(</span><span class="n">MlpPolicy</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span> <span class="n">n_steps</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1">#optimise the environment class</span>
+    <span class="n">acktr</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span><span class="n">total_timesteps</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">cb</span><span class="p">)</span>
+    <span class="c1">#print the best results</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--------------- ACKTR results ---------------&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The best value of x found:&#39;</span><span class="p">,</span> <span class="n">cb</span><span class="o">.</span><span class="n">xbest</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The best value of y found:&#39;</span><span class="p">,</span> <span class="n">cb</span><span class="o">.</span><span class="n">rbest</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

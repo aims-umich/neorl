@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.hybrid.pesa &mdash; NEORL 1.4.8b documentation</title>
+  <title>neorl.hybrid.pesa &mdash; NEORL 1.5.0b documentation</title>
   
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                main (1.4.8b )
+                main (1.5.0b )
               </div>
             
           
@@ -120,6 +120,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/jaya.html">JAYA Algorithm</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/bat.html">Bat Algorithm (BAT)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/hho.html">Harris Hawks Optimization (HHO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/fneat.html">Feedforward Neuroevolution of Augmenting Topologies (FNEAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/rneat.html">Recurrent Neuroevolution of Augmenting Topologies (RNEAT)</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
 <ul>
@@ -130,7 +132,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex1.html">Example 1: RL Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex1.html">Example 1: Traveling Salesman Problem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex2.html">Example 2: Ackley with EA</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex3.html">Example 3: Welded-beam design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex4.html">Example 4: Benchmarks</a></li>
@@ -139,6 +141,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex7.html">Example 7: Pressure Vessel Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex8.html">Example 8: Pressure Vessel Design with Demonstration of Categorical Parameter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex9.html">Example 9: Cantilever Stepped Beam</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex10.html">Example 10: Knapsack Problem</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Misc</span></p>
 <ul>
@@ -411,7 +414,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">MEMORY_SIZE</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">memory_size</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">MEMORY_SIZE</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">STEPS</span><span class="o">*</span><span class="mi">3</span><span class="o">+</span><span class="mi">1</span> <span class="c1">#PESA</span>
-            
+        
         <span class="c1">#-------------------------------------------------------</span>
         <span class="c1"># Check if initial pop is provided as initial guess </span>
         <span class="c1">#-------------------------------------------------------</span>
@@ -760,7 +763,7 @@
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;PESA step </span><span class="si">{}</span><span class="s1">/</span><span class="si">{}</span><span class="s1">, Ncores=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">STEP0</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">STEPS</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">))</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;------------------------------------------------------------&#39;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;PESA statistics for generation </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">gen</span><span class="p">))</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best Fitness:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pesa_best</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;max&#39;</span> <span class="k">else</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">pesa_best</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best Fitness:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitness_best</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;max&#39;</span> <span class="k">else</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">fitness_best</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best Individual:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">xbest_correct</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ALPHA:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ALPHA</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Memory Size:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">memory_size</span><span class="p">)</span>

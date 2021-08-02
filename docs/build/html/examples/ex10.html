@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Example 10: Knapsack Problem &mdash; NEORL 1.4.8b documentation</title>
+  <title>Example 10: Knapsack Problem &mdash; NEORL 1.5.0b documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.4.8b )
+                main (1.5.0b )
               </div>
             
           
@@ -123,6 +123,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../modules/jaya.html">JAYA Algorithm</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../modules/bat.html">Bat Algorithm (BAT)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../modules/hho.html">Harris Hawks Optimization (HHO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/fneat.html">Feedforward Neuroevolution of Augmenting Topologies (FNEAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/rneat.html">Recurrent Neuroevolution of Augmenting Topologies (RNEAT)</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
 <ul>
@@ -241,7 +243,7 @@
 <div class="math notranslate nohighlight">
 \[\begin{split}&amp;\max \sum_{i=1}^n\nu_ix_i \\
 &amp;s.t. \quad \sum_{i=1}^nw_ix_i \le W \\
-&amp;x_j \in \{0,1\}\end{split}\]</div>
+&amp;x_i \in \{0,1\}\end{split}\]</div>
 <p>where <span class="math notranslate nohighlight">\(x_i=1\)</span> if the item <span class="math notranslate nohighlight">\(i\)</span> is in the bag, otherwise <span class="math notranslate nohighlight">\(x_i=0\)</span>. This is called the 0-1 Knapsack Problem. The constraint characterizes the fact that the capacity of the bag is limited by <span class="math notranslate nohighlight">\(W\)</span>, hence the sum of the weights <span class="math notranslate nohighlight">\(\sum_{i=1}^nw_ix_i\)</span> of the items should not exceed <span class="math notranslate nohighlight">\(W\)</span>.</p>
 </div>
 <div class="section" id="neorl-script">

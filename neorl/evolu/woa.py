@@ -11,6 +11,7 @@ import numpy as np
 import math
 import time
 import joblib
+from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
 
 class WOA(object):
     """
@@ -22,10 +23,11 @@ class WOA(object):
     :param nwhales: (int): number of whales in the population
     :param a0: (float): initial value for coefficient ``a``, which is annealed from ``a0`` to 0 (see **Notes** below for more info).
     :param b: (float): constant for defining the shape of the logarithmic spiral
+    :param int_transform: (str): method of handling int/discrete variables, choose from: ``nearest_int``, ``sigmoid``, ``minmax``.
     :param ncores: (int) number of parallel processors (must be ``<= nwhales``)
     :param seed: (int) random seed for sampling
     """
-    def __init__(self, mode, bounds, fit, nwhales=5, a0=2, b=1, ncores=1, seed=None):
+    def __init__(self, mode, bounds, fit, nwhales=5, a0=2, b=1, int_transform='nearest_int', ncores=1, seed=None):
         
         if seed:
             random.seed(seed)
@@ -44,14 +46,33 @@ class WOA(object):
         else:
             raise ValueError('--error: The mode entered by user is invalid, use either `min` or `max`')
             
+        self.int_transform=int_transform
+        if int_transform not in ["nearest_int", "sigmoid", "minmax"]:
+            raise ValueError('--error: int_transform entered by user is invalid, must be `nearest_int`, `sigmoid`, or `minmax`')
+           
         self.bounds=bounds
         self.ncores = ncores
         self.nwhales=nwhales
         assert a0 > 0, '--error: a0 must be positive'
         self.a0=a0
         self.b=b
-        self.dim = len(bounds)
         
+        #infer variable types 
+        self.var_type = np.array([bounds[item][0] for item in bounds])
+        
+        #mir-grid
+        if "grid" in self.var_type:
+            self.grid_flag=True
+            self.orig_bounds=bounds  #keep original bounds for decoding
+            print('--debug: grid parameter type is found in the space')
+            self.bounds, self.bounds_map=encode_grid_to_discrete(self.bounds) #encoding grid to int
+            #define var_types again by converting grid to int
+            self.var_type = np.array([self.bounds[item][0] for item in self.bounds])
+        else:
+            self.grid_flag=False
+            self.bounds = bounds
+        
+        self.dim = len(bounds)
         self.lb=np.array([self.bounds[item][1] for item in self.bounds])
         self.ub=np.array([self.bounds[item][2] for item in self.bounds])
 
@@ -63,8 +84,8 @@ class WOA(object):
                 indv.append(random.randint(bounds[key][1], bounds[key][2]))
             elif bounds[key][0] == 'float':
                 indv.append(random.uniform(bounds[key][1], bounds[key][2]))
-            elif bounds[key][0] == 'grid':
-                indv.append(random.sample(bounds[key][1],1)[0])
+            #elif bounds[key][0] == 'grid':
+            #    indv.append(random.sample(bounds[key][1],1)[0])
             else:
                 raise Exception ('unknown data type is given, either int, float, or grid are allowed for parameter bounds')   
         return indv
@@ -91,10 +112,10 @@ class WOA(object):
         return fitness_lst
 
     def select(self, pos, fit):
-        
+        #this function selects the best fitness and position in a population
         best_fit=np.min(fit)
         min_idx=np.argmin(fit)
-        best_pos=pos[min_idx,:]
+        best_pos=pos[min_idx,:].copy()
         
         return best_pos, best_fit 
         
@@ -121,11 +142,39 @@ class WOA(object):
         # Clip the whale with position outside the lower/upper bounds and return same position
         x=self.ensure_bounds(x)
         
+        if self.grid_flag:
+            #decode the individual back to the int/float/grid mixed space
+            x=decode_discrete_to_grid(x,self.orig_bounds,self.bounds_map)
+            
         # Calculate objective function for each search agent
         fitness = self.fit(x)
         
         return fitness
 
+    def ensure_discrete(self, vec):
+        #"""
+        #to mutate a vector if discrete variables exist 
+        #handy function to be used three times within BAT phases
+
+        #Params:
+        #vec - bat position in vector/list form
+
+        #Return:
+        #vec - updated bat position vector with discrete values
+        #"""
+        
+        for dim in range(self.dim):
+            if self.var_type[dim] == 'int':
+                vec[dim] = mutate_discrete(x_ij=vec[dim], 
+                                               x_min=min(vec),
+                                               x_max=max(vec),
+                                               lb=self.lb[dim], 
+                                               ub=self.ub[dim],
+                                               alpha=self.alpha,
+                                               method=self.int_transform,
+                                               )
+        return vec
+        
     def UpdateWhales(self):
 
        # Update the Position of the whales agents
@@ -154,6 +203,8 @@ class WOA(object):
                                             * math.cos(l * 2 * math.pi) + self.best_position[j])
             
             self.Positions[i,:]=self.ensure_bounds(self.Positions[i,:])
+            self.Positions[i, :] = self.ensure_discrete(self.Positions[i,:])
+
 
     def evolute(self, ngen, x0=None, verbose=True):
         """
@@ -174,18 +225,17 @@ class WOA(object):
             for i in range(self.nwhales):
                 self.Positions[i,:] = x0[i]
         else:
-            #self.Positions=self.init_sample(self.bounds)  #TODO, update later for mixed-integer optimisation
             # Initialize the positions of whales
-            
-            for i in range(self.dim):
-                self.Positions[:, i] = (np.random.uniform(0, 1, self.nwhales) * (self.ub[i] - self.lb[i]) + self.lb[i])
-        
+            for i in range(self.nwhales):
+                self.Positions[i,:]=self.init_sample(self.bounds)
+                
         fitness0=self.eval_whales()
         
         self.best_position, self.best_fitness = self.select(self.Positions, fitness0)
                        
         for k in range(0, ngen):
             
+            self.alpha= 1 - k * ((1) / ngen)  #mir: alpha decreases linearly between 1 to 0, for discrete mutation
             # a is annealed from 2 to 0
             self.a = self.a0 - k * ((self.a0) / (ngen))
             # fac is annealed from -1 to -2 to estimate l
@@ -225,15 +275,26 @@ class WOA(object):
                 print('WOA step {}/{}, nwhales={}, Ncores={}'.format((k+1)*self.nwhales, ngen*self.nwhales, self.nwhales, self.ncores))
                 print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
                 print('Best Whale Fitness:', np.round(self.fitness_best_correct,6))
-                print('Best Whale Position:', np.round(self.best_position,6))
+                if self.grid_flag:
+                    self.whale_decoded = decode_discrete_to_grid(self.best_position, self.orig_bounds, self.bounds_map)
+                    print('Best Whale Position:', self.whale_decoded)
+                else:
+                    print('Best Whale Position:', self.best_position)
                 print('a:', np.round(self.a,3))
                 print('A:', np.round(self.A,3))
                 print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
 
+        #mir-grid
+        if self.grid_flag:
+            self.whale_correct = decode_discrete_to_grid(self.best_position, self.orig_bounds, self.bounds_map)
+        else:
+            self.whale_correct = self.best_position
+                
         if self.verbose:
             print('------------------------ WOA Summary --------------------------')
             print('Best fitness (y) found:', self.fitness_best_correct)
-            print('Best individual (x) found:', self.best_position)
+            print('Best individual (x) found:', self.whale_correct)
             print('--------------------------------------------------------------')  
             
-        return self.best_position, self.fitness_best_correct, self.history
+        return self.whale_correct, self.fitness_best_correct, self.history
+

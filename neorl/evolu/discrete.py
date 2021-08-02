@@ -26,6 +26,8 @@ def mutate_discrete(x_ij, x_min, x_max, lb, ub, alpha, method):
     #Return:
     #int - new discrete value
     #"""
+    lb=int(lb)
+    ub=int(ub)
     
     if method == 'nearest_int':
         to_ret = int(x_ij)

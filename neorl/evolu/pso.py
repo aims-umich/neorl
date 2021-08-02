@@ -8,6 +8,7 @@ from collections import defaultdict
 import copy
 import time
 import joblib
+from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
 
 class PSO:
     """
@@ -48,9 +49,7 @@ class PSO:
         self.c1=c1
         self.c2=c2
         self.size=len(bounds)
-        self.datatype=[bounds[key][0] for key in bounds]
-        self.low=[bounds[key][1] for key in bounds]
-        self.up=[bounds[key][2] for key in bounds]
+        
         self.v0=0.1 # factor to intialize the speed
         
         if self.speed_mech=='constric':
@@ -66,6 +65,24 @@ class PSO:
             raise ('only timew, globw, or constric are allowed for speed_mech, the mechanism used is not defined')
         
         assert self.ncores >=1, "Number of cores must be more than or equal 1"
+        
+        #infer variable types 
+        self.datatype = np.array([bounds[item][0] for item in bounds])
+        
+        #mir-grid
+        if "grid" in self.datatype:
+            self.grid_flag=True
+            self.orig_bounds=bounds  #keep original bounds for decoding
+            print('--debug: grid parameter type is found in the space')
+            self.bounds, self.bounds_map=encode_grid_to_discrete(self.bounds) #encoding grid to int
+            #define var_types again by converting grid to int
+            self.datatype = np.array([self.bounds[item][0] for item in self.bounds])
+        else:
+            self.grid_flag=False
+            self.bounds = bounds
+        
+        self.low = np.array([self.bounds[item][1] for item in self.bounds])
+        self.up = np.array([self.bounds[item][2] for item in self.bounds])
                         
     def GenParticle(self, bounds):
         #"""
@@ -89,8 +106,42 @@ class PSO:
         particle=list(content)
         speed = list(self.v0*np.array(content))
         return particle, speed
-    
 
+    def ensure_bounds(self, vec):
+    
+        vec_new = []
+        # cycle through each variable in vector 
+        for i, (key, val) in enumerate(self.bounds.items()):
+    
+            # variable exceedes the minimum boundary
+            if vec[i] < self.bounds[key][1]:
+                vec_new.append(self.bounds[key][1])
+    
+            # variable exceedes the maximum boundary
+            if vec[i] > self.bounds[key][2]:
+                vec_new.append(self.bounds[key][2])
+    
+            # the variable is fine
+            if self.bounds[key][1] <= vec[i] <= self.bounds[key][2]:
+                vec_new.append(vec[i])
+            
+        return vec_new
+    
+    def fit_worker(self, x):
+        #"""
+        #Evaluates fitness of an individual.
+        #"""
+        
+        x=self.ensure_bounds(x)
+        
+        #mir-grid
+        if self.grid_flag:
+            #decode the individual back to the int/float/grid mixed space
+            x=decode_discrete_to_grid(x,self.orig_bounds,self.bounds_map) 
+                    
+        fitness = self.fit(x)
+        return fitness
+    
     def InitSwarm(self, x0=None):
         #"""
         #Swarm intializer 
@@ -133,13 +184,13 @@ class PSO:
                 core_list.append(pop[particle][0])
 
             with joblib.Parallel(n_jobs=self.ncores) as parallel:
-                fitness=parallel(joblib.delayed(self.fit)(item) for item in core_list)
+                fitness=parallel(joblib.delayed(self.fit_worker)(item) for item in core_list)
                 
             [pop[particle].append(fitness[particle]) for particle in range(len(pop))]
         
         else: #evaluate swarm in series
             for particle in pop:
-                fitness=self.fit(pop[particle][0])
+                fitness=self.fit_worker(pop[particle][0])
                 pop[particle].append(fitness)
                 
         #Setup the local position and fitness for PSO calculations
@@ -319,7 +370,7 @@ class PSO:
                     core_list.append(offspring[key][0])
 
                 with joblib.Parallel(n_jobs=self.ncores) as parallel:
-                    fitness=parallel(joblib.delayed(self.fit)(item) for item in core_list)
+                    fitness=parallel(joblib.delayed(self.fit_worker)(item) for item in core_list)
                 
                 self.partime=time.time()-t0
                 #print('PSO:', self.partime)
@@ -343,7 +394,7 @@ class PSO:
             else: 
                 for par in range(len(offspring)):
                     
-                    fitness=self.fit(offspring[par][0])
+                    fitness=self.fit_worker(offspring[par][0])
                     offspring[par][2]=fitness
             
                     #check and update local best
@@ -381,7 +432,11 @@ class PSO:
                 print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
                 print('Statistics for generation {}'.format(gen))
                 print('Best Swarm Fitness:', np.round(self.swm_fit_correct,6))
-                print('Best Swarm Position:', np.round(self.swm_pos,6))
+                if self.grid_flag:
+                    self.swm_decoded = decode_discrete_to_grid(self.swm_pos, self.orig_bounds, self.bounds_map)
+                    print('Best Swarm Position:', self.swm_decoded,6)
+                else:
+                    print('Best Swarm Position:', self.swm_pos)             
                 print('Max Speed:', np.round(np.max(mean_speed),3))
                 print('Min Speed:', np.round(np.min(mean_speed),3))
                 print('Average Speed:', np.round(np.mean(mean_speed),3))
@@ -395,14 +450,20 @@ class PSO:
             swarm[par].append(self.local_pos[par])
             swarm[par].append(self.local_fit[par])
         
+        #mir-grid
+        if self.grid_flag:
+            self.swm_pos_correct=decode_discrete_to_grid(self.swm_pos,self.orig_bounds,self.bounds_map)
+        else:
+            self.swm_pos_correct=self.swm_pos
+                
         if verbose:
             print('------------------------ PSO Summary --------------------------')
             print('Best fitness (y) found:', self.swm_fit_correct)
-            print('Best individual (x) found:', self.swm_pos)
+            print('Best individual (x) found:', self.swm_pos_correct)
             print('--------------------------------------------------------------')
     
         #--mir
         if self.mode=='min':
             self.best_scores=[-item for item in self.best_scores]
                 
-        return self.swm_pos, self.swm_fit_correct, self.best_scores
+        return self.swm_pos_correct, self.swm_fit_correct, self.best_scores

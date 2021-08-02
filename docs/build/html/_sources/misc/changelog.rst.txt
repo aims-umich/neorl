@@ -10,6 +10,13 @@ Coming next
 - To add two modules for RL-informed EA optimization.
 - And more ...
 
+Release 1.5.0b (2021-07-28)
+------------------------------------
+
+- Updated Example 1 on using RL to solve Travel Salesman problem
+- Added Example 10 on using RL to solve Knapsack problem
+- Added CEC-2008 benchmark functions for large-scale optimization
+
 Release 1.4.8b (2021-07-14)
 ------------------------------------
 

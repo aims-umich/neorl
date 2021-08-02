@@ -8,6 +8,7 @@ from collections import defaultdict
 
 import multiprocessing
 import multiprocessing.pool
+from neorl.evolu.discrete import mutate_discrete
 class NoDaemonProcess(multiprocessing.Process):
     # make 'daemon' attribute always return False
     def _get_daemon(self):
@@ -33,7 +34,7 @@ class DEmod:
     :param ncores: (int) number of parallel processors
     :param seed: (int) random seed for sampling
     """
-    def __init__ (self, bounds, fit, npop=50, F=0.5, CR=0.3, ncores=1, seed=None):  
+    def __init__ (self, bounds, fit, npop=50, F=0.5, CR=0.3, int_transform ='nearest_int', ncores=1, seed=None):  
 
         self.seed=seed
         if self.seed:
@@ -47,6 +48,11 @@ class DEmod:
         self.fit=fit
         self.F=F
         self.CR=CR
+        self.dim=len(bounds)
+        self.int_transform=int_transform
+        self.var_type = np.array([bounds[item][0] for item in bounds])
+        self.lb=[self.bounds[item][1] for item in self.bounds]
+        self.ub=[self.bounds[item][2] for item in self.bounds]
         
     def ensure_bounds(self, vec, bounds):
     
@@ -84,8 +90,8 @@ class DEmod:
                 indv.append(random.randint(bounds[key][1], bounds[key][2]))
             elif bounds[key][0] == 'float':
                 indv.append(random.uniform(bounds[key][1], bounds[key][2]))
-            elif bounds[key][0] == 'grid':
-                indv.append(random.sample(bounds[key][1],1)[0])
+            #elif bounds[key][0] == 'grid':
+            #    indv.append(random.sample(bounds[key][1],1)[0])
             else:
                 raise Exception ('unknown data type is given, either int, float, or grid are allowed for parameter bounds')   
         return indv
@@ -106,13 +112,30 @@ class DEmod:
         
         return pop
 
-    def fit_worker(self, x):
-                
-        # Calculate objective function for each search agent
-        fitness = self.fit(x)
+    def ensure_discrete(self, vec):
+        #"""
+        #to mutate a vector if discrete variables exist 
+
+        #Params:
+        #vec - position in vector/list form
+
+        #Return:
+        #vec - updated position vector with discrete values
+        #"""
         
-        return fitness
-    
+        for dim in range(self.dim):
+            if self.var_type[dim] == 'int':
+                vec[dim] = mutate_discrete(x_ij=vec[dim], 
+                                               x_min=min(vec),
+                                               x_max=max(vec),
+                                               lb=self.lb[dim], 
+                                               ub=self.ub[dim],
+                                               alpha=self.b,
+                                               method=self.int_transform,
+                                               )
+        
+        return vec
+
     def evolute(self, ngen, x0=None, verbose=0):
         """
         This function evolutes the DE algorithm for number of generations.
@@ -148,7 +171,7 @@ class DEmod:
             
             # cycle through each individual in the population
             for j in range(0, self.npop):
-                
+                self.b= 1 - j * ((1) / ngen)  #mir: b decreases linearly between 1 to 0, for discrete mutation
                 #-----------------------------
                 #Mutation
                 #-----------------------------
@@ -181,6 +204,9 @@ class DEmod:
     
                     else:
                         v_trial.append(x_t[k])
+
+                x_t=self.ensure_discrete(x_t)
+                v_trial=self.ensure_discrete(v_trial)
                 
                 x_t_lst.append(x_t)
                 v_trial_lst.append(v_trial)
@@ -189,20 +215,20 @@ class DEmod:
             if self.ncores > 1:
 
                 p=MyPool(self.ncores)
-                score_trial_lst = p.map(self.fit_worker, v_trial_lst)
+                score_trial_lst = p.map(self.fit, v_trial_lst)
                 p.close(); p.join()
 
                 p=MyPool(self.ncores)
-                score_target_lst = p.map(self.fit_worker, x_t_lst)
+                score_target_lst = p.map(self.fit, x_t_lst)
                 p.close(); p.join()
                                     
             else:
                 score_trial_lst=[]
                 score_target_lst=[]
                 for item in v_trial_lst:
-                    score_trial_lst.append(self.fit_worker(item))  
+                    score_trial_lst.append(self.fit(item))  
                 for item in x_t_lst:
-                    score_target_lst.append(self.fit_worker(item))  
+                    score_target_lst.append(self.fit(item))  
             #-----------------------------
             #Selection
             #-----------------------------

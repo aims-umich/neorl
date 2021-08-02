@@ -198,7 +198,7 @@ class PESA(ExperienceReplay):
             self.MEMORY_SIZE=self.memory_size
         else:
             self.MEMORY_SIZE=self.STEPS*3+1 #PESA
-            
+        
         #-------------------------------------------------------
         # Check if initial pop is provided as initial guess 
         #-------------------------------------------------------
@@ -547,7 +547,7 @@ class PESA(ExperienceReplay):
             print('PESA step {}/{}, Ncores={}'.format(self.STEP0-1,self.STEPS, self.ncores))
             print('------------------------------------------------------------')
             print('PESA statistics for generation {}'.format(gen))
-            print('Best Fitness:', self.pesa_best[1] if self.mode == 'max' else -self.pesa_best[1])
+            print('Best Fitness:', self.fitness_best if self.mode == 'max' else -self.fitness_best)
             print('Best Individual:', self.xbest_correct)
             print('ALPHA:', np.round(self.ALPHA,3))
             print('Memory Size:', self.memory_size)

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Salp Swarm Algorithm (SSA) &mdash; NEORL 1.4.8b documentation</title>
+  <title>Salp Swarm Algorithm (SSA) &mdash; NEORL 1.5.0b documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.4.8b )
+                main (1.5.0b )
               </div>
             
           
@@ -129,6 +129,8 @@
 <li class="toctree-l1"><a class="reference internal" href="jaya.html">JAYA Algorithm</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bat.html">Bat Algorithm (BAT)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hho.html">Harris Hawks Optimization (HHO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fneat.html">Feedforward Neuroevolution of Augmenting Topologies (FNEAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rneat.html">Recurrent Neuroevolution of Augmenting Topologies (RNEAT)</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
 <ul>
@@ -148,6 +150,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../examples/ex7.html">Example 7: Pressure Vessel Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/ex8.html">Example 8: Pressure Vessel Design with Demonstration of Categorical Parameter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/ex9.html">Example 9: Cantilever Stepped Beam</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex10.html">Example 10: Knapsack Problem</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Misc</span></p>
 <ul>
@@ -230,16 +233,16 @@
 <h2>What can you use?<a class="headerlink" href="#what-can-you-use" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>Multi processing: ✔️</p></li>
-<li><p>Discrete spaces: ❌</p></li>
+<li><p>Discrete spaces: ✔️</p></li>
 <li><p>Continuous spaces: ✔️</p></li>
-<li><p>Mixed Discrete/Continuous spaces: ❌</p></li>
+<li><p>Mixed Discrete/Continuous spaces: ✔️</p></li>
 </ul>
 </div>
 <div class="section" id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="neorl.evolu.ssa.SSA">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">neorl.evolu.ssa.</span></code><code class="sig-name descname"><span class="pre">SSA</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsalps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ncores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/evolu/ssa.html#SSA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.evolu.ssa.SSA" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">neorl.evolu.ssa.</span></code><code class="sig-name descname"><span class="pre">SSA</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsalps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int_transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'nearest_int'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ncores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/evolu/ssa.html#SSA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.evolu.ssa.SSA" title="Permalink to this definition">¶</a></dt>
 <dd><p>Salp Swarm Algorithm</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -250,6 +253,7 @@
 <li><p><strong>nsalps</strong> – (int): number of salps in the swarm</p></li>
 <li><p><strong>c1</strong> – (float/list): a scalar value or a list of values with size <code class="docutils literal notranslate"><span class="pre">ngen</span></code> for the coefficient that controls exploration/exploitation. 
 If <code class="docutils literal notranslate"><span class="pre">None</span></code>, default annealing formula for <code class="docutils literal notranslate"><span class="pre">c1</span></code> is used (see <strong>Notes</strong> below for more info).</p></li>
+<li><p><strong>int_transform</strong> – (str): method of handling int/discrete variables, choose from: <code class="docutils literal notranslate"><span class="pre">nearest_int</span></code>, <code class="docutils literal notranslate"><span class="pre">sigmoid</span></code>, <code class="docutils literal notranslate"><span class="pre">minmax</span></code>.</p></li>
 <li><p><strong>ncores</strong> – (int) number of parallel processors (must be <code class="docutils literal notranslate"><span class="pre">&lt;=</span> <span class="pre">nsalps</span></code>)</p></li>
 <li><p><strong>seed</strong> – (int) random seed for sampling</p></li>
 </ul>
