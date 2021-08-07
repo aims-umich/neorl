@@ -35,8 +35,8 @@ class BAYESTUNE:
         self.ncases=ncases
         self.seed=seed
         if self.ncases < 11:
-            self.ncases = 11 
-            print('--warning: ncases={} < 11 is given by the user, but ncases must be more than 11, reset ncases to 11'.format(self.ncases))  
+            print('--warning: ncases={} < 11 is given by the user, but ncases must be more than 11, reset ncases to 11'.format(self.ncases))
+            self.ncases = 11
             
         self.full_grid()
         
@@ -99,7 +99,7 @@ class BAYESTUNE:
                                     dimensions=self.dimensions,
                                     acq_func='EI', # Expected Improvement.
                                     n_calls=self.ncases,
-                                    random_state=core_seed)
+                                    random_state=core_seed, verbose=self.verbose)
         
         return search_result.x_iters, list(search_result.func_vals)
     
@@ -173,7 +173,7 @@ class BAYESTUNE:
                                             dimensions=self.dimensions,
                                             acq_func='EI', # Expected Improvement.
                                             n_calls=self.ncases,
-                                            random_state=self.seed)
+                                            random_state=self.seed, verbose=self.verbose)
 
             self.bayesres = pd.DataFrame(self.search_result.x_iters, columns = self.func_args)
             self.bayesres['score'] = self.search_result.func_vals if self.mode=='min' else -self.search_result.func_vals

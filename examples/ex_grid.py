@@ -34,9 +34,6 @@ def tune_fit(cxpb, mutpb, alpha):
 #*************************************************************
 # Part III: Tuning
 #*************************************************************
-#Setup the parameter space
-#VERY IMPORTANT: The order of these grids MUST be similar to their order in tune_fit
-#see tune_fit
 param_grid={
 #def tune_fit(cxpb, mutpb, alpha):
 'cxpb': [0.2, 0.4],  #cxpb is first

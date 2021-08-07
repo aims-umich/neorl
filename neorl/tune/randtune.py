@@ -34,9 +34,19 @@ class RANDTUNE:
         if self.seed:
             random.seed(self.seed)
         
-        self.param_lst=[self.param_grid[item][0] for item in self.param_grid]
-        self.param_types=[self.param_grid[item][1] for item in self.param_grid]
+        #self.param_lst=[self.param_grid[item][0] for item in self.param_grid]
+        #self.param_types=[self.param_grid[item][1] for item in self.param_grid]
+        #self.param_names=[item for item in self.param_grid]
+        self.param_types=[self.param_grid[item][0] for item in self.param_grid]
+        self.param_lst=[]
+        for i, item in enumerate(self.param_grid):
+            if self.param_types[i] in ['grid', 'categorical']:
+                self.param_lst.append(self.param_grid[item][1])
+            else:
+                self.param_lst.append(self.param_grid[item][1:])
+        
         self.param_names=[item for item in self.param_grid]
+        
         self.hyperparameter_cases=[]
         
         for _ in range(self.ncases):
