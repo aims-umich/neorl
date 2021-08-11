@@ -25,6 +25,10 @@ Parameters
   :members:
   :inherited-members:
 
+.. autoclass:: neorl.rl.make_env.CreateEnvironment
+
+.. autoclass:: neorl.utils.neorlcalls.RLLogger
+
 Example
 -------
 
@@ -56,7 +60,7 @@ Train a PPO agent to optimize the 5-D sphere function
 	                      bounds=bounds, mode='min', episode_length=50)
 	
 	#create a callback function to log data
-	cb=RLLogger(check_freq=1, mode='min')
+	cb=RLLogger(check_freq=1)
 	#create a RL object based on the env object
 	ppo = PPO2(MlpPolicy, env=env, n_steps=12, seed=1)
 	#optimise the enviroment class
@@ -95,7 +99,7 @@ Here is a script to run a parallel PPO for the same problem
 	                          bounds=bounds, mode='min', episode_length=50)
 	    
 	    #create a callback function to log data
-	    cb=RLLogger(check_freq=1, mode='min')
+	    cb=RLLogger(check_freq=1)
 	    #create a RL object based on the env object
 	    ppo = PPO2(MlpPolicy, env=env, n_steps=12, seed=1)
 	    #optimise the environment class

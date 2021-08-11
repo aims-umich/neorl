@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Index &mdash; NEORL 1.5.0b documentation</title>
+  <title>Index &mdash; NEORL 1.5.1b documentation</title>
   
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                main (1.5.0b )
+                main (1.5.1b )
               </div>
             
           
@@ -122,6 +122,8 @@
 <li class="toctree-l1"><a class="reference internal" href="modules/hho.html">Harris Hawks Optimization (HHO)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/fneat.html">Feedforward Neuroevolution of Augmenting Topologies (FNEAT)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/rneat.html">Recurrent Neuroevolution of Augmenting Topologies (RNEAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/ppoes.html">RL-informed Evolution Strategies (PPO-ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/ackde.html">RL-informed Differential Evolution (ACKTR-DE)</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
 <ul>
@@ -219,6 +221,7 @@
 <div class="genindex-jumpbox">
  <a href="#A"><strong>A</strong></a>
  | <a href="#B"><strong>B</strong></a>
+ | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
  | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
@@ -241,9 +244,11 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/a2c.html#neorl.rl.baselines.a2c.A2C">A2C (class in neorl.rl.baselines.a2c)</a>
 </li>
+      <li><a href="modules/acer.html#neorl.rl.baselines.acer.ACER">ACER (class in neorl.rl.baselines.acer)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules/acer.html#neorl.rl.baselines.acer.ACER">ACER (class in neorl.rl.baselines.acer)</a>
+      <li><a href="modules/ackde.html#neorl.hybrid.ackde.ACKDE">ACKDE (class in neorl.hybrid.ackde)</a>
 </li>
       <li><a href="modules/acktr.html#neorl.rl.baselines.acktr.ACKTR">ACKTR (class in neorl.rl.baselines.acktr)</a>
 </li>
@@ -258,6 +263,14 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="tune/bayes.html#neorl.tune.bayestune.BAYESTUNE">BAYESTUNE (class in neorl.tune.bayestune)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="C">C</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="modules/a2c.html#neorl.rl.make_env.CreateEnvironment">CreateEnvironment (class in neorl.rl.make_env)</a>, <a href="modules/acer.html#neorl.rl.make_env.CreateEnvironment">[1]</a>, <a href="modules/ackde.html#neorl.rl.make_env.CreateEnvironment">[2]</a>, <a href="modules/acktr.html#neorl.rl.make_env.CreateEnvironment">[3]</a>, <a href="modules/dqn.html#neorl.rl.make_env.CreateEnvironment">[4]</a>, <a href="modules/ppo2.html#neorl.rl.make_env.CreateEnvironment">[5]</a>, <a href="modules/ppoes.html#neorl.rl.make_env.CreateEnvironment">[6]</a>
 </li>
   </ul></td>
 </tr></table>
@@ -306,11 +319,15 @@
 </li>
         <li><a href="modules/xnes.html#neorl.evolu.xnes.XNES.evolute">(neorl.evolu.xnes.XNES method)</a>
 </li>
+        <li><a href="modules/ackde.html#neorl.hybrid.ackde.ACKDE.evolute">(neorl.hybrid.ackde.ACKDE method)</a>
+</li>
         <li><a href="modules/fneat.html#neorl.hybrid.fneat.FNEAT.evolute">(neorl.hybrid.fneat.FNEAT method)</a>
 </li>
         <li><a href="modules/pesa.html#neorl.hybrid.pesa.PESA.evolute">(neorl.hybrid.pesa.PESA method)</a>
 </li>
         <li><a href="modules/pesa2.html#neorl.hybrid.pesa2.PESA2.evolute">(neorl.hybrid.pesa2.PESA2 method)</a>
+</li>
+        <li><a href="modules/ppoes.html#neorl.hybrid.ppoes.PPOES.evolute">(neorl.hybrid.ppoes.PPOES method)</a>
 </li>
         <li><a href="modules/rneat.html#neorl.hybrid.rneat.RNEAT.evolute">(neorl.hybrid.rneat.RNEAT method)</a>
 </li>
@@ -357,9 +374,13 @@
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules/a2c.html#neorl.rl.baselines.a2c.A2C.learn">learn() (neorl.rl.baselines.a2c.A2C method)</a>
+      <li><a href="modules/ackde.html#neorl.hybrid.ackde.ACKDE.learn">learn() (neorl.hybrid.ackde.ACKDE method)</a>
 
       <ul>
+        <li><a href="modules/ppoes.html#neorl.hybrid.ppoes.PPOES.learn">(neorl.hybrid.ppoes.PPOES method)</a>
+</li>
+        <li><a href="modules/a2c.html#neorl.rl.baselines.a2c.A2C.learn">(neorl.rl.baselines.a2c.A2C method)</a>
+</li>
         <li><a href="modules/acer.html#neorl.rl.baselines.acer.ACER.learn">(neorl.rl.baselines.acer.ACER method)</a>
 </li>
         <li><a href="modules/acktr.html#neorl.rl.baselines.acktr.ACKTR.learn">(neorl.rl.baselines.acktr.ACKTR method)</a>
@@ -419,9 +440,13 @@
 </li>
         <li><a href="modules/xnes.html#module-neorl.evolu.xnes">neorl.evolu.xnes</a>
 </li>
+        <li><a href="modules/ackde.html#module-neorl.hybrid.ackde">neorl.hybrid.ackde</a>
+</li>
         <li><a href="modules/pesa.html#module-neorl.hybrid.pesa">neorl.hybrid.pesa</a>
 </li>
         <li><a href="modules/pesa2.html#module-neorl.hybrid.pesa2">neorl.hybrid.pesa2</a>
+</li>
+        <li><a href="modules/ppoes.html#module-neorl.hybrid.ppoes">neorl.hybrid.ppoes</a>
 </li>
         <li><a href="modules/a2c.html#module-neorl.rl.baselines.a2c">neorl.rl.baselines.a2c</a>
 </li>
@@ -532,6 +557,13 @@
         <li><a href="modules/xnes.html#module-neorl.evolu.xnes">module</a>
 </li>
       </ul></li>
+      <li>
+    neorl.hybrid.ackde
+
+      <ul>
+        <li><a href="modules/ackde.html#module-neorl.hybrid.ackde">module</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li>
@@ -546,6 +578,13 @@
 
       <ul>
         <li><a href="modules/pesa2.html#module-neorl.hybrid.pesa2">module</a>
+</li>
+      </ul></li>
+      <li>
+    neorl.hybrid.ppoes
+
+      <ul>
+        <li><a href="modules/ppoes.html#module-neorl.hybrid.ppoes">module</a>
 </li>
       </ul></li>
       <li>
@@ -623,6 +662,8 @@
 </li>
       <li><a href="modules/ppo2.html#neorl.rl.baselines.ppo2.PPO2">PPO2 (class in neorl.rl.baselines.ppo2)</a>
 </li>
+      <li><a href="modules/ppoes.html#neorl.hybrid.ppoes.PPOES">PPOES (class in neorl.hybrid.ppoes)</a>
+</li>
       <li><a href="modules/a2c.html#neorl.rl.baselines.a2c.A2C.predict">predict() (neorl.rl.baselines.a2c.A2C method)</a>
 
       <ul>
@@ -649,6 +690,8 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="modules/a2c.html#neorl.utils.neorlcalls.RLLogger">RLLogger (class in neorl.utils.neorlcalls)</a>, <a href="modules/acer.html#neorl.utils.neorlcalls.RLLogger">[1]</a>, <a href="modules/acktr.html#neorl.utils.neorlcalls.RLLogger">[2]</a>, <a href="modules/dqn.html#neorl.utils.neorlcalls.RLLogger">[3]</a>, <a href="modules/ppo2.html#neorl.utils.neorlcalls.RLLogger">[4]</a>
+</li>
       <li><a href="modules/rneat.html#neorl.hybrid.rneat.RNEAT">RNEAT (class in neorl.hybrid.rneat)</a>
 </li>
   </ul></td>

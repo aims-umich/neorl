@@ -100,7 +100,7 @@ for item in ['float', 'int', 'grid', 'float/int', 'float/grid', 'int/grid', 'mix
     # PPO
     #---------------------------------
     env=CreateEnvironment(method='ppo', fit=Vessel, bounds=bounds, mode='min', episode_length=50)
-    cb=RLLogger(check_freq=1, mode='min')
+    cb=RLLogger(check_freq=1)
     ppo = PPO2(policy=MlpPolicy, env=env, n_steps=4, seed=1)
     ppo.learn(total_timesteps=t, callback=cb)
     print('--------------- PPO results ---------------')
@@ -112,7 +112,7 @@ for item in ['float', 'int', 'grid', 'float/int', 'float/grid', 'int/grid', 'mix
     #---------------------------------
     # A2C
     #---------------------------------
-    cb=RLLogger(check_freq=1, mode='min')
+    cb=RLLogger(check_freq=1)
     a2c = A2C(policy=MlpPolicy, env=env, n_steps=4, seed=1)
     a2c.learn(total_timesteps=t, callback=cb)
     print('--------------- A2C results ---------------')
@@ -123,7 +123,7 @@ for item in ['float', 'int', 'grid', 'float/int', 'float/grid', 'int/grid', 'mix
     #---------------------------------
     # ACKTR
     #---------------------------------
-    cb=RLLogger(check_freq=1, mode='min')
+    cb=RLLogger(check_freq=1)
     acktr = ACKTR(policy=MlpPolicy, env=env, n_steps=4)
     acktr.learn(total_timesteps=t, callback=cb)
     print('--------------- ACKTR results ---------------')
@@ -138,7 +138,7 @@ for item in ['float', 'int', 'grid', 'float/int', 'float/grid', 'int/grid', 'mix
         #---------------------------------
         disc_env=CreateEnvironment(method='acer', fit=Vessel, mode='min', 
                                    bounds=bounds, episode_length=50)
-        cb=RLLogger(check_freq=1, mode='min')
+        cb=RLLogger(check_freq=1)
         acer = ACER(MlpPolicy, env=disc_env, n_steps=4)
         acer.learn(total_timesteps=t, callback=cb)
         print('--------------- ACER results ---------------')
@@ -149,7 +149,7 @@ for item in ['float', 'int', 'grid', 'float/int', 'float/grid', 'int/grid', 'mix
         #---------------------------------
         # DQN
         #---------------------------------
-        cb=RLLogger(check_freq=1, mode='min')
+        cb=RLLogger(check_freq=1)
         dqn = DQN(DQNPolicy, env=disc_env)
         dqn.learn(total_timesteps=t, callback=cb)
         print('--------------- DQN results ---------------')

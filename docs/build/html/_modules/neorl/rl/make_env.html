@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.rl.make_env &mdash; NEORL 1.5.0b documentation</title>
+  <title>neorl.rl.make_env &mdash; NEORL 1.5.1b documentation</title>
   
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                main (1.5.0b )
+                main (1.5.1b )
               </div>
             
           
@@ -120,7 +120,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/jaya.html">JAYA Algorithm</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/bat.html">Bat Algorithm (BAT)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/hho.html">Harris Hawks Optimization (HHO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/fneat.html">Feedforward Neuroevolution of Augmenting Topologies (FNEAT)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/rneat.html">Recurrent Neuroevolution of Augmenting Topologies (RNEAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/ppoes.html">RL-informed Evolution Strategies (PPO-ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/ackde.html">RL-informed Differential Evolution (ACKTR-DE)</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
 <ul>
@@ -222,6 +225,8 @@
 
 <span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">uuid</span>
 <span class="kn">from</span> <span class="nn">neorl.evolu.discrete</span> <span class="kn">import</span> <span class="n">encode_grid_to_discrete</span><span class="p">,</span> <span class="n">decode_discrete_to_grid</span>
+<span class="kn">from</span> <span class="nn">neorl.rl.baselines.shared</span> <span class="kn">import</span> <span class="n">set_global_seeds</span>
+<span class="kn">from</span> <span class="nn">neorl.rl.baselines.shared.vec_env</span> <span class="kn">import</span> <span class="n">SubprocVecEnv</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">gym</span>
 <span class="kn">from</span> <span class="nn">gym.spaces</span> <span class="kn">import</span> <span class="n">Box</span><span class="p">,</span> <span class="n">MultiDiscrete</span><span class="p">,</span> <span class="n">Discrete</span>
@@ -321,17 +326,17 @@
         
     <span class="k">return</span> <span class="n">decoded_action</span> 
 
-<div class="viewcode-block" id="CreateEnvironment"><a class="viewcode-back" href="../../../modules/rneat.html#neorl.rl.make_env.CreateEnvironment">[docs]</a><span class="k">class</span> <span class="nc">CreateEnvironment</span><span class="p">(</span><span class="n">gym</span><span class="o">.</span><span class="n">Env</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A module to construct a fitness environment for certain algorithms </span>
-<span class="sd">    that follow reinforcement learning approach of optimization</span>
-<span class="sd">    </span>
-<span class="sd">    :param method: (str) the supported algorithms, choose either: ``dqn``, ``ppo``, ``acktr``, ``acer``, ``a2c``, ``rneat``, ``fneat``</span>
-<span class="sd">    :param fit: (function) the fitness function</span>
-<span class="sd">    :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: ``bounds={&#39;x1&#39;: [&#39;int&#39;, 1, 4], &#39;x2&#39;: [&#39;float&#39;, 0.1, 0.8], &#39;x3&#39;: [&#39;float&#39;, 2.2, 6.2]}``</span>
-<span class="sd">    :param mode: (str) problem type, either ``min`` for minimization problem or ``max`` for maximization (RL is default to ``max``)</span>
-<span class="sd">    :param episode_length: (int): number of individuals to evaluate before resetting the environment to random initial guess. </span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="k">class</span> <span class="nc">BaseEnvironment</span><span class="p">(</span><span class="n">gym</span><span class="o">.</span><span class="n">Env</span><span class="p">):</span>
+    <span class="c1">#&quot;&quot;&quot;</span>
+    <span class="c1">#A module to construct a fitness environment for certain algorithms </span>
+    <span class="c1">#that follow reinforcement learning approach of optimization</span>
+    <span class="c1">#</span>
+    <span class="c1">#:param method: (str) the supported algorithms, choose either: ``dqn``, ``ppo``, ``acktr``, ``acer``, ``a2c``, ``rneat``, ``fneat``</span>
+    <span class="c1">#:param fit: (function) the fitness function</span>
+    <span class="c1">#:param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: ``bounds={&#39;x1&#39;: [&#39;int&#39;, 1, 4], &#39;x2&#39;: [&#39;float&#39;, 0.1, 0.8], &#39;x3&#39;: [&#39;float&#39;, 2.2, 6.2]}``</span>
+    <span class="c1">#:param mode: (str) problem type, either ``min`` for minimization problem or ``max`` for maximization (RL is default to ``max``)</span>
+    <span class="c1">#:param episode_length: (int): number of individuals to evaluate before resetting the environment to random initial guess. </span>
+    <span class="c1">#&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;max&#39;</span><span class="p">,</span> <span class="n">episode_length</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
 
         <span class="k">if</span> <span class="n">method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ppo&#39;</span><span class="p">,</span> <span class="s1">&#39;a2c&#39;</span><span class="p">,</span> <span class="s1">&#39;acer&#39;</span><span class="p">,</span> <span class="s1">&#39;acktr&#39;</span><span class="p">,</span> <span class="s1">&#39;dqn&#39;</span><span class="p">,</span> <span class="s1">&#39;neat&#39;</span><span class="p">,</span> <span class="s1">&#39;rneat&#39;</span><span class="p">,</span> <span class="s1">&#39;fneat&#39;</span><span class="p">]:</span>
@@ -361,7 +366,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">lb_norm</span><span class="o">=-</span><span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ub_norm</span><span class="o">=</span><span class="mi">1</span>
         <span class="k">if</span> <span class="nb">all</span><span class="p">([</span><span class="n">item</span> <span class="o">==</span> <span class="s1">&#39;int&#39;</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span><span class="p">]):</span>   <span class="c1">#discrete optimization</span>
-            <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ppo&#39;</span><span class="p">,</span> <span class="s1">&#39;a2c&#39;</span><span class="p">,</span> <span class="s1">&#39;acer&#39;</span><span class="p">,</span> <span class="s1">&#39;acktr&#39;</span><span class="p">,</span> <span class="s1">&#39;dqn&#39;</span><span class="p">,</span> <span class="s1">&#39;neat&#39;</span><span class="p">,</span> <span class="s1">&#39;rneat&#39;</span><span class="p">,</span> <span class="s1">&#39;fneat&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ppo&#39;</span><span class="p">,</span> <span class="s1">&#39;a2c&#39;</span><span class="p">,</span> <span class="s1">&#39;acktr&#39;</span><span class="p">,</span> <span class="s1">&#39;rneat&#39;</span><span class="p">,</span> <span class="s1">&#39;fneat&#39;</span><span class="p">]:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">action_bounds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">int_bounds_map</span><span class="o">=</span><span class="n">convert_actions_multidiscrete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">action_space</span> <span class="o">=</span> <span class="n">MultiDiscrete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">action_bounds</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">observation_space</span> <span class="o">=</span> <span class="n">Box</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lb</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ub</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
@@ -374,7 +379,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">cont_map_flag</span><span class="o">=</span><span class="kc">False</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">int_map_flag</span><span class="o">=</span><span class="kc">False</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ppo&#39;</span><span class="p">,</span> <span class="s1">&#39;a2c&#39;</span><span class="p">,</span> <span class="s1">&#39;acer&#39;</span><span class="p">,</span> <span class="s1">&#39;acktr&#39;</span><span class="p">,</span> <span class="s1">&#39;dqn&#39;</span><span class="p">,</span> <span class="s1">&#39;neat&#39;</span><span class="p">,</span> <span class="s1">&#39;rneat&#39;</span><span class="p">,</span> <span class="s1">&#39;fneat&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ppo&#39;</span><span class="p">,</span> <span class="s1">&#39;a2c&#39;</span><span class="p">,</span> <span class="s1">&#39;acktr&#39;</span><span class="p">,</span> <span class="s1">&#39;rneat&#39;</span><span class="p">,</span> <span class="s1">&#39;fneat&#39;</span><span class="p">]:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">action_space</span> <span class="o">=</span> <span class="n">Box</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_norm</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ub_norm</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">,))</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">observation_space</span> <span class="o">=</span> <span class="n">Box</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lb</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ub</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">cont_map_flag</span><span class="o">=</span><span class="kc">True</span>
@@ -398,34 +403,37 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="o">=</span><span class="mi">0</span>
 
-<div class="viewcode-block" id="CreateEnvironment.step"><a class="viewcode-back" href="../../../modules/rneat.html#neorl.rl.make_env.CreateEnvironment.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
-        <span class="n">action</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">action_mapper</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
-        <span class="n">reward</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">seed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed_id</span><span class="p">):</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed_id</span><span class="p">)</span>
+        <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed_id</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+        <span class="n">state</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">reward</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">action_mapper</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">episode_length</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">done</span><span class="o">=</span><span class="kc">True</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
         
-        <span class="c1">#print(self.state, action, reward)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">done</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span><span class="n">action</span><span class="p">}</span></div>
+        <span class="c1">#print(state, action, reward)</span>
+        <span class="k">return</span> <span class="n">state</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">done</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span><span class="n">action</span><span class="p">}</span>
     
-<div class="viewcode-block" id="CreateEnvironment.reset"><a class="viewcode-back" href="../../../modules/rneat.html#neorl.rl.make_env.CreateEnvironment.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">done</span><span class="o">=</span><span class="kc">False</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ppo&#39;</span><span class="p">,</span> <span class="s1">&#39;a2c&#39;</span><span class="p">,</span> <span class="s1">&#39;acer&#39;</span><span class="p">,</span> <span class="s1">&#39;acktr&#39;</span><span class="p">,</span> <span class="s1">&#39;dqn&#39;</span><span class="p">,</span> <span class="s1">&#39;neat&#39;</span><span class="p">,</span> <span class="s1">&#39;rneat&#39;</span><span class="p">,</span> <span class="s1">&#39;fneat&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ppo&#39;</span><span class="p">,</span> <span class="s1">&#39;a2c&#39;</span><span class="p">,</span> <span class="s1">&#39;acktr&#39;</span><span class="p">,</span> <span class="s1">&#39;rneat&#39;</span><span class="p">,</span> <span class="s1">&#39;fneat&#39;</span><span class="p">]:</span>
             <span class="n">init_state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;acer&#39;</span><span class="p">,</span> <span class="s1">&#39;dqn&#39;</span><span class="p">]:</span>
             <span class="n">init_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_space</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">full_action</span><span class="o">=</span><span class="n">init_state</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">pass</span>
-        <span class="k">return</span> <span class="n">init_state</span></div>
+        <span class="k">return</span> <span class="n">init_state</span>
 
-<div class="viewcode-block" id="CreateEnvironment.render"><a class="viewcode-back" href="../../../modules/rneat.html#neorl.rl.make_env.CreateEnvironment.render">[docs]</a>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;human&#39;</span><span class="p">):</span>
-        <span class="k">pass</span></div>
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;human&#39;</span><span class="p">):</span>
+        <span class="k">pass</span>
     
     <span class="k">def</span> <span class="nf">action_mapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
         
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ppo&#39;</span><span class="p">,</span> <span class="s1">&#39;a2c&#39;</span><span class="p">,</span> <span class="s1">&#39;acer&#39;</span><span class="p">,</span> <span class="s1">&#39;acktr&#39;</span><span class="p">,</span> <span class="s1">&#39;dqn&#39;</span><span class="p">,</span> <span class="s1">&#39;neat&#39;</span><span class="p">,</span> <span class="s1">&#39;rneat&#39;</span><span class="p">,</span> <span class="s1">&#39;fneat&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ppo&#39;</span><span class="p">,</span> <span class="s1">&#39;a2c&#39;</span><span class="p">,</span> <span class="s1">&#39;acktr&#39;</span><span class="p">,</span> <span class="s1">&#39;rneat&#39;</span><span class="p">,</span> <span class="s1">&#39;fneat&#39;</span><span class="p">]:</span>
             <span class="c1">#--------------------------</span>
             <span class="c1"># cont./discrete methods</span>
             <span class="c1">#---------------------------</span>
@@ -436,15 +444,21 @@
                 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">int_map_flag</span><span class="p">:</span>  <span class="c1">#this flag converts multidiscrete action to the real space</span>
                 <span class="n">action</span><span class="o">=</span><span class="n">convert_multidiscrete_actions</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="n">action</span><span class="p">,</span> <span class="n">int_bounds_map</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">int_bounds_map</span><span class="p">)</span>
-                <span class="c1">#action=decode_action()</span>
                 
             <span class="k">if</span> <span class="s1">&#39;int&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span><span class="p">:</span>
                 <span class="n">action</span><span class="o">=</span><span class="n">ensure_discrete</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="n">action</span><span class="p">,</span> <span class="n">var_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">var_type</span><span class="p">)</span>
+            
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="p">:</span>
                 <span class="c1">#decode the individual back to the int/float/grid mixed space</span>
-                <span class="n">action</span><span class="o">=</span><span class="n">decode_discrete_to_grid</span><span class="p">(</span><span class="n">action</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="p">)</span>
-            
-            <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">=</span><span class="n">action</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="n">decoded_action</span><span class="o">=</span><span class="n">decode_discrete_to_grid</span><span class="p">(</span><span class="n">action</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="p">)</span>
+                <span class="n">reward</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">decoded_action</span><span class="p">)</span>  <span class="c1">#calc reward based on decoded action</span>
+                <span class="n">state</span><span class="o">=</span><span class="n">action</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>   <span class="c1">#save the state as the original undecoded action (for further procecessing)</span>
+                <span class="n">action</span><span class="o">=</span><span class="n">decoded_action</span>  <span class="c1">#now for logging, return the action as the decoded action</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1">#calculate reward and use state as action</span>
+                <span class="n">reward</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>  
+                <span class="n">state</span><span class="o">=</span><span class="n">action</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                
             
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;acer&#39;</span><span class="p">,</span> <span class="s1">&#39;dqn&#39;</span><span class="p">]:</span>
             <span class="c1">#--------------------------</span>
@@ -466,14 +480,53 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="p">:</span>
                 <span class="c1">#decode the individual back to the int/float/grid mixed space</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">decoded_action</span><span class="o">=</span><span class="n">decode_discrete_to_grid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">full_action</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="p">)</span> <span class="c1">#convert integer to categorical</span>
-                <span class="n">action</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">decoded_action</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>   <span class="c1">#returned the decoded action for reward evaluation</span>
+                <span class="n">reward</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">decoded_action</span><span class="p">)</span>  <span class="c1">#calc reward based on decoded action</span>
+                <span class="n">state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">full_action</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>        <span class="c1">#save the state as the original undecoded action (for further procecessing)   </span>
+                <span class="n">action</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">decoded_action</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>   <span class="c1">#now for logging, return the action as the decoded action</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">action</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">full_action</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>   <span class="c1">#returned the original action for reward evaluation</span>
+                <span class="n">action</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">full_action</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>   <span class="c1">#returned the full action for logging</span>
+                <span class="n">reward</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>          <span class="c1">#calc reward based on the action (float + int)</span>
+                <span class="n">state</span><span class="o">=</span><span class="n">action</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>              <span class="c1">#save the state as the action</span>
             
-            
-            <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">full_action</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>   <span class="c1">#take the unconverted original anyway as next state</span>
-            
-        <span class="k">return</span> <span class="n">action</span></div>
+        <span class="k">return</span> <span class="n">state</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">reward</span>
+    
+    
+
+<div class="viewcode-block" id="CreateEnvironment"><a class="viewcode-back" href="../../../modules/ppoes.html#neorl.rl.make_env.CreateEnvironment">[docs]</a><span class="k">def</span> <span class="nf">CreateEnvironment</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;max&#39;</span><span class="p">,</span> <span class="n">episode_length</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A module to construct a fitness environment for certain algorithms </span>
+<span class="sd">    that follow reinforcement learning approach of optimization</span>
+<span class="sd">    </span>
+<span class="sd">    :param method: (str) the supported algorithms, choose either: ``dqn``, ``ppo``, ``acktr``, ``acer``, ``a2c``.</span>
+<span class="sd">    :param fit: (function) the fitness function</span>
+<span class="sd">    :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: ``bounds={&#39;x1&#39;: [&#39;int&#39;, 1, 4], &#39;x2&#39;: [&#39;float&#39;, 0.1, 0.8], &#39;x3&#39;: [&#39;float&#39;, 2.2, 6.2]}``</span>
+<span class="sd">    :param ncores: (int) number of parallel processors</span>
+<span class="sd">    :param mode: (str) problem type, either ``min`` for minimization problem or ``max`` for maximization (RL is default to ``max``)</span>
+<span class="sd">    :param episode_length: (int): number of individuals to evaluate before resetting the environment to random initial guess. </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="nf">make_env</span><span class="p">(</span><span class="n">rank</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="c1">#Utility function for multiprocessed env.</span>
+        <span class="c1"># </span>
+        <span class="c1">#:param num_env: (int) the number of environment you wish to have in subprocesses</span>
+        <span class="c1">#:param seed: (int) the inital seed for RNG</span>
+        <span class="c1">#:param rank: (int) index of the subprocess</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="k">def</span> <span class="nf">_init</span><span class="p">():</span>
+            <span class="n">env</span><span class="o">=</span><span class="n">BaseEnvironment</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">fit</span><span class="p">,</span> 
+                          <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">episode_length</span><span class="o">=</span><span class="n">episode_length</span><span class="p">)</span>
+            <span class="n">env</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span> <span class="o">+</span> <span class="n">rank</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">env</span>
+        <span class="n">set_global_seeds</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_init</span>
+    
+    <span class="k">if</span> <span class="n">ncores</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">env</span> <span class="o">=</span> <span class="n">SubprocVecEnv</span><span class="p">([</span><span class="n">make_env</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ncores</span><span class="p">)])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">env</span><span class="o">=</span><span class="n">BaseEnvironment</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">fit</span><span class="p">,</span> 
+                      <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">episode_length</span><span class="o">=</span><span class="n">episode_length</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">env</span></div>
 </pre></div>
 
            </div>

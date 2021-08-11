@@ -31,10 +31,14 @@ Parameters
   :members:
   :inherited-members:
 
+.. autoclass:: neorl.rl.make_env.CreateEnvironment
+
+.. autoclass:: neorl.utils.neorlcalls.RLLogger
+
 Example
 -------
 
-Train an ACER agent to optimize the 5-D discrete sphere function
+Train a DQN agent to optimize the 5-D discrete sphere function
 
 .. code-block:: python
 
@@ -65,7 +69,7 @@ Train an ACER agent to optimize the 5-D discrete sphere function
 	                      mode='min', 
 	                      episode_length=50)
 	#create a callback function to log data
-	cb=RLLogger(check_freq=1, mode='min')
+	cb=RLLogger(check_freq=1)
 	#create a RL object based on the env object
 	dqn = DQN(DQNPolicy, env=env, seed=1)
 	#optimise the enviroment class

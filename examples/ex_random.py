@@ -39,10 +39,11 @@ def tune_fit(cxpb, mu, alpha, cxmode):
 #see tune_fit
 param_grid={
 #def tune_fit(cxpb, mu, alpha, cxmode):
-'cxpb': [[0.1, 0.9],'float'],             #cxpb is first (low=0.1, high=0.8, type=float/continuous)
-'mu':   [[30, 60],'int'],                 #mu is second (low=30, high=60, type=int/discrete)
-'alpha':[[0.1, 0.2, 0.3, 0.4],'grid'],    #alpha is third (grid with fixed values, type=grid/categorical)
-'cxmode':[['blend', 'cx2point'],'grid']}  #cxmode is fourth (grid with fixed values, type=grid/categorical)
+
+'cxpb': ['float', 0.1, 0.9],             #cxpb is first (low=0.1, high=0.8, type=float/continuous)
+'mu':   ['int', 30, 60],                 #mu is second (low=30, high=60, type=int/discrete)
+'alpha':['grid', (0.1, 0.2, 0.3, 0.4)],    #alpha is third (grid with fixed values, type=grid/categorical)
+'cxmode':['grid', ('blend', 'cx2point')]}  #cxmode is fourth (grid with fixed values, type=grid/categorical)
 
 #setup a random tune object
 rtune=RANDTUNE(param_grid=param_grid, fit=tune_fit, ncases=25, seed=1)

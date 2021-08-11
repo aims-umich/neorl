@@ -26,7 +26,7 @@ if __name__=='__main__':
     #---------------------------------
     env=CreateEnvironment(method='ppo', fit=Sphere, ncores=ncores, 
                       bounds=bounds, mode='min', episode_length=50)
-    cb=RLLogger(check_freq=1, mode='min')
+    cb=RLLogger(check_freq=1)
     ppo = PPO2(MlpPolicy, env=env, n_steps=12, seed=1)
     ppo.learn(total_timesteps=1000, callback=cb)
     print('--------------- PPO results ---------------')
@@ -65,7 +65,7 @@ if __name__=='__main__':
             
     env=CreateEnvironment(method='acer', fit=Sphere, ncores=10, 
                       bounds=bounds, mode='min', episode_length=50)    
-    cb=RLLogger(check_freq=1, mode='min')
+    cb=RLLogger(check_freq=1)
     acer = ACER(MlpPolicy, env=env, n_steps=25, q_coef=0.55, ent_coef=0.02, seed=1)
     acer.learn(total_timesteps=1000, callback=cb)
     print('--------------- ACER results ---------------')

@@ -72,6 +72,8 @@ User Guide
   modules/hho
   modules/fneat
   modules/rneat
+  modules/ppoes
+  modules/ackde
 
 .. toctree::
   :maxdepth: 1

@@ -25,6 +25,10 @@ Parameters
 .. autoclass:: A2C
   :members:
   :inherited-members:
+  
+.. autoclass:: neorl.rl.make_env.CreateEnvironment
+
+.. autoclass:: neorl.utils.neorlcalls.RLLogger
 
 Example
 -------
@@ -56,7 +60,7 @@ Train an A2C agent to optimize the 5-D sphere function
 	env=CreateEnvironment(method='a2c', fit=Sphere, 
 	                      bounds=bounds, mode='min', episode_length=50)
 	#create a callback function to log data
-	cb=RLLogger(check_freq=1, mode='min')
+	cb=RLLogger(check_freq=1)
 	#create an optimizer object based on the env object
 	a2c = A2C(MlpPolicy, env=env, n_steps=8, seed=1)
 	#optimise the enviroment class
@@ -95,7 +99,7 @@ Here is an example for a parallel A2C
 	                          bounds=bounds, mode='min', episode_length=50)
 	    
 	    #create a callback function to log data
-	    cb=RLLogger(check_freq=1, mode='min')
+	    cb=RLLogger(check_freq=1)
 	    #create a RL object based on the env object
 	    a2c = A2C(MlpPolicy, env=env, n_steps=8, seed=1)
 	    #optimise the environment class

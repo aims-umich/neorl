@@ -26,7 +26,7 @@ Webpage: https://web.mit.edu/nse/people/faculty/shirvan.html
    :alt: alternate text
    :align: right
 
-Paul RM. Seurin is a Ph.D student at MIT Nuclear Science and Engineering department. He joined MIT in September 2019 after receiving an Engineering Diploma and a Master in Nuclear Engineering from France. His research involves algorithm design for optimization with focuses on heuristics methods, deep, and Reinforcement Learning with applications to nuclear reactor economics and licensing.  For NEORL, he is currently working on validation and benchmarking, applying the framework from Pressurized Water Reactor optimization to combinatorial and Mixed-Integer programming. 
+Paul RM. Seurin is a Ph.D student in the joint program between the Nuclear Science and Engineering department and the Center for Computational Science and Engineering at MIT. He joined MIT in September 2019 after receiving an Engineering Diploma and a Master in Nuclear Engineering from France. His research involves algorithm design for optimization with focuses on heuristics methods, deep, and Reinforcement Learning with applications to nuclear reactor economics and licensing.  For NEORL, he is currently working on validation and benchmarking, applying the framework from Pressurized Water Reactor optimization to combinatorial and Mixed-Integer programming. 
 
 .. image:: ../images/wang.jpg
    :scale: 6 %
@@ -36,3 +36,12 @@ Paul RM. Seurin is a Ph.D student at MIT Nuclear Science and Engineering departm
 Haijia Wang is an undergraduate student at MIT in the MIT Electrical Engineering and Computer Science Department. She is in the class of 2023, studying Computer Science and Engineering. She is passionate about algorithm design and optimization, artificial intelligence and machine learning, and advanced computing technologies. Haijia is interested in exploring these fields in her studies and future career. She worked as a summer research intern with NEORL in 2020, and her contribution was adding different hyperparameter tuning methods to NEORL, including evolutioanry search and Bayesian search. She also validated the classes for grid and random search.
 
 Linkedin: https://www.linkedin.com/in/haijia-wang
+
+.. image:: ../images/katelin.jpg
+   :scale: 16 %
+   :alt: alternate text
+   :align: right
+
+Katelin Du is an undergraduate student at MIT in the class of 2023. She is studying nuclear science and engineering with a focus in computational modeling and simulation methods. She is interested in the use of computational tools such as simulation methods and machine learning in engineering applications. In the summer of 2021, she worked as an undergraduate researcher and contributed to NEORL by adding to its existing set of optimization algorithms and performing engineering benchmarking. Algorithms she worked on include Harris Hawks Optimization and hybrid neuroevolution Harris Hawks Optimization, and genetic algorithms.
+
+ 

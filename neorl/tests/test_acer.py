@@ -25,7 +25,7 @@ def test_acer():
     env=CreateEnvironment(method='acer', fit=Sphere, 
                           bounds=bounds, mode='min', episode_length=50)
     #create a callback function to log data
-    cb=RLLogger(check_freq=1, mode='min')
+    cb=RLLogger(check_freq=1)
     #create an acer object based on the env object
     acer = ACER(MlpPolicy, env=env, n_steps=25, q_coef=0.55, ent_coef=0.02)
     #optimise the enviroment class

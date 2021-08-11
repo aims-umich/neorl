@@ -25,7 +25,7 @@ def test_acktr():
     env=CreateEnvironment(method='acktr', fit=Sphere, 
                           bounds=bounds, mode='min', episode_length=50)
     #create a callback function to log data
-    cb=RLLogger(check_freq=1, mode='min')
+    cb=RLLogger(check_freq=1)
     #create an acktr object based on the env object
     acktr = ACKTR(MlpPolicy, env=env, n_steps=12)
     #optimise the enviroment class

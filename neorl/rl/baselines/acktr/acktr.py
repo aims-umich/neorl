@@ -34,7 +34,7 @@ class ACKTR(ActorCriticRLModel):
     The ACKTR (Actor Critic using Kronecker-Factored Trust Region) model class4
 
     :param policy: (ActorCriticPolicy or str) The policy model to use (e.g. MlpPolicy)
-    :param env: (Gym environment or str) The environment to learn from (if registered in Gym, can be str)
+    :param env: (NEORL environment or Gym environment) The environment to learn with PPO, either use NEORL method ``CreateEnvironment`` (see **below**) or construct your custom Gym environment
     :param gamma: (float) Discount factor
     :param n_steps: (int) The number of steps to run for each environment
     :param ent_coef: (float) The weight for the entropy loss

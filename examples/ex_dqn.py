@@ -25,7 +25,7 @@ env=CreateEnvironment(method='dqn',
                       mode='min', 
                       episode_length=50)
 #create a callback function to log data
-cb=RLLogger(check_freq=1, mode='min')
+cb=RLLogger(check_freq=1)
 #create a RL object based on the env object
 dqn = DQN(DQNPolicy, env=env, seed=1)
 #optimise the enviroment class

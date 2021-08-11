@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Random Search &mdash; NEORL 1.5.0b documentation</title>
+  <title>Random Search &mdash; NEORL 1.5.1b documentation</title>
   
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                main (1.5.0b )
+                main (1.5.1b )
               </div>
             
           
@@ -122,6 +122,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../modules/jaya.html">JAYA Algorithm</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../modules/bat.html">Bat Algorithm (BAT)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../modules/hho.html">Harris Hawks Optimization (HHO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/fneat.html">Feedforward Neuroevolution of Augmenting Topologies (FNEAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/rneat.html">Recurrent Neuroevolution of Augmenting Topologies (RNEAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/ppoes.html">RL-informed Evolution Strategies (PPO-ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/ackde.html">RL-informed Differential Evolution (ACKTR-DE)</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
 <ul class="current">
@@ -314,10 +318,11 @@
 <span class="c1">#see tune_fit</span>
 <span class="n">param_grid</span><span class="o">=</span><span class="p">{</span>
 <span class="c1">#def tune_fit(cxpb, mu, alpha, cxmode):</span>
-<span class="s1">&#39;cxpb&#39;</span><span class="p">:</span> <span class="p">[[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">],</span><span class="s1">&#39;float&#39;</span><span class="p">],</span>             <span class="c1">#cxpb is first (low=0.1, high=0.8, type=float/continuous)</span>
-<span class="s1">&#39;mu&#39;</span><span class="p">:</span>   <span class="p">[[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">],</span><span class="s1">&#39;int&#39;</span><span class="p">],</span>                 <span class="c1">#mu is second (low=30, high=60, type=int/discrete)</span>
-<span class="s1">&#39;alpha&#39;</span><span class="p">:[[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span><span class="s1">&#39;grid&#39;</span><span class="p">],</span>    <span class="c1">#alpha is third (grid with fixed values, type=grid/categorical)</span>
-<span class="s1">&#39;cxmode&#39;</span><span class="p">:[[</span><span class="s1">&#39;blend&#39;</span><span class="p">,</span> <span class="s1">&#39;cx2point&#39;</span><span class="p">],</span><span class="s1">&#39;grid&#39;</span><span class="p">]}</span>  <span class="c1">#cxmode is fourth (grid with fixed values, type=grid/categorical)</span>
+
+<span class="s1">&#39;cxpb&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">],</span>             <span class="c1">#cxpb is first (low=0.1, high=0.8, type=float/continuous)</span>
+<span class="s1">&#39;mu&#39;</span><span class="p">:</span>   <span class="p">[</span><span class="s1">&#39;int&#39;</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">],</span>                 <span class="c1">#mu is second (low=30, high=60, type=int/discrete)</span>
+<span class="s1">&#39;alpha&#39;</span><span class="p">:[</span><span class="s1">&#39;grid&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">)],</span>    <span class="c1">#alpha is third (grid with fixed values, type=grid/categorical)</span>
+<span class="s1">&#39;cxmode&#39;</span><span class="p">:[</span><span class="s1">&#39;grid&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;blend&#39;</span><span class="p">,</span> <span class="s1">&#39;cx2point&#39;</span><span class="p">)]}</span>  <span class="c1">#cxmode is fourth (grid with fixed values, type=grid/categorical)</span>
 
 <span class="c1">#setup a random tune object</span>
 <span class="n">rtune</span><span class="o">=</span><span class="n">RANDTUNE</span><span class="p">(</span><span class="n">param_grid</span><span class="o">=</span><span class="n">param_grid</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">tune_fit</span><span class="p">,</span> <span class="n">ncases</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>

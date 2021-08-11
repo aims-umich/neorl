@@ -21,12 +21,25 @@ class DE:
     :param ncores: (int) number of parallel processors
     :param seed: (int) random seed for sampling
     """
-    def __init__ (self, mode, bounds, fit, npop=50, F=0.5, CR=0.3, int_transform='nearest_int', ncores=1, seed=None):  
+    def __init__ (self, mode, bounds, fit, npop=50, F=0.5, CR=0.3, 
+                  int_transform='nearest_int', ncores=1, seed=None, **kwargs):  
 
         self.seed=seed
         if self.seed:
             random.seed(self.seed)
             np.random.seed(self.seed)
+        
+        #-----------------------------------------------------
+        #a special block for RL-informed DE
+        if 'npop_rl' in kwargs or 'init_pop_rl' in kwargs or 'RLdata' in kwargs:
+            print('--warning: npop_rl and init_pop_rl are passed to DE, so RL-informed DE mode is activated')
+            self.npop_rl=kwargs['npop_rl']
+            self.init_pop_rl=kwargs['init_pop_rl']
+            self.RLdata=kwargs['RLdata']
+            self.RLmode=True
+        else:
+            self.RLmode=False
+        #-----------------------------------------------------
         
         assert npop > 4, '--error: size of npop must be more than 4'
         self.npop=npop
@@ -165,6 +178,18 @@ class DE:
         
         return vec
     
+    def mix_population(self, pop, scores):
+        
+        fit_lst=np.array(scores)
+        worst_index=fit_lst.argsort()[:self.npop_rl]
+        rl_indices=random.sample(range(self.RLdata.shape[0]),self.npop_rl)
+        for i, idx in  enumerate(worst_index):
+            #print(pop[idx], fit_lst[idx])
+            pop[idx] = list(self.RLdata[rl_indices[i],:])
+        
+        return pop
+
+    
     def evolute(self, ngen, x0=None, verbose=0):
         """
         This function evolutes the DE algorithm for number of generations.
@@ -257,8 +282,6 @@ class DE:
             #-----------------------------
             #Selection
             #-----------------------------
-            #print('trial=', score_trial_lst)
-            #print('target=', score_target_lst)
             index=0
             for (score_trial, score_target, v_trial) in zip(score_trial_lst, score_target_lst, v_trial_lst):
                 if score_trial > score_target:
@@ -278,6 +301,10 @@ class DE:
             x_best = population[gen_scores.index(max(gen_scores))]  # solution of best individual
             best_scores.append(y_best)
             
+
+            if self.RLmode:
+                population=self.mix_population(pop=population, scores=gen_scores)
+                
             #--mir
             if self.mode=='min':
                 y_best_correct=-y_best

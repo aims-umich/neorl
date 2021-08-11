@@ -31,9 +31,22 @@ class ES:
     :param seed: (int) random seed for sampling
     """
     def __init__ (self, mode, bounds, fit, lambda_=60, mu=30, cxmode='cx2point', 
-                  alpha=0.5, cxpb=0.6, mutpb=0.3, smin=0.01, smax=0.5, clip=True, ncores=1, seed=None):  
+                  alpha=0.5, cxpb=0.6, mutpb=0.3, smin=0.01, smax=0.5, clip=True, ncores=1, seed=None, **kwargs):  
         if seed:
             random.seed(seed)
+        
+        #-----------------------------------------------------
+        #a special block for RL-informed GA/ES
+        if 'npop_rl' in kwargs or 'init_pop_rl' in kwargs or 'RLdata' in kwargs:
+            print('--warning: npop_rl and init_pop_rl are passed to ES, so RL-informed ES mode is activated')
+            self.npop_rl=kwargs['npop_rl']
+            self.init_pop_rl=kwargs['init_pop_rl']
+            self.RLdata=kwargs['RLdata']
+            self.RLmode=True
+        else:
+            self.RLmode=False
+        #-----------------------------------------------------
+            
         self.seed=seed
         self.bounds=bounds
         self.nx=len(bounds.keys())
@@ -366,6 +379,24 @@ class ES:
         
         return offspring
 
+    def mix_population(self, pop):
+        #function used to mix RL with ES population when RLmode is True.
+        
+        kbs_append=False
+        indices=random.sample(range(self.RLdata.shape[0]),self.npop_rl)
+        last_index=list(pop.keys())[-1]
+        for i in range (len(indices)):
+            ind_vec=list(self.RLdata[indices[i],:])
+            
+            if kbs_append: #append RL individuals to the population
+                strategy = [random.uniform(self.smin,self.smax) for _ in range(len(self.lb))]
+                kbs_ind=[ind_vec,strategy,0]
+                pop[last_index+(i+1)]=kbs_ind
+            else: #replace the worst individuals in pop with RL individuals
+                pop[last_index-i][0]=ind_vec
+            
+        return pop
+                        
     def evolute(self, ngen, x0=None, verbose=0):
         """
         This function evolutes the ES algorithm for number of generations.
@@ -411,9 +442,10 @@ class ES:
         
                 
             # Select the next generation population
-            #print(offspring)
             population = copy.deepcopy(self.select(pop=offspring, k=self.mu))
-            #print(population)
+            if self.RLmode:  #perform RL informed ES
+                population=self.mix_population(population)
+                
             inds, rwd=[population[i][0] for i in population], [population[i][2] for i in population]
             self.best_scores.append(np.max(rwd))
             arg_max=np.argmax(rwd)

@@ -24,6 +24,10 @@ Parameters
   :members:
   :inherited-members:
 
+.. autoclass:: neorl.rl.make_env.CreateEnvironment
+
+.. autoclass:: neorl.utils.neorlcalls.RLLogger
+
 Example
 -------
 
@@ -54,7 +58,7 @@ Train an ACER agent to optimize the 5-D discrete sphere function
 	env=CreateEnvironment(method='acer', fit=Sphere, 
 	                      bounds=bounds, mode='min', episode_length=50)
 	#create a callback function to log data
-	cb=RLLogger(check_freq=1, mode='min')
+	cb=RLLogger(check_freq=1)
 	#create an acer object based on the env object
 	acer = ACER(MlpPolicy, env=env, n_steps=25, q_coef=0.55, ent_coef=0.02, seed=1)
 	#optimise the enviroment class
@@ -92,7 +96,7 @@ Here is an example of parallel ACER
 	    env=CreateEnvironment(method='acer', fit=Sphere, ncores=10,
 	                          bounds=bounds, mode='min', episode_length=50)
 	    #create a callback function to log data
-	    cb=RLLogger(check_freq=1, mode='min')
+	    cb=RLLogger(check_freq=1)
 	    #create an acer object based on the env object
 	    acer = ACER(MlpPolicy, env=env, n_steps=25, q_coef=0.55, ent_coef=0.02, seed=1)
 	    #optimise the enviroment class

@@ -7,8 +7,14 @@ Coming next
 --------------------------
 
 - To add a module for Cuckoo search.
-- To add two modules for RL-informed EA optimization.
 - And more ...
+
+Release 1.5.2b (2021-08-10)
+------------------------------------
+
+- Added hybrid neuroevolution algorithm PPO-ES.
+- Added hybrid neuroevolution algorithm ACKTR-DE.
+- Updated documentation for RL algorithms.
 
 Release 1.5.1b (2021-08-01)
 ------------------------------------

@@ -98,7 +98,6 @@ def encode_grid_to_discrete(bounds):
         
     return bounds_new, bounds_map
 
-
 bounds_new, bounds_map=encode_grid_to_discrete(bounds)
 
 def decode_discrete_to_grid(individual, bounds, bounds_map):

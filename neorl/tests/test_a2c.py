@@ -26,7 +26,7 @@ def test_a2c():
     env=CreateEnvironment(method='a2c', fit=Sphere, 
                           bounds=bounds, mode='min', episode_length=50)
     #create a callback function to log data
-    cb=RLLogger(check_freq=1, mode='min')
+    cb=RLLogger(check_freq=1)
     #create an a2c object based on the env object
     a2c = A2C(MlpPolicy, env=env, n_steps=15)
     #optimise the enviroment class

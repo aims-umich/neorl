@@ -32,7 +32,7 @@ class DQN(OffPolicyRLModel):
     The DQN model class
 
     :param policy: (DQNPolicy or str) The policy model to use (MlpPolicy, CnnPolicy, LnMlpPolicy, ...)
-    :param env: (Gym environment or str) The environment to learn from (if registered in Gym, can be str)
+    :param env: (NEORL environment or Gym environment) The environment to learn with PPO, either use NEORL method ``CreateEnvironment`` (see **below**) or construct your custom Gym environment
     :param gamma: (float) discount factor
     :param learning_rate: (float) learning rate for adam optimizer
     :param buffer_size: (int) size of the replay buffer

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Proximal Policy Optimisation (PPO) &mdash; NEORL 1.5.0b documentation</title>
+  <title>Proximal Policy Optimisation (PPO) &mdash; NEORL 1.5.1b documentation</title>
   
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                main (1.5.0b )
+                main (1.5.1b )
               </div>
             
           
@@ -130,6 +130,8 @@
 <li class="toctree-l1"><a class="reference internal" href="hho.html">Harris Hawks Optimization (HHO)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fneat.html">Feedforward Neuroevolution of Augmenting Topologies (FNEAT)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rneat.html">Recurrent Neuroevolution of Augmenting Topologies (RNEAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ppoes.html">RL-informed Evolution Strategies (PPO-ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ackde.html">RL-informed Differential Evolution (ACKTR-DE)</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
 <ul>
@@ -247,7 +249,7 @@ For that, PPO uses clipping to avoid too large update.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>policy</strong> – (ActorCriticPolicy or str) The policy model to use (e.g. MlpPolicy)</p></li>
-<li><p><strong>env</strong> – (Gym environment or str) The environment to learn from (if registered in Gym, can be str)</p></li>
+<li><p><strong>env</strong> – (NEORL environment or Gym environment) The environment to learn with PPO, either use NEORL method <code class="docutils literal notranslate"><span class="pre">CreateEnvironment</span></code> (see <strong>below</strong>) or construct your custom Gym environment</p></li>
 <li><p><strong>gamma</strong> – (float) Discount factor</p></li>
 <li><p><strong>n_steps</strong> – (int) The number of steps to run for each environment per update
 (i.e. batch size is n_steps * n_env where n_env is number of environment copies running in parallel)</p></li>
@@ -348,6 +350,45 @@ file that can not be deserialized.</p></li>
 
 </dd></dl>
 
+<dl class="py class">
+<dt id="neorl.rl.make_env.CreateEnvironment">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">neorl.rl.make_env.</span></code><code class="sig-name descname"><span class="pre">CreateEnvironment</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ncores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'max'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">episode_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/rl/make_env.html#CreateEnvironment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.rl.make_env.CreateEnvironment" title="Permalink to this definition">¶</a></dt>
+<dd><p>A module to construct a fitness environment for certain algorithms 
+that follow reinforcement learning approach of optimization</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>method</strong> – (str) the supported algorithms, choose either: <code class="docutils literal notranslate"><span class="pre">dqn</span></code>, <code class="docutils literal notranslate"><span class="pre">ppo</span></code>, <code class="docutils literal notranslate"><span class="pre">acktr</span></code>, <code class="docutils literal notranslate"><span class="pre">acer</span></code>, <code class="docutils literal notranslate"><span class="pre">a2c</span></code>.</p></li>
+<li><p><strong>fit</strong> – (function) the fitness function</p></li>
+<li><p><strong>bounds</strong> – (dict) input parameter type and lower/upper bounds in dictionary form. Example: <code class="docutils literal notranslate"><span class="pre">bounds={'x1':</span> <span class="pre">['int',</span> <span class="pre">1,</span> <span class="pre">4],</span> <span class="pre">'x2':</span> <span class="pre">['float',</span> <span class="pre">0.1,</span> <span class="pre">0.8],</span> <span class="pre">'x3':</span> <span class="pre">['float',</span> <span class="pre">2.2,</span> <span class="pre">6.2]}</span></code></p></li>
+<li><p><strong>ncores</strong> – (int) number of parallel processors</p></li>
+<li><p><strong>mode</strong> – (str) problem type, either <code class="docutils literal notranslate"><span class="pre">min</span></code> for minimization problem or <code class="docutils literal notranslate"><span class="pre">max</span></code> for maximization (RL is default to <code class="docutils literal notranslate"><span class="pre">max</span></code>)</p></li>
+<li><p><strong>episode_length</strong> – (int): number of individuals to evaluate before resetting the environment to random initial guess.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="neorl.utils.neorlcalls.RLLogger">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">neorl.utils.neorlcalls.</span></code><code class="sig-name descname"><span class="pre">RLLogger</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">check_freq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_freq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_avg_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pngname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'history'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bestmodel.pkl'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_best_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/utils/neorlcalls.html#RLLogger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.utils.neorlcalls.RLLogger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback for logging data of RL algorathims (x,y), compatible with: A2C, ACER, ACKTR, DQN, PPO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>check_freq</strong> – (int) logging frequency, e.g. 1 will record every time step</p></li>
+<li><p><strong>plot_freq</strong> – (int) frequency of plotting the fitness progress (if <code class="docutils literal notranslate"><span class="pre">None</span></code>, plotter is deactivated)</p></li>
+<li><p><strong>n_avg_steps</strong> – (int) if <code class="docutils literal notranslate"><span class="pre">plot_freq</span></code> is NOT <code class="docutils literal notranslate"><span class="pre">None</span></code>, then this is the number of timesteps to group to draw statistics for the plotter (e.g. 10 will group every 10 time steps to estimate min, max, mean, and std).</p></li>
+<li><p><strong>pngname</strong> – (str) name of the plot that will be saved if <code class="docutils literal notranslate"><span class="pre">plot_freq</span></code> is NOT <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>save_model</strong> – (bool) whether or not to save the RL neural network model (model is saved every <code class="docutils literal notranslate"><span class="pre">check_freq</span></code>)</p></li>
+<li><p><strong>model_name</strong> – (str) name of the model to be saved  if <code class="docutils literal notranslate"><span class="pre">save_model=True</span></code></p></li>
+<li><p><strong>save_best_only</strong> – (bool) if <code class="docutils literal notranslate"><span class="pre">save_model</span> <span class="pre">=</span> <span class="pre">True</span></code>, then this flag only saves the model if the fitness value improves.</p></li>
+<li><p><strong>verbose</strong> – (int) print updates to the screen</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 <div class="section" id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
@@ -376,7 +417,7 @@ file that can not be deserialized.</p></li>
                       <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">episode_length</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
 
 <span class="c1">#create a callback function to log data</span>
-<span class="n">cb</span><span class="o">=</span><span class="n">RLLogger</span><span class="p">(</span><span class="n">check_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">)</span>
+<span class="n">cb</span><span class="o">=</span><span class="n">RLLogger</span><span class="p">(</span><span class="n">check_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="c1">#create a RL object based on the env object</span>
 <span class="n">ppo</span> <span class="o">=</span> <span class="n">PPO2</span><span class="p">(</span><span class="n">MlpPolicy</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span> <span class="n">n_steps</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="c1">#optimise the enviroment class</span>
@@ -413,7 +454,7 @@ file that can not be deserialized.</p></li>
                           <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">episode_length</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
 
     <span class="c1">#create a callback function to log data</span>
-    <span class="n">cb</span><span class="o">=</span><span class="n">RLLogger</span><span class="p">(</span><span class="n">check_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">)</span>
+    <span class="n">cb</span><span class="o">=</span><span class="n">RLLogger</span><span class="p">(</span><span class="n">check_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="c1">#create a RL object based on the env object</span>
     <span class="n">ppo</span> <span class="o">=</span> <span class="n">PPO2</span><span class="p">(</span><span class="n">MlpPolicy</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span> <span class="n">n_steps</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="c1">#optimise the environment class</span>

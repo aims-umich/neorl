@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.tune.bayestune &mdash; NEORL 1.4.8b documentation</title>
+  <title>neorl.tune.bayestune &mdash; NEORL 1.5.1b documentation</title>
   
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                main (1.4.8b )
+                main (1.5.1b )
               </div>
             
           
@@ -120,6 +120,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/jaya.html">JAYA Algorithm</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/bat.html">Bat Algorithm (BAT)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/hho.html">Harris Hawks Optimization (HHO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/fneat.html">Feedforward Neuroevolution of Augmenting Topologies (FNEAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/rneat.html">Recurrent Neuroevolution of Augmenting Topologies (RNEAT)</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
 <ul>
@@ -130,7 +132,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex1.html">Example 1: RL Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex1.html">Example 1: Traveling Salesman Problem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex2.html">Example 2: Ackley with EA</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex3.html">Example 3: Welded-beam design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex4.html">Example 4: Benchmarks</a></li>
@@ -139,6 +141,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex7.html">Example 7: Pressure Vessel Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex8.html">Example 8: Pressure Vessel Design with Demonstration of Categorical Parameter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex9.html">Example 9: Cantilever Stepped Beam</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex10.html">Example 10: Knapsack Problem</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Misc</span></p>
 <ul>
@@ -248,8 +251,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ncases</span><span class="o">=</span><span class="n">ncases</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncases</span> <span class="o">&lt;</span> <span class="mi">11</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ncases</span> <span class="o">=</span> <span class="mi">11</span> 
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--warning: ncases=</span><span class="si">{}</span><span class="s1"> &lt; 11 is given by the user, but ncases must be more than 11, reset ncases to 11&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ncases</span><span class="p">))</span>  
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--warning: ncases=</span><span class="si">{}</span><span class="s1"> &lt; 11 is given by the user, but ncases must be more than 11, reset ncases to 11&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ncases</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ncases</span> <span class="o">=</span> <span class="mi">11</span>
             
         <span class="bp">self</span><span class="o">.</span><span class="n">full_grid</span><span class="p">()</span>
         
@@ -312,7 +315,7 @@
                                     <span class="n">dimensions</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dimensions</span><span class="p">,</span>
                                     <span class="n">acq_func</span><span class="o">=</span><span class="s1">&#39;EI&#39;</span><span class="p">,</span> <span class="c1"># Expected Improvement.</span>
                                     <span class="n">n_calls</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ncases</span><span class="p">,</span>
-                                    <span class="n">random_state</span><span class="o">=</span><span class="n">core_seed</span><span class="p">)</span>
+                                    <span class="n">random_state</span><span class="o">=</span><span class="n">core_seed</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">)</span>
         
         <span class="k">return</span> <span class="n">search_result</span><span class="o">.</span><span class="n">x_iters</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">search_result</span><span class="o">.</span><span class="n">func_vals</span><span class="p">)</span>
     
@@ -386,7 +389,7 @@
                                             <span class="n">dimensions</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dimensions</span><span class="p">,</span>
                                             <span class="n">acq_func</span><span class="o">=</span><span class="s1">&#39;EI&#39;</span><span class="p">,</span> <span class="c1"># Expected Improvement.</span>
                                             <span class="n">n_calls</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ncases</span><span class="p">,</span>
-                                            <span class="n">random_state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+                                            <span class="n">random_state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">bayesres</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">search_result</span><span class="o">.</span><span class="n">x_iters</span><span class="p">,</span> <span class="n">columns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">func_args</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">bayesres</span><span class="p">[</span><span class="s1">&#39;score&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_result</span><span class="o">.</span><span class="n">func_vals</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">==</span><span class="s1">&#39;min&#39;</span> <span class="k">else</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">search_result</span><span class="o">.</span><span class="n">func_vals</span>

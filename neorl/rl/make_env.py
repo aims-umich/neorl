@@ -279,7 +279,7 @@ def CreateEnvironment(method, fit, bounds, ncores=1, mode='max', episode_length=
     A module to construct a fitness environment for certain algorithms 
     that follow reinforcement learning approach of optimization
     
-    :param method: (str) the supported algorithms, choose either: ``dqn``, ``ppo``, ``acktr``, ``acer``, ``a2c``, ``rneat``, ``fneat``
+    :param method: (str) the supported algorithms, choose either: ``dqn``, ``ppo``, ``acktr``, ``acer``, ``a2c``.
     :param fit: (function) the fitness function
     :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: ``bounds={'x1': ['int', 1, 4], 'x2': ['float', 0.1, 0.8], 'x3': ['float', 2.2, 6.2]}``
     :param ncores: (int) number of parallel processors

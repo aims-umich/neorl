@@ -6,6 +6,8 @@
 #@author: majdi
 #"""
 
+import matplotlib
+matplotlib.use('Agg')
 import numpy as np
 import pandas as pd
 from neorl.rl.baselines.shared.callbacks import BaseCallback
@@ -228,37 +230,54 @@ def Sphere(individual):
     
 class RLLogger(BaseCallback):
     """
-    Callback for logging data of RL algorathims (x,y data) and saving a model (the check is done every ``check_freq`` steps)
+    Callback for logging data of RL algorathims (x,y), compatible with: A2C, ACER, ACKTR, DQN, PPO
 
-    :param check_freq: (int)
-    :param log_dir: (str) Path to the folder where the model and logging data will be saved.
+    :param check_freq: (int) logging frequency, e.g. 1 will record every time step 
+    :param plot_freq: (int) frequency of plotting the fitness progress (if ``None``, plotter is deactivated)
+    :param n_avg_steps: (int) if ``plot_freq`` is NOT ``None``, then this is the number of timesteps to group to draw statistics for the plotter (e.g. 10 will group every 10 time steps to estimate min, max, mean, and std).
+    :param pngname: (str) name of the plot that will be saved if ``plot_freq`` is NOT ``None``.
+    :param save_model: (bool) whether or not to save the RL neural network model (model is saved every ``check_freq``)
+    :param model_name: (str) name of the model to be saved  if ``save_model=True``
+    :param save_best_only: (bool) if ``save_model = True``, then this flag only saves the model if the fitness value improves. 
     :param verbose: (int) print updates to the screen
-    :param save_model: (bool) whether or not to save the RL neural network model
     """
-    def __init__(self, check_freq=1, mode='max', log_dir='rl_log', plot_freq=None, n_avg_steps=10, pngname='history', save_model=False, save_best_only=True, verbose=False):
+    def __init__(self, check_freq=1, plot_freq=None, n_avg_steps=10, pngname='history', 
+                 save_model=False, model_name='bestmodel.pkl', save_best_only=True, 
+                 verbose=False):
         super(RLLogger, self).__init__(verbose)
         self.check_freq = check_freq
         self.plot_freq=plot_freq
         self.pngname=pngname
         self.n_avg_steps=n_avg_steps
-        if mode not in ['min', 'max']:
-            raise ValueError('--error: The mode entered by user is invalid, use either `min` or `max`')
-        self.mode=mode
-        self.log_dir = log_dir
+        self.model_name = model_name
         self.save_model=save_model
         self.verbose=verbose
         self.save_best_only=save_best_only
-        self.save_path = os.path.join(log_dir, 'best_model.pkl')
         self.rbest = -np.inf
         self.rbest_maxonly = -np.inf
         self.r_hist=[]
+        self.x_hist=[]
     def _init_callback(self) -> None:
         # Create folder if needed
-        if self.save_model:
-            if self.log_dir is not None:
-                os.makedirs(self.log_dir, exist_ok=True)
+        try:
+            self.mode=self.training_env.get_attr('mode')[0]   #PPO/ACER/A2C/ACKTR
+        except:
+            try:
+                self.mode=self.training_env.mode       #DQN
+            except:
+                print('--warning: the logger cannot find mode in the environment, it is set by default to `max`')
+                self.mode='max'
+                
+        if self.mode not in ['min', 'max']:
+            raise ValueError('--error: The mode entered by user is invalid, use either `min` or `max`')
+
+        #if self.save_model:
+        #    if self.log_dir is not None:
+        #        os.makedirs(self.log_dir, exist_ok=True)
 
     def _on_step(self) -> bool:
+        
+        
         if self.n_calls % self.check_freq == 0:
             
             if self.verbose:
@@ -279,9 +298,9 @@ class RLLogger(BaseCallback):
                     x=self.locals['info']['x']   #DQN case (special dict naming)
                     
             if self.save_model and not self.save_best_only:
-                self.model.save(self.save_path)
+                self.model.save(self.model_name)
                 if self.verbose:
-                    print('A new model is saved to {}'.format(self.save_path))
+                    print('A new model is saved to {}'.format(self.model_name))
                 
             if rwd > self.rbest_maxonly:
                 self.xbest=x.copy()
@@ -294,14 +313,16 @@ class RLLogger(BaseCallback):
                 
             
                 if self.save_model and self.save_best_only:
-                    self.model.save(self.save_path)
+                    self.model.save(self.model_name)
                     if self.verbose:
-                        print('An improvement is observed, new model is saved to {}'.format(self.save_path))
+                        print('An improvement is observed, new model is saved to {}'.format(self.model_name))
             
             if self.mode=='max':
                 self.r_hist.append(rwd)
             else:
-                self.r_hist.append(-rwd)  
+                self.r_hist.append(-rwd)
+            
+            self.x_hist.append(list(x))
             
             if self.plot_freq:
                 if self.n_calls % self.plot_freq == 0:

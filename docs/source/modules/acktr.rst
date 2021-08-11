@@ -24,6 +24,10 @@ Parameters
   :members:
   :inherited-members:
 
+.. autoclass:: neorl.rl.make_env.CreateEnvironment
+
+.. autoclass:: neorl.utils.neorlcalls.RLLogger
+
 Example
 -------
 
@@ -54,7 +58,7 @@ Train an ACKTR agent to optimize the 5-D sphere function
 	env=CreateEnvironment(method='acktr', fit=Sphere, 
 	                      bounds=bounds, mode='min', episode_length=50)
 	#create a callback function to log data
-	cb=RLLogger(check_freq=1, mode='min')
+	cb=RLLogger(check_freq=1)
 	#create an acktr object based on the env object
 	acktr = ACKTR(MlpPolicy, env=env, n_steps=12, seed=1)
 	#optimise the enviroment class
@@ -93,7 +97,7 @@ Here is an example for a parallel ACKTR
 	                          bounds=bounds, mode='min', episode_length=50)
 	    
 	    #create a callback function to log data
-	    cb=RLLogger(check_freq=1, mode='min')
+	    cb=RLLogger(check_freq=1)
 	    #create a RL object based on the env object
 	    acktr = ACKTR(MlpPolicy, env=env, n_steps=12, seed=1)
 	    #optimise the environment class

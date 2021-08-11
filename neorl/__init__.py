@@ -55,3 +55,5 @@ from neorl.utils.neorlcalls import RLLogger
 from neorl.rl.make_env import CreateEnvironment
 from neorl.hybrid.rneat import RNEAT
 from neorl.hybrid.fneat import FNEAT
+from neorl.hybrid.ppoes import PPOES
+from neorl.hybrid.ackde import ACKDE

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.evolu.es &mdash; NEORL 1.4.8b documentation</title>
+  <title>neorl.evolu.es &mdash; NEORL 1.5.1b documentation</title>
   
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                main (1.4.8b )
+                main (1.5.1b )
               </div>
             
           
@@ -120,6 +120,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/jaya.html">JAYA Algorithm</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/bat.html">Bat Algorithm (BAT)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/hho.html">Harris Hawks Optimization (HHO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/fneat.html">Feedforward Neuroevolution of Augmenting Topologies (FNEAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/rneat.html">Recurrent Neuroevolution of Augmenting Topologies (RNEAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/ppoes.html">RL-informed Evolution Strategies (PPO-ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/ackde.html">RL-informed Differential Evolution (ACKTR-DE)</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
 <ul>
@@ -130,7 +134,7 @@
 </ul>
 <p class="caption"><span class="caption-text">Examples</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex1.html">Example 1: RL Optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex1.html">Example 1: Traveling Salesman Problem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex2.html">Example 2: Ackley with EA</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex3.html">Example 3: Welded-beam design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex4.html">Example 4: Benchmarks</a></li>
@@ -139,6 +143,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex7.html">Example 7: Pressure Vessel Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex8.html">Example 8: Pressure Vessel Design with Demonstration of Categorical Parameter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex9.html">Example 9: Cantilever Stepped Beam</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex10.html">Example 10: Knapsack Problem</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Misc</span></p>
 <ul>
@@ -244,9 +249,22 @@
 <span class="sd">    :param seed: (int) random seed for sampling</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">lambda_</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">cxmode</span><span class="o">=</span><span class="s1">&#39;cx2point&#39;</span><span class="p">,</span> 
-                  <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">cxpb</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">mutpb</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">smin</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">smax</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">clip</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  
+                  <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">cxpb</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">mutpb</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">smin</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">smax</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">clip</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  
         <span class="k">if</span> <span class="n">seed</span><span class="p">:</span>
             <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+        
+        <span class="c1">#-----------------------------------------------------</span>
+        <span class="c1">#a special block for RL-informed GA/ES</span>
+        <span class="k">if</span> <span class="s1">&#39;npop_rl&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="ow">or</span> <span class="s1">&#39;init_pop_rl&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="ow">or</span> <span class="s1">&#39;RLdata&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--warning: npop_rl and init_pop_rl are passed to ES, so RL-informed ES mode is activated&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">npop_rl</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;npop_rl&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">init_pop_rl</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;init_pop_rl&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">RLdata</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;RLdata&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">RLmode</span><span class="o">=</span><span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">RLmode</span><span class="o">=</span><span class="kc">False</span>
+        <span class="c1">#-----------------------------------------------------</span>
+            
         <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">bounds</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
@@ -579,6 +597,24 @@
         
         <span class="k">return</span> <span class="n">offspring</span>
 
+    <span class="k">def</span> <span class="nf">mix_population</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">):</span>
+        <span class="c1">#function used to mix RL with ES population when RLmode is True.</span>
+        
+        <span class="n">kbs_append</span><span class="o">=</span><span class="kc">False</span>
+        <span class="n">indices</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">RLdata</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="bp">self</span><span class="o">.</span><span class="n">npop_rl</span><span class="p">)</span>
+        <span class="n">last_index</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">indices</span><span class="p">)):</span>
+            <span class="n">ind_vec</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">RLdata</span><span class="p">[</span><span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="p">],:])</span>
+            
+            <span class="k">if</span> <span class="n">kbs_append</span><span class="p">:</span> <span class="c1">#append RL individuals to the population</span>
+                <span class="n">strategy</span> <span class="o">=</span> <span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">smin</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">smax</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb</span><span class="p">))]</span>
+                <span class="n">kbs_ind</span><span class="o">=</span><span class="p">[</span><span class="n">ind_vec</span><span class="p">,</span><span class="n">strategy</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">pop</span><span class="p">[</span><span class="n">last_index</span><span class="o">+</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span><span class="o">=</span><span class="n">kbs_ind</span>
+            <span class="k">else</span><span class="p">:</span> <span class="c1">#replace the worst individuals in pop with RL individuals</span>
+                <span class="n">pop</span><span class="p">[</span><span class="n">last_index</span><span class="o">-</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">ind_vec</span>
+            
+        <span class="k">return</span> <span class="n">pop</span>
+                        
 <div class="viewcode-block" id="ES.evolute"><a class="viewcode-back" href="../../../modules/es.html#neorl.evolu.es.ES.evolute">[docs]</a>    <span class="k">def</span> <span class="nf">evolute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ngen</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function evolutes the ES algorithm for number of generations.</span>
@@ -624,9 +660,10 @@
         
                 
             <span class="c1"># Select the next generation population</span>
-            <span class="c1">#print(offspring)</span>
             <span class="n">population</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">pop</span><span class="o">=</span><span class="n">offspring</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="p">))</span>
-            <span class="c1">#print(population)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">RLmode</span><span class="p">:</span>  <span class="c1">#perform RL informed ES</span>
+                <span class="n">population</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mix_population</span><span class="p">(</span><span class="n">population</span><span class="p">)</span>
+                
             <span class="n">inds</span><span class="p">,</span> <span class="n">rwd</span><span class="o">=</span><span class="p">[</span><span class="n">population</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">population</span><span class="p">],</span> <span class="p">[</span><span class="n">population</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">population</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">best_scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">rwd</span><span class="p">))</span>
             <span class="n">arg_max</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">rwd</span><span class="p">)</span>
