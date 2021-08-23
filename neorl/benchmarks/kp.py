@@ -106,7 +106,8 @@ class KP(gym.Env):
         self.subcounter += 1 
         if self.subcounter != self.episode_length + 1: # generate the new knapsack
             self.obj_id = copy.deepcopy(list(self.obj_library.keys()))
-            individual = self.obj_list
+            self.obj_list.pop(-1)
+            individual = copy.deepcopy(self.obj_list)
             self.obj_list = []
             self.state[:,0] = - 10**6.0 * np.ones(self.number_of_objects)
             self.state[:,1] = - 10**6.0 * np.ones(self.number_of_objects)
@@ -138,13 +139,14 @@ class KP(gym.Env):
             self.counter = 0
             if self.subcounter != self.episode_length + 1: # generate the new knapsack 
                 self.obj_id = copy.deepcopy(list(self.obj_library.keys()))
-                individual = self.obj_list
+                self.obj_list.pop(-1)
+                individual = copy.deepcopy(self.obj_list)
                 self.obj_list = []
                 self.state[:,0] = - 10**6.0 * np.ones(self.number_of_objects)
                 self.state[:,1] = - 10**6.0 * np.ones(self.number_of_objects)
                 self.state[:,2] = - 10**6.0 * np.ones(self.number_of_objects)
         else:
-            individual = self.obj_list # a knapsack is not complete.
+            individual = copy.deepcopy(self.obj_list) # a knapsack is not complete.
 
     if self.subcounter == self.episode_length:# episode terminates
         self.done = True
