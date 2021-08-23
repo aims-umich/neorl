@@ -3,14 +3,15 @@
 Changelog
 ==========
 
-Release 1.5.3b (2021-08-22)
-------------------------------------
+Release 1.5.3b (correction: 1.5.4b) (2021-08-22)
+--------------------------------------------------
 
 - Added hybrid neuroevolution algorithm: Neural genetic algorithm (NGA)
 - Added hybrid neuroevolution algorithm: Neural Harris hawks optimization (NHHO)
 - Added Cuckoo Search with all spaces handled.
 - Added Ant Colony optimization for continuous domains.
 - Added Tabu Search for discrete domains.
+- Fixed a critical bug in the terminal API in the followup 1.5.4b
 
 Release 1.5.2b (2021-08-10)
 ------------------------------------

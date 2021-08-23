@@ -44,13 +44,21 @@ Linkedin: https://www.linkedin.com/in/haijia-wang
 
 Katelin Du is an undergraduate student at MIT in the class of 2023. She is studying nuclear science and engineering with a focus in computational modeling and simulation methods. She is interested in the use of computational tools such as simulation methods and machine learning in engineering applications. In the summer of 2021, she worked as an undergraduate researcher and contributed to NEORL by adding to its existing set of optimization algorithms and performing engineering benchmarking. Algorithms she worked on include Harris Hawks Optimization and hybrid neuroevolution Harris Hawks Optimization, and genetic algorithms.
 
+.. image:: ../images/devin.jpg
+   :scale: 30 %
+   :alt: alternate text
+   :align: left
+   
+Devin Seyler is an undergraduate at MIT in the class of 2022 studying physics and mathematics. He is interested in nuclear physics and the use of algorithms in engineering applications, particularly to solve problems related to energy design and optimization. He worked as an undergraduate researcher with NEORL during the summer of 2021, contributing to its set of optimization algorithms. Specifically, he worked on Bat Algorithm and a hybrid neuroevolutionary Grey Wolf Optimizer. He also performed benchmarking with various engineering problems along with application of NEORL on fuel cell energy optimization.
+
 .. image:: ../images/john.jpg
    :scale: 13 %
    :alt: alternate text
-   :align: left
+   :align: right
 
 John Mobley IV is a Ph.D. student within the Department of Nuclear Science and Engineering at MIT. He joined MIT in June 2021 following the completion of his undergraduate career at Iowa State University where he earned a B.S. in Physics and a B.S. in Mathematics. Passionate about the development and deployment of advanced nuclear reactor technologies from Generation IV and beyond, John is interested in exploring the burgeoning domain of small-scale, reduced capital, modular, self-contained concepts. Contributing to NEORL, he has worked to identify the implications of hyperparameters in an effort to tune and isolate optimal settings. He also has worked on application of NEORL to Pressurized Water Reactor core optimization.
 
 Linkedin: https://www.linkedin.com/in/johnmobleyiv/
+
 
  

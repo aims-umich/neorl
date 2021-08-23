@@ -591,7 +591,7 @@ class ESTUNE:
         
         with open ('tunesummary.txt', 'w') as fout:
             
-            fout.write(self.logo)
+            #fout.write(self.logo)
             fout.write('*****************************************************\n')
             fout.write('Summary for the TUNE case \n')
             fout.write('*****************************************************\n')

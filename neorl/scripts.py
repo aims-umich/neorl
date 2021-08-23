@@ -79,12 +79,9 @@ def main():
                                  All Rights Reserved
     
                            \n"""
-
-    try:                    
-        print(logo)
-    except:
-        logo=logo.encode('utf-8')
-        #logo=logo.encode('ascii', 'ignore').decode('ascii')
+    
+    
+    logo=logo.encode('utf-8')
                            
     __version__=version()
     path=os.path.dirname(neorl.__file__)
