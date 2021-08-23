@@ -768,7 +768,7 @@ class ActorCriticRLModel(BaseRLModel):
         If None, the number of cpu of the current machine will be used.
     """
 
-    def __init__(self, policy, env, _init_setup_model, verbose=0, policy_base=ActorCriticPolicy,
+    def __init__(self, policy, env, _init_setup_model=False, verbose=0, policy_base=ActorCriticPolicy,
                  requires_vec_env=False, policy_kwargs=None, seed=None, n_cpu_tf_sess=None):
         super(ActorCriticRLModel, self).__init__(policy, env, verbose=verbose, requires_vec_env=requires_vec_env,
                                                  policy_base=policy_base, policy_kwargs=policy_kwargs,

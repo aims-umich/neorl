@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Changelog &mdash; NEORL 1.5.1b documentation</title>
+  <title>Changelog &mdash; NEORL 1.5.3b documentation</title>
   
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                main (1.5.1b )
+                main (1.5.3b )
               </div>
             
           
@@ -124,6 +124,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../modules/hho.html">Harris Hawks Optimization (HHO)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../modules/fneat.html">Feedforward Neuroevolution of Augmenting Topologies (FNEAT)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../modules/rneat.html">Recurrent Neuroevolution of Augmenting Topologies (RNEAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/ppoes.html">RL-informed Evolution Strategies (PPO-ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/ackde.html">RL-informed Differential Evolution (ACKTR-DE)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/aco.html">Ant Colony Optimization (ACO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/nga.html">Neural Genetic Algorithms (NGA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/nhho.html">Neural Harris Hawks Optimization (NHHO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/cs.html">Cuckoo Search (CS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/ts.html">Tabu Search (TS)</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
 <ul>
@@ -148,7 +155,8 @@
 <p class="caption"><span class="caption-text">Misc</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#coming-next">Coming next</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#release-1-5-3b-2021-08-22">Release 1.5.3b (2021-08-22)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#release-1-5-2b-2021-08-10">Release 1.5.2b (2021-08-10)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#release-1-5-1b-2021-08-01">Release 1.5.1b (2021-08-01)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#release-1-5-0b-2021-07-28">Release 1.5.0b (2021-07-28)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#release-1-4-8b-2021-07-14">Release 1.4.8b (2021-07-14)</a></li>
@@ -239,12 +247,22 @@
             
   <div class="section" id="changelog">
 <span id="id1"></span><h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="coming-next">
-<h2>Coming next<a class="headerlink" href="#coming-next" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="release-1-5-3b-2021-08-22">
+<h2>Release 1.5.3b (2021-08-22)<a class="headerlink" href="#release-1-5-3b-2021-08-22" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p>To add a module for Cuckoo search.</p></li>
-<li><p>To add two modules for RL-informed EA optimization.</p></li>
-<li><p>And more …</p></li>
+<li><p>Added hybrid neuroevolution algorithm: Neural genetic algorithm (NGA)</p></li>
+<li><p>Added hybrid neuroevolution algorithm: Neural Harris hawks optimization (NHHO)</p></li>
+<li><p>Added Cuckoo Search with all spaces handled.</p></li>
+<li><p>Added Ant Colony optimization for continuous domains.</p></li>
+<li><p>Added Tabu Search for discrete domains.</p></li>
+</ul>
+</div>
+<div class="section" id="release-1-5-2b-2021-08-10">
+<h2>Release 1.5.2b (2021-08-10)<a class="headerlink" href="#release-1-5-2b-2021-08-10" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Added hybrid neuroevolution algorithm PPO-ES.</p></li>
+<li><p>Added hybrid neuroevolution algorithm ACKTR-DE.</p></li>
+<li><p>Updated documentation for RL algorithms.</p></li>
 </ul>
 </div>
 <div class="section" id="release-1-5-1b-2021-08-01">

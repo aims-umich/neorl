@@ -65,7 +65,6 @@ print('best y:', y_best)
   
 def main():
     
-    
     logo="""
     
     \t    NEORL: NeuroEvolution Optimisation with Reinforcement Learning
@@ -80,9 +79,13 @@ def main():
                                  All Rights Reserved
     
                            \n"""
+
+    try:                    
+        print(logo)
+    except:
+        logo=logo.encode('utf-8')
+        #logo=logo.encode('ascii', 'ignore').decode('ascii')
                            
-    #print(logo)
-    
     __version__=version()
     path=os.path.dirname(neorl.__file__)
     parser = argparse.ArgumentParser(description='NEORL command line API parser')
@@ -159,7 +162,7 @@ def main():
                 print('NEORL was run on -t/--test mode successfully and the syntax seems correct')
                 print('***************************************************************************')
                 sys.exit()
-                
+            
             initfiles(methods=inp.methods, nx=inp.gen_dict['xsize_plot'][0], ny=inp.gen_dict['ysize'][0], 
                       inp_headers= inp.gen_dict['xnames'][0], out_headers=inp.gen_dict['ynames'][0], 
                       log_dir=inp.gen_dict['log_dir'], logo=logo)  # Intialize the all loggers

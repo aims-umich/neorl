@@ -6,14 +6,11 @@
 #@author: majdi
 #"""
 
-import matplotlib
-matplotlib.use('Agg')
 import numpy as np
 import pandas as pd
 from neorl.rl.baselines.shared.callbacks import BaseCallback
-from matplotlib.lines import Line2D
 import matplotlib.pyplot as plt
-import sys, os
+from matplotlib.lines import Line2D
 
 class SavePlotCallback(BaseCallback):
     """
@@ -39,6 +36,10 @@ class SavePlotCallback(BaseCallback):
         self.log_dir = log_dir
         self.save_path = self.log_dir + '_bestmodel.pkl'
         self.best_mean_reward = -np.inf
+
+        #avoid activating 'Agg' in the header so not to affect other classes/algs
+        import matplotlib
+        matplotlib.use('Agg')
 
     def runcall(self):
         
@@ -123,7 +124,7 @@ class SavePlotCallback(BaseCallback):
     
     
     def plot_progress(self, method_xlabel='Epoch'):
-        
+
         self.out_data=pd.read_csv(self.log_dir+'_out.csv')
         color_list=['b', 'g', 'r', 'c', 'm', 'y', 'darkorange', 'purple', 'tab:brown', 'lime']
         plot_data=self.out_data.drop(['caseid'], axis=1)  #exclude caseid, which is the first column from plotting (meaningless)
@@ -217,16 +218,6 @@ class SavePlotCallback(BaseCallback):
             
         else:
             raise Exception ('the plot mode defined by the user does not exist')
-			
-def Sphere(individual):
-        """Sphere test objective function.
-                F(x) = sum_{i=1}^d xi^2
-                d=1,2,3,...
-                Range: [-100,100]
-                Minima: 0
-        """
-        #print(individual)
-        return sum(x**2 for x in individual)
     
 class RLLogger(BaseCallback):
     """
@@ -257,6 +248,12 @@ class RLLogger(BaseCallback):
         self.rbest_maxonly = -np.inf
         self.r_hist=[]
         self.x_hist=[]
+        
+        if self.plot_freq:
+            #avoid activating 'Agg' in the header so not to affect other classes/algs
+            import matplotlib
+            matplotlib.use('Agg')
+            
     def _init_callback(self) -> None:
         # Create folder if needed
         try:
@@ -267,9 +264,10 @@ class RLLogger(BaseCallback):
             except:
                 print('--warning: the logger cannot find mode in the environment, it is set by default to `max`')
                 self.mode='max'
-                
+        
         if self.mode not in ['min', 'max']:
-            raise ValueError('--error: The mode entered by user is invalid, use either `min` or `max`')
+            self.mode='max'
+            print('--warning: The mode entered by user is invalid, use either `min` or `max`')
 
         #if self.save_model:
         #    if self.log_dir is not None:

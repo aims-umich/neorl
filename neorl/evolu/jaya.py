@@ -120,13 +120,17 @@ class JAYA:
         #Return:
         #list - pop fitnesses
         #"""
+        core_lst=[]
+        for case in range (0, pos_array.shape[0]):
+            core_lst.append(list(pos_array[case, :]))
+                        
         if self.ncores > 1:
             with joblib.Parallel(n_jobs=self.ncores) as parallel:
-                fitness_lst = parallel(joblib.delayed(self.fit_worker)(pos_array[i, :]) for i in range(self.npop))
+                fitness_lst = parallel(joblib.delayed(self.fit_worker)(item) for item in core_lst)
         else:
             fitness_lst = []
-            for i in range(self.npop):
-                fitness_lst.append(self.fit_worker(pos_array[i, :]))
+            for item in core_lst:
+                fitness_lst.append(self.fit_worker(item))
         return fitness_lst
 
     def fit_worker(self, x):
@@ -202,11 +206,11 @@ class JAYA:
         for i in range(N):
             if fitness_mat[i] > Best_score:
                 Best_score = fitness_mat[i]
-                Best_pos = pos[i, :]
+                Best_pos = pos[i, :].copy()
             if fitness_mat[i] < Worst_score:
                 Worst_score = fitness_mat[i]
-                Worst_pos = pos[i, :]
-
+                Worst_pos = pos[i, :].copy()
+                
         ## main loop
         best_scores = []
         for gen in range(1, ngen+1):
@@ -232,26 +236,28 @@ class JAYA:
                         
             for i in range(N):
                 if fitness_new[i] > fitness_mat[i]:
-                    pos[i,:] = new_pos[i,:]
+                    pos[i,:] = new_pos[i,:].copy()
                     fitness_mat[i] = fitness_new[i]
 
             # update best_score and worst_score
             for i in range(N):
                 if fitness_mat[i] > Best_score:
                     Best_score = fitness_mat[i]
-                    Best_pos = pos[i, :]
+                    Best_pos = pos[i, :].copy()
                 if fitness_mat[i] < Worst_score:
                     Worst_score = fitness_mat[i]
-                    Worst_pos = pos[i, :]            
+                    Worst_pos = pos[i, :].copy()           
 
             #-----------------------------
             #Fitness saving 
             #-----------------------------
             gen_avg = sum(fitness_mat) / N                   # current generation avg. fitness
-            y_best = Best_score                                # fitness of best individual
-            x_best = Best_pos  # position of the best flame
+            y_best = Best_score         # fitness of best individual
+            x_best = Best_pos.copy()   # position of the best flame
             best_scores.append(y_best)
             
+            #print(self.fit_worker(x_best), self.fit(x_best), y_best)
+                        
             #--mir  show the value wrt min/max
             if self.mode=='min':
                 y_best_correct=-y_best
@@ -277,7 +283,7 @@ class JAYA:
         if self.grid_flag:
             x_best_correct = decode_discrete_to_grid(x_best, self.orig_bounds, self.bounds_map)
         else:
-            x_best_correct = x_best
+            x_best_correct = x_best.copy()
             
         if verbose:
             print('------------------------ JAYA Summary --------------------------')

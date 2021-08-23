@@ -44,11 +44,12 @@ neorl/evolu/runners/__init__.py
 neorl/evolu/runners/ga.py
 neorl/evolu/runners/sa.py
 neorl/hybrid/__init__.py
+neorl/hybrid/ackde.py
 neorl/hybrid/fneat.py
 neorl/hybrid/pesa.py
 neorl/hybrid/pesa2.py
 neorl/hybrid/pesax.py
-neorl/hybrid/rles.py
+neorl/hybrid/ppoes.py
 neorl/hybrid/rneat.py
 neorl/hybrid/pesacore/__init__.py
 neorl/hybrid/pesacore/de.py
@@ -144,6 +145,7 @@ neorl/tests/t_deepq.py
 neorl/tests/t_ppo.py
 neorl/tests/test_a2c.py
 neorl/tests/test_acer.py
+neorl/tests/test_ackde.py
 neorl/tests/test_acktr.py
 neorl/tests/test_bat.py
 neorl/tests/test_bayes.py
@@ -166,6 +168,7 @@ neorl/tests/test_parallel_pesa.py
 neorl/tests/test_pesa.py
 neorl/tests/test_pesa2.py
 neorl/tests/test_ppo2.py
+neorl/tests/test_ppoes.py
 neorl/tests/test_pso.py
 neorl/tests/test_random.py
 neorl/tests/test_rneat.py

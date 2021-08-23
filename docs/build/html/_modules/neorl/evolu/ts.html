@@ -1,0 +1,612 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>neorl.evolu.ts &mdash; NEORL 1.5.3b documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> NEORL
+          
+
+          
+            
+            <img src="../../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                main (1.5.3b )
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">General Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/install.html">Quick Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/detinstall.html">Detailed Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/quickstart.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/rl.html">Reinforcement Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/evolu.html">Evolutionary Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/hyperparameter.html">Hyperparameter Tuning</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Algorithms</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/a2c.html">Advantage Actor Critic (A2C)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/acer.html">Actor-Critic with Experience Replay (ACER)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/acktr.html">Actor Critic using Kronecker-Factored Trust Region (ACKTR)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/dqn.html">Deep Q Learning (DQN)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/ppo2.html">Proximal Policy Optimisation (PPO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/es.html">Evolution Strategies (<span class="math notranslate nohighlight">\(\mu,\lambda\)</span>) (ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/pso.html">Particle Swarm Optimisation (PSO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/de.html">Differential Evolution (DE)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/xnes.html">Exponential Natural Evolution Strategies (XNES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/gwo.html">Grey Wolf Optimizer (GWO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/pesa.html">Prioritized replay Evolutionary and Swarm Algorithm (PESA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/pesa2.html">Modern PESA (PESA2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/sa.html">Simulated Annealing (SA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/ssa.html">Salp Swarm Algorithm (SSA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/woa.html">Whale Optimization Algorithm (WOA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/mfo.html">Moth-flame Optimization (MFO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/jaya.html">JAYA Algorithm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/bat.html">Bat Algorithm (BAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/hho.html">Harris Hawks Optimization (HHO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/fneat.html">Feedforward Neuroevolution of Augmenting Topologies (FNEAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/rneat.html">Recurrent Neuroevolution of Augmenting Topologies (RNEAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/ppoes.html">RL-informed Evolution Strategies (PPO-ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/ackde.html">RL-informed Differential Evolution (ACKTR-DE)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/aco.html">Ant Colony Optimization (ACO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/nga.html">Neural Genetic Algorithms (NGA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/nhho.html">Neural Harris Hawks Optimization (NHHO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/cs.html">Cuckoo Search (CS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/ts.html">Tabu Search (TS)</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../tune/grid.html">Grid Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tune/random.html">Random Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tune/bayes.html">Bayesian Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tune/evolu.html">Evolutionary Search</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex1.html">Example 1: Traveling Salesman Problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex2.html">Example 2: Ackley with EA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex3.html">Example 3: Welded-beam design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex4.html">Example 4: Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex5.html">Example 5: CEC’2017 Test Suite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex6.html">Example 6: Three-bar Truss Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex7.html">Example 7: Pressure Vessel Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex8.html">Example 8: Pressure Vessel Design with Demonstration of Categorical Parameter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex9.html">Example 9: Cantilever Stepped Beam</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex10.html">Example 10: Knapsack Problem</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Misc</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../misc/changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../misc/projects.html">Projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../misc/contrib.html">Contributors</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">NEORL</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>neorl.evolu.ts</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for neorl.evolu.ts</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">#&quot;&quot;&quot;</span>
+<span class="c1">#Created on Mon Aug 17 2021</span>
+<span class="c1">#</span>
+<span class="c1">#@author: Paul</span>
+<span class="c1">#&quot;&quot;&quot;</span>
+
+
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">joblib</span>
+<span class="kn">from</span> <span class="nn">neorl.evolu.discrete</span> <span class="kn">import</span> <span class="n">mutate_discrete</span><span class="p">,</span> <span class="n">encode_grid_to_discrete</span><span class="p">,</span> <span class="n">decode_discrete_to_grid</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">combinations</span>
+<span class="kn">import</span> <span class="nn">copy</span> 
+
+<div class="viewcode-block" id="TS"><a class="viewcode-back" href="../../../modules/ts.html#neorl.evolu.ts.TS">[docs]</a><span class="k">class</span> <span class="nc">TS</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Tabu Search Algorithm</span>
+<span class="sd">    </span>
+<span class="sd">    :param mode: (str) problem type, either ``min`` for minimization problem or ``max`` for maximization</span>
+<span class="sd">    :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: ``bounds={&#39;x1&#39;: [&#39;int&#39;, 1, 4], &#39;x2&#39;: [&#39;int&#39;, -10, 10], &#39;x3&#39;: [&#39;int&#39;, -100, 100]}``</span>
+<span class="sd">    :param fit: (function) the fitness function </span>
+<span class="sd">    :param tabu_tenure: (int): Timestep under which a certain list of solution cannot be accessed (for diversification). Default value is 6.</span>
+<span class="sd">    :param penalization_weight: (float): a scalar value for the coefficient that controls exploration/exploitation, </span>
+<span class="sd">                            i.e. importance of the frequency of a certain action performed in the search. The higher the value, the least likely is an action to be performed again after</span>
+<span class="sd">                            multiple attempts.</span>
+<span class="sd">    :param swap_mode: (str): either &quot;swap&quot; for swapping two elements of the input or &quot;perturb&quot; to perturb each input within certain bounds (see **Notes** below)</span>
+<span class="sd">    :param ncores: (int) number of parallel processors (only ``ncores=1`` is supported now)</span>
+<span class="sd">    :param seed: (int) random seed for sampling</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">tabu_tenure</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">penalization_weight</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">,</span> <span class="n">swap_mode</span> <span class="o">=</span> <span class="s2">&quot;perturb&quot;</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        
+        <span class="k">if</span> <span class="n">seed</span><span class="p">:</span>
+            <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">ncores</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span><span class="s1">&#39;-error: parallel implementaiton is not yet available. ncores (</span><span class="si">{}</span><span class="s1">) should be equal to 1.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ncores</span><span class="p">)</span>
+        <span class="c1">#assert ncores &lt;= len(bounds), &#39;--error: ncores ({}) must be less than or equal than the length of an individual solution ({})&#39;.format(ncores, len(bounds))</span>
+        
+        <span class="n">int_transform</span><span class="o">=</span><span class="s1">&#39;nearest_int&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span> <span class="c1">#  mode for optimization: CS only solves a minimization problem.</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;min&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="o">=</span><span class="n">fit</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;max&#39;</span><span class="p">:</span>
+            <span class="k">def</span> <span class="nf">fitness_wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                <span class="k">return</span> <span class="o">-</span><span class="n">fit</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="o">=</span><span class="n">fitness_wrapper</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;--error: The mode entered by user is invalid, use either `min` or `max`&#39;</span><span class="p">)</span>
+          
+        <span class="bp">self</span><span class="o">.</span><span class="n">int_transform</span><span class="o">=</span><span class="n">int_transform</span>
+        <span class="k">if</span> <span class="n">int_transform</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;nearest_int&quot;</span><span class="p">,</span> <span class="s2">&quot;sigmoid&quot;</span><span class="p">,</span> <span class="s2">&quot;minmax&quot;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;--error: int_transform entered by user is invalid, must be `nearest_int`, `sigmoid`, or `minmax`&#39;</span><span class="p">)</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span> <span class="o">=</span> <span class="n">ncores</span>
+        
+        <span class="k">assert</span> <span class="n">swap_mode</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;swap&quot;</span><span class="p">,</span><span class="s2">&quot;perturb&quot;</span><span class="p">],</span><span class="s1">&#39;--error: swap_mode must be either &quot;swap&quot; or &quot;perturb&quot; not (</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">swap_mode</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">swap_mode</span> <span class="o">=</span> <span class="n">swap_mode</span> <span class="c1"># swapping method for characterizing a &quot;move&quot; in the tabu search</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tabu_tenure</span> <span class="o">=</span> <span class="n">tabu_tenure</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">penalization_weight</span> <span class="o">=</span> <span class="n">penalization_weight</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ntabus</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">bounds</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span> <span class="c1"># the number of move performed depends on the size of the instance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">bounds</span><span class="p">])</span><span class="c1"># infer variable types </span>
+        <span class="c1">#mir-grid</span>
+        <span class="k">if</span> <span class="s2">&quot;grid&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="o">=</span><span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="o">=</span><span class="n">bounds</span>  <span class="c1">#keep original bounds for decoding</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--debug: grid parameter type is found in the space&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="o">=</span><span class="n">encode_grid_to_discrete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span> <span class="c1">#encoding grid to int</span>
+            <span class="c1">#define var_types again by converting grid to int</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="o">=</span><span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span> <span class="o">=</span> <span class="n">bounds</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">bounds</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ub</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">init_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bounds</span><span class="p">):</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="c1">#Initialize the initial population of Tabu</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="n">indv</span><span class="o">=</span><span class="p">[]</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">bounds</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;int&#39;</span><span class="p">:</span>
+                <span class="n">indv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">2</span><span class="p">]))</span>
+            <span class="k">elif</span> <span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;float&#39;</span><span class="p">:</span>
+                <span class="n">indv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">2</span><span class="p">]))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span> <span class="p">(</span><span class="s1">&#39;unknown data type is given, either int, float, or grid are allowed for parameter bounds&#39;</span><span class="p">)</span>   
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">indv</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">eval_tabus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tabu_list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="c1">#---------------------</span>
+            <span class="c1"># Fitness calcs</span>
+            <span class="c1">#---------------------</span>
+            <span class="n">core_lst</span><span class="o">=</span><span class="p">[]</span>
+            <span class="k">if</span> <span class="n">tabu_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">case</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                    <span class="n">core_lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">case</span><span class="p">,</span> <span class="p">:])</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">with</span> <span class="n">joblib</span><span class="o">.</span><span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">)</span> <span class="k">as</span> <span class="n">parallel</span><span class="p">:</span>
+                        <span class="n">fitness_lst</span><span class="o">=</span><span class="n">parallel</span><span class="p">(</span><span class="n">joblib</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fit_worker</span><span class="p">)(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">core_lst</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">fitness_lst</span><span class="o">=</span><span class="p">[]</span>
+                    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">core_lst</span><span class="p">:</span>
+                        <span class="n">fitness_lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fit_worker</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">case</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">tabu_list</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                    <span class="n">core_lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tabu_list</span><span class="p">[</span><span class="n">case</span><span class="p">,</span> <span class="p">:])</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">with</span> <span class="n">joblib</span><span class="o">.</span><span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">)</span> <span class="k">as</span> <span class="n">parallel</span><span class="p">:</span>
+                        <span class="n">fitness_lst</span><span class="o">=</span><span class="n">parallel</span><span class="p">(</span><span class="n">joblib</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fit_worker</span><span class="p">)(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">core_lst</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">fitness_lst</span><span class="o">=</span><span class="p">[]</span>
+                    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">core_lst</span><span class="p">:</span>
+                        <span class="n">fitness_lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fit_worker</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
+
+            <span class="k">return</span> <span class="n">fitness_lst</span>
+
+    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">fit</span><span class="p">):</span>
+    
+        <span class="n">best_fit</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
+        <span class="n">min_idx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
+        <span class="n">best_pos</span><span class="o">=</span><span class="n">pos</span><span class="p">[</span><span class="n">min_idx</span><span class="p">,:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  
+        <span class="k">return</span> <span class="n">best_pos</span><span class="p">,</span> <span class="n">best_fit</span> 
+        
+    <span class="k">def</span> <span class="nf">ensure_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vec</span><span class="p">):</span>
+        <span class="n">vec_new</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># cycle through each variable in vector </span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+            <span class="c1"># variable exceedes the minimum boundary</span>
+            <span class="k">if</span> <span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">vec_new</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+            <span class="c1"># variable exceedes the maximum boundary</span>
+            <span class="k">if</span> <span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">2</span><span class="p">]:</span>
+                <span class="n">vec_new</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">2</span><span class="p">])</span>
+            <span class="c1"># the variable is fine</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">2</span><span class="p">]:</span>
+                <span class="n">vec_new</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">vec_new</span>
+
+    <span class="k">def</span> <span class="nf">fit_worker</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="c1">#This worker is for parallel calculations</span>
+        <span class="c1"># Clip the tabu with position outside the lower/upper bounds and return same position</span>
+        <span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ensure_bounds</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="p">:</span>
+            <span class="c1">#decode the individual back to the int/float/grid mixed space</span>
+            <span class="n">x</span><span class="o">=</span><span class="n">decode_discrete_to_grid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="p">)</span>
+        <span class="c1"># Calculate objective function for each search agent</span>
+        <span class="n">fitness</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fitness</span>
+
+    <span class="k">def</span> <span class="nf">ensure_discrete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vec</span><span class="p">):</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="c1">#to mutate a vector if discrete variables exist </span>
+        <span class="c1">#handy function to be used within CS phases</span>
+
+        <span class="c1">#Params:</span>
+        <span class="c1">#vec - tabu position in vector/list form</span>
+
+        <span class="c1">#Return:</span>
+        <span class="c1">#vec - updated tabu position vector with discrete values</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;int&#39;</span><span class="p">:</span>
+                <span class="n">vec</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span> <span class="o">=</span> <span class="n">mutate_discrete</span><span class="p">(</span><span class="n">x_ij</span><span class="o">=</span><span class="n">vec</span><span class="p">[</span><span class="n">dim</span><span class="p">],</span> 
+                                               <span class="n">x_min</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="n">vec</span><span class="p">),</span>
+                                               <span class="n">x_max</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="n">vec</span><span class="p">),</span>
+                                               <span class="n">lb</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lb</span><span class="p">[</span><span class="n">dim</span><span class="p">],</span> 
+                                               <span class="n">ub</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ub</span><span class="p">[</span><span class="n">dim</span><span class="p">],</span>
+                                               <span class="n">alpha</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span>
+                                               <span class="n">method</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">int_transform</span><span class="p">,</span>
+                                               <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">vec</span>
+
+    <span class="k">def</span> <span class="nf">UpdateTabu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">Position</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
+        <span class="c1">#&quot;&quot;&quot; </span>
+        <span class="c1">#Perturb the &#39;Position&#39; vector with parameter i and j</span>
+        <span class="c1">#if swap option: swap elements</span>
+        <span class="c1">#if perturb option: perturb elements</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="n">tempposition</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">Position</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">swap_mode</span> <span class="o">==</span> <span class="s2">&quot;swap&quot;</span><span class="p">:</span>
+            <span class="c1"># job index in the Position:</span>
+            <span class="n">i_index</span> <span class="o">=</span> <span class="n">tempposition</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">j_index</span> <span class="o">=</span> <span class="n">tempposition</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+            <span class="n">tempposition</span><span class="p">[</span><span class="n">i_index</span><span class="p">],</span> <span class="n">tempposition</span><span class="p">[</span><span class="n">j_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">tempposition</span><span class="p">[</span><span class="n">j_index</span><span class="p">],</span> <span class="n">tempposition</span><span class="p">[</span><span class="n">i_index</span><span class="p">]</span><span class="c1"># Swap</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">swap_mode</span> <span class="o">==</span> <span class="s2">&quot;perturb&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;int&#39;</span><span class="p">:</span>
+                <span class="n">tempposition</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">j</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">j</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;float&#39;</span><span class="p">:</span>
+                <span class="n">tempposition</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">j</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">j</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">tempposition</span>
+        
+<div class="viewcode-block" id="TS.evolute"><a class="viewcode-back" href="../../../modules/ts.html#neorl.evolu.ts.TS.evolute">[docs]</a>    <span class="k">def</span> <span class="nf">evolute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ngen</span><span class="p">,</span><span class="n">x0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function evolutes the TS algorithm for number of generations</span>
+<span class="sd">        </span>
+<span class="sd">        :param ngen: (int) number of generations to evolute</span>
+<span class="sd">        :param x0: (list) initial position of the tabu (vector size must be of same size as ``len(bounds)``)</span>
+<span class="sd">        :param verbose: (bool) print statistics to screen</span>
+<span class="sd">        </span>
+<span class="sd">        :return: (tuple) (best tabu position, best fitness, and dictionary of fitness history)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;local_fitness&#39;</span><span class="p">:[],</span> <span class="s1">&#39;global_fitness&#39;</span><span class="p">:[]}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">best_fitness</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">)</span><span class="c1">#np.zeros((self.ntabus, self.dim))</span>
+        <span class="k">if</span> <span class="n">x0</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">ntabus</span><span class="p">,</span> <span class="s1">&#39;--error: the length of x0 (</span><span class="si">{}</span><span class="s1">) MUST equal the size of the problem (</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">ntabus</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span> <span class="o">=</span> <span class="n">x0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1">#self.Positions=self.init_sample(self.bounds)  #TODO, update later for mixed-integer optimisation</span>
+            <span class="c1"># Initialize the positions of tabu</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">swap_mode</span> <span class="o">==</span> <span class="s2">&quot;swap&quot;</span><span class="p">:</span><span class="c1"># no repetition of element if swap method</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ntabus</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">swap_mode</span> <span class="o">==</span> <span class="s2">&quot;perturb&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_sample</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span>
+
+        <span class="n">fitness</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">)</span> <span class="c1"># evaluate the initial tabu</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">best_position</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_fitness</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">fitness</span><span class="c1">#self.select(pos = self.Positions,fit = fitness) # find the initial best position and fitness</span>
+        <span class="n">current_solution</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    
+        <span class="n">tabu_structure</span> <span class="o">=</span> <span class="p">{}</span> <span class="c1"># record possible the tabu memory for all possible moves</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">swap_mode</span> <span class="o">==</span> <span class="s2">&quot;swap&quot;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">swap</span> <span class="ow">in</span> <span class="n">combinations</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ntabus</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">2</span><span class="p">):</span>
+                <span class="n">tabu_structure</span><span class="p">[</span><span class="n">swap</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;tabu_time&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;MoveValue&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;freq&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Penalized_MV&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">swap_mode</span> <span class="o">==</span> <span class="s2">&quot;perturb&quot;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ntabus</span><span class="p">):</span>
+                <span class="n">tabu_structure</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;tabu_time&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;MoveValue&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;freq&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Penalized_MV&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+                
+        <span class="nb">iter</span> <span class="o">=</span> <span class="mi">1</span>    
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ngen</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span><span class="c1"># Main loop</span>
+            <span class="c1">#-----------------------------</span>
+            <span class="c1"># Performs multiple moves and evaluate the resulting tabu</span>
+            <span class="c1">#-----------------------------</span>
+            <span class="n">increment</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># utilize to perturb the Position vector at the &#39;increment&#39;th position</span>
+            <span class="n">temp_candidate</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># store new candidate for perturbation to avoid the problem of change in perturbation when best move is called</span>
+            <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tabu_structure</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">move</span> <span class="ow">in</span> <span class="n">tabu_structure</span><span class="p">:</span><span class="c1"># Searching the whole neighborhood of the current solution:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">swap_mode</span> <span class="o">==</span> <span class="s2">&quot;swap&quot;</span><span class="p">:</span>
+                    <span class="n">candidate_solution</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">UpdateTabu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">,</span> <span class="n">move</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">move</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">swap_mode</span> <span class="o">==</span> <span class="s2">&quot;perturb&quot;</span><span class="p">:</span>
+                    <span class="n">candidate_solution</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">UpdateTabu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">,</span> <span class="n">increment</span><span class="p">,[</span><span class="bp">self</span><span class="o">.</span><span class="n">lb</span><span class="p">[</span><span class="n">increment</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">ub</span><span class="p">[</span><span class="n">increment</span><span class="p">]])</span>
+                    <span class="n">temp_candidate</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">candidate_solution</span><span class="p">)</span>
+                    <span class="n">increment</span> <span class="o">+=</span><span class="mi">1</span>
+                <span class="n">fitness</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">candidate_solution</span><span class="p">)</span>
+                <span class="n">tabu_structure</span><span class="p">[</span><span class="n">move</span><span class="p">][</span><span class="s1">&#39;MoveValue&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fitness</span>
+                <span class="n">tabu_structure</span><span class="p">[</span><span class="n">move</span><span class="p">][</span><span class="s1">&#39;Penalized_MV&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fitness</span> <span class="o">+</span> <span class="p">(</span><span class="n">tabu_structure</span><span class="p">[</span><span class="n">move</span><span class="p">][</span><span class="s1">&#39;freq&#39;</span><span class="p">]</span> <span class="o">*</span>
+                                                                             <span class="bp">self</span><span class="o">.</span><span class="n">penalization_weight</span><span class="p">)</span><span class="c1"># Penalized fitness by simply adding freq to it (minimization):</span>
+            <span class="c1">#----------------------</span>
+            <span class="c1">#  Manipulate the tabu list</span>
+            <span class="c1">#----------------------</span>
+            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span><span class="c1"># Admissible move</span>
+                <span class="n">best_move</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">tabu_structure</span><span class="p">,</span> <span class="n">key</span> <span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">tabu_structure</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="s1">&#39;Penalized_MV&#39;</span><span class="p">])</span> <span class="c1"># select the move with the lowest Penalized fitness in the neighborhood (minimization)</span>
+                <span class="n">MoveValue</span> <span class="o">=</span> <span class="n">tabu_structure</span><span class="p">[</span><span class="n">best_move</span><span class="p">][</span><span class="s2">&quot;MoveValue&quot;</span><span class="p">]</span>
+                <span class="n">tabu_time</span> <span class="o">=</span> <span class="n">tabu_structure</span><span class="p">[</span><span class="n">best_move</span><span class="p">][</span><span class="s2">&quot;tabu_time&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">tabu_structure</span><span class="p">[</span><span class="n">best_move</span><span class="p">][</span><span class="s1">&#39;Penalized_MV&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">1e11</span><span class="p">:</span><span class="c1"># no improvement</span>
+                    <span class="k">break</span>
+                <span class="k">if</span> <span class="n">tabu_time</span> <span class="o">&lt;</span> <span class="nb">iter</span><span class="p">:</span><span class="c1"># Not Tabu: the current move can be potentially added to the tabu list</span>
+                    <span class="c1"># make the move</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">swap_mode</span> <span class="o">==</span> <span class="s2">&quot;swap&quot;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">UpdateTabu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">,</span> <span class="n">best_move</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">best_move</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">swap_mode</span> <span class="o">==</span> <span class="s2">&quot;perturb&quot;</span><span class="p">:</span>
+                        <span class="n">best_loc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">([</span><span class="n">tabu_structure</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="s1">&#39;Penalized_MV&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">tabu_structure</span><span class="o">.</span><span class="n">keys</span><span class="p">()])</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span> <span class="o">=</span> <span class="n">temp_candidate</span><span class="p">[</span><span class="n">best_loc</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                    <span class="n">fitness</span> <span class="o">=</span> <span class="n">MoveValue</span><span class="c1">#self.fit(self.Positions)</span>
+                    <span class="k">if</span> <span class="n">MoveValue</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_fitness</span><span class="p">:</span><span class="c1"># Best Improving move</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">best_position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">best_fitness</span> <span class="o">=</span> <span class="n">fitness</span>
+                    <span class="c1"># update tabu_time for the move and freq count</span>
+                    <span class="n">tabu_structure</span><span class="p">[</span><span class="n">best_move</span><span class="p">][</span><span class="s1">&#39;tabu_time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">iter</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">tabu_tenure</span>
+                    <span class="n">tabu_structure</span><span class="p">[</span><span class="n">best_move</span><span class="p">][</span><span class="s1">&#39;freq&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="nb">iter</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">break</span>
+                <span class="k">else</span><span class="p">:</span><span class="c1"># If tabu</span>
+                    <span class="c1"># Aspiration</span>
+                    <span class="k">if</span> <span class="n">MoveValue</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_fitness</span><span class="p">:</span>
+                        <span class="c1"># make the move</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">swap_mode</span> <span class="o">==</span> <span class="s2">&quot;swap&quot;</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">UpdateTabu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">,</span> <span class="n">best_move</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">best_move</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">swap_mode</span> <span class="o">==</span> <span class="s2">&quot;perturb&quot;</span><span class="p">:</span>
+                            <span class="n">best_loc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">([</span><span class="n">tabu_structure</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="s1">&#39;Penalized_MV&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">tabu_structure</span><span class="o">.</span><span class="n">keys</span><span class="p">()])</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span> <span class="o">=</span> <span class="n">temp_candidate</span><span class="p">[</span><span class="n">best_loc</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                        <span class="n">fitness</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">best_position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">best_fitness</span> <span class="o">=</span> <span class="n">fitness</span>
+                        <span class="n">tabu_structure</span><span class="p">[</span><span class="n">best_move</span><span class="p">][</span><span class="s1">&#39;freq&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="nb">iter</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="k">break</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">tabu_structure</span><span class="p">[</span><span class="n">best_move</span><span class="p">][</span><span class="s1">&#39;Penalized_MV&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)</span>
+                        <span class="k">continue</span>
+            
+            <span class="c1">#----------------------</span>
+            <span class="c1">#  Logger related portion</span>
+            <span class="c1">#----------------------</span>
+            <span class="c1">#for i, fits in enumerate(fitness):  </span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">fits</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="n">fitness</span><span class="p">]):</span> 
+                <span class="c1">#save the best of the best!!!</span>
+                <span class="k">if</span> <span class="n">fits</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_fitness</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">best_fitness</span><span class="o">=</span><span class="n">fits</span>
+                    <span class="c1">#self.best_position=self.Positions[i, :].copy()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">best_position</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            
+            <span class="c1">#--mir</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">==</span><span class="s1">&#39;max&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fitness_best_correct</span><span class="o">=-</span><span class="bp">self</span><span class="o">.</span><span class="n">best_fitness</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">local_fitness</span><span class="o">=-</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">fitness</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fitness_best_correct</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">best_fitness</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">local_fitness</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">fitness</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;local_fitness&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">local_fitness</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;global_fitness&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitness_best_correct</span><span class="p">)</span>
+            <span class="c1"># Print statistics</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="ow">and</span> <span class="n">l</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">ntabus</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;TS step </span><span class="si">{}</span><span class="s1">/</span><span class="si">{}</span><span class="s1">, ntabus=</span><span class="si">{}</span><span class="s1">, Ncores=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">((</span><span class="n">l</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">ntabus</span><span class="p">,</span> <span class="n">ngen</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">ntabus</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ntabus</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best Tabu Fitness:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitness_best_correct</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">tabu_decoded</span> <span class="o">=</span> <span class="n">decode_discrete_to_grid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">best_position</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best Tabu Position:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tabu_decoded</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best Tabu Position:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_position</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^&#39;</span><span class="p">)</span>
+
+        <span class="c1">#mir-grid</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tabu_correct</span> <span class="o">=</span> <span class="n">decode_discrete_to_grid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">best_position</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tabu_correct</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_position</span>                
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;------------------------ TS Summary --------------------------&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best fitness (y) found:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitness_best_correct</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best individual (x) found:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tabu_correct</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--------------------------------------------------------------&#39;</span><span class="p">)</span>  
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tabu_correct</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitness_best_correct</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Exelon Corp. &amp; MIT.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

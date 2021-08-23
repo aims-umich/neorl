@@ -1,0 +1,571 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>neorl.evolu.cs &mdash; NEORL 1.5.3b documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> NEORL
+          
+
+          
+            
+            <img src="../../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                main (1.5.3b )
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">General Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/install.html">Quick Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/detinstall.html">Detailed Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/quickstart.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/rl.html">Reinforcement Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/evolu.html">Evolutionary Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/hyperparameter.html">Hyperparameter Tuning</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Algorithms</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/a2c.html">Advantage Actor Critic (A2C)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/acer.html">Actor-Critic with Experience Replay (ACER)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/acktr.html">Actor Critic using Kronecker-Factored Trust Region (ACKTR)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/dqn.html">Deep Q Learning (DQN)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/ppo2.html">Proximal Policy Optimisation (PPO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/es.html">Evolution Strategies (<span class="math notranslate nohighlight">\(\mu,\lambda\)</span>) (ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/pso.html">Particle Swarm Optimisation (PSO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/de.html">Differential Evolution (DE)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/xnes.html">Exponential Natural Evolution Strategies (XNES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/gwo.html">Grey Wolf Optimizer (GWO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/pesa.html">Prioritized replay Evolutionary and Swarm Algorithm (PESA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/pesa2.html">Modern PESA (PESA2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/sa.html">Simulated Annealing (SA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/ssa.html">Salp Swarm Algorithm (SSA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/woa.html">Whale Optimization Algorithm (WOA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/mfo.html">Moth-flame Optimization (MFO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/jaya.html">JAYA Algorithm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/bat.html">Bat Algorithm (BAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/hho.html">Harris Hawks Optimization (HHO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/fneat.html">Feedforward Neuroevolution of Augmenting Topologies (FNEAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/rneat.html">Recurrent Neuroevolution of Augmenting Topologies (RNEAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/ppoes.html">RL-informed Evolution Strategies (PPO-ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/ackde.html">RL-informed Differential Evolution (ACKTR-DE)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/aco.html">Ant Colony Optimization (ACO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/nga.html">Neural Genetic Algorithms (NGA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/nhho.html">Neural Harris Hawks Optimization (NHHO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/cs.html">Cuckoo Search (CS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/ts.html">Tabu Search (TS)</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../tune/grid.html">Grid Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tune/random.html">Random Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tune/bayes.html">Bayesian Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tune/evolu.html">Evolutionary Search</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex1.html">Example 1: Traveling Salesman Problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex2.html">Example 2: Ackley with EA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex3.html">Example 3: Welded-beam design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex4.html">Example 4: Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex5.html">Example 5: CEC’2017 Test Suite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex6.html">Example 6: Three-bar Truss Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex7.html">Example 7: Pressure Vessel Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex8.html">Example 8: Pressure Vessel Design with Demonstration of Categorical Parameter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex9.html">Example 9: Cantilever Stepped Beam</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/ex10.html">Example 10: Knapsack Problem</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Misc</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../misc/changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../misc/projects.html">Projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../misc/contrib.html">Contributors</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">NEORL</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>neorl.evolu.cs</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for neorl.evolu.cs</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">#&quot;&quot;&quot;</span>
+<span class="c1">#Created on Sun Aug 15 2021</span>
+<span class="c1">#</span>
+<span class="c1">#@author: Paul</span>
+<span class="c1">#&quot;&quot;&quot;</span>
+
+
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">joblib</span>
+<span class="kn">from</span> <span class="nn">neorl.evolu.discrete</span> <span class="kn">import</span> <span class="n">mutate_discrete</span><span class="p">,</span> <span class="n">encode_grid_to_discrete</span><span class="p">,</span> <span class="n">decode_discrete_to_grid</span>
+
+<div class="viewcode-block" id="CS"><a class="viewcode-back" href="../../../modules/cs.html#neorl.evolu.cs.CS">[docs]</a><span class="k">class</span> <span class="nc">CS</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Cuckoo Search Algorithm</span>
+<span class="sd">    </span>
+<span class="sd">    :param mode: (str) problem type, either ``min`` for minimization problem or ``max`` for maximization</span>
+<span class="sd">    :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: ``bounds={&#39;x1&#39;: [&#39;int&#39;, 1, 4], &#39;x2&#39;: [&#39;float&#39;, 0.1, 0.8], &#39;x3&#39;: [&#39;float&#39;, 2.2, 6.2]}``</span>
+<span class="sd">    :param fit: (function) the fitness function </span>
+<span class="sd">    :param ncuckoos: (int) number of cuckoos or nests in the population: one cuckoos per nest. Default value is 15.</span>
+<span class="sd">    :param pa: (float) a scalar value for the coefficient that controls exploration/exploitation, </span>
+<span class="sd">                            i.e. fraction of the cuckoos/nests that will be replaced by the new cuckoos/nests.</span>
+<span class="sd">    :param int_transform: (str) method of handling int/discrete variables, choose from: ``nearest_int``, ``sigmoid``, ``minmax``.</span>
+<span class="sd">    :param ncores: (int) number of parallel processors (must be ``&lt;= ncuckoos``)</span>
+<span class="sd">    :param seed: (int) random seed for sampling</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">ncuckoos</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">pa</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">int_transform</span><span class="o">=</span><span class="s1">&#39;nearest_int&#39;</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        
+        <span class="k">if</span> <span class="n">seed</span><span class="p">:</span>
+            <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">ncores</span> <span class="o">&lt;=</span> <span class="n">ncuckoos</span><span class="p">,</span> <span class="s1">&#39;--error: ncores (</span><span class="si">{}</span><span class="s1">) must be less than or equal than ncuckoos (</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ncores</span><span class="p">,</span> <span class="n">ncuckoos</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span> <span class="c1">#  mode for optimization: CS only solves a minimization problem.</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;min&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="o">=</span><span class="n">fit</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;max&#39;</span><span class="p">:</span>
+            <span class="k">def</span> <span class="nf">fitness_wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                <span class="k">return</span> <span class="o">-</span><span class="n">fit</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="o">=</span><span class="n">fitness_wrapper</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;--error: The mode entered by user is invalid, use either `min` or `max`&#39;</span><span class="p">)</span>
+          
+        <span class="bp">self</span><span class="o">.</span><span class="n">int_transform</span><span class="o">=</span><span class="n">int_transform</span>
+        <span class="k">if</span> <span class="n">int_transform</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;nearest_int&quot;</span><span class="p">,</span> <span class="s2">&quot;sigmoid&quot;</span><span class="p">,</span> <span class="s2">&quot;minmax&quot;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;--error: int_transform entered by user is invalid, must be `nearest_int`, `sigmoid`, or `minmax`&#39;</span><span class="p">)</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span> <span class="o">=</span> <span class="n">ncores</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ncuckoos</span> <span class="o">=</span> <span class="n">ncuckoos</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pa</span> <span class="o">=</span> <span class="n">pa</span> <span class="c1"># Discovery rate of parasitic eggs/solutions</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">bounds</span><span class="p">])</span><span class="c1"># infer variable types </span>
+        <span class="c1">#mir-grid</span>
+        <span class="k">if</span> <span class="s2">&quot;grid&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="o">=</span><span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="o">=</span><span class="n">bounds</span>  <span class="c1">#keep original bounds for decoding</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--debug: grid parameter type is found in the space&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="o">=</span><span class="n">encode_grid_to_discrete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span> <span class="c1">#encoding grid to int</span>
+            <span class="c1">#define var_types again by converting grid to int</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="o">=</span><span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span> <span class="o">=</span> <span class="n">bounds</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">bounds</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ub</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">init_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bounds</span><span class="p">):</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="c1">#Initialize the initial population of cuckoos/nests</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="n">indv</span><span class="o">=</span><span class="p">[]</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">bounds</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;int&#39;</span><span class="p">:</span>
+                <span class="n">indv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">2</span><span class="p">]))</span>
+            <span class="k">elif</span> <span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;float&#39;</span><span class="p">:</span>
+                <span class="n">indv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">2</span><span class="p">]))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span> <span class="p">(</span><span class="s1">&#39;unknown data type is given, either int, float, or grid are allowed for parameter bounds&#39;</span><span class="p">)</span>   
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">indv</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">eval_cuckoos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">newnest</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="c1">#---------------------</span>
+        <span class="c1"># Fitness calcs</span>
+        <span class="c1">#---------------------</span>
+        <span class="n">core_lst</span><span class="o">=</span><span class="p">[]</span>
+        <span class="k">if</span> <span class="n">newnest</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">case</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                <span class="n">core_lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">case</span><span class="p">,</span> <span class="p">:])</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">with</span> <span class="n">joblib</span><span class="o">.</span><span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">)</span> <span class="k">as</span> <span class="n">parallel</span><span class="p">:</span>
+                    <span class="n">fitness_lst</span><span class="o">=</span><span class="n">parallel</span><span class="p">(</span><span class="n">joblib</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fit_worker</span><span class="p">)(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">core_lst</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">fitness_lst</span><span class="o">=</span><span class="p">[]</span>
+                <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">core_lst</span><span class="p">:</span>
+                    <span class="n">fitness_lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fit_worker</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span><span class="c1"># fitness of new cuckoo versus old cuckoo must also be compared. newnest are the new cuckoos</span>
+            <span class="k">for</span> <span class="n">case</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">newnest</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                <span class="n">core_lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">newnest</span><span class="p">[</span><span class="n">case</span><span class="p">,</span> <span class="p">:])</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">with</span> <span class="n">joblib</span><span class="o">.</span><span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">)</span> <span class="k">as</span> <span class="n">parallel</span><span class="p">:</span>
+                    <span class="n">fitness_lst</span><span class="o">=</span><span class="n">parallel</span><span class="p">(</span><span class="n">joblib</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fit_worker</span><span class="p">)(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">core_lst</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">fitness_lst</span><span class="o">=</span><span class="p">[]</span>
+                <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">core_lst</span><span class="p">:</span>
+                    <span class="n">fitness_lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fit_worker</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
+            
+        <span class="k">return</span> <span class="n">fitness_lst</span>
+
+    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">fit</span><span class="p">):</span>
+    
+        <span class="n">best_fit</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
+        <span class="n">min_idx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
+        <span class="n">best_pos</span><span class="o">=</span><span class="n">pos</span><span class="p">[</span><span class="n">min_idx</span><span class="p">,:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  
+        <span class="k">return</span> <span class="n">best_pos</span><span class="p">,</span> <span class="n">best_fit</span> 
+        
+    <span class="k">def</span> <span class="nf">ensure_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vec</span><span class="p">):</span>
+        <span class="n">vec_new</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># cycle through each variable in vector </span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+            <span class="c1"># variable exceedes the minimum boundary</span>
+            <span class="k">if</span> <span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">vec_new</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+            <span class="c1"># variable exceedes the maximum boundary</span>
+            <span class="k">if</span> <span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">2</span><span class="p">]:</span>
+                <span class="n">vec_new</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">2</span><span class="p">])</span>
+            <span class="c1"># the variable is fine</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">2</span><span class="p">]:</span>
+                <span class="n">vec_new</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">vec_new</span>
+
+    <span class="k">def</span> <span class="nf">fit_worker</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="c1">#This worker is for parallel calculations</span>
+        <span class="c1"># Clip the cuckoo with position outside the lower/upper bounds and return same position</span>
+        <span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ensure_bounds</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="p">:</span>
+            <span class="c1">#decode the individual back to the int/float/grid mixed space</span>
+            <span class="n">x</span><span class="o">=</span><span class="n">decode_discrete_to_grid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="p">)</span>
+        <span class="c1"># Calculate objective function for each search agent</span>
+        <span class="n">fitness</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fitness</span>
+
+    <span class="k">def</span> <span class="nf">ensure_discrete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vec</span><span class="p">):</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="c1">#to mutate a vector if discrete variables exist </span>
+        <span class="c1">#handy function to be used within CS phases</span>
+
+        <span class="c1">#Params:</span>
+        <span class="c1">#vec - salp position in vector/list form</span>
+
+        <span class="c1">#Return:</span>
+        <span class="c1">#vec - updated salp position vector with discrete values</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;int&#39;</span><span class="p">:</span>
+                <span class="n">vec</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span> <span class="o">=</span> <span class="n">mutate_discrete</span><span class="p">(</span><span class="n">x_ij</span><span class="o">=</span><span class="n">vec</span><span class="p">[</span><span class="n">dim</span><span class="p">],</span> 
+                                               <span class="n">x_min</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="n">vec</span><span class="p">),</span>
+                                               <span class="n">x_max</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="n">vec</span><span class="p">),</span>
+                                               <span class="n">lb</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lb</span><span class="p">[</span><span class="n">dim</span><span class="p">],</span> 
+                                               <span class="n">ub</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ub</span><span class="p">[</span><span class="n">dim</span><span class="p">],</span>
+                                               <span class="n">alpha</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span>
+                                               <span class="n">method</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">int_transform</span><span class="p">,</span>
+                                               <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">vec</span>
+
+    <span class="k">def</span> <span class="nf">UpdateCuckoos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># perform Levy flights to generate </span>
+        <span class="c1"># self.ncuckoos new Cuckoos</span>
+        <span class="n">tempnest</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">ncuckoos</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">))</span>
+        <span class="n">tempnest</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">beta</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="n">sigma</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">math</span><span class="o">.</span><span class="n">gamma</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">beta</span><span class="p">)</span>
+            <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">beta</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="o">/</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">gamma</span><span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="n">beta</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">beta</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">**</span> <span class="p">((</span><span class="n">beta</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">beta</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncuckoos</span><span class="p">):</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">))</span> <span class="o">*</span> <span class="n">sigma</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+            <span class="n">step</span> <span class="o">=</span> <span class="n">u</span> <span class="o">/</span> <span class="nb">abs</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">beta</span><span class="p">)</span>
+            <span class="n">stepsize</span> <span class="o">=</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="p">(</span><span class="n">step</span> <span class="o">*</span> <span class="p">(</span><span class="n">s</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_position</span><span class="p">))</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="n">stepsize</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+            <span class="n">tempnest</span><span class="p">[</span><span class="n">j</span><span class="p">,:]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ensure_bounds</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="n">tempnest</span><span class="p">[</span><span class="n">j</span><span class="p">,:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensure_discrete</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+ 
+        <span class="k">return</span> <span class="n">tempnest</span>
+        
+<div class="viewcode-block" id="CS.evolute"><a class="viewcode-back" href="../../../modules/cs.html#neorl.evolu.cs.CS.evolute">[docs]</a>    <span class="k">def</span> <span class="nf">evolute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ngen</span><span class="p">,</span><span class="n">x0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function evolutes the CS algorithm for number of generations</span>
+<span class="sd">        </span>
+<span class="sd">        :param ngen: (int) number of generations to evolute</span>
+<span class="sd">        :param x0: (list of lists) initial position of the cuckoos (must be of same size as ``ncuckoos``)</span>
+<span class="sd">        :param verbose: (bool) print statistics to screen</span>
+<span class="sd">        </span>
+<span class="sd">        :return: (tuple) (best cuckoo, best fitness, and dictionary of fitness history)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;local_fitness&#39;</span><span class="p">:[],</span> <span class="s1">&#39;global_fitness&#39;</span><span class="p">:[]}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">best_fitness</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">ncuckoos</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">x0</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncuckoos</span><span class="p">,</span> <span class="s1">&#39;--error: the length of x0 (</span><span class="si">{}</span><span class="s1">) MUST equal the number of cuckoos in the group (</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncuckoos</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ncuckoos</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">x0</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1">#self.Positions=self.init_sample(self.bounds)  #TODO, update later for mixed-integer optimisation</span>
+            <span class="c1"># Initialize the positions of cuckoos</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ncuckoos</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">init_sample</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span>
+
+        <span class="n">fitness</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">eval_cuckoos</span><span class="p">()</span> <span class="c1"># evaluate the first cuckoos</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">best_position</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_fitness</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">,</span><span class="n">fit</span> <span class="o">=</span> <span class="n">fitness</span><span class="p">)</span> <span class="c1"># find the initial best position and fitness</span>
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ngen</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span><span class="c1"># Main loop</span>
+            <span class="c1">#-----------------------------</span>
+            <span class="c1"># Obtain new Cuckoo Positions by Lévy flights</span>
+            <span class="c1">#-----------------------------</span>
+            <span class="n">newnest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">UpdateCuckoos</span><span class="p">()</span> <span class="c1"># new cuckoos after Lévy Flights</span>
+            <span class="c1">#----------------------</span>
+            <span class="c1">#  Evaluate New Cuckoos</span>
+            <span class="c1">#----------------------</span>
+            <span class="c1"># Evaluating all new solutions</span>
+            <span class="n">tempnest</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">)</span>
+            <span class="n">fnew</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval_cuckoos</span><span class="p">(</span><span class="n">newnest</span><span class="p">)</span>
+            <span class="c1"># and update current Cuckoos</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncuckoos</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">fnew</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">fitness</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>
+                    <span class="n">fitness</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">fnew</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                    <span class="n">tempnest</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">newnest</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span> <span class="o">=</span> <span class="n">tempnest</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="c1"># Take only the fittest individual</span>
+            <span class="c1">#----------------------</span>
+            <span class="c1">#  Discover a fraction ~pa of Cuckoos from the Cuckoos after Lévy flights</span>
+            <span class="c1">#----------------------</span>
+            <span class="n">new_nest</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">ncuckoos</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">))</span>
+            <span class="n">K</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ncuckoos</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">))</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">pa</span>
+            <span class="n">stepsize</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">*</span> <span class="p">(</span>
+                <span class="n">newnest</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ncuckoos</span><span class="p">),</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">newnest</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ncuckoos</span><span class="p">),</span> <span class="p">:]</span>
+            <span class="p">)</span>
+            <span class="n">new_nest</span> <span class="o">=</span> <span class="n">newnest</span> <span class="o">+</span> <span class="n">stepsize</span> <span class="o">*</span> <span class="n">K</span> <span class="c1"># Update a fraction ~pa of Cuckoo after the Lévy flights</span>
+            <span class="c1">#----------------------</span>
+            <span class="c1">#  Re-evaluate the Cuckoos obtained and update to get the fittest individuals</span>
+            <span class="c1">#----------------------</span>
+            <span class="n">tempnest</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">)</span> <span class="c1"># Will save the fittest individual</span>
+            <span class="n">fnew</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval_cuckoos</span><span class="p">(</span><span class="n">new_nest</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncuckoos</span><span class="p">):</span> <span class="c1"># Compare Cuckoo fitness of newly generated Cuckoos (newnest) and current Cuckoos (self.positions)</span>
+                <span class="k">if</span> <span class="n">fnew</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">fitness</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>
+                    <span class="n">fitness</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">fnew</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                    <span class="n">tempnest</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">new_nest</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span> <span class="o">=</span> <span class="n">tempnest</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="c1"># Update the population</span>
+            
+            <span class="c1">#----------------------</span>
+            <span class="c1">#  Logger related portion</span>
+            <span class="c1">#----------------------</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">fits</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fitness</span><span class="p">):</span>  
+                <span class="c1">#save the best of the best!!!</span>
+                <span class="k">if</span> <span class="n">fits</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_fitness</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">best_fitness</span><span class="o">=</span><span class="n">fits</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">best_position</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            
+            <span class="c1">#--mir</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">==</span><span class="s1">&#39;max&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fitness_best_correct</span><span class="o">=-</span><span class="bp">self</span><span class="o">.</span><span class="n">best_fitness</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">local_fitness</span><span class="o">=-</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">fitness</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fitness_best_correct</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">best_fitness</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">local_fitness</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">fitness</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;local_fitness&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">local_fitness</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;global_fitness&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitness_best_correct</span><span class="p">)</span>
+            <span class="c1"># Print statistics</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncuckoos</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;CS step </span><span class="si">{}</span><span class="s1">/</span><span class="si">{}</span><span class="s1">, ncuckoos=</span><span class="si">{}</span><span class="s1">, Ncores=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">((</span><span class="n">l</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">ncuckoos</span><span class="p">,</span> <span class="n">ngen</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">ncuckoos</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncuckoos</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best Cuckoo/Nest Fitness:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitness_best_correct</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">cuckoo_decoded</span> <span class="o">=</span> <span class="n">decode_discrete_to_grid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">best_position</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best Cuckoo Position:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cuckoo_decoded</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best Cuckoo Position:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_position</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^&#39;</span><span class="p">)</span>
+
+        <span class="c1">#mir-grid</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cuckoo_correct</span> <span class="o">=</span> <span class="n">decode_discrete_to_grid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">best_position</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cuckoo_correct</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_position</span>                
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;------------------------ CS Summary --------------------------&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best fitness (y) found:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitness_best_correct</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best individual (x) found:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cuckoo_correct</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--------------------------------------------------------------&#39;</span><span class="p">)</span>  
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cuckoo_correct</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitness_best_correct</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Exelon Corp. &amp; MIT.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

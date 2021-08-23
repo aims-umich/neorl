@@ -58,7 +58,7 @@ class InputParser():
         
         #-- Paul parser
         self.input_file = []
-        input_file_text = open(input_file_path,'r')
+        input_file_text = open(input_file_path,'r', encoding='utf-8')
         while True:
             line1 = input_file_text.readline()
             if not line1:break

@@ -122,13 +122,11 @@ class MFO:
 
     def fit_worker(self, x):
         
-        xchecked=self.ensure_bounds(x)
-        
         if self.grid_flag:
             #decode the individual back to the int/float/grid mixed space
-            xchecked=decode_discrete_to_grid(xchecked,self.orig_bounds,self.bounds_map)
-
-        fitness = self.fit(xchecked)
+            x=decode_discrete_to_grid(x,self.orig_bounds,self.bounds_map)
+            
+        fitness = self.fit(x)
 
         return fitness
     
@@ -202,20 +200,30 @@ class MFO:
         previous_fitness = np.zeros(N)
         
         ## main loop
-        best_scores = []
         for gen in range(1, ngen+1):
             self.a= 1 - gen * ((1) / ngen)  #mir: a decreases linearly between 1 to 0, for discrete mutation
             Flame_no = round(N - gen*((N-1) / (ngen+1)))
 
+            core_lst=[]
+            for case in range (0, Moth_pos.shape[0]):
+                core_lst.append(Moth_pos[case, :])
+                    
             if self.ncores > 1: 
                 with joblib.Parallel(n_jobs=self.ncores) as parallel:
-                    Moth_fitness=parallel(joblib.delayed(self.fit_worker)(indv) for indv in Moth_pos) # 2d list
+                    Moth_fitness=parallel(joblib.delayed(self.fit_worker)(indv) for indv in core_lst) # 2d list
                 Moth_pos = np.array(Moth_pos)
                 Moth_fitness = np.array(Moth_fitness)
             else:
-                for i in range(N):
-                    Moth_fitness[i] = self.fit_worker(Moth_pos[i,:])
+                Moth_fitness=[]
+                for item in core_lst:
+                    Moth_fitness.append(self.fit_worker(item))
 
+            for i, fits in enumerate(Moth_fitness):
+                #save the best of the best!!!
+                if fits < self.best_fitness:
+                    self.best_fitness=fits
+                    self.best_position=Moth_pos[i, :].copy()
+                                        
             if gen == 1: # OF # equal to OM #
                 # sort the moths
                 fitness_sorted = np.sort(Moth_fitness) # default: (small -> large)
@@ -277,19 +285,11 @@ class MFO:
                 
                 Moth_pos[i,:]=self.ensure_bounds(Moth_pos[i,:])
                 Moth_pos[i, :] = self.ensure_discrete(Moth_pos[i, :])
-    
+                
             #-----------------------------
             #Fitness saving 
             #-----------------------------
             gen_avg = sum(best_flame_fitness) / len(best_flame_fitness)  # current generation avg. fitness
-            y_local_best = Best_flame_score # fitness of best individual
-            x_local_best = Best_flame_pos  # position of the best flame
-            
-            for i, fits in enumerate(fitness_sorted):
-                #save the best of the best!!!
-                if fits < self.best_fitness:
-                    self.best_fitness=fits
-                    self.best_position=sorted_population[i, :].copy()
                 
             #--mir
             if self.mode=='max':
@@ -320,7 +320,7 @@ class MFO:
         if self.grid_flag:
             self.moth_correct = decode_discrete_to_grid(self.best_position, self.orig_bounds, self.bounds_map)
         else:
-            self.moth_correct = self.best_position
+            self.moth_correct = self.best_position.copy()
 
         if verbose:
             print('------------------------ MFO Summary --------------------------')
@@ -329,4 +329,3 @@ class MFO:
             print('--------------------------------------------------------------')
                 
         return self.moth_correct, self.fitness_best_correct, self.history
-

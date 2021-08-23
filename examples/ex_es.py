@@ -8,7 +8,6 @@ def FIT(individual):
             Range: [-100,100]
             Minima: 0
     """
-    print(individual)
     check=all([item >= BOUNDS['x'+str(i+1)][1] for i,item in enumerate(individual)]) and all([item <= BOUNDS['x'+str(i+1)][2] for i,item in enumerate(individual)])
     if not check:
         raise Exception ('--error check fails')

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.utils.neorlcalls &mdash; NEORL 1.5.1b documentation</title>
+  <title>neorl.utils.neorlcalls &mdash; NEORL 1.5.3b documentation</title>
   
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                main (1.5.1b )
+                main (1.5.3b )
               </div>
             
           
@@ -123,6 +123,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/fneat.html">Feedforward Neuroevolution of Augmenting Topologies (FNEAT)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/rneat.html">Recurrent Neuroevolution of Augmenting Topologies (RNEAT)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/ppoes.html">RL-informed Evolution Strategies (PPO-ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/ackde.html">RL-informed Differential Evolution (ACKTR-DE)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/aco.html">Ant Colony Optimization (ACO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/nga.html">Neural Genetic Algorithms (NGA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/nhho.html">Neural Harris Hawks Optimization (NHHO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/cs.html">Cuckoo Search (CS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/ts.html">Tabu Search (TS)</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
 <ul>
@@ -223,14 +229,11 @@
 <span class="c1">#@author: majdi</span>
 <span class="c1">#&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">matplotlib</span>
-<span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;Agg&#39;</span><span class="p">)</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">neorl.rl.baselines.shared.callbacks</span> <span class="kn">import</span> <span class="n">BaseCallback</span>
-<span class="kn">from</span> <span class="nn">matplotlib.lines</span> <span class="kn">import</span> <span class="n">Line2D</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">matplotlib.lines</span> <span class="kn">import</span> <span class="n">Line2D</span>
 
 <span class="k">class</span> <span class="nc">SavePlotCallback</span><span class="p">(</span><span class="n">BaseCallback</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -256,6 +259,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span> <span class="o">=</span> <span class="n">log_dir</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span> <span class="o">+</span> <span class="s1">&#39;_bestmodel.pkl&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">best_mean_reward</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+
+        <span class="c1">#avoid activating &#39;Agg&#39; in the header so not to affect other classes/algs</span>
+        <span class="kn">import</span> <span class="nn">matplotlib</span>
+        <span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;Agg&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">runcall</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         
@@ -340,7 +347,7 @@
     
     
     <span class="k">def</span> <span class="nf">plot_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method_xlabel</span><span class="o">=</span><span class="s1">&#39;Epoch&#39;</span><span class="p">):</span>
-        
+
         <span class="bp">self</span><span class="o">.</span><span class="n">out_data</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span><span class="o">+</span><span class="s1">&#39;_out.csv&#39;</span><span class="p">)</span>
         <span class="n">color_list</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;darkorange&#39;</span><span class="p">,</span> <span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="s1">&#39;tab:brown&#39;</span><span class="p">,</span> <span class="s1">&#39;lime&#39;</span><span class="p">]</span>
         <span class="n">plot_data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">out_data</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;caseid&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1">#exclude caseid, which is the first column from plotting (meaningless)</span>
@@ -434,18 +441,8 @@
             
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span> <span class="p">(</span><span class="s1">&#39;the plot mode defined by the user does not exist&#39;</span><span class="p">)</span>
-			
-<span class="k">def</span> <span class="nf">Sphere</span><span class="p">(</span><span class="n">individual</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Sphere test objective function.</span>
-<span class="sd">                F(x) = sum_{i=1}^d xi^2</span>
-<span class="sd">                d=1,2,3,...</span>
-<span class="sd">                Range: [-100,100]</span>
-<span class="sd">                Minima: 0</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1">#print(individual)</span>
-        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">individual</span><span class="p">)</span>
     
-<div class="viewcode-block" id="RLLogger"><a class="viewcode-back" href="../../../modules/a2c.html#neorl.utils.neorlcalls.RLLogger">[docs]</a><span class="k">class</span> <span class="nc">RLLogger</span><span class="p">(</span><span class="n">BaseCallback</span><span class="p">):</span>
+<div class="viewcode-block" id="RLLogger"><a class="viewcode-back" href="../../../modules/ppo2.html#neorl.utils.neorlcalls.RLLogger">[docs]</a><span class="k">class</span> <span class="nc">RLLogger</span><span class="p">(</span><span class="n">BaseCallback</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Callback for logging data of RL algorathims (x,y), compatible with: A2C, ACER, ACKTR, DQN, PPO</span>
 
@@ -474,6 +471,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">rbest_maxonly</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">r_hist</span><span class="o">=</span><span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x_hist</span><span class="o">=</span><span class="p">[]</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot_freq</span><span class="p">:</span>
+            <span class="c1">#avoid activating &#39;Agg&#39; in the header so not to affect other classes/algs</span>
+            <span class="kn">import</span> <span class="nn">matplotlib</span>
+            <span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;Agg&#39;</span><span class="p">)</span>
+            
     <span class="k">def</span> <span class="nf">_init_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># Create folder if needed</span>
         <span class="k">try</span><span class="p">:</span>
@@ -484,9 +487,10 @@
             <span class="k">except</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--warning: the logger cannot find mode in the environment, it is set by default to `max`&#39;</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;max&#39;</span>
-                
+        
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="s1">&#39;max&#39;</span><span class="p">]:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;--error: The mode entered by user is invalid, use either `min` or `max`&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;max&#39;</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--warning: The mode entered by user is invalid, use either `min` or `max`&#39;</span><span class="p">)</span>
 
         <span class="c1">#if self.save_model:</span>
         <span class="c1">#    if self.log_dir is not None:</span>

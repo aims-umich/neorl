@@ -26,8 +26,12 @@ Copyright © 2021 Exelon Corporation (https://www.exeloncorp.com/) in collaborat
 
                        \n"""
                        
-print(logo)
 
+try:                    
+    print(logo)
+except:
+    print(logo.encode('utf-8'))
+    #print(logo.encode('ascii', 'ignore').decode('ascii'))
 import os
 
 from neorl.rl.baselines.a2c import A2C
@@ -57,3 +61,8 @@ from neorl.hybrid.rneat import RNEAT
 from neorl.hybrid.fneat import FNEAT
 from neorl.hybrid.ppoes import PPOES
 from neorl.hybrid.ackde import ACKDE
+from neorl.evolu.aco import ACO
+from neorl.evolu.cs import CS
+from neorl.hybrid.nga import NGA
+from neorl.hybrid.nhho import NHHO
+from neorl.evolu.ts import TS

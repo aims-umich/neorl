@@ -56,8 +56,14 @@ def mutate_discrete(x_ij, x_min, x_max, lb, ub, alpha, method):
     if method == 'minmax':
         
         rand = random.random()
-        norm = (x_ij + x_min) / (abs(x_min) + x_max)
-        if norm >= 0.5 and rand < alpha:
+        if (abs(x_min) + x_max == 0):
+            flag = True #force perturbation
+            norm=0
+        else:
+            norm = (x_ij + x_min) / (abs(x_min) + x_max)
+            flag = False
+            
+        if (norm >= 0.5 and rand < alpha) or flag:
             choices = list(range(lb, ub+1))
             choices.remove(int(x_ij))
             to_ret = random.choice(choices)

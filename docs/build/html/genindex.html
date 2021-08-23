@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Index &mdash; NEORL 1.5.1b documentation</title>
+  <title>Index &mdash; NEORL 1.5.3b documentation</title>
   
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                main (1.5.1b )
+                main (1.5.3b )
               </div>
             
           
@@ -124,6 +124,11 @@
 <li class="toctree-l1"><a class="reference internal" href="modules/rneat.html">Recurrent Neuroevolution of Augmenting Topologies (RNEAT)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/ppoes.html">RL-informed Evolution Strategies (PPO-ES)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules/ackde.html">RL-informed Differential Evolution (ACKTR-DE)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/aco.html">Ant Colony Optimization (ACO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/nga.html">Neural Genetic Algorithms (NGA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/nhho.html">Neural Harris Hawks Optimization (NHHO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/cs.html">Cuckoo Search (CS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/ts.html">Tabu Search (TS)</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
 <ul>
@@ -252,6 +257,8 @@
 </li>
       <li><a href="modules/acktr.html#neorl.rl.baselines.acktr.ACKTR">ACKTR (class in neorl.rl.baselines.acktr)</a>
 </li>
+      <li><a href="modules/aco.html#neorl.evolu.aco.ACO">ACO (class in neorl.evolu.aco)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -271,6 +278,10 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/a2c.html#neorl.rl.make_env.CreateEnvironment">CreateEnvironment (class in neorl.rl.make_env)</a>, <a href="modules/acer.html#neorl.rl.make_env.CreateEnvironment">[1]</a>, <a href="modules/ackde.html#neorl.rl.make_env.CreateEnvironment">[2]</a>, <a href="modules/acktr.html#neorl.rl.make_env.CreateEnvironment">[3]</a>, <a href="modules/dqn.html#neorl.rl.make_env.CreateEnvironment">[4]</a>, <a href="modules/ppo2.html#neorl.rl.make_env.CreateEnvironment">[5]</a>, <a href="modules/ppoes.html#neorl.rl.make_env.CreateEnvironment">[6]</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="modules/cs.html#neorl.evolu.cs.CS">CS (class in neorl.evolu.cs)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -294,9 +305,13 @@
 </li>
       <li><a href="tune/evolu.html#neorl.tune.estune.ESTUNE">ESTUNE (class in neorl.tune.estune)</a>
 </li>
-      <li><a href="modules/bat.html#neorl.evolu.bat.BAT.evolute">evolute() (neorl.evolu.bat.BAT method)</a>
+      <li><a href="modules/aco.html#neorl.evolu.aco.ACO.evolute">evolute() (neorl.evolu.aco.ACO method)</a>
 
       <ul>
+        <li><a href="modules/bat.html#neorl.evolu.bat.BAT.evolute">(neorl.evolu.bat.BAT method)</a>
+</li>
+        <li><a href="modules/cs.html#neorl.evolu.cs.CS.evolute">(neorl.evolu.cs.CS method)</a>
+</li>
         <li><a href="modules/de.html#neorl.evolu.de.DE.evolute">(neorl.evolu.de.DE method)</a>
 </li>
         <li><a href="modules/es.html#neorl.evolu.es.ES.evolute">(neorl.evolu.es.ES method)</a>
@@ -315,6 +330,8 @@
 </li>
         <li><a href="modules/ssa.html#neorl.evolu.ssa.SSA.evolute">(neorl.evolu.ssa.SSA method)</a>
 </li>
+        <li><a href="modules/ts.html#neorl.evolu.ts.TS.evolute">(neorl.evolu.ts.TS method)</a>
+</li>
         <li><a href="modules/woa.html#neorl.evolu.woa.WOA.evolute">(neorl.evolu.woa.WOA method)</a>
 </li>
         <li><a href="modules/xnes.html#neorl.evolu.xnes.XNES.evolute">(neorl.evolu.xnes.XNES method)</a>
@@ -322,6 +339,10 @@
         <li><a href="modules/ackde.html#neorl.hybrid.ackde.ACKDE.evolute">(neorl.hybrid.ackde.ACKDE method)</a>
 </li>
         <li><a href="modules/fneat.html#neorl.hybrid.fneat.FNEAT.evolute">(neorl.hybrid.fneat.FNEAT method)</a>
+</li>
+        <li><a href="modules/nga.html#neorl.hybrid.nga.NGA.evolute">(neorl.hybrid.nga.NGA method)</a>
+</li>
+        <li><a href="modules/nhho.html#neorl.hybrid.nhho.NHHO.evolute">(neorl.hybrid.nhho.NHHO method)</a>
 </li>
         <li><a href="modules/pesa.html#neorl.hybrid.pesa.PESA.evolute">(neorl.hybrid.pesa.PESA method)</a>
 </li>
@@ -416,7 +437,11 @@
     module
 
       <ul>
+        <li><a href="modules/aco.html#module-neorl.evolu.aco">neorl.evolu.aco</a>
+</li>
         <li><a href="modules/bat.html#module-neorl.evolu.bat">neorl.evolu.bat</a>
+</li>
+        <li><a href="modules/cs.html#module-neorl.evolu.cs">neorl.evolu.cs</a>
 </li>
         <li><a href="modules/de.html#module-neorl.evolu.de">neorl.evolu.de</a>
 </li>
@@ -436,11 +461,17 @@
 </li>
         <li><a href="modules/ssa.html#module-neorl.evolu.ssa">neorl.evolu.ssa</a>
 </li>
+        <li><a href="modules/ts.html#module-neorl.evolu.ts">neorl.evolu.ts</a>
+</li>
         <li><a href="modules/woa.html#module-neorl.evolu.woa">neorl.evolu.woa</a>
 </li>
         <li><a href="modules/xnes.html#module-neorl.evolu.xnes">neorl.evolu.xnes</a>
 </li>
         <li><a href="modules/ackde.html#module-neorl.hybrid.ackde">neorl.hybrid.ackde</a>
+</li>
+        <li><a href="modules/nga.html#module-neorl.hybrid.nga">neorl.hybrid.nga</a>
+</li>
+        <li><a href="modules/nhho.html#module-neorl.hybrid.nhho">neorl.hybrid.nhho</a>
 </li>
         <li><a href="modules/pesa.html#module-neorl.hybrid.pesa">neorl.hybrid.pesa</a>
 </li>
@@ -474,10 +505,24 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li>
+    neorl.evolu.aco
+
+      <ul>
+        <li><a href="modules/aco.html#module-neorl.evolu.aco">module</a>
+</li>
+      </ul></li>
+      <li>
     neorl.evolu.bat
 
       <ul>
         <li><a href="modules/bat.html#module-neorl.evolu.bat">module</a>
+</li>
+      </ul></li>
+      <li>
+    neorl.evolu.cs
+
+      <ul>
+        <li><a href="modules/cs.html#module-neorl.evolu.cs">module</a>
 </li>
       </ul></li>
       <li>
@@ -544,6 +589,13 @@
 </li>
       </ul></li>
       <li>
+    neorl.evolu.ts
+
+      <ul>
+        <li><a href="modules/ts.html#module-neorl.evolu.ts">module</a>
+</li>
+      </ul></li>
+      <li>
     neorl.evolu.woa
 
       <ul>
@@ -566,6 +618,20 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    neorl.hybrid.nga
+
+      <ul>
+        <li><a href="modules/nga.html#module-neorl.hybrid.nga">module</a>
+</li>
+      </ul></li>
+      <li>
+    neorl.hybrid.nhho
+
+      <ul>
+        <li><a href="modules/nhho.html#module-neorl.hybrid.nhho">module</a>
+</li>
+      </ul></li>
       <li>
     neorl.hybrid.pesa
 
@@ -650,6 +716,10 @@
         <li><a href="tune/random.html#module-neorl.tune.randtune">module</a>
 </li>
       </ul></li>
+      <li><a href="modules/nga.html#neorl.hybrid.nga.NGA">NGA (class in neorl.hybrid.nga)</a>
+</li>
+      <li><a href="modules/nhho.html#neorl.hybrid.nhho.NHHO">NHHO (class in neorl.hybrid.nhho)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -724,6 +794,8 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="modules/ts.html#neorl.evolu.ts.TS">TS (class in neorl.evolu.ts)</a>
+</li>
       <li><a href="tune/bayes.html#neorl.tune.bayestune.BAYESTUNE.tune">tune() (neorl.tune.bayestune.BAYESTUNE method)</a>
 
       <ul>

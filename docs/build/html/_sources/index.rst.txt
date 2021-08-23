@@ -74,6 +74,11 @@ User Guide
   modules/rneat
   modules/ppoes
   modules/ackde
+  modules/aco
+  modules/nga
+  modules/nhho
+  modules/cs
+  modules/ts
 
 .. toctree::
   :maxdepth: 1

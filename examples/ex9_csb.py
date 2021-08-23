@@ -159,7 +159,7 @@ def CSB_square(individual):
 	  phi = 0
 
   V = 0.0624*(np.sum(individual)) 
-  
+
   return V + w1*phi
 
 #---------------------------------
