@@ -57,7 +57,7 @@ class DQN(OffPolicyRLModel):
 #    :param prioritized_replay_eps: (float) epsilon to add to the TD errors when updating priorities.
     def __init__(self, policy, env, gamma=0.99, learning_rate=5e-4, buffer_size=50000, exploration_fraction=0.1,
                  eps_final=0.02, eps_init=1.0, train_freq=1, batch_size=32,
-                 learning_starts=1000, target_network_update_freq=500, prioritized_replay=True, verbose=0, seed=None):
+                 learning_starts=1000, target_network_update_freq=500, prioritized_replay=True, verbose=0, seed=None, _init_setup_model=True):
         
         # TODO: replay_buffer refactoring
         super(DQN, self).__init__(policy=policy, env=env, replay_buffer=None, verbose=verbose, policy_base=DQNPolicy,
@@ -81,7 +81,6 @@ class DQN(OffPolicyRLModel):
         self.gamma = gamma
         self.tensorboard_log = None
         self.full_tensorboard_log = False
-        _init_setup_model=True
         self.double_q = True
 
         self.graph = None

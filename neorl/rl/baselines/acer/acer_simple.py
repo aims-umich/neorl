@@ -181,7 +181,7 @@ class ACER(ActorCriticRLModel):
     
     def __init__(self, policy, env, gamma=0.99, n_steps=20, q_coef=0.5, ent_coef=0.01, max_grad_norm=10,
                  learning_rate=7e-4, lr_schedule='linear', buffer_size=5000,
-                 replay_ratio=4, replay_start=1000, verbose=0, seed=None):
+                 replay_ratio=4, replay_start=1000, verbose=0, seed=None, _init_setup_model=True):
 
         #if num_procs is not None:
         #    warnings.warn("num_procs will be removed in a future version (v3.x.x) "
@@ -208,7 +208,6 @@ class ACER(ActorCriticRLModel):
         self.full_tensorboard_log = False
         
         policy_kwargs=None
-        _init_setup_model=True
         n_cpu_tf_sess=1
 
         self.action_ph = None

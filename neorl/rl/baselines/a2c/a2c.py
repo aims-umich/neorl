@@ -67,7 +67,7 @@ class A2C(ActorCriticRLModel):
 
     def __init__(self, policy, env, gamma=0.99, n_steps=5, vf_coef=0.25, ent_coef=0.01, max_grad_norm=0.5,
                  learning_rate=7e-4, alpha=0.99, lr_schedule='constant',
-                 verbose=0, seed=None):
+                 verbose=0, seed=None, _init_setup_model=True):
         
         self.n_steps = n_steps
         self.gamma = gamma
@@ -83,7 +83,6 @@ class A2C(ActorCriticRLModel):
         self.full_tensorboard_log = False
         
         policy_kwargs=None
-        _init_setup_model=True
         n_cpu_tf_sess=1
         
         self.learning_rate_ph = None

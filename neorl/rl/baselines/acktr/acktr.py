@@ -56,7 +56,7 @@ class ACKTR(ActorCriticRLModel):
 
     def __init__(self, policy, env, gamma=0.99, n_steps=20, ent_coef=0.01, 
                  vf_coef=0.25, vf_fisher_coef=1.0, learning_rate=0.25, max_grad_norm=0.5, 
-                 kfac_clip=0.001, lr_schedule='linear', verbose=0, seed=None):
+                 kfac_clip=0.001, lr_schedule='linear', verbose=0, seed=None, _init_setup_model=True):
 
         self.n_steps = n_steps
         self.gamma = gamma
@@ -72,7 +72,6 @@ class ACKTR(ActorCriticRLModel):
         self.full_tensorboard_log = False
         
         policy_kwargs=None
-        _init_setup_model=True
         n_cpu_tf_sess=1
         
         self.async_eigen_decomp = False

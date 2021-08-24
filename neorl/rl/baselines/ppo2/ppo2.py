@@ -49,7 +49,7 @@ class PPO2(ActorCriticRLModel):
         If None (default), use random seed."""
     def __init__(self, policy, env, gamma=0.99, n_steps=128, ent_coef=0.01, learning_rate=2.5e-4, vf_coef=0.5,
                  max_grad_norm=0.5, lam=0.95, nminibatches=4, noptepochs=4, cliprange=0.2,
-                 verbose=0, seed=None):
+                 verbose=0, seed=None, _init_setup_model=True):
 
         self.learning_rate = learning_rate
         self.cliprange = cliprange
@@ -66,7 +66,6 @@ class PPO2(ActorCriticRLModel):
         self.full_tensorboard_log = False
         
         policy_kwargs=None
-        _init_setup_model=True
         n_cpu_tf_sess=1
 
         self.action_ph = None
