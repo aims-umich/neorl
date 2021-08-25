@@ -3,7 +3,7 @@
 Changelog
 ==========
 
-Release 1.5.3b-1.5.5b (2021-08-22)
+Release 1.5.3b-1.5.6b (2021-08-22)
 --------------------------------------
 
 - Added hybrid neuroevolution algorithm: Neural genetic algorithm (NGA)

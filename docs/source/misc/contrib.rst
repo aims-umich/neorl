@@ -26,7 +26,7 @@ Webpage: https://web.mit.edu/nse/people/faculty/shirvan.html
    :alt: alternate text
    :align: right
 
-Paul RM. Seurin is a Ph.D student in the joint program between the Nuclear Science and Engineering department and the Center for Computational Science and Engineering at MIT. He joined MIT in September 2019 after receiving an Engineering Diploma and a Master in Nuclear Engineering from France. His research involves algorithm design for optimization with focuses on heuristics methods, deep, and Reinforcement Learning with applications to nuclear reactor economics and licensing.  For NEORL, he is currently working on validation and benchmarking, applying the framework from Pressurized Water Reactor optimization to combinatorial and Mixed-Integer programming. 
+Paul RM. Seurin is a Ph.D student in the joint program between the Nuclear Science and Engineering department and the Center for Computational Science and Engineering at MIT. He joined MIT in September 2019 after receiving an Engineering Diploma and a Master in Nuclear Engineering from France. His research involves algorithm design for optimization with focuses on heuristics methods, deep, and Reinforcement Learning with applications to nuclear reactor economics and licensing.  For NEORL, he is currently working on validation and benchmarking, applying the framework to Pressurized Water Reactor optimization, and to solve combinatorial problems like Travel Salesman, Knapsack, and Job Scheduling problems. In algorithms, he developed the base classes for Cuckoo search and Tabu search, while he is also planning to develop a combinatorial version of the Ant Colony optimizer.  
 
 .. image:: ../images/wang.jpg
    :scale: 6 %

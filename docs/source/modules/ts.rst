@@ -19,7 +19,7 @@ What can you use?
 
 -  Multi processing: ❌
 -  Discrete spaces: ✔️
--  Continuous spaces: ❌
+-  Continuous spaces: ✔️
 -  Mixed Discrete/Continuous spaces: ❌
 
 Parameters
