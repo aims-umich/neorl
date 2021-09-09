@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Example 2: Ackley with EA &mdash; NEORL 1.5.4b documentation</title>
+  <title>Example 2: Ackley with EA &mdash; NEORL 1.6 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.5.4b )
+                main (1.6 )
               </div>
             
           
@@ -256,7 +256,7 @@ The function is usually evaluated on the hypercube <span class="math notranslate
 </div>
 <div class="section" id="neorl-script">
 <h2>NEORL script<a class="headerlink" href="#neorl-script" title="Permalink to this headline">¶</a></h2>
-<p>The solution below is for a 8-dimensional Ackley function (<span class="math notranslate nohighlight">\(d=10\)</span>)</p>
+<p>The solution below is for a 8-dimensional Ackley function (<span class="math notranslate nohighlight">\(d=8\)</span>)</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#---------------------------------</span>
 <span class="c1"># Import packages</span>
 <span class="c1">#---------------------------------</span>
@@ -290,14 +290,14 @@ The function is usually evaluated on the hypercube <span class="math notranslate
 <span class="c1">#---------------------------------</span>
 <span class="c1"># PSO</span>
 <span class="c1">#---------------------------------</span>
-<span class="n">pso</span><span class="o">=</span><span class="n">PSO</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">ACKLEY</span><span class="p">,</span> <span class="n">npar</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+<span class="n">pso</span><span class="o">=</span><span class="n">PSO</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">ACKLEY</span><span class="p">,</span> <span class="n">npar</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> 
         <span class="n">c1</span><span class="o">=</span><span class="mf">2.05</span><span class="p">,</span> <span class="n">c2</span><span class="o">=</span><span class="mf">2.1</span><span class="p">,</span> <span class="n">speed_mech</span><span class="o">=</span><span class="s1">&#39;constric&#39;</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">x_best</span><span class="p">,</span> <span class="n">y_best</span><span class="p">,</span> <span class="n">pso_hist</span><span class="o">=</span><span class="n">pso</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="c1">#---------------------------------</span>
 <span class="c1"># DE</span>
 <span class="c1">#---------------------------------</span>
-<span class="n">de</span><span class="o">=</span><span class="n">DE</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">ACKLEY</span><span class="p">,</span> <span class="n">npop</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+<span class="n">de</span><span class="o">=</span><span class="n">DE</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">ACKLEY</span><span class="p">,</span> <span class="n">npop</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> 
       <span class="n">F</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">CR</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">x_best</span><span class="p">,</span> <span class="n">y_best</span><span class="p">,</span> <span class="n">de_hist</span><span class="o">=</span><span class="n">de</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
@@ -305,7 +305,7 @@ The function is usually evaluated on the hypercube <span class="math notranslate
 <span class="c1"># NES</span>
 <span class="c1">#---------------------------------</span>
 <span class="n">amat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
-<span class="n">xnes</span> <span class="o">=</span> <span class="n">XNES</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">ACKLEY</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="n">amat</span><span class="p">,</span> <span class="n">npop</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+<span class="n">xnes</span> <span class="o">=</span> <span class="n">XNES</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">ACKLEY</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="n">amat</span><span class="p">,</span> <span class="n">npop</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> 
             <span class="n">eta_Bmat</span><span class="o">=</span><span class="mf">0.04</span><span class="p">,</span> <span class="n">eta_sigma</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">adapt_sampling</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">x_best</span><span class="p">,</span> <span class="n">y_best</span><span class="p">,</span> <span class="n">nes_hist</span><span class="o">=</span><span class="n">xnes</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
@@ -314,8 +314,8 @@ The function is usually evaluated on the hypercube <span class="math notranslate
 <span class="c1">#---------------------------------</span>
 <span class="c1">#Plot fitness for both methods</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pso_hist</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;PSO&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">de_hist</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;DE&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pso_hist</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;PSO&#39;</span><span class="p">)</span>           
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">de_hist</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;DE&#39;</span><span class="p">)</span>            
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">nes_hist</span><span class="p">[</span><span class="s1">&#39;fitness&#39;</span><span class="p">]),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;NES&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Generation&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Fitness&#39;</span><span class="p">)</span>

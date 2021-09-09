@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.evolu.mfo &mdash; NEORL 1.5.3b documentation</title>
+  <title>neorl.evolu.mfo &mdash; NEORL 1.5.6b documentation</title>
   
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                main (1.5.3b )
+                main (1.5.6b )
               </div>
             
           
@@ -404,8 +404,12 @@
             <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span> <span class="o">==</span> <span class="n">N</span><span class="p">,</span> <span class="s1">&#39;--error: the length of x0 (</span><span class="si">{}</span><span class="s1">) (initial population) must equal to number of individuals npop (</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">npop</span><span class="p">)</span>
             <span class="n">Moth_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_population</span><span class="p">(</span><span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">Moth_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_population</span><span class="p">()</span>     
+            <span class="n">Moth_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_population</span><span class="p">()</span>
+            
+        <span class="n">Moth_pos</span> <span class="o">=</span> <span class="n">Moth_pos</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="c1">#this is to account for mixed intger-cont. problems, data needs to be float</span>
         <span class="n">Moth_fitness</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">))</span>  <span class="c1"># set as worst result</span>
+        
+        
 
         <span class="c1"># sort moths</span>
         <span class="n">sorted_population</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">Moth_pos</span><span class="p">)</span>
@@ -446,7 +450,7 @@
                 <span class="k">if</span> <span class="n">fits</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_fitness</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">best_fitness</span><span class="o">=</span><span class="n">fits</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">best_position</span><span class="o">=</span><span class="n">Moth_pos</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-                                        
+                                                            
             <span class="k">if</span> <span class="n">gen</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> <span class="c1"># OF # equal to OM #</span>
                 <span class="c1"># sort the moths</span>
                 <span class="n">fitness_sorted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">Moth_fitness</span><span class="p">)</span> <span class="c1"># default: (small -&gt; large)</span>

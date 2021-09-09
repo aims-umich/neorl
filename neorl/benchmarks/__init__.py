@@ -15,6 +15,8 @@ def bench_2dplot(function, domain=(-100,100), points=30, savepng=None):
     import matplotlib.pyplot as plt
     import numpy as np
     try:
+        
+        plt.figure()
         dimension=2
         
         # create points^2 tuples of (x,y) and populate z

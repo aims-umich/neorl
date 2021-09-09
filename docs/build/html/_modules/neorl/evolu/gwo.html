@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.evolu.gwo &mdash; NEORL 1.5.3b documentation</title>
+  <title>neorl.evolu.gwo &mdash; NEORL 1.5.6b documentation</title>
   
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                main (1.5.3b )
+                main (1.5.6b )
               </div>
             
           
@@ -475,7 +475,7 @@
                         <span class="c1"># Equation (3.3)</span>
                         <span class="n">C1</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">r2</span>
                         <span class="c1"># Equation (3.4)</span>
-        
+                        <span class="c1">#print(&#39;A1=&#39;, A1,C1)</span>
                         <span class="n">D_alpha</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">C1</span> <span class="o">*</span> <span class="n">Alpha_pos</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
                         <span class="c1"># Equation (3.5)-part 1</span>
                         <span class="n">X1</span> <span class="o">=</span> <span class="n">Alpha_pos</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">A1</span> <span class="o">*</span> <span class="n">D_alpha</span>
@@ -488,7 +488,7 @@
                         <span class="c1"># Equation (3.3)</span>
                         <span class="n">C2</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">r2</span>
                         <span class="c1"># Equation (3.4)</span>
-        
+                        <span class="c1">#print(&#39;A2=&#39;, A2,C2)</span>
                         <span class="n">D_beta</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">C2</span> <span class="o">*</span> <span class="n">Beta_pos</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
                         <span class="c1"># Equation (3.5)-part 2</span>
                         <span class="n">X2</span> <span class="o">=</span> <span class="n">Beta_pos</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">A2</span> <span class="o">*</span> <span class="n">D_beta</span>
@@ -501,7 +501,7 @@
                         <span class="c1"># Equation (3.3)</span>
                         <span class="n">C3</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">r2</span>
                         <span class="c1"># Equation (3.4)</span>
-        
+                        <span class="c1">#print(&#39;A3=&#39;, A3,C3)</span>
                         <span class="n">D_delta</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">C3</span> <span class="o">*</span> <span class="n">Delta_pos</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
                         <span class="c1"># Equation (3.5)-part 3</span>
                         <span class="n">X3</span> <span class="o">=</span> <span class="n">Delta_pos</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">A3</span> <span class="o">*</span> <span class="n">D_delta</span>

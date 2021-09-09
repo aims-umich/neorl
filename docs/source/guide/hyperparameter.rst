@@ -90,7 +90,7 @@ The cost of Bayesian search is determined by the total number of fitness evaluat
 Evolutionary Search
 =====================
 
-See the :ref:`Evolutionary Search <evolu>` section
+See the :ref:`Evolutionary Search <evolsearch>` section
 
 Original paper: E. Bochinski, T. Senst and T. Sikora, "Hyper-parameter optimization for convolutional neural network committees based on evolutionary algorithms," 2017 IEEE International Conference on Image Processing (ICIP), Beijing, China, 2017, pp. 3924-3928, doi: 10.1109/ICIP.2017.8297018.
 

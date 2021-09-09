@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>RL-informed Evolution Strategies (PPO-ES) &mdash; NEORL 1.5.4b documentation</title>
+  <title>RL-informed Evolution Strategies (PPO-ES) &mdash; NEORL 1.6 documentation</title>
   
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                main (1.5.4b )
+                main (1.6 )
               </div>
             
           
@@ -348,22 +348,23 @@ that follow reinforcement learning approach of optimization</p>
 <span class="n">BOUNDS</span><span class="o">=</span><span class="p">{}</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">nx</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
     <span class="n">BOUNDS</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
+    
 
 <span class="k">if</span> <span class="vm">__name__</span><span class="o">==</span><span class="s1">&#39;__main__&#39;</span><span class="p">:</span>  <span class="c1">#use this block for parallel PPO!</span>
     <span class="c1">#create an enviroment class for RL/PPO</span>
-    <span class="n">env</span><span class="o">=</span><span class="n">CreateEnvironment</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;ppo&#39;</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">Sphere</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">env</span><span class="o">=</span><span class="n">CreateEnvironment</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;ppo&#39;</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">Sphere</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>  
                           <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">episode_length</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
-
+    
     <span class="c1">#change hyperparameters of PPO/ES if you like (defaults should be good to start with)</span>
     <span class="n">h</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;cxpb&#39;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span>
        <span class="s1">&#39;mutpb&#39;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span>
        <span class="s1">&#39;n_steps&#39;</span><span class="p">:</span> <span class="mi">24</span><span class="p">,</span>
        <span class="s1">&#39;lam&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">}</span>
-
+    
     <span class="c1">#Important: `mode` in CreateEnvironment and `mode` in PPOES must be consistent</span>
     <span class="c1">#fit is needed to be passed again for ES, must be same as the one used in env</span>
-    <span class="n">ppoes</span><span class="o">=</span><span class="n">PPOES</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">Sphere</span><span class="p">,</span>
-                <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span> <span class="n">npop_rl</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">init_pop_rl</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">ppoes</span><span class="o">=</span><span class="n">PPOES</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">Sphere</span><span class="p">,</span> 
+                <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span> <span class="n">npop_rl</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">init_pop_rl</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
                 <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">hyperparam</span><span class="o">=</span><span class="n">h</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="c1">#first run RL for some timesteps</span>
     <span class="n">rl</span><span class="o">=</span><span class="n">ppoes</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span><span class="n">total_timesteps</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>

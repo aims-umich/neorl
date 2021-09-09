@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.utils.neorlcalls &mdash; NEORL 1.5.3b documentation</title>
+  <title>neorl.utils.neorlcalls &mdash; NEORL 1.6 documentation</title>
   
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                main (1.5.3b )
+                main (1.6 )
               </div>
             
           
@@ -234,6 +234,7 @@
 <span class="kn">from</span> <span class="nn">neorl.rl.baselines.shared.callbacks</span> <span class="kn">import</span> <span class="n">BaseCallback</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">matplotlib.lines</span> <span class="kn">import</span> <span class="n">Line2D</span>
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span>
 
 <span class="k">class</span> <span class="nc">SavePlotCallback</span><span class="p">(</span><span class="n">BaseCallback</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -329,12 +330,16 @@
         
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_timesteps</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_timesteps</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;system exit&#39;</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">_exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            
             
         <span class="k">return</span> <span class="kc">True</span>
     
     <span class="k">def</span> <span class="nf">_on_training_end</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">runcall</span><span class="p">()</span>
-        <span class="k">pass</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Training is finished&#39;</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">_exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1">#pass</span>
 
     <span class="k">def</span> <span class="nf">calc_cumavg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
     

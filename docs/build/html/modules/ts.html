@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Tabu Search (TS) &mdash; NEORL 1.5.4b documentation</title>
+  <title>Tabu Search (TS) &mdash; NEORL 1.6 documentation</title>
   
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                main (1.5.4b )
+                main (1.6 )
               </div>
             
           
@@ -243,7 +243,7 @@
 <ul class="simple">
 <li><p>Multi processing: ❌</p></li>
 <li><p>Discrete spaces: ✔️</p></li>
-<li><p>Continuous spaces: ❌</p></li>
+<li><p>Continuous spaces: ✔️</p></li>
 <li><p>Mixed Discrete/Continuous spaces: ❌</p></li>
 </ul>
 </div>
@@ -314,7 +314,7 @@ multiple attempts.</p></li>
 
 <span class="c1">#setup and evolute TS</span>
 <span class="n">x0</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="o">-</span><span class="mi">75</span><span class="p">,</span><span class="o">-</span><span class="mi">100</span><span class="p">]</span>  <span class="c1">#initial guess</span>
-<span class="n">ts</span><span class="o">=</span><span class="n">TS</span><span class="p">(</span><span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="n">bounds</span> <span class="o">=</span> <span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span> <span class="o">=</span> <span class="n">Sphere</span><span class="p">,</span> <span class="n">tabu_tenure</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+<span class="n">ts</span><span class="o">=</span><span class="n">TS</span><span class="p">(</span><span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="n">bounds</span> <span class="o">=</span> <span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span> <span class="o">=</span> <span class="n">Sphere</span><span class="p">,</span> <span class="n">tabu_tenure</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> 
       <span class="n">penalization_weight</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">,</span> <span class="n">swap_mode</span> <span class="o">=</span> <span class="s2">&quot;perturb&quot;</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">x_best</span><span class="p">,</span> <span class="n">y_best</span><span class="p">,</span> <span class="n">ts_hist</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span> <span class="o">=</span> <span class="mi">700</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>

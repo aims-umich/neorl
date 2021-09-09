@@ -2,9 +2,8 @@
 # Import Packages
 ########################
 
-from neorl import HHO, ES, PESA, BAT, GWO, MFO, WOA, SSA, DE, JAYA, PESA2, PSO, FNEAT, RNEAT
+from neorl import HHO, ES, PESA, BAT, GWO, MFO, WOA, SSA, DE, JAYA, PESA2, PSO
 import math
-import matplotlib.pyplot as plt
 
 #################################
 # Define Vessel Function 
@@ -147,7 +146,6 @@ for item in ['float', 'grid', 'float/int', 'float/grid', 'int/grid', 'mixed', 'i
     ########################
     jaya=JAYA(mode='min', bounds=bounds, fit=Vessel, npop=60, int_transform='sigmoid', ncores=1, seed=1)
     x_jaya, y_jaya, jaya_hist=jaya.evolute(ngen=ngen, verbose=0)
-    print(item)
     assert Vessel(x_jaya) == y_jaya
     
     ########################
@@ -197,7 +195,7 @@ for item in ['float', 'grid', 'float/int', 'float/grid', 'int/grid', 'mixed', 'i
     ########################
     # Comparison
     ########################
-    if 0:
+    if 1:
         print('---Best HHO Results---')
         print(x_hho)
         print(y_hho)

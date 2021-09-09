@@ -1,5 +1,6 @@
 from neorl import NHHO
 import time
+import sys
 
 #Define the fitness function
 def FIT(individual):
@@ -26,10 +27,15 @@ nn_params['plot'] = False #will accelerate training
 nn_params['verbose'] = False #will accelerate training
 nn_params['save_models'] = False  #will accelerate training
 
+try:
+    ngen=int(sys.argv[1])  #get ngen as external argument for testing
+except:
+    ngen=50      #or use default ngen
+
 t0=time.time()
 nhho = NHHO(mode='min', bounds=BOUNDS, fit=FIT, nhawks=20, 
             nn_params=nn_params, ncores=3, seed=1)
-individuals, fitnesses = nhho.evolute(ngen=50, verbose=True)
+individuals, fitnesses = nhho.evolute(ngen=ngen, verbose=True)
 print('Comp Time:', time.time()-t0)
 
 #make evaluation of the best individuals using the real fitness function

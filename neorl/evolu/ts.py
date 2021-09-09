@@ -240,7 +240,6 @@ class TS(object):
             #-----------------------------
             increment = 0 # utilize to perturb the Position vector at the 'increment'th position
             temp_candidate = [] # store new candidate for perturbation to avoid the problem of change in perturbation when best move is called
-            print(len(tabu_structure))
             for move in tabu_structure:# Searching the whole neighborhood of the current solution:
                 if self.swap_mode == "swap":
                     candidate_solution = self.UpdateTabu(self.Positions, move[0], move[1])

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Ant Colony Optimization (ACO) &mdash; NEORL 1.5.4b documentation</title>
+  <title>Ant Colony Optimization (ACO) &mdash; NEORL 1.6 documentation</title>
   
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                main (1.5.4b )
+                main (1.6 )
               </div>
             
           
@@ -288,7 +288,7 @@
 </div>
 <div class="section" id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">ACO</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">ACO</span> 
 <span class="kn">import</span> <span class="nn">random</span>
 
 <span class="c1">#Define the fitness function</span>
@@ -310,9 +310,10 @@
 
 <span class="n">nants</span><span class="o">=</span><span class="mi">40</span>
 <span class="n">x0</span><span class="o">=</span><span class="p">[[</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span><span class="mi">100</span><span class="p">)]</span><span class="o">*</span><span class="n">nx</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nants</span><span class="p">)]</span>
-<span class="n">acor</span> <span class="o">=</span> <span class="n">ACO</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">FIT</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">nants</span><span class="o">=</span><span class="n">nants</span><span class="p">,</span> <span class="n">narchive</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+<span class="n">acor</span> <span class="o">=</span> <span class="n">ACO</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">FIT</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">nants</span><span class="o">=</span><span class="n">nants</span><span class="p">,</span> <span class="n">narchive</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> 
            <span class="n">Q</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">Z</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">x_best</span><span class="p">,</span> <span class="n">y_best</span><span class="p">,</span> <span class="n">acor_hist</span><span class="o">=</span><span class="n">acor</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
 </pre></div>
 </div>
 </div>

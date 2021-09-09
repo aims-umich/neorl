@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Detailed Installation &mdash; NEORL 1.5.4b documentation</title>
+  <title>Detailed Installation &mdash; NEORL 1.6 documentation</title>
   
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                main (1.5.4b )
+                main (1.6 )
               </div>
             
           
@@ -277,6 +277,10 @@
 <p>1- Create a new python-3.7 environment with name <strong>neorl</strong></p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda create --name neorl <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.7
 </pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>For some machines that are not updated frequently (e.g. clusters), TensforFlow may fail to load due to outdated gcc libraries. If you encounter those errors, we typically recommend to downgrade python by using python=3.6 or python=3.5 when creating the virtual environment.</p>
 </div>
 <p>2- Activate the environment</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda activate neorl

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.rl.baselines.ppo2.ppo2 &mdash; NEORL 1.5.3b documentation</title>
+  <title>neorl.rl.baselines.ppo2.ppo2 &mdash; NEORL 1.5.6b documentation</title>
   
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                main (1.5.3b )
+                main (1.5.6b )
               </div>
             
           
@@ -272,7 +272,7 @@
 <span class="sd">        If None (default), use random seed.&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">policy</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span> <span class="n">n_steps</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">ent_coef</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">learning_rate</span><span class="o">=</span><span class="mf">2.5e-4</span><span class="p">,</span> <span class="n">vf_coef</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
                  <span class="n">max_grad_norm</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">nminibatches</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">noptepochs</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">cliprange</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
-                 <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                 <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_init_setup_model</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">learning_rate</span> <span class="o">=</span> <span class="n">learning_rate</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cliprange</span> <span class="o">=</span> <span class="n">cliprange</span>
@@ -289,7 +289,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">full_tensorboard_log</span> <span class="o">=</span> <span class="kc">False</span>
         
         <span class="n">policy_kwargs</span><span class="o">=</span><span class="kc">None</span>
-        <span class="n">_init_setup_model</span><span class="o">=</span><span class="kc">True</span>
         <span class="n">n_cpu_tf_sess</span><span class="o">=</span><span class="mi">1</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">action_ph</span> <span class="o">=</span> <span class="kc">None</span>

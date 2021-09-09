@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.rl.baselines.a2c.a2c &mdash; NEORL 1.5.3b documentation</title>
+  <title>neorl.rl.baselines.a2c.a2c &mdash; NEORL 1.5.6b documentation</title>
   
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                main (1.5.3b )
+                main (1.5.6b )
               </div>
             
           
@@ -290,7 +290,7 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">policy</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span> <span class="n">n_steps</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">vf_coef</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">ent_coef</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">max_grad_norm</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
                  <span class="n">learning_rate</span><span class="o">=</span><span class="mf">7e-4</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span> <span class="n">lr_schedule</span><span class="o">=</span><span class="s1">&#39;constant&#39;</span><span class="p">,</span>
-                 <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                 <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_init_setup_model</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">n_steps</span> <span class="o">=</span> <span class="n">n_steps</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="n">gamma</span>
@@ -306,7 +306,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">full_tensorboard_log</span> <span class="o">=</span> <span class="kc">False</span>
         
         <span class="n">policy_kwargs</span><span class="o">=</span><span class="kc">None</span>
-        <span class="n">_init_setup_model</span><span class="o">=</span><span class="kc">True</span>
         <span class="n">n_cpu_tf_sess</span><span class="o">=</span><span class="mi">1</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">learning_rate_ph</span> <span class="o">=</span> <span class="kc">None</span>

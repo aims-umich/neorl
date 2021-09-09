@@ -98,7 +98,7 @@ def main():
         sys.exit()
         
     if args.test:
-        pytest.main(["-x", path])
+        pytest.main(["-x", path, "-v", "--continue-on-collection-errors", "--maxfail=10"])
         sys.exit(0)
         
     if args.input:

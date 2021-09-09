@@ -252,7 +252,7 @@ class GWO(object):
                         # Equation (3.3)
                         C1 = 2 * r2
                         # Equation (3.4)
-        
+                        #print('A1=', A1,C1)
                         D_alpha = abs(C1 * Alpha_pos[j] - self.Positions[i, j])
                         # Equation (3.5)-part 1
                         X1 = Alpha_pos[j] - A1 * D_alpha
@@ -265,7 +265,7 @@ class GWO(object):
                         # Equation (3.3)
                         C2 = 2 * r2
                         # Equation (3.4)
-        
+                        #print('A2=', A2,C2)
                         D_beta = abs(C2 * Beta_pos[j] - self.Positions[i, j])
                         # Equation (3.5)-part 2
                         X2 = Beta_pos[j] - A2 * D_beta
@@ -278,7 +278,7 @@ class GWO(object):
                         # Equation (3.3)
                         C3 = 2 * r2
                         # Equation (3.4)
-        
+                        #print('A3=', A3,C3)
                         D_delta = abs(C3 * Delta_pos[j] - self.Positions[i, j])
                         # Equation (3.5)-part 3
                         X3 = Delta_pos[j] - A3 * D_delta

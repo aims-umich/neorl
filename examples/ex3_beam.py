@@ -84,16 +84,16 @@ def tune_fit(cxpb, mu, alpha, cxmode, mutpb):
 #see tune_fit
 param_grid={
 #def tune_fit(cxpb, mu, alpha, cxmode):
-'cxpb': [[0.1, 0.7],'float'],             #cxpb is first (low=0.1, high=0.8, type=float/continuous)
-'mu':   [[30, 60],'int'],                 #mu is second (low=30, high=60, type=int/discrete)
-'alpha':[[0.1, 0.2, 0.3, 0.4],'grid'],    #alpha is third (grid with fixed values, type=grid/categorical)
-'cxmode':[['blend', 'cx2point'],'grid'],
-'mutpb': [[0.05, 0.3], 'float']}  #cxmode is fourth (grid with fixed values, type=grid/categorical)
+'cxpb': ['float', 0.1, 0.7],             #cxpb is first (low=0.1, high=0.8, type=float/continuous)
+'mu':   ['int', 30, 60],                 #mu is second (low=30, high=60, type=int/discrete)
+'alpha':['grid', [0.1, 0.2, 0.3, 0.4]],    #alpha is third (grid with fixed values, type=grid/categorical)
+'cxmode':['grid', ['blend', 'cx2point']],
+'mutpb': ['float', 0.05, 0.3]}  #cxmode is fourth (grid with fixed values, type=grid/categorical)
 
 #setup a bayesian tune object
 btune=BAYESTUNE(param_grid=param_grid, fit=tune_fit, ncases=30)
 #tune the parameters with method .tune
-bayesres=btune.tune(nthreads=1, csvname='bayestune.csv', verbose=True)
+bayesres=btune.tune(ncores=1, csvname='bayestune.csv', verbose=True)
 
 print('----Top 10 hyperparameter sets----')
 bayesres = bayesres[bayesres['score'] >= 1] #drop the cases with scores < 1 (violates the constraints)

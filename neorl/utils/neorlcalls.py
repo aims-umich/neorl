@@ -11,6 +11,7 @@ import pandas as pd
 from neorl.rl.baselines.shared.callbacks import BaseCallback
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
+import os, sys
 
 class SavePlotCallback(BaseCallback):
     """
@@ -106,12 +107,16 @@ class SavePlotCallback(BaseCallback):
         
         if self.num_timesteps == self.total_timesteps:
             print('system exit')
+            os._exit(1)
+            
             
         return True
     
     def _on_training_end(self) -> None:
         self.runcall()
-        pass
+        print('Training is finished')
+        os._exit(1)
+        #pass
 
     def calc_cumavg(self, data, N):
     

@@ -8,6 +8,7 @@ from neorl import RLLogger
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
+import sys
 
 #--------------------------------------------------------
 # KP Data
@@ -53,7 +54,11 @@ def KP_Data(n_objects):
 #--------------------------------------------------------
 # User Parameters for RL Optimisation
 #--------------------------------------------------------
-total_steps=8000   #total time steps to run all optimizers
+try:
+    total_steps=int(sys.argv[1])  #get time steps as external argument (for quick testing)
+except:
+    total_steps=8000      #or use default total time steps to run all optimizers
+    
 n_steps=12         #update frequency for A2C, ACKTR, PPO
 n_objects=50       #number of objects: choose 50 or 100
 n_sum_steps=10     #this is for logging and averaging purposes

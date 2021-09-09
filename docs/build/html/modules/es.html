@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Evolution Strategies (\(\mu,\lambda\)) (ES) &mdash; NEORL 1.5.4b documentation</title>
+  <title>Evolution Strategies (\(\mu,\lambda\)) (ES) &mdash; NEORL 1.6 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.5.4b )
+                main (1.6 )
               </div>
             
           
@@ -302,8 +302,11 @@
 <span class="sd">            Range: [-100,100]</span>
 <span class="sd">            Minima: 0</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">check</span><span class="o">=</span><span class="nb">all</span><span class="p">([</span><span class="n">item</span> <span class="o">&gt;=</span> <span class="n">BOUNDS</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)][</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">individual</span><span class="p">)])</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">([</span><span class="n">item</span> <span class="o">&lt;=</span> <span class="n">BOUNDS</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)][</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">individual</span><span class="p">)])</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">check</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span> <span class="p">(</span><span class="s1">&#39;--error check fails&#39;</span><span class="p">)</span>
     <span class="n">y</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">individual</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">y</span>
+    <span class="k">return</span> <span class="n">y</span> 
 
 <span class="c1">#Setup the parameter space (d=5)</span>
 <span class="n">nx</span><span class="o">=</span><span class="mi">5</span>
@@ -311,9 +314,10 @@
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">nx</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
     <span class="n">BOUNDS</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
 
-<span class="n">es</span><span class="o">=</span><span class="n">ES</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">FIT</span><span class="p">,</span> <span class="n">lambda_</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">mutpb</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
+<span class="n">es</span><span class="o">=</span><span class="n">ES</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">FIT</span><span class="p">,</span> <span class="n">lambda_</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">mutpb</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
      <span class="n">cxmode</span><span class="o">=</span><span class="s1">&#39;blend&#39;</span><span class="p">,</span> <span class="n">cxpb</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">x_best</span><span class="p">,</span> <span class="n">y_best</span><span class="p">,</span> <span class="n">es_hist</span><span class="o">=</span><span class="n">es</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">x_best</span><span class="p">,</span> <span class="n">y_best</span><span class="p">,</span> <span class="n">es_hist</span><span class="o">=</span><span class="n">es</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">FIT</span><span class="p">(</span><span class="n">x_best</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Neural Genetic Algorithms (NGA) &mdash; NEORL 1.5.4b documentation</title>
+  <title>Neural Genetic Algorithms (NGA) &mdash; NEORL 1.6 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.5.4b )
+                main (1.6 )
               </div>
             
           
@@ -306,7 +306,7 @@
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">nx</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
     <span class="n">BOUNDS</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
 
-<span class="n">nga</span> <span class="o">=</span> <span class="n">NGA</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">FIT</span><span class="p">,</span> <span class="n">npop</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">num_warmups</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+<span class="n">nga</span> <span class="o">=</span> <span class="n">NGA</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">FIT</span><span class="p">,</span> <span class="n">npop</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">num_warmups</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> 
           <span class="n">hidden_shape</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">individuals</span><span class="p">,</span> <span class="n">surrogate_fit</span> <span class="o">=</span> <span class="n">nga</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 

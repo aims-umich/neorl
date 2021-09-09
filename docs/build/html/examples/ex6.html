@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Example 6: Three-bar Truss Design &mdash; NEORL 1.5.4b documentation</title>
+  <title>Example 6: Three-bar Truss Design &mdash; NEORL 1.6 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.5.4b )
+                main (1.6 )
               </div>
             
           
@@ -270,28 +270,27 @@
 <span class="k">def</span> <span class="nf">TBT</span><span class="p">(</span><span class="n">individual</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Three-bar truss Design</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="n">x1</span> <span class="o">=</span> <span class="n">individual</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">x2</span> <span class="o">=</span> <span class="n">individual</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-
+    
     <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">x1</span> <span class="o">+</span> <span class="n">x2</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
-
+    
     <span class="c1">#Constraints</span>
     <span class="k">if</span> <span class="n">x1</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">g</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+    	<span class="n">g</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">g1</span> <span class="o">=</span> <span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">x1</span><span class="o">+</span><span class="n">x2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">x1</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">x1</span><span class="o">*</span><span class="n">x2</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">2</span>
-        <span class="n">g2</span> <span class="o">=</span> <span class="n">x2</span><span class="o">/</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">x1</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">x1</span><span class="o">*</span><span class="n">x2</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">2</span>
-        <span class="n">g3</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">x1</span> <span class="o">+</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">x2</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">2</span>
-        <span class="n">g</span> <span class="o">=</span> <span class="p">[</span><span class="n">g1</span><span class="p">,</span><span class="n">g2</span><span class="p">,</span><span class="n">g3</span><span class="p">]</span>
-
+    	<span class="n">g1</span> <span class="o">=</span> <span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">x1</span><span class="o">+</span><span class="n">x2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">x1</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">x1</span><span class="o">*</span><span class="n">x2</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">2</span>
+    	<span class="n">g2</span> <span class="o">=</span> <span class="n">x2</span><span class="o">/</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">x1</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">x1</span><span class="o">*</span><span class="n">x2</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">2</span>
+    	<span class="n">g3</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">x1</span> <span class="o">+</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">x2</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">2</span>
+    	<span class="n">g</span> <span class="o">=</span> <span class="p">[</span><span class="n">g1</span><span class="p">,</span><span class="n">g2</span><span class="p">,</span><span class="n">g3</span><span class="p">]</span>
+    
     <span class="n">g_round</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">g</span><span class="p">),</span><span class="mi">6</span><span class="p">)</span>
     <span class="n">w1</span><span class="o">=</span><span class="mi">100</span>
     <span class="n">w2</span><span class="o">=</span><span class="mi">100</span>
-
+    
     <span class="n">phi</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">item</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">g_round</span><span class="p">)</span>
     <span class="n">viol</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">g_round</span><span class="p">)</span>
-
+    
     <span class="k">return</span> <span class="n">y</span> <span class="o">+</span> <span class="n">w1</span><span class="o">*</span><span class="n">phi</span> <span class="o">+</span> <span class="n">w2</span><span class="o">*</span><span class="n">viol</span>
 <span class="c1">#---------------------------------</span>
 <span class="c1"># Parameter space</span>
@@ -306,19 +305,19 @@
 <span class="c1"># BAT</span>
 <span class="c1">#---------------------------------</span>
 <span class="n">bat</span><span class="o">=</span><span class="n">BAT</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">TBT</span><span class="p">,</span> <span class="n">nbats</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">fmin</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">,</span> <span class="n">fmax</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">r0</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">levy</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">bat_x</span><span class="p">,</span> <span class="n">bat_y</span><span class="p">,</span> <span class="n">bat_hist</span><span class="o">=</span><span class="n">bat</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">bat_x</span><span class="p">,</span> <span class="n">bat_y</span><span class="p">,</span> <span class="n">bat_hist</span><span class="o">=</span><span class="n">bat</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="c1">#---------------------------------</span>
 <span class="c1"># GWO</span>
 <span class="c1">#---------------------------------</span>
 <span class="n">gwo</span><span class="o">=</span><span class="n">GWO</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">TBT</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">nwolves</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">gwo_x</span><span class="p">,</span> <span class="n">gwo_y</span><span class="p">,</span> <span class="n">gwo_hist</span><span class="o">=</span><span class="n">gwo</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">gwo_x</span><span class="p">,</span> <span class="n">gwo_y</span><span class="p">,</span> <span class="n">gwo_hist</span><span class="o">=</span><span class="n">gwo</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="c1">#---------------------------------</span>
 <span class="c1"># MFO</span>
 <span class="c1">#---------------------------------</span>
 <span class="n">mfo</span><span class="o">=</span><span class="n">MFO</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">TBT</span><span class="p">,</span> <span class="n">nmoths</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">mfo_x</span><span class="p">,</span> <span class="n">mfo_y</span><span class="p">,</span> <span class="n">mfo_hist</span><span class="o">=</span><span class="n">mfo</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">mfo_x</span><span class="p">,</span> <span class="n">mfo_y</span><span class="p">,</span> <span class="n">mfo_hist</span><span class="o">=</span><span class="n">mfo</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="c1">#---------------------------------</span>
 <span class="c1"># Plot</span>

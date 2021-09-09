@@ -120,23 +120,19 @@ class JAYA:
         #Return:
         #list - pop fitnesses
         #"""
-        core_lst=[]
-        for case in range (0, pos_array.shape[0]):
-            core_lst.append(list(pos_array[case, :]))
-                        
         if self.ncores > 1:
             with joblib.Parallel(n_jobs=self.ncores) as parallel:
-                fitness_lst = parallel(joblib.delayed(self.fit_worker)(item) for item in core_lst)
+                fitness_lst = parallel(joblib.delayed(self.fit_worker)(pos_array[i, :]) for i in range(self.npop))
         else:
             fitness_lst = []
-            for item in core_lst:
-                fitness_lst.append(self.fit_worker(item))
+            for i in range(self.npop):
+                fitness_lst.append(self.fit_worker(pos_array[i, :]))
         return fitness_lst
 
     def fit_worker(self, x):
         
         # Clip the wolf with position outside the lower/upper bounds and return same position
-        x=self.ensure_bounds(x)
+        # x=self.ensure_bounds(x)
         
         if self.grid_flag:
             #decode the individual back to the int/float/grid mixed space
@@ -199,18 +195,20 @@ class JAYA:
             assert len(x0) == N, '--error: the length of x0 ({}) (initial population) must equal to number of individuals npop ({})'.format(len(x0), self.npop)
             pos = self.init_population(x0=x0)
         else:
-            pos = self.init_population()     
+            pos = self.init_population()
+
+        pos = pos*1.0   #this is to account for mixed intger-cont. problems, data needs to be float
         
         # calulate fitness 
         fitness_mat=self.eval_pop(pos)
         for i in range(N):
             if fitness_mat[i] > Best_score:
                 Best_score = fitness_mat[i]
-                Best_pos = pos[i, :].copy()
+                Best_pos = pos[i, :]
             if fitness_mat[i] < Worst_score:
                 Worst_score = fitness_mat[i]
-                Worst_pos = pos[i, :].copy()
-                
+                Worst_pos = pos[i, :]
+
         ## main loop
         best_scores = []
         for gen in range(1, ngen+1):
@@ -229,35 +227,33 @@ class JAYA:
                 )
                 # check bounds            
                 new_pos[i,:] = self.ensure_bounds(new_pos[i,:])
-                new_pos[i, :] = self.ensure_discrete(new_pos[i, :])
+                new_pos[i,:] = self.ensure_discrete(new_pos[i,:])
             
             
             fitness_new=self.eval_pop(new_pos)
                         
             for i in range(N):
                 if fitness_new[i] > fitness_mat[i]:
-                    pos[i,:] = new_pos[i,:].copy()
+                    pos[i,:] = new_pos[i,:]
                     fitness_mat[i] = fitness_new[i]
 
             # update best_score and worst_score
             for i in range(N):
                 if fitness_mat[i] > Best_score:
                     Best_score = fitness_mat[i]
-                    Best_pos = pos[i, :].copy()
+                    Best_pos = pos[i, :]
                 if fitness_mat[i] < Worst_score:
                     Worst_score = fitness_mat[i]
-                    Worst_pos = pos[i, :].copy()           
+                    Worst_pos = pos[i, :]            
 
             #-----------------------------
             #Fitness saving 
             #-----------------------------
             gen_avg = sum(fitness_mat) / N                   # current generation avg. fitness
-            y_best = Best_score         # fitness of best individual
-            x_best = Best_pos.copy()   # position of the best flame
+            y_best = Best_score                                # fitness of best individual
+            x_best = Best_pos.copy()
             best_scores.append(y_best)
             
-            #print(self.fit_worker(x_best), self.fit(x_best), y_best)
-                        
             #--mir  show the value wrt min/max
             if self.mode=='min':
                 y_best_correct=-y_best
@@ -270,6 +266,7 @@ class JAYA:
                 print('JAYA step {}/{}, Ncores={}'.format(gen*self.npop, ngen*self.npop, self.ncores))
                 print('************************************************************')
                 print('Best fitness:', np.round(y_best_correct,6))
+
                 if self.grid_flag:
                     x_decoded = decode_discrete_to_grid(x_best, self.orig_bounds, self.bounds_map)
                     print('Best individual:', x_decoded)
@@ -283,7 +280,7 @@ class JAYA:
         if self.grid_flag:
             x_best_correct = decode_discrete_to_grid(x_best, self.orig_bounds, self.bounds_map)
         else:
-            x_best_correct = x_best.copy()
+            x_best_correct = x_best
             
         if verbose:
             print('------------------------ JAYA Summary --------------------------')

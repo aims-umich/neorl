@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Recurrent Neuroevolution of Augmenting Topologies (RNEAT) &mdash; NEORL 1.5.4b documentation</title>
+  <title>Recurrent Neuroevolution of Augmenting Topologies (RNEAT) &mdash; NEORL 1.6 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.5.4b )
+                main (1.6 )
               </div>
             
           
@@ -291,7 +291,7 @@
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
 <p>Train a RNEAT agent to optimize the 5-D sphere function</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">RNEAT</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> 
 
 <span class="k">def</span> <span class="nf">Sphere</span><span class="p">(</span><span class="n">individual</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Sphere test objective function.</span>
@@ -321,8 +321,8 @@
 <span class="n">rneat</span><span class="o">=</span><span class="n">RNEAT</span><span class="p">(</span><span class="n">fit</span><span class="o">=</span><span class="n">Sphere</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span> <span class="n">config</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="c1">#A random initial guess (provide one individual)</span>
 <span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">lb</span><span class="p">,</span><span class="n">ub</span><span class="p">,</span><span class="n">nx</span><span class="p">)</span>
-<span class="n">x_best</span><span class="p">,</span> <span class="n">y_best</span><span class="p">,</span> <span class="n">rneat_hist</span><span class="o">=</span><span class="n">rneat</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span>
-                                         <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">checkpoint_itv</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="n">x_best</span><span class="p">,</span> <span class="n">y_best</span><span class="p">,</span> <span class="n">rneat_hist</span><span class="o">=</span><span class="n">rneat</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span> 
+                                         <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">checkpoint_itv</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
                                          <span class="n">startpoint</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 </div>

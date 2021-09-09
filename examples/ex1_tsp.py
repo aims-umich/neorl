@@ -7,6 +7,7 @@ from neorl import MlpPolicy, DQNPolicy
 from neorl import RLLogger
 import matplotlib.pyplot as plt
 import pandas as pd
+import sys
 
 #--------------------------------------------------------
 # TSP Data
@@ -59,7 +60,11 @@ def TSP_Data(n_city):
 #--------------------------------------------------------
 # User Parameters for RL Optimisation
 #--------------------------------------------------------
-total_steps=500   #total time steps to run all optimizers
+try:
+    total_steps=int(sys.argv[1])  #get time steps as external argument (for quick testing)
+except:
+    total_steps=500      #or use default total time steps to run all optimizers
+
 n_steps=12        #update frequency for A2C, ACKTR, PPO
 n_city=51         #number of cities: choose 51 or 100
 

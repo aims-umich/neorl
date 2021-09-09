@@ -181,8 +181,12 @@ class MFO:
             assert len(x0) == N, '--error: the length of x0 ({}) (initial population) must equal to number of individuals npop ({})'.format(len(x0), self.npop)
             Moth_pos = self.init_population(x0=x0)
         else:
-            Moth_pos = self.init_population()     
+            Moth_pos = self.init_population()
+            
+        Moth_pos = Moth_pos * 1.0 #this is to account for mixed intger-cont. problems, data needs to be float
         Moth_fitness = np.full(N, float('inf'))  # set as worst result
+        
+        
 
         # sort moths
         sorted_population = np.copy(Moth_pos)
@@ -223,7 +227,7 @@ class MFO:
                 if fits < self.best_fitness:
                     self.best_fitness=fits
                     self.best_position=Moth_pos[i, :].copy()
-                                        
+                                                            
             if gen == 1: # OF # equal to OM #
                 # sort the moths
                 fitness_sorted = np.sort(Moth_fitness) # default: (small -> large)

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Example 4: Benchmarks &mdash; NEORL 1.5.4b documentation</title>
+  <title>Example 4: Benchmarks &mdash; NEORL 1.6 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.5.4b )
+                main (1.6 )
               </div>
             
           
@@ -257,11 +257,18 @@
 </div>
 <div class="section" id="neorl-script">
 <h2>NEORL script<a class="headerlink" href="#neorl-script" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Created on Thu May  6 13:23:00 2021</span>
+
+<span class="sd">@author: majdi</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">neorl.benchmarks.cec17</span> <span class="k">as</span> <span class="nn">functions</span>    <span class="c1">#import all cec17 functions</span>
 <span class="kn">import</span> <span class="nn">neorl.benchmarks.classic</span> <span class="k">as</span> <span class="nn">classics</span>   <span class="c1">#import all classical functions</span>
 <span class="kn">from</span> <span class="nn">neorl.benchmarks.classic</span> <span class="kn">import</span> <span class="n">ackley</span><span class="p">,</span> <span class="n">levy</span><span class="p">,</span> <span class="n">bohachevsky</span>  <span class="c1">#import specific functions</span>
-<span class="kn">from</span> <span class="nn">neorl.benchmarks.cec17</span> <span class="kn">import</span> <span class="n">f3</span><span class="p">,</span> <span class="n">f10</span><span class="p">,</span> <span class="n">f21</span>  <span class="c1">#import cec17 specific functions</span>
+<span class="kn">from</span> <span class="nn">neorl.benchmarks.cec17</span> <span class="kn">import</span> <span class="n">f3</span><span class="p">,</span> <span class="n">f10</span><span class="p">,</span> <span class="n">f21</span>  <span class="c1">#import cec17 specific functions </span>
 <span class="kn">from</span> <span class="nn">neorl.benchmarks</span> <span class="kn">import</span> <span class="n">bench_2dplot</span>   <span class="c1">#import the built-in plotter</span>
 
 <span class="n">d1</span> <span class="o">=</span> <span class="mi">2</span> <span class="c1">#set dimension for classical functions</span>
@@ -295,7 +302,7 @@
 <span class="n">bench_2dplot</span><span class="p">(</span><span class="n">bohachevsky</span><span class="p">,</span> <span class="n">points</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
 
 <span class="c1">#------------------------------------------------------------------------------</span>
-<span class="c1">#NOTE: CEC&#39;17 functions: f11-f20, f29, f30 are not defined for d=2 dimensions,</span>
+<span class="c1">#NOTE: CEC&#39;17 functions: f11-f20, f29, f30 are not defined for d=2 dimensions, </span>
 <span class="c1">#so the plotter will FAIL for these functions</span>
 <span class="c1">#------------------------------------------------------------------------------</span>
 </pre></div>

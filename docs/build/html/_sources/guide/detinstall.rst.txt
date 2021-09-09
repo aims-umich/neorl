@@ -53,6 +53,10 @@ NEORL is tested on ``python3 (3.5-3.7)`` with the development headers.
 .. code-block:: bash
 	
 	conda create --name neorl python=3.7	
+
+.. warning::
+
+	For some machines that are not updated frequently (e.g. clusters), TensforFlow may fail to load due to outdated gcc libraries. If you encounter those errors, we typically recommend to downgrade python by using python=3.6 or python=3.5 when creating the virtual environment.  
 	
 2- Activate the environment 
 

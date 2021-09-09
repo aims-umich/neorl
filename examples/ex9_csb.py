@@ -147,11 +147,10 @@ def CSB_square(individual):
   if not check:
 	  raise Exception ('--error check fails')
 
-  g = 61/individual[0]**3 + 27/individual[1]**3 + 19/individual[2]**3 + 7/individual[3]**3 + 1/individual[4]**3 - 1
+  g = 61/individual[0]**3 + 37/individual[1]**3 + 19/individual[2]**3 + 7/individual[3]**3 + 1/individual[4]**3 - 1
 
   g_round=np.round(g,6)
   w1=1000
-
   #phi=max(g_round,0)
   if g_round > 0:
 	  phi = 1

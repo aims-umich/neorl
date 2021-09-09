@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Example 8: Pressure Vessel Design with Demonstration of Categorical Parameter &mdash; NEORL 1.5.4b documentation</title>
+  <title>Example 8: Pressure Vessel Design with Demonstration of Categorical Parameter &mdash; NEORL 1.6 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.5.4b )
+                main (1.6 )
               </div>
             
           
@@ -265,20 +265,20 @@
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
 <span class="c1">#################################</span>
-<span class="c1"># Define Vessel Function</span>
+<span class="c1"># Define Vessel Function </span>
 <span class="c1">#Mixed discrete/continuous/grid</span>
 <span class="c1">#################################</span>
 <span class="k">def</span> <span class="nf">Vessel</span><span class="p">(</span><span class="n">individual</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Pressure vesssel design</span>
-<span class="sd">    x1: thickness (d1)  --&gt; discrete value multiple of 0.0625 in</span>
+<span class="sd">    x1: thickness (d1)  --&gt; discrete value multiple of 0.0625 in </span>
 <span class="sd">    x2: thickness of the heads (d2) ---&gt; categorical value from a pre-defined grid</span>
 <span class="sd">    x3: inner radius (r)  ---&gt; cont. value between [10, 200]</span>
 <span class="sd">    x4: length (L)  ---&gt; cont. value between [10, 200]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">x</span><span class="o">=</span><span class="n">individual</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*=</span> <span class="mf">0.0625</span>   <span class="c1">#convert d1 to &quot;in&quot;</span>
+    <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*=</span> <span class="mf">0.0625</span>   <span class="c1">#convert d1 to &quot;in&quot; </span>
 
     <span class="n">y</span> <span class="o">=</span> <span class="mf">0.6224</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">+</span><span class="mf">1.7781</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="mf">3.1661</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">+</span><span class="mf">19.84</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
 
@@ -287,12 +287,12 @@
     <span class="n">g3</span> <span class="o">=</span> <span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">-</span><span class="p">(</span><span class="mi">4</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="mi">1296000</span><span class="p">;</span>
     <span class="n">g4</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">-</span><span class="mi">240</span><span class="p">;</span>
     <span class="n">g</span><span class="o">=</span><span class="p">[</span><span class="n">g1</span><span class="p">,</span><span class="n">g2</span><span class="p">,</span><span class="n">g3</span><span class="p">,</span><span class="n">g4</span><span class="p">]</span>
-
+    
     <span class="n">phi</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">item</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">g</span><span class="p">)</span>
     <span class="n">eps</span><span class="o">=</span><span class="mf">1e-5</span> <span class="c1">#tolerance to escape the constraint region</span>
     <span class="n">penality</span><span class="o">=</span><span class="mf">1e7</span> <span class="c1">#large penality to add if constraints are violated</span>
-
-    <span class="k">if</span> <span class="n">phi</span> <span class="o">&gt;</span> <span class="n">eps</span><span class="p">:</span>
+    
+    <span class="k">if</span> <span class="n">phi</span> <span class="o">&gt;</span> <span class="n">eps</span><span class="p">:</span>  
         <span class="n">fitness</span><span class="o">=</span><span class="n">phi</span><span class="o">+</span><span class="n">penality</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">fitness</span><span class="o">=</span><span class="n">y</span>
@@ -308,15 +308,15 @@
 <span class="c1">########################</span>
 <span class="c1"># Setup and evolute HHO</span>
 <span class="c1">########################</span>
-<span class="n">hho</span> <span class="o">=</span> <span class="n">HHO</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">Vessel</span><span class="p">,</span> <span class="n">nhawks</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+<span class="n">hho</span> <span class="o">=</span> <span class="n">HHO</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">Vessel</span><span class="p">,</span> <span class="n">nhawks</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> 
                   <span class="n">int_transform</span><span class="o">=</span><span class="s1">&#39;minmax&#39;</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">x_hho</span><span class="p">,</span> <span class="n">y_hho</span><span class="p">,</span> <span class="n">hho_hist</span><span class="o">=</span><span class="n">hho</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="k">assert</span> <span class="n">Vessel</span><span class="p">(</span><span class="n">x_hho</span><span class="p">)</span> <span class="o">==</span> <span class="n">y_hho</span>
 
 <span class="c1">########################</span>
-<span class="c1"># Setup and evolute ES</span>
+<span class="c1"># Setup and evolute ES </span>
 <span class="c1">########################</span>
-<span class="n">es</span> <span class="o">=</span> <span class="n">ES</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">Vessel</span><span class="p">,</span> <span class="n">cxmode</span><span class="o">=</span><span class="s1">&#39;cx2point&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span>
+<span class="n">es</span> <span class="o">=</span> <span class="n">ES</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">Vessel</span><span class="p">,</span> <span class="n">cxmode</span><span class="o">=</span><span class="s1">&#39;cx2point&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span> 
                  <span class="n">lambda_</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">cxpb</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">mutpb</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">x_es</span><span class="p">,</span> <span class="n">y_es</span><span class="p">,</span> <span class="n">es_hist</span><span class="o">=</span><span class="n">es</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="k">assert</span> <span class="n">Vessel</span><span class="p">(</span><span class="n">x_es</span><span class="p">)</span> <span class="o">==</span> <span class="n">y_es</span>
@@ -332,7 +332,7 @@
 <span class="c1">########################</span>
 <span class="c1"># Setup and evolute BAT</span>
 <span class="c1">########################</span>
-<span class="n">bat</span><span class="o">=</span><span class="n">BAT</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">Vessel</span><span class="p">,</span> <span class="n">nbats</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">fmin</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">,</span> <span class="n">fmax</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+<span class="n">bat</span><span class="o">=</span><span class="n">BAT</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">Vessel</span><span class="p">,</span> <span class="n">nbats</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">fmin</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">,</span> <span class="n">fmax</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> 
         <span class="n">A</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">r0</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">levy</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">x_bat</span><span class="p">,</span> <span class="n">y_bat</span><span class="p">,</span> <span class="n">bat_hist</span><span class="o">=</span><span class="n">bat</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="k">assert</span> <span class="n">Vessel</span><span class="p">(</span><span class="n">x_bat</span><span class="p">)</span> <span class="o">==</span> <span class="n">y_bat</span>

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.rl.baselines.deepq.dqn &mdash; NEORL 1.5.3b documentation</title>
+  <title>neorl.rl.baselines.deepq.dqn &mdash; NEORL 1.5.6b documentation</title>
   
 
   
@@ -65,7 +65,7 @@
             
             
               <div class="version">
-                main (1.5.3b )
+                main (1.5.6b )
               </div>
             
           
@@ -280,7 +280,7 @@
 <span class="c1">#    :param prioritized_replay_eps: (float) epsilon to add to the TD errors when updating priorities.</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">policy</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span> <span class="n">learning_rate</span><span class="o">=</span><span class="mf">5e-4</span><span class="p">,</span> <span class="n">buffer_size</span><span class="o">=</span><span class="mi">50000</span><span class="p">,</span> <span class="n">exploration_fraction</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
                  <span class="n">eps_final</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">eps_init</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">train_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
-                 <span class="n">learning_starts</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">target_network_update_freq</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">prioritized_replay</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                 <span class="n">learning_starts</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">target_network_update_freq</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">prioritized_replay</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_init_setup_model</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         
         <span class="c1"># TODO: replay_buffer refactoring</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">DQN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">policy</span><span class="o">=</span><span class="n">policy</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span> <span class="n">replay_buffer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">policy_base</span><span class="o">=</span><span class="n">DQNPolicy</span><span class="p">,</span>
@@ -304,7 +304,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="n">gamma</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tensorboard_log</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">full_tensorboard_log</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="n">_init_setup_model</span><span class="o">=</span><span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">double_q</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="o">=</span> <span class="kc">None</span>
