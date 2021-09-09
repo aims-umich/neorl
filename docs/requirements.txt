@@ -3,6 +3,7 @@ pandas
 tensorflow==1.14.0
 numpy
 neat-python
+scikit-learn
 gym
 cloudpickle
 scipy

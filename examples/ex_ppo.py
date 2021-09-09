@@ -17,17 +17,19 @@ bounds={}
 for i in range(1,nx+1):
         bounds['x'+str(i)]=['float', -10, 10]
 
-#create an enviroment class
-env=CreateEnvironment(method='ppo', fit=Sphere, 
-                      bounds=bounds, mode='min', episode_length=50)
-
-#create a callback function to log data
-cb=RLLogger(check_freq=1)
-#create a RL object based on the env object
-ppo = PPO2(MlpPolicy, env=env, n_steps=12, seed=1)
-#optimise the enviroment class
-ppo.learn(total_timesteps=2000, callback=cb)
-#print the best results
-print('--------------- PPO results ---------------')
-print('The best value of x found:', cb.xbest)
-print('The best value of y found:', cb.rbest)
+if __name__=='__main__':  #use this "if" block for parallel PPO!
+    
+    #create an enviroment class
+    env=CreateEnvironment(method='ppo', fit=Sphere, 
+                          bounds=bounds, mode='min', episode_length=50)
+    
+    #create a callback function to log data
+    cb=RLLogger(check_freq=1)
+    #create a RL object based on the env object
+    ppo = PPO2(MlpPolicy, env=env, n_steps=12, seed=1)
+    #optimise the enviroment class
+    ppo.learn(total_timesteps=2000, callback=cb)
+    #print the best results
+    print('--------------- PPO results ---------------')
+    print('The best value of x found:', cb.xbest)
+    print('The best value of y found:', cb.rbest)

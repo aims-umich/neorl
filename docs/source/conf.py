@@ -127,7 +127,7 @@ html_logo = '_static/img/logo.png'
 
 def setup(app):
     #app.add_stylesheet("css/baselines_theme.css")
-    app.add_stylesheet("css/theme_overrides.css")
+    app.add_css_file("css/theme_overrides.css")
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the

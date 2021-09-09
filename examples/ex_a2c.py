@@ -17,16 +17,19 @@ bounds={}
 for i in range(1,nx+1):
         bounds['x'+str(i)]=['float', -10, 10]
 
-#create an enviroment class
-env=CreateEnvironment(method='a2c', fit=Sphere, 
-                      bounds=bounds, mode='min', episode_length=50)
-#create a callback function to log data
-cb=RLLogger(check_freq=1)
-#create an optimizer object based on the env object
-a2c = A2C(MlpPolicy, env=env, n_steps=8, seed=1)
-#optimise the enviroment class
-a2c.learn(total_timesteps=2000, callback=cb)
-#print the best results
-print('--------------- A2C results ---------------')
-print('The best value of x found:', cb.xbest)
-print('The best value of y found:', cb.rbest)
+
+if __name__=='__main__':  #use this "if" block for parallel A2C!
+    
+    #create an enviroment class
+    env=CreateEnvironment(method='a2c', fit=Sphere, 
+                          bounds=bounds, mode='min', episode_length=50)
+    #create a callback function to log data
+    cb=RLLogger(check_freq=1)
+    #create an optimizer object based on the env object
+    a2c = A2C(MlpPolicy, env=env, n_steps=8, seed=1)
+    #optimise the enviroment class
+    a2c.learn(total_timesteps=2000, callback=cb)
+    #print the best results
+    print('--------------- A2C results ---------------')
+    print('The best value of x found:', cb.xbest)
+    print('The best value of y found:', cb.rbest)
