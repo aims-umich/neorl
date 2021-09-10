@@ -183,6 +183,7 @@ setup(
                       'gym >= 0.15.4, < 0.17.0',
                       'scikit-optimize==0.8.1',
                       'cloudpickle >= 1.2.2',
+                      'h5py < 2.10.0',    #for windows version (NHHO fails with model load)
                       'neat-python', 
                       'scipy',
                       'joblib',

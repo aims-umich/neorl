@@ -28,6 +28,6 @@ def test_nhho():
     nn_params['save_models'] = False
     
     nhho = NHHO(mode='min', bounds=BOUNDS, fit=FIT, nhawks=20, nn_params=nn_params, seed=1)
-    #individuals, fitnesses = nhho.evolute(ngen=10, verbose=True)
+    individuals, fitnesses = nhho.evolute(ngen=2, verbose=True)
 
 test_nhho()
