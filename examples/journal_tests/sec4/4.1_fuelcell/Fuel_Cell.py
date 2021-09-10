@@ -5,6 +5,13 @@ Created on Tue Aug 17 17:24:03 2021
 @author: Devin Seyler
 """
 
+#--------------------------------------------------------------------
+# Paper: NEORL: A Framework for NeuroEvolution Optimization with RL
+# Section: Script for section 4.1
+# Contact: Majdi I. Radaideh (radaideh@mit.edu)
+# Last update: 9/10/2021
+#---------------------------------------------------------------------
+
 #---------------------------------
 # Import packages
 #---------------------------------

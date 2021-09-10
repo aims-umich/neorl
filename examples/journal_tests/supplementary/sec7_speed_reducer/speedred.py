@@ -1,3 +1,10 @@
+#--------------------------------------------------------------------
+# Paper: NEORL: A Framework for NeuroEvolution Optimization with RL
+# Section: Script for supplementary materials section 7
+# Contact: Majdi I. Radaideh (radaideh@mit.edu)
+# Last update: 9/10/2021
+#---------------------------------------------------------------------
+
 from neorl import ES, DE, GWO, PESA2, SSA, JAYA, HHO
 from neorl.tune import RANDTUNE, GRIDTUNE
 import math

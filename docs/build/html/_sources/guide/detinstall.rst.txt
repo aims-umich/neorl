@@ -3,7 +3,7 @@
 Detailed Installation
 ======================
 
-Use this guide if you are looking for a clean installation of NEORL with all Python tools and package management. If you are an expert Python user and aware of Python virtual environment and package management, see the :ref:`Quick Installation <install>` section.  
+Use this guide if you are looking for a safe and clean installation of NEORL with all Python tools and package management. If you are an expert Python user and aware of Python virtual environment and package management, see the :ref:`Quick Installation <install>` section.  
 
 Linux/Ubuntu
 ------------------
@@ -48,7 +48,7 @@ Step 1: Create virtual environment for NEORL
 
 NEORL is tested on ``python3 (3.5-3.7)`` with the development headers.
 
-1- Create a new python-3.7 environment with name **neorl**
+1- Create a new python-3.7 environment with name ``neorl``
 
 .. code-block:: bash
 	
@@ -66,20 +66,20 @@ NEORL is tested on ``python3 (3.5-3.7)`` with the development headers.
 	
 .. warning::
 
-	You need to run ``conda activate neorl`` every time you log in the system, therefore, it is good to add this command to your OS bashrc or environment variables for automatic activation when log in.
+	You need to run ``conda activate neorl`` every time you log in the system, therefore, it is good to add this command to your OS bashrc or environment variables for automatic activation when you log in.
 
 Step 2: Install NEORL
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Make sure **neorl** environment is activated, then run the following command.
+Make sure ``neorl`` environment is activated, then run the following command:
  
 .. code-block:: bash
 
-  pip install neorl --extra-index-url https://test.pypi.org/simple
-
+  pip install neorl
+	
 .. warning::
 
-	Depending on your OS, ``conda`` command may fail due to unknown reasons, if ``conda list`` command fails, then type
+	Depending on your OS, ``conda`` command may fail due to unknown reasons. If ``conda list`` command fails, then type
 	
 	.. code-block:: bash
 	
@@ -130,7 +130,8 @@ https://repo.anaconda.com/archive/Anaconda3-2019.03-Windows-x86_64.exe
 
 .. note::
 
-	Choose the option "Register Anaconda as your default Python-3.7". For the option of "adding anaconda to your PATH variables", choose this option only if you have cleaned all previous Anaconda3 releases from your machine. 	
+	- Choose the option "Register Anaconda as your default Python-3.7". 
+	- For the option of "adding anaconda to your PATH variables", choose this option only if you have cleaned all previous Anaconda3 releases from your machine. 	
 	
 	    
 Step 1: Create virtual environment for NEORL
@@ -138,7 +139,7 @@ Step 1: Create virtual environment for NEORL
 
 Search for ``Anaconda Prompt`` and open a new terminal as an administrator  
 
-1- Create a new python-3.7 environment with name **neorl**
+1- Create a new python-3.7 environment with name ``neorl``
 
 .. code-block:: bash
 	
@@ -149,27 +150,23 @@ Search for ``Anaconda Prompt`` and open a new terminal as an administrator
 .. code-block:: bash
 	
 	conda activate neorl
-	
-.. warning::
-
-	You need to run ``conda activate neorl`` every time you log in the system, therefore, it is good to add this command to your OS bashrc or environment variables for automatic activation when log in.
 
 Step 2: Install NEORL
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Make sure **neorl** environment is activated, then run the following command.
+Make sure ``neorl`` environment is activated, then run the following command:
  
 .. code-block:: bash
 
-  pip install neorl --extra-index-url https://test.pypi.org/simple
+  pip install neorl
 
 .. warning::
 
-	Depending on your OS, ``conda`` command may fail due to unknown reasons, if ``conda list`` command fails, then type
+	Depending on your OS, ``conda`` command may fail due to unknown reasons. If ``conda list`` command fails, then type
 	
 	.. code-block:: bash
 	
-		conda update -n base -c defaults conda  
+		conda update -n base -c defaults conda
 
 Step 3: Test NEORL
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -193,7 +190,6 @@ and you can run unit tests by running:
 
   neorl --test
 
-Mac OS
-------------------
+.. warning::
 
-Coming soon!
+	You need to run ``conda activate neorl`` every time you log in the system, therefore, it is good to add this command to your OS environment variables for automatic activation. Similarly, make sure to connect your Jupyter notebook and Spyder IDE to ``neorl`` virtual environment NOT to the default ``base``.

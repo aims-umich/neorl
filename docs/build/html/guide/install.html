@@ -100,7 +100,6 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Quick Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#ubuntu-prerequisites">Ubuntu Prerequisites</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#mac-os-x-prerequisites">Mac OS X Prerequisites</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#windows-10-prerequisites">Windows 10 Prerequisites</a></li>
 </ul>
 </li>
@@ -238,23 +237,19 @@
             
   <div class="section" id="quick-installation">
 <span id="install"></span><h1>Quick Installation<a class="headerlink" href="#quick-installation" title="Permalink to this headline">¶</a></h1>
-<p>Use this guide if you are an expert Python user and aware of Python virtual environment and package management. For a detailed and clean installation guide, see the <a class="reference internal" href="detinstall.html#detinstall"><span class="std std-ref">Detailed Installation</span></a> section.</p>
+<p>Use this guide if you are an expert Python user and aware of Python virtual environment and package management. For a safe and clean installation guide, see the <a class="reference internal" href="detinstall.html#detinstall"><span class="std std-ref">Detailed Installation</span></a> section.</p>
 <div class="section" id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
 <p>NEORL is tested on <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">(3.5-3.7)</span></code> with the development headers.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>NEORL supports <code class="docutils literal notranslate"><span class="pre">tensorflow</span></code> versions from 1.8.0 to 1.14.0, <strong>we do not support tensorflow &gt;= 2.0</strong>. Please, make sure to uninstall <code class="docutils literal notranslate"><span class="pre">tensorflow</span></code> if already installed on your environment or have a proper version. If <code class="docutils literal notranslate"><span class="pre">tensorflow</span></code> does not exist, NEORL will automatically install <code class="docutils literal notranslate"><span class="pre">tensorflow-1.14.0</span></code> for most stability.</p>
+<p>NEORL supports <code class="docutils literal notranslate"><span class="pre">tensorflow</span></code> versions from 1.8.0 to 1.14.0, <strong>we do not support tensorflow &gt;= 2.0</strong>. Please, make sure to uninstall <code class="docutils literal notranslate"><span class="pre">tensorflow</span></code> if already installed on your environment or have a proper version. If <code class="docutils literal notranslate"><span class="pre">tensorflow</span></code> is left in the virtual environment, NEORL will automatically force <code class="docutils literal notranslate"><span class="pre">tensorflow-1.14.0</span></code> for most stability.</p>
 </div>
 <div class="section" id="ubuntu-prerequisites">
 <h3>Ubuntu Prerequisites<a class="headerlink" href="#ubuntu-prerequisites" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo apt-get update <span class="o">&amp;&amp;</span> sudo apt-get install cmake python3-dev
 </pre></div>
 </div>
-</div>
-<div class="section" id="mac-os-x-prerequisites">
-<h3>Mac OS X Prerequisites<a class="headerlink" href="#mac-os-x-prerequisites" title="Permalink to this headline">¶</a></h3>
-<p>NEORL is not tested yet on Mac OS, the Mac OS NEORL is currently under development.</p>
 </div>
 <div class="section" id="windows-10-prerequisites">
 <h3>Windows 10 Prerequisites<a class="headerlink" href="#windows-10-prerequisites" title="Permalink to this headline">¶</a></h3>
@@ -276,7 +271,7 @@ conda activate neorl
 <div class="section" id="install-using-pip">
 <h2>Install using pip<a class="headerlink" href="#install-using-pip" title="Permalink to this headline">¶</a></h2>
 <p>For both Ubuntu and Windows, you can install NEORL via pip</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install neorl --extra-index-url https://test.pypi.org/simple
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install neorl
 </pre></div>
 </div>
 </div>

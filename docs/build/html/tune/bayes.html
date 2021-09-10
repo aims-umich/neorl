@@ -238,11 +238,11 @@
 <h1>Bayesian Search<a class="headerlink" href="#bayesian-search" title="Permalink to this headline">¶</a></h1>
 <p>A module of Bayesian optimisation search for hyperparameter tuning of NEORL algorithms based upon <code class="docutils literal notranslate"><span class="pre">scikit-optimise</span></code>.</p>
 <p>Original paper: <a class="reference external" href="https://arxiv.org/abs/1012.2599">https://arxiv.org/abs/1012.2599</a></p>
-<p>Bayesian search, in contrast to grid and random searches, keeps track of past evaluation results. Bayesian uses past evaluations to form a probabilistic model mapping hyperparameters to a probability of a score on the objective function (e.g. max fitness, max reward). Bayesian optimization excels when the objective functions are expensive to evaluate, when we do not have access to derivatives, or when the problem at hand is non-convex.</p>
+<p>Bayesian search, in contrast to grid and random searches, keeps track of past evaluation results. Bayesian uses past evaluations to form a probabilistic model mapping hyperparameters to a probability of a score on the objective function (e.g. max/min fitness). Bayesian optimization excels when the objective functions are expensive to evaluate, when we do not have access to derivatives, or when the problem at hand is non-convex.</p>
 <div class="section" id="what-can-you-use">
 <h2>What can you use?<a class="headerlink" href="#what-can-you-use" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p>Multi processing: ❌ (Multithreading in a single processor is available via <code class="docutils literal notranslate"><span class="pre">nthreads</span></code>)</p></li>
+<li><p>Multi processing: ✔️ (Multithreading in a single processor)</p></li>
 <li><p>Discrete/Continuous/Mixed spaces: ✔️</p></li>
 <li><p>Reinforcement Learning Algorithms: ✔️</p></li>
 <li><p>Evolutionary Algorithms: ✔️</p></li>
@@ -344,15 +344,15 @@
 <div class="section" id="notes">
 <h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p>We allow a weak parallelization of Bayesian search via multithreading. The user can start independent Bayesian search with different seeds by increasing <code class="docutils literal notranslate"><span class="pre">nthreads</span></code>. However, all threads will be executed on a single processor, which will slow down every Bayesian sequence. Therefore, this option is recommended when each hyperparameter case is fast-to-evaluate and does not require intensive CPU power.</p></li>
-<li><p>If the user sets <code class="docutils literal notranslate"><span class="pre">nthreads=4</span></code> and sets <code class="docutils literal notranslate"><span class="pre">ncases=15</span></code>, a total of 60 hyperparameter cases are evaluated, where each thread uses 25% of the CPU power. <strong>The extension to multiprocessing/multi-core capability is on track in future</strong>.</p></li>
-<li><p>Keep <code class="docutils literal notranslate"><span class="pre">ncases</span> <span class="pre">&gt;=</span> <span class="pre">11</span></code>. If ncases &lt; 11 is given, the optimiser resets <code class="docutils literal notranslate"><span class="pre">ncases=11</span></code>. It is good to start with <code class="docutils literal notranslate"><span class="pre">ncases=30</span></code>, check the optimizer convergence, and increase as needed.</p></li>
+<li><p>We allow a weak parallelization of Bayesian search via multithreading. The user can start independent Bayesian search with different seeds by increasing <code class="docutils literal notranslate"><span class="pre">ncores</span></code>. However, all threads will be executed on a single processor, which will slow down every Bayesian sequence. Therefore, this option is recommended when each hyperparameter case is fast-to-evaluate and does not require intensive CPU power.</p></li>
+<li><p>If the user sets <code class="docutils literal notranslate"><span class="pre">ncores=4</span></code> and sets <code class="docutils literal notranslate"><span class="pre">ncases=15</span></code>, a total of 60 hyperparameter cases are evaluated, where each thread uses 25% of the CPU power. <strong>The extension to multiprocessing/multi-core capability is on track in future</strong>.</p></li>
+<li><p>Keep <code class="docutils literal notranslate"><span class="pre">ncases</span> <span class="pre">&gt;=</span> <span class="pre">11</span></code>. If ncases &lt; 11, the optimiser resets <code class="docutils literal notranslate"><span class="pre">ncases=11</span></code>. It is good to start with <code class="docutils literal notranslate"><span class="pre">ncases=30</span></code>, check the optimizer convergence, and increase as needed.</p></li>
 <li><p>Relying on <code class="docutils literal notranslate"><span class="pre">grid/categorical</span></code> variables can accelerate the search by a wide margin. Therefore, if the user is aware of certain values of the (<code class="docutils literal notranslate"><span class="pre">int/discrete</span></code>) or the (<code class="docutils literal notranslate"><span class="pre">float/continuous</span></code>) hyperparameters, it is good to convert them to <code class="docutils literal notranslate"><span class="pre">grid/categorical</span></code>.</p></li>
 </ul>
 </div>
 <div class="section" id="acknowledgment">
 <h2>Acknowledgment<a class="headerlink" href="#acknowledgment" title="Permalink to this headline">¶</a></h2>
-<p>Thanks to our fellows in <a class="reference external" href="https://github.com/scikit-optimize/scikit-optimize">scikit-optimize</a>, as we used their <code class="docutils literal notranslate"><span class="pre">gp_minimize</span></code> implementation to leverage our Bayesian search module in this page.</p>
+<p>Thanks to our fellows in <a class="reference external" href="https://github.com/scikit-optimize/scikit-optimize">scikit-optimize</a>, as we used their <code class="docutils literal notranslate"><span class="pre">gp_minimize</span></code> implementation to leverage our Bayesian search module in our framework.</p>
 <p>Head, Tim, Gilles Louppe MechCoder, and Iaroslav Shcherbatyi. “scikit-optimize/scikit-optimize: v0.7.1”(2020).</p>
 </div>
 </div>

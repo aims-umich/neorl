@@ -36,6 +36,7 @@
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -328,7 +329,7 @@ multiple attempts.</p></li>
 <ul class="simple">
 <li><p>Tabu search (TS) is a metaheuristic algorithm that can be used for solving combinatorial optimization problems (problems where an optimal ordering and selection of options is desired). Also, we adapted TS to solve bounded discrete problems for which the candidate solution needs to be perturbed and bounded.</p></li>
 <li><p>For <code class="docutils literal notranslate"><span class="pre">swap_mode</span></code>, choose <code class="docutils literal notranslate"><span class="pre">perturb</span></code> for problems that have lower/upper bounds at which the individual is perturbed between them to find optimal solution (e.g. Sphere function). Choose <code class="docutils literal notranslate"><span class="pre">swap</span></code> for combinatorial problems where the elements of the individual are swapped (not perturbed) to find the optimal solution (e.g. Travel Salesman, Job Scheduling).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">tabu_tenure</span></code> refers to a short-term set of the solutions that have been visited in the recent past time steps. For example <code class="docutils literal notranslate"><span class="pre">tabu_tenure=6</span></code> stores the list of the previous 6 found solutions, which can be reused by the algorithm.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tabu_tenure</span></code> refers to the number of timesteps to perform to enable any particular update to happen again (i.e. swapping of two entries <span class="math notranslate nohighlight">\(x_i, x_j\)</span> or perturbation of an entry <span class="math notranslate nohighlight">\(x_i\)</span>). For example, if tabu_tenure=6 and <span class="math notranslate nohighlight">\(x_i\)</span> of a candidate solution is perturbed, within 6 additional timesteps, <span class="math notranslate nohighlight">\(x_i\)</span> can be perturbed if and only if the resulting perturbation yields to a solution better than the current best one.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">penalization_weight</span></code> represents the importance/frequency of a certain action performed in the search. Large values of <code class="docutils literal notranslate"><span class="pre">penalization_weight</span></code> reduces the frequency of using the same action again in the search.</p></li>
 </ul>
 </div>

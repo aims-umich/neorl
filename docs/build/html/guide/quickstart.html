@@ -230,14 +230,13 @@
             
   <div class="section" id="getting-started">
 <span id="quickstart"></span><h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
-<p>NEORL tries to follow a typical ML-like syntax used in most libraries like <code class="docutils literal notranslate"><span class="pre">sklearn</span></code>, <code class="docutils literal notranslate"><span class="pre">keras</span></code>, and <code class="docutils literal notranslate"><span class="pre">stable-baselines</span></code>.</p>
+<p>NEORL tries to follow a typical machine-learning-like syntax used in most libraries like <code class="docutils literal notranslate"><span class="pre">sklearn</span></code> and <code class="docutils literal notranslate"><span class="pre">keras</span></code>.</p>
 <p>Here, we describe how to use NEORL to minimize the popular sphere function, which takes the form</p>
 <div class="math notranslate nohighlight">
 \[f(\vec{x}) = \sum_{i=1}^d x_i^2\]</div>
-<p>The Sphere function is continuous, convex and unimodal. This plot shows its two-dimensional (<span class="math notranslate nohighlight">\(d=2\)</span>) form.</p>
+<p>The sphere function is continuous, convex and unimodal. This plot shows its two-dimensional (<span class="math notranslate nohighlight">\(d=2\)</span>) form.</p>
 <a class="reference internal image-reference" href="../_images/spheref.png"><img alt="alternate text" class="align-center" src="../_images/spheref.png" style="width: 420.0px; height: 315.0px;" /></a>
-<p><span class="math notranslate nohighlight">\(\vec{x}\)</span> domain:
-The function is usually evaluated on the hypercube <span class="math notranslate nohighlight">\(x_i \in [-5.12, 5.12]\)</span>, for all <span class="math notranslate nohighlight">\(i = 1, …, d\)</span>. The global minima for the sphere function is:</p>
+<p>The function is usually evaluated on the hypercube <span class="math notranslate nohighlight">\(x_i \in [-5.12, 5.12]\)</span>, for all <span class="math notranslate nohighlight">\(i = 1, …, d\)</span>. The global minimum for the sphere function is:</p>
 <div class="math notranslate nohighlight">
 \[f(\vec{x}^*)=0, \text{ at } \vec{x}^*=[0,0,...,0]\]</div>
 <p>Here is a quick example of how to use NEORL to minimize a 5-D (<span class="math notranslate nohighlight">\(d=5\)</span>) sphere function:</p>

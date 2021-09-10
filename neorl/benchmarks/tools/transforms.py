@@ -1,8 +1,18 @@
-# cec2017.transforms
-# Author: Duncan Tilley
-# Contains rotation, shift and shuffle data loaded from data.pkl.
-# Note that these correspond to the many .txt files provided along with the
-# original implementation and should be used for final benchmark results.
+#    This file is part of NEORL.
+
+#    Copyright (c) 2021 Exelon Corporation and MIT Nuclear Science and Engineering
+#    NEORL is free software: you can redistribute it and/or modify
+#    it under the terms of the MIT LICENSE
+
+#    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+#    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+#    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+#    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+#    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+#    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+#    SOFTWARE.
+
+#    Thanks to https://github.com/tilleyd/cec2017-py, this script is modified or adapted from this repo 
 
 import numpy as np
 import pickle

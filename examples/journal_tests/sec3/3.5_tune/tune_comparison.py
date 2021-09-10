@@ -1,3 +1,10 @@
+#--------------------------------------------------------------------
+# Paper: NEORL: A Framework for NeuroEvolution Optimization with RL
+# Section: Script for section 3.5
+# Contact: Majdi I. Radaideh (radaideh@mit.edu)
+# Last update: 9/10/2021
+#---------------------------------------------------------------------
+
 from neorl.tune import GRIDTUNE, RANDTUNE, BAYESTUNE, ESTUNE
 from neorl import ES
 import matplotlib.pyplot as plt

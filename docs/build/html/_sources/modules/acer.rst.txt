@@ -35,6 +35,14 @@ Train an ACER agent to optimize the 5-D discrete sphere function
 
 .. literalinclude :: ../scripts/ex_acer.py
    :language: python
+  
+Notes
+-------	
+
+- ACER can be observed as the parallel version of DQN with additional enhancements. ACER is also restricted to discrete spaces.
+- ACER shows sensitivity to ``n_steps``, ``q_coef``, and ``ent_coef``. It is always good to consider tuning these hyperparameters before using for optimization. In particular, ``n_steps`` is considered the most important parameter to tune. 
+- The cost of ACER equals to the ``total_timesteps`` in the ``learn`` function, where the original fitness function will be accessed ``total_timesteps`` times.
+- See how ACER is used to solve two common combinatorial problems in :ref:`TSP <ex1>` and :ref:`KP <ex10>`.
 
 Acknowledgment
 -----------------

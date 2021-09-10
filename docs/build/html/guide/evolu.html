@@ -103,8 +103,11 @@
 <li class="toctree-l1"><a class="reference internal" href="rl.html">Reinforcement Learning</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Evolutionary Algorithms</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#evolution-strategies">Evolution Strategies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#particle-swarm-optimisation">Particle Swarm Optimisation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#particle-swarm-optimization">Particle Swarm Optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#differential-evolution">Differential Evolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#grey-wolf-optimizer">Grey Wolf Optimizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#whale-optimization-algorithm">Whale Optimization Algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cuckoo-search">Cuckoo Search</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="hyperparameter.html">Hyperparameter Tuning</a></li>
@@ -234,22 +237,34 @@
             
   <div class="section" id="evolutionary-algorithms">
 <span id="evolu"></span><h1>Evolutionary Algorithms<a class="headerlink" href="#evolutionary-algorithms" title="Permalink to this headline">¶</a></h1>
-<p>Evolutionary and Swarm algorithms are a class of computational intelligence that rely on heuristic-based approaches to solve optimisation problems, which cannot be easily solved in polynomial time. These problems include NP-Hard combinatorial problems, and similar problems that require too long to process due to the fitness function complexity (e.g. engineering problems, computer simulation).</p>
+<p>Evolutionary and Swarm algorithms are a class of computational intelligence that rely on heuristic-based approaches to solve optimization problems, which cannot be easily solved in polynomial time. These problems include NP-Hard combinatorial problems, and similar problems that require too long to process due to the fitness function complexity (e.g. engineering problems, computer simulation).</p>
 <p>The concept of evolutionary algorithms (EA) is quite simple as it follows the process of natural selection and evolution. Genetic algorithms, evolution strategies, and differential evolution are among the most popular  EA. An EA contains four overall stages: initialization, selection, genetic operators, and termination. Typically in an EA, fitter individuals that maximize/minimize the fitness function will survive and proliferate into the next generations, while weak individuals will die off and not contribute to the pool of further generations, just like natural selection processes. A typical workflow of an EA is shown in the figure below.</p>
 <a class="reference internal image-reference" href="../_images/genetic.png"><img alt="alternate text" class="align-center" src="../_images/genetic.png" style="width: 796.8px; height: 374.4px;" /></a>
-<p>Swarm intelligence is also another variant of EA and nature-inspired metaheuristics, in which a population of agents are interacting locally with one another and globally with their environment. The inspiration comes from the nature, especially how biological systems interact. The agents follow simple rules and with repeated local and some random interactions between the agents, an emergence of “intelligent” global behavior can be observed among the whole population of agents. For example, this behavior can be seen in ant colonies, bee colonies, and bird flocking movement when searching for food. Among the most common swarm algorithms are particle swarm optimisation, ant colony optimization, artificial bee colony, cuckoo search, and many others.</p>
-<p>Currently we have a support of different standalone evolutionary and swarm algorithms, some are listed below, and many others are on track.</p>
+<p>Swarm intelligence is also another variant of EA and nature-inspired metaheuristics, in which a population of agents are interacting locally with one another and globally with their environment. The inspiration comes from the nature, especially how biological systems interact. The agents follow simple rules and with repeated local and some random interactions between the agents, an emergence of “intelligent” global behavior can be observed among the whole population of agents. For example, this behavior can be seen in ant colonies, bee colonies, and bird flocking movement when searching for food. Among the most common swarm algorithms are particle swarm optimization, ant colony optimization, artificial bee colony, cuckoo search, and many others.</p>
+<p>Currently we have a support of many evolutionary and swarm algorithms, some are listed below:</p>
 <div class="section" id="evolution-strategies">
 <h2>Evolution Strategies<a class="headerlink" href="#evolution-strategies" title="Permalink to this headline">¶</a></h2>
 <p>See the <a class="reference internal" href="../modules/es.html#es"><span class="std std-ref">ES</span></a> section</p>
 </div>
-<div class="section" id="particle-swarm-optimisation">
-<h2>Particle Swarm Optimisation<a class="headerlink" href="#particle-swarm-optimisation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="particle-swarm-optimization">
+<h2>Particle Swarm Optimization<a class="headerlink" href="#particle-swarm-optimization" title="Permalink to this headline">¶</a></h2>
 <p>See the <a class="reference internal" href="../modules/pso.html#pso"><span class="std std-ref">PSO</span></a> section</p>
 </div>
 <div class="section" id="differential-evolution">
 <h2>Differential Evolution<a class="headerlink" href="#differential-evolution" title="Permalink to this headline">¶</a></h2>
 <p>See the <a class="reference internal" href="../modules/de.html#de"><span class="std std-ref">DE</span></a> section</p>
+</div>
+<div class="section" id="grey-wolf-optimizer">
+<h2>Grey Wolf Optimizer<a class="headerlink" href="#grey-wolf-optimizer" title="Permalink to this headline">¶</a></h2>
+<p>See the <a class="reference internal" href="../modules/gwo.html#gwo"><span class="std std-ref">GWO</span></a> section</p>
+</div>
+<div class="section" id="whale-optimization-algorithm">
+<h2>Whale Optimization Algorithm<a class="headerlink" href="#whale-optimization-algorithm" title="Permalink to this headline">¶</a></h2>
+<p>See the <a class="reference internal" href="../modules/woa.html#woa"><span class="std std-ref">WOA</span></a> section</p>
+</div>
+<div class="section" id="cuckoo-search">
+<h2>Cuckoo Search<a class="headerlink" href="#cuckoo-search" title="Permalink to this headline">¶</a></h2>
+<p>See the <a class="reference internal" href="../modules/cs.html#cs"><span class="std std-ref">CS</span></a> section</p>
 </div>
 </div>
 

@@ -4,6 +4,14 @@ Created on Tue Apr 20 22:47:37 2021
 
 @author: majdi
 """
+
+#--------------------------------------------------------------------
+# Paper: NEORL: A Framework for NeuroEvolution Optimization with RL
+# Section: Script for section 3.4
+# Contact: Majdi I. Radaideh (radaideh@mit.edu)
+# Last update: 9/10/2021
+#---------------------------------------------------------------------
+
 import matplotlib
 matplotlib.use('Agg')
 from neorl import GWO, PESA, HHO, FNEAT

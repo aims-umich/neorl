@@ -236,9 +236,9 @@
             
   <span class="target" id="module-neorl.tune.estune"><span id="evolsearch"></span></span><div class="section" id="evolutionary-search">
 <h1>Evolutionary Search<a class="headerlink" href="#evolutionary-search" title="Permalink to this headline">¶</a></h1>
-<p>A module of evolutionary search for hyperparameter tuning of NEORL algorithms based upon evolution strategies.</p>
+<p>A module of evolutionary search for hyperparameter tuning of NEORL algorithms.</p>
 <p>Original paper: E. Bochinski, T. Senst and T. Sikora, “Hyper-parameter optimization for convolutional neural network committees based on evolutionary algorithms,” 2017 IEEE International Conference on Image Processing (ICIP), Beijing, China, 2017, pp. 3924-3928, doi: 10.1109/ICIP.2017.8297018.</p>
-<p>We have used a compact evolution strategy (ES) module for the purpose of tuning hyperparameter of NEORL algorithms. See the <a class="reference internal" href="../modules/es.html#es"><span class="std std-ref">ES algorithm</span></a> section for more details about the (<span class="math notranslate nohighlight">\(\mu,\lambda\)</span>) algorithm. To reduce the burden on the users, we specified and adapt all ES tuner hyperparameters, so the user needs to specify the hyperparameter space similar to grid, random, and other search methods. ES tuner leverages a population of individuals, where each individual represents a sample from the hyperparameter space. ES uses recombination, crossover, and mutation operations to improve the individuals from generation to the other. The best of the best individuals in all generations are reported as the top hyperparameter sets for the algorithm.</p>
+<p>We have used a compact evolution strategies (ES) module for the purpose of tuning the hyperparameters of NEORL algorithms. See the <a class="reference internal" href="../modules/es.html#es"><span class="std std-ref">ES algorithm</span></a> section for more details about the (<span class="math notranslate nohighlight">\(\mu,\lambda\)</span>) algorithm. ES tuner leverages a population of individuals, where each individual represents a sample from the hyperparameter space. ES uses recombination, crossover, and mutation operations to improve the individuals from generation to the other. The best of the best individuals in all generations are reported as the top hyperparameter sets to use further with the algorithm.</p>
 <div class="section" id="what-can-you-use">
 <h2>What can you use?<a class="headerlink" href="#what-can-you-use" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
@@ -304,9 +304,9 @@ is set to maximize an objective</p></li>
 <span class="c1"># Part II: Define fitness function for hyperparameter tuning</span>
 <span class="c1">#*************************************************************</span>
 <span class="k">def</span> <span class="nf">tune_fit</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-
+    
     <span class="n">npar</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">c1</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">c1</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> 
     <span class="n">c2</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">speed_mech</span><span class="o">=</span><span class="s1">&#39;constric&#39;</span>
@@ -358,8 +358,8 @@ is set to maximize an objective</p></li>
 <h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>Evolutionary search uses fixed values for <code class="docutils literal notranslate"><span class="pre">lambda_=10</span></code> and <code class="docutils literal notranslate"><span class="pre">mu=10</span></code>.</p></li>
-<li><p>Therefore, total cost of evolutionary search or total number of hyperparameter tests is <code class="docutils literal notranslate"><span class="pre">ngen</span> <span class="pre">*</span> <span class="pre">10</span></code>.</p></li>
-<li><p>For categorical variables, use integers to encode them to convert to integer variables. See how <code class="docutils literal notranslate"><span class="pre">speed_mech</span></code> is handled in the example above.</p></li>
+<li><p>Therefore, the total cost of evolutionary search or the total number of hyperparameter tests is <code class="docutils literal notranslate"><span class="pre">ngen</span> <span class="pre">*</span> <span class="pre">10</span></code>.</p></li>
+<li><p>For categorical variables, use integers to encode them as integer variables. Then, inside the <code class="docutils literal notranslate"><span class="pre">tune_fit</span></code> function, the integers are converted back to the real categorical value. See how <code class="docutils literal notranslate"><span class="pre">speed_mech</span></code> is handled in the example above.</p></li>
 <li><p>The strategy and individual vectors in the ES tuner are updated similarly to the ES algorithm module described <a class="reference internal" href="../modules/es.html#es"><span class="std std-ref">here</span></a>.</p></li>
 <li><p>For difficult problems, the analyst can start with a random search first to narrow the choices of the important hyperparameters. Then, an evolutionary search can be executed on those important parameters to refine their values.</p></li>
 </ul>

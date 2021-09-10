@@ -113,7 +113,6 @@
 <li class="toctree-l3"><a class="reference internal" href="#id4">Step 3: Test NEORL</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#mac-os">Mac OS</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Getting Started</a></li>
@@ -246,7 +245,7 @@
             
   <div class="section" id="detailed-installation">
 <span id="detinstall"></span><h1>Detailed Installation<a class="headerlink" href="#detailed-installation" title="Permalink to this headline">¶</a></h1>
-<p>Use this guide if you are looking for a clean installation of NEORL with all Python tools and package management. If you are an expert Python user and aware of Python virtual environment and package management, see the <a class="reference internal" href="install.html#install"><span class="std std-ref">Quick Installation</span></a> section.</p>
+<p>Use this guide if you are looking for a safe and clean installation of NEORL with all Python tools and package management. If you are an expert Python user and aware of Python virtual environment and package management, see the <a class="reference internal" href="install.html#install"><span class="std std-ref">Quick Installation</span></a> section.</p>
 <div class="section" id="linux-ubuntu">
 <h2>Linux/Ubuntu<a class="headerlink" href="#linux-ubuntu" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="step-0-prerequisites-anaconda3-installation">
@@ -277,7 +276,7 @@
 <div class="section" id="step-1-create-virtual-environment-for-neorl">
 <h3>Step 1: Create virtual environment for NEORL<a class="headerlink" href="#step-1-create-virtual-environment-for-neorl" title="Permalink to this headline">¶</a></h3>
 <p>NEORL is tested on <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">(3.5-3.7)</span></code> with the development headers.</p>
-<p>1- Create a new python-3.7 environment with name <strong>neorl</strong></p>
+<p>1- Create a new python-3.7 environment with name <code class="docutils literal notranslate"><span class="pre">neorl</span></code></p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda create --name neorl <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.7
 </pre></div>
 </div>
@@ -291,18 +290,18 @@
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>You need to run <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">activate</span> <span class="pre">neorl</span></code> every time you log in the system, therefore, it is good to add this command to your OS bashrc or environment variables for automatic activation when log in.</p>
+<p>You need to run <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">activate</span> <span class="pre">neorl</span></code> every time you log in the system, therefore, it is good to add this command to your OS bashrc or environment variables for automatic activation when you log in.</p>
 </div>
 </div>
 <div class="section" id="step-2-install-neorl">
 <h3>Step 2: Install NEORL<a class="headerlink" href="#step-2-install-neorl" title="Permalink to this headline">¶</a></h3>
-<p>Make sure <strong>neorl</strong> environment is activated, then run the following command.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install neorl --extra-index-url https://test.pypi.org/simple
+<p>Make sure <code class="docutils literal notranslate"><span class="pre">neorl</span></code> environment is activated, then run the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install neorl
 </pre></div>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Depending on your OS, <code class="docutils literal notranslate"><span class="pre">conda</span></code> command may fail due to unknown reasons, if <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">list</span></code> command fails, then type</p>
+<p>Depending on your OS, <code class="docutils literal notranslate"><span class="pre">conda</span></code> command may fail due to unknown reasons. If <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">list</span></code> command fails, then type</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda update -n base -c defaults conda
 </pre></div>
 </div>
@@ -337,13 +336,16 @@
 <p>2- Start the exe installer, follow the instructions on the screen, and wait until completion. See the notes below on what options to choose.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Choose the option “Register Anaconda as your default Python-3.7”. For the option of “adding anaconda to your PATH variables”, choose this option only if you have cleaned all previous Anaconda3 releases from your machine.</p>
+<ul class="simple">
+<li><p>Choose the option “Register Anaconda as your default Python-3.7”.</p></li>
+<li><p>For the option of “adding anaconda to your PATH variables”, choose this option only if you have cleaned all previous Anaconda3 releases from your machine.</p></li>
+</ul>
 </div>
 </div>
 <div class="section" id="id2">
 <h3>Step 1: Create virtual environment for NEORL<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <p>Search for <code class="docutils literal notranslate"><span class="pre">Anaconda</span> <span class="pre">Prompt</span></code> and open a new terminal as an administrator</p>
-<p>1- Create a new python-3.7 environment with name <strong>neorl</strong></p>
+<p>1- Create a new python-3.7 environment with name <code class="docutils literal notranslate"><span class="pre">neorl</span></code></p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda create --name neorl <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.7
 </pre></div>
 </div>
@@ -351,20 +353,16 @@
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda activate neorl
 </pre></div>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>You need to run <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">activate</span> <span class="pre">neorl</span></code> every time you log in the system, therefore, it is good to add this command to your OS bashrc or environment variables for automatic activation when log in.</p>
-</div>
 </div>
 <div class="section" id="id3">
 <h3>Step 2: Install NEORL<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
-<p>Make sure <strong>neorl</strong> environment is activated, then run the following command.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install neorl --extra-index-url https://test.pypi.org/simple
+<p>Make sure <code class="docutils literal notranslate"><span class="pre">neorl</span></code> environment is activated, then run the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install neorl
 </pre></div>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Depending on your OS, <code class="docutils literal notranslate"><span class="pre">conda</span></code> command may fail due to unknown reasons, if <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">list</span></code> command fails, then type</p>
+<p>Depending on your OS, <code class="docutils literal notranslate"><span class="pre">conda</span></code> command may fail due to unknown reasons. If <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">list</span></code> command fails, then type</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda update -n base -c defaults conda
 </pre></div>
 </div>
@@ -382,11 +380,11 @@
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>neorl --test
 </pre></div>
 </div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>You need to run <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">activate</span> <span class="pre">neorl</span></code> every time you log in the system, therefore, it is good to add this command to your OS environment variables for automatic activation. Similarly, make sure to connect your Jupyter notebook and Spyder IDE to <code class="docutils literal notranslate"><span class="pre">neorl</span></code> virtual environment NOT to the default <code class="docutils literal notranslate"><span class="pre">base</span></code>.</p>
 </div>
 </div>
-<div class="section" id="mac-os">
-<h2>Mac OS<a class="headerlink" href="#mac-os" title="Permalink to this headline">¶</a></h2>
-<p>Coming soon!</p>
 </div>
 </div>
 

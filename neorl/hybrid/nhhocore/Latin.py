@@ -1,14 +1,19 @@
-# Latin hypercube sampling
-# N - The size of the sample data
-# D - No.of Decision Variables
-#
-#### Authors: Pengfei Huang, Handing Wang, Yaochu Jin
-#### Xidian University, China and University of Surrey, United Kingdom.
-#### EMAIL: pfeihuang @ foxmail.com, hdwang @ xidian.edu.cn
-#### WEBSITE: https://sites.google.com/site/handingwanghomepage
-#### DATE: November 2020
+#    This file is part of NEORL.
+
+#    Copyright (c) 2021 Exelon Corporation and MIT Nuclear Science and Engineering
+#    NEORL is free software: you can redistribute it and/or modify
+#    it under the terms of the MIT LICENSE
+
+#    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+#    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+#    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+#    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+#    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+#    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+#    SOFTWARE.
+
 # ------------------------------------------------------------------------
-# This code is part of the program that produces the results in the following paper:
+# This code is taken from the following paper:
 #
 # Pengfei Huang,Handing Wang,Yaochu Jin,Offine Data-Driven Evolutionary Optimization Based on Tri-Training, Swarm and Evolutionary Computation, Accepted.
 #
@@ -18,6 +23,9 @@
 import numpy as np
 
 def latin(N, D, lower_bound, upper_bound):
+	# Latin hypercube sampling
+	# N - The size of the sample data
+	# D - No.of Decision Variables
     d = 1.0 / N
     result = np.empty([N, D])
     temp = np.empty([N])

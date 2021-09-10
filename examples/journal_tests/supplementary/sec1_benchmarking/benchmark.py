@@ -1,7 +1,9 @@
-#------------------------------------------
-#Author: Majdi Radaideh
-#Classic Function Tests for the paper
-#------------------------------------------
+#--------------------------------------------------------------------
+# Paper: NEORL: A Framework for NeuroEvolution Optimization with RL
+# Section: Script for supplementary materials section 1
+# Contact: Majdi I. Radaideh (radaideh@mit.edu)
+# Last update: 9/10/2021
+#---------------------------------------------------------------------
 
 import matplotlib
 matplotlib.use('Agg')

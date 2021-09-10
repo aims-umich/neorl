@@ -16,13 +16,11 @@ neorl/benchmarks/cec17.py
 neorl/benchmarks/classic.py
 neorl/benchmarks/kp.py
 neorl/benchmarks/tsp.py
-neorl/benchmarks/utils.py
 neorl/benchmarks/tools/__init__.py
 neorl/benchmarks/tools/basic.py
 neorl/benchmarks/tools/data.pkl
 neorl/benchmarks/tools/data08.csv
 neorl/benchmarks/tools/transforms.py
-neorl/benchmarks/tools/utils.py
 neorl/evolu/__init__.py
 neorl/evolu/aco.py
 neorl/evolu/bat.py
@@ -80,6 +78,7 @@ neorl/parsers/__init__.py
 neorl/rl/__init__.py
 neorl/rl/make_env.py
 neorl/rl/baselines/__init__.py
+neorl/rl/baselines/readme.py
 neorl/rl/baselines/a2c/__init__.py
 neorl/rl/baselines/a2c/a2c.py
 neorl/rl/baselines/a2c/run_atari.py
@@ -207,5 +206,4 @@ neorl/utils/__init__.py
 neorl/utils/initfiles.py
 neorl/utils/multiproc.py
 neorl/utils/neorlcalls.py
-neorl/utils/subproc_vec_env.py
 neorl/utils/test_policy.py

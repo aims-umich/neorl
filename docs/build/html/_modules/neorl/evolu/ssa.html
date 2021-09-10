@@ -7,12 +7,14 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.evolu.ssa &mdash; NEORL 1.5.3b documentation</title>
+  <title>neorl.evolu.ssa &mdash; NEORL 1.6 documentation</title>
   
 
   
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
 
   
@@ -30,6 +32,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
@@ -65,7 +68,7 @@
             
             
               <div class="version">
-                main (1.5.3b )
+                main (1.6 )
               </div>
             
           
@@ -90,7 +93,7 @@
               
             
             
-              <p class="caption"><span class="caption-text">General Guide</span></p>
+              <p class="caption" role="heading"><span class="caption-text">General Guide</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../guide/install.html">Quick Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../guide/detinstall.html">Detailed Installation</a></li>
@@ -99,7 +102,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../guide/evolu.html">Evolutionary Algorithms</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../guide/hyperparameter.html">Hyperparameter Tuning</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Algorithms</span></p>
+<p class="caption" role="heading"><span class="caption-text">Algorithms</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/a2c.html">Advantage Actor Critic (A2C)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/acer.html">Actor-Critic with Experience Replay (ACER)</a></li>
@@ -130,14 +133,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/cs.html">Cuckoo Search (CS)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/ts.html">Tabu Search (TS)</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Hyperparameter Tuning</span></p>
+<p class="caption" role="heading"><span class="caption-text">Hyperparameter Tuning</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../tune/grid.html">Grid Search</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tune/random.html">Random Search</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tune/bayes.html">Bayesian Search</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tune/evolu.html">Evolutionary Search</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Examples</span></p>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex1.html">Example 1: Traveling Salesman Problem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex2.html">Example 2: Ackley with EA</a></li>
@@ -150,7 +153,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex9.html">Example 9: Cantilever Stepped Beam</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../examples/ex10.html">Example 10: Knapsack Problem</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Misc</span></p>
+<p class="caption" role="heading"><span class="caption-text">Misc</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../misc/changelog.html">Changelog</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../misc/projects.html">Projects</a></li>
@@ -221,13 +224,26 @@
            <div itemprop="articleBody">
             
   <h1>Source code for neorl.evolu.ssa</h1><div class="highlight"><pre>
-<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span></span><span class="c1">#    This file is part of NEORL.</span>
+
+<span class="c1">#    Copyright (c) 2021 Exelon Corporation and MIT Nuclear Science and Engineering</span>
+<span class="c1">#    NEORL is free software: you can redistribute it and/or modify</span>
+<span class="c1">#    it under the terms of the MIT LICENSE</span>
+
+<span class="c1">#    THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span class="c1">#    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
+<span class="c1">#    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
+<span class="c1">#    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
+<span class="c1">#    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span>
+<span class="c1">#    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span>
+<span class="c1">#    SOFTWARE.</span>
+
+<span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="c1">#&quot;&quot;&quot;</span>
 <span class="c1">#Created on Thu Dec  3 14:42:29 2020</span>
 <span class="c1">#</span>
 <span class="c1">#@author: Majdi</span>
 <span class="c1">#&quot;&quot;&quot;</span>
-
 
 <span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>

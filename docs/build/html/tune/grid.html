@@ -238,7 +238,7 @@
 <h1>Grid Search<a class="headerlink" href="#grid-search" title="Permalink to this headline">¶</a></h1>
 <p>A module for grid search of hyperparameters of NEORL algorithms.</p>
 <p>Original paper: Bergstra, J., &amp; Bengio, Y. (2012). Random search for hyper-parameter optimization. Journal of machine learning research, 13(2).</p>
-<p>Grid Search is an exhaustive search for selecting an optimal set of algorithm hyperparameters. In Grid Search, the analyst sets up a grid of hyperparameter values. A multi-dimensional full grid of all hyperparameters is constructed, which contains all possible combinations of hyperparameters. Afterwards, every combination of hyperparameter values is tested in serial/parallel, where the optimisation score (e.g. fitness) is estimated. Grid search can be very expensive for fine grids as well as large number of hyperparameters to tune.</p>
+<p>Grid Search is an exhaustive search for selecting an optimal set of algorithm hyperparameters. In Grid Search, the analyst sets up a grid of hyperparameter values. A multi-dimensional full grid of all hyperparameters is constructed, which contains all possible combinations of hyperparameters. Afterwards, every combination of hyperparameter values is tested in serial/parallel, where the optimization score (e.g. fitness) is estimated. Grid search can be very expensive for fine grids as well as large number of hyperparameters to tune.</p>
 <div class="section" id="what-can-you-use">
 <h2>What can you use?<a class="headerlink" href="#what-can-you-use" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
@@ -320,9 +320,6 @@
 <span class="c1">#*************************************************************</span>
 <span class="c1"># Part III: Tuning</span>
 <span class="c1">#*************************************************************</span>
-<span class="c1">#Setup the parameter space</span>
-<span class="c1">#VERY IMPORTANT: The order of these grids MUST be similar to their order in tune_fit</span>
-<span class="c1">#see tune_fit</span>
 <span class="n">param_grid</span><span class="o">=</span><span class="p">{</span>
 <span class="c1">#def tune_fit(cxpb, mutpb, alpha):</span>
 <span class="s1">&#39;cxpb&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span>  <span class="c1">#cxpb is first</span>
@@ -342,9 +339,9 @@
 <div class="section" id="notes">
 <h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p>For <code class="docutils literal notranslate"><span class="pre">ncores</span> <span class="pre">&gt;</span> <span class="pre">1</span></code>, the parallel tuning engine starts. <strong>Make sure to run your python script from Terminal NOT from an IDE (e.g. Spyder, Jupyter Notebook)</strong>. IDEs usually crash when running parallel problems with packages like <code class="docutils literal notranslate"><span class="pre">joblib</span></code> or <code class="docutils literal notranslate"><span class="pre">multiprocessing</span></code>. For <code class="docutils literal notranslate"><span class="pre">ncores</span> <span class="pre">=</span> <span class="pre">1</span></code>, IDEs seem to work fine.</p></li>
+<li><p>For <code class="docutils literal notranslate"><span class="pre">ncores</span> <span class="pre">&gt;</span> <span class="pre">1</span></code>, the parallel tuning engine starts. <strong>Make sure to run your python script from the terminal NOT from an IDE (e.g. Spyder, Jupyter Notebook)</strong>. IDEs are not robust when running parallel problems with packages like <code class="docutils literal notranslate"><span class="pre">joblib</span></code> or <code class="docutils literal notranslate"><span class="pre">multiprocessing</span></code>. For <code class="docutils literal notranslate"><span class="pre">ncores</span> <span class="pre">=</span> <span class="pre">1</span></code>, IDEs seem to work fine.</p></li>
 <li><p>If there are large number of hyperparameters to tune (large <span class="math notranslate nohighlight">\(d\)</span>), try nested grid search. First, run a grid search on few parameters first, then fix them to their best, and start another grid search for the next group of hyperparameters, and so on.</p></li>
-<li><p>Always start with coarse grid for all hyperparameters (small <span class="math notranslate nohighlight">\(k_i\)</span>) to obtain an impression about thier sensitivity. Then, refine the grids for those hyperparameters showing more impact, and run a more detailed grid search.</p></li>
+<li><p>Always start with coarse grid for all hyperparameters (small <span class="math notranslate nohighlight">\(k_i\)</span>) to obtain an impression about their sensitivity. Then, refine the grids for those hyperparameters with more impact, and execute a more detailed grid search.</p></li>
 <li><p>Grid search is ideal to use when the analyst has prior experience on the feasible range of each hyperparameter and the most important hyperparameters to tune.</p></li>
 </ul>
 </div>

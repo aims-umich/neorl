@@ -1,3 +1,10 @@
+#--------------------------------------------------------------------
+# Paper: NEORL: A Framework for NeuroEvolution Optimization with RL
+# Section: Script for supplementary materials section 5, case 1
+# Contact: Majdi I. Radaideh (radaideh@mit.edu)
+# Last update: 9/10/2021
+#---------------------------------------------------------------------
+
 from neorl import HHO, ES, PESA, BAT
 import math
 import matplotlib.pyplot as plt

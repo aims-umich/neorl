@@ -1,3 +1,10 @@
+#--------------------------------------------------------------------
+# Paper: NEORL: A Framework for NeuroEvolution Optimization with RL
+# Section: Script for supplementary materials section 9
+# Contact: Majdi I. Radaideh (radaideh@mit.edu)
+# Last update: 9/10/2021
+#---------------------------------------------------------------------
+
 #--------------------------------------------------------
 # Import Packages
 #--------------------------------------------------------
