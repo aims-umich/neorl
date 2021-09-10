@@ -154,8 +154,7 @@ neorl/rl/runners/acer.py
 neorl/rl/runners/dqn.py
 neorl/rl/runners/ppo2.py
 neorl/tests/__init__.py
-neorl/tests/t_deepq.py
-neorl/tests/t_ppo.py
+neorl/tests/parallel_pesa.py
 neorl/tests/test_a2c.py
 neorl/tests/test_acer.py
 neorl/tests/test_ackde.py
@@ -181,7 +180,6 @@ neorl/tests/test_mixedea.py
 neorl/tests/test_mixedrl.py
 neorl/tests/test_nga.py
 neorl/tests/test_nhho.py
-neorl/tests/test_parallel_pesa.py
 neorl/tests/test_pesa.py
 neorl/tests/test_pesa2.py
 neorl/tests/test_ppo2.py
@@ -195,10 +193,7 @@ neorl/tests/test_ts.py
 neorl/tests/test_woa.py
 neorl/tests/test_xnes.py
 neorl/tune/__init__.py
-neorl/tune/algs.py
-neorl/tune/ashtune.py
 neorl/tune/bayestune.py
-neorl/tune/core.py
 neorl/tune/estune.py
 neorl/tune/gridtune.py
 neorl/tune/randtune.py
