@@ -8,7 +8,7 @@ Contributors
    :alt: alternate text
    :align: right
    
-Majdi I. Radaideh is a Postdoctoral Associate at MIT Nuclear Science and Engineering. He obtained his MS and PhD degrees from the University of Illinois at Urbana Champaign (UIUC) between August 2015 - August 2019. Radaideh's research focuses on algorithms, data engineering, deep learning, physics-informed machine learning, reinforcement learning, uncertainty quantification, and large-scale optimization with applications related to nuclear reactor safety and multiphysics simulations. Radaideh is the founder of NEORL with contributions include establishing the framework structure, algorithm development, open-source and documentation handling, benchmarking and testing, applications to nuclear fuel assembly optimisation, user interface handling, parallel computing, and many other minor contributions.
+Majdi I. Radaideh is a Research Scientist at MIT Nuclear Science and Engineering. He obtained his MS and PhD degrees from the University of Illinois at Urbana Champaign (UIUC) between August 2015 - August 2019. Radaideh's research focuses on algorithms, data engineering, deep learning, physics-informed machine learning, reinforcement learning, uncertainty quantification, and large-scale optimization with applications related to nuclear reactor safety and multiphysics simulations. Radaideh is the founder of NEORL with contributions include establishing the framework structure, algorithm development, open-source and documentation handling, benchmarking and testing, applications to nuclear fuel assembly optimisation, user interface handling, parallel computing, and many other minor contributions.
 
 Github: https://github.com/mradaideh
 

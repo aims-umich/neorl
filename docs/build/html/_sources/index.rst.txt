@@ -6,7 +6,9 @@
 Welcome to NEORL Website!
 =================================
 
-*This project is still under beta testing*
+*Latest News*: 
+
+- September 10, 2021: First NEORL stable release 1.6 is out. 
 
 **Primary contact to report bugs/issues**: Majdi I. Radaideh (radaideh@mit.edu)
 
