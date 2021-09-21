@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu May  6 13:23:00 2021
-
-@author: majdi
-"""
-
 import numpy as np
 import neorl.benchmarks.cec17 as functions    #import all cec17 functions
 import neorl.benchmarks.classic as classics   #import all classical functions

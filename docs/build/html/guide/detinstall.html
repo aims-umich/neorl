@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Detailed Installation &mdash; NEORL 1.6 documentation</title>
+  <title>Detailed Installation &mdash; NEORL 1.6.1b documentation</title>
   
 
   
@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                main (1.6 )
+                main (1.6.1b )
               </div>
             
           
@@ -275,14 +275,14 @@
 </div>
 <div class="section" id="step-1-create-virtual-environment-for-neorl">
 <h3>Step 1: Create virtual environment for NEORL<a class="headerlink" href="#step-1-create-virtual-environment-for-neorl" title="Permalink to this headline">¶</a></h3>
-<p>NEORL is tested on <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">(3.5-3.7)</span></code> with the development headers.</p>
+<p>NEORL is tested on <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">(3.6-3.7)</span></code> with the development headers. <strong>Please, avoid using python 3.5 or lower</strong> (as dictionary ordering is not preserved), or <strong>python 3.8 or newer</strong> (as tensorflow-1.14.0 will not be stable).</p>
 <p>1- Create a new python-3.7 environment with name <code class="docutils literal notranslate"><span class="pre">neorl</span></code></p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda create --name neorl <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.7
 </pre></div>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>For some machines that are not updated frequently (e.g. clusters), TensforFlow may fail to load due to outdated gcc libraries. If you encounter those errors, we typically recommend to downgrade python by using python=3.6 or python=3.5 when creating the virtual environment.</p>
+<p>For some machines that are not updated frequently (e.g. clusters), TensforFlow may fail to load due to outdated gcc libraries. If you encounter those errors, we typically recommend to downgrade python by using python=3.6, when creating the virtual environment.</p>
 </div>
 <p>2- Activate the environment</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda activate neorl

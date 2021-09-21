@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Example 8: Pressure Vessel Design with Demonstration of Categorical Parameter &mdash; NEORL 1.6 documentation</title>
+  <title>Example 8: Pressure Vessel Design with Demonstration of Categorical Parameter &mdash; NEORL 1.6.1b documentation</title>
   
 
   
@@ -71,7 +71,7 @@
             
             
               <div class="version">
-                main (1.6 )
+                main (1.6.1b )
               </div>
             
           
@@ -247,7 +247,7 @@
 </div>
 <div class="section" id="problem-description">
 <h2>Problem Description<a class="headerlink" href="#problem-description" title="Permalink to this headline">¶</a></h2>
-<p>The pressure vessel design is an engineering optimization problem with the objective to evaluate the optimal thickness of shell (<span class="math notranslate nohighlight">\(T_s\)</span>), thickness of head (<span class="math notranslate nohighlight">\(T_h\)</span>), inner radius (R), and length of shell (L) such that the total cost of material, forming, and welding is minimized accounting for 4 constraints. <span class="math notranslate nohighlight">\(T_s\)</span> and <span class="math notranslate nohighlight">\(T_h\)</span> are integer multiples of 0.0625 in., which are the available thicknesses of rolled steel plates, and R and L are continuous. Unlike <a class="reference internal" href="ex7.html#ex7"><span class="std std-ref">Example 7</span></a>, <span class="math notranslate nohighlight">\(T_h\)</span> will be modeled as a categorical parameter to demonstrate compatibility with a mix of continuous, discrete, and categorical parameters. The figure below shows the dimensions of the pressure vessel structure.</p>
+<p>The pressure vessel design is an engineering optimization problem with the objective to evaluate the optimal thickness of shell (<span class="math notranslate nohighlight">\(T_s = x_1\)</span>), thickness of head (<span class="math notranslate nohighlight">\(T_h = x_2\)</span>), inner radius (<span class="math notranslate nohighlight">\(R = x_3\)</span>), and length of shell (<span class="math notranslate nohighlight">\(L = x_4\)</span>) such that the total cost of material, forming, and welding is minimized accounting for 4 constraints. <span class="math notranslate nohighlight">\(T_s\)</span> and <span class="math notranslate nohighlight">\(T_h\)</span> are integer multiples of 0.0625 in., which are the available thicknesses of rolled steel plates, and R and L are continuous. Unlike <a class="reference internal" href="ex7.html#ex7"><span class="std std-ref">Example 7</span></a>, <span class="math notranslate nohighlight">\(T_h\)</span> will be modeled as a categorical parameter to demonstrate compatibility with a mix of continuous, discrete, and categorical parameters. The figure below shows the dimensions of the pressure vessel structure.</p>
 <a class="reference internal image-reference" href="../_images/ex78_vessel_diagram.jpg"><img alt="alternate text" class="align-center" src="../_images/ex78_vessel_diagram.jpg" style="width: 466.0px; height: 250.5px;" /></a>
 <p>The equation for the cost of the pressure vessel is</p>
 <div class="math notranslate nohighlight">

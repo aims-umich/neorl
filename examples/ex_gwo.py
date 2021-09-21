@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Apr 20 22:47:37 2021
-
-@author: majdi
-"""
-
 from neorl import GWO
 import matplotlib.pyplot as plt
     

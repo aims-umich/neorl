@@ -40,7 +40,6 @@ def globalize(func):
    setattr(sys.modules[result.__module__], result.__name__, result)
    return result
 
-
 def action_map(norm_action, ub, lb, ub_norm, lb_norm):
     #"""
     #Map a nromalized action `norm_action` from a small range [lb_norm, ub_norm] 
@@ -244,6 +243,8 @@ class BaseEnvironment(gym.Env):
             if 'int' in self.var_type:
                 action=ensure_discrete(action=action, var_type=self.var_type)
             
+            action = self.ensure_bounds(action)   #checking the bounds
+            
             if self.grid_flag:
                 #decode the individual back to the int/float/grid mixed space
                 decoded_action=decode_discrete_to_grid(action,self.orig_bounds,self.bounds_map)
@@ -285,6 +286,23 @@ class BaseEnvironment(gym.Env):
                 state=action.copy()              #save the state as the action
             
         return state, action, reward
+
+    def ensure_bounds(self, vec): # bounds check
+    
+        vec_new = []
+    
+        for i, (key, val) in enumerate(self.bounds.items()):
+            # less than minimum 
+            if vec[i] < self.bounds[key][1]:
+                vec_new.append(self.bounds[key][1])
+            # more than maximum
+            if vec[i] > self.bounds[key][2]:
+                vec_new.append(self.bounds[key][2])
+            # fine
+            if self.bounds[key][1] <= vec[i] <= self.bounds[key][2]:
+                vec_new.append(vec[i])
+        
+        return np.array(vec_new)
     
     
 

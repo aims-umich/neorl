@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.hybrid.fneat &mdash; NEORL 1.6 documentation</title>
+  <title>neorl.hybrid.fneat &mdash; NEORL 1.6.1b documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.6 )
+                main (1.6.1b )
               </div>
             
           
@@ -283,7 +283,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;DefaultGenome&#39;</span><span class="p">][</span><span class="s1">&#39;num_outputs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nx</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">episode_length</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;NEAT&#39;</span><span class="p">][</span><span class="s1">&#39;pop_size&#39;</span><span class="p">]</span>
         
-        <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">=</span><span class="n">CreateEnvironment</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;rneat&#39;</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">=</span><span class="n">CreateEnvironment</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;fneat&#39;</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
                       <span class="n">bounds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span> <span class="n">episode_length</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">episode_length</span><span class="p">)</span>
         
     <span class="k">def</span> <span class="nf">eval_genomes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">genomes</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>

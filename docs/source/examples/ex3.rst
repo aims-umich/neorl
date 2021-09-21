@@ -16,7 +16,7 @@ Problem Description
 --------------------
 
 
-The welded beam is a common engineering optimisation problem with an objective to find an optimal set of the dimensions :math:`h (x_1)`, :math:`l (x_2)`, :math:`t (x_3)`, and :math:`b (x_4)` such that the fabrication cost of the beam is minimized. This problem is a continuous optimisation problem. See the Figure below for graphical details of the beam dimensions (:math:`h, l, t, b`) to be optimised. 
+The welded beam is a common engineering optimisation problem with an objective to find an optimal set of the dimensions :math:`h=x_1`, :math:`l=x_2`, :math:`t=x_3`, and :math:`b=x_4` such that the fabrication cost of the beam is minimized. This problem is a continuous optimisation problem. See the Figure below for graphical details of the beam dimensions (:math:`h, l, t, b`) to be optimised. 
 
 .. image:: ../images/welded-beam.png
    :scale: 50 %

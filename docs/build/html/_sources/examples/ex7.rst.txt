@@ -16,7 +16,7 @@ Problem Description
 --------------------
 
 
-The pressure vessel design is an engineering optimization problem with the objective to evaluate the optimal thickness of shell (:math:`T_s`), thickness of head (:math:`T_h`), inner radius (R), and length of shell (L) such that the total cost of material, forming, and welding is minimized accounting for 4 constraints. :math:`T_s` and :math:`T_h` are integer multiples of 0.0625 in., which are the available thicknesses of rolled steel plates, and R and L are continuous. The figure below shows the dimensions of the pressure vessel structure. 
+The pressure vessel design is an engineering optimization problem with the objective to evaluate the optimal thickness of shell (:math:`T_s = x_1`), thickness of head (:math:`T_h = x_2`), inner radius (:math:`R = x_3`), and length of shell (:math:`L = x_4`) such that the total cost of material, forming, and welding is minimized accounting for 4 constraints. :math:`T_s` and :math:`T_h` are integer multiples of 0.0625 in., which are the available thicknesses of rolled steel plates, and R and L are continuous. The figure below shows the dimensions of the pressure vessel structure. 
 
 .. image:: ../images/ex78_vessel_diagram.jpg
    :scale: 55 %

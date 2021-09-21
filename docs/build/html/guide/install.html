@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Quick Installation &mdash; NEORL 1.6 documentation</title>
+  <title>Quick Installation &mdash; NEORL 1.6.1b documentation</title>
   
 
   
@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                main (1.6 )
+                main (1.6.1b )
               </div>
             
           
@@ -240,7 +240,7 @@
 <p>Use this guide if you are an expert Python user and aware of Python virtual environment and package management. For a safe and clean installation guide, see the <a class="reference internal" href="detinstall.html#detinstall"><span class="std std-ref">Detailed Installation</span></a> section.</p>
 <div class="section" id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
-<p>NEORL is tested on <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">(3.5-3.7)</span></code> with the development headers.</p>
+<p>NEORL is tested on <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">(3.6-3.7)</span></code> with the development headers. <strong>Please, avoid using python 3.5 or lower</strong> (as dictionary ordering is not preserved), or <strong>python 3.8 or newer</strong> (as tensorflow-1.14.0 will not be stable).</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>NEORL supports <code class="docutils literal notranslate"><span class="pre">tensorflow</span></code> versions from 1.8.0 to 1.14.0, <strong>we do not support tensorflow &gt;= 2.0</strong>. Please, make sure to uninstall <code class="docutils literal notranslate"><span class="pre">tensorflow</span></code> if already installed on your environment or have a proper version. If <code class="docutils literal notranslate"><span class="pre">tensorflow</span></code> is left in the virtual environment, NEORL will automatically force <code class="docutils literal notranslate"><span class="pre">tensorflow-1.14.0</span></code> for most stability.</p>

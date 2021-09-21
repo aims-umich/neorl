@@ -8,7 +8,7 @@ Example of solving the popular continuous optimization function "Ackley" using N
 Summary
 --------------------
 
--  Algorithms: PSO, NES, DE 
+-  Algorithms: PSO, XNES, DE 
 -  Type: Continuous, Single-objective, Unconstrained
 -  Field: Mathematical Optimization
  

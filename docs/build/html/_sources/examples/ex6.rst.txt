@@ -16,7 +16,7 @@ Problem Description
 --------------------
 
 
-The Three-bar truss design is an engineering optimization problem with the objective to evaluate the optimal cross sectional areas :math:`A_1 = A_3 (x_1)` and :math:`A_2 (x_2)` such that the volume of the statically loaded truss structure is minimized accounting for stress :math:`(\sigma)` constraints. The figure below shows the dimensions of the three-bar truss structure.
+The Three-bar truss design is an engineering optimization problem with the objective to evaluate the optimal cross sectional areas :math:`A_1 = A_3 = x_1` and :math:`A_2 = x_2` such that the volume of the statically loaded truss structure is minimized accounting for stress :math:`(\sigma)` constraints. The figure below shows the dimensions of the three-bar truss structure.
 
 .. image:: ../images/three-bar-truss.png
    :scale: 75 %

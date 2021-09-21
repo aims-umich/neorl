@@ -46,7 +46,7 @@ Anaconda3 will provide you with OS-independent framework that hosts Python packa
 Step 1: Create virtual environment for NEORL
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-NEORL is tested on ``python3 (3.5-3.7)`` with the development headers.
+NEORL is tested on ``python3 (3.6-3.7)`` with the development headers. **Please, avoid using python 3.5 or lower** (as dictionary ordering is not preserved), or **python 3.8 or newer** (as tensorflow-1.14.0 will not be stable).
 
 1- Create a new python-3.7 environment with name ``neorl``
 
@@ -56,7 +56,7 @@ NEORL is tested on ``python3 (3.5-3.7)`` with the development headers.
 
 .. warning::
 
-	For some machines that are not updated frequently (e.g. clusters), TensforFlow may fail to load due to outdated gcc libraries. If you encounter those errors, we typically recommend to downgrade python by using python=3.6 or python=3.5 when creating the virtual environment.  
+	For some machines that are not updated frequently (e.g. clusters), TensforFlow may fail to load due to outdated gcc libraries. If you encounter those errors, we typically recommend to downgrade python by using python=3.6, when creating the virtual environment.  
 	
 2- Activate the environment 
 

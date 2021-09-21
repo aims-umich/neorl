@@ -8,7 +8,7 @@ Use this guide if you are an expert Python user and aware of Python virtual envi
 Prerequisites
 --------------
 
-NEORL is tested on ``python3 (3.5-3.7)`` with the development headers.
+NEORL is tested on ``python3 (3.6-3.7)`` with the development headers. **Please, avoid using python 3.5 or lower** (as dictionary ordering is not preserved), or **python 3.8 or newer** (as tensorflow-1.14.0 will not be stable).
 
 .. note::
 

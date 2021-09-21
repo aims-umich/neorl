@@ -262,7 +262,7 @@ class XNES(object):
         self.sigma_old = sigma_old
         
         if self.verbose:
-            print('------------------------ NES Summary --------------------------')
+            print('------------------------ XNES Summary --------------------------')
             print('Best fitness (y) found:', self.fitness_best_correct)
             print('Best individual (x) found:', self.x_best)
             print('--------------------------------------------------------------')  

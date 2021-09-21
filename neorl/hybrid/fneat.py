@@ -57,7 +57,7 @@ class FNEAT(object):
         self.config['DefaultGenome']['num_outputs'] = self.nx
         self.episode_length=self.config['NEAT']['pop_size']
         
-        self.env=CreateEnvironment(method='rneat', fit=self.fit, ncores=1, 
+        self.env=CreateEnvironment(method='fneat', fit=self.fit, ncores=1, 
                       bounds=self.bounds, mode=self.mode, episode_length=self.episode_length)
         
     def eval_genomes(self, genomes, config):

@@ -15,6 +15,10 @@ h1, h2, .rst-content .toctree-wrapper p.caption, h3, h4, h5, h6, legend, p.capti
   background-color: var(--main-bg-color);
 }
 
+.wy-nav-content {
+    max-width: 1200px !important;
+}
+
 /* Mobile version */
 .wy-nav-top{
   background-color: var(--main-bg-color);

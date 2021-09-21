@@ -21,6 +21,17 @@ Release 1.6 (2021-09-10)
 Beta Releases (for developers)
 ---------------------------------
 
+Releases 1.6.1b (2021-09-20)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+  pip install neorl==1.6.1b --extra-index-url https://test.pypi.org/simple
+
+- Fixed a bounding check bug in FNEAT and RNEAT.
+- Fixed different typos in the documentation. 
+- Increased the width of the online documentation page to fit more code/words. 
+
 Releases 1.5.3b-1.5.7b (2021-09-10)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

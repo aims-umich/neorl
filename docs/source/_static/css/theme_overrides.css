@@ -15,3 +15,7 @@
 .wy-side-nav-search input[type=text] {
 	border-color: rgba(7, 78, 104, 0.83);
 }
+
+.wy-nav-content {
+    max-width: 1200px !important;
+}

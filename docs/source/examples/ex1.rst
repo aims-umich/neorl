@@ -8,7 +8,7 @@ Example of solving the classical discrete optimization problem "Traveling Salesm
 Summary
 --------------------
 
-- Algorithm: PPO,A2C, ACKTR, DQN, ACER
+- Algorithm: PPO, A2C, ACKTR, DQN, ACER
 - Type: Discrete/Combinatorial, Single Objective, Constrained
 - Field: Computational mathematics
  
