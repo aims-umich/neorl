@@ -1,0 +1,505 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Advantage Actor Critic (A2C) &mdash; NEORL 1.6 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Actor-Critic with Experience Replay (ACER)" href="acer.html" />
+    <link rel="prev" title="Hyperparameter Tuning" href="../guide/hyperparameter.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> NEORL
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                main (1.6 )
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">General Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guide/install.html">Quick Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/detinstall.html">Detailed Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/quickstart.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/rl.html">Reinforcement Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/evolu.html">Evolutionary Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/hyperparameter.html">Hyperparameter Tuning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Algorithms</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Advantage Actor Critic (A2C)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-can-you-use">What can you use?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example">Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#acknowledgment">Acknowledgment</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="acer.html">Actor-Critic with Experience Replay (ACER)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="acktr.html">Actor Critic using Kronecker-Factored Trust Region (ACKTR)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dqn.html">Deep Q Learning (DQN)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ppo2.html">Proximal Policy Optimisation (PPO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="es.html">Evolution Strategies (<span class="math notranslate nohighlight">\(\mu,\lambda\)</span>) (ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pso.html">Particle Swarm Optimisation (PSO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="de.html">Differential Evolution (DE)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xnes.html">Exponential Natural Evolution Strategies (XNES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gwo.html">Grey Wolf Optimizer (GWO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pesa.html">Prioritized replay Evolutionary and Swarm Algorithm (PESA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pesa2.html">Modern PESA (PESA2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sa.html">Simulated Annealing (SA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ssa.html">Salp Swarm Algorithm (SSA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="woa.html">Whale Optimization Algorithm (WOA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mfo.html">Moth-flame Optimization (MFO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jaya.html">JAYA Algorithm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bat.html">Bat Algorithm (BAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hho.html">Harris Hawks Optimization (HHO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fneat.html">Feedforward Neuroevolution of Augmenting Topologies (FNEAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rneat.html">Recurrent Neuroevolution of Augmenting Topologies (RNEAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ppoes.html">RL-informed Evolution Strategies (PPO-ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ackde.html">RL-informed Differential Evolution (ACKTR-DE)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aco.html">Ant Colony Optimization (ACO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nga.html">Neural Genetic Algorithms (NGA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nhho.html">Neural Harris Hawks Optimization (NHHO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cs.html">Cuckoo Search (CS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ts.html">Tabu Search (TS)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Hyperparameter Tuning</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tune/grid.html">Grid Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/random.html">Random Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/bayes.html">Bayesian Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/evolu.html">Evolutionary Search</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex1.html">Example 1: Traveling Salesman Problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex2.html">Example 2: Ackley with EA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex3.html">Example 3: Welded-beam design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex4.html">Example 4: Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex5.html">Example 5: CEC’2017 Test Suite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex6.html">Example 6: Three-bar Truss Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex7.html">Example 7: Pressure Vessel Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex8.html">Example 8: Pressure Vessel Design with Demonstration of Categorical Parameter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex9.html">Example 9: Cantilever Stepped Beam</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex10.html">Example 10: Knapsack Problem</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Misc</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../misc/changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/projects.html">Projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/contrib.html">Contributors</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEORL</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Advantage Actor Critic (A2C)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/modules/a2c.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <span class="target" id="module-neorl.rl.baselines.a2c"><span id="a2c"></span></span><div class="section" id="advantage-actor-critic-a2c">
+<h1>Advantage Actor Critic (A2C)<a class="headerlink" href="#advantage-actor-critic-a2c" title="Permalink to this headline">¶</a></h1>
+<p>A synchronous, deterministic variant of <a class="reference external" href="https://arxiv.org/abs/1602.01783">Asynchronous Advantage Actor Critic (A3C)</a>.
+It uses multiple workers to avoid the use of a replay buffer.</p>
+<p>Original paper:  <a class="reference external" href="https://arxiv.org/abs/1602.01783">https://arxiv.org/abs/1602.01783</a></p>
+<div class="section" id="what-can-you-use">
+<h2>What can you use?<a class="headerlink" href="#what-can-you-use" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Multi processing: ✔️</p></li>
+<li><p>Discrete spaces: ✔️</p></li>
+<li><p>Continuous spaces: ✔️</p></li>
+<li><p>Mixed Discrete/Continuous spaces: ✔️</p></li>
+</ul>
+</div>
+<div class="section" id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="neorl.rl.baselines.a2c.A2C">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">neorl.rl.baselines.a2c.</span></span><span class="sig-name descname"><span class="pre">A2C</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">policy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vf_coef</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ent_coef</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_grad_norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0007</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr_schedule</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'constant'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_init_setup_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/rl/baselines/a2c/a2c.html#A2C"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.rl.baselines.a2c.A2C" title="Permalink to this definition">¶</a></dt>
+<dd><p>The A2C (Advantage Actor Critic) model class</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>policy</strong> – (ActorCriticPolicy or str) The policy model to use (MlpPolicy, CnnPolicy, CnnLstmPolicy, …)</p></li>
+<li><p><strong>env</strong> – (NEORL environment or Gym environment) The environment to learn with PPO, either use NEORL method <code class="docutils literal notranslate"><span class="pre">CreateEnvironment</span></code> (see <strong>below</strong>) or construct your custom Gym environment</p></li>
+<li><p><strong>gamma</strong> – (float) Discount factor</p></li>
+<li><p><strong>n_steps</strong> – (int) The number of steps to run for each environment per update
+(i.e. batch size is n_steps * n_env where n_env is number of environment copies running in parallel)</p></li>
+<li><p><strong>vf_coef</strong> – (float) Value function coefficient for the loss calculation</p></li>
+<li><p><strong>ent_coef</strong> – (float) Entropy coefficient for the loss calculation</p></li>
+<li><p><strong>max_grad_norm</strong> – (float) The maximum value for the gradient clipping</p></li>
+<li><p><strong>learning_rate</strong> – (float) The learning rate</p></li>
+<li><p><strong>alpha</strong> – (float)  RMSProp decay parameter (default: 0.99)</p></li>
+<li><p><strong>lr_schedule</strong> – (str) The type of scheduler for the learning rate update (‘linear’, ‘constant’,
+‘double_linear_con’, ‘middle_drop’ or ‘double_middle_drop’)</p></li>
+<li><p><strong>verbose</strong> – (int) the verbosity level: 0 none, 1 training information, 2 tensorflow debug</p></li>
+<li><p><strong>seed</strong> – (int) Seed for the pseudo-random generators (python, numpy, tensorflow).
+If None (default), use random seed.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="neorl.rl.baselines.a2c.A2C.learn">
+<span class="sig-name descname"><span class="pre">learn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">total_timesteps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb_log_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'A2C'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reset_num_timesteps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/rl/baselines/a2c/a2c.html#A2C.learn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.rl.baselines.a2c.A2C.learn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a trained model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>total_timesteps</strong> – (int) The total number of samples to train on</p></li>
+<li><p><strong>callback</strong> – (Union[callable, [callable], BaseCallback])
+function called at every steps with state of the algorithm.
+It takes the local and global variables. If it returns False, training is aborted.
+When the callback inherits from BaseCallback, you will have access
+to additional stages of the training (training start/end),
+please read the documentation for more details.</p></li>
+<li><p><strong>log_interval</strong> – (int) The number of timesteps before logging.</p></li>
+<li><p><strong>tb_log_name</strong> – (str) the name of the run for tensorboard log</p></li>
+<li><p><strong>reset_num_timesteps</strong> – (bool) whether or not to reset the current timestep number (used in logging)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(BaseRLModel) the trained model</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neorl.rl.baselines.a2c.A2C.load">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">load_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_objects</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neorl.rl.baselines.a2c.A2C.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the model from file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>load_path</strong> – (str or file-like) the saved parameter location</p></li>
+<li><p><strong>env</strong> – (Gym Environment) the new environment to run the loaded model on
+(can be None if you only need prediction from a trained model)</p></li>
+<li><p><strong>custom_objects</strong> – (dict) Dictionary of objects to replace
+upon loading. If a variable is present in this dictionary as a
+key, it will not be deserialized and the corresponding item
+will be used instead. Similar to custom_objects in
+<cite>keras.models.load_model</cite>. Useful when you have an object in
+file that can not be deserialized.</p></li>
+<li><p><strong>kwargs</strong> – extra arguments to change the model when loading</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neorl.rl.baselines.a2c.A2C.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">observation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deterministic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neorl.rl.baselines.a2c.A2C.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the model’s action from an observation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>observation</strong> – (np.ndarray) the input observation</p></li>
+<li><p><strong>state</strong> – (np.ndarray) The last states (can be None, used in recurrent policies)</p></li>
+<li><p><strong>mask</strong> – (np.ndarray) The last masks (can be None, used in recurrent policies)</p></li>
+<li><p><strong>deterministic</strong> – (bool) Whether or not to return deterministic actions.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(np.ndarray, np.ndarray) the model’s action and the next state (used in recurrent policies)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neorl.rl.baselines.a2c.A2C.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cloudpickle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/rl/baselines/a2c/a2c.html#A2C.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.rl.baselines.a2c.A2C.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the current parameters to file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>save_path</strong> – (str or file-like) The save location</p></li>
+<li><p><strong>cloudpickle</strong> – (bool) Use older cloudpickle format instead of zip-archives.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="neorl.rl.make_env.CreateEnvironment">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">neorl.rl.make_env.</span></span><span class="sig-name descname"><span class="pre">CreateEnvironment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ncores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'max'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">episode_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/rl/make_env.html#CreateEnvironment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.rl.make_env.CreateEnvironment" title="Permalink to this definition">¶</a></dt>
+<dd><p>A module to construct a fitness environment for certain algorithms 
+that follow reinforcement learning approach of optimization</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>method</strong> – (str) the supported algorithms, choose either: <code class="docutils literal notranslate"><span class="pre">dqn</span></code>, <code class="docutils literal notranslate"><span class="pre">ppo</span></code>, <code class="docutils literal notranslate"><span class="pre">acktr</span></code>, <code class="docutils literal notranslate"><span class="pre">acer</span></code>, <code class="docutils literal notranslate"><span class="pre">a2c</span></code>.</p></li>
+<li><p><strong>fit</strong> – (function) the fitness function</p></li>
+<li><p><strong>bounds</strong> – (dict) input parameter type and lower/upper bounds in dictionary form. Example: <code class="docutils literal notranslate"><span class="pre">bounds={'x1':</span> <span class="pre">['int',</span> <span class="pre">1,</span> <span class="pre">4],</span> <span class="pre">'x2':</span> <span class="pre">['float',</span> <span class="pre">0.1,</span> <span class="pre">0.8],</span> <span class="pre">'x3':</span> <span class="pre">['float',</span> <span class="pre">2.2,</span> <span class="pre">6.2]}</span></code></p></li>
+<li><p><strong>ncores</strong> – (int) number of parallel processors</p></li>
+<li><p><strong>mode</strong> – (str) problem type, either <code class="docutils literal notranslate"><span class="pre">min</span></code> for minimization problem or <code class="docutils literal notranslate"><span class="pre">max</span></code> for maximization (RL is default to <code class="docutils literal notranslate"><span class="pre">max</span></code>)</p></li>
+<li><p><strong>episode_length</strong> – (int): number of individuals to evaluate before resetting the environment to random initial guess.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="neorl.utils.neorlcalls.RLLogger">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">neorl.utils.neorlcalls.</span></span><span class="sig-name descname"><span class="pre">RLLogger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">check_freq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_freq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_avg_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pngname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'history'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bestmodel.pkl'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_best_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/utils/neorlcalls.html#RLLogger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.utils.neorlcalls.RLLogger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback for logging data of RL algorathims (x,y), compatible with: A2C, ACER, ACKTR, DQN, PPO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>check_freq</strong> – (int) logging frequency, e.g. 1 will record every time step</p></li>
+<li><p><strong>plot_freq</strong> – (int) frequency of plotting the fitness progress (if <code class="docutils literal notranslate"><span class="pre">None</span></code>, plotter is deactivated)</p></li>
+<li><p><strong>n_avg_steps</strong> – (int) if <code class="docutils literal notranslate"><span class="pre">plot_freq</span></code> is NOT <code class="docutils literal notranslate"><span class="pre">None</span></code>, then this is the number of timesteps to group to draw statistics for the plotter (e.g. 10 will group every 10 time steps to estimate min, max, mean, and std).</p></li>
+<li><p><strong>pngname</strong> – (str) name of the plot that will be saved if <code class="docutils literal notranslate"><span class="pre">plot_freq</span></code> is NOT <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>save_model</strong> – (bool) whether or not to save the RL neural network model (model is saved every <code class="docutils literal notranslate"><span class="pre">check_freq</span></code>)</p></li>
+<li><p><strong>model_name</strong> – (str) name of the model to be saved  if <code class="docutils literal notranslate"><span class="pre">save_model=True</span></code></p></li>
+<li><p><strong>save_best_only</strong> – (bool) if <code class="docutils literal notranslate"><span class="pre">save_model</span> <span class="pre">=</span> <span class="pre">True</span></code>, then this flag only saves the model if the fitness value improves.</p></li>
+<li><p><strong>verbose</strong> – (int) print updates to the screen</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>Train an A2C agent to optimize the 5-D sphere function</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">A2C</span>
+<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">MlpPolicy</span>
+<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">RLLogger</span>
+<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">CreateEnvironment</span>
+
+<span class="k">def</span> <span class="nf">Sphere</span><span class="p">(</span><span class="n">individual</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sphere test objective function.</span>
+<span class="sd">                F(x) = sum_{i=1}^d xi^2</span>
+<span class="sd">                d=1,2,3,...</span>
+<span class="sd">                Range: [-100,100]</span>
+<span class="sd">                Minima: 0</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">individual</span><span class="p">)</span>
+
+<span class="n">nx</span><span class="o">=</span><span class="mi">5</span>
+<span class="n">bounds</span><span class="o">=</span><span class="p">{}</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">nx</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span><span class="o">==</span><span class="s1">&#39;__main__&#39;</span><span class="p">:</span>  <span class="c1">#use this &quot;if&quot; block for parallel A2C!</span>
+    
+    <span class="c1">#create an enviroment class</span>
+    <span class="n">env</span><span class="o">=</span><span class="n">CreateEnvironment</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;a2c&#39;</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">Sphere</span><span class="p">,</span> 
+                          <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">episode_length</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+    <span class="c1">#create a callback function to log data</span>
+    <span class="n">cb</span><span class="o">=</span><span class="n">RLLogger</span><span class="p">(</span><span class="n">check_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1">#create an optimizer object based on the env object</span>
+    <span class="n">a2c</span> <span class="o">=</span> <span class="n">A2C</span><span class="p">(</span><span class="n">MlpPolicy</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span> <span class="n">n_steps</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1">#optimise the enviroment class</span>
+    <span class="n">a2c</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span><span class="n">total_timesteps</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">cb</span><span class="p">)</span>
+    <span class="c1">#print the best results</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--------------- A2C results ---------------&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The best value of x found:&#39;</span><span class="p">,</span> <span class="n">cb</span><span class="o">.</span><span class="n">xbest</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The best value of y found:&#39;</span><span class="p">,</span> <span class="n">cb</span><span class="o">.</span><span class="n">rbest</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>A2C belongs to the actor-critic family, and usually considered as the state-of-the-art in the reinforcement learning domain. A2C is parallel and supports all types of spaces.</p></li>
+<li><p>A2C shows sensitivity to <code class="docutils literal notranslate"><span class="pre">n_steps</span></code>, <code class="docutils literal notranslate"><span class="pre">vf_coef</span></code>, <code class="docutils literal notranslate"><span class="pre">ent_coef</span></code>, and <code class="docutils literal notranslate"><span class="pre">learning_rate</span></code>. It is always good to consider tuning these hyperparameters before using for optimization. In particular, <code class="docutils literal notranslate"><span class="pre">n_steps</span></code> is considered the most important parameter to tune for A2C. Always start with small <code class="docutils literal notranslate"><span class="pre">n_steps</span></code> and increase as needed.</p></li>
+<li><p>The cost of A2C equals to the <code class="docutils literal notranslate"><span class="pre">total_timesteps</span></code> in the <code class="docutils literal notranslate"><span class="pre">learn</span></code> function, where the original fitness function will be accessed <code class="docutils literal notranslate"><span class="pre">total_timesteps</span></code> times.</p></li>
+<li><p>See how A2C is used to solve two common combinatorial problems in <a class="reference internal" href="../examples/ex1.html#ex1"><span class="std std-ref">TSP</span></a> and <a class="reference internal" href="../examples/ex10.html#ex10"><span class="std std-ref">KP</span></a>.</p></li>
+</ul>
+</div>
+<div class="section" id="acknowledgment">
+<h2>Acknowledgment<a class="headerlink" href="#acknowledgment" title="Permalink to this headline">¶</a></h2>
+<p>Thanks to our fellows in <a class="reference external" href="https://github.com/hill-a/stable-baselines">stable-baselines</a>, as we used their standalone RL implementation, which is utilized as a baseline to leverage advanced neuroevolution algorithms.</p>
+<p>Hill, Ashley, et al. “Stable baselines.” (2018).</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="acer.html" class="btn btn-neutral float-right" title="Actor-Critic with Experience Replay (ACER)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../guide/hyperparameter.html" class="btn btn-neutral float-left" title="Hyperparameter Tuning" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Exelon Corp. &amp; MIT.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

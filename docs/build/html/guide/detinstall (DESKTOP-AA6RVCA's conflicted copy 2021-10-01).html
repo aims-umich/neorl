@@ -1,0 +1,439 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Detailed Installation &mdash; NEORL 1.6 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Getting Started" href="quickstart.html" />
+    <link rel="prev" title="Quick Installation" href="install.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> NEORL
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                main (1.6 )
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">General Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Quick Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Detailed Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#linux-ubuntu">Linux/Ubuntu</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#step-0-prerequisites-anaconda3-installation">Step 0: Prerequisites (Anaconda3 Installation)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-1-create-virtual-environment-for-neorl">Step 1: Create virtual environment for NEORL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-2-install-neorl">Step 2: Install NEORL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-3-test-neorl">Step 3: Test NEORL</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#windows-10">Windows 10</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Step 0: Prerequisites (Anaconda3 Installation)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Step 1: Create virtual environment for NEORL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Step 2: Install NEORL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Step 3: Test NEORL</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rl.html">Reinforcement Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="evolu.html">Evolutionary Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hyperparameter.html">Hyperparameter Tuning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Algorithms</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules/a2c.html">Advantage Actor Critic (A2C)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/acer.html">Actor-Critic with Experience Replay (ACER)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/acktr.html">Actor Critic using Kronecker-Factored Trust Region (ACKTR)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/dqn.html">Deep Q Learning (DQN)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/ppo2.html">Proximal Policy Optimisation (PPO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/es.html">Evolution Strategies (<span class="math notranslate nohighlight">\(\mu,\lambda\)</span>) (ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pso.html">Particle Swarm Optimisation (PSO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/de.html">Differential Evolution (DE)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/xnes.html">Exponential Natural Evolution Strategies (XNES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/gwo.html">Grey Wolf Optimizer (GWO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pesa.html">Prioritized replay Evolutionary and Swarm Algorithm (PESA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pesa2.html">Modern PESA (PESA2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/sa.html">Simulated Annealing (SA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/ssa.html">Salp Swarm Algorithm (SSA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/woa.html">Whale Optimization Algorithm (WOA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/mfo.html">Moth-flame Optimization (MFO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/jaya.html">JAYA Algorithm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/bat.html">Bat Algorithm (BAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/hho.html">Harris Hawks Optimization (HHO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/fneat.html">Feedforward Neuroevolution of Augmenting Topologies (FNEAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/rneat.html">Recurrent Neuroevolution of Augmenting Topologies (RNEAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/ppoes.html">RL-informed Evolution Strategies (PPO-ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/ackde.html">RL-informed Differential Evolution (ACKTR-DE)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/aco.html">Ant Colony Optimization (ACO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/nga.html">Neural Genetic Algorithms (NGA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/nhho.html">Neural Harris Hawks Optimization (NHHO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/cs.html">Cuckoo Search (CS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/ts.html">Tabu Search (TS)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Hyperparameter Tuning</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tune/grid.html">Grid Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/random.html">Random Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/bayes.html">Bayesian Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/evolu.html">Evolutionary Search</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex1.html">Example 1: Traveling Salesman Problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex2.html">Example 2: Ackley with EA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex3.html">Example 3: Welded-beam design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex4.html">Example 4: Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex5.html">Example 5: CEC’2017 Test Suite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex6.html">Example 6: Three-bar Truss Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex7.html">Example 7: Pressure Vessel Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex8.html">Example 8: Pressure Vessel Design with Demonstration of Categorical Parameter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex9.html">Example 9: Cantilever Stepped Beam</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/ex10.html">Example 10: Knapsack Problem</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Misc</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../misc/changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/projects.html">Projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/contrib.html">Contributors</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEORL</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Detailed Installation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/guide/detinstall.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="detailed-installation">
+<span id="detinstall"></span><h1>Detailed Installation<a class="headerlink" href="#detailed-installation" title="Permalink to this headline">¶</a></h1>
+<p>Use this guide if you are looking for a safe and clean installation of NEORL with all Python tools and package management. If you are an expert Python user and aware of Python virtual environment and package management, see the <a class="reference internal" href="install.html#install"><span class="std std-ref">Quick Installation</span></a> section.</p>
+<div class="section" id="linux-ubuntu">
+<h2>Linux/Ubuntu<a class="headerlink" href="#linux-ubuntu" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="step-0-prerequisites-anaconda3-installation">
+<h3>Step 0: Prerequisites (Anaconda3 Installation)<a class="headerlink" href="#step-0-prerequisites-anaconda3-installation" title="Permalink to this headline">¶</a></h3>
+<p>Anaconda3 will provide you with OS-independent framework that hosts Python packages, including NEORL. <strong>If you have Anaconda3 installed on your machine, move to Step 1</strong>.</p>
+<p>1- First download the Anaconda3 package</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>wget --no-check-certificate https://repo.continuum.io/archive/Anaconda3-2019.03-Linux-x86_64.sh
+</pre></div>
+</div>
+<p>2- Start the installer</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bash Anaconda3-2019.03-Linux-x86_64.sh
+</pre></div>
+</div>
+<p>3- Follow the instructions on the screen and wait until completion (See the notes below on how to respond to certain prompts)</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Choose the default location for installation when asked (e.g. /home/username/anaconda3)</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Enter <strong>yes</strong> when you get this prompt: <strong>Do you wish the installer to initialize Anaconda3 by running conda init? [yes|no]</strong></p>
+</div>
+<p>4- You may update the setup tool packages before proceeding</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install --upgrade pip setuptools wheel
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-1-create-virtual-environment-for-neorl">
+<h3>Step 1: Create virtual environment for NEORL<a class="headerlink" href="#step-1-create-virtual-environment-for-neorl" title="Permalink to this headline">¶</a></h3>
+<p>NEORL is tested on <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">(3.5-3.7)</span></code> with the development headers.</p>
+<p>1- Create a new python-3.7 environment with name <code class="docutils literal notranslate"><span class="pre">neorl</span></code></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda create --name neorl <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.7
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>For some machines that are not updated frequently (e.g. clusters), TensforFlow may fail to load due to outdated gcc libraries. If you encounter those errors, we typically recommend to downgrade python by using python=3.6 or python=3.5 when creating the virtual environment.</p>
+</div>
+<p>2- Activate the environment</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda activate neorl
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>You need to run <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">activate</span> <span class="pre">neorl</span></code> every time you log in the system, therefore, it is good to add this command to your OS bashrc or environment variables for automatic activation when you log in.</p>
+</div>
+</div>
+<div class="section" id="step-2-install-neorl">
+<h3>Step 2: Install NEORL<a class="headerlink" href="#step-2-install-neorl" title="Permalink to this headline">¶</a></h3>
+<p>Make sure <code class="docutils literal notranslate"><span class="pre">neorl</span></code> environment is activated, then run the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install neorl
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Depending on your OS, <code class="docutils literal notranslate"><span class="pre">conda</span></code> command may fail due to unknown reasons. If <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">list</span></code> command fails, then type</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda update -n base -c defaults conda
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="step-3-test-neorl">
+<h3>Step 3: Test NEORL<a class="headerlink" href="#step-3-test-neorl" title="Permalink to this headline">¶</a></h3>
+<p>After an error-free Step 2 completion, you can test NEORL by typing on the terminal:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>neorl
+</pre></div>
+</div>
+<p>which yields NEORL logo</p>
+<a class="reference internal image-reference" href="../_images/neorl_terminal.jpg"><img alt="alternate text" class="align-center" src="../_images/neorl_terminal.jpg" style="width: 614.5999999999999px; height: 379.04999999999995px;" /></a>
+<p>and you can run unit tests by running:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>neorl --test
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="windows-10">
+<h2>Windows 10<a class="headerlink" href="#windows-10" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id1">
+<h3>Step 0: Prerequisites (Anaconda3 Installation)<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>Anaconda3 will provide you with OS-independent framework that hosts Python packages, including NEORL. <strong>If you have Anaconda3 installed on your machine, move to Step 1</strong>.</p>
+<p>1- First download the Anaconda3 package by visiting the link in the note below and search for <code class="docutils literal notranslate"><span class="pre">Anaconda3-2019.03-Windows-x86_64.exe</span></code></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can access Anaconda3 archives for all OS installers from this page <a class="reference external" href="https://repo.anaconda.com/archive/">https://repo.anaconda.com/archive/</a></p>
+</div>
+<p>or simply click on the link below to download:</p>
+<p><a class="reference external" href="https://repo.anaconda.com/archive/Anaconda3-2019.03-Windows-x86_64.exe">https://repo.anaconda.com/archive/Anaconda3-2019.03-Windows-x86_64.exe</a></p>
+<p>2- Start the exe installer, follow the instructions on the screen, and wait until completion. See the notes below on what options to choose.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Choose the option “Register Anaconda as your default Python-3.7”.</p></li>
+<li><p>For the option of “adding anaconda to your PATH variables”, choose this option only if you have cleaned all previous Anaconda3 releases from your machine.</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="id2">
+<h3>Step 1: Create virtual environment for NEORL<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>Search for <code class="docutils literal notranslate"><span class="pre">Anaconda</span> <span class="pre">Prompt</span></code> and open a new terminal as an administrator</p>
+<p>1- Create a new python-3.7 environment with name <code class="docutils literal notranslate"><span class="pre">neorl</span></code></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda create --name neorl <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.7
+</pre></div>
+</div>
+<p>2- Activate the environment</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda activate neorl
+</pre></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h3>Step 2: Install NEORL<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>Make sure <code class="docutils literal notranslate"><span class="pre">neorl</span></code> environment is activated, then run the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install neorl
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Depending on your OS, <code class="docutils literal notranslate"><span class="pre">conda</span></code> command may fail due to unknown reasons. If <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">list</span></code> command fails, then type</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda update -n base -c defaults conda
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id4">
+<h3>Step 3: Test NEORL<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<p>After an error-free Step 2 completion, you can test NEORL by typing on the terminal:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>neorl
+</pre></div>
+</div>
+<p>which yields NEORL logo</p>
+<a class="reference internal image-reference" href="../_images/neorl_terminal.jpg"><img alt="alternate text" class="align-center" src="../_images/neorl_terminal.jpg" style="width: 614.5999999999999px; height: 379.04999999999995px;" /></a>
+<p>and you can run unit tests by running:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>neorl --test
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>You need to run <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">activate</span> <span class="pre">neorl</span></code> every time you log in the system, therefore, it is good to add this command to your OS environment variables for automatic activation. Similarly, make sure to connect your Jupyter notebook and Spyder IDE to <code class="docutils literal notranslate"><span class="pre">neorl</span></code> virtual environment NOT to the default <code class="docutils literal notranslate"><span class="pre">base</span></code>.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="quickstart.html" class="btn btn-neutral float-right" title="Getting Started" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="install.html" class="btn btn-neutral float-left" title="Quick Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Exelon Corp. &amp; MIT.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

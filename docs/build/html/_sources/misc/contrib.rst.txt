@@ -13,7 +13,7 @@ Majdi I. Radaideh is a Research Scientist at MIT Nuclear Science and Engineering
 Github: https://github.com/mradaideh
 
 .. image:: ../images/shirvan.jpg
-   :scale: 60 %
+   :scale: 65 %
    :alt: alternate text
    :align: left
    
@@ -22,14 +22,14 @@ Koroush Shirvan is the John Clark Hardwick (1986) Career Development Professor i
 Webpage: https://web.mit.edu/nse/people/faculty/shirvan.html
 
 .. image:: ../images/paul.jpeg
-   :scale: 8 %
+   :scale: 7 %
    :alt: alternate text
    :align: right
 
 Paul RM. Seurin is a Ph.D student in the joint program between the Nuclear Science and Engineering department and the Center for Computational Science and Engineering at MIT. He joined MIT in September 2019 after receiving an Engineering Diploma and a Master in Nuclear Engineering from France. His research involves algorithm design for optimization with focuses on heuristics methods, deep, and Reinforcement Learning with applications to nuclear reactor economics and licensing.  For NEORL, he is currently working on validation and benchmarking, applying the framework to Pressurized Water Reactor optimization, and to solve combinatorial problems like Travel Salesman, Knapsack, and Job Scheduling problems. In algorithms, he developed the base classes for Cuckoo search and Tabu search, while he is also planning to develop a combinatorial version of the Ant Colony optimizer.  
 
 .. image:: ../images/wang.jpg
-   :scale: 6 %
+   :scale: 5 %
    :alt: alternate text
    :align: left
    
@@ -38,7 +38,7 @@ Haijia Wang is an undergraduate student at MIT in the MIT Electrical Engineering
 Linkedin: https://www.linkedin.com/in/haijia-wang
 
 .. image:: ../images/katelin.jpg
-   :scale: 16 %
+   :scale: 13 %
    :alt: alternate text
    :align: right
 
@@ -51,6 +51,7 @@ Katelin Du is an undergraduate student at MIT in the class of 2023. She is study
    
 Devin Seyler is an undergraduate at MIT in the class of 2022 studying physics and mathematics. He is interested in nuclear physics and the use of algorithms in engineering applications, particularly to solve problems related to energy design and optimization. He worked as an undergraduate researcher with NEORL during the summer of 2021, contributing to its set of optimization algorithms. Specifically, he worked on Bat Algorithm and a hybrid neuroevolutionary Grey Wolf Optimizer. He also performed benchmarking with various engineering problems along with application of NEORL on fuel cell energy optimization.
 
+|
 .. image:: ../images/john.jpg
    :scale: 13 %
    :alt: alternate text

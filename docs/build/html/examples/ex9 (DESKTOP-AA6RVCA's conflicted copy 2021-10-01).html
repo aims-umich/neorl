@@ -1,0 +1,733 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Example 9: Cantilever Stepped Beam &mdash; NEORL 1.6 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Example 10: Knapsack Problem" href="ex10.html" />
+    <link rel="prev" title="Example 8: Pressure Vessel Design with Demonstration of Categorical Parameter" href="ex8.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> NEORL
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                main (1.6 )
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">General Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guide/install.html">Quick Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/detinstall.html">Detailed Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/quickstart.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/rl.html">Reinforcement Learning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/evolu.html">Evolutionary Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/hyperparameter.html">Hyperparameter Tuning</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Algorithms</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules/a2c.html">Advantage Actor Critic (A2C)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/acer.html">Actor-Critic with Experience Replay (ACER)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/acktr.html">Actor Critic using Kronecker-Factored Trust Region (ACKTR)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/dqn.html">Deep Q Learning (DQN)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/ppo2.html">Proximal Policy Optimisation (PPO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/es.html">Evolution Strategies (<span class="math notranslate nohighlight">\(\mu,\lambda\)</span>) (ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pso.html">Particle Swarm Optimisation (PSO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/de.html">Differential Evolution (DE)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/xnes.html">Exponential Natural Evolution Strategies (XNES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/gwo.html">Grey Wolf Optimizer (GWO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pesa.html">Prioritized replay Evolutionary and Swarm Algorithm (PESA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/pesa2.html">Modern PESA (PESA2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/sa.html">Simulated Annealing (SA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/ssa.html">Salp Swarm Algorithm (SSA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/woa.html">Whale Optimization Algorithm (WOA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/mfo.html">Moth-flame Optimization (MFO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/jaya.html">JAYA Algorithm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/bat.html">Bat Algorithm (BAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/hho.html">Harris Hawks Optimization (HHO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/fneat.html">Feedforward Neuroevolution of Augmenting Topologies (FNEAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/rneat.html">Recurrent Neuroevolution of Augmenting Topologies (RNEAT)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/ppoes.html">RL-informed Evolution Strategies (PPO-ES)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/ackde.html">RL-informed Differential Evolution (ACKTR-DE)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/aco.html">Ant Colony Optimization (ACO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/nga.html">Neural Genetic Algorithms (NGA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/nhho.html">Neural Harris Hawks Optimization (NHHO)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/cs.html">Cuckoo Search (CS)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/ts.html">Tabu Search (TS)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Hyperparameter Tuning</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tune/grid.html">Grid Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/random.html">Random Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/bayes.html">Bayesian Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/evolu.html">Evolutionary Search</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ex1.html">Example 1: Traveling Salesman Problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ex2.html">Example 2: Ackley with EA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ex3.html">Example 3: Welded-beam design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ex4.html">Example 4: Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ex5.html">Example 5: CEC’2017 Test Suite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ex6.html">Example 6: Three-bar Truss Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ex7.html">Example 7: Pressure Vessel Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ex8.html">Example 8: Pressure Vessel Design with Demonstration of Categorical Parameter</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Example 9: Cantilever Stepped Beam</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#problem-description">Problem Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#neorl-script">NEORL script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#results">Results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#simple-square-case">Simple Square Case</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">Results</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ex10.html">Example 10: Knapsack Problem</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Misc</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../misc/changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/projects.html">Projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/contrib.html">Contributors</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEORL</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Example 9: Cantilever Stepped Beam</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/examples/ex9.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="example-9-cantilever-stepped-beam">
+<span id="ex9"></span><h1>Example 9: Cantilever Stepped Beam<a class="headerlink" href="#example-9-cantilever-stepped-beam" title="Permalink to this headline">¶</a></h1>
+<p>Example of solving the constrained engineering optimization problem “Cantilever Stepped Beam” as well as a simpler square case using NEORL with the PSO, DE, SSA, GWO, MFO, BAT, and PESA2 algorithms.</p>
+<div class="section" id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Algorithms: PSO, DE, SSA, GWO, MFO, BAT, PESA2</p></li>
+<li><p>Type: Continuous, Single-objective, Constrained</p></li>
+<li><p>Field: Structural Engineering</p></li>
+</ul>
+</div>
+<div class="section" id="problem-description">
+<h2>Problem Description<a class="headerlink" href="#problem-description" title="Permalink to this headline">¶</a></h2>
+<p>The cantilever stepped beam design is an engineering optimization problem with the objective to evaluate the optimal heights <span class="math notranslate nohighlight">\(x_1 - x_5\)</span> and widths <span class="math notranslate nohighlight">\(x_6 - x_{10}\)</span> of the five rectangular segments such that the volume of the statically loaded cantilever beam is minimized accounting for stress <span class="math notranslate nohighlight">\((\sigma)\)</span> constraints. The figure below shows the dimensions of the cantilever structure</p>
+<a class="reference internal image-reference" href="../_images/CSB_diagram.png"><img alt="alternate text" class="align-center" src="../_images/CSB_diagram.png" style="width: 325.5px; height: 151.2px;" /></a>
+<p>The equation for the volume of the cantilever beam is</p>
+<div class="math notranslate nohighlight">
+\[\min_{\vec{x}} f (\vec{x}) = \sum_{i=1}^{5} x_i x_{i+5} l_i,\]</div>
+<p>where <span class="math notranslate nohighlight">\(l_i\)</span> = 100 cm. The design is subject to 11 constraints:</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}      g_1 = \frac{P l_5}{x_5 x_{10}^2} - 14000 \leq 0,\\      g_2 = \frac{P (l_5 + l_4)}{x_4 x_9^2} - 14000 \leq 0,\\      g_3 = \frac{P (l_5 + l_4 + l_3)}{x_3 x_8^2} - 14000 \leq 0,\\g_4 = \frac{P (l_5 + l_4 + l_3 + l_2)}{x_2 x_7^2} - 14000 \leq 0,\\g_5 = \frac{P (l_5 + l_4 + l_3 + l_2 + l_1)}{x_1 x_6^2} - 14000 \leq 0,\\g_6 = \frac{x_{10}}{x_5} - 20 \leq 0,\\g_7 = \frac{x_9}{x_4} - 20 \leq 0,\\g_8 = \frac{x_8}{x_3} - 20 \leq 0,\\g_9 = \frac{x_7}{x_2} - 20 \leq 0,\\g_{10} = \frac{x_6}{x_1} - 20 \leq 0,\\g_{11} = \frac{P l^3}{3 E} \left( \frac{1}{I_5} +\frac{7}{I_4} + \frac{19}{I_3} + \frac{37}{I_2} + \frac{61}{I_1} \right)-2.7 \leq 0,\end{aligned}\end{align} \]</div>
+<p>where <span class="math notranslate nohighlight">\(1 \leq x_i \leq 5\)</span> <span class="math notranslate nohighlight">\((i = 1,2, \ldots, 5)\)</span>, <span class="math notranslate nohighlight">\(30 \leq x_i \leq 65\)</span> <span class="math notranslate nohighlight">\((i = 6,7,\ldots,10)\)</span>, <span class="math notranslate nohighlight">\(P = 50,000 N\)</span>, and <span class="math notranslate nohighlight">\(E = 2 \times 10^7 N/cm^2\)</span>.</p>
+</div>
+<div class="section" id="neorl-script">
+<h2>NEORL script<a class="headerlink" href="#neorl-script" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#************************************************************</span>
+<span class="c1">#               Cantilever Stepped Beam</span>
+<span class="c1">#************************************************************</span>
+
+<span class="c1">#---------------------------------</span>
+<span class="c1"># Import packages</span>
+<span class="c1">#---------------------------------</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">PSO</span><span class="p">,</span> <span class="n">DE</span><span class="p">,</span> <span class="n">SSA</span><span class="p">,</span> <span class="n">GWO</span><span class="p">,</span> <span class="n">MFO</span><span class="p">,</span> <span class="n">BAT</span><span class="p">,</span> <span class="n">PESA2</span>
+
+<span class="c1">#---------------------------------</span>
+<span class="c1"># Fitness function</span>
+<span class="c1">#---------------------------------</span>
+<span class="k">def</span> <span class="nf">CSB</span><span class="p">(</span><span class="n">individual</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;Cantilever Stepped Beam</span>
+<span class="sd">  individual[i = 0 - 4] are beam widths</span>
+<span class="sd">  individual[i = 5 - 9] are beam heights</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+
+  <span class="n">check</span><span class="o">=</span><span class="nb">all</span><span class="p">([</span><span class="n">item</span> <span class="o">&gt;=</span> <span class="n">BOUNDS</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)][</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">individual</span><span class="p">)])</span> \
+		<span class="ow">and</span> <span class="nb">all</span><span class="p">([</span><span class="n">item</span> <span class="o">&lt;=</span> <span class="n">BOUNDS</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)][</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">individual</span><span class="p">)])</span>
+  <span class="k">if</span> <span class="ow">not</span> <span class="n">check</span><span class="p">:</span>
+	  <span class="k">raise</span> <span class="ne">Exception</span> <span class="p">(</span><span class="s1">&#39;--error check fails&#39;</span><span class="p">)</span>
+
+  <span class="n">P</span> <span class="o">=</span> <span class="mi">50000</span>
+  <span class="n">E</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">10</span><span class="o">**</span><span class="mi">7</span>
+  <span class="n">l</span> <span class="o">=</span> <span class="mi">100</span>
+  <span class="n">g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span>
+  <span class="n">g</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">600</span><span class="o">*</span><span class="n">P</span><span class="o">/</span><span class="p">(</span><span class="n">individual</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">*</span> <span class="n">individual</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mi">14000</span>
+  <span class="n">g</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">6</span><span class="o">*</span><span class="n">P</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">l</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">individual</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="n">individual</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mi">14000</span>
+  <span class="n">g</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">6</span><span class="o">*</span><span class="n">P</span><span class="o">*</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">l</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">individual</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">individual</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mi">14000</span>
+  <span class="n">g</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mi">6</span><span class="o">*</span><span class="n">P</span><span class="o">*</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">l</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">individual</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">individual</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mi">14000</span>
+  <span class="n">g</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="mi">6</span><span class="o">*</span><span class="n">P</span><span class="o">*</span><span class="p">(</span><span class="mi">5</span><span class="o">*</span><span class="n">l</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">individual</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">individual</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mi">14000</span>
+  <span class="n">g</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="n">g</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">individual</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span><span class="o">/</span><span class="n">individual</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">-</span> <span class="mi">20</span>
+  <span class="n">g</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="n">individual</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="o">/</span><span class="n">individual</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="mi">20</span>
+  <span class="n">g</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="n">individual</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span><span class="o">/</span><span class="n">individual</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="mi">20</span>
+  <span class="n">g</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span> <span class="o">=</span> <span class="n">individual</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="o">/</span><span class="n">individual</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">20</span>
+  <span class="n">g</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="n">individual</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">/</span><span class="n">individual</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">20</span>
+
+  <span class="n">g_round</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">g</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span>
+  <span class="n">w1</span><span class="o">=</span><span class="mi">1000</span>
+  <span class="n">w2</span><span class="o">=</span><span class="mi">1000</span>
+
+  <span class="n">phi</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">item</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">g_round</span><span class="p">)</span>
+  <span class="n">viol</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">g_round</span><span class="p">)</span>
+  
+  <span class="n">V</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+	  <span class="n">V</span> <span class="o">+=</span> <span class="n">individual</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">individual</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">5</span><span class="p">]</span> <span class="o">*</span> <span class="n">l</span>
+	  
+  <span class="k">return</span> <span class="n">V</span> <span class="o">+</span> <span class="n">w1</span><span class="o">*</span><span class="n">phi</span> <span class="o">+</span> <span class="n">w2</span><span class="o">*</span><span class="n">viol</span>
+
+<span class="c1">#---------------------------------</span>
+<span class="c1"># Parameter space</span>
+<span class="c1">#---------------------------------</span>
+<span class="n">nx</span><span class="o">=</span><span class="mi">10</span>
+<span class="n">BOUNDS</span><span class="o">=</span><span class="p">{}</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">):</span>
+  <span class="n">BOUNDS</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">11</span><span class="p">):</span>
+  <span class="n">BOUNDS</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">65</span><span class="p">]</span>
+
+<span class="c1">#---------------------------------</span>
+<span class="c1"># PSO</span>
+<span class="c1">#---------------------------------</span>
+<span class="n">pso</span><span class="o">=</span><span class="n">PSO</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">CSB</span><span class="p">,</span> <span class="n">c1</span><span class="o">=</span><span class="mf">2.05</span><span class="p">,</span> <span class="n">c2</span><span class="o">=</span><span class="mf">2.1</span><span class="p">,</span> <span class="n">npar</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">speed_mech</span><span class="o">=</span><span class="s1">&#39;constric&#39;</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pso_x</span><span class="p">,</span> <span class="n">pso_y</span><span class="p">,</span> <span class="n">pso_hist</span><span class="o">=</span><span class="n">pso</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1">#---------------------------------</span>
+<span class="c1"># DE</span>
+<span class="c1">#---------------------------------</span>
+<span class="n">de</span><span class="o">=</span><span class="n">DE</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">CSB</span><span class="p">,</span> <span class="n">npop</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">F</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">CR</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">de_x</span><span class="p">,</span> <span class="n">de_y</span><span class="p">,</span> <span class="n">de_hist</span><span class="o">=</span><span class="n">de</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1">#---------------------------------</span>
+<span class="c1"># SSA</span>
+<span class="c1">#---------------------------------</span>
+<span class="n">ssa</span><span class="o">=</span><span class="n">SSA</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">CSB</span><span class="p">,</span> <span class="n">nsalps</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">c1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ssa_x</span><span class="p">,</span> <span class="n">ssa_y</span><span class="p">,</span> <span class="n">ssa_hist</span><span class="o">=</span><span class="n">ssa</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1">#---------------------------------</span>
+<span class="c1"># BAT</span>
+<span class="c1">#---------------------------------</span>
+<span class="n">bat</span><span class="o">=</span><span class="n">BAT</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">CSB</span><span class="p">,</span> <span class="n">nbats</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">fmin</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">,</span> <span class="n">fmax</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">r0</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">levy</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">bat_x</span><span class="p">,</span> <span class="n">bat_y</span><span class="p">,</span> <span class="n">bat_hist</span><span class="o">=</span><span class="n">bat</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1">#---------------------------------</span>
+<span class="c1"># GWO</span>
+<span class="c1">#---------------------------------</span>
+<span class="n">gwo</span><span class="o">=</span><span class="n">GWO</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">CSB</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">nwolves</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">gwo_x</span><span class="p">,</span> <span class="n">gwo_y</span><span class="p">,</span> <span class="n">gwo_hist</span><span class="o">=</span><span class="n">gwo</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1">#---------------------------------</span>
+<span class="c1"># MFO</span>
+<span class="c1">#---------------------------------</span>
+<span class="n">mfo</span><span class="o">=</span><span class="n">MFO</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">CSB</span><span class="p">,</span> <span class="n">nmoths</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">mfo_x</span><span class="p">,</span> <span class="n">mfo_y</span><span class="p">,</span> <span class="n">mfo_hist</span><span class="o">=</span><span class="n">mfo</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1">#---------------------------------</span>
+<span class="c1"># PESA2</span>
+<span class="c1">#---------------------------------</span>
+<span class="n">pesa2</span><span class="o">=</span><span class="n">PESA2</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">CSB</span><span class="p">,</span> <span class="n">npop</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">nwolves</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pesa2_x</span><span class="p">,</span> <span class="n">pesa2_y</span><span class="p">,</span> <span class="n">pesa2_hist</span><span class="o">=</span><span class="n">pesa2</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">replay_every</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1">#---------------------------------</span>
+<span class="c1"># Plot</span>
+<span class="c1">#---------------------------------</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pso_hist</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;PSO&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">de_hist</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;DE&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ssa_hist</span><span class="p">[</span><span class="s1">&#39;global_fitness&#39;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;SSA&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">bat_hist</span><span class="p">[</span><span class="s1">&#39;global_fitness&#39;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;BAT&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">gwo_hist</span><span class="p">[</span><span class="s1">&#39;fitness&#39;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;GWO&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mfo_hist</span><span class="p">[</span><span class="s1">&#39;global_fitness&#39;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;MFO&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pesa2_hist</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;PESA2&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Generation&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Fitness&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">150000</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;CSB_fitness.png&#39;</span><span class="p">,</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
+
+
+<span class="c1">#************************************************************</span>
+<span class="c1">#              Square Cantilever Stepped Beam</span>
+<span class="c1">#************************************************************</span>
+
+<span class="c1">#---------------------------------</span>
+<span class="c1"># Import packages</span>
+<span class="c1">#---------------------------------</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">cos</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">exp</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">sqrt</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">PSO</span><span class="p">,</span> <span class="n">DE</span><span class="p">,</span> <span class="n">SSA</span><span class="p">,</span> <span class="n">GWO</span><span class="p">,</span> <span class="n">MFO</span><span class="p">,</span> <span class="n">BAT</span><span class="p">,</span> <span class="n">PESA2</span>
+
+<span class="c1">#---------------------------------</span>
+<span class="c1"># Fitness function</span>
+<span class="c1">#---------------------------------</span>
+<span class="k">def</span> <span class="nf">CSB_square</span><span class="p">(</span><span class="n">individual</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;Square Cantilever Stepped Beam</span>
+<span class="sd">  individual[i = 0 - 4] are beam heights and widths</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+
+  <span class="n">check</span><span class="o">=</span><span class="nb">all</span><span class="p">([</span><span class="n">item</span> <span class="o">&gt;=</span> <span class="n">BOUNDS</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)][</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">individual</span><span class="p">)])</span> \
+		<span class="ow">and</span> <span class="nb">all</span><span class="p">([</span><span class="n">item</span> <span class="o">&lt;=</span> <span class="n">BOUNDS</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)][</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">individual</span><span class="p">)])</span>
+  <span class="k">if</span> <span class="ow">not</span> <span class="n">check</span><span class="p">:</span>
+	  <span class="k">raise</span> <span class="ne">Exception</span> <span class="p">(</span><span class="s1">&#39;--error check fails&#39;</span><span class="p">)</span>
+
+  <span class="n">g</span> <span class="o">=</span> <span class="mi">61</span><span class="o">/</span><span class="n">individual</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="mi">37</span><span class="o">/</span><span class="n">individual</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="mi">19</span><span class="o">/</span><span class="n">individual</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="mi">7</span><span class="o">/</span><span class="n">individual</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="mi">1</span><span class="o">/</span><span class="n">individual</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">**</span><span class="mi">3</span> <span class="o">-</span> <span class="mi">1</span>
+
+  <span class="n">g_round</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">g</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span>
+  <span class="n">w1</span><span class="o">=</span><span class="mi">1000</span>
+  <span class="c1">#phi=max(g_round,0)</span>
+  <span class="k">if</span> <span class="n">g_round</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+	  <span class="n">phi</span> <span class="o">=</span> <span class="mi">1</span>
+  <span class="k">else</span><span class="p">:</span>
+	  <span class="n">phi</span> <span class="o">=</span> <span class="mi">0</span>
+
+  <span class="n">V</span> <span class="o">=</span> <span class="mf">0.0624</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">individual</span><span class="p">))</span> 
+
+  <span class="k">return</span> <span class="n">V</span> <span class="o">+</span> <span class="n">w1</span><span class="o">*</span><span class="n">phi</span>
+
+<span class="c1">#---------------------------------</span>
+<span class="c1"># Parameter space</span>
+<span class="c1">#---------------------------------</span>
+<span class="n">nx</span><span class="o">=</span><span class="mi">5</span>
+<span class="n">BOUNDS</span><span class="o">=</span><span class="p">{}</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">):</span>
+  <span class="n">BOUNDS</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
+  
+<span class="c1">#---------------------------------</span>
+<span class="c1"># PSO</span>
+<span class="c1">#---------------------------------</span>
+<span class="n">pso</span><span class="o">=</span><span class="n">PSO</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">CSB_square</span><span class="p">,</span> <span class="n">c1</span><span class="o">=</span><span class="mf">2.05</span><span class="p">,</span> <span class="n">c2</span><span class="o">=</span><span class="mf">2.1</span><span class="p">,</span> <span class="n">npar</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">speed_mech</span><span class="o">=</span><span class="s1">&#39;constric&#39;</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pso_x</span><span class="p">,</span> <span class="n">pso_y</span><span class="p">,</span> <span class="n">pso_hist</span><span class="o">=</span><span class="n">pso</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1">#---------------------------------</span>
+<span class="c1"># DE</span>
+<span class="c1">#---------------------------------</span>
+<span class="n">de</span><span class="o">=</span><span class="n">DE</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">CSB_square</span><span class="p">,</span> <span class="n">npop</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">F</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">CR</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">de_x</span><span class="p">,</span> <span class="n">de_y</span><span class="p">,</span> <span class="n">de_hist</span><span class="o">=</span><span class="n">de</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1">#---------------------------------</span>
+<span class="c1"># SSA</span>
+<span class="c1">#---------------------------------</span>
+<span class="n">ssa</span><span class="o">=</span><span class="n">SSA</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">CSB_square</span><span class="p">,</span> <span class="n">nsalps</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">c1</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ssa_x</span><span class="p">,</span> <span class="n">ssa_y</span><span class="p">,</span> <span class="n">ssa_hist</span><span class="o">=</span><span class="n">ssa</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1">#---------------------------------</span>
+<span class="c1"># BAT</span>
+<span class="c1">#---------------------------------</span>
+<span class="n">bat</span><span class="o">=</span><span class="n">BAT</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">CSB_square</span><span class="p">,</span> <span class="n">nbats</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">fmin</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">,</span> <span class="n">fmax</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">r0</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">levy</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">bat_x</span><span class="p">,</span> <span class="n">bat_y</span><span class="p">,</span> <span class="n">bat_hist</span><span class="o">=</span><span class="n">bat</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1">#---------------------------------</span>
+<span class="c1"># GWO</span>
+<span class="c1">#---------------------------------</span>
+<span class="n">gwo</span><span class="o">=</span><span class="n">GWO</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">CSB_square</span><span class="p">,</span> <span class="n">nwolves</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">gwo_x</span><span class="p">,</span> <span class="n">gwo_y</span><span class="p">,</span> <span class="n">gwo_hist</span><span class="o">=</span><span class="n">gwo</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1">#---------------------------------</span>
+<span class="c1"># MFO</span>
+<span class="c1">#---------------------------------</span>
+<span class="n">mfo</span><span class="o">=</span><span class="n">MFO</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">CSB_square</span><span class="p">,</span> <span class="n">nmoths</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">mfo_x</span><span class="p">,</span> <span class="n">mfo_y</span><span class="p">,</span> <span class="n">mfo_hist</span><span class="o">=</span><span class="n">mfo</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1">#---------------------------------</span>
+<span class="c1"># PESA2</span>
+<span class="c1">#---------------------------------</span>
+<span class="n">pesa2</span><span class="o">=</span><span class="n">PESA2</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">CSB_square</span><span class="p">,</span> <span class="n">npop</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">nwolves</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pesa2_x</span><span class="p">,</span> <span class="n">pesa2_y</span><span class="p">,</span> <span class="n">pesa2_hist</span><span class="o">=</span><span class="n">pesa2</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">replay_every</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1">#---------------------------------</span>
+<span class="c1"># Plot</span>
+<span class="c1">#---------------------------------</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pso_hist</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;PSO&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">de_hist</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;DE&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ssa_hist</span><span class="p">[</span><span class="s1">&#39;global_fitness&#39;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;SSA&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">bat_hist</span><span class="p">[</span><span class="s1">&#39;global_fitness&#39;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;BAT&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">gwo_hist</span><span class="p">[</span><span class="s1">&#39;fitness&#39;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;GWO&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mfo_hist</span><span class="p">[</span><span class="s1">&#39;global_fitness&#39;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;MFO&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pesa2_hist</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;PESA2&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Generation&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Fitness&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;CSB_square_fitness.png&#39;</span><span class="p">,</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="results">
+<h2>Results<a class="headerlink" href="#results" title="Permalink to this headline">¶</a></h2>
+<p>A summary of the results for the different methods is shown below with the best <span class="math notranslate nohighlight">\(\vec{x}\)</span> and <span class="math notranslate nohighlight">\(y=f(x)\)</span> (minimum volume). DE and PESA2 show the best results</p>
+<a class="reference internal image-reference" href="../_images/CSB_fitness.png"><img alt="alternate text" class="align-center" src="../_images/CSB_fitness.png" style="width: 510.29999999999995px; height: 328.5px;" /></a>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>      <span class="o">------------------------</span> <span class="n">PSO</span> <span class="n">Summary</span> <span class="o">--------------------------</span>
+<span class="n">Best</span> <span class="n">fitness</span> <span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="n">found</span><span class="p">:</span> <span class="mf">67335.91306205148</span>
+<span class="n">Best</span> <span class="n">individual</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">found</span><span class="p">:</span> <span class="p">[</span><span class="mf">3.5688543506518657</span><span class="p">,</span> <span class="mf">2.7791479019993583</span><span class="p">,</span> <span class="mf">2.525097748486896</span><span class="p">,</span> <span class="mf">2.5931709214818746</span><span class="p">,</span> <span class="mf">3.0184400437701497</span><span class="p">,</span> <span class="mf">54.792949608125554</span><span class="p">,</span> <span class="mf">55.55687861890972</span><span class="p">,</span> <span class="mf">50.45798494270985</span><span class="p">,</span> <span class="mf">40.66285990348347</span><span class="p">,</span> <span class="mi">30</span><span class="p">]</span>
+<span class="o">--------------------------------------------------------------</span>
+      <span class="o">------------------------</span> <span class="n">DE</span> <span class="n">Summary</span> <span class="o">--------------------------</span>
+<span class="n">Best</span> <span class="n">fitness</span> <span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="n">found</span><span class="p">:</span> <span class="mf">62253.08088965673</span>
+<span class="n">Best</span> <span class="n">individual</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">found</span><span class="p">:</span> <span class="p">[</span><span class="mf">3.0024484908957634</span><span class="p">,</span> <span class="mf">2.805060577916484</span><span class="p">,</span> <span class="mf">2.5489794459150485</span><span class="p">,</span> <span class="mf">2.2104364777790244</span><span class="p">,</span> <span class="mf">1.7812440232731417</span><span class="p">,</span> <span class="mf">59.83601779613085</span><span class="p">,</span> <span class="mf">55.29672939889619</span><span class="p">,</span> <span class="mf">50.28650239860514</span><span class="p">,</span> <span class="mf">44.1239666136573</span><span class="p">,</span> <span class="mf">34.83693680366301</span><span class="p">]</span>
+<span class="o">--------------------------------------------------------------</span>
+      <span class="o">------------------------</span> <span class="n">SSA</span> <span class="n">Summary</span> <span class="o">--------------------------</span>
+<span class="n">Best</span> <span class="n">fitness</span> <span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="n">found</span><span class="p">:</span> <span class="mf">64883.21386055779</span>
+<span class="n">Best</span> <span class="n">individual</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">found</span><span class="p">:</span> <span class="p">[</span> <span class="mf">3.01217612</span>  <span class="mf">3.12691389</span>  <span class="mf">2.66584391</span>  <span class="mf">2.56789564</span>  <span class="mf">2.26413108</span> <span class="mf">59.64053204</span>
+ <span class="mf">52.35626719</span> <span class="mf">49.10660541</span> <span class="mf">40.85291814</span> <span class="mf">30.76422498</span><span class="p">]</span>
+<span class="o">--------------------------------------------------------------</span>
+<span class="o">------------------------</span> <span class="n">BAT</span> <span class="n">Summary</span> <span class="o">--------------------------</span>
+<span class="n">Best</span> <span class="n">fitness</span> <span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="n">found</span><span class="p">:</span> <span class="mf">85509.99706478164</span>
+<span class="n">Best</span> <span class="n">individual</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">found</span><span class="p">:</span> <span class="p">[</span> <span class="mf">3.24944962</span>  <span class="mf">3.15901556</span>  <span class="mf">3.71034211</span>  <span class="mf">2.88044491</span>  <span class="mf">2.72539593</span> <span class="mf">57.42189701</span>
+ <span class="mf">63.18019888</span> <span class="mf">41.62463495</span> <span class="mf">57.60433819</span> <span class="mf">54.50783013</span><span class="p">]</span>
+<span class="o">--------------------------------------------------------------</span>
+<span class="o">------------------------</span> <span class="n">GWO</span> <span class="n">Summary</span> <span class="o">--------------------------</span>
+<span class="n">Best</span> <span class="n">fitness</span> <span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="n">found</span><span class="p">:</span> <span class="mf">64217.56500668205</span>
+<span class="n">Best</span> <span class="n">individual</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">found</span><span class="p">:</span> <span class="p">[</span> <span class="mf">3.0490241</span>   <span class="mf">2.82805632</span>  <span class="mf">2.54882906</span>  <span class="mf">2.60647295</span>  <span class="mf">1.91892183</span> <span class="mf">59.32877115</span>
+ <span class="mf">55.25800387</span> <span class="mf">50.22171706</span> <span class="mf">40.6816295</span>  <span class="mf">36.98217938</span><span class="p">]</span>
+<span class="o">--------------------------------------------------------------</span>
+<span class="o">------------------------</span> <span class="n">MFO</span> <span class="n">Summary</span> <span class="o">--------------------------</span>
+<span class="n">Best</span> <span class="n">fitness</span> <span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="n">found</span><span class="p">:</span> <span class="mf">68284.66539072228</span>
+<span class="n">Best</span> <span class="n">individual</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">found</span><span class="p">:</span> <span class="p">[</span> <span class="mf">3.00200798</span>  <span class="mf">3.04903017</span>  <span class="mf">2.52470544</span>  <span class="mf">4.76307633</span>  <span class="mf">2.38149254</span> <span class="mf">59.7430926</span>
+ <span class="mf">53.04777538</span> <span class="mf">50.46763269</span> <span class="mf">30.00000001</span> <span class="mf">30.00007271</span><span class="p">]</span>
+<span class="o">--------------------------------------------------------------</span>
+<span class="o">------------------------</span><span class="n">PESA2</span> <span class="n">Summary</span><span class="o">-------------------------</span>
+<span class="n">Best</span> <span class="n">fitness</span> <span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="n">found</span><span class="p">:</span> <span class="mf">62491.80715494685</span>
+<span class="n">Best</span> <span class="n">individual</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">found</span><span class="p">:</span> <span class="p">[</span><span class="mf">3.0160894636962894</span><span class="p">,</span> <span class="mf">2.7812536032709683</span><span class="p">,</span> <span class="mf">2.5788148288206765</span><span class="p">,</span> <span class="mf">2.22105253054037</span><span class="p">,</span> <span class="mf">1.9267356857359532</span><span class="p">,</span> <span class="mf">59.60349505892154</span><span class="p">,</span> <span class="mf">55.515872598414006</span><span class="p">,</span> <span class="mf">49.94170599870354</span><span class="p">,</span> <span class="mf">43.93631599428571</span><span class="p">,</span> <span class="mf">33.408629968533766</span><span class="p">]</span>
+<span class="o">--------------------------------------------------------------</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="simple-square-case">
+<h2>Simple Square Case<a class="headerlink" href="#simple-square-case" title="Permalink to this headline">¶</a></h2>
+<p>A simpler case of the cantilever stepped beam design is shown in the figure below where the heights and widths of each section of the beam are equal <span class="math notranslate nohighlight">\((x_i = x_{i+5})\)</span> and the cantilever is hollow with constant thickness.</p>
+<a class="reference internal image-reference" href="../_images/CSB_square_diagram.png"><img alt="alternate text" class="align-center" src="../_images/CSB_square_diagram.png" style="width: 467.1px; height: 112.5px;" /></a>
+<p>The equation for the weight of the square cantilever beam to be minimized is:</p>
+<div class="math notranslate nohighlight">
+\[\min_{\vec{x}} f (\vec{x}) = 0.0624 \sum_{i=1}^{5} x_i,\]</div>
+<p>with a single constraint</p>
+<div class="math notranslate nohighlight">
+\[g_1 = \frac{61}{x_1^3} + \frac{37}{x_2^3} + \frac{19}{x_3^3} + \frac{7}{x_4^3} + \frac{1}{x_5^3} - 1 \leq 0,\]</div>
+<p>where <span class="math notranslate nohighlight">\(0.001 \leq x_i \leq 100\)</span></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#---------------------------------</span>
+<span class="c1"># Import packages</span>
+<span class="c1">#---------------------------------</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">cos</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">exp</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">sqrt</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">PSO</span><span class="p">,</span> <span class="n">DE</span><span class="p">,</span> <span class="n">SSA</span><span class="p">,</span> <span class="n">GWO</span><span class="p">,</span> <span class="n">MFO</span><span class="p">,</span> <span class="n">BAT</span><span class="p">,</span> <span class="n">PESA2</span>
+
+<span class="c1">#---------------------------------</span>
+<span class="c1"># Fitness function</span>
+<span class="c1">#---------------------------------</span>
+<span class="k">def</span> <span class="nf">CSB_square</span><span class="p">(</span><span class="n">individual</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;Square Cantilever Stepped Beam</span>
+<span class="sd">  individual[i = 0 - 4] are beam heights and widths</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+
+  <span class="n">check</span><span class="o">=</span><span class="nb">all</span><span class="p">([</span><span class="n">item</span> <span class="o">&gt;=</span> <span class="n">BOUNDS</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)][</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">individual</span><span class="p">)])</span> \
+                <span class="ow">and</span> <span class="nb">all</span><span class="p">([</span><span class="n">item</span> <span class="o">&lt;=</span> <span class="n">BOUNDS</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)][</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">individual</span><span class="p">)])</span>
+  <span class="k">if</span> <span class="ow">not</span> <span class="n">check</span><span class="p">:</span>
+          <span class="k">raise</span> <span class="ne">Exception</span> <span class="p">(</span><span class="s1">&#39;--error check fails&#39;</span><span class="p">)</span>
+
+  <span class="n">g</span> <span class="o">=</span> <span class="mi">61</span><span class="o">/</span><span class="n">individual</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="mi">37</span><span class="o">/</span><span class="n">individual</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="mi">19</span><span class="o">/</span><span class="n">individual</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="mi">7</span><span class="o">/</span><span class="n">individual</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="mi">1</span><span class="o">/</span><span class="n">individual</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">**</span><span class="mi">3</span> <span class="o">-</span> <span class="mi">1</span>
+
+  <span class="n">g_round</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">g</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span>
+  <span class="n">w1</span><span class="o">=</span><span class="mi">1000</span>
+  <span class="c1">#phi=max(g_round,0)</span>
+  <span class="k">if</span> <span class="n">g_round</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+          <span class="n">phi</span> <span class="o">=</span> <span class="mi">1</span>
+  <span class="k">else</span><span class="p">:</span>
+          <span class="n">phi</span> <span class="o">=</span> <span class="mi">0</span>
+
+  <span class="n">V</span> <span class="o">=</span> <span class="mf">0.0624</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">individual</span><span class="p">))</span>
+
+  <span class="k">return</span> <span class="n">V</span> <span class="o">+</span> <span class="n">w1</span><span class="o">*</span><span class="n">phi</span>
+
+<span class="c1">#---------------------------------</span>
+<span class="c1"># Parameter space</span>
+<span class="c1">#---------------------------------</span>
+<span class="n">nx</span><span class="o">=</span><span class="mi">5</span>
+<span class="n">BOUNDS</span><span class="o">=</span><span class="p">{}</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">):</span>
+  <span class="n">BOUNDS</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
+
+<span class="c1">#---------------------------------</span>
+<span class="c1"># PSO</span>
+<span class="c1">#---------------------------------</span>
+<span class="n">pso</span><span class="o">=</span><span class="n">PSO</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">CSB_square</span><span class="p">,</span> <span class="n">c1</span><span class="o">=</span><span class="mf">2.05</span><span class="p">,</span> <span class="n">c2</span><span class="o">=</span><span class="mf">2.1</span><span class="p">,</span> <span class="n">npar</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">speed_mech</span><span class="o">=</span><span class="s1">&#39;constric&#39;</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pso_x</span><span class="p">,</span> <span class="n">pso_y</span><span class="p">,</span> <span class="n">pso_hist</span><span class="o">=</span><span class="n">pso</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1">#---------------------------------</span>
+<span class="c1"># DE</span>
+<span class="c1">#---------------------------------</span>
+<span class="n">de</span><span class="o">=</span><span class="n">DE</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">CSB_square</span><span class="p">,</span> <span class="n">npop</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">F</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">CR</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">de_x</span><span class="p">,</span> <span class="n">de_y</span><span class="p">,</span> <span class="n">de_hist</span><span class="o">=</span><span class="n">de</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1">#---------------------------------</span>
+<span class="c1"># SSA</span>
+<span class="c1">#---------------------------------</span>
+<span class="n">ssa</span><span class="o">=</span><span class="n">SSA</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">CSB_square</span><span class="p">,</span> <span class="n">nsalps</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">c1</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ssa_x</span><span class="p">,</span> <span class="n">ssa_y</span><span class="p">,</span> <span class="n">ssa_hist</span><span class="o">=</span><span class="n">ssa</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1">#---------------------------------</span>
+<span class="c1"># BAT</span>
+<span class="c1">#---------------------------------</span>
+<span class="n">bat</span><span class="o">=</span><span class="n">BAT</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">CSB_square</span><span class="p">,</span> <span class="n">nbats</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">fmin</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">,</span> <span class="n">fmax</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">r0</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">levy</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">bat_x</span><span class="p">,</span> <span class="n">bat_y</span><span class="p">,</span> <span class="n">bat_hist</span><span class="o">=</span><span class="n">bat</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1">#---------------------------------</span>
+<span class="c1"># GWO</span>
+<span class="c1">#---------------------------------</span>
+<span class="n">gwo</span><span class="o">=</span><span class="n">GWO</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">CSB_square</span><span class="p">,</span> <span class="n">nwolves</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">gwo_x</span><span class="p">,</span> <span class="n">gwo_y</span><span class="p">,</span> <span class="n">gwo_hist</span><span class="o">=</span><span class="n">gwo</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1">#---------------------------------</span>
+<span class="c1"># MFO</span>
+<span class="c1">#---------------------------------</span>
+<span class="n">mfo</span><span class="o">=</span><span class="n">MFO</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">CSB_square</span><span class="p">,</span> <span class="n">nmoths</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">mfo_x</span><span class="p">,</span> <span class="n">mfo_y</span><span class="p">,</span> <span class="n">mfo_hist</span><span class="o">=</span><span class="n">mfo</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1">#---------------------------------</span>
+<span class="c1"># PESA2</span>
+<span class="c1">#---------------------------------</span>
+<span class="n">pesa2</span><span class="o">=</span><span class="n">PESA2</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">CSB_square</span><span class="p">,</span> <span class="n">npop</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">nwolves</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pesa2_x</span><span class="p">,</span> <span class="n">pesa2_y</span><span class="p">,</span> <span class="n">pesa2_hist</span><span class="o">=</span><span class="n">pesa2</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">replay_every</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1">#---------------------------------</span>
+<span class="c1"># Plot</span>
+<span class="c1">#---------------------------------</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pso_hist</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;PSO&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">de_hist</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;DE&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ssa_hist</span><span class="p">[</span><span class="s1">&#39;global_fitness&#39;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;SSA&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">bat_hist</span><span class="p">[</span><span class="s1">&#39;global_fitness&#39;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;BAT&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">gwo_hist</span><span class="p">[</span><span class="s1">&#39;fitness&#39;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;GWO&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mfo_hist</span><span class="p">[</span><span class="s1">&#39;global_fitness&#39;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;MFO&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pesa2_hist</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;PESA2&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Generation&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Fitness&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;CSB_square_fitness.png&#39;</span><span class="p">,</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id1">
+<h2>Results<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>A summary of the results for the different methods is shown below with the best <span class="math notranslate nohighlight">\(\vec{x}\)</span> and <span class="math notranslate nohighlight">\(y=f(x)\)</span> (minimum volume). All methods seem to provide a competitive performance.</p>
+<a class="reference internal image-reference" href="../_images/CSB_square_fitness.png"><img alt="alternate text" class="align-center" src="../_images/CSB_square_fitness.png" style="width: 471.0px; height: 328.5px;" /></a>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">------------------------</span> <span class="n">PSO</span> <span class="n">Summary</span> <span class="o">--------------------------</span>
+<span class="n">Best</span> <span class="n">fitness</span> <span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="n">found</span><span class="p">:</span> <span class="mf">1.3399752313729163</span>
+<span class="n">Best</span> <span class="n">individual</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">found</span><span class="p">:</span> <span class="p">[</span><span class="mf">6.009251848152787</span><span class="p">,</span> <span class="mf">5.30657072479825</span><span class="p">,</span> <span class="mf">4.487735398237302</span><span class="p">,</span> <span class="mf">3.5223666630459225</span><span class="p">,</span> <span class="mf">2.148037406998374</span><span class="p">]</span>
+<span class="o">--------------------------------------------------------------</span>
+<span class="o">------------------------</span> <span class="n">DE</span> <span class="n">Summary</span> <span class="o">--------------------------</span>
+<span class="n">Best</span> <span class="n">fitness</span> <span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="n">found</span><span class="p">:</span> <span class="mf">1.3400333309297923</span>
+<span class="n">Best</span> <span class="n">individual</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">found</span><span class="p">:</span> <span class="p">[</span><span class="mf">6.009134740254158</span><span class="p">,</span> <span class="mf">5.313241105010421</span><span class="p">,</span> <span class="mf">4.465292783694765</span><span class="p">,</span> <span class="mf">3.529049287512202</span><span class="p">,</span> <span class="mf">2.1581752074033305</span><span class="p">]</span>
+<span class="o">--------------------------------------------------------------</span>
+<span class="o">------------------------</span> <span class="n">SSA</span> <span class="n">Summary</span> <span class="o">--------------------------</span>
+<span class="n">Best</span> <span class="n">fitness</span> <span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="n">found</span><span class="p">:</span> <span class="mf">1.3588143704307478</span>
+<span class="n">Best</span> <span class="n">individual</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">found</span><span class="p">:</span> <span class="p">[</span><span class="mf">5.78402889</span> <span class="mf">5.66053404</span> <span class="mf">4.28387098</span> <span class="mf">3.33467882</span> <span class="mf">2.71275859</span><span class="p">]</span>
+<span class="o">--------------------------------------------------------------</span>
+<span class="o">------------------------</span> <span class="n">BAT</span> <span class="n">Summary</span> <span class="o">--------------------------</span>
+<span class="n">Best</span> <span class="n">fitness</span> <span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="n">found</span><span class="p">:</span> <span class="mf">1.3399823246990532</span>
+<span class="n">Best</span> <span class="n">individual</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">found</span><span class="p">:</span> <span class="p">[</span><span class="mf">6.00500481</span> <span class="mf">5.29566351</span> <span class="mf">4.51093598</span> <span class="mf">3.49613637</span> <span class="mf">2.16633504</span><span class="p">]</span>
+<span class="o">--------------------------------------------------------------</span>
+<span class="o">------------------------</span> <span class="n">GWO</span> <span class="n">Summary</span> <span class="o">--------------------------</span>
+<span class="n">Best</span> <span class="n">fitness</span> <span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="n">found</span><span class="p">:</span> <span class="mf">1.3401094136761165</span>
+<span class="n">Best</span> <span class="n">individual</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">found</span><span class="p">:</span> <span class="p">[</span><span class="mf">6.03840936</span> <span class="mf">5.27194855</span> <span class="mf">4.46957895</span> <span class="mf">3.52048465</span> <span class="mf">2.17569089</span><span class="p">]</span>
+<span class="o">--------------------------------------------------------------</span>
+<span class="o">------------------------</span> <span class="n">MFO</span> <span class="n">Summary</span> <span class="o">--------------------------</span>
+<span class="n">Best</span> <span class="n">fitness</span> <span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="n">found</span><span class="p">:</span> <span class="mf">1.340072721543648</span>
+<span class="n">Best</span> <span class="n">individual</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">found</span><span class="p">:</span> <span class="p">[</span><span class="mf">5.98884701</span> <span class="mf">5.35435014</span> <span class="mf">4.45583399</span> <span class="mf">3.51864409</span> <span class="mf">2.15784915</span><span class="p">]</span>
+<span class="o">--------------------------------------------------------------</span>
+<span class="o">------------------------</span> <span class="n">PESA2</span> <span class="n">Summary</span> <span class="o">--------------------------</span>
+<span class="n">Best</span> <span class="n">fitness</span> <span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="n">found</span><span class="p">:</span> <span class="mf">1.3399951046267742</span>
+<span class="n">Best</span> <span class="n">individual</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">found</span><span class="p">:</span> <span class="p">[</span><span class="mf">6.0302855076764095</span><span class="p">,</span> <span class="mf">5.324816195983351</span><span class="p">,</span> <span class="mf">4.498012579038754</span><span class="p">,</span> <span class="mf">3.474272116432333</span><span class="p">,</span> <span class="mf">2.1468941237341275</span><span class="p">]</span>
+<span class="o">--------------------------------------------------------------</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="ex10.html" class="btn btn-neutral float-right" title="Example 10: Knapsack Problem" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="ex8.html" class="btn btn-neutral float-left" title="Example 8: Pressure Vessel Design with Demonstration of Categorical Parameter" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Exelon Corp. &amp; MIT.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
