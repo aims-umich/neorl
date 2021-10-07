@@ -114,8 +114,7 @@ plt.show()
 # Import Packages
 ########################
 from neorl import HHO, BAT
-import math
-import matplotlib.pyplot as plt
+
 #################################
 # Define Vessel Function 
 #Mixed discrete/continuous/grid
@@ -136,7 +135,7 @@ def Vessel(individual):
 
     g1 = -x[0]+0.0193*x[2];
     g2 = -x[1]+0.00954*x[2];
-    g3 = -math.pi*x[2]**2*x[3]-(4/3)*math.pi*x[2]**3 + 1296000;
+    g3 = -pi*x[2]**2*x[3]-(4/3)*pi*x[2]**3 + 1296000;
     g4 = x[3]-240;
     g=[g1,g2,g3,g4]
     

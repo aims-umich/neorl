@@ -19,9 +19,6 @@ Created on Wed Feb 26 09:33:45 2020
 
 @author: majdi
 """
-import numpy as np
-import pandas as pd
-import os, subprocess
 
 def evaluate_policy(model, env, log_dir, n_eval_episodes=10, render=False):
     """
@@ -60,31 +57,3 @@ def evaluate_policy(model, env, log_dir, n_eval_episodes=10, render=False):
             
         episode_rewards.append(episode_reward)
         episode_lengths.append(episode_length)
-
-    out_data=pd.read_csv(log_dir+'_out.csv')
-    inp_data=pd.read_csv(log_dir+'_inp.csv')
-    sorted_out=out_data.sort_values(by=['reward'],ascending=False)   
-    sorted_inp=inp_data.sort_values(by=['reward'],ascending=False)   
-
-    with open (log_dir + '_summary.txt', 'a') as fin:
-        fin.write('*****************************************************\n')
-        fin.write('Model testing is completed for {} episodes \n'.format(n_eval_episodes))
-        fin.write('*****************************************************\n')
-        fin.write('Mean Reward: {0:.3f} \n'.format(np.mean(episode_rewards)))
-        fin.write('Std Reward: {0:.3f} \n'.format(np.std(episode_rewards)))
-        fin.write('Max Reward: {0:.3f} \n'.format(np.max(episode_rewards)))
-        fin.write('Min Reward: {0:.3f} \n'.format(np.min(episode_rewards)))
-
-
-        fin.write ('--------------------------------------------------------------------------------------\n')
-        fin.write ('Outputs of all episodes ordered from highest reward to lowest \n')
-        fin.write ('Original data is saved in {} \n'.format(log_dir+'_out.csv'))
-        fin.write(sorted_out.to_string())
-        fin.write('\n')
-        fin.write ('-------------------------------------------------------------------------------------- \n')
-        fin.write ('Corresponding inputs of all episodes ordered from highest reward to lowest \n')
-        fin.write ('Original data is saved in {} \n'.format(log_dir+'_inp.csv'))
-        fin.write(sorted_inp.to_string())
-        fin.write('\n')
-        fin.write ('-------------------------------------------------------------------------------------- \n')
-        fin.write('\n\n')

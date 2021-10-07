@@ -26,9 +26,8 @@ import random
 import gym
 import pandas as pd
 import numpy as np
-import multiprocessing
 from neorl.parsers.PARSER import InputChecker
-import copy, math, random, sys, time, os
+import copy, os
 
 class SAAgent(InputChecker):
     
@@ -311,11 +310,6 @@ class SAAgent(InputChecker):
                 accept_rate=np.round(accepts/trials*100,2)
                 improve_rate=np.round(improves/trials*100,2)
                 
-                out_data=pd.read_csv(self.log_dir+'_out.csv')
-                inp_data=pd.read_csv(self.log_dir+'_inp.csv')
-                sorted_out=out_data.sort_values(by=['reward'],ascending=False)   
-                sorted_inp=inp_data.sort_values(by=['reward'],ascending=False)   
-                
                 #------------
                 # plot progress 
                 #------------
@@ -332,30 +326,6 @@ class SAAgent(InputChecker):
                 print('Best Reward So Far: {}'.format(-np.round(energy_best,3)))
                 print('Best Solution So Far: {}'.format(x_best))
                 print('*****************************************************')
-                
-                with open (self.log_dir + '_summary.txt', 'a') as fin:
-                    fin.write('*****************************************************\n')
-                    fin.write('Summary data for annealing step {}/{} \n'.format(step, self.steps))
-                    fin.write('*****************************************************\n')
-                    fin.write('Current Temperature/Max Temperature: {}/{} \n'.format(int(T), self.Tmax))
-                    fin.write('Accept Rate: {}% \n'.format(accept_rate))
-                    fin.write('Improvement Rate: {}% \n'.format(improve_rate))
-                    fin.write ('--------------------------------------------------------------------------------------\n')
-                    fin.write ('Statistics for THIS annealing step \n')
-                    fin.write('Max Reward: {0:.2f} \n'.format(np.max(fit_lst)))
-                    fin.write('Mean Reward: {0:.2f} \n'.format(np.mean(fit_lst)))
-                    fin.write('Std Reward: {0:.2f} \n'.format(np.std(fit_lst)))
-                    fin.write('Min Reward: {0:.2f} \n'.format(np.min(fit_lst)))
-                    fin.write ('--------------------------------------------------------------------------------------\n')
-                    fin.write ('Best output for ALL annealing steps so far \n')
-                    fin.write(sorted_out.iloc[0,:].to_string())
-                    fin.write('\n')
-                    fin.write ('-------------------------------------------------------------------------------------- \n')
-                    fin.write ('Best corresponding input for ALL annealing steps so far \n')
-                    fin.write(sorted_inp.iloc[0,:].to_string())
-                    fin.write('\n')
-                    fin.write ('-------------------------------------------------------------------------------------- \n')
-                    fin.write('\n\n')
                 
                 trials, accepts, improves = 0, 0, 0
                 fit_lst=[]

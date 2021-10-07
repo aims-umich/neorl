@@ -75,11 +75,5 @@ def initfiles(methods, nx, ny, inp_headers, out_headers, log_dir, logo):
                     fin.write(out_names[i] + '\n')
                 else:
                     fin.write(out_names[i]+',')
-                    
-        with open (log_dir+method+'_summary.txt','w') as fin:
-            fin.write('---------------------------------------------------\n')
-            fin.write('Summary file for the {} method \n'.format(method))
-            fin.write('---------------------------------------------------\n')
-            #fin.write(logo)
             
     print('--debug: All logging files are created')

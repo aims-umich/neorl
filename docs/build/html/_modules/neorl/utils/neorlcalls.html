@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.utils.neorlcalls &mdash; NEORL 1.6 documentation</title>
+  <title>neorl.utils.neorlcalls &mdash; NEORL 1.6.2b documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.6 )
+                main (1.6.2b )
               </div>
             
           
@@ -251,7 +251,7 @@
 <span class="kn">from</span> <span class="nn">neorl.rl.baselines.shared.callbacks</span> <span class="kn">import</span> <span class="n">BaseCallback</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">matplotlib.lines</span> <span class="kn">import</span> <span class="n">Line2D</span>
-<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
 
 <span class="k">class</span> <span class="nc">SavePlotCallback</span><span class="p">(</span><span class="n">BaseCallback</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -275,7 +275,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">check_freq</span> <span class="o">=</span> <span class="n">check_freq</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">avg_step</span><span class="o">=</span><span class="n">avg_step</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span> <span class="o">=</span> <span class="n">log_dir</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">save_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span> <span class="o">+</span> <span class="s1">&#39;_bestmodel.pkl&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">best_save_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span> <span class="o">+</span> <span class="s1">&#39;_bestmodel.pkl&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span> <span class="o">+</span> <span class="s1">&#39;_lastmodel.pkl&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">best_mean_reward</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span>
 
         <span class="c1">#avoid activating &#39;Agg&#39; in the header so not to affect other classes/algs</span>
@@ -285,30 +286,21 @@
     <span class="k">def</span> <span class="nf">runcall</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;num_timesteps=</span><span class="si">{}</span><span class="s1">/</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_timesteps</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_timesteps</span><span class="p">))</span>
-        <span class="k">with</span> <span class="nb">open</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span><span class="o">+</span><span class="s1">&#39;_summary.txt&#39;</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fin</span><span class="p">:</span>
-            <span class="n">fin</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;*****************************************************</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-            <span class="n">fin</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;Summary for update step </span><span class="si">{}</span><span class="s1"> </span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_timesteps</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">check_freq</span><span class="p">)))</span>
-            <span class="n">fin</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;*****************************************************</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
             
         <span class="c1"># Retrieve training reward</span>
         <span class="n">y</span><span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span><span class="o">+</span><span class="s1">&#39;_out.csv&#39;</span><span class="p">)</span>
         <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">[</span><span class="s2">&quot;reward&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
         <span class="c1"># Mean training reward over the last 100 episodes</span>
         <span class="n">mean_reward</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">avg_step</span><span class="p">:])</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">with</span> <span class="nb">open</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span><span class="o">+</span><span class="s1">&#39;_summary.txt&#39;</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fin</span><span class="p">:</span>
-                <span class="n">fin</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Num  of time steps passed: </span><span class="si">{}</span><span class="s2">/</span><span class="si">{}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_timesteps</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_timesteps</span><span class="p">))</span>
-                <span class="n">fin</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Best mean reward so far: </span><span class="si">{:.3f}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">best_mean_reward</span><span class="p">))</span>
-                <span class="n">fin</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Mean reward in this update step: </span><span class="si">{:.3f}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mean_reward</span><span class="p">))</span>
                
         <span class="c1"># New best model, you could save the agent here</span>
         <span class="k">if</span> <span class="n">mean_reward</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_mean_reward</span><span class="p">:</span>
               <span class="bp">self</span><span class="o">.</span><span class="n">best_mean_reward</span> <span class="o">=</span> <span class="n">mean_reward</span>
-              <span class="c1"># Example for saving best model</span>
-              <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="k">with</span> <span class="nb">open</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span><span class="o">+</span><span class="s1">&#39;_summary.txt&#39;</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fin</span><span class="p">:</span>
-                    <span class="n">fin</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Saving new best model to </span><span class="si">{}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path</span><span class="p">))</span>
-              <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path</span><span class="p">)</span>
+              <span class="c1">#saving best model</span>
+              <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">best_save_path</span><span class="p">)</span>    <span class="c1">#best model found so far</span>
+
+        <span class="c1">#saving current model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path</span><span class="p">)</span>   <span class="c1">#latest model</span>
               
         <span class="bp">self</span><span class="o">.</span><span class="n">out_data</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span><span class="o">+</span><span class="s1">&#39;_out.csv&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">inp_data</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span><span class="o">+</span><span class="s1">&#39;_inp.csv&#39;</span><span class="p">)</span>     
@@ -316,26 +308,6 @@
         <span class="c1"># Progress Plot</span>
         <span class="c1">#-------------------</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">plot_progress</span><span class="p">()</span>
-                        
-        <span class="c1"># Print summary for this method</span>
-
-        <span class="n">top</span><span class="o">=</span><span class="mi">10</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">top</span><span class="p">,</span><span class="nb">int</span><span class="p">),</span> <span class="s1">&#39;the user provided a non-integer value for the summary parameter </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">top</span><span class="p">)</span>
-        
-        <span class="n">sorted_out</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">out_data</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;reward&#39;</span><span class="p">],</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>   
-        <span class="n">sorted_inp</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">inp_data</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;reward&#39;</span><span class="p">],</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>   
-            
-        <span class="k">with</span> <span class="nb">open</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span><span class="o">+</span><span class="s1">&#39;_summary.txt&#39;</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fin</span><span class="p">:</span>
-            <span class="n">fin</span><span class="o">.</span><span class="n">write</span> <span class="p">(</span><span class="s1">&#39;--------------------------------------------------------------------------------------</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-            <span class="n">fin</span><span class="o">.</span><span class="n">write</span> <span class="p">(</span><span class="s1">&#39;Top </span><span class="si">{}</span><span class="s1"> outputs for update step </span><span class="si">{}</span><span class="s1"> </span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">top</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_timesteps</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">check_freq</span><span class="p">)))</span>
-            <span class="n">fin</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">sorted_out</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="n">top</span><span class="p">]</span><span class="o">.</span><span class="n">to_string</span><span class="p">())</span>
-            <span class="n">fin</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-            <span class="n">fin</span><span class="o">.</span><span class="n">write</span> <span class="p">(</span><span class="s1">&#39;-------------------------------------------------------------------------------------- </span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-            <span class="n">fin</span><span class="o">.</span><span class="n">write</span> <span class="p">(</span><span class="s1">&#39;Top </span><span class="si">{}</span><span class="s1"> corresponding inputs for update step </span><span class="si">{}</span><span class="s1"> </span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">top</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_timesteps</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">check_freq</span><span class="p">)))</span>
-            <span class="n">fin</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">sorted_inp</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="n">top</span><span class="p">]</span><span class="o">.</span><span class="n">to_string</span><span class="p">())</span>
-            <span class="n">fin</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-            <span class="n">fin</span><span class="o">.</span><span class="n">write</span> <span class="p">(</span><span class="s1">&#39;-------------------------------------------------------------------------------------- </span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-            <span class="n">fin</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">)</span>
                 
     <span class="k">def</span> <span class="nf">_on_step</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         
@@ -394,7 +366,6 @@
                 
                 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">rmax</span><span class="p">,</span><span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Max per </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">method_xlabel</span><span class="p">),</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
                 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span><span class="n">rmin</span><span class="p">,</span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Min per </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">method_xlabel</span><span class="p">),</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-                <span class="c1">#plt.axhline(y=6000, color=&#39;k&#39;, linestyle=&#39;--&#39;, label=&#39;Desired reward (top 0.1%)&#39;)</span>
                 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
                 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="n">method_xlabel</span><span class="p">)</span>
                 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>

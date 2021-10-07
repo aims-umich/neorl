@@ -21,7 +21,17 @@ Release 1.6 (2021-09-10)
 Beta Releases (for developers)
 ---------------------------------
 
-Releases 1.6.1b (2021-09-20)
+Release 1.6.2b (2021-10-07)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+  pip install neorl==1.6.2b --extra-index-url https://test.pypi.org/simple
+
+- Removed summary files from RL runners.
+- Added a capability to save current model for RL runners. Currently best model and last model are saved. 
+
+Release 1.6.1b (2021-09-20)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: bash

@@ -25,7 +25,7 @@ import pandas as pd
 from neorl.rl.baselines.shared.callbacks import BaseCallback
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
-import os, sys
+import os
 
 class SavePlotCallback(BaseCallback):
     """
@@ -49,7 +49,8 @@ class SavePlotCallback(BaseCallback):
         self.check_freq = check_freq
         self.avg_step=avg_step
         self.log_dir = log_dir
-        self.save_path = self.log_dir + '_bestmodel.pkl'
+        self.best_save_path = self.log_dir + '_bestmodel.pkl'
+        self.save_path = self.log_dir + '_lastmodel.pkl'
         self.best_mean_reward = -np.inf
 
         #avoid activating 'Agg' in the header so not to affect other classes/algs
@@ -59,30 +60,21 @@ class SavePlotCallback(BaseCallback):
     def runcall(self):
         
         print('num_timesteps={}/{}'.format (self.num_timesteps, self.total_timesteps))
-        with open (self.log_dir+'_summary.txt','a') as fin:
-            fin.write('*****************************************************\n')
-            fin.write('Summary for update step {} \n'.format(int(self.num_timesteps/self.check_freq)))
-            fin.write('*****************************************************\n')
             
         # Retrieve training reward
         y= pd.read_csv(self.log_dir+'_out.csv')
         y=y["reward"].values
         # Mean training reward over the last 100 episodes
         mean_reward = np.mean(y[-self.avg_step:])
-        if self.verbose > 0:
-            with open (self.log_dir+'_summary.txt','a') as fin:
-                fin.write("Num  of time steps passed: {}/{} \n".format(self.num_timesteps, self.total_timesteps))
-                fin.write("Best mean reward so far: {:.3f} \n".format(self.best_mean_reward))
-                fin.write("Mean reward in this update step: {:.3f} \n".format(mean_reward))
                
         # New best model, you could save the agent here
         if mean_reward > self.best_mean_reward:
               self.best_mean_reward = mean_reward
-              # Example for saving best model
-              if self.verbose > 0:
-                with open (self.log_dir+'_summary.txt','a') as fin:
-                    fin.write("Saving new best model to {} \n".format(self.save_path))
-              self.model.save(self.save_path)
+              #saving best model
+              self.model.save(self.best_save_path)    #best model found so far
+
+        #saving current model
+        self.model.save(self.save_path)   #latest model
               
         self.out_data=pd.read_csv(self.log_dir+'_out.csv')
         self.inp_data=pd.read_csv(self.log_dir+'_inp.csv')     
@@ -90,26 +82,6 @@ class SavePlotCallback(BaseCallback):
         # Progress Plot
         #-------------------
         self.plot_progress()
-                        
-        # Print summary for this method
-
-        top=10
-        assert isinstance(top,int), 'the user provided a non-integer value for the summary parameter {}'.format(top)
-        
-        sorted_out=self.out_data.sort_values(by=['reward'],ascending=False)   
-        sorted_inp=self.inp_data.sort_values(by=['reward'],ascending=False)   
-            
-        with open (self.log_dir+'_summary.txt','a') as fin:
-            fin.write ('--------------------------------------------------------------------------------------\n')
-            fin.write ('Top {} outputs for update step {} \n'.format(top, int(self.num_timesteps/self.check_freq)))
-            fin.write(sorted_out.iloc[:top].to_string())
-            fin.write('\n')
-            fin.write ('-------------------------------------------------------------------------------------- \n')
-            fin.write ('Top {} corresponding inputs for update step {} \n'.format(top, int(self.num_timesteps/self.check_freq)))
-            fin.write(sorted_inp.iloc[:top].to_string())
-            fin.write('\n')
-            fin.write ('-------------------------------------------------------------------------------------- \n')
-            fin.write('\n\n')
                 
     def _on_step(self) -> bool:
         
@@ -117,7 +89,7 @@ class SavePlotCallback(BaseCallback):
             if (self.num_timesteps % self.check_freq == 0) or (self.num_timesteps == self.total_timesteps):
                 self.runcall()
         except:
-            print('--warning: try to plot empty csv loggers, increase `check_freq` to a value larger than time needed to firstly update csv loggers')
+            print('--warning: No plot is generated, NEORL tried to plot the output csv logger, but failed to some reason, you may increase `check_freq` to a large value to allow some data printed in the csv logger')
         
         if self.num_timesteps == self.total_timesteps:
             print('system exit')
@@ -168,7 +140,6 @@ class SavePlotCallback(BaseCallback):
                 
                 plt.plot(epochs, rmax,'s', c='k', label='Max per {}'.format(method_xlabel), markersize=4)
                 plt.plot(epochs,rmin,'d', c='k', label='Min per {}'.format(method_xlabel), markersize=4)
-                #plt.axhline(y=6000, color='k', linestyle='--', label='Desired reward (top 0.1%)')
                 plt.legend()
                 plt.xlabel(method_xlabel)
                 plt.ylabel(labels[i])

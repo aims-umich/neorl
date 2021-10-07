@@ -33,7 +33,7 @@ from collections import defaultdict
 import multiprocessing
 import multiprocessing.pool
 
-import os, csv
+import os
 import copy
 
 class NoDaemonProcess(multiprocessing.Process):
@@ -294,39 +294,12 @@ class GAAgent(InputChecker):
             #------------
             if  gen % self.check_freq == 0 or gen == self.ngen:
                 
-                out_data=pd.read_csv(self.log_dir+'_out.csv')
-                inp_data=pd.read_csv(self.log_dir+'_inp.csv')
-                sorted_out=out_data.sort_values(by=['reward'],ascending=False)   
-                sorted_inp=inp_data.sort_values(by=['reward'],ascending=False)  
                 inds, rwd=[population[i][0] for i in population], [population[i][2] for i in population]
                 mean_strategy=[np.mean(population[i][1]) for i in population]
                 #------------
                 # plot progress 
                 #------------
                 self.callback.plot_progress('Generation')
-                
-                #------------
-                # print summary 
-                #------------
-                with open (self.log_dir + '_summary.txt', 'a') as fin:
-                    fin.write('*****************************************************\n')
-                    fin.write('Summary data for generation {}/{} \n'.format(gen, self.ngen))
-                    fin.write('*****************************************************\n')
-                    fin.write('Max Reward: {0:.2f} \n'.format(np.max(rwd)))
-                    fin.write('Mean Reward: {0:.2f} \n'.format(np.mean(rwd)))
-                    fin.write('Std Reward: {0:.2f} \n'.format(np.std(rwd)))
-                    fin.write('Min Reward: {0:.2f} \n'.format(np.min(rwd)))
-                    
-                    fin.write ('--------------------------------------------------------------------------------------\n')
-                    fin.write ('Best output for this generation \n')
-                    fin.write(sorted_out.iloc[0,:].to_string())
-                    fin.write('\n')
-                    fin.write ('-------------------------------------------------------------------------------------- \n')
-                    fin.write ('Best corresponding input for this generation \n')
-                    fin.write(sorted_inp.iloc[0,:].to_string())
-                    fin.write('\n')
-                    fin.write ('-------------------------------------------------------------------------------------- \n')
-                    fin.write('\n\n')
 
                 print('############################################################')
                 print('ES generation {}/{}, CX={}, MUT={}, MU={}, LAMBDA={}'.format(gen,ngen, np.round(self.cxpb,2), np.round(self.mutpb,2), self.mu, self.lambda_))
