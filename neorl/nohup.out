@@ -1,7 +1,0 @@
-dropbox: load fq extension '/home/majdi/.dropbox-dist/dropbox-lnx.x86_64-132.4.3800/cryptography.hazmat.bindings._openssl.cpython-38-x86_64-linux-gnu.so'
-dropbox: load fq extension '/home/majdi/.dropbox-dist/dropbox-lnx.x86_64-132.4.3800/cryptography.hazmat.bindings._padding.cpython-38-x86_64-linux-gnu.so'
-dropbox: load fq extension '/home/majdi/.dropbox-dist/dropbox-lnx.x86_64-132.4.3800/psutil._psutil_linux.cpython-38-x86_64-linux-gnu.so'
-dropbox: load fq extension '/home/majdi/.dropbox-dist/dropbox-lnx.x86_64-132.4.3800/psutil._psutil_posix.cpython-38-x86_64-linux-gnu.so'
-dropbox: load fq extension '/home/majdi/.dropbox-dist/dropbox-lnx.x86_64-132.4.3800/apex._apex.cpython-38-x86_64-linux-gnu.so'
-dropbox: load fq extension '/home/majdi/.dropbox-dist/dropbox-lnx.x86_64-132.4.3800/tornado.speedups.cpython-38-x86_64-linux-gnu.so'
-dropbox: load fq extension '/home/majdi/.dropbox-dist/dropbox-lnx.x86_64-132.4.3800/wrapt._wrappers.cpython-38-x86_64-linux-gnu.so'
