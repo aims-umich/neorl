@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.hybrid.pesa &mdash; NEORL 1.6 documentation</title>
+  <title>neorl.hybrid.pesa &mdash; NEORL 1.6.3b documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.6 )
+                main (1.6.3b )
               </div>
             
           
@@ -419,7 +419,7 @@
         <span class="n">fitness</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">FIT</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">fitness</span>
 
-<div class="viewcode-block" id="PESA.evolute"><a class="viewcode-back" href="../../../modules/pesa.html#neorl.hybrid.pesa.PESA.evolute">[docs]</a>    <span class="k">def</span> <span class="nf">evolute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ngen</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">warmup</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="PESA.evolute"><a class="viewcode-back" href="../../../modules/pesa.html#neorl.hybrid.pesa.PESA.evolute">[docs]</a>    <span class="k">def</span> <span class="nf">evolute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ngen</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">warmup</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function evolutes the PESA algorithm for number of generations.</span>
 <span class="sd">        </span>
@@ -428,7 +428,7 @@
 <span class="sd">        :param warmup: (int) number of random warmup samples to initialize the replay memory and must be equal or more than ``npop`` (only used if ``x0=None``)</span>
 <span class="sd">        :param verbose: (int) print statistics to screen, 0: no print, 1: PESA print, 2: detailed print</span>
 <span class="sd">        </span>
-<span class="sd">        :return: (dict) dictionary containing major PESA search results</span>
+<span class="sd">        :return: (tuple) (best individual, best fitness, and a list of fitness history)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span>

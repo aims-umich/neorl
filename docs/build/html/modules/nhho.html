@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Neural Harris Hawks Optimization (NHHO) &mdash; NEORL 1.6.2b documentation</title>
+  <title>Neural Harris Hawks Optimization (NHHO) &mdash; NEORL 1.6.3b documentation</title>
   
 
   
@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                main (1.6.2b )
+                main (1.6.3b )
               </div>
             
           
@@ -272,7 +272,7 @@ Keys are: <code class="docutils literal notranslate"><span class="pre">test_spli
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="neorl.hybrid.nhho.NHHO.evolute">
-<span class="sig-name descname"><span class="pre">evolute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ngen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/hybrid/nhho.html#NHHO.evolute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.hybrid.nhho.NHHO.evolute" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">evolute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ngen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/hybrid/nhho.html#NHHO.evolute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.hybrid.nhho.NHHO.evolute" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function evolutes the NHHO algorithm for number of generations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -283,7 +283,7 @@ Keys are: <code class="docutils literal notranslate"><span class="pre">test_spli
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>(tuple) (best position, best fitness, and dictionary containing major search results)</p>
+<dd class="field-even"><p>(tuple) (list of best individuals, list of best fitnesses)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -351,7 +351,7 @@ Keys are: <code class="docutils literal notranslate"><span class="pre">test_spli
 <li><p>Tri-training concept uses semi-supervised learning to leverage surrogate models that approximate the real fitness function to accelerate the optimization process for expensive fitness functions. Three feedforward neural network models are trained, which are used to determine the best individual from one generation to the next, which is added to retrain the three surrogate models. The real fitness function <code class="docutils literal notranslate"><span class="pre">fit</span></code> is ONLY used to evaluate <code class="docutils literal notranslate"><span class="pre">num_warmups</span></code>. Afterwards, the three neural network models are used to guide the Harris hawks optimizer.</p></li>
 <li><p>For <code class="docutils literal notranslate"><span class="pre">num_warmups</span></code>, choose a reasonable value to accommodate the number of design variables <code class="docutils literal notranslate"><span class="pre">x</span></code> in your problem. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, the default value of warmup samples is 20 times the size of <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p></li>
 <li><p>Total number of cost evaluations via the real fitness function <code class="docutils literal notranslate"><span class="pre">fit</span></code> for NHHO is <code class="docutils literal notranslate"><span class="pre">num_warmups</span></code>.</p></li>
-<li><p>Total number of cost evaluations via the surrogate model for NHHO is <code class="docutils literal notranslate"><span class="pre">nhawks</span></code> * <code class="docutils literal notranslate"><span class="pre">ngen</span></code>.</p></li>
+<li><p>Total number of cost evaluations via the surrogate model for NHHO is <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">*</span> <span class="pre">nhawks</span></code> * <code class="docutils literal notranslate"><span class="pre">ngen</span></code>.</p></li>
 <li><p>The following variables can be used in <code class="docutils literal notranslate"><span class="pre">nn_params</span></code> dictionary to construct the surrogate model</p>
 <blockquote>
 <div><table class="docutils align-default">

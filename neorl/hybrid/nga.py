@@ -77,7 +77,7 @@ class NGA(object):
         print('surrogate hidden_shape:', self.hidden_shape)
         print('surrogate kernel:', self.kernel)
 
-    def evolute(self, ngen, verbose=True):
+    def evolute(self, ngen, verbose=False):
         """
         This function evolutes the NGA algorithm for number of generations.
 

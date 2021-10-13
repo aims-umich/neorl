@@ -309,7 +309,7 @@ class SA:
         
         return x0, E0 #return initial guess and initial fitness      
     
-    def evolute(self, ngen, x0=None, verbose=True):
+    def evolute(self, ngen, x0=None, verbose=False):
         """
         This function evolutes the SA algorithm for number of generations.
         
@@ -317,7 +317,7 @@ class SA:
         :param x0: (list of lists) initial samples to start the evolution (``len(x0)`` must be equal to ``ncores``)
         :param verbose: (int) print statistics to screen
         
-        :return: (dict) dictionary containing major SA search results
+        :return: (tuple) (best individual, best fitness, and dictionary containing major search results)
         """
         #chain statistics
         #self.accept=0

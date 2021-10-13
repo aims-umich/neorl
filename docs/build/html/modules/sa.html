@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Simulated Annealing (SA) &mdash; NEORL 1.6.2b documentation</title>
+  <title>Simulated Annealing (SA) &mdash; NEORL 1.6.3b documentation</title>
   
 
   
@@ -71,7 +71,7 @@
             
             
               <div class="version">
-                main (1.6.2b )
+                main (1.6.3b )
               </div>
             
           
@@ -276,7 +276,7 @@ is provided, each core/chain uses different value of <code class="docutils liter
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="neorl.evolu.sa.SA.evolute">
-<span class="sig-name descname"><span class="pre">evolute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ngen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/evolu/sa.html#SA.evolute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.evolu.sa.SA.evolute" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">evolute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ngen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/evolu/sa.html#SA.evolute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.evolu.sa.SA.evolute" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function evolutes the SA algorithm for number of generations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -287,7 +287,7 @@ is provided, each core/chain uses different value of <code class="docutils liter
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>(dict) dictionary containing major SA search results</p>
+<dd class="field-even"><p>(tuple) (best individual, best fitness, and dictionary containing major search results)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -350,7 +350,7 @@ is provided, each core/chain uses different value of <code class="docutils liter
 <li><p>Custom <code class="docutils literal notranslate"><span class="pre">move_func</span></code> is allowed by following the input/output format in the example above. If <code class="docutils literal notranslate"><span class="pre">None</span></code> the default moving function is used, which is controlled by the <code class="docutils literal notranslate"><span class="pre">chi</span></code> parameter. Therefore, <code class="docutils literal notranslate"><span class="pre">chi</span></code> is used ONLY if <code class="docutils literal notranslate"><span class="pre">move_func=None</span></code>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">chi</span></code> controls the probability of perturbing an attribute of the individual. For example, for <code class="docutils literal notranslate"><span class="pre">d=4</span></code>, <span class="math notranslate nohighlight">\(\vec{x}=[x_1,x_2,x_3,x_4]\)</span>, for every <span class="math notranslate nohighlight">\(x_i\)</span>, a uniform random number <span class="math notranslate nohighlight">\(U[0,1]\)</span> is compared to <code class="docutils literal notranslate"><span class="pre">chi</span></code>, if <code class="docutils literal notranslate"><span class="pre">U[0,1]</span> <span class="pre">&lt;</span> <span class="pre">chi</span></code>, the attribute is perturbed. Otherwise, it remains fixed.</p></li>
 <li><p>For every generation, a total of <code class="docutils literal notranslate"><span class="pre">chain_size</span></code> individuals are executed. Therefore, look for an optimal balance between <code class="docutils literal notranslate"><span class="pre">chain_size</span></code> and <code class="docutils literal notranslate"><span class="pre">ngen</span></code>.</p></li>
-<li><p>Total number of cost evaluations for SA is <code class="docutils literal notranslate"><span class="pre">chain_size</span></code> * <code class="docutils literal notranslate"><span class="pre">ngen</span></code>.</p></li>
+<li><p>Total number of cost evaluations for SA is <code class="docutils literal notranslate"><span class="pre">chain_size</span></code> * <code class="docutils literal notranslate"><span class="pre">(ngen</span> <span class="pre">+</span> <span class="pre">1)</span></code>.</p></li>
 <li><p>If <code class="docutils literal notranslate"><span class="pre">ncores</span> <span class="pre">&gt;</span> <span class="pre">1</span></code>, parallel SA chains are initialized to accelerate the calculations of all <code class="docutils literal notranslate"><span class="pre">chain_size</span></code> * <code class="docutils literal notranslate"><span class="pre">ngen</span></code>.</p></li>
 <li><p>If <code class="docutils literal notranslate"><span class="pre">ncores</span> <span class="pre">&gt;</span> <span class="pre">1</span></code> and <code class="docutils literal notranslate"><span class="pre">move_func=None</span></code>, parallel SA chains can have different <code class="docutils literal notranslate"><span class="pre">chi</span></code> values, provided as a list/vector.</p></li>
 <li><p>Option <code class="docutils literal notranslate"><span class="pre">reinforce_best=True</span></code> allows enforcing the best solution from previous generation to use as a chain startup in the next generation. For example, if <code class="docutils literal notranslate"><span class="pre">chain_size=10</span></code>, the best of the 10 individuals in the first generation is used to initialize the chain in the second generation, and so on. Different <code class="docutils literal notranslate"><span class="pre">ncores</span></code> chains have different best individuals (initial guess) to avoid biasing the parallel search toward a specific chain.</p></li>

@@ -39,4 +39,4 @@ Notes
 - JAYA is free of special hyperparameters, therefore, the user only needs to specify the size of the population ``npop``.
 - ``ncores`` argument evaluates the fitness of all individuals in the population in parallel. Therefore, set ``ncores <= npop`` for most optimal resource allocation.
 - Look for an optimal balance between ``npop`` and ``ngen``, it is recommended to minimize the number of ``npop`` to allow for more updates and more generations.
-- Total number of cost evaluations for JAYA is ``npop`` * ``ngen``.
+- Total number of cost evaluations for JAYA is ``npop`` * ``(ngen + 1)``.

@@ -208,7 +208,7 @@ class CS(object):
  
         return tempnest
         
-    def evolute(self,ngen,x0=None, verbose=True):
+    def evolute(self, ngen, x0=None, verbose=False):
         """
         This function evolutes the CS algorithm for number of generations
         
@@ -216,7 +216,7 @@ class CS(object):
         :param x0: (list of lists) initial position of the cuckoos (must be of same size as ``ncuckoos``)
         :param verbose: (bool) print statistics to screen
         
-        :return: (tuple) (best cuckoo, best fitness, and dictionary of fitness history)
+        :return: (tuple) (best individual, best fitness, and dictionary containing major search results)
         """
         self.history = {'local_fitness':[], 'global_fitness':[]}
         self.best_fitness=float("inf") 

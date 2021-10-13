@@ -180,7 +180,7 @@ class JAYA:
         
         return vec
 
-    def evolute(self, ngen, x0=None, verbose=0):
+    def evolute(self, ngen, x0=None, verbose=False):
         """
         This function evolutes the MFO algorithm for number of generations.
         
@@ -188,7 +188,7 @@ class JAYA:
         :param x0: (list of lists) the initial individuals of the population
         :param verbose: (bool) print statistics to screen
         
-        :return: (dict) dictionary containing major MFO search results
+        :return: (tuple) (best individual, best fitness, and a list of fitness history)
         """
         N = self.npop # population size
         dim = len(self.bounds) # individual length

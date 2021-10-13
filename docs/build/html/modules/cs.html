@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Cuckoo Search (CS) &mdash; NEORL 1.6.2b documentation</title>
+  <title>Cuckoo Search (CS) &mdash; NEORL 1.6.3b documentation</title>
   
 
   
@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                main (1.6.2b )
+                main (1.6.3b )
               </div>
             
           
@@ -270,7 +270,7 @@ i.e. fraction of the cuckoos/nests that will be replaced by the new cuckoos/nest
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="neorl.evolu.cs.CS.evolute">
-<span class="sig-name descname"><span class="pre">evolute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ngen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/evolu/cs.html#CS.evolute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.evolu.cs.CS.evolute" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">evolute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ngen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/evolu/cs.html#CS.evolute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.evolu.cs.CS.evolute" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function evolutes the CS algorithm for number of generations</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -281,7 +281,7 @@ i.e. fraction of the cuckoos/nests that will be replaced by the new cuckoos/nest
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>(tuple) (best cuckoo, best fitness, and dictionary of fitness history)</p>
+<dd class="field-even"><p>(tuple) (best individual, best fitness, and dictionary containing major search results)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -322,7 +322,7 @@ i.e. fraction of the cuckoos/nests that will be replaced by the new cuckoos/nest
 <li><p><code class="docutils literal notranslate"><span class="pre">pa</span></code> controls exploration/exploitation of the algorithm, it is the fraction of the cuckoos/nests that will be replaced by new cuckoos/nests. In this case, the host bird can either throw the egg away or abandon the nest, and build a completely new nest.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">ncores</span></code> argument evaluates the fitness of all cuckoos in the population in parallel. Therefore, set <code class="docutils literal notranslate"><span class="pre">ncores</span> <span class="pre">&lt;=</span> <span class="pre">ncuckoos</span></code> for most optimal resource allocation.</p></li>
 <li><p>Look for an optimal balance between <code class="docutils literal notranslate"><span class="pre">ncuckoos</span></code> and <code class="docutils literal notranslate"><span class="pre">ngen</span></code>, it is recommended to minimize the number of <code class="docutils literal notranslate"><span class="pre">ncuckoos</span></code> to allow for more updates and more generations.</p></li>
-<li><p>Total number of cost evaluations for CS is <code class="docutils literal notranslate"><span class="pre">2*ncuckoos</span></code> * <code class="docutils literal notranslate"><span class="pre">ngen</span></code>.</p></li>
+<li><p>Total number of cost evaluations for CS is <code class="docutils literal notranslate"><span class="pre">2*ncuckoos</span></code> * <code class="docutils literal notranslate"><span class="pre">(ngen</span> <span class="pre">+</span> <span class="pre">1)</span></code>.</p></li>
 </ul>
 </div>
 </div>

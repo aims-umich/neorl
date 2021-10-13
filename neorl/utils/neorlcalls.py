@@ -31,14 +31,8 @@ class SavePlotCallback(BaseCallback):
     """
     Callback for saving a model (the check is done every ``check_freq`` steps)
     based on the training reward (in practice, we recommend using ``EvalCallback``).
-
-    :param check_freq: (int)
-    :param log_dir: (str) Path to the folder where the model will be saved.
-      It must contains the file created by the ``Monitor`` wrapper.
-    :param verbose: (int)
     """
     def __init__(self, check_freq, avg_step, log_dir, total_timesteps, basecall, plot_mode='subplot'):
-        #super(SavePlotCallback, self).__init__(verbose)
         self.base=basecall
         self.plot_mode=plot_mode
         self.n_calls=self.base.n_calls
@@ -77,7 +71,6 @@ class SavePlotCallback(BaseCallback):
         self.model.save(self.save_path)   #latest model
               
         self.out_data=pd.read_csv(self.log_dir+'_out.csv')
-        self.inp_data=pd.read_csv(self.log_dir+'_inp.csv')     
         #-------------------
         # Progress Plot
         #-------------------
@@ -89,7 +82,7 @@ class SavePlotCallback(BaseCallback):
             if (self.num_timesteps % self.check_freq == 0) or (self.num_timesteps == self.total_timesteps):
                 self.runcall()
         except:
-            print('--warning: No plot is generated, NEORL tried to plot the output csv logger, but failed to some reason, you may increase `check_freq` to a large value to allow some data printed in the csv logger')
+            print('--warning: No plot is generated, NEORL tried to plot the output csv logger, but failed for some reason, you may increase `check_freq` to a large value to allow some data printed in the csv logger')
         
         if self.num_timesteps == self.total_timesteps:
             print('system exit')
@@ -220,7 +213,7 @@ class RLLogger(BaseCallback):
     :param save_model: (bool) whether or not to save the RL neural network model (model is saved every ``check_freq``)
     :param model_name: (str) name of the model to be saved  if ``save_model=True``
     :param save_best_only: (bool) if ``save_model = True``, then this flag only saves the model if the fitness value improves. 
-    :param verbose: (int) print updates to the screen
+    :param verbose: (bool) print updates to the screen
     """
     def __init__(self, check_freq=1, plot_freq=None, n_avg_steps=10, pngname='history', 
                  save_model=False, model_name='bestmodel.pkl', save_best_only=True, 

@@ -411,7 +411,7 @@ class ES:
             
         return pop
                         
-    def evolute(self, ngen, x0=None, verbose=0):
+    def evolute(self, ngen, x0=None, verbose=False):
         """
         This function evolutes the ES algorithm for number of generations.
         
@@ -419,7 +419,7 @@ class ES:
         :param x0: (list of lists) the initial position of the swarm particles
         :param verbose: (bool) print statistics to screen
         
-        :return: (dict) dictionary containing major ES search results
+        :return: (tuple) (best individual, best fitness, and a list of fitness history)
         """
         self.y_opt=-np.inf
         self.best_scores=[]

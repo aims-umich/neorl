@@ -222,15 +222,15 @@ class BAT(object):
         step = np.divide(u, zz)
         return step
 
-    def evolute(self, ngen, x0=None, verbose=True):
+    def evolute(self, ngen, x0=None, verbose=False):
         """
         This function evolutes the BAT algorithm for number of generations.
         
         :param ngen: (int) number of generations to evolute
         :param x0: (list of lists) initial position of the bats (must be of same size as ``nbats``)
         :param verbose: (bool) print statistics to screen
-        
-        :return: (dict) dictionary containing major BAT search results
+		
+        :return: (tuple) (best individual, best fitness, and dictionary containing major search results)
         """
         self.history = {'local_fitness':[], 'global_fitness':[], 'A': [], 'r': []}
         self.fbest=float("inf")

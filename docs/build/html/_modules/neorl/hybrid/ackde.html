@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.hybrid.ackde &mdash; NEORL 1.6 documentation</title>
+  <title>neorl.hybrid.ackde &mdash; NEORL 1.6.3b documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.6 )
+                main (1.6.3b )
               </div>
             
           
@@ -425,7 +425,7 @@
 <span class="sd">        :param ncores: (int) number of parallel processors to use with DE </span>
 <span class="sd">        :param verbose: (bool) print statistics to screen</span>
 <span class="sd">        </span>
-<span class="sd">        :return: (dict) dictionary containing major ACKTR-DE search results</span>
+<span class="sd">        :return: (tuple) (best individual, best fitness, and a list of fitness history)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;------------------------------- Part II: DE is running and informed by ACKTR -------------------------------&#39;</span><span class="p">)</span>
         
@@ -443,14 +443,14 @@
         
         <span class="n">de</span><span class="o">=</span><span class="n">DE</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">,</span> <span class="n">npop</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">npop</span><span class="p">,</span> <span class="n">F</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">F</span><span class="p">,</span> 
               <span class="n">CR</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">CR</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="n">ncores</span><span class="p">,</span> <span class="n">int_transform</span><span class="o">=</span><span class="s1">&#39;nearest_int&#39;</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">,</span> <span class="o">**</span><span class="n">rl_kwargs</span><span class="p">)</span>
-        <span class="n">x_best</span><span class="p">,</span> <span class="n">y_best</span><span class="p">,</span> <span class="n">es_hist</span><span class="o">=</span><span class="n">de</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="n">ngen</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+        <span class="n">x_best</span><span class="p">,</span> <span class="n">y_best</span><span class="p">,</span> <span class="n">de_hist</span><span class="o">=</span><span class="n">de</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="n">ngen</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;************************* ACKTR-DE Summary *************************&#39;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best fitness (y) found:&#39;</span><span class="p">,</span> <span class="n">x_best</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best individual (x) found:&#39;</span><span class="p">,</span> <span class="n">y_best</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;******************************************************************&#39;</span><span class="p">)</span>
             
-        <span class="k">return</span> <span class="n">x_best</span><span class="p">,</span> <span class="n">y_best</span><span class="p">,</span> <span class="n">es_hist</span></div></div>
+        <span class="k">return</span> <span class="n">x_best</span><span class="p">,</span> <span class="n">y_best</span><span class="p">,</span> <span class="n">de_hist</span></div></div>
 </pre></div>
 
            </div>

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.hybrid.rneat &mdash; NEORL 1.6 documentation</title>
+  <title>neorl.hybrid.rneat &mdash; NEORL 1.6.3b documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.6 )
+                main (1.6.3b )
               </div>
             
           
@@ -348,7 +348,7 @@
 <span class="sd">        :param startpoint: (str) name/path to the checkpoint file to use to start the search (the checkpoint file can be saved by invoking the argument ``checkpoint_itv``) </span>
 <span class="sd">        :param verbose: (bool) print statistics to screen</span>
 <span class="sd">        </span>
-<span class="sd">        :return: (vector, float, dict) best :math:`x`, best fitness, logging dictionary</span>
+<span class="sd">        :return: (tuple) (best individual, best fitness, and dictionary containing major search results)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;global_fitness&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s1">&#39;local_fitness&#39;</span><span class="p">:[]}</span>

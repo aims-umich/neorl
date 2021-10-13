@@ -193,7 +193,7 @@ class PESA(ExperienceReplay):
         fitness = self.FIT(x)
         return fitness
 
-    def evolute(self, ngen, x0=None, warmup=100, verbose=True):
+    def evolute(self, ngen, x0=None, warmup=100, verbose=0):
         """
         This function evolutes the PESA algorithm for number of generations.
         
@@ -202,7 +202,7 @@ class PESA(ExperienceReplay):
         :param warmup: (int) number of random warmup samples to initialize the replay memory and must be equal or more than ``npop`` (only used if ``x0=None``)
         :param verbose: (int) print statistics to screen, 0: no print, 1: PESA print, 2: detailed print
         
-        :return: (dict) dictionary containing major PESA search results
+        :return: (tuple) (best individual, best fitness, and a list of fitness history)
         """
         
         self.verbose=verbose

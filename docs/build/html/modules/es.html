@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Evolution Strategies (\(\mu,\lambda\)) (ES) &mdash; NEORL 1.6.2b documentation</title>
+  <title>Evolution Strategies (\(\mu,\lambda\)) (ES) &mdash; NEORL 1.6.3b documentation</title>
   
 
   
@@ -71,7 +71,7 @@
             
             
               <div class="version">
-                main (1.6.2b )
+                main (1.6.3b )
               </div>
             
           
@@ -274,7 +274,7 @@
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="neorl.evolu.es.ES.evolute">
-<span class="sig-name descname"><span class="pre">evolute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ngen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/evolu/es.html#ES.evolute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.evolu.es.ES.evolute" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">evolute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ngen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/evolu/es.html#ES.evolute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.evolu.es.ES.evolute" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function evolutes the ES algorithm for number of generations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -285,7 +285,7 @@
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>(dict) dictionary containing major ES search results</p>
+<dd class="field-even"><p>(tuple) (best individual, best fitness, and a list of fitness history)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -332,7 +332,7 @@
 <li><p>Too small <code class="docutils literal notranslate"><span class="pre">cxpb</span></code> and <code class="docutils literal notranslate"><span class="pre">mutpb</span></code> reduce ES exploration, and increase the likelihood of falling in a local optima.</p></li>
 <li><p>Usually, population size <code class="docutils literal notranslate"><span class="pre">lambda_</span></code> between 60-100 shows good performance along with <code class="docutils literal notranslate"><span class="pre">mu=0.5*lambda_</span></code>.</p></li>
 <li><p>Look for an optimal balance between <code class="docutils literal notranslate"><span class="pre">lambda_</span></code> and <code class="docutils literal notranslate"><span class="pre">ngen</span></code>, it is recommended to minimize population size to allow for more generations.</p></li>
-<li><p>Total number of cost evaluations for ES is <code class="docutils literal notranslate"><span class="pre">npop</span></code> * <code class="docutils literal notranslate"><span class="pre">ngen</span></code>.</p></li>
+<li><p>Total number of cost evaluations for ES is <code class="docutils literal notranslate"><span class="pre">lambda_</span></code> * <code class="docutils literal notranslate"><span class="pre">(ngen</span> <span class="pre">+</span> <span class="pre">1)</span></code>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">cxmode='blend'</span></code> with <code class="docutils literal notranslate"><span class="pre">alpha=0.5</span></code> may perform better than <code class="docutils literal notranslate"><span class="pre">cxmode='cx2point'</span></code>.</p></li>
 </ul>
 </div>

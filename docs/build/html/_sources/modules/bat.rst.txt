@@ -50,4 +50,4 @@ Notes
 - We provide a flexible BAT implemetation that can handle continuous (``float``), discrete (``int``), and categorical (``grid``) spaces and their mix. The user can control the type of discrete transformation via the argument ``int_transform``. 
 - ``ncores`` argument evaluates the fitness of all bats in parallel. Therefore, set ``ncores <= nbats`` for most optimal resource allocation.
 - Look for an optimal balance between ``nbats`` and ``ngen``, it is recommended to minimize the number of ``nbats`` to allow for more updates and more generations.
-- Total number of cost evaluations for BAT is ``3*nbats`` * ``ngen``.
+- Total number of cost evaluations for BAT is ``3*nbats`` * ``(ngen + 1)``.

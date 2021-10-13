@@ -44,4 +44,4 @@ Notes
 - Therefore, the user should notice that ``ngen`` value used within the ``.evolute`` function has an impact on the ``a`` value and hence on WOA overall performance.
 - ``ncores`` argument evaluates the fitness of all whales in the population in parallel. Therefore, set ``ncores <= nwhales`` for most optimal resource allocation.
 - Look for an optimal balance between ``nwhales`` and ``ngen``, it is recommended to minimize the number of ``nwhales`` to allow for more updates and more generations.
-- Total number of cost evaluations for WOA is ``nwhales`` * ``ngen``.
+- Total number of cost evaluations for WOA is ``nwhales`` * ``(ngen + 1)``.

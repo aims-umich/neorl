@@ -157,7 +157,7 @@ class GWO(object):
         
         return vec
     
-    def evolute(self, ngen, x0=None, verbose=True):
+    def evolute(self, ngen, x0=None, verbose=False):
         """
         This function evolutes the GWO algorithm for number of generations.
         
@@ -165,7 +165,7 @@ class GWO(object):
         :param x0: (list of lists) initial position of the wolves (must be of same size as ``nwolves``)
         :param verbose: (bool) print statistics to screen
         
-        :return: (dict) dictionary containing major GWO search results
+        :return: (tuple) (best individual, best fitness, and dictionary containing major search results)
         """
         self.history = {'alpha_wolf':[], 'beta_wolf':[], 'delta_wolf': [], 'fitness':[]}
         self.fitness_best=float("inf") 

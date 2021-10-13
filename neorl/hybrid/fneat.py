@@ -124,7 +124,7 @@ class FNEAT(object):
         :param startpoint: (str) name/path to the checkpoint file to use to start the search (the checkpoint file can be saved by invoking the argument ``checkpoint_itv``) 
         :param verbose: (bool) print statistics to screen
         
-        :return: (vector, float, dict) best :math:`x`, best fitness, logging dictionary
+        :return: (tuple) (best individual, best fitness, and dictionary containing major search results)
         """
         
         self.history={'global_fitness': [], 'local_fitness':[]}

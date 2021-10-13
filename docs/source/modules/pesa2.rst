@@ -44,4 +44,4 @@ Notes
 - Check the sections of :ref:`GWO <gwo>`, :ref:`WOA <woa>`, and :ref:`DE <de>` for notes on the internal algorithms and the auxiliary parameters of PESA2.
 - Start the prioritized replay with a small fraction for ``alpha_init < 0.1`` to increase randomness earlier to improve PESA exploration. Choose a high fraction for ``alpha_end > 0.9`` to increase exploitation by the end of evolution.
 - Look for an optimal balance between ``npop`` and ``ngen``, it is recommended to minimize population size to allow for more generations.
-- Total number of cost evaluations for PESA2 is ``ngen*npop*3``.
+- Total number of cost evaluations for PESA2 is ``ngen*npop*3 + warmup``.

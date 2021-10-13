@@ -38,7 +38,7 @@ Notes
 - Tri-training concept uses semi-supervised learning to leverage surrogate models that approximate the real fitness function to accelerate the optimization process for expensive fitness functions. Three feedforward neural network models are trained, which are used to determine the best individual from one generation to the next, which is added to retrain the three surrogate models. The real fitness function ``fit`` is ONLY used to evaluate ``num_warmups``. Afterwards, the three neural network models are used to guide the Harris hawks optimizer.
 - For ``num_warmups``, choose a reasonable value to accommodate the number of design variables ``x`` in your problem. If ``None``, the default value of warmup samples is 20 times the size of ``x``. 
 - Total number of cost evaluations via the real fitness function ``fit`` for NHHO is ``num_warmups``.
-- Total number of cost evaluations via the surrogate model for NHHO is ``nhawks`` * ``ngen``.
+- Total number of cost evaluations via the surrogate model for NHHO is ``2 * nhawks`` * ``ngen``.
 - The following variables can be used in ``nn_params`` dictionary to construct the surrogate model
 
     +--------------------+-------------------------------------------------------------------------------------------------------------------+

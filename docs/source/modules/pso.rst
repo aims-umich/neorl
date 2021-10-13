@@ -48,4 +48,4 @@ Notes
 - ``speed_mech=timew`` uses a time-dependent inertia factor, where inertia ``w`` is annealed over PSO generations.
 - ``speed_mech=globw`` uses a ratio of swarm global position to local position to define inertia factor, and this factor is updated every generation.
 - Look for an optimal balance between ``npar`` and ``ngen``, it is recommended to minimize particle size to allow for more generations.
-- Total number of cost evaluations for PSO is ``npar`` * ``ngen``.
+- Total number of cost evaluations for PSO is ``npar`` * ``(ngen + 1)``.

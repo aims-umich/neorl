@@ -45,4 +45,4 @@ Notes
 - Therefore, if ``c1=None``, the user should notice that ``ngen`` value used within the ``.evolute`` function has an impact on the ``c1`` value and hence on SSA overall performance.
 - ``ncores`` argument evaluates the fitness of all hawks in the swarm in parallel after the position update. Therefore, set ``ncores <= nhawks`` for most optimal resource allocation.
 - Look for an optimal balance between ``nhawks`` and ``ngen``, it is recommended to minimize the number of ``nhawks`` to allow for more updates and more generations.
-- Total number of cost evaluations for HHO is ``2*nhawks`` * ``ngen``.
+- Total number of cost evaluations for HHO is ``2*nhawks`` * ``ngen`` (this is an upper bound estimate as there is randomness in whether some of the hawks are evaluated or not).

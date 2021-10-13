@@ -204,7 +204,7 @@ class DE:
         return pop
 
     
-    def evolute(self, ngen, x0=None, verbose=0):
+    def evolute(self, ngen, x0=None, verbose=False):
         """
         This function evolutes the DE algorithm for number of generations.
         
@@ -212,7 +212,7 @@ class DE:
         :param x0: (list of lists) the initial individuals of the population
         :param verbose: (bool) print statistics to screen
         
-        :return: (dict) dictionary containing major DE search results
+        :return: (tuple) (best individual, best fitness, and a list of fitness history)
         """
         
         if self.seed:

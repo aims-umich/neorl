@@ -154,7 +154,7 @@ class XNES(object):
             
         return vec_new
 
-    def evolute(self, ngen, x0=None, verbose=True):
+    def evolute(self, ngen, x0=None, verbose=False):
         """
         This function evolutes the XNES algorithm for number of generations.
         
@@ -162,7 +162,7 @@ class XNES(object):
         :param x0: (list) initial guess for the search (must be of same size as ``len(bounds)``)
         :param verbose: (bool) print statistics to screen
         
-        :return: (dict) dictionary containing major XNES search results
+        :return: (tuple) (best individual, best fitness, and dictionary containing major search results)
         """
         f = self.f
         self.verbose=verbose

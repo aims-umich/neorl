@@ -79,7 +79,7 @@ class HHO(object):
         self.lb = np.array([self.bounds[item][1] for item in self.bounds])
         self.ub = np.array([self.bounds[item][2] for item in self.bounds])
         
-    def evolute(self, ngen, x0=None, verbose=True):
+    def evolute(self, ngen, x0=None, verbose=False):
         """
         This function evolutes the HHO algorithm for number of generations.
         
@@ -87,7 +87,7 @@ class HHO(object):
         :param x0: (list of lists) initial position of the hawks (must be of same size as ``nhawks``)
         :param verbose: (bool) print statistics to screen
         
-        :return: (tuple) (best position, best fitness, and dictionary containing major search results)
+        :return: (tuple) (best individual, best fitness, and dictionary containing major search results)
         """
         if self.seed:
             random.seed(self.seed)

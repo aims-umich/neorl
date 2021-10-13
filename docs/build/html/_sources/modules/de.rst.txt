@@ -39,3 +39,4 @@ Notes
 - ``F`` is usually chosen between [0.5, 1].
 - The higher the population size ``npop``, the lower one should choose the weighting factor ``F``
 - You may start with ``npop`` =10*d, where d is the number of input parameters to optimise (degrees of freedom).
+- Total number of cost evaluations for DE is ``2 * npop * ngen``.

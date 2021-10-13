@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.evolu.aco &mdash; NEORL 1.6 documentation</title>
+  <title>neorl.evolu.aco &mdash; NEORL 1.6.3b documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.6 )
+                main (1.6.3b )
               </div>
             
           
@@ -337,7 +337,7 @@
                 <span class="n">vec_new</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">vec_new</span><span class="p">)</span>
                       
-<div class="viewcode-block" id="ACO.evolute"><a class="viewcode-back" href="../../../modules/aco.html#neorl.evolu.aco.ACO.evolute">[docs]</a>    <span class="k">def</span> <span class="nf">evolute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ngen</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="ACO.evolute"><a class="viewcode-back" href="../../../modules/aco.html#neorl.evolu.aco.ACO.evolute">[docs]</a>    <span class="k">def</span> <span class="nf">evolute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ngen</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function evolutes the ACO algorithm for number of generations</span>
 <span class="sd">        </span>
@@ -345,7 +345,7 @@
 <span class="sd">        :param x0: (list of lists) the initial individuals of the population</span>
 <span class="sd">        :param verbose: (bool) print statistics to screen</span>
 <span class="sd">        </span>
-<span class="sd">        :return: (tuple) (best position, best fitness, and list of fitness history)</span>
+<span class="sd">        :return: (tuple) (best individual, best fitness, and list of fitness history)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">x0</span><span class="p">:</span>
             <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">nants</span><span class="p">,</span> <span class="s1">&#39;--error: the length of x0 (</span><span class="si">{}</span><span class="s1">) (initial population) must equal to number of ants (</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">nants</span><span class="p">)</span>

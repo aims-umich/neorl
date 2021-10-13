@@ -22,20 +22,25 @@ from sklearn.preprocessing import MinMaxScaler
 
 #Keras specials
 from keras.models import Sequential
-from keras.layers import Dense, Dropout
+from keras.layers import Dense, Dropout, Activation
 from keras.optimizers import Adam
+from keras.layers.normalization import BatchNormalization
+from keras.regularizers import L1L2
 
 #External path
 mitr_path='mitr_temp.png'
-
+noisy_data=True
 #----------------------------------------------------------------
 #                           Load data
 #----------------------------------------------------------------
 
 #---------------------------
 #(a). Load data from url
-xurl='https://raw.githubusercontent.com/MajdiRadaideh/S097data/main/crx.csv'
-yurl='https://raw.githubusercontent.com/MajdiRadaideh/S097data/main/powery.csv'
+xurl='crx.csv'
+if noisy_data:
+    yurl='final_noisy_powery.csv'
+else:
+    yurl='powery.csv'
 xdata=pd.read_csv(xurl)
 ydata=pd.read_csv(yurl)
 colnames=list(ydata.columns)
@@ -50,13 +55,26 @@ print(ydata.shape)
 xdata=xdata.values # convert dataframe to numpy array
 ydata=ydata.values # convert dataframe to numpy array
 
+gen_noisy_data=False
+
+if gen_noisy_data:
+    noise_level=np.random.uniform(1,2)/100    #1%-2% is typical noise in reactor power
+    for i in range(0,300):                    #add noise to first 300 samples
+        for j in range(ydata.shape[1]):
+            noise_value=np.random.normal(0, noise_level*ydata[i,j]) 
+            ydata[i,j] = ydata[i,j] + noise_value
+    
+    ydf=pd.DataFrame(ydata, columns=colnames)
+    ydf.to_csv('noisy_powery.csv', index=False)
+    
+
 #---------------------------
 #(c). Data split for training/testing
-xtrain=xdata[0:900,:]
-ytrain=ydata[0:900,:]
+xtrain=xdata[0:800,:]  #use clean and noisy data in training
+ytrain=ydata[0:800,:]  #use clean and noisy data in training
 
-xtest=xdata[900:,:]
-ytest=ydata[900:,:]
+xtest=xdata[800:,:]   #use only clean data for testing
+ytest=ydata[800:,:]   #use only clean data for testing
 
 #---------------------------
 #(d). Input/output scaling
@@ -96,7 +114,8 @@ def fitness(inp):
     #model.summary()
     
     # train the model
-    model.fit(Xtrain, Ytrain, epochs=epochs, batch_size=batch_size, validation_split = 0.15, verbose=False)
+    model.fit(Xtrain, Ytrain, epochs=epochs, batch_size=batch_size, 
+              validation_split = 0.15, verbose=False, shuffle=True)
 
     # Get the R2 score on the test-set
     Ynn=model.predict(Xtest)
@@ -108,9 +127,9 @@ def fitness(inp):
     R2=r2_score(Ytest,Ynn)
     
     #print the results
-    print('parameters=', inp, 'MSE=', np.round(mse,3))
+    print('parameters=', inp, 'MAE=', np.round(mae,3))
     
-    return mse
+    return mae
 
 
 #----------------------------------------------------------------
@@ -132,7 +151,7 @@ bounds['n_nodes7'] = ['int', 25, 50]
 npop=10
 ngen=10
 ncores=10
-colnames=list(bounds.keys()) + ['R2']
+colnames=list(bounds.keys()) + ['MAE']
 algs=['PESA', 'HHO', 'ES', 'BAT', 'GWO']
 results=np.zeros((len(algs), len(colnames)))
 if 1:
@@ -152,27 +171,33 @@ if 1:
     ########################
     # Setup and evolute HHO
     ########################
+    t0=time.time()
     hho = HHO(mode='min', bounds=bounds, fit=fitness, nhawks=npop,
                       int_transform='minmax', ncores=ncores, seed=1)
     x_hho, y_hho, hho_hist=hho.evolute(ngen=ngen, verbose=1)
+    print('HHO time=', time.time()-t0)
     results[1, :-1]=x_hho
     results[1, -1]=y_hho
     
     ########################
     # Setup and evolute ES
     ########################
+    t0=time.time()
     es = ES(mode='min', fit=fitness, cxmode='cx2point', bounds=bounds,
                      lambda_=npop, mu=5, cxpb=0.7, mutpb=0.2, ncores=ncores, seed=1)
     x_es, y_es, es_hist=es.evolute(ngen=ngen, verbose=1)
+    print('ES time=', time.time()-t0)
     results[2, :-1]=x_es
     results[2, -1]=y_es
     
     ########################
     # Setup and evolute BAT
     ########################
+    t0=time.time()
     bat=BAT(mode='min', bounds=bounds, fit=fitness, nbats=npop, fmin = 0 , fmax = 1,
             A=0.5, r0=0.5, levy = True, ncores=ncores, seed=1)
     x_bat, y_bat, bat_hist=bat.evolute(ngen=ngen, verbose=1)
+    print('BAT time=', time.time()-t0)
     results[3, :-1]=x_bat
     results[3, -1]=y_bat
     
@@ -181,7 +206,7 @@ if 1:
     ########################
     t0=time.time()
     gwo=GWO(mode='min', fit=fitness, bounds=bounds, nwolves=npop, ncores=ncores, seed=1)
-    x_gwo, y_gwo, gwo_hist=gwo.evolute(ngen=10, verbose=1)
+    x_gwo, y_gwo, gwo_hist=gwo.evolute(ngen=ngen, verbose=1)
     print('GWO time=', time.time()-t0)
     results[4, :-1]=x_gwo
     results[4, -1]=y_gwo
@@ -208,7 +233,7 @@ print(x_gwo)
 print(y_gwo)
 
 results=pd.DataFrame(results, index=algs, columns=colnames)
-sort_results = results.sort_values(['R2'], axis='index', ascending=True)
+sort_results = results.sort_values(['MAE'], axis='index', ascending=True)
 print(sort_results)
 sort_results.to_csv('control_tune.csv', index=True)
 

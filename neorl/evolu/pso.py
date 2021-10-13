@@ -339,7 +339,7 @@ class PSO:
     
         return offspring
 
-    def evolute(self, ngen, x0=None, verbose=True):
+    def evolute(self, ngen, x0=None, verbose=False):
         """
         This function evolutes the PSO algorithm for number of generations.
         
@@ -347,7 +347,7 @@ class PSO:
         :param x0: (list of lists) the initial position of the swarm particles
         :param verbose: (bool) print statistics to screen
         
-        :return: (dict) dictionary containing major PSO search results
+        :return: (tuple) (best individual, best fitness, and a list of fitness history)
         """
             
         self.best_scores=[]

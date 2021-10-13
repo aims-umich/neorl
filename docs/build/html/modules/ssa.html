@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Salp Swarm Algorithm (SSA) &mdash; NEORL 1.6.2b documentation</title>
+  <title>Salp Swarm Algorithm (SSA) &mdash; NEORL 1.6.3b documentation</title>
   
 
   
@@ -71,7 +71,7 @@
             
             
               <div class="version">
-                main (1.6.2b )
+                main (1.6.3b )
               </div>
             
           
@@ -271,7 +271,7 @@ If <code class="docutils literal notranslate"><span class="pre">None</span></cod
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="neorl.evolu.ssa.SSA.evolute">
-<span class="sig-name descname"><span class="pre">evolute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ngen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/evolu/ssa.html#SSA.evolute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.evolu.ssa.SSA.evolute" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">evolute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ngen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/evolu/ssa.html#SSA.evolute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.evolu.ssa.SSA.evolute" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function evolutes the SSA algorithm for number of generations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -282,7 +282,7 @@ If <code class="docutils literal notranslate"><span class="pre">None</span></cod
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>(dict) dictionary containing major SSA search results</p>
+<dd class="field-even"><p>(tuple) (best individual, best fitness, and dictionary containing major search results)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -327,7 +327,7 @@ If <code class="docutils literal notranslate"><span class="pre">None</span></cod
 <li><p>Therefore, if <code class="docutils literal notranslate"><span class="pre">c1=None</span></code>, the user should notice that <code class="docutils literal notranslate"><span class="pre">ngen</span></code> value used within the <code class="docutils literal notranslate"><span class="pre">.evolute</span></code> function has an impact on the <code class="docutils literal notranslate"><span class="pre">c1</span></code> value and hence on SSA overall performance.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">ncores</span></code> argument evaluates the fitness of all salps in the swarm in parallel. Therefore, set <code class="docutils literal notranslate"><span class="pre">ncores</span> <span class="pre">&lt;=</span> <span class="pre">nsalps</span></code> for most optimal resource allocation.</p></li>
 <li><p>Look for an optimal balance between <code class="docutils literal notranslate"><span class="pre">nsalps</span></code> and <code class="docutils literal notranslate"><span class="pre">ngen</span></code>, it is recommended to minimize the number of <code class="docutils literal notranslate"><span class="pre">nsalps</span></code> to allow for more updates and more generations.</p></li>
-<li><p>Total number of cost evaluations for SSA is <code class="docutils literal notranslate"><span class="pre">nsalps</span></code> * <code class="docutils literal notranslate"><span class="pre">ngen</span></code>.</p></li>
+<li><p>Total number of cost evaluations for SSA is <code class="docutils literal notranslate"><span class="pre">nsalps</span></code> * <code class="docutils literal notranslate"><span class="pre">(ngen</span> <span class="pre">+</span> <span class="pre">1)</span></code>.</p></li>
 </ul>
 </div>
 </div>

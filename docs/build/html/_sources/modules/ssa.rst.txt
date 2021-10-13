@@ -45,4 +45,4 @@ Notes
 - Therefore, if ``c1=None``, the user should notice that ``ngen`` value used within the ``.evolute`` function has an impact on the ``c1`` value and hence on SSA overall performance.
 - ``ncores`` argument evaluates the fitness of all salps in the swarm in parallel. Therefore, set ``ncores <= nsalps`` for most optimal resource allocation.
 - Look for an optimal balance between ``nsalps`` and ``ngen``, it is recommended to minimize the number of ``nsalps`` to allow for more updates and more generations.
-- Total number of cost evaluations for SSA is ``nsalps`` * ``ngen``.
+- Total number of cost evaluations for SSA is ``nsalps`` * ``(ngen + 1)``.

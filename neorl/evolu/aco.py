@@ -111,7 +111,7 @@ class ACO(object):
                 vec_new.append(vec[i])
         return np.array(vec_new)
                       
-    def evolute(self, ngen, x0=None, verbose=0):
+    def evolute(self, ngen, x0=None, verbose=False):
         """
         This function evolutes the ACO algorithm for number of generations
         
@@ -119,7 +119,7 @@ class ACO(object):
         :param x0: (list of lists) the initial individuals of the population
         :param verbose: (bool) print statistics to screen
         
-        :return: (tuple) (best position, best fitness, and list of fitness history)
+        :return: (tuple) (best individual, best fitness, and list of fitness history)
         """
         if x0:
             assert len(x0) == self.nants, '--error: the length of x0 ({}) (initial population) must equal to number of ants ({})'.format(len(x0), self.nants)

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Modern PESA (PESA2) &mdash; NEORL 1.6.2b documentation</title>
+  <title>Modern PESA (PESA2) &mdash; NEORL 1.6.3b documentation</title>
   
 
   
@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                main (1.6.2b )
+                main (1.6.3b )
               </div>
             
           
@@ -292,7 +292,7 @@ Also, <code class="docutils literal notranslate"><span class="pre">R_frac</span>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="neorl.hybrid.pesa2.PESA2.evolute">
-<span class="sig-name descname"><span class="pre">evolute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ngen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replay_every</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warmup</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/hybrid/pesa2.html#PESA2.evolute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.hybrid.pesa2.PESA2.evolute" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">evolute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ngen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replay_every</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warmup</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/hybrid/pesa2.html#PESA2.evolute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.hybrid.pesa2.PESA2.evolute" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function evolutes the PESA2 algorithm for number of generations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -305,7 +305,7 @@ Also, <code class="docutils literal notranslate"><span class="pre">R_frac</span>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>(dict) dictionary containing major PESA search results</p>
+<dd class="field-even"><p>(tuple) (best individual, best fitness, and a list of fitness history)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -351,7 +351,7 @@ Also, <code class="docutils literal notranslate"><span class="pre">R_frac</span>
 <li><p>Check the sections of <a class="reference internal" href="gwo.html#gwo"><span class="std std-ref">GWO</span></a>, <a class="reference internal" href="woa.html#woa"><span class="std std-ref">WOA</span></a>, and <a class="reference internal" href="de.html#de"><span class="std std-ref">DE</span></a> for notes on the internal algorithms and the auxiliary parameters of PESA2.</p></li>
 <li><p>Start the prioritized replay with a small fraction for <code class="docutils literal notranslate"><span class="pre">alpha_init</span> <span class="pre">&lt;</span> <span class="pre">0.1</span></code> to increase randomness earlier to improve PESA exploration. Choose a high fraction for <code class="docutils literal notranslate"><span class="pre">alpha_end</span> <span class="pre">&gt;</span> <span class="pre">0.9</span></code> to increase exploitation by the end of evolution.</p></li>
 <li><p>Look for an optimal balance between <code class="docutils literal notranslate"><span class="pre">npop</span></code> and <code class="docutils literal notranslate"><span class="pre">ngen</span></code>, it is recommended to minimize population size to allow for more generations.</p></li>
-<li><p>Total number of cost evaluations for PESA2 is <code class="docutils literal notranslate"><span class="pre">ngen*npop*3</span></code>.</p></li>
+<li><p>Total number of cost evaluations for PESA2 is <code class="docutils literal notranslate"><span class="pre">ngen*npop*3</span> <span class="pre">+</span> <span class="pre">warmup</span></code>.</p></li>
 </ul>
 </div>
 </div>

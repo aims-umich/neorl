@@ -211,7 +211,7 @@ class PPOES(object):
         :param ncores: (int) number of parallel processors to use with ES 
         :param verbose: (bool) print statistics to screen
         
-        :return: (dict) dictionary containing major PPO-ES search results
+        :return: (tuple) (best individual, best fitness, and a list of fitness history)
         """
         print('------------------------------- Part II: ES is running and informed by PPO -------------------------------')
         

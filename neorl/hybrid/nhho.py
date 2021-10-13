@@ -144,7 +144,7 @@ class NHHO(object):
             
             #----------------------------------------
 
-    def evolute(self, ngen, x0=None, verbose=True):
+    def evolute(self, ngen, x0=None, verbose=False):
         """
         This function evolutes the NHHO algorithm for number of generations.
 
@@ -152,7 +152,7 @@ class NHHO(object):
         :param x0: (list of lists) initial position of the hawks (must be of same size as ``nhawks``)
         :param verbose: (bool) print statistics to screen
 
-        :return: (tuple) (best position, best fitness, and dictionary containing major search results)
+        :return: (tuple) (list of best individuals, list of best fitnesses)
         """
         if self.seed:
             random.seed(self.seed)

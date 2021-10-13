@@ -44,4 +44,4 @@ Notes
 - Start the prioritized replay with a small fraction for ``alpha_init < 0.1`` to increase randomness earlier to improve PESA exploration. Choose a high fraction for ``alpha_end > 0.9`` to increase exploitation by the end of evolution.    
 - The rate of ``alpha_backdoor`` replaces the regular random-walk sample of SA with the best individual in the replay memory to keep SA chain up-to-date. For example, ``alpha_backdoor=0.1`` implies that out of 10 individuals in the SA chain, 1 comes from the memory and the other 9 come from classical random-walk. Keep the value of ``alpha_backdoor`` small enough, e.g. ``alpha_backdoor < 0.2``, to avoid SA divergence. 
 - Look for an optimal balance between ``npop`` and ``ngen``, it is recommended to minimize population size to allow for more generations.
-- Total number of cost evaluations for PESA is ``ngen*npop*3``.
+- Total number of cost evaluations for PESA is ``ngen*npop*3 + warmup``.

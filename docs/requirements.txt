@@ -4,6 +4,7 @@ tensorflow==1.14.0
 numpy
 neat-python
 scikit-learn
+scikit-optimize
 gym
 cloudpickle
 scipy

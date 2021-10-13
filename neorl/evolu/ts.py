@@ -209,7 +209,7 @@ class TS(object):
                 tempposition[i] = random.uniform(j[0],j[1])
         return tempposition
         
-    def evolute(self,ngen,x0=None, verbose=True):
+    def evolute(self,ngen,x0=None, verbose=False):
         """
         This function evolutes the TS algorithm for number of generations
         
@@ -217,7 +217,7 @@ class TS(object):
         :param x0: (list) initial position of the tabu (vector size must be of same size as ``len(bounds)``)
         :param verbose: (bool) print statistics to screen
         
-        :return: (tuple) (best tabu position, best fitness, and dictionary of fitness history)
+        :return: (tuple) (best individual, best fitness, and dictionary containing major search results)
         """
         self.history = {'local_fitness':[], 'global_fitness':[]}
         self.best_fitness=float("inf") 

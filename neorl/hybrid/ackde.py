@@ -199,7 +199,7 @@ class ACKDE(object):
         :param ncores: (int) number of parallel processors to use with DE 
         :param verbose: (bool) print statistics to screen
         
-        :return: (dict) dictionary containing major ACKTR-DE search results
+        :return: (tuple) (best individual, best fitness, and a list of fitness history)
         """
         print('------------------------------- Part II: DE is running and informed by ACKTR -------------------------------')
         
@@ -217,11 +217,11 @@ class ACKDE(object):
         
         de=DE(mode=self.mode, bounds=self.bounds, fit=self.fit, npop=self.npop, F=self.F, 
               CR=self.CR, ncores=ncores, int_transform='nearest_int', seed=self.seed, **rl_kwargs)
-        x_best, y_best, es_hist=de.evolute(ngen=ngen, x0=x0, verbose=verbose)
+        x_best, y_best, de_hist=de.evolute(ngen=ngen, x0=x0, verbose=verbose)
 
         print('************************* ACKTR-DE Summary *************************')
         print('Best fitness (y) found:', x_best)
         print('Best individual (x) found:', y_best)
         print('******************************************************************')
             
-        return x_best, y_best, es_hist
+        return x_best, y_best, de_hist

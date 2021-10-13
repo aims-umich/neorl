@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.utils.neorlcalls &mdash; NEORL 1.6.2b documentation</title>
+  <title>neorl.utils.neorlcalls &mdash; NEORL 1.6.3b documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.6.2b )
+                main (1.6.3b )
               </div>
             
           
@@ -257,14 +257,8 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Callback for saving a model (the check is done every ``check_freq`` steps)</span>
 <span class="sd">    based on the training reward (in practice, we recommend using ``EvalCallback``).</span>
-
-<span class="sd">    :param check_freq: (int)</span>
-<span class="sd">    :param log_dir: (str) Path to the folder where the model will be saved.</span>
-<span class="sd">      It must contains the file created by the ``Monitor`` wrapper.</span>
-<span class="sd">    :param verbose: (int)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">check_freq</span><span class="p">,</span> <span class="n">avg_step</span><span class="p">,</span> <span class="n">log_dir</span><span class="p">,</span> <span class="n">total_timesteps</span><span class="p">,</span> <span class="n">basecall</span><span class="p">,</span> <span class="n">plot_mode</span><span class="o">=</span><span class="s1">&#39;subplot&#39;</span><span class="p">):</span>
-        <span class="c1">#super(SavePlotCallback, self).__init__(verbose)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="o">=</span><span class="n">basecall</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">plot_mode</span><span class="o">=</span><span class="n">plot_mode</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_calls</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">n_calls</span>
@@ -303,7 +297,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path</span><span class="p">)</span>   <span class="c1">#latest model</span>
               
         <span class="bp">self</span><span class="o">.</span><span class="n">out_data</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span><span class="o">+</span><span class="s1">&#39;_out.csv&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">inp_data</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span><span class="o">+</span><span class="s1">&#39;_inp.csv&#39;</span><span class="p">)</span>     
         <span class="c1">#-------------------</span>
         <span class="c1"># Progress Plot</span>
         <span class="c1">#-------------------</span>
@@ -315,7 +308,7 @@
             <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_timesteps</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_freq</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_timesteps</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_timesteps</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">runcall</span><span class="p">()</span>
         <span class="k">except</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--warning: try to plot empty csv loggers, increase `check_freq` to a value larger than time needed to firstly update csv loggers&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--warning: No plot is generated, NEORL tried to plot the output csv logger, but failed for some reason, you may increase `check_freq` to a large value to allow some data printed in the csv logger&#39;</span><span class="p">)</span>
         
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_timesteps</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_timesteps</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;system exit&#39;</span><span class="p">)</span>
@@ -446,7 +439,7 @@
 <span class="sd">    :param save_model: (bool) whether or not to save the RL neural network model (model is saved every ``check_freq``)</span>
 <span class="sd">    :param model_name: (str) name of the model to be saved  if ``save_model=True``</span>
 <span class="sd">    :param save_best_only: (bool) if ``save_model = True``, then this flag only saves the model if the fitness value improves. </span>
-<span class="sd">    :param verbose: (int) print updates to the screen</span>
+<span class="sd">    :param verbose: (bool) print updates to the screen</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">check_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">plot_freq</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_avg_steps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">pngname</span><span class="o">=</span><span class="s1">&#39;history&#39;</span><span class="p">,</span> 
                  <span class="n">save_model</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s1">&#39;bestmodel.pkl&#39;</span><span class="p">,</span> <span class="n">save_best_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 

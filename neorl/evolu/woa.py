@@ -220,7 +220,7 @@ class WOA(object):
             self.Positions[i, :] = self.ensure_discrete(self.Positions[i,:])
 
 
-    def evolute(self, ngen, x0=None, verbose=True):
+    def evolute(self, ngen, x0=None, verbose=False):
         """
         This function evolutes the WOA algorithm for number of generations.
         
@@ -228,7 +228,7 @@ class WOA(object):
         :param x0: (list of lists) initial position of the whales (must be of same size as ``nwhales``)
         :param verbose: (bool) print statistics to screen
         
-        :return: (dict) dictionary containing major WOA search results
+        :return: (tuple) (best individual, best fitness, and dictionary containing major search results)
         """
         self.history = {'local_fitness':[], 'global_fitness':[], 'a': [], 'A': []}
         self.best_fitness=float("inf") 

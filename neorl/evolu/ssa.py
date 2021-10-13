@@ -217,7 +217,7 @@ class SSA(object):
             self.Positions = np.transpose(self.Positions)
             
 
-    def evolute(self, ngen, x0=None, verbose=True):
+    def evolute(self, ngen, x0=None, verbose=False):
         """
         This function evolutes the SSA algorithm for number of generations.
         
@@ -225,7 +225,7 @@ class SSA(object):
         :param x0: (list of lists) initial position of the salps (must be of same size as ``nsalps``)
         :param verbose: (bool) print statistics to screen
         
-        :return: (dict) dictionary containing major SSA search results
+        :return: (tuple) (best individual, best fitness, and dictionary containing major search results)
         """
         self.history = {'local_fitness':[], 'global_fitness':[], 'c1': []}
         self.best_fitness=float("inf") 

@@ -44,5 +44,5 @@ Notes
 - Too small ``cxpb`` and ``mutpb`` reduce ES exploration, and increase the likelihood of falling in a local optima.
 - Usually, population size ``lambda_`` between 60-100 shows good performance along with ``mu=0.5*lambda_``. 
 - Look for an optimal balance between ``lambda_`` and ``ngen``, it is recommended to minimize population size to allow for more generations.
-- Total number of cost evaluations for ES is ``npop`` * ``ngen``.
+- Total number of cost evaluations for ES is ``lambda_`` * ``(ngen + 1)``.
 - ``cxmode='blend'`` with ``alpha=0.5`` may perform better than ``cxmode='cx2point'``.

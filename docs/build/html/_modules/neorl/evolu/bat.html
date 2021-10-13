@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.evolu.bat &mdash; NEORL 1.6 documentation</title>
+  <title>neorl.evolu.bat &mdash; NEORL 1.6.3b documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.6 )
+                main (1.6.3b )
               </div>
             
           
@@ -448,15 +448,15 @@
         <span class="n">step</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">zz</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">step</span>
 
-<div class="viewcode-block" id="BAT.evolute"><a class="viewcode-back" href="../../../modules/bat.html#neorl.evolu.bat.BAT.evolute">[docs]</a>    <span class="k">def</span> <span class="nf">evolute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ngen</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="BAT.evolute"><a class="viewcode-back" href="../../../modules/bat.html#neorl.evolu.bat.BAT.evolute">[docs]</a>    <span class="k">def</span> <span class="nf">evolute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ngen</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function evolutes the BAT algorithm for number of generations.</span>
 <span class="sd">        </span>
 <span class="sd">        :param ngen: (int) number of generations to evolute</span>
 <span class="sd">        :param x0: (list of lists) initial position of the bats (must be of same size as ``nbats``)</span>
 <span class="sd">        :param verbose: (bool) print statistics to screen</span>
-<span class="sd">        </span>
-<span class="sd">        :return: (dict) dictionary containing major BAT search results</span>
+<span class="sd">		</span>
+<span class="sd">        :return: (tuple) (best individual, best fitness, and dictionary containing major search results)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">history</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;local_fitness&#39;</span><span class="p">:[],</span> <span class="s1">&#39;global_fitness&#39;</span><span class="p">:[],</span> <span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s1">&#39;r&#39;</span><span class="p">:</span> <span class="p">[]}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fbest</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)</span>
