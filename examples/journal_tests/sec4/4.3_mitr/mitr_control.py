@@ -36,11 +36,11 @@ noisy_data=True
 
 #---------------------------
 #(a). Load data from url
-xurl='crx.csv'
+xurl='./data/crx.csv'
 if noisy_data:
-    yurl='final_noisy_powery.csv'
+    yurl='./data/final_noisy_powery.csv'
 else:
-    yurl='powery.csv'
+    yurl='./data/powery.csv'
 xdata=pd.read_csv(xurl)
 ydata=pd.read_csv(yurl)
 colnames=list(ydata.columns)

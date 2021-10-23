@@ -26,6 +26,7 @@ from neorl.rl.baselines.shared.callbacks import BaseCallback
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 import os
+import copy
 
 class SavePlotCallback(BaseCallback):
     """
@@ -62,12 +63,15 @@ class SavePlotCallback(BaseCallback):
         mean_reward = np.mean(y[-self.avg_step:])
                
         # New best model, you could save the agent here
+        print('--debug: current mean reward={}, previous best mean reward = {}'.format(np.round(mean_reward), np.round(self.best_mean_reward)))
         if mean_reward > self.best_mean_reward:
-              self.best_mean_reward = mean_reward
+              self.best_mean_reward = copy.copy(mean_reward)
               #saving best model
+              print('--debug: improvement in reward is observed, new best model is saved to {}'.format(self.best_save_path))
               self.model.save(self.best_save_path)    #best model found so far
 
         #saving current model
+        print('--debug: current model model is saved to {}'.format(self.save_path))
         self.model.save(self.save_path)   #latest model
               
         self.out_data=pd.read_csv(self.log_dir+'_out.csv')

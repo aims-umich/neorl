@@ -184,6 +184,7 @@ setup(
                       'scikit-optimize==0.8.1',
                       'cloudpickle >= 1.2.2',
                       'h5py < 2.10.0',    #for windows version (NHHO fails with model load)
+					  'scikit-learn <= 0.24.2',
                       'neat-python', 
                       'scipy',
                       'joblib',
