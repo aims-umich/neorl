@@ -12,11 +12,73 @@
 #    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #    SOFTWARE.
 
+#TODO: for nonuniform weights need to incorporate fitness values at the member level
 class Population:
     # Class to store information and functionality related to a single population
     # in the AEO algorithm. Should be characterized by an evolution strategy passed
     # as one of the optimization classes from the other algorithms in NEORL.
-    def __init__(self, strategy, pop_attr, conv = None):
-        print("we are running this")
-        pass
+    def __init__(self, strategy, init_pop, conv = None):
+        # strategy should be one of the optimization objects containing an "evolute" method
+        # init_pop needs to match the population given to the strategy object initially
+        # conv is a function which takes ngen and returns number of evaluations
+        self.conv = conv
+        self.strategy = strategy
+        self.members = [strategy.init_sample(strategy.bounds) for i in range(init_pop)]
+
+        self.fitlog = []
+
+    @property
+    def fitness(self):
+        return self.fitlog[-1]
+
+    def evolute(self, ngen):
+        #perform evolution and store relevant information
+        self.fitlog.append(self.strategy.evolute(ngen, x0 = self.members)[1])
+        self.members = self.strategy.Positions.tolist()
+
+    #TODO: method to export members, return them and remove from list
+    #TODO: method to reviece members, update them in members
+    #TODO: calc strength method, no need to normalize, may need some scaling parametrs
+
+class AEO(object):
+    """
+    Animorphoc Ensemble Optimizer
+
+    :param mode: (str) problem type, either "min" for minimization problem or "max" for maximization
+    :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: ``bounds={'x1': ['int', 1, 4], 'x2': ['float', 0.1, 0.8], 'x3': ['float', 2.2, 6.2]}``
+    :param fit: (function) the fitness function
+    :param optimizers: (list) list of optimizer instances to be included in the ensemble
+    :param ncores: (int) number of parallel processors
+    :param seed: (int) random seed for sampling
+    """
+    def __init__(self, mode, bounds, fit, optimizers, ncores = 1, seed = None):
+
+        if not (seed is None):
+            random.seed(seed)
+            np.random.seed(seed)
+
+        self.mode=mode
+        if mode == 'min':
+            self.fit=fit
+        elif mode == 'max':
+            def fitness_wrapper(*args, **kwargs):
+                return -fit(*args, **kwargs) 
+            self.fit=fitness_wrapper
+        else:
+            raise ValueError('--error: The mode entered by user is invalid, use either `min` or `max`')
+
+        #infer variable types 
+        self.var_type = np.array([bounds[item][0] for item in bounds])
+
+        self.dim = len(bounds)
+        self.lb=[self.bounds[item][1] for item in self.bounds]
+        self.ub=[self.bounds[item][2] for item in self.bounds]
+
+        #TODO: set up checker to make sure options consistent across optimizers
+        #TODO: Initialize populations
+    #TODO: Set up evolute method
+    #TODO: Set up migration method with 3 phases and markov matrix calculation
+
+
+
 
