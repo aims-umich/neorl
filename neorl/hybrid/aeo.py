@@ -28,7 +28,7 @@ class Population:
         # conv is a function which takes ngen and returns number of evaluations
         self.conv = conv
         self.strategy = strategy
-        self.members = [strategy.init_sample(strategy.bounds) for i in range(init_pop)]
+        self.members = init_pop
 
         self.fitlog = []
 
@@ -128,6 +128,7 @@ class AEO(object):
         :param pop0: (list of ints) population assignments for x0, integer corresponding to assigned population ordered
             according to self.optimize
         """
+        #intepret npop0 or x0 and pop0 input
         if x0 is not None:
             if npop0 is not None:
                 print('--warning: x0 and npop0 is defined, ignoring npop0')
@@ -141,10 +142,19 @@ class AEO(object):
             dup = [[i]*npop0[i] for i in range(len(npop0))]
             pop0 = list(itertools.chain.from_iterable(dup))
 
-        pass
+        #separate starting positions according to optimizer/strategy, initialize Population objs
+        self.pops = []
+        for i in range(len(self.optimizers)):
+            xpop = []
+            for x, p in zip(x0, pop0):
+                if p == i:
+                    xpop.append(x)
+            self.pops.append(Population(self.optimizers[i], xpop))
 
+
+    #TODO: set up input intepreter which allows for selection of variants
     #TODO: Set up evolute method
-        #TODO: Initialize populations
+        #TODO: Initialize populations*
         #TODO: write in verbose reporting
     #TODO: Set up migration method with 3 phases and markov matrix calculation
 
