@@ -82,7 +82,7 @@ class AEO(object):
         self.lb=[self.bounds[item][1] for item in self.bounds]
         self.ub=[self.bounds[item][2] for item in self.bounds]
 
-        #check that all optimizers have options that match
+        #check that all optimizers have options that match AEO
         self.ensure_consistency()
 
     def ensure_consistency(self):
@@ -98,6 +98,20 @@ class AEO(object):
                 assert self.fit(inner_test) == o.fit(inner_test)
             except:
                 raise Exception('i%s has incorrect fitness function'%o + gen_warning)
+
+    def init_sample(self, bounds):
+
+        indv=[]
+        for key in bounds:
+            if bounds[key][0] == 'int':
+                indv.append(random.randint(bounds[key][1], bounds[key][2]))
+            elif bounds[key][0] == 'float':
+                indv.append(random.uniform(bounds[key][1], bounds[key][2]))
+            #elif bounds[key][0] == 'grid':
+            #    indv.append(random.sample(bounds[key][1],1)[0])
+            else:
+                raise Exception ('unknown data type is given, either int, float, or grid are allowed for parameter bounds')   
+        return indv
 
         #TODO: Initialize populations
     #TODO: Set up evolute method
