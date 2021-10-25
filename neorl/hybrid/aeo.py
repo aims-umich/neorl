@@ -15,6 +15,8 @@
 #TODO: for nonuniform weights need to incorporate fitness values at the member level
 
 import numpy as np
+import itertools
+import random
 
 class Population:
     # Class to store information and functionality related to a single population
@@ -51,10 +53,11 @@ class AEO(object):
     :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: ``bounds={'x1': ['int', 1, 4], 'x2': ['float', 0.1, 0.8], 'x3': ['float', 2.2, 6.2]}``
     :param fit: (function) the fitness function
     :param optimizers: (list) list of optimizer instances to be included in the ensemble
+    :param gen_per_cycle: (int) number of generations performed in evolution phase per cycle
     :param ncores: (int) number of parallel processors
     :param seed: (int) random seed for sampling
     """
-    def __init__(self, mode, bounds, fit, optimizers, ncores = 1, seed = None):
+    def __init__(self, mode, bounds, fit, optimizers, gen_per_cycle, ncores = 1, seed = None):
 
         if not (seed is None):
             random.seed(seed)
@@ -71,6 +74,7 @@ class AEO(object):
             raise ValueError('--error: The mode entered by user is invalid, use either `min` or `max`')
 
         self.optimizers = optimizers
+        self.gpc = gen_per_cycle
 
         self.bounds = bounds
         self.ncores = ncores
@@ -110,11 +114,38 @@ class AEO(object):
             #elif bounds[key][0] == 'grid':
             #    indv.append(random.sample(bounds[key][1],1)[0])
             else:
-                raise Exception ('unknown data type is given, either int, float, or grid are allowed for parameter bounds')   
+                raise Exception ('unknown data type is given, either int, float, or grid are allowed for parameter bounds')
         return indv
 
-        #TODO: Initialize populations
+    def evolute(self, ncyc, npop0 = None, x0 = None, pop0 = None, verbose = False):
+        """
+        This function evolutes the AEO algorithm for a number of cycles. Either
+        npop0 or x0 and pop0 are required.
+
+        :param ncyc: (int) number of cycles to evolute
+        :param pop0: (list of ints) number of individuals in starting population for each optimizer
+        :param x0: (list of lists) initial positions of individuals in problem space
+        :param pop0: (list of ints) population assignments for x0, integer corresponding to assigned population ordered
+            according to self.optimize
+        """
+        if x0 is not None:
+            if npop0 is not None:
+                print('--warning: x0 and npop0 is defined, ignoring npop0')
+            if pop0 is None:
+                raise Exception('need to assign individuals in x0 to populations with different evolution'\
+                        + ' strategies by using the pop0 argument where a list of integers is used of equal'\
+                        + ' length to x0 telling where each individual belongs.')
+            assert len(x0) == len(pop0), 'x0 and pop0 must be ov equal length'
+        else:
+            x0 = [self.init_sample(self.bounds) for i in range(sum(npop0))]
+            dup = [[i]*npop0[i] for i in range(len(npop0))]
+            pop0 = list(itertools.chain.from_iterable(dup))
+
+        pass
+
     #TODO: Set up evolute method
+        #TODO: Initialize populations
+        #TODO: write in verbose reporting
     #TODO: Set up migration method with 3 phases and markov matrix calculation
 
 
