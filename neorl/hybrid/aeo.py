@@ -13,6 +13,9 @@
 #    SOFTWARE.
 
 #TODO: for nonuniform weights need to incorporate fitness values at the member level
+
+import numpy as np
+
 class Population:
     # Class to store information and functionality related to a single population
     # in the AEO algorithm. Should be characterized by an evolution strategy passed
@@ -67,6 +70,11 @@ class AEO(object):
         else:
             raise ValueError('--error: The mode entered by user is invalid, use either `min` or `max`')
 
+        self.optimizers = optimizers
+
+        self.bounds = bounds
+        self.ncores = ncores
+
         #infer variable types 
         self.var_type = np.array([bounds[item][0] for item in bounds])
 
@@ -74,7 +82,23 @@ class AEO(object):
         self.lb=[self.bounds[item][1] for item in self.bounds]
         self.ub=[self.bounds[item][2] for item in self.bounds]
 
-        #TODO: set up checker to make sure options consistent across optimizers
+        #check that all optimizers have options that match
+        self.ensure_consistency()
+
+    def ensure_consistency(self):
+        #loop through all optimizers and make sure all options are set to be the same
+        gen_warning = ', check that options of all optimizers are the same as AEO'
+        for o in self.optimizers:
+            assert self.mode == o.mode,'%s has incorrect optimization mode'%o + gen_warning
+            assert self.bounds == o.bounds,'%s has incorrect bounds'%o + gen_warning
+            try:
+                assert self.fit(self.lb) == o.fit(self.lb)
+                assert self.fit(self.ub) == o.fit(self.ub)
+                inner_test = [np.random.uniform(self.lb[i], self.ub[i]) for i in range(len(self.ub))]
+                assert self.fit(inner_test) == o.fit(inner_test)
+            except:
+                raise Exception('i%s has incorrect fitness function'%o + gen_warning)
+
         #TODO: Initialize populations
     #TODO: Set up evolute method
     #TODO: Set up migration method with 3 phases and markov matrix calculation
