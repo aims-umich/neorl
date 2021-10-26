@@ -292,6 +292,7 @@ class DE:
                     score_trial_lst.append(self.fit_worker(item))  
                 for item in x_t_lst:
                     score_target_lst.append(self.fit_worker(item))  
+            
             #-----------------------------
             #Selection
             #-----------------------------

@@ -23,6 +23,7 @@ import math
 import joblib
 from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
 from neorl.utils.seeding import set_neorl_seed
+from neorl.utils.tools import get_population
 
 class MFO:
     """
@@ -211,8 +212,8 @@ class MFO:
         double_sorted_population = np.zeros((2*N, dim))
         double_fitness_sorted = np.zeros(2*N)
         # previous generation
-        previous_population = np.zeros((N, dim))
-        previous_fitness = np.zeros(N)
+        self.previous_population = np.zeros((N, dim))
+        self.previous_fitness = np.zeros(N)
         
         ## main loop
         for gen in range(1, ngen+1):
@@ -252,8 +253,8 @@ class MFO:
 
             else: # #OF may > #OM
                 
-                double_population = np.concatenate((previous_population, best_flames), axis=0)
-                double_fitness = np.concatenate((previous_fitness, best_flame_fitness), axis=0)
+                double_population = np.concatenate((self.previous_population, best_flames), axis=0)
+                double_fitness = np.concatenate((self.previous_fitness, best_flame_fitness), axis=0)
                 
                 double_fitness_sorted = np.sort(double_fitness)
                 I2 = np.argsort(double_fitness)
@@ -269,9 +270,9 @@ class MFO:
             Best_flame_score = fitness_sorted[0]
             Best_flame_pos = sorted_population[0, :]
 
-            # previous
-            previous_population = np.copy(Moth_pos)  # if not using np.copy(),changes of Moth_pos after this code will also change previous_population!  
-            previous_fitness = np.copy(Moth_fitness) # because of the joblib..
+            # previous for logging
+            self.previous_population = np.copy(Moth_pos)  # if not using np.copy(),changes of Moth_pos after this code will also change previous_population!  
+            self.previous_fitness = np.copy(Moth_fitness) # because of the joblib..
 
             # r linearly dicreases from -1 to -2 to calculate t in Eq. (3.12)
             r = -1 + gen * ((-1) / ngen)
@@ -342,5 +343,10 @@ class MFO:
             print('Best fitness (y) found:', self.fitness_best_correct)
             print('Best individual (x) found:', self.moth_correct)
             print('--------------------------------------------------------------')
+            
+        if self.mode=='max':
+            self.previous_fitness=-self.previous_fitness
+            
+        self.history['last_pop'] = get_population(self.previous_population, fits=self.previous_fitness)        
                 
         return self.moth_correct, self.fitness_best_correct, self.history

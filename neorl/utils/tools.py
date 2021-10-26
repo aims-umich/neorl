@@ -43,7 +43,13 @@ def get_population(pop, fits=None):
         for i, indv in enumerate(pop):
             df_pop[i,:d]=indv
             df_pop[i,-1]=fits[i]
-    
+
+    elif type(pop).__module__ == 'numpy':   
+        #GWO, HHO, MFO, WOA mainly
+        npop, d=pop.shape
+        if fits is not None:
+            assert len(fits) == npop, '--error: the size of fits and pop are not equal, pop cannot be constructed'
+        df_pop=np.c_[pop, np.array(fits)]
     else:
         raise ('--warning: population data structure type cannot be identified, the population cannot be reconstructed')
     

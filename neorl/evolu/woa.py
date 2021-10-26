@@ -27,6 +27,7 @@ import time
 import joblib
 from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
 from neorl.utils.seeding import set_neorl_seed
+from neorl.utils.tools import get_population
 
 class WOA(object):
     """
@@ -308,6 +309,12 @@ class WOA(object):
             print('Best fitness (y) found:', self.fitness_best_correct)
             print('Best individual (x) found:', self.whale_correct)
             print('--------------------------------------------------------------')  
-            
+        
+        if self.mode=='min':
+            fitness=np.array(fitness)
+        else:
+            fitness=-np.array(fitness)
+        self.history['last_pop'] = get_population(self.Positions, fits=fitness)
+        
         return self.whale_correct, self.fitness_best_correct, self.history
 
