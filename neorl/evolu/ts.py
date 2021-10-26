@@ -26,6 +26,7 @@ import joblib
 from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
 from itertools import combinations
 import copy 
+from neorl.utils.seeding import set_neorl_seed
 
 class TS(object):
     """
@@ -44,9 +45,7 @@ class TS(object):
     """
     def __init__(self, mode, bounds, fit, tabu_tenure=6, penalization_weight = 0.8, swap_mode = "perturb", ncores=1, seed=None):
         
-        if seed:
-            random.seed(seed)
-            np.random.seed(seed)
+        set_neorl_seed(seed)
         assert ncores == 1,'-error: parallel implementaiton is not yet available. ncores ({}) should be equal to 1.'.format(ncores)
         #assert ncores <= len(bounds), '--error: ncores ({}) must be less than or equal than the length of an individual solution ({})'.format(ncores, len(bounds))
         

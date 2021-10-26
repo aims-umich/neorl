@@ -23,6 +23,7 @@ from collections import defaultdict
 import multiprocessing
 import multiprocessing.pool
 from neorl.evolu.discrete import mutate_discrete
+from neorl.utils.seeding import set_neorl_seed
 class NoDaemonProcess(multiprocessing.Process):
     # make 'daemon' attribute always return False
     def _get_daemon(self):
@@ -51,9 +52,7 @@ class DEmod:
     def __init__ (self, bounds, fit, npop=50, F=0.5, CR=0.3, int_transform ='nearest_int', ncores=1, seed=None):  
 
         self.seed=seed
-        if self.seed:
-            random.seed(self.seed)
-            np.random.seed(self.seed)
+        set_neorl_seed(self.seed)
         
         assert npop > 4, '--error: size of npop must be more than 4'
         self.npop=npop
@@ -161,10 +160,7 @@ class DEmod:
         :return: (dict) dictionary containing major DE search results
         """
         
-        if self.seed:
-            random.seed(self.seed)
-            np.random.seed(self.seed)
-
+        set_neorl_seed(self.seed)
         #--- INITIALIZE the population
         
         if x0 is not None:

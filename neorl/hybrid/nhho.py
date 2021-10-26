@@ -30,6 +30,7 @@ from neorl.hybrid.nhhocore.nnmodel import NNmodel
 from neorl.hybrid.nhhocore.hho import HHO
 from tensorflow.keras.models import load_model
 import shutil
+from neorl.utils.seeding import set_neorl_seed
 
 import multiprocessing
 import multiprocessing.pool
@@ -68,16 +69,14 @@ class NHHO(object):
                  nn_params = {}, ncores=1, seed=None):
         
         self.seed = seed
-        if seed:
-            random.seed(seed)
-            np.random.seed(seed)
+        set_neorl_seed(self.seed)
 
         #-------------------------------------------------------
         #construct a main HHO model based on the core directory
         #--------------------------------------------------------
         self.hho=HHO(mode=mode, bounds=bounds,
                 fit=fit, nhawks=nhawks, int_transform=int_transform,
-                ncores=ncores, seed=seed)
+                ncores=ncores, seed=self.seed)
 
         assert mode == 'min' or mode == 'max', "Mode must be 'max' or 'min'."
         self.mode = mode
@@ -154,9 +153,7 @@ class NHHO(object):
 
         :return: (tuple) (list of best individuals, list of best fitnesses)
         """
-        if self.seed:
-            random.seed(self.seed)
-            np.random.seed(self.seed)
+        set_neorl_seed(self.seed)
         self.verbose = verbose
 
         self.history = {'local_fitness':[], 'best_hawk':[]}

@@ -33,6 +33,7 @@ import time
 import joblib
 from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
 import matplotlib.pyplot as plt
+from neorl.utils.seeding import set_neorl_seed
 
 class HHO(object):
     """
@@ -47,10 +48,9 @@ class HHO(object):
     :param seed: (int) random seed for sampling
     """
     def __init__(self, mode, bounds, fit, nhawks, int_transform='nearest_int', ncores=1, seed=None):
+        
         self.seed = seed
-        if seed:
-            random.seed(seed)
-            np.random.seed(seed)
+        set_neorl_seed(self.seed)
 
         assert mode == 'min' or mode == 'max', "Mode must be 'max' or 'min'."
         self.mode = mode
@@ -89,9 +89,7 @@ class HHO(object):
         
         :return: (tuple) (best individual, best fitness, and dictionary containing major search results)
         """
-        if self.seed:
-            random.seed(self.seed)
-            np.random.seed(self.seed)
+        set_neorl_seed(self.seed)
 
         self.history = {'local_fitness':[], 'global_fitness':[]}
         self.rabbit_energy = float("inf")

@@ -108,8 +108,8 @@ pesa2_x, pesa2_y, pesa2_hist=pesa2.evolute(ngen=600, replay_every=2, verbose=0)
 # Plot
 #---------------------------------
 plt.figure()
-plt.plot(pso_hist, label = 'PSO')
-plt.plot(de_hist, label = 'DE')
+plt.plot(pso_hist['global_fitness'], label = 'PSO')
+plt.plot(de_hist['global_fitness'], label = 'DE')
 plt.plot(ssa_hist['global_fitness'], label = 'SSA')
 plt.plot(bat_hist['global_fitness'], label = 'BAT')
 plt.plot(gwo_hist['fitness'], label = 'GWO')
@@ -120,7 +120,7 @@ plt.xlabel('Generation')
 plt.ylabel('Fitness')
 plt.ylim(0,150000)
 plt.savefig('CSB_fitness.png',format='png', dpi=300, bbox_inches="tight")
-
+plt.close()
 
 #************************************************************
 #              Square Cantilever Stepped Beam
@@ -215,8 +215,8 @@ pesa2_x, pesa2_y, pesa2_hist=pesa2.evolute(ngen=400, replay_every=2, verbose=0)
 # Plot
 #---------------------------------
 plt.figure()
-plt.plot(pso_hist, label = 'PSO')
-plt.plot(de_hist, label = 'DE')
+plt.plot(pso_hist['global_fitness'], label = 'PSO')
+plt.plot(de_hist['global_fitness'], label = 'DE')
 plt.plot(ssa_hist['global_fitness'], label = 'SSA')
 plt.plot(bat_hist['global_fitness'], label = 'BAT')
 plt.plot(gwo_hist['fitness'], label = 'GWO')
@@ -226,3 +226,4 @@ plt.legend()
 plt.xlabel('Generation')
 plt.ylabel('Fitness')
 plt.savefig('CSB_square_fitness.png',format='png', dpi=300, bbox_inches="tight")
+plt.close()

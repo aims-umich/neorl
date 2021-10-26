@@ -29,7 +29,7 @@ import random
 from neorl.hybrid.ngacore.RBFN import RBFN
 from neorl.hybrid.ngacore.Latin import latin
 from neorl.hybrid.ngacore.GA import GA
-
+from neorl.utils.seeding import set_neorl_seed
 
 class NGA(object):
     """
@@ -48,9 +48,7 @@ class NGA(object):
     def __init__(self, mode, bounds, fit, npop, num_warmups=None, 
                  hidden_shape = None, kernel='gaussian', ncores=1, seed=None):
         self.seed = seed
-        if seed:
-            random.seed(seed)
-            np.random.seed(seed)
+        set_neorl_seed(self.seed)
 
         self.dimension = len(bounds)
         lb = np.array([bounds[item][1] for item in bounds])
@@ -86,9 +84,7 @@ class NGA(object):
 
         :return: (tuple) (list of best individuals, list of best fitnesses)
         """
-        if self.seed:
-            random.seed(self.seed)
-            np.random.seed(self.seed)
+        set_neorl_seed(self.seed)
         self.verbose = verbose
 
         self.history = {'local_fitness':[], 'best_individual':[]}

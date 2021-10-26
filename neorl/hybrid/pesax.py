@@ -29,6 +29,7 @@ import random
 import numpy as np
 from collections import defaultdict
 import time
+from neorl.utils.seeding import set_neorl_seed
 
 class PESAX(ExperienceReplay):
 
@@ -76,9 +77,7 @@ class PESAX(ExperienceReplay):
         #--------------------
         #General Parameters
         #--------------------
-        if seed:
-            random.seed(seed)
-            np.random.seed(seed)
+        set_neorl_seed(seed)
             
         self.BOUNDS=bounds
 
@@ -248,6 +247,7 @@ class PESAX(ExperienceReplay):
                 
                 QDE = Queue(); QES=Queue(); QPSO=Queue()
                 def de_worker():
+                    random.seed(self.SEED)
                     xde_best, yde_best, de_new=de.evolute(ngen=1,x0=self.de_next, verbose=0)
                     QDE.put((xde_best, yde_best, de_new))
                 def es_worker():

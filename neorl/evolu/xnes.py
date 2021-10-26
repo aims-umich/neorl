@@ -28,6 +28,7 @@ import joblib
 import random
 import numpy as np
 import copy
+from neorl.utils.seeding import set_neorl_seed
 
 class XNES(object):
     """
@@ -49,11 +50,8 @@ class XNES(object):
                  eta_mu=1.0, eta_sigma=None, eta_Bmat=None, 
                  adapt_sampling=False, ncores=1, seed=None):
         
-        if seed:
-            random.seed(seed)
-            np.random.seed(seed)
+        set_neorl_seed(seed)
             
-        self.seed=seed
         patience=100
         self.fitness_hom=-np.inf
         

@@ -22,6 +22,7 @@ import numpy as np
 import math
 import joblib
 from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
+from neorl.utils.seeding import set_neorl_seed
 
 class MFO:
     """
@@ -40,9 +41,7 @@ class MFO:
     def __init__(self, mode, bounds, fit, nmoths=50, b=1, int_transform='nearest_int', ncores=1, seed=None):
 
         self.seed=seed
-        if self.seed:
-            random.seed(self.seed)
-            np.random.seed(self.seed)
+        set_neorl_seed(self.seed)
 
         assert ncores <= nmoths, '--error: ncores ({}) must be less than or equal to nmoths ({})'.format(ncores, nmoths)
         assert nmoths > 3, '--eror: size of nmoths must be more than 3'
@@ -185,9 +184,7 @@ class MFO:
         N = self.npop # population size
         dim = len(self.bounds) # individual length
 
-        if self.seed:
-            random.seed(self.seed)
-            np.random.seed(self.seed)
+        set_neorl_seed(self.seed)
 
         ## INITIALIZE
         #  moths

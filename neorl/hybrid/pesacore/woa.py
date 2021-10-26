@@ -31,6 +31,7 @@ import uuid
 import multiprocessing
 import multiprocessing.pool
 from neorl.evolu.discrete import mutate_discrete
+from neorl.utils.seeding import set_neorl_seed
 
 class NoDaemonProcess(multiprocessing.Process):
     # make 'daemon' attribute always return False
@@ -68,9 +69,7 @@ class WOAmod(object):
     """
     def __init__(self, mode, bounds, fit, nwhales=5, a0=2, b=1, int_transform ='nearest_int', ncores=1, seed=None):
         
-        if seed:
-            random.seed(seed)
-            np.random.seed(seed)
+        set_neorl_seed(seed)
                 
         #--mir
         self.mode=mode

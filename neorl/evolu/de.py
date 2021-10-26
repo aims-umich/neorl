@@ -20,6 +20,8 @@ import random
 import numpy as np
 import joblib 
 from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
+from neorl.utils.seeding import set_neorl_seed
+from neorl.utils.tools import get_population
 
 class DE:
     """
@@ -39,9 +41,7 @@ class DE:
                   int_transform='nearest_int', ncores=1, seed=None, **kwargs):  
 
         self.seed=seed
-        if self.seed:
-            random.seed(self.seed)
-            np.random.seed(self.seed)
+        set_neorl_seed(self.seed)
         
         #-----------------------------------------------------
         #a special block for RL-informed DE
@@ -213,22 +213,19 @@ class DE:
         :param verbose: (bool) print statistics to screen
         
         :return: (tuple) (best individual, best fitness, and a list of fitness history)
-        """
-        
-        if self.seed:
-            random.seed(self.seed)
-            np.random.seed(self.seed)
-
+        """        
+        set_neorl_seed(self.seed)
+        self.de_hist={}
         #--- INITIALIZE the population
         
         if x0:
             assert len(x0) == self.npop, '--error: the length of x0 ({}) (initial population) must equal to number of individuals npop ({})'.format(len(x0), self.npop)
-            population = self.InitPopulation(x0=x0)
+            self.population = self.InitPopulation(x0=x0)
         else:
-            population = self.InitPopulation()
+            self.population = self.InitPopulation()
                 
         # loop through all generations
-        best_scores=[]
+        self.best_scores=[]
         for gen in range(1,ngen+1):
             
             #print(population)
@@ -248,10 +245,10 @@ class DE:
                 candidates.remove(j)
                 random_index = random.sample(candidates, 3)
                             
-                x_1 = population[random_index[0]]
-                x_2 = population[random_index[1]]
-                x_3 = population[random_index[2]]
-                x_t = population[j]     # target individual
+                x_1 = self.population[random_index[0]]
+                x_2 = self.population[random_index[1]]
+                x_3 = self.population[random_index[2]]
+                x_t = self.population[j]     # target individual
     
                 # subtract x3 from x2, and create a new vector (x_diff)
                 x_diff = [x_2_i - x_3_i for x_2_i, x_3_i in zip(x_2, x_3)]
@@ -279,7 +276,9 @@ class DE:
                 x_t_lst.append(x_t)
                 v_trial_lst.append(v_trial)
             
+            #--------------------------------
             #paralell evaluation
+            #--------------------------------
             if self.ncores > 1:
 
                 with joblib.Parallel(n_jobs=self.ncores) as parallel:
@@ -299,25 +298,23 @@ class DE:
             index=0
             for (score_trial, score_target, v_trial) in zip(score_trial_lst, score_target_lst, v_trial_lst):
                 if score_trial > score_target:
-                    population[index] = v_trial
+                    self.population[index] = v_trial
                     gen_scores.append(score_trial)
                 else:
                     gen_scores.append(score_target)
                 
                 index+=1
             
-            
             #-----------------------------
             #Fitness saving 
             #-----------------------------
             gen_avg = sum(gen_scores) / self.npop                   # current generation avg. fitness
             y_best = max(gen_scores)                                # fitness of best individual
-            x_best = population[gen_scores.index(max(gen_scores))]  # solution of best individual
-            best_scores.append(y_best)
+            x_best = self.population[gen_scores.index(max(gen_scores))]  # solution of best individual
+            self.best_scores.append(y_best)
             
-
             if self.RLmode:
-                population=self.mix_population(pop=population, scores=gen_scores)
+                self.population=self.mix_population(pop=self.population, scores=gen_scores)
                 
             #--mir
             if self.mode=='min':
@@ -350,9 +347,16 @@ class DE:
             print('Best fitness (y) found:', y_best_correct)
             print('Best individual (x) found:', x_best_correct)
             print('--------------------------------------------------------------')
-
-        #--mir
-        if self.mode=='min':
-            best_scores=[-item for item in best_scores]
             
-        return x_best_correct, y_best_correct, best_scores
+        #---update final logger
+        self.de_hist['last_pop'] = get_population(self.population, fits=gen_scores)
+        if self.mode == 'min':
+            self.best_scores=[-item for item in self.best_scores]
+            self.de_hist['global_fitness'] = np.minimum.accumulate(self.best_scores)
+            self.de_hist['last_pop']['fitness'] *= -1
+        else:
+            self.de_hist['global_fitness'] = np.maximum.accumulate(self.best_scores)
+        
+        self.de_hist['local_fitness'] = self.best_scores
+            
+        return x_best_correct, y_best_correct, self.de_hist

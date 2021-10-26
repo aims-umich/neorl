@@ -27,6 +27,7 @@
 import random
 import numpy as np
 import joblib
+from neorl.utils.seeding import set_neorl_seed
 
 class ACO(object):
     """
@@ -48,9 +49,7 @@ class ACO(object):
         
         assert narchive <= nants, '--error: narchive must be less than or equal nants'
         self.seed=seed
-        if self.seed:
-            random.seed(self.seed)
-            np.random.seed(self.seed)
+        set_neorl_seed(self.seed)
             
         self.mode=mode
         if mode == 'min':
@@ -74,7 +73,7 @@ class ACO(object):
         self.__final_best_solution = None 
         self.__probs = None
         self.__new_pops = None   
-        self.__random = np.random.RandomState(seed)
+        self.__random = np.random.RandomState(self.seed)
         self.pops_sorted = None
 
     def __computePdf(self) -> object:

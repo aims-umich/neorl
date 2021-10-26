@@ -27,6 +27,7 @@ import time
 import multiprocessing
 import multiprocessing.pool
 import joblib
+from neorl.utils.seeding import set_neorl_seed
 class NoDaemonProcess(multiprocessing.Process):
     # make 'daemon' attribute always return False
     def _get_daemon(self):
@@ -42,7 +43,7 @@ class MyPool(multiprocessing.pool.Pool):
 
 class SAMod(ExperienceReplay):
     
-    def __init__ (self, bounds, fit, steps, memory=None, ncores=1, chi=0.1, replay_rate=0, cooling='fast', Tmax=10000, Tmin=1):  
+    def __init__ (self, bounds, fit, steps, memory=None, ncores=1, chi=0.1, replay_rate=0, cooling='fast', Tmax=10000, Tmin=1, seed=None):  
         """
         Parallel SA:
         A Synchronous Approach with Occasional Enforcement of Best Solution-Fixed Intervals
@@ -59,7 +60,7 @@ class SAMod(ExperienceReplay):
             Tmin (int): minimum temperature
         """
         
-        random.seed(1)
+        set_neorl_seed(seed)
         
         if memory:
             self._memory=memory

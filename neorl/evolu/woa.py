@@ -26,6 +26,7 @@ import math
 import time
 import joblib
 from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
+from neorl.utils.seeding import set_neorl_seed
 
 class WOA(object):
     """
@@ -43,9 +44,7 @@ class WOA(object):
     """
     def __init__(self, mode, bounds, fit, nwhales=5, a0=2, b=1, int_transform='nearest_int', ncores=1, seed=None):
         
-        if seed:
-            random.seed(seed)
-            np.random.seed(seed)
+        set_neorl_seed(seed)
         
         assert ncores <= nwhales, '--error: ncores ({}) must be less than or equal than nwhales ({})'.format(ncores, nwhales)
         

@@ -45,7 +45,7 @@ class ESTUNE:
         self.ngen = ngen
         self.param_names=[item for item in self.param_grid]
 
-    def plot_results(self, pngname=None):
+    def plot_results(self, pngname='evolu_tune'):
         if self.mode=='max':
             plt.plot(pd.DataFrame.cummax(self.evolures['score']), '-og')
             plt.ylabel('Max score so far')
@@ -57,7 +57,7 @@ class ESTUNE:
         plt.grid()
         if pngname is not None:
             plt.savefig(str(pngname)+'.png', dpi=200, format='png')
-        plt.show()
+        plt.close()
 
 
     def tune(self, ncores=1, csvname=None, verbose=True):
@@ -82,12 +82,12 @@ class ESTUNE:
                 
         es=ES(mode=self.mode, bounds=self.param_grid, fit=self.fit, 
               lambda_=self.npop, mu=self.npop, mutpb=0.25,
-             cxmode='cx2point', cxpb=0.7, ncores=self.ncores, seed=1)
-        x_best, y_best, es_hist=es.evolute(ngen=self.ngen, verbose=1)
+             cxmode='cx2point', cxpb=0.7, ncores=self.ncores, seed=self.seed)
+        x_best, y_best, es_hist=es.evolute(ngen=self.ngen, verbose=self.verbose)
 
         self.evolures = pd.DataFrame(es.best_indvs, columns=self.param_names)
         self.evolures.index += 1
-        self.evolures['score'] = es_hist
+        self.evolures['score'] = es_hist['local_fitness']
 
         if self.csvlogger:
             self.evolures.index.name='id'

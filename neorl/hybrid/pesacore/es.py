@@ -27,6 +27,7 @@ import time
 import joblib
 import multiprocessing
 import multiprocessing.pool
+from neorl.utils.seeding import set_neorl_seed
 class NoDaemonProcess(multiprocessing.Process):
     # make 'daemon' attribute always return False
     def _get_daemon(self):
@@ -41,7 +42,7 @@ class MyPool(multiprocessing.pool.Pool):
     Process = NoDaemonProcess
 
 class ESMod:
-    def __init__ (self, bounds, fit, mu, lambda_, ncores=1, indpb=0.1, cxpb=0.6, mutpb=0.3, smin=0.01, smax=0.5):  
+    def __init__ (self, bounds, fit, mu, lambda_, ncores=1, indpb=0.1, cxpb=0.6, mutpb=0.3, smin=0.01, smax=0.5, seed=None):  
         """
         Parallel ES:
         A module for constructing evolution strategy (ES) with parallelization in evaluating the population
@@ -57,7 +58,7 @@ class ESMod:
             -smin (float): minimum bound for strategy vector (fix it to 0.01)
             -smin (float): max bound for strategy vector (fix it to 0.5)
         """
-        random.seed(1)
+        set_neorl_seed(seed)
         self.bounds=bounds
         self.fit=fit
         self.ncores=ncores
