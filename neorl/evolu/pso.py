@@ -156,7 +156,7 @@ class PSO:
         fitness = self.fit(x)
         return fitness
     
-    def InitSwarm(self, x0=None):
+    def InitSwarm(self, x0=None, verbose=False):
         #"""
         #Swarm intializer 
         #Inputs:
@@ -179,8 +179,9 @@ class PSO:
         
         #Establish the swarm
         if x0:
-            print('The first particle provided by the user:', x0[0])
-            print('The last particle provided by the user:', x0[-1])
+            if verbose:
+                print('The first particle provided by the user:', x0[0])
+                print('The last particle provided by the user:', x0[-1])
             for i in range(len(x0)):
                 pop[i].append(x0[i])
                 speed = list(self.v0*np.array(x0[i]))
@@ -356,11 +357,11 @@ class PSO:
             #get the initial swarm position from the user, it has to be 
             #print('-- Using The Initial PSO Swarm from the User')
             assert len(x0) == self.npar, '--error: the length of x0 ({}) (initial swarm) must equal to number of particles ({})'.format(len(x0), self.npar)
-            swarm, self.local_pos, self.local_fit=self.InitSwarm(x0=x0)
+            swarm, self.local_pos, self.local_fit=self.InitSwarm(x0=x0, verbose=verbose)
         else:
             #print('-- Using A Random Initial PSO Swarm')
             #generate the initial swarm internally, assign all variables
-            swarm, self.local_pos, self.local_fit=self.InitSwarm()
+            swarm, self.local_pos, self.local_fit=self.InitSwarm(verbose=verbose)
         
         swm0=self.select(swarm, k=1)
         self.swm_pos=swm0[0][0]
