@@ -138,7 +138,7 @@ class ES:
         strategy = [random.uniform(self.smin,self.smax) for _ in range(self.nx)]
         return ind, strategy
 
-    def init_pop(self, x0=None):
+    def init_pop(self, x0=None, verbose=False):
         #"""
         #Population intializer 
         #Inputs:
@@ -159,8 +159,9 @@ class ES:
         #     99: [[1.1,2.1,3.1,4.1,5.1], [0.1,0.2,0.3,0.4,0.5], 5.2]}
         #"""
         if x0:
-            print('The first particle provided by the user:', x0[0])
-            print('The last particle provided by the user:', x0[-1])
+            if verbose:
+                print('The first particle provided by the user:', x0[0])
+                print('The last particle provided by the user:', x0[-1])
             for i in range(len(x0)):
                 pop[i].append(x0[i])
                 strategy = [random.uniform(self.smin,self.smax) for _ in range(self.nx)]
@@ -429,9 +430,9 @@ class ES:
         self.best_indvs=[]
         if x0:    
             assert len(x0) == self.lambda_, '--error: the length of x0 ({}) (initial population) must equal to the size of lambda ({})'.format(len(x0), self.lambda_)
-            self.population=self.init_pop(x0=x0)
+            self.population=self.init_pop(x0=x0, verbose=verbose)
         else:
-            self.population=self.init_pop()
+            self.population=self.init_pop(verbose=verbose)
             
         # Begin the evolution process
         for gen in range(1, ngen + 1):
