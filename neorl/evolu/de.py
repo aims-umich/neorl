@@ -138,13 +138,14 @@ class DE:
                 raise Exception ('unknown data type is given, either int, float, or grid are allowed for parameter bounds')   
         return indv
 
-    def InitPopulation(self, x0=None):
+    def InitPopulation(self, x0=None, verbose = False):
         
         pop=[]
         #Establish the swarm
         if x0:
-            print('The first individual provided by the user:', x0[0])
-            print('The last individual provided by the user:', x0[-1])
+            if verbose:
+                print('The first individual provided by the user:', x0[0])
+                print('The last individual provided by the user:', x0[-1])
             for i in range(len(x0)):
                 pop.append(x0[i])
         else:
@@ -220,7 +221,7 @@ class DE:
         
         if x0:
             assert len(x0) == self.npop, '--error: the length of x0 ({}) (initial population) must equal to number of individuals npop ({})'.format(len(x0), self.npop)
-            self.population = self.InitPopulation(x0=x0)
+            self.population = self.InitPopulation(x0=x0, verbose=verbose)
         else:
             self.population = self.InitPopulation()
                 
