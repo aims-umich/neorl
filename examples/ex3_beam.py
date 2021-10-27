@@ -118,9 +118,9 @@ print('Best individual (x) found:', x_best)
 #---------------------------------
 #Plot fitness convergence
 plt.figure()
-plt.plot(np.array(es_hist), label='ES')
+plt.plot(es_hist['local_fitness'], label='ES')
 plt.xlabel('Generation')
 plt.ylabel('Fitness')
 plt.legend()
 plt.savefig('ex3_fitness.png',format='png', dpi=300, bbox_inches="tight")
-plt.show()
+plt.close()

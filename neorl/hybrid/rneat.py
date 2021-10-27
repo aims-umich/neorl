@@ -26,6 +26,7 @@ import random
 import os
 from multiprocessing import Pool
 from neorl.rl.make_env import CreateEnvironment
+from neorl.utils.seeding import set_neorl_seed
 
 class RNEAT(object):
     """
@@ -39,9 +40,8 @@ class RNEAT(object):
     :param seed: (int) random seed for sampling
     """
     def __init__(self, mode, fit, bounds, config, ncores=1, seed=None):
-        if seed:
-            random.seed(seed)
-            np.random.seed(seed)
+        
+        set_neorl_seed(seed)
         
         self.ncores=ncores
         self.mode=mode

@@ -23,6 +23,7 @@ import random
 import numpy as np
 import copy
 import joblib
+from neorl.utils.seeding import set_neorl_seed
 
 class SA:
     """
@@ -46,9 +47,7 @@ class SA:
     def __init__ (self, mode, bounds, fit, chain_size=10, chi=0.1, Tmax=10000, Tmin=1, 
                   cooling='fast', move_func=None, reinforce_best=False, ncores=1, seed=None):  
 
-        if seed:
-            random.seed(seed)
-            np.random.seed(seed)
+        set_neorl_seed(seed)
         
         self.seed=seed
         #--mir
@@ -198,7 +197,8 @@ class SA:
         min_step=inp[2]
         max_step=inp[3]
         core_seed=inp[4]
-        if self.seed:
+        
+        if not (self.seed is None):
             random.seed(self.seed + core_seed)
         
         rejects=0; accepts=0; improves=0

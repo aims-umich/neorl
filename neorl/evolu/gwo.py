@@ -27,6 +27,8 @@ import math
 import time
 import joblib
 from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
+from neorl.utils.seeding import set_neorl_seed
+from neorl.utils.tools import get_population
 
 class GWO(object):
     """
@@ -42,9 +44,7 @@ class GWO(object):
     """
     def __init__(self, mode, bounds, fit, nwolves=5, int_transform ='nearest_int', ncores=1, seed=None):
         
-        if seed:
-            random.seed(seed)
-            np.random.seed(seed)
+        set_neorl_seed(seed)
         
         assert ncores <= nwolves, '--error: ncores ({}) must be less than or equal than nwolves ({})'.format(ncores, nwolves)
         
@@ -213,7 +213,9 @@ class GWO(object):
                     fitness=[]
                     for item in core_lst:
                         fitness.append(self.fit_worker(item))  
-                        
+                
+                self.last_pop=self.Positions.copy()  #for logging
+                self.last_fit=np.array(fitness)      #for logging
                 #----------------------
                 #  Update wolf scores
                 #----------------------
@@ -346,6 +348,8 @@ class GWO(object):
             self.history['beta_wolf']=[-item for item in self.history['beta_wolf']]
             self.history['delta_wolf']=[-item for item in self.history['delta_wolf']]
             self.history['fitness']=[-item for item in self.history['fitness']]
-            
+            self.last_fit=-self.last_fit
+        
+        self.history['last_pop'] = get_population(self.last_pop, fits=self.last_fit)
         return self.wolf_correct, self.fitness_best_correct, self.history
 

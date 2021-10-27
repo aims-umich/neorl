@@ -26,6 +26,7 @@ import pandas as pd
 from multiprocessing import Pool
 import joblib
 import csv
+from neorl.utils.seeding import set_neorl_seed
 
 class RANDTUNE:
     """
@@ -45,8 +46,7 @@ class RANDTUNE:
 
     def full_grid(self):
         #This function builds the full multi-dimensional grid
-        if self.seed:
-            random.seed(self.seed)
+        set_neorl_seed(self.seed)
         
         #self.param_lst=[self.param_grid[item][0] for item in self.param_grid]
         #self.param_types=[self.param_grid[item][1] for item in self.param_grid]

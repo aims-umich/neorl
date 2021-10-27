@@ -26,6 +26,8 @@ import math
 import time
 import joblib
 from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
+from neorl.utils.seeding import set_neorl_seed
+from neorl.utils.tools import get_population
 
 class WOA(object):
     """
@@ -43,9 +45,7 @@ class WOA(object):
     """
     def __init__(self, mode, bounds, fit, nwhales=5, a0=2, b=1, int_transform='nearest_int', ncores=1, seed=None):
         
-        if seed:
-            random.seed(seed)
-            np.random.seed(seed)
+        set_neorl_seed(seed)
         
         assert ncores <= nwhales, '--error: ncores ({}) must be less than or equal than nwhales ({})'.format(ncores, nwhales)
         
@@ -309,6 +309,12 @@ class WOA(object):
             print('Best fitness (y) found:', self.fitness_best_correct)
             print('Best individual (x) found:', self.whale_correct)
             print('--------------------------------------------------------------')  
-            
+        
+        if self.mode=='min':
+            fitness=np.array(fitness)
+        else:
+            fitness=-np.array(fitness)
+        self.history['last_pop'] = get_population(self.Positions, fits=fitness)
+        
         return self.whale_correct, self.fitness_best_correct, self.history
 

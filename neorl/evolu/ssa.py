@@ -25,6 +25,7 @@ import math
 import time
 import joblib
 from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
+from neorl.utils.seeding import set_neorl_seed
 
 class SSA(object):
     """
@@ -42,9 +43,7 @@ class SSA(object):
     """
     def __init__(self, mode, bounds, fit, nsalps=5, c1=None, int_transform='nearest_int', ncores=1, seed=None):
         
-        if seed:
-            random.seed(seed)
-            np.random.seed(seed)
+        set_neorl_seed(seed)
         
         assert ncores <= nsalps, '--error: ncores ({}) must be less than or equal than nsalps ({})'.format(ncores, nsalps)
         

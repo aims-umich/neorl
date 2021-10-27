@@ -39,6 +39,7 @@ import numpy as np
 from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
 from neorl import ES
 from neorl import PPO2, MlpPolicy, RLLogger
+from neorl.utils.seeding import set_neorl_seed
 
 def encode_grid_individual_to_discrete(individual, bounds):
     
@@ -72,9 +73,7 @@ class PPOES(object):
                   seed=None):    
         
         self.seed = seed
-        if seed:
-            random.seed(seed)
-            np.random.seed(seed)
+        set_neorl_seed(self.seed)
             
         assert npop_rl < npop, '--error: the size of RL individuals `npop_rl` MUST be less than `npop`'
         self.mode=mode

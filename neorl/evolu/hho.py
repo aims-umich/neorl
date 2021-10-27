@@ -33,6 +33,8 @@ import time
 import joblib
 from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
 import matplotlib.pyplot as plt
+from neorl.utils.seeding import set_neorl_seed
+from neorl.utils.tools import get_population
 
 class HHO(object):
     """
@@ -47,14 +49,22 @@ class HHO(object):
     :param seed: (int) random seed for sampling
     """
     def __init__(self, mode, bounds, fit, nhawks, int_transform='nearest_int', ncores=1, seed=None):
+        
         self.seed = seed
-        if seed:
-            random.seed(seed)
-            np.random.seed(seed)
+        set_neorl_seed(self.seed)
 
+        #--mir
         assert mode == 'min' or mode == 'max', "Mode must be 'max' or 'min'."
-        self.mode = mode
-        self.fit = fit
+        self.mode=mode
+        if mode == 'min':
+            self.fit=fit
+        elif mode == 'max':
+            def fitness_wrapper(*args, **kwargs):
+                return -fit(*args, **kwargs) 
+            self.fit=fitness_wrapper
+        else:
+            raise ValueError('--error: The mode entered by user is invalid, use either `min` or `max`')
+            
         self.int_transform=int_transform
         self.ncores = ncores
         self.nhawks = nhawks
@@ -89,9 +99,7 @@ class HHO(object):
         
         :return: (tuple) (best individual, best fitness, and dictionary containing major search results)
         """
-        if self.seed:
-            random.seed(self.seed)
-            np.random.seed(self.seed)
+        set_neorl_seed(self.seed)
 
         self.history = {'local_fitness':[], 'global_fitness':[]}
         self.rabbit_energy = float("inf")
@@ -109,35 +117,34 @@ class HHO(object):
             # self.hawk_positions = np.asarray([x * (self.ub - self.lb) + self.lb for x in np.random.uniform(0, 1, (self.nhawks, self.dim))])
             for hawk_i in range(self.nhawks):
                 self.hawk_positions[hawk_i, :] = self.init_sample()
-
+        
+        self.best_scores=[]
         for t in range(ngen):
             self.a= 1 - t * ((1) / ngen)  #mir: a decreases linearly between 1 to 0, for discrete mutation
             ###########################
             # Evaluate hawk fitnesses #
             ###########################
             fitness_lst = self.eval_hawks()
-
+            
+            #for logging
+            self.prev_pop=self.hawk_positions.copy()
+            self.prev_fits=np.array(fitness_lst)
+            self.best_scores.append(np.min(fitness_lst))
             #######################################################################
             # Update rabbit energy and rabbit location based on best hawk fitness #
             #######################################################################
             for i, fitness in enumerate(fitness_lst):
-                fitness = fitness if self.mode == 'min' else -fitness
                 if fitness < self.rabbit_energy:
                     self.rabbit_energy = fitness
                     self.rabbit_location = self.hawk_positions[i, :].copy()
-
+            
             #####################################################
             # Update best global and local fitnesses in history #
             #####################################################
             if self.mode=='max':
                 self.best_global_fitness = -self.rabbit_energy
-                self.best_local_fitness = -np.min(fitness_lst)
             else:
                 self.best_global_fitness = self.rabbit_energy
-                self.best_local_fitness = np.min(fitness)
-
-            self.history['local_fitness'].append(self.best_local_fitness)
-            self.history['global_fitness'].append(self.best_global_fitness)
 
             if self.verbose and t % self.nhawks: # change depending on how often message should be displayed
                 print(f'HHO step {t*self.nhawks}/{ngen*self.nhawks}, nhawks={self.nhawks}, ncores={self.ncores}')
@@ -180,7 +187,17 @@ class HHO(object):
             print('Best fitness (y) found:', self.best_global_fitness)
             print('Best individual (x) found:', self.rabbit_correct)
             print('-------------------------------------------------------------- \n \n')
-
+        
+        if self.mode=='max':
+            self.prev_fits=-self.prev_fits
+            self.best_scores=[-item for item in self.best_scores]
+            self.history['global_fitness'] = np.maximum.accumulate(self.best_scores)
+        else:
+            self.history['global_fitness'] = np.minimum.accumulate(self.best_scores)
+            
+        self.history['local_fitness'] = self.best_scores
+        self.history['last_pop'] = get_population(self.prev_pop, fits=self.prev_fits)
+        
         return self.rabbit_correct, self.best_global_fitness, self.history
 
     def ensure_bounds(self, vec, bounds):

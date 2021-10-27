@@ -24,6 +24,7 @@ import numpy as np
 import math
 import joblib
 from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
+from neorl.utils.seeding import set_neorl_seed
 
 #Main reference of the BAT algorithm:
 #Xie, J., Zhou, Y., & Chen, H. (2013). A novel bat algorithm based on 
@@ -53,9 +54,7 @@ class BAT(object):
                  fmax=1, A=0.5, r0=0.5, alpha=1.0, gamma=0.9, 
                  levy='False', int_transform='nearest_int', ncores=1, seed=None):
         
-        if seed:
-            random.seed(seed)
-            np.random.seed(seed)
+        set_neorl_seed(seed)
         
         assert ncores <= nbats, '--error: ncores ({}) must be less than or equal to nbats ({})'.format(ncores, nbats)
         assert nbats >= 5, '--error: number of bats must be more than 5 for this algorithm'

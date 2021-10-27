@@ -40,4 +40,4 @@ plt.plot(sa_hist['improve'], '-^', label='Improvement')
 plt.xlabel('Generation')
 plt.ylabel('Rate (%)')
 plt.legend()
-plt.show()
+plt.close()   #change to plt.show() for inline plots

@@ -32,7 +32,7 @@ import time
 import sys
 import uuid
 from neorl.evolu.discrete import encode_grid_to_discrete, decode_discrete_to_grid
-
+from neorl.utils.seeding import set_neorl_seed
 
 #multiprocessing trick to paralllelize nested functions in python (un-picklable objects!)
 def globalize(func):
@@ -85,9 +85,7 @@ class PESA(ExperienceReplay):
         #--------------------
         #General Parameters
         #--------------------
-        if seed:
-            random.seed(seed)
-            np.random.seed(seed)
+        set_neorl_seed(seed)
         
         self.bounds=bounds
         #--mir
@@ -288,6 +286,7 @@ class PESA(ExperienceReplay):
                 
                 QSA = Queue(); QES=Queue(); QPSO=Queue()
                 def sa_worker():
+                    random.seed(self.SEED)
                     x_new, E_new, self.T, self.acc, self.rej, self.imp, x_best, E_best, sa_partime= sa.anneal(ngen=1,npop=self.NPOP, x0=self.x_next, 
                                                                                                   E0=self.E_next, step0=self.STEP0)
                     QSA.put((x_new, E_new, self.T, self.acc, self.rej, self.imp, x_best, E_best, sa_partime))

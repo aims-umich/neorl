@@ -21,6 +21,7 @@ import random
 import numpy as np
 import joblib
 from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
+from neorl.utils.seeding import set_neorl_seed
 
 class JAYA:
     """
@@ -38,9 +39,7 @@ class JAYA:
     def __init__(self, mode, bounds, fit, npop=50, int_transform ='nearest_int', ncores=1, seed=None):
 
         self.seed=seed
-        if self.seed:
-            random.seed(self.seed)
-            np.random.seed(self.seed)
+        set_neorl_seed(self.seed)
 
         assert npop > 3, '--eror: size of npop must be more than 3'
         self.npop= npop
@@ -193,9 +192,7 @@ class JAYA:
         N = self.npop # population size
         dim = len(self.bounds) # individual length
 
-        if self.seed:
-            random.seed(self.seed)
-            np.random.seed(self.seed)
+        set_neorl_seed(self.seed)
         
         fitness_mat = np.zeros(N)
 

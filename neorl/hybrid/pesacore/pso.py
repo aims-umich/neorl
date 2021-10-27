@@ -27,6 +27,7 @@ import time
 import multiprocessing
 import multiprocessing.pool
 import joblib
+from neorl.utils.seeding import set_neorl_seed
 class NoDaemonProcess(multiprocessing.Process):
     # make 'daemon' attribute always return False
     def _get_daemon(self):
@@ -41,7 +42,7 @@ class MyPool(multiprocessing.pool.Pool):
     Process = NoDaemonProcess
 
 class PSOMod:
-    def __init__ (self, bounds, fit, npar, swm0=None, ncores=1, c1=2.05, c2=2.05, speed_mech='constric'):  
+    def __init__ (self, bounds, fit, npar, swm0=None, ncores=1, c1=2.05, c2=2.05, speed_mech='constric', seed=None):  
         """
         Particle Swarm Optimisaion (PSO)
         Parallel mixed discrete/continuous PSO module
@@ -60,7 +61,8 @@ class PSOMod:
             -c2 (float): social speed constant 
             -w (float): constant inertia weight (how much to weigh the previous velocity)
         """
-        random.seed(1)
+        set_neorl_seed(seed)
+        
         self.bounds=bounds
         self.npar=npar
         self.fit=fit

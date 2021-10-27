@@ -32,6 +32,7 @@ from collections import defaultdict
 
 import multiprocessing
 import multiprocessing.pool
+from neorl.utils.seeding import set_neorl_seed
 
 #import os, csv
 import copy
@@ -67,8 +68,7 @@ class GA:
                   chi=0.1, ncores=1, seed=None):    
 
         
-        if seed:
-            random.seed(seed)
+        set_neorl_seed(seed)
         
         self.bounds=bounds
         self.fit=fit
@@ -252,8 +252,7 @@ class GA:
         
         :return: (dict) dictionary containing major GA search results
         """
-        if self.seed:
-            random.seed(self.seed)
+        set_neorl_seed(self.seed)
 
         if x0:
             assert len(x0) == self.npop, '--error: the length of `x0` ({}) (initial population) must equal to number of individuals `npop` ({})'.format(len(x0), self.npop)

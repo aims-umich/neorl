@@ -29,4 +29,4 @@ plt.plot(woa_hist['A'], label='A')
 plt.xlabel('generation')
 plt.ylabel('coefficient')
 plt.legend()
-plt.show()
+plt.close()   #change to plt.show() for inline plot 

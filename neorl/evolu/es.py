@@ -26,6 +26,8 @@ import copy
 import joblib
 from neorl.evolu.crossover import cxES2point, cxESBlend
 from neorl.evolu.discrete import encode_grid_to_discrete, decode_discrete_to_grid
+from neorl.utils.seeding import set_neorl_seed
+from neorl.utils.tools import get_population
 
 class ES:
     """
@@ -46,8 +48,8 @@ class ES:
     """
     def __init__ (self, mode, bounds, fit, lambda_=60, mu=30, cxmode='cx2point', 
                   alpha=0.5, cxpb=0.6, mutpb=0.3, smin=0.01, smax=0.5, clip=True, ncores=1, seed=None, **kwargs):  
-        if seed:
-            random.seed(seed)
+        
+        set_neorl_seed(seed)
         
         #-----------------------------------------------------
         #a special block for RL-informed GA/ES
@@ -61,7 +63,6 @@ class ES:
             self.RLmode=False
         #-----------------------------------------------------
             
-        self.seed=seed
         self.bounds=bounds
         self.nx=len(bounds.keys())
         #--mir
@@ -421,20 +422,22 @@ class ES:
         
         :return: (tuple) (best individual, best fitness, and a list of fitness history)
         """
+        self.es_hist={}
+        self.es_hist['mean_strategy']=[]
         self.y_opt=-np.inf
         self.best_scores=[]
         self.best_indvs=[]
         if x0:    
             assert len(x0) == self.lambda_, '--error: the length of x0 ({}) (initial population) must equal to the size of lambda ({})'.format(len(x0), self.lambda_)
-            population=self.init_pop(x0=x0)
+            self.population=self.init_pop(x0=x0)
         else:
-            population=self.init_pop()
+            self.population=self.init_pop()
             
         # Begin the evolution process
         for gen in range(1, ngen + 1):
             
             # Vary the population and generate new offspring
-            offspring = self.GenOffspring(pop=population)
+            offspring = self.GenOffspring(pop=self.population)
             
             # Evaluate the individuals with an invalid fitness with multiprocessign Pool
             # create and run the Pool
@@ -456,11 +459,11 @@ class ES:
         
                 
             # Select the next generation population
-            population = copy.deepcopy(self.select(pop=offspring, k=self.mu))
+            self.population = copy.deepcopy(self.select(pop=offspring, k=self.mu))
             if self.RLmode:  #perform RL informed ES
-                population=self.mix_population(population)
+                self.population=self.mix_population(self.population)
                 
-            inds, rwd=[population[i][0] for i in population], [population[i][2] for i in population]
+            inds, rwd=[self.population[i][0] for i in self.population], [self.population[i][2] for i in self.population]
             self.best_scores.append(np.max(rwd))
             arg_max=np.argmax(rwd)
             self.best_indvs.append(inds[arg_max])
@@ -479,9 +482,10 @@ class ES:
                 self.x_opt_correct=decode_discrete_to_grid(self.x_opt,self.orig_bounds,self.bounds_map)
             else:
                 self.x_opt_correct=self.x_opt
-                
+            
+            mean_strategy=[np.mean(self.population[i][1]) for i in self.population]
+            self.es_hist['mean_strategy'].append(np.mean(mean_strategy))
             if verbose:
-                mean_strategy=[np.mean(population[i][1]) for i in population]
                 print('##############################################################################')
                 print('ES step {}/{}, CX={}, MUT={}, MU={}, LAMBDA={}, Ncores={}'.format(gen*self.lambda_,ngen*self.lambda_, np.round(self.cxpb,2), np.round(self.mutpb,2), self.mu, self.lambda_, self.ncores))
                 print('##############################################################################')
@@ -499,9 +503,17 @@ class ES:
             print('Best individual (x) found:', self.x_opt_correct)
             print('--------------------------------------------------------------') 
 
-        #--mir
-        if self.mode=='min':
+        
+        #---update final logger
+        self.es_hist['last_pop'] = get_population(self.population)
+        if self.mode == 'min':
             self.best_scores=[-item for item in self.best_scores]
-            
-        return self.x_opt_correct, self.y_opt_correct, self.best_scores
+            self.es_hist['global_fitness'] = np.minimum.accumulate(self.best_scores)
+            self.es_hist['last_pop']['fitness'] *= -1
+        else:
+            self.es_hist['global_fitness'] = np.maximum.accumulate(self.best_scores)
+        
+        self.es_hist['local_fitness'] = self.best_scores
+        
+        return self.x_opt_correct, self.y_opt_correct, self.es_hist
     

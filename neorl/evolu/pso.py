@@ -23,6 +23,8 @@ import copy
 import time
 import joblib
 from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
+from neorl.utils.seeding import set_neorl_seed
+from neorl.utils.tools import get_population
 
 class PSO:
     """
@@ -40,9 +42,7 @@ class PSO:
     """
     def __init__ (self, mode, bounds, fit, npar=50, c1=2.05, c2=2.05, speed_mech='constric', ncores=1, seed=None):  
 
-        if seed:
-            random.seed(seed)
-            self.seed=seed
+        set_neorl_seed(seed)
         
         self.bounds=bounds
         self.npar=npar
@@ -349,7 +349,8 @@ class PSO:
         
         :return: (tuple) (best individual, best fitness, and a list of fitness history)
         """
-            
+        self.pso_hist={}
+        self.pso_hist['mean_speed']=[]
         self.best_scores=[]
         if x0:
             #get the initial swarm position from the user, it has to be 
@@ -439,8 +440,9 @@ class PSO:
                 self.swm_fit_correct=self.swm_fit
             
             # Print data
+            mean_speed=[np.mean(swarm[i][1]) for i in swarm]
+            self.pso_hist['mean_speed'].append(np.mean(mean_speed))
             if verbose:
-                mean_speed=[np.mean(swarm[i][1]) for i in swarm]
                 print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
                 print('PSO step {}/{}, C1={}, C2={}, W={}, Particles={}, Ncores={}'.format(gen*self.npar, ngen*self.npar, np.round(self.c1,2), np.round(self.c2,2), np.round(self.w,2), self.npar, self.ncores))
                 print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
@@ -457,8 +459,7 @@ class PSO:
                 print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
 
         #Select and order the last population 
-        population=copy.deepcopy(self.select(pop=swarm, k=self.npar))
-        
+        self.population=copy.deepcopy(self.select(pop=swarm, k=self.npar))
         # Append local data to the final swarm population, items [3] and [4] in the dictionary
         for par in range(len(swarm)):
             swarm[par].append(self.local_pos[par])
@@ -476,8 +477,15 @@ class PSO:
             print('Best individual (x) found:', self.swm_pos_correct)
             print('--------------------------------------------------------------')
     
-        #--mir
-        if self.mode=='min':
+        #---update final logger
+        self.pso_hist['last_pop'] = get_population(self.population)
+        if self.mode == 'min':
             self.best_scores=[-item for item in self.best_scores]
+            self.pso_hist['global_fitness'] = np.minimum.accumulate(self.best_scores)
+            self.pso_hist['last_pop']['fitness'] *= -1
+        else:
+            self.pso_hist['global_fitness'] = np.maximum.accumulate(self.best_scores)
+        
+        self.pso_hist['local_fitness'] = self.best_scores
                 
-        return self.swm_pos_correct, self.swm_fit_correct, self.best_scores
+        return self.swm_pos_correct, self.swm_fit_correct, self.pso_hist

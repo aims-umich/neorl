@@ -104,7 +104,7 @@ class BAYESTUNE:
             def fitness_wrapper(*args, **kwargs):
                 return -self.fit(*args, **kwargs) 
         
-        if self.seed:
+        if self.seed is not None:
             core_seed=self.seed + x
         else:
             core_seed=None
@@ -117,7 +117,7 @@ class BAYESTUNE:
         
         return search_result.x_iters, list(search_result.func_vals)
     
-    def plot_results(self, pngname=None):
+    def plot_results(self, pngname='bayes_tune'):
         if self.mode=='max':
             plt.plot(pd.DataFrame.cummax(self.bayesres['score']), '-og')
             plt.ylabel('Max score so far')
@@ -129,7 +129,7 @@ class BAYESTUNE:
         plt.grid()
         if pngname is not None:
             plt.savefig(str(pngname)+'.png', dpi=200, format='png')
-        plt.show()
+        plt.close()
         
     def tune(self, ncores=1, csvname=None, verbose=True):
         """
