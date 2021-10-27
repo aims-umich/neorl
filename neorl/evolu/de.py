@@ -223,7 +223,7 @@ class DE:
             assert len(x0) == self.npop, '--error: the length of x0 ({}) (initial population) must equal to number of individuals npop ({})'.format(len(x0), self.npop)
             self.population = self.InitPopulation(x0=x0, verbose=verbose)
         else:
-            self.population = self.InitPopulation()
+            self.population = self.InitPopulation(verbose=verbose)
                 
         # loop through all generations
         self.best_scores=[]
