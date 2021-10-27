@@ -12,17 +12,38 @@
 #    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #    SOFTWARE.
 
-#TODO: for nonuniform weights need to incorporate fitness values at the member level
-
 import numpy as np
 import itertools
 import random
 
 from neorl import WOA
+from neorl import GWO
+from neorl import PSO
+from neorl import MFO
+from neorl import HHO
+from neorl import DE
+from neorl import ES
 
 def detect_algo(obj):
     if isinstance(obj, WOA):
-        print("worked???")
+        return 'WOA'
+    elif isinstance(obj, GWO):
+        return 'GWO'
+    elif isinstance(obj, PSO):
+        return 'PSO'
+    elif isinstance(obj, MFO):
+        return 'MFO'
+    elif isinstance(obj, HHO):
+        return 'HHO'
+    elif isinstance(obj, DE):
+        return 'DE'
+    elif isinstance(obj, ES):
+        return 'ES'
+    raise Exception('%s algorithm object not recognized or supported'%obj)
+
+max_algos = ['PSO', 'DE', 'ES']#algos that change fitness function to make a maximum problem
+min_algos = ['WOA', 'GWO', 'MFO', 'HHO']#algos that change fitness function to make a minimum problem
+
 
 class Population:
     # Class to store information and functionality related to a single population
@@ -50,12 +71,7 @@ class Population:
         self.member_fitnesses = out[2]['last_pop'].iloc[:, -1].values.tolist()
 
         self.fitlog.append(max(self.member_fitnesses))
-        print(self.members)
-        print('----')
-        print(self.member_fitnesses)
-        print('----')
-        print(self.fitlog)
-        exit()
+        print('kkkkf', self.fitlog)
 
     #TODO: method to export members, return them and remove from list
     #TODO: method to reviece members, update them in members
@@ -99,9 +115,9 @@ class AEO(object):
             np.random.seed(seed)
 
         self.mode=mode
-        if mode == 'min':
+        if mode == 'max':
             self.fit=fit
-        elif mode == 'max':
+        elif mode == 'min':
             def fitness_wrapper(*args, **kwargs):
                 return -fit(*args, **kwargs) 
             self.fit=fitness_wrapper
@@ -109,12 +125,13 @@ class AEO(object):
             raise ValueError('--error: The mode entered by user is invalid, use either `min` or `max`')
 
         self.optimizers = optimizers
+        self.algos = [detect_algo(o) for o in self.optimizers]
         self.gpc = gen_per_cycle
 
         self.bounds = bounds
         self.ncores = ncores
 
-        #infer variable types 
+        #infer variable types
         self.var_type = np.array([bounds[item][0] for item in bounds])
 
         self.dim = len(bounds)
@@ -181,16 +198,27 @@ class AEO(object):
     def ensure_consistency(self):
         #loop through all optimizers and make sure all options are set to be the same
         gen_warning = ', check that options of all optimizers are the same as AEO'
-        for o in self.optimizers:
-            assert self.mode == o.mode,'%s has incorrect optimization mode'%o + gen_warning
-            assert self.bounds == o.bounds,'%s has incorrect bounds'%o + gen_warning
-            try:
-                assert self.fit(self.lb) == o.fit(self.lb)
-                assert self.fit(self.ub) == o.fit(self.ub)
-                inner_test = [np.random.uniform(self.lb[i], self.ub[i]) for i in range(len(self.ub))]
-                assert self.fit(inner_test) == o.fit(inner_test)
-            except:
-                raise Exception('i%s has incorrect fitness function'%o + gen_warning)
+        for o, a in zip(self.optimizers, self.algos):
+            if a in max_algos:
+                assert self.mode == o.mode,'%s has incorrect optimization mode'%o + gen_warning
+                assert self.bounds == o.bounds,'%s has incorrect bounds'%o + gen_warning
+                try:
+                    assert self.fit(self.lb) == o.fit(self.lb)
+                    assert self.fit(self.ub) == o.fit(self.ub)
+                    inner_test = [np.random.uniform(self.lb[i], self.ub[i]) for i in range(len(self.ub))]
+                    assert self.fit(inner_test) == o.fit(inner_test)
+                except:
+                    raise Exception('i%s has incorrect fitness function'%o + gen_warning)
+            else:
+                assert self.mode == o.mode,'%s has incorrect optimization mode'%o + gen_warning
+                assert self.bounds == o.bounds,'%s has incorrect bounds'%o + gen_warning
+                try:
+                    assert self.fit(self.lb) == -o.fit(self.lb)
+                    assert self.fit(self.ub) == -o.fit(self.ub)
+                    inner_test = [np.random.uniform(self.lb[i], self.ub[i]) for i in range(len(self.ub))]
+                    assert self.fit(inner_test) == -o.fit(inner_test)
+                except:
+                    raise Exception('i%s has incorrect fitness function'%o + gen_warning)
 
     def init_sample(self, bounds):
 
@@ -254,6 +282,8 @@ class AEO(object):
         #TODO: write in verbose reporting
     #TODO: Set up migration method with 3 phases and markov matrix calculation
 
+    #TODO: Autodetect initial populations
+    #TODO: Incorporate ngtonevals into method autodetection
 
 
 
