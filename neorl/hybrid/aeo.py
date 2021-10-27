@@ -54,10 +54,29 @@ class AEO(object):
     :param fit: (function) the fitness function
     :param optimizers: (list) list of optimizer instances to be included in the ensemble
     :param gen_per_cycle: (int) number of generations performed in evolution phase per cycle
+    :param alpha: (float or str) option for exponent on g strength measure, if numeric, alpha is taken to be
+        that value. If alpha is 'up' alpha is annealed from -1 to 1. If alpha is 'down' it is annealed from
+        1 to -1.
+    :param g: (str) either 'fitness' or 'improve' for strength measure for exportation number section of migration
+    :param g_burden: (bool) True if strength if divided by number of fitness evaluations in evolution phase
+    :param wt: (str) 'log', 'lin', 'exp', 'uni' for different weightings in member selection section of migration
+    :param beta: (float or str) option for exponent on b strength measure. See alpha for details.
+    :param b: (str) either 'fitness' or 'improve' for strength measure for destination selection section of migration
+    :param b_burden: (bool) True if strength if divided by number of fitness evaluations in evolution phase
+    :param ret: (bool) True if individual can return to original population in destination selection section
+    :param order: (str) 'wb' for worst to best, 'bw' for best to worst, prepend 'a' for annealed starting in the given ordering.
+    :param kf: (int) 0 or 1 for variant of weighting functions
+    :param ngtonevals: (list of callables) list of functions which take number of generations and number of individuals and returns
+        number of fitness evaluations ordered according to the algorithms given in optimizers.
     :param ncores: (int) number of parallel processors
     :param seed: (int) random seed for sampling
     """
-    def __init__(self, mode, bounds, fit, optimizers, gen_per_cycle, ncores = 1, seed = None):
+    def __init__(self, mode, bounds, fit, 
+            optimizers, gen_per_cycle,
+            alpha, g, g_burden, wt,
+            beta, b, b_burden, ret,
+            order = None, kf = None, ngtonevals = None,
+            ncores = 1, seed = None):
 
         if not (seed is None):
             random.seed(seed)
@@ -88,6 +107,60 @@ class AEO(object):
 
         #check that all optimizers have options that match AEO
         self.ensure_consistency()
+
+        #process variant options for exportation number
+        self.alpha = alpha
+        if (not isinstance(self.alpha, float) and
+            not self.alpha in ['up', 'down']):
+            raise Exception('invalid value for alpha, make sure it is a float!')
+
+        self.g = g
+        if not self.g in ['fitness', 'improve']:
+            raise Exception('invalid option for g')
+
+        self.g_burden = g_burden
+        if not isinstance(g_burden, bool):
+            raise Exception('g_burden should be boolean type')
+
+        #process variant options for member selection
+        self.wt = wt
+        if not self.wt in ['log', 'lin', 'exp', 'uni']:
+            raise Exception('invalid option for wt')
+
+        self.order = order
+        if not self.order in ['wb', 'bw', 'awb', 'abw']:
+            raise Exception('invalid option for order')
+
+        self.kf = kf
+        if not self.kf in [0, 1]:
+            raise Exception('invalid option for kf')
+
+        if self.wt == 'uni' and ((self.kf is not None)
+                or (self.order is not None)):
+            print('--warning: kf and order options ignored for uniform weighting')
+
+        #process variant options for destination selection
+        self.beta = beta
+        if (not isinstance(self.beta, float) and
+            not self.beta in ['up', 'down']):
+            raise Exception('invalid value for beta, make sure it is a float!')
+
+        self.b = b
+        if not self.b in ['fitness', 'improve']:
+            raise Exception('invalid option for b')
+
+        self.b_burden = b_burden
+        if not isinstance(b_burden, bool):
+            raise Exception('b_burden should be boolean type')
+
+        self.ret = ret
+        if not isinstance(ret, bool):
+            raise Exception('ret should be boolean type')
+
+        #process number of generations to number of evaluations functions
+        if g_burden or b_burden:
+            self.ngttonevals = ngtonevals
+
 
     def ensure_consistency(self):
         #loop through all optimizers and make sure all options are set to be the same
