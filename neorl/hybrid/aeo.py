@@ -18,6 +18,12 @@ import numpy as np
 import itertools
 import random
 
+from neorl import WOA
+
+def detect_algo(obj):
+    if isinstance(obj, WOA):
+        print("worked???")
+
 class Population:
     # Class to store information and functionality related to a single population
     # in the AEO algorithm. Should be characterized by an evolution strategy passed
@@ -38,8 +44,18 @@ class Population:
 
     def evolute(self, ngen):
         #perform evolution and store relevant information
-        self.fitlog.append(self.strategy.evolute(ngen, x0 = self.members)[1])
-        self.members = self.strategy.Positions.tolist()
+        print(self.members)
+        out = self.strategy.evolute(ngen, x0 = self.members)
+        self.members = out[2]['last_pop'].iloc[:, :-1].values.tolist()
+        self.member_fitnesses = out[2]['last_pop'].iloc[:, -1].values.tolist()
+
+        self.fitlog.append(max(self.member_fitnesses))
+        print(self.members)
+        print('----')
+        print(self.member_fitnesses)
+        print('----')
+        print(self.fitlog)
+        exit()
 
     #TODO: method to export members, return them and remove from list
     #TODO: method to reviece members, update them in members
@@ -159,7 +175,7 @@ class AEO(object):
 
         #process number of generations to number of evaluations functions
         if g_burden or b_burden:
-            self.ngttonevals = ngtonevals
+            self.ngtonevals = ngtonevals
 
 
     def ensure_consistency(self):
@@ -222,12 +238,19 @@ class AEO(object):
             for x, p in zip(x0, pop0):
                 if p == i:
                     xpop.append(x)
-            self.pops.append(Population(self.optimizers[i], xpop))
+            if self.g_burden or self.b_burden:
+                self.pops.append(Population(self.optimizers[i], xpop, self.ngtonevals[i]))
+            else:
+                self.pops.append(Population(self.optimizers[i], xpop))
+
+        #perform evolution/migration cycle
+        for i in range(ncyc):
+            #evolution phase
+            [p.evolute(self.gpc) for p in self.pops]
+            #migration pase
 
 
-    #TODO: set up input intepreter which allows for selection of variants
     #TODO: Set up evolute method
-        #TODO: Initialize populations*
         #TODO: write in verbose reporting
     #TODO: Set up migration method with 3 phases and markov matrix calculation
 
