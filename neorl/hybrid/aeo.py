@@ -15,6 +15,7 @@
 import numpy as np
 import itertools
 import random
+import math
 
 from neorl import WOA
 from neorl import GWO
@@ -84,6 +85,7 @@ class Population:
         self.member_fitnesses = out[2]['last_pop'].iloc[:, -1].values.tolist()
 
         self.fitlog.append(max(self.member_fitnesses))
+        self.n = len(self.members)
         return self.fitness
 
     def strength(self, g, g_burden, fmax, fmin):
@@ -102,12 +104,11 @@ class Population:
         normed = (unorm - fworst)/(fbest - fworst)
 
         if g_burden:
-            normed /= self.conv(self.last_ngen, len(self.members))
+            normed /= self.conv(self.last_ngen, self.n)
         return normed + 1e-6*(fmax - fmin) #litle adjustment to avoid divide by zero
 
     def export(self, ei, wt, order, kf, gfrac):
-        # Figure out what members to export given ei and algo options
-
+        #decide what members to export and then remove them from members and return them
         if wt == 'uni': #uniform case very easy
             return wtd_remove(self.members, ei)
         else:
@@ -128,14 +129,21 @@ class Population:
                 self.members = [a for _, a in sorted(zip(self.member_fitnesses, self.members), reverse = True)]
 
             #calculate the wts
-            seq = np.array(range(kf, len(self.members) + kf))
-            if wts == 'log':
-                wts = #need to recalculate and impliment
+            seq = np.array(range(1, len(self.members) + 1))
+            if wt == 'log':
+                wts = (np.log(seq)+kf)/(self.n*kf + np.log(math.factorial(self.n)))
+            elif wt == 'lin':
+                wts = (seq-1+kf)/(self.n*(kf-.5)+.5*self.n**2)
+            elif wt == 'exp':
+                wts = (np.exp(seq-1) - 1 + kf)/((kf-1)*self.n+(1-np.exp(self.n))/(1-np.exp(1)))
 
+            #draw members and return them
+            return wtd_remove(self.members, ei, wts)
 
+    def receive(self, individuals):
+        #bring individuals into the populations
+        self.members += individuals
 
-
-    #TODO: method to export members, return them and remove from list
     #TODO: method to reviece members, update them in members
 
 class AEO(object):
@@ -295,12 +303,12 @@ class AEO(object):
                 raise Exception ('unknown data type is given, either int, float, or grid are allowed for parameter bounds')
         return indv
 
-    def get_alpha(self, ncyc, Ncyc):
-        if isinstance(self.alpha, float):
-            return self.alpha
-        elif self.alpha == 'up':
+    def get_alphabeta(self, aorb, ncyc, Ncyc):
+        if isinstance(aorb, float):
+            return aorb
+        elif aorb == 'up':
             return 2*(ncyc-1)/(Ncyc-1) - 1
-        elif self.alpha == 'down':
+        elif aorb == 'down':
             return 1 - 2*(ncyc-1)/(Ncyc-1)
 
     def evolute(self, Ncyc, npop0 = None, x0 = None, pop0 = None, verbose = False):
@@ -350,16 +358,25 @@ class AEO(object):
             #  calc weights
             maxf = max(pop_fits)
             minf = min(pop_fits)
-            alpha = self.get_alpha(i, Ncyc)
+            alpha = self.get_alphabeta(self.alpha, i, Ncyc)
             strengths_exp = [p.strength(self.g, self.g_burden, maxf, minf)**alpha for p in self.pops]
             strengths_exp_scaled = [s/sum(strengths_exp) for s in strengths_exp]
             #  sample binomial to get e_i for each population
             eis = [np.random.binomial(len(p.members), strengths_exp_scaled[j]) for j, p in enumerate(self.pops)]
 
+            exit()
             #member selection
+            #  members removed from population with this export method
             exported = [p.export(eis[j], self.wt, self.order, self.kf, i/Ncyc) for j, p in enumerate(self.pops)]
+            exported = list(itertools.chain.from_iterable(exported))
 
-            #self.pops[0].export(2, "exp", "awb", 0, i/Ncyc)
+            #destination selection
+            beta = self.get_alphabeta(self.beta, i, Ncyc)
+            strengths_exp = [p.strength(self.b, self.b_burden, maxf, minf)**beta for p in self.pops]
+            strengths_exp_scaled = [s/sum(strengths_exp) for s in strengths_exp]
+            #randomize exported
+            #distribute according to outcome of multinomial distribution
+
             exit()
 
             #migration pase
@@ -372,6 +389,7 @@ class AEO(object):
 
     #TODO: Autodetect initial populations
     #TODO: Incorporate ngtonevals into method autodetection
+    #TODO: Ramanujan approx for log(x!)
 
 
 
