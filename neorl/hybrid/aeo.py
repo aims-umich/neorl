@@ -137,7 +137,6 @@ class Population:
 
     #TODO: method to export members, return them and remove from list
     #TODO: method to reviece members, update them in members
-    #TODO: calc strength method, no need to normalize, may need some scaling parametrs
 
 class AEO(object):
     """
@@ -373,7 +372,6 @@ class AEO(object):
 
     #TODO: Autodetect initial populations
     #TODO: Incorporate ngtonevals into method autodetection
-    #TODO: Introduce population size 
 
 
 
