@@ -25,6 +25,8 @@ from neorl import DE
 from neorl import ES
 
 def detect_algo(obj):
+    #simple function to detect object type given neorl
+    # algorithm object
     if isinstance(obj, WOA):
         return 'WOA'
     elif isinstance(obj, GWO):
@@ -44,18 +46,28 @@ def detect_algo(obj):
 max_algos = ['PSO', 'DE', 'ES']#algos that change fitness function to make a maximum problem
 min_algos = ['WOA', 'GWO', 'MFO', 'HHO']#algos that change fitness function to make a minimum problem
 
+def wtd_remove(lst, ei, wts = None):
+    #quick helper function to handle removing ei items from lst and returning them with
+    #wts probability vector
+    if wts is None:
+        wts = [1/len(lst) for i in range(len(lst))]
+    indxs = np.random.choice(range(len(lst)), size=ei, p = wts, replace = False)
+    return [lst.pop(i) for i in reversed(sorted(indxs))]
 
 class Population:
     # Class to store information and functionality related to a single population
     # in the AEO algorithm. Should be characterized by an evolution strategy passed
     # as one of the optimization classes from the other algorithms in NEORL.
-    def __init__(self, strategy, init_pop, conv = None):
+    def __init__(self, strategy, algo, init_pop, mode, conv = None):
         # strategy should be one of the optimization objects containing an "evolute" method
         # init_pop needs to match the population given to the strategy object initially
+        # algo is string that identifies which class is being used
         # conv is a function which takes ngen and returns number of evaluations
         self.conv = conv
         self.strategy = strategy
+        self.algo = algo
         self.members = init_pop
+        self.mode = mode
 
         self.fitlog = []
 
@@ -64,14 +76,64 @@ class Population:
         return self.fitlog[-1]
 
     def evolute(self, ngen):
+        self.last_ngen = ngen
+
         #perform evolution and store relevant information
-        print(self.members)
         out = self.strategy.evolute(ngen, x0 = self.members)
         self.members = out[2]['last_pop'].iloc[:, :-1].values.tolist()
         self.member_fitnesses = out[2]['last_pop'].iloc[:, -1].values.tolist()
 
         self.fitlog.append(max(self.member_fitnesses))
-        print('kkkkf', self.fitlog)
+        return self.fitness
+
+    def strength(self, g, g_burden, fmax, fmin):
+        if self.mode == "max":
+            fbest, fworst = fmax, fmin
+        elif self.mode == "min":
+            fworst, fbest = fmax, fmin
+
+        #calculate strength for two different types
+        if g == 'improve' and len(self.fitlog) > 1:
+            unorm = max([self.fitlog[-1] - self.fitlog[-2], 0]) #in case best indiv got exported
+        if g == 'fitness':
+            unorm = self.fitness
+
+        #normalize strength measure
+        normed = (unorm - fworst)/(fbest - fworst)
+
+        if g_burden:
+            normed /= self.conv(self.last_ngen, len(self.members))
+        return normed + 1e-6*(fmax - fmin) #litle adjustment to avoid divide by zero
+
+    def export(self, ei, wt, order, kf, gfrac):
+        # Figure out what members to export given ei and algo options
+
+        if wt == 'uni': #uniform case very easy
+            return wtd_remove(self.members, ei)
+        else:
+            if order[0] == 'a': #handle the annealed cases
+                if gfrac < 0.5:
+                    o = order[1:]
+                else:
+                    o = order[2] + order[1]
+            else: #if no annealing
+                o = order
+
+            #order the members
+            if (o == 'wb' and self.mode == 'max') \
+                    or (o == 'bw' and self.mode == 'min'):
+                self.members = [a for _, a in sorted(zip(self.member_fitnesses, self.members))]
+            if (o == 'bw' and self.mode == 'max') \
+                    or (o == 'wb' and self.mode == 'min'):
+                self.members = [a for _, a in sorted(zip(self.member_fitnesses, self.members), reverse = True)]
+
+            #calculate the wts
+            seq = np.array(range(kf, len(self.members) + kf))
+            if wts == 'log':
+                wts = #need to recalculate and impliment
+
+
+
 
     #TODO: method to export members, return them and remove from list
     #TODO: method to reviece members, update them in members
@@ -119,7 +181,7 @@ class AEO(object):
             self.fit=fit
         elif mode == 'min':
             def fitness_wrapper(*args, **kwargs):
-                return -fit(*args, **kwargs) 
+                return -fit(*args, **kwargs)
             self.fit=fitness_wrapper
         else:
             raise ValueError('--error: The mode entered by user is invalid, use either `min` or `max`')
@@ -234,12 +296,20 @@ class AEO(object):
                 raise Exception ('unknown data type is given, either int, float, or grid are allowed for parameter bounds')
         return indv
 
-    def evolute(self, ncyc, npop0 = None, x0 = None, pop0 = None, verbose = False):
+    def get_alpha(self, ncyc, Ncyc):
+        if isinstance(self.alpha, float):
+            return self.alpha
+        elif self.alpha == 'up':
+            return 2*(ncyc-1)/(Ncyc-1) - 1
+        elif self.alpha == 'down':
+            return 1 - 2*(ncyc-1)/(Ncyc-1)
+
+    def evolute(self, Ncyc, npop0 = None, x0 = None, pop0 = None, verbose = False):
         """
         This function evolutes the AEO algorithm for a number of cycles. Either
         npop0 or x0 and pop0 are required.
 
-        :param ncyc: (int) number of cycles to evolute
+        :param Ncyc: (int) number of cycles to evolute
         :param pop0: (list of ints) number of individuals in starting population for each optimizer
         :param x0: (list of lists) initial positions of individuals in problem space
         :param pop0: (list of ints) population assignments for x0, integer corresponding to assigned population ordered
@@ -267,23 +337,43 @@ class AEO(object):
                 if p == i:
                     xpop.append(x)
             if self.g_burden or self.b_burden:
-                self.pops.append(Population(self.optimizers[i], xpop, self.ngtonevals[i]))
+                self.pops.append(Population(self.optimizers[i], self.algos[i],
+                    xpop, self.mode, self.ngtonevals[i]))
             else:
-                self.pops.append(Population(self.optimizers[i], xpop))
+                self.pops.append(Population(self.optimizers[i], self.algos[i], xpop, self.mode))
 
         #perform evolution/migration cycle
-        for i in range(ncyc):
+        for i in range(1, Ncyc + 1):
             #evolution phase
-            [p.evolute(self.gpc) for p in self.pops]
+            pop_fits = [p.evolute(self.gpc) for p in self.pops]
+
+            #exportation number
+            #  calc weights
+            maxf = max(pop_fits)
+            minf = min(pop_fits)
+            alpha = self.get_alpha(i, Ncyc)
+            strengths_exp = [p.strength(self.g, self.g_burden, maxf, minf)**alpha for p in self.pops]
+            strengths_exp_scaled = [s/sum(strengths_exp) for s in strengths_exp]
+            #  sample binomial to get e_i for each population
+            eis = [np.random.binomial(len(p.members), strengths_exp_scaled[j]) for j, p in enumerate(self.pops)]
+
+            #member selection
+            exported = [p.export(eis[j], self.wt, self.order, self.kf, i/Ncyc) for j, p in enumerate(self.pops)]
+
+            #self.pops[0].export(2, "exp", "awb", 0, i/Ncyc)
+            exit()
+
             #migration pase
 
 
     #TODO: Set up evolute method
         #TODO: write in verbose reporting
     #TODO: Set up migration method with 3 phases and markov matrix calculation
+        #TODO: set up method for removing indivicuals from population`
 
     #TODO: Autodetect initial populations
     #TODO: Incorporate ngtonevals into method autodetection
+    #TODO: Introduce population size 
 
 
 
