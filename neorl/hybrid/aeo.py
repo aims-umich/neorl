@@ -77,6 +77,11 @@ class Population:
         return self.fitlog[-1]
 
     def evolute(self, ngen):
+        if len(self.members) < 3:
+            print(self.algo, "skipped")
+            self.n = len(self.members)
+            return self.fitness
+
         self.last_ngen = ngen
 
         #perform evolution and store relevant information
@@ -97,7 +102,7 @@ class Population:
         #calculate strength for two different types
         if g == 'improve' and len(self.fitlog) > 1:
             unorm = max([self.fitlog[-1] - self.fitlog[-2], 0]) #in case best indiv got exported
-        if g == 'fitness':
+        else: #when g == 'fitness' and also no matter what if on first cycle
             unorm = self.fitness
 
         #normalize strength measure
@@ -364,28 +369,45 @@ class AEO(object):
             #  sample binomial to get e_i for each population
             eis = [np.random.binomial(len(p.members), strengths_exp_scaled[j]) for j, p in enumerate(self.pops)]
 
-            exit()
             #member selection
             #  members removed from population with this export method
             exported = [p.export(eis[j], self.wt, self.order, self.kf, i/Ncyc) for j, p in enumerate(self.pops)]
-            exported = list(itertools.chain.from_iterable(exported))
 
             #destination selection
             beta = self.get_alphabeta(self.beta, i, Ncyc)
             strengths_exp = [p.strength(self.b, self.b_burden, maxf, minf)**beta for p in self.pops]
-            strengths_exp_scaled = [s/sum(strengths_exp) for s in strengths_exp]
-            #randomize exported
-            #distribute according to outcome of multinomial distribution
 
-            exit()
+            if self.ret:#if population can return to original population
+                #manage members that are currently without a home
+                exported = list(itertools.chain.from_iterable(exported))
+                random.shuffle(exported)#in-place randomize order
 
-            #migration pase
+                #calculate normalized probabilities and draw samples
+                strengths_exp_scaled = [s/sum(strengths_exp) for s in strengths_exp]
+                allotments = np.random.multinomial(len(exported), strengths_exp_scaled)
+
+                #distribute individuals according to the sample
+                for a, p in zip(allotments, self.pops):
+                    p.receive(exported[:a])
+                    exported = exported[a:]
+
+            else:
+                pop_indxs = list(range(len(self.pops)))
+                for j, exported_group in enumerate(exported):
+                    strengths_inotj = strengths_exp_scaled[:j] + strengths_exp_scaled[j+1:]
+                    pop_indxs_inotj = pop_indxs[:j] + pop_indxs[j+1:]
+                    random.shuffle(exported_group)
+                    allotment = np.random.multinomial(len(exported_group), strengths_inotj)
+                    for a, pi in zip(allotment, pop_indxs_inotj):
+                        self.pops[pi].receive(exported_group[:a])
+                        exported_group = exported_group[a:]
 
 
+    #TODO: on second generation, the number of members changes so evolute is unhappy...should make
+    # some function to copy and initialize a new versionof the algo object but with n individuals changed
     #TODO: Set up evolute method
         #TODO: write in verbose reporting
     #TODO: Set up migration method with 3 phases and markov matrix calculation
-        #TODO: set up method for removing indivicuals from population`
 
     #TODO: Autodetect initial populations
     #TODO: Incorporate ngtonevals into method autodetection
