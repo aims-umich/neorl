@@ -16,6 +16,7 @@ import numpy as np
 import itertools
 import random
 import math
+import inspect
 
 from neorl import WOA
 from neorl import GWO
@@ -55,6 +56,52 @@ def wtd_remove(lst, ei, wts = None):
     indxs = np.random.choice(range(len(lst)), size=ei, p = wts, replace = False)
     return [lst.pop(i) for i in reversed(sorted(indxs))]
 
+def clone_algo_obj(obj, nmembers):
+    # function to return a copy of an algorithm object with anumber of members given as
+    # nmembers. This is to circumvent the error when the x0 passed in the evolute function
+    # is a different size than the individuals given originally in the initialization of 
+    # the algorithm object.
+    # works for now, has potential of breaking
+
+    def filter_kw(dftr, twk):
+        sig = inspect.signature(twk)
+        fks = [p.name for p in sig.parameters.values() if p.kind == p.POSITIONAL_OR_KEYWORD]
+        fd = {fk:dftr[fk] for fk in fks if fk in dftr.keys()}
+        return fd
+
+    algo = detect_algo(obj)
+
+    attrs = obj.__dict__
+
+    if algo == 'WOA':
+        attrs['nwhales'] = nmembers
+        return WOA(**filter_kw(attrs, WOA))
+    elif algo == 'GWO':
+        attrs['nwolves'] = nmembers
+        return GWO(**filter_kw(attrs, GWO))
+    elif algo == 'PSO':
+        attrs['npar'] = nmembers
+        return PSO(**filter_kw(attrs, PSO))
+    elif algo == 'HHO':
+        attrs['nhawks'] = nmembers
+        return HHO(**filter_kw(attrs, HHO))
+    elif algo == 'DE':
+        attrs['npop'] = nmembers
+        return DE(**filter_kw(attrs, DE))
+    elif algo == 'ES':
+        attrs['lambda_'] = nmembers
+        return ES(**filter_kw(attrs, ES))
+
+def eval_algo_popnumber(obj, nmembers):
+    # check if an algorithm is prepared to participate in evolution phase
+    # based on its population information
+
+    algo = detect_algo(obj)
+    #Work in progress
+
+
+
+
 class Population:
     # Class to store information and functionality related to a single population
     # in the AEO algorithm. Should be characterized by an evolution strategy passed
@@ -81,6 +128,8 @@ class Population:
             print(self.algo, "skipped")
             self.n = len(self.members)
             return self.fitness
+
+        if eval_algo_popnumber(self
 
         self.last_ngen = ngen
 
