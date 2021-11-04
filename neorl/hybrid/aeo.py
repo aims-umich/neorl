@@ -26,6 +26,12 @@ from neorl import HHO
 from neorl import DE
 from neorl import ES
 
+# Note: to incorporate additional algorithms into ensembles, the following needs to be done:
+#     1. detect_algo needs to be updated to return appropriate name
+#     2. clone_algo_obj needs to be updated to change the correct attribute in the dict
+#     3. eval_algo_popnumber needs to be given some criteria for the minimum number of individuals
+#        to run the evolution phase
+
 def detect_algo(obj):
     #simple function to detect object type given neorl
     # algorithm object
@@ -56,7 +62,7 @@ def wtd_remove(lst, ei, wts = None):
     indxs = np.random.choice(range(len(lst)), size=ei, p = wts, replace = False)
     return [lst.pop(i) for i in reversed(sorted(indxs))]
 
-def clone_algo_obj(obj, nmembers):
+def clone_algo_obj(obj, nmembers, fit):
     # function to return a copy of an algorithm object with anumber of members given as
     # nmembers. This is to circumvent the error when the x0 passed in the evolute function
     # is a different size than the individuals given originally in the initialization of 
@@ -75,21 +81,27 @@ def clone_algo_obj(obj, nmembers):
 
     if algo == 'WOA':
         attrs['nwhales'] = nmembers
+        attrs['fit'] = fit
         return WOA(**filter_kw(attrs, WOA))
     elif algo == 'GWO':
         attrs['nwolves'] = nmembers
+        attrs['fit'] = fit
         return GWO(**filter_kw(attrs, GWO))
     elif algo == 'PSO':
         attrs['npar'] = nmembers
+        attrs['fit'] = fit
         return PSO(**filter_kw(attrs, PSO))
     elif algo == 'HHO':
         attrs['nhawks'] = nmembers
+        attrs['fit'] = fit
         return HHO(**filter_kw(attrs, HHO))
     elif algo == 'DE':
         attrs['npop'] = nmembers
+        attrs['fit'] = fit
         return DE(**filter_kw(attrs, DE))
     elif algo == 'ES':
         attrs['lambda_'] = nmembers
+        attrs['fit'] = fit
         return ES(**filter_kw(attrs, ES))
 
 def eval_algo_popnumber(obj, nmembers):
@@ -97,10 +109,10 @@ def eval_algo_popnumber(obj, nmembers):
     # based on its population information
 
     algo = detect_algo(obj)
-    #Work in progress
-
-
-
+    if algo in ['WOA', 'GWO', 'PSO', 'HHO', 'DE']:
+        return nmembers >= 5
+    elif algo == 'ES':
+        return nmembers >= obj.mu
 
 class Population:
     # Class to store information and functionality related to a single population
@@ -118,28 +130,43 @@ class Population:
         self.mode = mode
 
         self.fitlog = []
+        self.log = []
 
     @property
     def fitness(self):
         return self.fitlog[-1]
 
-    def evolute(self, ngen):
-        if len(self.members) < 3:
-            print(self.algo, "skipped")
+    def evolute(self, ngen, fit): #fit is included to avoid needing to pull .fit methods
+                                  #    from algo objects that may have been flipped
+        #check if there are enouh members to evolve
+        if not eval_algo_popnumber(self.strategy, len(self.members)):
             self.n = len(self.members)
             return self.fitness
 
-        if eval_algo_popnumber(self
+        #update strategy with new population number
+        self.strategy = clone_algo_obj(self.strategy, len(self.members), fit)
 
+       #store last generation number
         self.last_ngen = ngen
 
         #perform evolution and store relevant information
         out = self.strategy.evolute(ngen, x0 = self.members)
         self.members = out[2]['last_pop'].iloc[:, :-1].values.tolist()
         self.member_fitnesses = out[2]['last_pop'].iloc[:, -1].values.tolist()
+        print("======")
+        print(self.algo)
+        print(self.member_fitnesses)
+        print([-(a[0]**2 + a[1]**2) for a in self.members])
+        print("======")
 
-        self.fitlog.append(max(self.member_fitnesses))
+        if self.mode == 'max':
+            self.fitlog.append(max(self.member_fitnesses))
+        elif self.mode == 'min':
+            self.fitlog.append(min(self.member_fitnesses))
+
         self.n = len(self.members)
+
+        self.log.append(list(zip(self.members, self.member_fitnesses)))
         return self.fitness
 
     def strength(self, g, g_burden, fmax, fmin):
@@ -158,7 +185,7 @@ class Population:
         normed = (unorm - fworst)/(fbest - fworst)
 
         if g_burden:
-            normed /= self.conv(self.last_ngen, self.n)
+            normed /= 1 + self.conv(self.last_ngen, self.n)
         return normed + 1e-6*(fmax - fmin) #litle adjustment to avoid divide by zero
 
     def export(self, ei, wt, order, kf, gfrac):
@@ -198,7 +225,6 @@ class Population:
         #bring individuals into the populations
         self.members += individuals
 
-    #TODO: method to reviece members, update them in members
 
 class AEO(object):
     """
@@ -238,12 +264,14 @@ class AEO(object):
             np.random.seed(seed)
 
         self.mode=mode
-        if mode == 'max':
-            self.fit=fit
+        self.fit = fit
+
+        if mode == 'max': #create fit attribute to use for checking consistency of fits
+            self.fitcheck=fit
         elif mode == 'min':
             def fitness_wrapper(*args, **kwargs):
                 return -fit(*args, **kwargs)
-            self.fit=fitness_wrapper
+            self.fitcheck=fitness_wrapper
         else:
             raise ValueError('--error: The mode entered by user is invalid, use either `min` or `max`')
 
@@ -326,20 +354,20 @@ class AEO(object):
                 assert self.mode == o.mode,'%s has incorrect optimization mode'%o + gen_warning
                 assert self.bounds == o.bounds,'%s has incorrect bounds'%o + gen_warning
                 try:
-                    assert self.fit(self.lb) == o.fit(self.lb)
-                    assert self.fit(self.ub) == o.fit(self.ub)
+                    assert self.fitcheck(self.lb) == o.fit(self.lb)
+                    assert self.fitcheck(self.ub) == o.fit(self.ub)
                     inner_test = [np.random.uniform(self.lb[i], self.ub[i]) for i in range(len(self.ub))]
-                    assert self.fit(inner_test) == o.fit(inner_test)
+                    assert self.fitcheck(inner_test) == o.fit(inner_test)
                 except:
                     raise Exception('i%s has incorrect fitness function'%o + gen_warning)
             else:
                 assert self.mode == o.mode,'%s has incorrect optimization mode'%o + gen_warning
                 assert self.bounds == o.bounds,'%s has incorrect bounds'%o + gen_warning
                 try:
-                    assert self.fit(self.lb) == -o.fit(self.lb)
-                    assert self.fit(self.ub) == -o.fit(self.ub)
+                    assert self.fitcheck(self.lb) == -o.fit(self.lb)
+                    assert self.fitcheck(self.ub) == -o.fit(self.ub)
                     inner_test = [np.random.uniform(self.lb[i], self.ub[i]) for i in range(len(self.ub))]
-                    assert self.fit(inner_test) == -o.fit(inner_test)
+                    assert self.fitcheck(inner_test) == -o.fit(inner_test)
                 except:
                     raise Exception('i%s has incorrect fitness function'%o + gen_warning)
 
@@ -406,7 +434,10 @@ class AEO(object):
         #perform evolution/migration cycle
         for i in range(1, Ncyc + 1):
             #evolution phase
-            pop_fits = [p.evolute(self.gpc) for p in self.pops]
+            pop_fits = [p.evolute(self.gpc, self.fit) for p in self.pops]
+            print("Cycle", i+1, '/',Ncyc + 1)
+            print(pop_fits)
+            print("======")
 
             #exportation number
             #  calc weights
@@ -450,6 +481,8 @@ class AEO(object):
                     for a, pi in zip(allotment, pop_indxs_inotj):
                         self.pops[pi].receive(exported_group[:a])
                         exported_group = exported_group[a:]
+
+
 
 
     #TODO: on second generation, the number of members changes so evolute is unhappy...should make
