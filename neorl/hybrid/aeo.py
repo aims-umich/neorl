@@ -142,7 +142,10 @@ class Population:
         #check if there are enouh members to evolve
         if not eval_algo_popnumber(self.strategy, len(self.members)):
             self.n = len(self.members)
-            return self.fitness
+            if len(self.fitlog) == 0:
+                raise Exception("Starting population for %s too small for evoluation"%self.algo)
+            else:
+                return self.fitness
 
         #update strategy with new population number
         self.strategy = clone_algo_obj(self.strategy, len(self.members), fit)
@@ -452,15 +455,15 @@ class AEO(object):
         npp = len(popcoords)
         log = xr.Dataset(
                 {
-                    "initial_members"    : (["member", "pop"         ], np.zeros((nm, npp    ), dtype = np.float64)),
-                    "member_locations"   : (["member", "pop", "cycle"], np.zeros((nm, npp, nc), dtype = np.float64)),
-                    "member_fitnesses"   : (["member", "pop", "cycle"], np.zeros((nm, npp, nc), dtype = np.float64)),
-                    "nmembers"           : (["pop",           "cycle"], np.zeros((    npp, nc), dtype = np.int32)),
-                    "nexport"            : (["pop",           "cycle"], np.zeros((    npp, nc), dtype = np.int32)),
-                    "export_pop_wts"     : (["pop",           "cycle"], np.zeros((    npp, nc), dtype = np.float64)),
-                    "alpha"              : ([                 "cycle"], np.zeros(          nc , dtype = np.float64)),
-                    "wb"                 : ([                 "cycle"], np.zeros(          nc , dtype = np.bool8)),
-                    "g"                  : (["pop",           "cycle"], np.zeros((    npp, nc), dtype = np.float64)),
+                    'initial_members'    : (['member', 'pop'         ], np.zeros((nm, npp    ), dtype = np.float64)),
+                    'member_locations'   : (['member', 'pop', 'cycle'], np.zeros((nm, npp, nc), dtype = np.float64)),
+                    'member_fitnesses'   : (['member', 'pop', 'cycle'], np.zeros((nm, npp, nc), dtype = np.float64)),
+                    'nmembers'           : (['pop',           'cycle'], np.zeros((    npp, nc), dtype = np.int32)),
+                    'nexport'            : (['pop',           'cycle'], np.zeros((    npp, nc), dtype = np.int32)),
+                    'export_pop_wts'     : (['pop',           'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
+                    'alpha'              : ([                 'cycle'], np.zeros(          nc , dtype = np.float64)),
+                    'wb'                 : ([                 'cycle'], np.zeros(          nc , dtype = np.bool8)),
+                    'g'                  : (['pop',           'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
                     'f'                  : (['pop',           'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
                     'unburdened_g'       : (['pop',           'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
                     'Nc'                 : (['pop',           'cycle'], np.zeros((    npp, nc), dtype = np.int32)),
@@ -469,6 +472,7 @@ class AEO(object):
                     'fmax'               : ([                 'cycle'], np.zeros(          nc , dtype = np.float64)),
                     'export_wts'         : (['member', 'pop', 'cycle'], np.zeros((nm, npp, nc), dtype = np.float64)),
                     'exported'           : (['member', 'pop', 'cycle'], np.zeros((nm, npp, nc), dtype = np.bool8)),
+                    'pop_after_migrate'  : (['member', 'pop', 'cycle'], np.zeros((nm, npp, nc), dtype = np.bool8)),
                     'beta'               : ([                 'cycle'], np.zeros(          nc , dtype = np.float64)),
                     'b'                  : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
                     'A'                  : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.int32)),
