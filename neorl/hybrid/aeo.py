@@ -178,9 +178,9 @@ class Population:
         return self.fitness
 
     def strength(self, g, g_burden, fmax, fmin, log, g_or_b):
-        if self.mode == "max":
+        if self.mode == 'max':
             fbest, fworst = fmax, fmin
-        elif self.mode == "min":
+        elif self.mode == 'min':
             fworst, fbest = fmax, fmin
 
         #calculate strength for two different types
@@ -192,14 +192,24 @@ class Population:
         #normalize strength measure
         normed = (unorm - fworst)/(fbest - fworst)
 
+        if g_or_b == 'g':
+            np.put(log['unburdened_g'].data, [0], [normed])
+        elif g_or_b == 'b':
+            np.put(log['unburdened_b'].data, [0], [normed])
+
+        Nc = self.conv(self.last_ngen, self.n)
+        #burden, if necessary
         if g_burden:
-            normed /= 1 + self.conv(self.last_ngen, self.n)
+            normed /= 1 + Nc
+            np.put(log['Nc'], [0], Nc)
+
+        ret = normed
 
         if g_or_b == 'g':
-            pass
+            np.put(log['g'].data, [0], [ret])
         elif g_or_b == 'b':
-            pass
-        return normed + 1e-6*(fmax - fmin) #litle adjustment to avoid divide by zero
+            np.put(log['b'].data, [0], [ret])
+        return ret
 
     def export(self, ei, wt, order, kf, gfrac):
         #decide what members to export and then remove them from members and return them
@@ -412,6 +422,7 @@ class AEO(object):
         npop0 or x0 and pop0 are required.
 
         :param Ncyc: (int) number of cycles to evolute
+
         :param pop0: (list of ints) number of individuals in starting population for each optimizer
         :param x0: (list of lists) initial positions of individuals in problem space
         :param pop0: (list of ints) population assignments for x0, integer corresponding to assigned population ordered
@@ -480,6 +491,7 @@ class AEO(object):
                     'g'                  : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
                     'f'                  : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
                     'unburdened_g'       : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
+                    'unburdened_b'       : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
                     'Nc'                 : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.int32)),
                     'delta_f'            : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
                     'fmin'               : ([                 'cycle'], np.zeros(          nc , dtype = np.float64)),
@@ -525,12 +537,20 @@ class AEO(object):
             #  sample binomial to get e_i for each population
             eis = [np.random.binomial(len(p.members), strengths_exp_scaled[j]) for j, p in enumerate(self.pops)]
 
+            # log pop export ingo
+            log['export_pop_wts'].loc[{'cycle' : i}] = strengths_exp_scaled
+            log['nexport'].loc[{'cycle' : i}] = eis
+            log['fmax'].loc[{'cycle' : i}] = maxf
+            log['fmin'].loc[{'cycle' : i}] = minf
+            log['alpha'].loc[{'cycle' : i}] = alpha
+
             #member selection
             #  members removed from population with this export method
             exported = [p.export(eis[j], self.wt, self.order, self.kf, i/Ncyc) for j, p in enumerate(self.pops)]
 
             #destination selection
             beta = self.get_alphabeta(self.beta, i, Ncyc)
+            log['beta'].loc[{'cycle' : i}] = alpha
             strengths_exp = [p.strength(self.b, self.b_burden, maxf, minf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'b')**beta for p in self.pops]
 
             if self.ret:#if population can return to original population
@@ -557,17 +577,13 @@ class AEO(object):
                     for a, pi in zip(allotment, pop_indxs_inotj):
                         self.pops[pi].receive(exported_group[:a])
                         exported_group = exported_group[a:]
-        print(log['nmembers'])
+
+            print(log.loc[{'cycle' : 1}])
+            exit()
 
 
 
-
-    #TODO: on second generation, the number of members changes so evolute is unhappy...should make
-    # some function to copy and initialize a new versionof the algo object but with n individuals changed
-    #TODO: Set up evolute method
-        #TODO: write in verbose reporting
-    #TODO: Set up migration method with 3 phases and markov matrix calculation
-
+    #TODO: Markov Matrix calculation
     #TODO: Autodetect initial populations
     #TODO: Incorporate ngtonevals into method autodetection
     #TODO: Ramanujan approx for log(x!)
