@@ -13,6 +13,7 @@
 #    SOFTWARE.
 
 import numpy as np
+import xarray as xr
 import itertools
 import random
 import math
@@ -430,6 +431,53 @@ class AEO(object):
                     xpop, self.mode, self.ngtonevals[i]))
             else:
                 self.pops.append(Population(self.optimizers[i], self.algos[i], xpop, self.mode))
+
+        #initialize log Dataset
+        membercoords = range(len(x0))
+        cyclecoords = range(1, Ncyc + 1)
+        popcoords = [p.algo for p in self.pops]
+        popcoords = []
+        for p in self.pops:
+            algo = p.algo
+            if not (algo in popcoords):
+                popcoords.append(algo)
+            else:
+                i = 2
+                while algo + str(i).zfill(3) in popcoords:
+                    i += 1
+                popcoords.append(algo + str(i).zfill(3))
+
+        nm = len(membercoords)
+        nc = len(cyclecoords)
+        npp = len(popcoords)
+        log = xr.Dataset(
+                {
+                    "initial_members"    : (["member", "pop"         ], np.zeros((nm, npp    ), dtype = np.float64)),
+                    "member_locations"   : (["member", "pop", "cycle"], np.zeros((nm, npp, nc), dtype = np.float64)),
+                    "member_fitnesses"   : (["member", "pop", "cycle"], np.zeros((nm, npp, nc), dtype = np.float64)),
+                    "nmembers"           : (["pop",           "cycle"], np.zeros((    npp, nc), dtype = np.int32)),
+                    "nexport"            : (["pop",           "cycle"], np.zeros((    npp, nc), dtype = np.int32)),
+                    "export_pop_wts"     : (["pop",           "cycle"], np.zeros((    npp, nc), dtype = np.float64)),
+                    "alpha"              : ([                 "cycle"], np.zeros(          nc , dtype = np.float64)),
+                    "wb"                 : ([                 "cycle"], np.zeros(          nc , dtype = np.bool8)),
+                    "g"                  : (["pop",           "cycle"], np.zeros((    npp, nc), dtype = np.float64)),
+                    'f'                  : (['pop',           'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
+                    'unburdened_g'       : (['pop',           'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
+                    'Nc'                 : (['pop',           'cycle'], np.zeros((    npp, nc), dtype = np.int32)),
+                    'delta_f'            : (['pop',           'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
+                    'fmin'               : ([                 'cycle'], np.zeros(          nc , dtype = np.float64)),
+                    'fmax'               : ([                 'cycle'], np.zeros(          nc , dtype = np.float64)),
+                    'export_wts'         : (['member', 'pop', 'cycle'], np.zeros((nm, npp, nc), dtype = np.float64)),
+                    'exported'           : (['member', 'pop', 'cycle'], np.zeros((nm, npp, nc), dtype = np.bool8)),
+                    'beta'               : ([                 'cycle'], np.zeros(          nc , dtype = np.float64)),
+                    'b'                  : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
+                    'A'                  : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.int32)),
+                    'evolute'            : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.bool8))},
+                coords = {
+                    'member'  : membercoords,
+                    'pop'     : popcoords,
+                    'cycle'   : cyclecoords}
+                )
 
         #perform evolution/migration cycle
         for i in range(1, Ncyc + 1):
