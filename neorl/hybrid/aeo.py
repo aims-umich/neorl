@@ -134,15 +134,14 @@ class Population:
                           #    used only for loggin purposes
 
         self.fitlog = []
-        self.log = []
 
     @property
     def fitness(self):
         return self.fitlog[-1]
 
-    def evolute(self, ngen, fit): #fit is included to avoid needing to pull .fit methods
-                                  #    from algo objects that may have been flipped
-        #check if there are enouh members to evolve
+    def evolute(self, ngen, fit, log): #fit is included to avoid needing to pull .fit methods
+                                       #    from algo objects that may have been flipped
+        #check if there are enouh members to evolve NOT appended to fitlog
         if not eval_algo_popnumber(self.strategy, len(self.members)):
             self.n = len(self.members)
             if len(self.fitlog) == 0:
@@ -160,11 +159,6 @@ class Population:
         out = self.strategy.evolute(ngen, x0 = self.members)
         self.members = out[2]['last_pop'].iloc[:, :-1].values.tolist()
         self.member_fitnesses = out[2]['last_pop'].iloc[:, -1].values.tolist()
-        print("======")
-        print(self.algo)
-        print(self.member_fitnesses)
-        print([-(a[0]**2 + a[1]**2) for a in self.members])
-        print("======")
 
         if self.mode == 'max':
             self.fitlog.append(max(self.member_fitnesses))
@@ -173,10 +167,17 @@ class Population:
 
         self.n = len(self.members)
 
-        self.log.append(list(zip(self.members, self.member_fitnesses)))
+        #log relevant information
+        log['member_x'][:self.n] = self.members
+        log['member_fitnesses'][:self.n] = self.member_fitnesses
+        np.put(log['nmembers'].data, [0],  [self.n])
+        np.put(log['f'].data, [0], [self.fitness])
+        if len(self.fitlog) > 1:
+            np.put(log['delta_f'].data, [0], [self.fitlog[-1] - self.fitlog[-2]])
+
         return self.fitness
 
-    def strength(self, g, g_burden, fmax, fmin):
+    def strength(self, g, g_burden, fmax, fmin, log, g_or_b):
         if self.mode == "max":
             fbest, fworst = fmax, fmin
         elif self.mode == "min":
@@ -193,6 +194,11 @@ class Population:
 
         if g_burden:
             normed /= 1 + self.conv(self.last_ngen, self.n)
+
+        if g_or_b == 'g':
+            pass
+        elif g_or_b == 'b':
+            pass
         return normed + 1e-6*(fmax - fmin) #litle adjustment to avoid divide by zero
 
     def export(self, ei, wt, order, kf, gfrac):
@@ -454,24 +460,28 @@ class AEO(object):
                 p.popname = algo + str(i).zfill(3)
                 popcoords.append(p.popname)
 
+        varcoords = list(self.bounds.keys())
+
         nm = len(membercoords)
         nc = len(cyclecoords)
         npp = len(popcoords)
+        nv = len(varcoords)
+
         log = xr.Dataset(
                 {
-                    'initial_members'    : (['member', 'pop'         ], np.zeros((nm, npp    ), dtype = np.float64)),
-                    'nmembers'           : (['pop',           'cycle'], np.zeros((    npp, nc), dtype = np.int32)),
-                    'member_locations'   : (['member', 'pop', 'cycle'], np.zeros((nm, npp, nc), dtype = np.float64)),
+                    'initial_member_x'   : (['member', 'pop',          'var'], np.zeros((nm, npp,     nv), dtype = np.float64)),
+                    'member_x'           : (['member', 'pop', 'cycle', 'var'], np.zeros((nm, npp, nc, nv), dtype = np.float64)),
+                    'nmembers'           : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.int32)),
                     'member_fitnesses'   : (['member', 'pop', 'cycle'], np.zeros((nm, npp, nc), dtype = np.float64)),
-                    'nexport'            : (['pop',           'cycle'], np.zeros((    npp, nc), dtype = np.int32)),
-                    'export_pop_wts'     : (['pop',           'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
+                    'nexport'            : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.int32)),
+                    'export_pop_wts'     : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
                     'alpha'              : ([                 'cycle'], np.zeros(          nc , dtype = np.float64)),
                     'wb'                 : ([                 'cycle'], np.zeros(          nc , dtype = np.bool8)),
-                    'g'                  : (['pop',           'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
-                    'f'                  : (['pop',           'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
-                    'unburdened_g'       : (['pop',           'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
-                    'Nc'                 : (['pop',           'cycle'], np.zeros((    npp, nc), dtype = np.int32)),
-                    'delta_f'            : (['pop',           'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
+                    'g'                  : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
+                    'f'                  : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
+                    'unburdened_g'       : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
+                    'Nc'                 : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.int32)),
+                    'delta_f'            : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
                     'fmin'               : ([                 'cycle'], np.zeros(          nc , dtype = np.float64)),
                     'fmax'               : ([                 'cycle'], np.zeros(          nc , dtype = np.float64)),
                     'export_wts'         : (['member', 'pop', 'cycle'], np.zeros((nm, npp, nc), dtype = np.float64)),
@@ -484,32 +494,33 @@ class AEO(object):
                 coords = {
                     'member'  : membercoords,
                     'pop'     : popcoords,
-                    'cycle'   : cyclecoords}
+                    'cycle'   : cyclecoords,
+                    'var'     : varcoords}
                 )
 
 
         #log positions of initial members
         for p in self.pops:
-            log['nmembers'].loc[{'pop' : p.popname, 'cycle' : 1}] = len(p.members)
-            log['initial_members'].loc[{'pop' : p.popname}][:len(p.members)] = p.members
-        print(log['nmembers'])
-        print(log['initial_members'])
-        exit()
+            log['initial_member_x'].loc[{'pop' : p.popname}][:len(p.members)] = p.members
 
         #perform evolution/migration cycle
         for i in range(1, Ncyc + 1):
             #evolution phase
-            pop_fits = [p.evolute(self.gpc, self.fit) for p in self.pops]
-            print("Cycle", i+1, '/',Ncyc + 1)
-            print(pop_fits)
-            print("======")
+            pop_fits = [p.evolute(self.gpc, self.fit, log.loc[{'pop' : p.popname, 'cycle' : i}]) for p in self.pops]
+
+            #log information from newly evolved populations
+            for p in self.pops:
+                #log['nmembers'].loc[{'pop' : p.popname, 'cycle' : i}] = len(p.members)
+                #log['member_x'].loc[{'pop' : p.popname, 'cycle' : i}][:len(p.members)] = np.array(p.members).reshape(-1, 2)
+                log['f'].loc[{'pop' : p.popname, 'cycle' : i}] = p.fitness
+
 
             #exportation number
             #  calc weights
             maxf = max(pop_fits)
             minf = min(pop_fits)
             alpha = self.get_alphabeta(self.alpha, i, Ncyc)
-            strengths_exp = [p.strength(self.g, self.g_burden, maxf, minf)**alpha for p in self.pops]
+            strengths_exp = [p.strength(self.g, self.g_burden, maxf, minf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'g')**alpha for p in self.pops]
             strengths_exp_scaled = [s/sum(strengths_exp) for s in strengths_exp]
             #  sample binomial to get e_i for each population
             eis = [np.random.binomial(len(p.members), strengths_exp_scaled[j]) for j, p in enumerate(self.pops)]
@@ -520,7 +531,7 @@ class AEO(object):
 
             #destination selection
             beta = self.get_alphabeta(self.beta, i, Ncyc)
-            strengths_exp = [p.strength(self.b, self.b_burden, maxf, minf)**beta for p in self.pops]
+            strengths_exp = [p.strength(self.b, self.b_burden, maxf, minf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'b')**beta for p in self.pops]
 
             if self.ret:#if population can return to original population
                 #manage members that are currently without a home
@@ -546,6 +557,7 @@ class AEO(object):
                     for a, pi in zip(allotment, pop_indxs_inotj):
                         self.pops[pi].receive(exported_group[:a])
                         exported_group = exported_group[a:]
+        print(log['nmembers'])
 
 
 
