@@ -130,6 +130,9 @@ class Population:
         self.members = init_pop
         self.mode = mode
 
+        self.popname = '' #will be assigned externally after object has been initialized
+                          #    used only for loggin purposes
+
         self.fitlog = []
         self.log = []
 
@@ -438,17 +441,18 @@ class AEO(object):
         #initialize log Dataset
         membercoords = range(len(x0))
         cyclecoords = range(1, Ncyc + 1)
-        popcoords = [p.algo for p in self.pops]
         popcoords = []
         for p in self.pops:
             algo = p.algo
             if not (algo in popcoords):
-                popcoords.append(algo)
+                p.popname = algo
+                popcoords.append(p.popname)
             else:
                 i = 2
                 while algo + str(i).zfill(3) in popcoords:
                     i += 1
-                popcoords.append(algo + str(i).zfill(3))
+                p.popname = algo + str(i).zfill(3)
+                popcoords.append(p.popname)
 
         nm = len(membercoords)
         nc = len(cyclecoords)
@@ -456,9 +460,9 @@ class AEO(object):
         log = xr.Dataset(
                 {
                     'initial_members'    : (['member', 'pop'         ], np.zeros((nm, npp    ), dtype = np.float64)),
+                    'nmembers'           : (['pop',           'cycle'], np.zeros((    npp, nc), dtype = np.int32)),
                     'member_locations'   : (['member', 'pop', 'cycle'], np.zeros((nm, npp, nc), dtype = np.float64)),
                     'member_fitnesses'   : (['member', 'pop', 'cycle'], np.zeros((nm, npp, nc), dtype = np.float64)),
-                    'nmembers'           : (['pop',           'cycle'], np.zeros((    npp, nc), dtype = np.int32)),
                     'nexport'            : (['pop',           'cycle'], np.zeros((    npp, nc), dtype = np.int32)),
                     'export_pop_wts'     : (['pop',           'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
                     'alpha'              : ([                 'cycle'], np.zeros(          nc , dtype = np.float64)),
@@ -482,6 +486,15 @@ class AEO(object):
                     'pop'     : popcoords,
                     'cycle'   : cyclecoords}
                 )
+
+
+        #log positions of initial members
+        for p in self.pops:
+            log['nmembers'].loc[{'pop' : p.popname, 'cycle' : 1}] = len(p.members)
+            log['initial_members'].loc[{'pop' : p.popname}][:len(p.members)] = p.members
+        print(log['nmembers'])
+        print(log['initial_members'])
+        exit()
 
         #perform evolution/migration cycle
         for i in range(1, Ncyc + 1):
