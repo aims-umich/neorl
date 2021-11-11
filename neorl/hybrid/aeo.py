@@ -552,6 +552,8 @@ class AEO(object):
                     'delta_f'            : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
                     'fmin'               : ([                 'cycle'], np.zeros(          nc , dtype = np.float64)),
                     'fmax'               : ([                 'cycle'], np.zeros(          nc , dtype = np.float64)),
+                    'scaling_fmin'       : ([                 'cycle'], np.zeros(          nc , dtype = np.float64)),
+                    'scaling_fmax'       : ([                 'cycle'], np.zeros(          nc , dtype = np.float64)),
                     'export_wts'         : (['member', 'pop', 'cycle'], np.zeros((nm, npp, nc), dtype = np.float64)),
                     'exported'           : (['member', 'pop', 'cycle'], np.zeros((nm, npp, nc), dtype = np.bool8)),
 #                    'pop_after_migrate'  : (['member', 'pop', 'cycle'], np.zeros((nm, npp, nc), dtype = '<U6')),
@@ -580,8 +582,13 @@ class AEO(object):
             #  calc weights
             maxf = max(pop_fits)
             minf = min(pop_fits)
+            if maxf == minf:
+                pass
+            else:
+                scaling_maxf = maxf
+                scaling_minf = minf
             alpha = self.get_alphabeta(self.alpha, i, Ncyc)
-            strengths_exp = [p.strength(self.g, self.g_burden, maxf, minf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'g')**alpha for p in self.pops]
+            strengths_exp = [p.strength(self.g, self.g_burden,scaling_maxf, scaling_minf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'g')**alpha for p in self.pops]
             strengths_exp_scaled = [s/sum(strengths_exp) for s in strengths_exp]
             #  sample binomial to get e_i for each population
             eis = [np.random.binomial(len(p.members), strengths_exp_scaled[j]) for j, p in enumerate(self.pops)]
@@ -591,6 +598,8 @@ class AEO(object):
             log['nexport'].loc[{'cycle' : i}] = eis
             log['fmax'].loc[{'cycle' : i}] = maxf
             log['fmin'].loc[{'cycle' : i}] = minf
+            log['scaling_fmax'].loc[{'cycle' : i}] = scaling_maxf
+            log['scaling_fmin'].loc[{'cycle' : i}] = scaling_minf
             log['alpha'].loc[{'cycle' : i}] = alpha
 
             #member selection
@@ -600,7 +609,7 @@ class AEO(object):
             #destination selection
             beta = self.get_alphabeta(self.beta, i, Ncyc)
             log['beta'].loc[{'cycle' : i}] = beta
-            strengths_exp = [p.strength(self.b, self.b_burden, maxf, minf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'b')**beta for p in self.pops]
+            strengths_exp = [p.strength(self.b, self.b_burden, scaling_maxf, scaling_minf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'b')**beta for p in self.pops]
 
             if self.ret:#if population can return to original population
                 #manage members that are currently without a home
