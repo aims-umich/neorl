@@ -18,6 +18,7 @@ import itertools
 import random
 import math
 import inspect
+import copy
 
 from neorl import WOA
 from neorl import GWO
@@ -163,7 +164,7 @@ class Population:
         # algo is string that identifies which class is being used
         # conv is a function which takes ngen and returns number of evaluations
         self.conv = conv
-        self.strategy = strategy
+        self.strategy = copy.deepcopy(strategy)
         self.algo = algo
         self.members = init_pop
         self.mode = mode
@@ -187,6 +188,8 @@ class Population:
             fitness = self.fitness
 
         else:
+            np.put(log['evolute'].data, [0], True)
+
             #update strategy with new population number
             self.strategy = clone_algo_obj(self.strategy, len(self.members), fit)
 
@@ -441,6 +444,7 @@ class AEO(object):
                     inner_test = [np.random.uniform(self.lb[i], self.ub[i]) for i in range(len(self.ub))]
                     assert self.fitcheck(inner_test) == o.fit(inner_test)
                 except:
+                    print("here")
                     raise Exception('i%s has incorrect fitness function'%o + gen_warning)
             else:
                 assert self.mode == o.mode,'%s has incorrect optimization mode'%o + gen_warning
@@ -460,8 +464,6 @@ class AEO(object):
                 indv.append(random.randint(bounds[key][1], bounds[key][2]))
             elif bounds[key][0] == 'float':
                 indv.append(random.uniform(bounds[key][1], bounds[key][2]))
-            #elif bounds[key][0] == 'grid':
-            #    indv.append(random.sample(bounds[key][1],1)[0])
             else:
                 raise Exception ('unknown data type is given, either int, float, or grid are allowed for parameter bounds')
         return indv
@@ -506,11 +508,8 @@ class AEO(object):
             for x, p in zip(x0, pop0):
                 if p == i:
                     xpop.append(x)
-            if self.g_burden or self.b_burden:
-                self.pops.append(Population(self.optimizers[i], self.algos[i],
+            self.pops.append(Population(self.optimizers[i], self.algos[i],
                     xpop, self.mode, self.ngtonevals[i]))
-            else:
-                self.pops.append(Population(self.optimizers[i], self.algos[i], xpop, self.mode))
 
         #initialize log Dataset
         membercoords = range(len(x0))
@@ -632,12 +631,14 @@ class AEO(object):
                     allotment_holder[pop_indxs_inotj] += allotment
 
                 log['A'].loc[{'cycle' : i}] = allotment_holder
-        print(log)
+
+        return log
 
 
 
     #TODO: Markov Matrix calculation
     #TODO: Ramanujan approx for log(x!)
+    #TODO: Fitness checker outside of consistency method
 
 
 
