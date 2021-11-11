@@ -583,12 +583,16 @@ class AEO(object):
             maxf = max(pop_fits)
             minf = min(pop_fits)
             if maxf == minf:
-                pass
+                if i == 1: #this basically sets all g_i to 1
+                    scaling_minf = .9*minf
+                    scaling_maxf = maxf
+                else:
+                    pass #Leave scaling parameters alone
             else:
                 scaling_maxf = maxf
                 scaling_minf = minf
             alpha = self.get_alphabeta(self.alpha, i, Ncyc)
-            strengths_exp = [p.strength(self.g, self.g_burden,scaling_maxf, scaling_minf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'g')**alpha for p in self.pops]
+            strengths_exp = [p.strength(self.g, self.g_burden, scaling_maxf, scaling_minf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'g')**alpha for p in self.pops]
             strengths_exp_scaled = [s/sum(strengths_exp) for s in strengths_exp]
             #  sample binomial to get e_i for each population
             eis = [np.random.binomial(len(p.members), strengths_exp_scaled[j]) for j, p in enumerate(self.pops)]
