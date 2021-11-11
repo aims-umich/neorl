@@ -387,6 +387,9 @@ class AEO(object):
         if (not isinstance(self.alpha, float) and
             not self.alpha in ['up', 'down']):
             raise Exception('invalid value for alpha, make sure it is a float!')
+        if isinstance(self.alpha, float):
+            if self.alpha < 0:
+                raise Exception('alpha must be equal to or greater than 0')
 
         self.g = g
         if not self.g in ['fitness', 'improve']:
@@ -418,6 +421,9 @@ class AEO(object):
         if (not isinstance(self.beta, float) and
             not self.beta in ['up', 'down']):
             raise Exception('invalid value for beta, make sure it is a float!')
+        if isinstance(self.beta, float):
+            if self.beta < 0:
+                raise Exception('beta must be equal to or greater than 0')
 
         self.b = b
         if not self.b in ['fitness', 'improve']:
@@ -472,9 +478,9 @@ class AEO(object):
         if isinstance(aorb, float):
             return aorb
         elif aorb == 'up':
-            return 2*(ncyc-1)/(Ncyc-1) - 1
+            return (ncyc-1)/(Ncyc-1)
         elif aorb == 'down':
-            return 1 - 2*(ncyc-1)/(Ncyc-1)
+            return 1 - (ncyc-1)/(Ncyc-1)
 
     def evolute(self, Ncyc, npop0 = None, x0 = None, pop0 = None, verbose = False):
         """
@@ -595,7 +601,7 @@ class AEO(object):
             strengths_exp = [p.strength(self.g, self.g_burden, scaling_maxf, scaling_minf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'g')**alpha for p in self.pops]
             strengths_exp_scaled = [s/sum(strengths_exp) for s in strengths_exp]
             #  sample binomial to get e_i for each population
-            eis = [np.random.binomial(len(p.members), strengths_exp_scaled[j]) for j, p in enumerate(self.pops)]
+            eis = [np.random.binomial(len(p.members), 1 - strengths_exp_scaled[j]) for j, p in enumerate(self.pops)]
 
             # log pop export ingo
             log['export_pop_wts'].loc[{'cycle' : i}] = strengths_exp_scaled
