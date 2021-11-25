@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Example 7: Pressure Vessel Design &mdash; NEORL 1.6.3b documentation</title>
+  <title>Example 7: Pressure Vessel Design &mdash; NEORL 1.7 documentation</title>
   
 
   
@@ -71,7 +71,7 @@
             
             
               <div class="version">
-                main (1.6.3b )
+                main (1.7 )
               </div>
             
           
@@ -347,7 +347,7 @@
 
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hho_hist</span><span class="p">[</span><span class="s1">&#39;global_fitness&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;HHO&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">es_hist</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ES&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">es_hist</span><span class="p">[</span><span class="s1">&#39;global_fitness&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ES&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pesa_hist</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;PESA&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">bat_hist</span><span class="p">[</span><span class="s1">&#39;global_fitness&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;BAT&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Generation&#39;</span><span class="p">)</span>
@@ -355,6 +355,7 @@
 <span class="c1">#plt.ylim([0,10000]) #zoom in</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;ex7_pv_fitness.png&#39;</span><span class="p">,</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
 <span class="c1">########################</span>
 <span class="c1"># Comparison</span>

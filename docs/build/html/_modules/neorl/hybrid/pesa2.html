@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.hybrid.pesa2 &mdash; NEORL 1.6.3b documentation</title>
+  <title>neorl.hybrid.pesa2 &mdash; NEORL 1.7 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.6.3b )
+                main (1.7 )
               </div>
             
           
@@ -259,7 +259,7 @@
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">uuid</span>
 <span class="kn">from</span> <span class="nn">neorl.evolu.discrete</span> <span class="kn">import</span> <span class="n">mutate_discrete</span><span class="p">,</span> <span class="n">encode_grid_to_discrete</span><span class="p">,</span> <span class="n">decode_discrete_to_grid</span>
-
+<span class="kn">from</span> <span class="nn">neorl.utils.seeding</span> <span class="kn">import</span> <span class="n">set_neorl_seed</span>
 
 <span class="c1">#multiprocessing trick to paralllelize nested functions in python (un-picklable objects!)</span>
 <span class="k">def</span> <span class="nf">globalize</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
@@ -309,10 +309,9 @@
                   <span class="n">nwhales</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="c1">#WOA parameters</span>
                   <span class="n">int_transform</span> <span class="o">=</span><span class="s1">&#39;nearest_int&#39;</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span> <span class="c1">#misc parameters</span>
         
-        <span class="k">if</span> <span class="n">seed</span><span class="p">:</span>
-            <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
-
+        
+        <span class="n">set_neorl_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+        
         <span class="c1">#--mir</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span>
         <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;max&#39;</span><span class="p">:</span>
@@ -535,6 +534,7 @@
                 
                 <span class="n">QGWO</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">();</span> <span class="n">QDE</span><span class="o">=</span><span class="n">Queue</span><span class="p">();</span> <span class="n">QWOA</span><span class="o">=</span><span class="n">Queue</span><span class="p">()</span>
                 <span class="k">def</span> <span class="nf">gwo_worker</span><span class="p">():</span>
+                    <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SEED</span><span class="p">)</span>
                     <span class="n">xgwo_best</span><span class="p">,</span> <span class="n">ygwo_best</span><span class="p">,</span> <span class="n">gwo_new</span><span class="o">=</span> <span class="n">gwo</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">GWO_gen</span><span class="o">*</span><span class="n">replay_every</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gwo_next</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
                                                                                                  
                     <span class="n">QGWO</span><span class="o">.</span><span class="n">put</span><span class="p">((</span><span class="n">xgwo_best</span><span class="p">,</span> <span class="n">ygwo_best</span><span class="p">,</span> <span class="n">gwo_new</span><span class="p">))</span>

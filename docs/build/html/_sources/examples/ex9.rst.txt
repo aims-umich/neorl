@@ -239,7 +239,7 @@ where :math:`0.001 \leq x_i \leq 100`
 Results
 --------------------
 
-A summary of the results for the different methods is shown below with the best :math:`\vec{x}` and :math:`y=f(x)` (minimum volume). All methods seem to provide a competitive performance. 
+A summary of the results for the different methods is shown below with the best :math:`\vec{x}` and :math:`y=f(x)` (minimum volume). All methods seem to provide competitive performances. 
 
 .. image:: ../images/CSB_square_fitness.png
    :scale: 30%

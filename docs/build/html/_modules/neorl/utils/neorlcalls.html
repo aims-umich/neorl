@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.utils.neorlcalls &mdash; NEORL 1.6.3b documentation</title>
+  <title>neorl.utils.neorlcalls &mdash; NEORL 1.7 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.6.3b )
+                main (1.7 )
               </div>
             
           
@@ -252,6 +252,7 @@
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">matplotlib.lines</span> <span class="kn">import</span> <span class="n">Line2D</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">copy</span>
 
 <span class="k">class</span> <span class="nc">SavePlotCallback</span><span class="p">(</span><span class="n">BaseCallback</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -288,12 +289,15 @@
         <span class="n">mean_reward</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">avg_step</span><span class="p">:])</span>
                
         <span class="c1"># New best model, you could save the agent here</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--debug: current mean reward=</span><span class="si">{}</span><span class="s1">, previous best mean reward = </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">mean_reward</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">best_mean_reward</span><span class="p">)))</span>
         <span class="k">if</span> <span class="n">mean_reward</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_mean_reward</span><span class="p">:</span>
-              <span class="bp">self</span><span class="o">.</span><span class="n">best_mean_reward</span> <span class="o">=</span> <span class="n">mean_reward</span>
+              <span class="bp">self</span><span class="o">.</span><span class="n">best_mean_reward</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">mean_reward</span><span class="p">)</span>
               <span class="c1">#saving best model</span>
+              <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--debug: improvement in reward is observed, new best model is saved to </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">best_save_path</span><span class="p">))</span>
               <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">best_save_path</span><span class="p">)</span>    <span class="c1">#best model found so far</span>
 
         <span class="c1">#saving current model</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--debug: current model model is saved to </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_path</span><span class="p">)</span>   <span class="c1">#latest model</span>
               
         <span class="bp">self</span><span class="o">.</span><span class="n">out_data</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_dir</span><span class="o">+</span><span class="s1">&#39;_out.csv&#39;</span><span class="p">)</span>

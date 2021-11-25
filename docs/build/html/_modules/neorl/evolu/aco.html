@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.evolu.aco &mdash; NEORL 1.6.3b documentation</title>
+  <title>neorl.evolu.aco &mdash; NEORL 1.7 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.6.3b )
+                main (1.7 )
               </div>
             
           
@@ -253,6 +253,7 @@
 <span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">joblib</span>
+<span class="kn">from</span> <span class="nn">neorl.utils.seeding</span> <span class="kn">import</span> <span class="n">set_neorl_seed</span>
 
 <div class="viewcode-block" id="ACO"><a class="viewcode-back" href="../../../modules/aco.html#neorl.evolu.aco.ACO">[docs]</a><span class="k">class</span> <span class="nc">ACO</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -274,9 +275,7 @@
         
         <span class="k">assert</span> <span class="n">narchive</span> <span class="o">&lt;=</span> <span class="n">nants</span><span class="p">,</span> <span class="s1">&#39;--error: narchive must be less than or equal nants&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">:</span>
-            <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+        <span class="n">set_neorl_seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
             
         <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span>
         <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;min&#39;</span><span class="p">:</span>
@@ -300,7 +299,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__final_best_solution</span> <span class="o">=</span> <span class="kc">None</span> 
         <span class="bp">self</span><span class="o">.</span><span class="n">__probs</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__new_pops</span> <span class="o">=</span> <span class="kc">None</span>   
-        <span class="bp">self</span><span class="o">.</span><span class="n">__random</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__random</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pops_sorted</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">__computePdf</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">object</span><span class="p">:</span>

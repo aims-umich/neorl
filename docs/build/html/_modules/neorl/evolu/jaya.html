@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.evolu.jaya &mdash; NEORL 1.6.3b documentation</title>
+  <title>neorl.evolu.jaya &mdash; NEORL 1.7 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.6.3b )
+                main (1.7 )
               </div>
             
           
@@ -247,6 +247,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">joblib</span>
 <span class="kn">from</span> <span class="nn">neorl.evolu.discrete</span> <span class="kn">import</span> <span class="n">mutate_discrete</span><span class="p">,</span> <span class="n">encode_grid_to_discrete</span><span class="p">,</span> <span class="n">decode_discrete_to_grid</span>
+<span class="kn">from</span> <span class="nn">neorl.utils.seeding</span> <span class="kn">import</span> <span class="n">set_neorl_seed</span>
 
 <div class="viewcode-block" id="JAYA"><a class="viewcode-back" href="../../../modules/jaya.html#neorl.evolu.jaya.JAYA">[docs]</a><span class="k">class</span> <span class="nc">JAYA</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -264,9 +265,7 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">npop</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">int_transform</span> <span class="o">=</span><span class="s1">&#39;nearest_int&#39;</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">:</span>
-            <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+        <span class="n">set_neorl_seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
 
         <span class="k">assert</span> <span class="n">npop</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;--eror: size of npop must be more than 3&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">npop</span><span class="o">=</span> <span class="n">npop</span>
@@ -419,9 +418,7 @@
         <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">npop</span> <span class="c1"># population size</span>
         <span class="n">dim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span> <span class="c1"># individual length</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">:</span>
-            <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+        <span class="n">set_neorl_seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
         
         <span class="n">fitness_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
 

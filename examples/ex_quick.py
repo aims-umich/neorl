@@ -55,7 +55,7 @@ print('y:', y_best)
 #---------------------------------
 #Plot fitness for both methods
 plt.figure()
-plt.plot(np.array(de_hist), label='DE')
+plt.plot(de_hist['global_fitness'], label='DE')
 plt.plot(np.array(nes_hist['fitness']), label='NES')
 plt.xlabel('Generation')
 plt.ylabel('Fitness')

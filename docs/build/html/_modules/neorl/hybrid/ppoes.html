@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.hybrid.ppoes &mdash; NEORL 1.6.3b documentation</title>
+  <title>neorl.hybrid.ppoes &mdash; NEORL 1.7 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.6.3b )
+                main (1.7 )
               </div>
             
           
@@ -265,6 +265,7 @@
 <span class="kn">from</span> <span class="nn">neorl.evolu.discrete</span> <span class="kn">import</span> <span class="n">mutate_discrete</span><span class="p">,</span> <span class="n">encode_grid_to_discrete</span><span class="p">,</span> <span class="n">decode_discrete_to_grid</span>
 <span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">ES</span>
 <span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">PPO2</span><span class="p">,</span> <span class="n">MlpPolicy</span><span class="p">,</span> <span class="n">RLLogger</span>
+<span class="kn">from</span> <span class="nn">neorl.utils.seeding</span> <span class="kn">import</span> <span class="n">set_neorl_seed</span>
 
 <span class="k">def</span> <span class="nf">encode_grid_individual_to_discrete</span><span class="p">(</span><span class="n">individual</span><span class="p">,</span> <span class="n">bounds</span><span class="p">):</span>
     
@@ -298,9 +299,7 @@
                   <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>    
         
         <span class="bp">self</span><span class="o">.</span><span class="n">seed</span> <span class="o">=</span> <span class="n">seed</span>
-        <span class="k">if</span> <span class="n">seed</span><span class="p">:</span>
-            <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+        <span class="n">set_neorl_seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
             
         <span class="k">assert</span> <span class="n">npop_rl</span> <span class="o">&lt;</span> <span class="n">npop</span><span class="p">,</span> <span class="s1">&#39;--error: the size of RL individuals `npop_rl` MUST be less than `npop`&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span>
