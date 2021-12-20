@@ -327,6 +327,7 @@ class AEO(object):
         1 to -1.
     :param g: (str) either 'fitness' or 'improve' for strength measure for exportation number section of migration
     :param g_burden: (bool) True if strength if divided by number of fitness evaluations in evolution phase
+    :param q: (float or str) option for favoring weak or strong pops in exportation number
     :param wt: (str) 'log', 'lin', 'exp', 'uni' for different weightings in member selection section of migration
     :param beta: (float or str) option for exponent on b strength measure. See alpha for details.
     :param b: (str) either 'fitness' or 'improve' for strength measure for destination selection section of migration
@@ -341,7 +342,7 @@ class AEO(object):
     """
     def __init__(self, mode, bounds, fit, 
             optimizers, gen_per_cycle,
-            alpha, g, g_burden, wt,
+            alpha, g, g_burden, q, wt,
             beta, b, b_burden, ret,
             order = None, kf = None, ngtonevals = None,
             ncores = 1, seed = None):
@@ -398,6 +399,10 @@ class AEO(object):
         self.g_burden = g_burden
         if not isinstance(g_burden, bool):
             raise Exception('g_burden should be boolean type')
+
+        self.q = q
+        if (not isinstance(self.q, float)) and not self.q in ['up', 'down']:
+            raise Exception('invalid value for q, make sure it is float or string option')
 
         #process variant options for member selection
         self.wt = wt
