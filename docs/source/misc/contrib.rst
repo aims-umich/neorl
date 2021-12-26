@@ -61,5 +61,12 @@ John Mobley IV is a Ph.D. student within the Department of Nuclear Science and E
 
 Linkedin: https://www.linkedin.com/in/johnmobleyiv/
 
+.. image:: ../images/xubo.png
+   :scale: 40 %
+   :alt: alternate text
+   :align: left
+   
+Xubo GU obtained his MS degree from Shanghai Jiao Tong University in 2020. His research involves machine learning, reinforcement learning, data analytics, large-scale optimization with heuristic methods, and their applications in the industry. He has one year of working experience in an industrial-intelligence company, where he applied optimization techniques and machine learning to solve practical industrial problems. For NEORL, he developed three evolutionary algorithms, including MFO, JAYA, and ACO. He also developed two hybrid neuroevolutionary algorithms for NEORL - FNEAT and RNEAT. Besides, he is the main developer of OpenNeoMC, which combines NEORL with OpenMC to empower particle transport code with state-of-the-art optimization techniques of NEORL. 
+
 
  

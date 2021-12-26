@@ -20,6 +20,7 @@
 #@author: majdi
 #"""
 
+import logging
 import numpy as np
 import pandas as pd
 import itertools
@@ -77,7 +78,9 @@ class GRIDTUNE:
             
             return obj
         
-        except:
+        except Exception as e:
+            print(e)
+            logging.exception("message")
             print('--error: case {} failed during execution'.format(caseid))
             print('--error: {} failed'.format(case_dict))
             
