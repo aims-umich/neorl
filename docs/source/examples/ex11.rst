@@ -15,6 +15,17 @@ Summary
 
 Problem Description
 --------------------
+The HOLOS-Quad reactor design is a high-temperature gas-cooled microreactor which has 8 cylindrical control drums for reactivity control. Each of the drums has a portion of their outer surface covered by absorbing material which, when rotated towards the body of the core, can absorb neutrons. The position of a drum will refer to its rotation angle from fully inserted. A view of the core design is given below:
+
+<<awaiting approval to include picture>>
+
+In this example, one of the 8 drums is immobilized and the positions of the remaining 7 drums needs to be selected to satisfy three criteria:
+1. **Insert a target reactivity:** In order for a nuclear reactor to effectively operate, the control system needs to adjust such that the core can have a criticality of 1.
+2. **Minimize the differences in quadrant powers:** Nuclear reactors must maintain relatively even power distributions to effectively operate because the maximum reactor power is limited by the highest power region in the core. Even power distributions allow for higher power output while maintaining safe operation.
+3. **Minimize the travel distance of the farthest traveling drum:** Control drums have a maximum rotation speed which dictates the amount of time required to a drum to a certain position. Therefore, minimizing the travel distance of the farthest traveling drum will minimize the time required to position all control drums.
+
+Due to the large computational cost associated with calculating core criticality and quadrant powers, 
+
 
 
 NEORL script
