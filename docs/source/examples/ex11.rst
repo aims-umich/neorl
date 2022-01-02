@@ -5,6 +5,8 @@ Example 11: Microreactor Control with Malfunction
 
 Example demonstrating NEORL used to find optimal control mechanism positions to acheive favorable operation of a nuclear microreactor.
 
+Original paper: Price, D., Radaideh, M., Kochunas, B. Multiobjective optimization of nuclear microreactor control system operation with surrogate-based evoluationary algorithms. Nuclear Engineering and Design. *Under Review*
+
 Summary
 --------------------
 
