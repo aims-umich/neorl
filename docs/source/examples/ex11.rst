@@ -37,6 +37,8 @@ This model will be refered to as :math: `\rho(\vec{x})` where :math: `\vec{x}` i
 
 where :math:`\rho_{tgt}` is the target reactivity.
 
+For the next objective, that is to minimize the differences in quadrant powers, a neural network is used to predict quadrant powers for a particlar control drum configuration. More information on this neural network is given in the paper given at the top of this page as "Original Paper". If the power in each quadrant of the core can be represented 
+
 
 NEORL script
 --------------------
