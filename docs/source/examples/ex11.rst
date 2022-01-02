@@ -24,8 +24,16 @@ In this example, one of the 8 drums is immobilized and the positions of the rema
 2. **Minimize the differences in quadrant powers:** Nuclear reactors must maintain relatively even power distributions to effectively operate because the maximum reactor power is limited by the highest power region in the core. Even power distributions allow for higher power output while maintaining safe operation.
 3. **Minimize the travel distance of the farthest traveling drum:** Control drums have a maximum rotation speed which dictates the amount of time required to a drum to a certain position. Therefore, minimizing the travel distance of the farthest traveling drum will minimize the time required to position all control drums.
 
-Due to the large computational cost associated with calculating core criticality and quadrant powers, 
+These criteria must be expressed mathematically to create the objective functions. Due to the large computational cost associated with conventional calculation methods for core criticality and quadrant powers, surrogate models must be used. For the target reactivity objective, a method which uses a physics-based model augmented with a statistical model is used to predict the reactivity inserted from a particular control drum configuration. This model is described in detail in the paper below:
 
+Price, D., Kinast, S., Barr, K., Kochunas, B., & Filippone, C. (2021), A perturbation-based hybrid methodology for control drum worth prediction applied to the HOLOS-Quad microreactor concept. Annals of Nuclear Energy, *in press*.
+
+This model will be refered to as :math: `\rho(\vec{x})` where :math: `\vec{x}` is a vector of 7 control drum positions. The objective function can then be written as:
+
+..math::
+& \hat{f}_c(\vec{x}) = |\rho_{tgt} - \rho(\vec{x})|
+
+where :math:`\rho_{tgt}` is the target reactivity.
 
 
 NEORL script
