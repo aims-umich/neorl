@@ -31,7 +31,7 @@ These criteria must be expressed mathematically to create the objective function
 
 Price, D., Kinast, S., Barr, K., Kochunas, B., & Filippone, C. (2021), A perturbation-based hybrid methodology for control drum worth prediction applied to the HOLOS-Quad microreactor concept. Annals of Nuclear Energy. (In Press)
 
-This model will be refered to as :math:`\rho(\vec{x})` where :math:`\vec{x}` is a vector of 7 control drum positions. Each component of :math:`\vec{x}` is bounded by 0 and 2:math:`\pi` radians. The objective function can then be written as:
+This model will be refered to as :math:`\rho(\vec{x})` where :math:`\vec{x}` is a vector of 7 control drum positions. Each component of :math:`\vec{x}` is bounded by 0 and 2 :math:`\pi` radians. The objective function can then be written as:
 
 .. math::
    \hat{f}_c(\vec{x}) = |\rho_{tgt} - \rho(\vec{x})|
