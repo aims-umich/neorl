@@ -552,14 +552,13 @@ class AEO(object):
                     'nmembers'           : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.int32)),
                     'member_fitnesses'   : (['member', 'pop', 'cycle'], np.zeros((nm, npp, nc), dtype = np.float64)),
                     'nexport'            : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.int32)),
-                    'export_str_scaled'     : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
+                    'export_str_scaled'  : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
                     'export_pop_wts'     : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
                     'alpha'              : ([                 'cycle'], np.zeros(          nc , dtype = np.float64)),
                     'wb'                 : ([                 'cycle'], np.zeros(          nc , dtype = np.bool8)),
                     'g'                  : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
                     'f'                  : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
                     'unburdened_g'       : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
-                    'unburdened_b'       : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
                     'Nc'                 : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.int32)),
                     'delta_f'            : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
                     'fmin'               : ([                 'cycle'], np.zeros(          nc , dtype = np.float64)),
@@ -571,6 +570,7 @@ class AEO(object):
 #                    'pop_after_migrate'  : (['member', 'pop', 'cycle'], np.zeros((nm, npp, nc), dtype = '<U6')),
                     'beta'               : ([                 'cycle'], np.zeros(          nc , dtype = np.float64)),
                     'b'                  : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
+                    'unburdened_b'       : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
                     'A'                  : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.int32)),
                     'evolute'            : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.bool8))},
                 coords = {
@@ -579,6 +579,30 @@ class AEO(object):
                     'cycle'   : cyclecoords,
                     'var'     : varcoords}
                 )
+        #initial_member_x: positions of all individuals in a population before any evolution
+        #member_x: positions of members in each population as through each cycle
+        #nmembers: number of members in each population in each cycle
+        #export_str_scaled: scaled strengths of each population each cycle
+        #export_pop_wts: weights passed into binomial function for ei selection
+        #alpha: alpha parameter as it may change over each cycle
+        #wb: ordering of individuals within the populations when used for member selection
+        #g: unscaled strengths of each population each cycle
+        #f: fitness of each population each cycle, may have existed across previous cycles
+        #unburdened_g: unscaled strengths of each pop each cycle without the burden applied
+        #Nc: Number of function evaluations required to get the f variable associated with that cycle
+        #delta_f: difference in current cycle fitness to previous cycle fitness
+        #fmin: minimum fitness across all populations for a single cycle
+        #fmax: maximum fitness across all populations for a single cycle
+        #scaling_fmin: some conditions make modifications to fmin required, this is modified version
+        #scaling_fmax: some conditions make modifications to fmax required, this is modified version
+        #export_wts: weights used for each individual in the member selection phase
+        #exported: boolean as to whether or not an individual was exported
+        #beta: beta parameter as it may change over each cycle
+        #b: unscaled strengths of each population for the destination selection phase
+        #unburdened_b: unscaled strengths without burdened applied for member selection phase
+        #A: number of members from export pool that end up in a particulat population each cycle
+        #evolute: is whether or not that population was evoluted each cycle
+
 
 
         #log positions of initial members
