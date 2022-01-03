@@ -36,7 +36,7 @@ This model will be refered to as :math:`\rho(\vec{x})` where :math:`\vec{x}` is 
 .. math::
    \hat{f}_c(\vec{x}) = |\rho_{tgt} - \rho(\vec{x})|
 
-where :math:`\rho_{tgt}` is the target reactivity. The :math:`c` subscript is used to show that this objective function corresponds to the criticality conditions of the core. The circumflex indicates that this objective is currently unscaled.
+where :math:`\rho_{tgt}` is the target reactivity. The :math:`c` subscript on :math:`\hat{f}` is used to show that this objective function corresponds to the criticality conditions of the core. The circumflex indicates that this objective is currently unscaled.
 
 For the next objective, that is to minimize the differences in quadrant powers, a neural network is used to predict quadrant powers for a particlar control drum configuration. More information on this neural network is given in the paper given at the top of this page as "Original Paper". If the power in each quadrant of the core can be represented by :math:`P` with some subscript indicating which of the four quadrants :math:`P` represents, the objective function can be given as:
 
