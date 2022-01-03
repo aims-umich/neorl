@@ -58,6 +58,13 @@ Now that the three objective functions have been defined, they can be scaled suc
 
 where :math:`\hat{f}_{max}` and :math:`\hat{f}_{min}` denote the maxima and minima of the objective being scaled. This can be obtained with a simple single objective optimization problem or it can be obtained using knowledge of the problem. Nevertheless, in this application, these extrema are given in the original paper.
 
+Next, scalarization is performed. Scalarization is a method used to reduce a multi objective optimization problem into a single objective optimization problem by assigning weights to each objective and summing them together. Mathematically, this can be written as:
+
+.. math::
+   F(\vec{x}) = w_c f_c(\vec{x}) + w_p f_p(\vec{x}) + w_d f_d(\vec{x})
+
+Here, :math:`F(\vec{x})` is the function that will be plugged into an optimizer and :math:`w` is used to indicate the weight assigned to each of the objective functions. Moreover, the selection of these weights is nontrivial and an important part of complex optimization analyses. For this application, :math:`w_c = 0.50, w_p = 0.40` and :math:`w_d = 0.10`. More discussion is given in the original paper on the selection of these weights. 
+
 NEORL script
 --------------------
 
