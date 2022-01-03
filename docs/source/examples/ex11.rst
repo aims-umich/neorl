@@ -38,7 +38,7 @@ This model will be refered to as :math:`\rho(\vec{x})` where :math:`\vec{x}` is 
 
 where :math:`\rho_{tgt}` is the target reactivity. The :math:`c` subscript on :math:`\hat{f}` is used to show that this objective function corresponds to the criticality conditions of the core. The circumflex indicates that this objective is currently unscaled.
 
-For the next objective, that is to minimize the differences in quadrant powers, a neural network is used to predict quadrant powers for a particlar control drum configuration. More information on this neural network is given in the paper given at the top of this page as "Original Paper". If the power in each quadrant of the core can be represented by :math:`P` with some subscript indicating which of the four quadrants :math:`P` represents, the objective function can be given as:
+For the next objective, that is to minimize the differences in quadrant powers, a neural network is used to predict fractional quadrant powers for a particlar control drum configuration. More information on this neural network is given in the paper given at the top of this page as "Original Paper". If the power in each quadrant of the core can be represented by :math:`P` with some subscript indicating which of the four quadrants :math:`P` represents, the objective function can be given as:
 
 .. math::
    \hat{f}_p(\vec{x}) = \sum_{i=1}^4 \left| \frac{P_i}{P_1 + P_2 + P_3 + P_4} - \frac{1}{4} \right|
@@ -171,18 +171,39 @@ A summary of the results for the different methods is shown below with the best 
     :alt: alternate text
     :align: center
 
+
 .. code-block:: python
 
 	------------------------ DE Summary --------------------------
-	Best fitness (y) found: 0.12957299388197963
-	Best individual (x) found: [3.141592653589793, 3.141592653589793, -1.699697241569818, 2.150523256377227, -3.141592653589793, -1.6038379536127607, 2.578360100786991]
-	--------------------------------------------------------
-	------------------ ES Summary --------------------------
-	Best fitness (y) found: 0.12434217238970668
-	Best individual (x) found: [3.141592653589793, 2.0770480232268893, 2.428930656128515, 1.6061230316002963, -3.07673302537692, 2.7116217646493634, 1.6733397109079915]
+	Best fitness (y) found: 0.12723682745792148
+	Best individual (x) found: [3.113469132155524, 2.52205504536713, -1.940784552123703, 2.3264933610351117, -2.0539691214048084, 3.089626887713435, 1.4072560227038484]
+	--------------------------------------------------------------
+	------------------------ ES Summary --------------------------
+	Best fitness (y) found: 0.11653471587218096
+	Best individual (x) found: [3.141592653589793, 2.0878715421838763, 2.0334381504862433, 2.2178488588636247, -2.2914574224308626, 2.4524812539265213, 1.7243458084183882]
 	--------------------------------------------------------------
 	------------------------ MFO Summary --------------------------
-	Best fitness (y) found: 0.1209028683387787
-	Best individual (x) found: [ 3.14159265  1.96128974  2.22098435  2.50370074 -2.01324367 -2.24056195  1.82915661]
+	Best fitness (y) found: 0.12684771880454485
+	Best individual (x) found: [3.14159265 3.14159265 1.29847427 1.85712596 3.14159265 2.77812329 1.89814577]
 	--------------------------------------------------------------
+
+The errors in the unscaled objectives can also be obtained:
+
+.. code-block:: python
+
+	print("MFO fc hat")
+	print(hatfc(mfo_x))
+	print("MFO fp hat")
+	print(hatfp(mfo_x))
+	print("MFO fd hat")
+	print(hatfd(mfo_x))
+
+.. code-block:: python
+
+	MFO fc hat
+	1.9822642943062574e-07
+	MFO fp hat
+	0.0023153573274612427
+	MFO fd hat
+	3.141592653589793
 
