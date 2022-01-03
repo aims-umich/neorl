@@ -106,6 +106,7 @@ User Guide
   examples/ex8
   examples/ex9
   examples/ex10
+  examples/ex11
 
 .. toctree::
   :maxdepth: 1
