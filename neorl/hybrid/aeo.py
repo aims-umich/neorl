@@ -606,9 +606,10 @@ class AEO(object):
             strengths_exp = [p.strength(self.g, self.g_burden, scaling_maxf, scaling_minf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'g')**alpha for p in self.pops]
             strengths_exp_scaled = [s/sum(strengths_exp) for s in strengths_exp]
             #  sample binomial to get e_i for each population
+            #binomial_wts = [(.5 - strengths_exp_scaled]
             eis = [np.random.binomial(len(p.members), 1 - strengths_exp_scaled[j]) for j, p in enumerate(self.pops)]
 
-            # log pop export ingo
+            # log pop export info
             log['export_pop_wts'].loc[{'cycle' : i}] = strengths_exp_scaled
             log['nexport'].loc[{'cycle' : i}] = eis
             log['fmax'].loc[{'cycle' : i}] = maxf
@@ -624,7 +625,7 @@ class AEO(object):
             #destination selection
             beta = self.get_alphabeta(self.beta, i, Ncyc)
             log['beta'].loc[{'cycle' : i}] = beta
-            strengths_exp = [p.strength(self.b, self.b_burden, scaling_maxf, scaling_minf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'b')**beta for p in self.pops]
+            strengths_dest = [p.strength(self.b, self.b_burden, scaling_maxf, scaling_minf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'b')**beta for p in self.pops]
 
             if self.ret:#if population can return to original population
                 #manage members that are currently without a home
@@ -632,8 +633,8 @@ class AEO(object):
                 random.shuffle(exported)#in-place randomize order
 
                 #calculate normalized probabilities and draw samples
-                strengths_exp_scaled = [s/sum(strengths_exp) for s in strengths_exp]
-                allotments = np.random.multinomial(len(exported), strengths_exp_scaled)
+                strengths_dest_scaled = [s/sum(strengths_dest) for s in strengths_dest]
+                allotments = np.random.multinomial(len(exported), strengths_dest_scaled)
                 log['A'].loc[{'cycle' : i}] = allotments
 
                 #distribute individuals according to the sample
@@ -645,7 +646,7 @@ class AEO(object):
                 pop_indxs = list(range(len(self.pops)))
                 allotment_holder = np.zeros(len(self.pops))
                 for j, exported_group in enumerate(exported):
-                    strengths_inotj = strengths_exp_scaled[:j] + strengths_exp_scaled[j+1:]
+                    strengths_inotj = strengths_dest_scaled[:j] + strengths_dest_scaled[j+1:]
                     pop_indxs_inotj = pop_indxs[:j] + pop_indxs[j+1:]
                     random.shuffle(exported_group)
                     allotment = np.random.multinomial(len(exported_group), strengths_inotj)
