@@ -50,6 +50,14 @@ The final objective is the simplest of the three, it is simply the maximum drum 
 .. math::
    \hat{f}_d(\vec{x}) = \max \vec{x}
 
+
+Now that the three objective functions have been defined, they can be scaled such that their outputs occupy similar scales. Although not strictly necessary, it makes the weight selection with the scalarization method considerably more straightforward. Separately for each of the three objectives, :math:`\hat{f}(\vec{x})` is transformed into :math:`f(\vec{x})` using the equation given below:
+
+.. math::
+   f(\vec{x}) = \frac{\hat{f}(\vec{x}) - \hat{f}_{min}}{\hat{f}_{max} - \hat{f}_{min}}
+
+where :math:`\hat{f}_{max}` and :math:`\hat{f}_{min}` denote the maxima and minima of the objective being scaled. This can be obtained with a simple single objective optimization problem or it can be obtained using knowledge of the problem. Nevertheless, in this application, these extrema are given in the original paper.
+
 NEORL script
 --------------------
 
