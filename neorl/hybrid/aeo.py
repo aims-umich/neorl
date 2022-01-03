@@ -552,6 +552,7 @@ class AEO(object):
                     'nmembers'           : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.int32)),
                     'member_fitnesses'   : (['member', 'pop', 'cycle'], np.zeros((nm, npp, nc), dtype = np.float64)),
                     'nexport'            : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.int32)),
+                    'export_str_scaled'     : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
                     'export_pop_wts'     : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
                     'alpha'              : ([                 'cycle'], np.zeros(          nc , dtype = np.float64)),
                     'wb'                 : ([                 'cycle'], np.zeros(          nc , dtype = np.bool8)),
@@ -606,11 +607,12 @@ class AEO(object):
             strengths_exp = [p.strength(self.g, self.g_burden, scaling_maxf, scaling_minf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'g')**alpha for p in self.pops]
             strengths_exp_scaled = [s/sum(strengths_exp) for s in strengths_exp]
             #  sample binomial to get e_i for each population
-            #binomial_wts = [(.5 - strengths_exp_scaled]
-            eis = [np.random.binomial(len(p.members), 1 - strengths_exp_scaled[j]) for j, p in enumerate(self.pops)]
+            binomial_wts = [(.5 - s)*self.q + .5 for s in strengths_exp_scaled]
+            eis = [np.random.binomial(len(p.members), binomial_wts[j]) for j, p in enumerate(self.pops)]
 
             # log pop export info
-            log['export_pop_wts'].loc[{'cycle' : i}] = strengths_exp_scaled
+            log['export_str_scaled'].loc[{'cycle' : i}] = strengths_exp_scaled
+            log['export_pop_wts'].loc[{'cycle' : i}] = binomial_wts
             log['nexport'].loc[{'cycle' : i}] = eis
             log['fmax'].loc[{'cycle' : i}] = maxf
             log['fmin'].loc[{'cycle' : i}] = minf
