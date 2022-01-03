@@ -67,7 +67,9 @@ Here, :math:`F(\vec{x})` is the function that will be plugged into an optimizer 
 
 NEORL script
 --------------------
+In its full working form, this script can be found at the `public repository <https://github.com/deanrp2/MicroControl/blob/main/neorl_example/example11.py>` included with the original paper.
 .. code-block:: python
+
 	import numpy as np
 	import matplotlib.pyplot as plt
 	import sys
@@ -161,4 +163,25 @@ NEORL script
 
 Results
 --------------------
+A summary of the results for the different methods is shown below with the best :math:`\vec{x}` and :math:`F(\vec{x})`. All methods seem to reasonably seek minima.
+
+.. image:: ../images/ex11_square_fitness.png
+    :scale: 30%
+    :alt: alternate text
+    :align: center
+
+.. code-block:: python
+
+	------------------------ DE Summary --------------------------
+	Best fitness (y) found: 0.12957299388197963
+	Best individual (x) found: [3.141592653589793, 3.141592653589793, -1.699697241569818, 2.150523256377227, -3.141592653589793, -1.6038379536127607, 2.578360100786991]
+	--------------------------------------------------------
+	------------------ ES Summary --------------------------
+	Best fitness (y) found: 0.12434217238970668
+	Best individual (x) found: [3.141592653589793, 2.0770480232268893, 2.428930656128515, 1.6061230316002963, -3.07673302537692, 2.7116217646493634, 1.6733397109079915]
+	--------------------------------------------------------------
+	------------------------ MFO Summary --------------------------
+	Best fitness (y) found: 0.1209028683387787
+	Best individual (x) found: [ 3.14159265  1.96128974  2.22098435  2.50370074 -2.01324367 -2.24056195  1.82915661]
+	--------------------------------------------------------------
 
