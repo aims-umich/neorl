@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.evolu.gwo &mdash; NEORL 1.6.3b documentation</title>
+  <title>neorl.evolu.gwo &mdash; NEORL 1.7 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.6.3b )
+                main (1.7 )
               </div>
             
           
@@ -253,6 +253,8 @@
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">joblib</span>
 <span class="kn">from</span> <span class="nn">neorl.evolu.discrete</span> <span class="kn">import</span> <span class="n">mutate_discrete</span><span class="p">,</span> <span class="n">encode_grid_to_discrete</span><span class="p">,</span> <span class="n">decode_discrete_to_grid</span>
+<span class="kn">from</span> <span class="nn">neorl.utils.seeding</span> <span class="kn">import</span> <span class="n">set_neorl_seed</span>
+<span class="kn">from</span> <span class="nn">neorl.utils.tools</span> <span class="kn">import</span> <span class="n">get_population</span>
 
 <div class="viewcode-block" id="GWO"><a class="viewcode-back" href="../../../modules/gwo.html#neorl.evolu.gwo.GWO">[docs]</a><span class="k">class</span> <span class="nc">GWO</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -268,9 +270,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">nwolves</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">int_transform</span> <span class="o">=</span><span class="s1">&#39;nearest_int&#39;</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         
-        <span class="k">if</span> <span class="n">seed</span><span class="p">:</span>
-            <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+        <span class="n">set_neorl_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
         
         <span class="k">assert</span> <span class="n">ncores</span> <span class="o">&lt;=</span> <span class="n">nwolves</span><span class="p">,</span> <span class="s1">&#39;--error: ncores (</span><span class="si">{}</span><span class="s1">) must be less than or equal than nwolves (</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ncores</span><span class="p">,</span> <span class="n">nwolves</span><span class="p">)</span>
         
@@ -439,7 +439,9 @@
                     <span class="n">fitness</span><span class="o">=</span><span class="p">[]</span>
                     <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">core_lst</span><span class="p">:</span>
                         <span class="n">fitness</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fit_worker</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>  
-                        
+                
+                <span class="bp">self</span><span class="o">.</span><span class="n">last_pop</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1">#for logging</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">last_fit</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">fitness</span><span class="p">)</span>      <span class="c1">#for logging</span>
                 <span class="c1">#----------------------</span>
                 <span class="c1">#  Update wolf scores</span>
                 <span class="c1">#----------------------</span>
@@ -572,7 +574,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;beta_wolf&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;beta_wolf&#39;</span><span class="p">]]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;delta_wolf&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;delta_wolf&#39;</span><span class="p">]]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;fitness&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;fitness&#39;</span><span class="p">]]</span>
-            
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_fit</span><span class="o">=-</span><span class="bp">self</span><span class="o">.</span><span class="n">last_fit</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;last_pop&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_population</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_pop</span><span class="p">,</span> <span class="n">fits</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">last_fit</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wolf_correct</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitness_best_correct</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span></div></div>
 
 </pre></div>

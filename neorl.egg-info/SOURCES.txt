@@ -206,4 +206,6 @@ neorl/utils/__init__.py
 neorl/utils/initfiles.py
 neorl/utils/multiproc.py
 neorl/utils/neorlcalls.py
+neorl/utils/seeding.py
 neorl/utils/test_policy.py
+neorl/utils/tools.py

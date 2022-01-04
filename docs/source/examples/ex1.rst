@@ -10,7 +10,7 @@ Summary
 
 - Algorithm: PPO, A2C, ACKTR, DQN, ACER
 - Type: Discrete/Combinatorial, Single Objective, Constrained
-- Field: Computational mathematics
+- Field: Computational Mathematics
  
 
 Problem Description

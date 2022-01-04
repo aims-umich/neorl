@@ -88,7 +88,7 @@ def main():
     \t\t\t ██║╚██╗██║██╔══╝  ██║   ██║██╔══██╗██║     
     \t\t\t ██║ ╚████║███████╗╚██████╔╝██║  ██║███████╗
     \t\t\t ╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝                                                
-    Copyright © 2021 Exelon Corporation (https://www.exeloncorp.com/) in collaboration with 
+    Copyright © 2021 - Present Exelon Corporation (https://www.exeloncorp.com/) in collaboration with 
                  MIT Nuclear Science and Engineering (https://web.mit.edu/nse/)
                                  All Rights Reserved
     

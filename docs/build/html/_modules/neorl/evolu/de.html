@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.evolu.de &mdash; NEORL 1.6.3b documentation</title>
+  <title>neorl.evolu.de &mdash; NEORL 1.7 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.6.3b )
+                main (1.7 )
               </div>
             
           
@@ -246,6 +246,8 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">joblib</span> 
 <span class="kn">from</span> <span class="nn">neorl.evolu.discrete</span> <span class="kn">import</span> <span class="n">mutate_discrete</span><span class="p">,</span> <span class="n">encode_grid_to_discrete</span><span class="p">,</span> <span class="n">decode_discrete_to_grid</span>
+<span class="kn">from</span> <span class="nn">neorl.utils.seeding</span> <span class="kn">import</span> <span class="n">set_neorl_seed</span>
+<span class="kn">from</span> <span class="nn">neorl.utils.tools</span> <span class="kn">import</span> <span class="n">get_population</span>
 
 <div class="viewcode-block" id="DE"><a class="viewcode-back" href="../../../modules/de.html#neorl.evolu.de.DE">[docs]</a><span class="k">class</span> <span class="nc">DE</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -265,9 +267,7 @@
                   <span class="n">int_transform</span><span class="o">=</span><span class="s1">&#39;nearest_int&#39;</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  
 
         <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">:</span>
-            <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+        <span class="n">set_neorl_seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
         
         <span class="c1">#-----------------------------------------------------</span>
         <span class="c1">#a special block for RL-informed DE</span>
@@ -364,13 +364,14 @@
                 <span class="k">raise</span> <span class="ne">Exception</span> <span class="p">(</span><span class="s1">&#39;unknown data type is given, either int, float, or grid are allowed for parameter bounds&#39;</span><span class="p">)</span>   
         <span class="k">return</span> <span class="n">indv</span>
 
-    <span class="k">def</span> <span class="nf">InitPopulation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">InitPopulation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
         
         <span class="n">pop</span><span class="o">=</span><span class="p">[]</span>
         <span class="c1">#Establish the swarm</span>
         <span class="k">if</span> <span class="n">x0</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The first individual provided by the user:&#39;</span><span class="p">,</span> <span class="n">x0</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The last individual provided by the user:&#39;</span><span class="p">,</span> <span class="n">x0</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The first individual provided by the user:&#39;</span><span class="p">,</span> <span class="n">x0</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The last individual provided by the user:&#39;</span><span class="p">,</span> <span class="n">x0</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">)):</span>
                 <span class="n">pop</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x0</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
@@ -439,22 +440,19 @@
 <span class="sd">        :param verbose: (bool) print statistics to screen</span>
 <span class="sd">        </span>
 <span class="sd">        :return: (tuple) (best individual, best fitness, and a list of fitness history)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">:</span>
-            <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
-
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="n">set_neorl_seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">de_hist</span><span class="o">=</span><span class="p">{}</span>
         <span class="c1">#--- INITIALIZE the population</span>
         
         <span class="k">if</span> <span class="n">x0</span><span class="p">:</span>
             <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">npop</span><span class="p">,</span> <span class="s1">&#39;--error: the length of x0 (</span><span class="si">{}</span><span class="s1">) (initial population) must equal to number of individuals npop (</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">npop</span><span class="p">)</span>
-            <span class="n">population</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">InitPopulation</span><span class="p">(</span><span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">population</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">InitPopulation</span><span class="p">(</span><span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">population</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">InitPopulation</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">population</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">InitPopulation</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
                 
         <span class="c1"># loop through all generations</span>
-        <span class="n">best_scores</span><span class="o">=</span><span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">best_scores</span><span class="o">=</span><span class="p">[]</span>
         <span class="k">for</span> <span class="n">gen</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">ngen</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
             
             <span class="c1">#print(population)</span>
@@ -474,10 +472,10 @@
                 <span class="n">candidates</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
                 <span class="n">random_index</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">candidates</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
                             
-                <span class="n">x_1</span> <span class="o">=</span> <span class="n">population</span><span class="p">[</span><span class="n">random_index</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
-                <span class="n">x_2</span> <span class="o">=</span> <span class="n">population</span><span class="p">[</span><span class="n">random_index</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
-                <span class="n">x_3</span> <span class="o">=</span> <span class="n">population</span><span class="p">[</span><span class="n">random_index</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
-                <span class="n">x_t</span> <span class="o">=</span> <span class="n">population</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>     <span class="c1"># target individual</span>
+                <span class="n">x_1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">population</span><span class="p">[</span><span class="n">random_index</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+                <span class="n">x_2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">population</span><span class="p">[</span><span class="n">random_index</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+                <span class="n">x_3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">population</span><span class="p">[</span><span class="n">random_index</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
+                <span class="n">x_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">population</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>     <span class="c1"># target individual</span>
     
                 <span class="c1"># subtract x3 from x2, and create a new vector (x_diff)</span>
                 <span class="n">x_diff</span> <span class="o">=</span> <span class="p">[</span><span class="n">x_2_i</span> <span class="o">-</span> <span class="n">x_3_i</span> <span class="k">for</span> <span class="n">x_2_i</span><span class="p">,</span> <span class="n">x_3_i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">x_2</span><span class="p">,</span> <span class="n">x_3</span><span class="p">)]</span>
@@ -505,7 +503,9 @@
                 <span class="n">x_t_lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x_t</span><span class="p">)</span>
                 <span class="n">v_trial_lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v_trial</span><span class="p">)</span>
             
+            <span class="c1">#--------------------------------</span>
             <span class="c1">#paralell evaluation</span>
+            <span class="c1">#--------------------------------</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
 
                 <span class="k">with</span> <span class="n">joblib</span><span class="o">.</span><span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">)</span> <span class="k">as</span> <span class="n">parallel</span><span class="p">:</span>
@@ -519,31 +519,30 @@
                     <span class="n">score_trial_lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fit_worker</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>  
                 <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">x_t_lst</span><span class="p">:</span>
                     <span class="n">score_target_lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fit_worker</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>  
+            
             <span class="c1">#-----------------------------</span>
             <span class="c1">#Selection</span>
             <span class="c1">#-----------------------------</span>
             <span class="n">index</span><span class="o">=</span><span class="mi">0</span>
             <span class="k">for</span> <span class="p">(</span><span class="n">score_trial</span><span class="p">,</span> <span class="n">score_target</span><span class="p">,</span> <span class="n">v_trial</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">score_trial_lst</span><span class="p">,</span> <span class="n">score_target_lst</span><span class="p">,</span> <span class="n">v_trial_lst</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">score_trial</span> <span class="o">&gt;</span> <span class="n">score_target</span><span class="p">:</span>
-                    <span class="n">population</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_trial</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">population</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_trial</span>
                     <span class="n">gen_scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">score_trial</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">gen_scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">score_target</span><span class="p">)</span>
                 
                 <span class="n">index</span><span class="o">+=</span><span class="mi">1</span>
             
-            
             <span class="c1">#-----------------------------</span>
             <span class="c1">#Fitness saving </span>
             <span class="c1">#-----------------------------</span>
             <span class="n">gen_avg</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">gen_scores</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">npop</span>                   <span class="c1"># current generation avg. fitness</span>
             <span class="n">y_best</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">gen_scores</span><span class="p">)</span>                                <span class="c1"># fitness of best individual</span>
-            <span class="n">x_best</span> <span class="o">=</span> <span class="n">population</span><span class="p">[</span><span class="n">gen_scores</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">gen_scores</span><span class="p">))]</span>  <span class="c1"># solution of best individual</span>
-            <span class="n">best_scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y_best</span><span class="p">)</span>
+            <span class="n">x_best</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">population</span><span class="p">[</span><span class="n">gen_scores</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">gen_scores</span><span class="p">))]</span>  <span class="c1"># solution of best individual</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">best_scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y_best</span><span class="p">)</span>
             
-
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">RLmode</span><span class="p">:</span>
-                <span class="n">population</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mix_population</span><span class="p">(</span><span class="n">pop</span><span class="o">=</span><span class="n">population</span><span class="p">,</span> <span class="n">scores</span><span class="o">=</span><span class="n">gen_scores</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">population</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mix_population</span><span class="p">(</span><span class="n">pop</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">population</span><span class="p">,</span> <span class="n">scores</span><span class="o">=</span><span class="n">gen_scores</span><span class="p">)</span>
                 
             <span class="c1">#--mir</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">==</span><span class="s1">&#39;min&#39;</span><span class="p">:</span>
@@ -576,12 +575,19 @@
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best fitness (y) found:&#39;</span><span class="p">,</span> <span class="n">y_best_correct</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best individual (x) found:&#39;</span><span class="p">,</span> <span class="n">x_best_correct</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--------------------------------------------------------------&#39;</span><span class="p">)</span>
-
-        <span class="c1">#--mir</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">==</span><span class="s1">&#39;min&#39;</span><span class="p">:</span>
-            <span class="n">best_scores</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">best_scores</span><span class="p">]</span>
             
-        <span class="k">return</span> <span class="n">x_best_correct</span><span class="p">,</span> <span class="n">y_best_correct</span><span class="p">,</span> <span class="n">best_scores</span></div></div>
+        <span class="c1">#---update final logger</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">de_hist</span><span class="p">[</span><span class="s1">&#39;last_pop&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_population</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">population</span><span class="p">,</span> <span class="n">fits</span><span class="o">=</span><span class="n">gen_scores</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;min&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">best_scores</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_scores</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">de_hist</span><span class="p">[</span><span class="s1">&#39;global_fitness&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="o">.</span><span class="n">accumulate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">best_scores</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">de_hist</span><span class="p">[</span><span class="s1">&#39;last_pop&#39;</span><span class="p">][</span><span class="s1">&#39;fitness&#39;</span><span class="p">]</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">de_hist</span><span class="p">[</span><span class="s1">&#39;global_fitness&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="o">.</span><span class="n">accumulate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">best_scores</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">de_hist</span><span class="p">[</span><span class="s1">&#39;local_fitness&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_scores</span>
+            
+        <span class="k">return</span> <span class="n">x_best_correct</span><span class="p">,</span> <span class="n">y_best_correct</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">de_hist</span></div></div>
 </pre></div>
 
            </div>

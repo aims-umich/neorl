@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.evolu.xnes &mdash; NEORL 1.6.3b documentation</title>
+  <title>neorl.evolu.xnes &mdash; NEORL 1.7 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.6.3b )
+                main (1.7 )
               </div>
             
           
@@ -254,6 +254,7 @@
 <span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">from</span> <span class="nn">neorl.utils.seeding</span> <span class="kn">import</span> <span class="n">set_neorl_seed</span>
 
 <div class="viewcode-block" id="XNES"><a class="viewcode-back" href="../../../modules/xnes.html#neorl.evolu.xnes.XNES">[docs]</a><span class="k">class</span> <span class="nc">XNES</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -275,11 +276,8 @@
                  <span class="n">eta_mu</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">eta_sigma</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">eta_Bmat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
                  <span class="n">adapt_sampling</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         
-        <span class="k">if</span> <span class="n">seed</span><span class="p">:</span>
-            <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+        <span class="n">set_neorl_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
             
-        <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span>
         <span class="n">patience</span><span class="o">=</span><span class="mi">100</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fitness_hom</span><span class="o">=-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span>
         

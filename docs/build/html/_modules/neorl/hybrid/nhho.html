@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.hybrid.nhho &mdash; NEORL 1.6.3b documentation</title>
+  <title>neorl.hybrid.nhho &mdash; NEORL 1.7 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.6.3b )
+                main (1.7 )
               </div>
             
           
@@ -256,6 +256,7 @@
 <span class="kn">from</span> <span class="nn">neorl.hybrid.nhhocore.hho</span> <span class="kn">import</span> <span class="n">HHO</span>
 <span class="kn">from</span> <span class="nn">tensorflow.keras.models</span> <span class="kn">import</span> <span class="n">load_model</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">from</span> <span class="nn">neorl.utils.seeding</span> <span class="kn">import</span> <span class="n">set_neorl_seed</span>
 
 <span class="kn">import</span> <span class="nn">multiprocessing</span>
 <span class="kn">import</span> <span class="nn">multiprocessing.pool</span>
@@ -294,16 +295,14 @@
                  <span class="n">nn_params</span> <span class="o">=</span> <span class="p">{},</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">seed</span> <span class="o">=</span> <span class="n">seed</span>
-        <span class="k">if</span> <span class="n">seed</span><span class="p">:</span>
-            <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+        <span class="n">set_neorl_seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
 
         <span class="c1">#-------------------------------------------------------</span>
         <span class="c1">#construct a main HHO model based on the core directory</span>
         <span class="c1">#--------------------------------------------------------</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hho</span><span class="o">=</span><span class="n">HHO</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span>
                 <span class="n">fit</span><span class="o">=</span><span class="n">fit</span><span class="p">,</span> <span class="n">nhawks</span><span class="o">=</span><span class="n">nhawks</span><span class="p">,</span> <span class="n">int_transform</span><span class="o">=</span><span class="n">int_transform</span><span class="p">,</span>
-                <span class="n">ncores</span><span class="o">=</span><span class="n">ncores</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+                <span class="n">ncores</span><span class="o">=</span><span class="n">ncores</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
 
         <span class="k">assert</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;min&#39;</span> <span class="ow">or</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;max&#39;</span><span class="p">,</span> <span class="s2">&quot;Mode must be &#39;max&#39; or &#39;min&#39;.&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">mode</span>
@@ -380,9 +379,7 @@
 
 <span class="sd">        :return: (tuple) (list of best individuals, list of best fitnesses)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">:</span>
-            <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+        <span class="n">set_neorl_seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">history</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;local_fitness&#39;</span><span class="p">:[],</span> <span class="s1">&#39;best_hawk&#39;</span><span class="p">:[]}</span>

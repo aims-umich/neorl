@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.evolu.sa &mdash; NEORL 1.6.3b documentation</title>
+  <title>neorl.evolu.sa &mdash; NEORL 1.7 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.6.3b )
+                main (1.7 )
               </div>
             
           
@@ -249,6 +249,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">copy</span>
 <span class="kn">import</span> <span class="nn">joblib</span>
+<span class="kn">from</span> <span class="nn">neorl.utils.seeding</span> <span class="kn">import</span> <span class="n">set_neorl_seed</span>
 
 <div class="viewcode-block" id="SA"><a class="viewcode-back" href="../../../modules/sa.html#neorl.evolu.sa.SA">[docs]</a><span class="k">class</span> <span class="nc">SA</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -272,9 +273,7 @@
     <span class="k">def</span> <span class="fm">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">chain_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">chi</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">Tmax</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">Tmin</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
                   <span class="n">cooling</span><span class="o">=</span><span class="s1">&#39;fast&#39;</span><span class="p">,</span> <span class="n">move_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reinforce_best</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  
 
-        <span class="k">if</span> <span class="n">seed</span><span class="p">:</span>
-            <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+        <span class="n">set_neorl_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span>
         <span class="c1">#--mir</span>
@@ -424,7 +423,8 @@
         <span class="n">min_step</span><span class="o">=</span><span class="n">inp</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
         <span class="n">max_step</span><span class="o">=</span><span class="n">inp</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
         <span class="n">core_seed</span><span class="o">=</span><span class="n">inp</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">:</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
             <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span> <span class="o">+</span> <span class="n">core_seed</span><span class="p">)</span>
         
         <span class="n">rejects</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">accepts</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">improves</span><span class="o">=</span><span class="mi">0</span>

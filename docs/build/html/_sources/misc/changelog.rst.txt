@@ -6,6 +6,16 @@ Changelog
 Stable Releases (for users)
 ------------------------------
 
+Release 1.7 (2021-11-24)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+  pip install neorl==1.7
+
+- Fixed a major bug following scikit-learn update to 1.0.0. Now, NEORL supports scikit-learn <= 0.24.0
+- Misc. minor updates for the documentation and the source code 
+
 Release 1.6 (2021-09-10)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

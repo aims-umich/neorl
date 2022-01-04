@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Example 9: Cantilever Stepped Beam &mdash; NEORL 1.6.3b documentation</title>
+  <title>Example 9: Cantilever Stepped Beam &mdash; NEORL 1.7 documentation</title>
   
 
   
@@ -71,7 +71,7 @@
             
             
               <div class="version">
-                main (1.6.3b )
+                main (1.7 )
               </div>
             
           
@@ -371,8 +371,8 @@
 <span class="c1"># Plot</span>
 <span class="c1">#---------------------------------</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pso_hist</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;PSO&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">de_hist</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;DE&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pso_hist</span><span class="p">[</span><span class="s1">&#39;global_fitness&#39;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;PSO&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">de_hist</span><span class="p">[</span><span class="s1">&#39;global_fitness&#39;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;DE&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ssa_hist</span><span class="p">[</span><span class="s1">&#39;global_fitness&#39;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;SSA&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">bat_hist</span><span class="p">[</span><span class="s1">&#39;global_fitness&#39;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;BAT&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">gwo_hist</span><span class="p">[</span><span class="s1">&#39;fitness&#39;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;GWO&#39;</span><span class="p">)</span>
@@ -383,7 +383,7 @@
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Fitness&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">150000</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;CSB_fitness.png&#39;</span><span class="p">,</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
-
+<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
 <span class="c1">#************************************************************</span>
 <span class="c1">#              Square Cantilever Stepped Beam</span>
@@ -478,8 +478,8 @@
 <span class="c1"># Plot</span>
 <span class="c1">#---------------------------------</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pso_hist</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;PSO&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">de_hist</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;DE&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">pso_hist</span><span class="p">[</span><span class="s1">&#39;global_fitness&#39;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;PSO&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">de_hist</span><span class="p">[</span><span class="s1">&#39;global_fitness&#39;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;DE&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ssa_hist</span><span class="p">[</span><span class="s1">&#39;global_fitness&#39;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;SSA&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">bat_hist</span><span class="p">[</span><span class="s1">&#39;global_fitness&#39;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;BAT&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">gwo_hist</span><span class="p">[</span><span class="s1">&#39;fitness&#39;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;GWO&#39;</span><span class="p">)</span>
@@ -489,6 +489,7 @@
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Generation&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Fitness&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;CSB_square_fitness.png&#39;</span><span class="p">,</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -647,7 +648,7 @@
 </div>
 <div class="section" id="id1">
 <h2>Results<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<p>A summary of the results for the different methods is shown below with the best <span class="math notranslate nohighlight">\(\vec{x}\)</span> and <span class="math notranslate nohighlight">\(y=f(x)\)</span> (minimum volume). All methods seem to provide a competitive performance.</p>
+<p>A summary of the results for the different methods is shown below with the best <span class="math notranslate nohighlight">\(\vec{x}\)</span> and <span class="math notranslate nohighlight">\(y=f(x)\)</span> (minimum volume). All methods seem to provide competitive performances.</p>
 <a class="reference internal image-reference" href="../_images/CSB_square_fitness.png"><img alt="alternate text" class="align-center" src="../_images/CSB_square_fitness.png" style="width: 471.0px; height: 328.5px;" /></a>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">------------------------</span> <span class="n">PSO</span> <span class="n">Summary</span> <span class="o">--------------------------</span>
 <span class="n">Best</span> <span class="n">fitness</span> <span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="n">found</span><span class="p">:</span> <span class="mf">1.3399752313729163</span>

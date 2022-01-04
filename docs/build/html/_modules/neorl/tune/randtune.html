@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.tune.randtune &mdash; NEORL 1.6 documentation</title>
+  <title>neorl.tune.randtune &mdash; NEORL 1.7 documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.6 )
+                main (1.7 )
               </div>
             
           
@@ -246,12 +246,14 @@
 <span class="c1">#@author: majdi</span>
 <span class="c1">#&quot;&quot;&quot;</span>
 
+<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Pool</span>
 <span class="kn">import</span> <span class="nn">joblib</span>
 <span class="kn">import</span> <span class="nn">csv</span>
+<span class="kn">from</span> <span class="nn">neorl.utils.seeding</span> <span class="kn">import</span> <span class="n">set_neorl_seed</span>
 
 <div class="viewcode-block" id="RANDTUNE"><a class="viewcode-back" href="../../../tune/random.html#neorl.tune.randtune.RANDTUNE">[docs]</a><span class="k">class</span> <span class="nc">RANDTUNE</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -271,8 +273,7 @@
 
     <span class="k">def</span> <span class="nf">full_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1">#This function builds the full multi-dimensional grid</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">:</span>
-            <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+        <span class="n">set_neorl_seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
         
         <span class="c1">#self.param_lst=[self.param_grid[item][0] for item in self.param_grid]</span>
         <span class="c1">#self.param_types=[self.param_grid[item][1] for item in self.param_grid]</span>
@@ -337,7 +338,9 @@
             
             <span class="k">return</span> <span class="n">obj</span>
         
-        <span class="k">except</span><span class="p">:</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;message&quot;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--error: case </span><span class="si">{}</span><span class="s1"> failed during execution&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">caseid</span><span class="p">))</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--error: </span><span class="si">{}</span><span class="s1"> failed&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">case_dict</span><span class="p">))</span>
             

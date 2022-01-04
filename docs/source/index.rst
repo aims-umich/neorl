@@ -8,6 +8,7 @@ Welcome to NEORL Website!
 
 *Latest News*: 
 
+- November 24, 2021: Stable release 1.7 is out. 
 - September 10, 2021: First NEORL stable release 1.6 is out. 
 
 **Primary contact to report bugs/issues**: Majdi I. Radaideh (radaideh@mit.edu)
@@ -105,6 +106,7 @@ User Guide
   examples/ex8
   examples/ex9
   examples/ex10
+  examples/ex11
 
 .. toctree::
   :maxdepth: 1
