@@ -67,7 +67,6 @@ Here, :math:`F(\vec{x})` is the function that will be plugged into an optimizer 
 
 NEORL script
 --------------------
-In its full working form, this script can be found at the `public repository <https://github.com/deanrp2/MicroControl/blob/main/neorl_example/example11.py>`_ included with the original paper.
 
 .. literalinclude :: ../scripts/ex11_microreactor.py
    :language: python
