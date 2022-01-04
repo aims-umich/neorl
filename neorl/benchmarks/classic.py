@@ -230,7 +230,7 @@ all_bounds = [
     [-600, 600],#griewank
     [-5.12, 5.12],#rastrigin
     [-32.768, 32.768],#ackley
-    #rastrigin_scaled
+    [-5.12, 5.12],#rastrigin_scaled
     #rastrigin_skew
     #schaffer
     #schwefel
@@ -298,7 +298,7 @@ all_minima_x = [
     0,#griewank
     0,#rastrigin
     0,#ackley
-    0,#rastrigin_scaled, should discard?
+    0,#rastrigin_scaled
     #rastrigin_skew
     #schaffer
     #schwefel
