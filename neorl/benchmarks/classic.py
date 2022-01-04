@@ -221,3 +221,105 @@ all_functions = [
     dixonprice,
     levy
 ]
+
+all_bounds = [
+    [-5.12, 5.12],#sphere
+    [-100, 100],#cigar
+    [-5, 10],#rosenbrock
+    [-100, 100],#bohachevsky
+    [-600, 600],#griewank
+    [-5.12, 5.12],#rastrigin
+    [-32.768, 32.768],#ackley
+    #rastrigin_scaled
+    #rastrigin_skew
+    #schaffer
+    #schwefel
+    #schwefel2
+    #alpinen1
+    #alpinen2
+    #brown
+    #expo
+    #yang
+    #yang2
+    #yang3
+    #yang4
+    #zakharov
+    #salomon
+    #st
+    #shubert
+    #ridge
+    #powell
+    #qing
+    #quartic
+    #happycat
+    #dixonprice
+    #levy
+]
+
+all_ndim = [
+    'arbitrary',#sphere
+    'arbitrary',#cigar
+    'arbitrary',#rosenbrock
+    2,#bohachevsky
+    'arbitrary',#griewank
+    'arbitrary',#rastrigin
+    'arbitrary',#ackley
+    '2+',#rastrigin_scaled
+    #rastrigin_skew
+    #schaffer
+    #schwefel
+    #schwefel2
+    #alpinen1
+    #alpinen2
+    #brown
+    #expo
+    #yang
+    #yang2
+    #yang3
+    #yang4
+    #zakharov
+    #salomon
+    #st
+    #shubert
+    #ridge
+    #powell
+    #qing
+    #quartic
+    #happycat
+    #dixonprice
+    #levy
+]
+
+all_minima_x = [
+    0,#sphere
+    0,#cigar
+    1,#rosenbrock
+    [0,0],#bohachevsky
+    0,#griewank
+    0,#rastrigin
+    0,#ackley
+    0,#rastrigin_scaled, should discard?
+    #rastrigin_skew
+    #schaffer
+    #schwefel
+    #schwefel2
+    #alpinen1
+    #alpinen2
+    #brown
+    #expo
+    #yang
+    #yang2
+    #yang3
+    #yang4
+    #zakharov
+    #salomon
+    #st
+    #shubert
+    #ridge
+    #powell
+    #qing
+    #quartic
+    #happycat
+    #dixonprice
+    #levy
+]
