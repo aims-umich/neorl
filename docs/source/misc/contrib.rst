@@ -3,6 +3,8 @@
 Contributors
 ================
 
+*These bios and affiliations are not continuously updated, and were added during the contribution period*
+
 .. image:: ../images/radaideh.jfif
    :scale: 45 %
    :alt: alternate text
@@ -62,11 +64,17 @@ John Mobley IV is a Ph.D. student within the Department of Nuclear Science and E
 Linkedin: https://www.linkedin.com/in/johnmobleyiv/
 
 .. image:: ../images/xubo.png
-   :scale: 40 %
+   :scale: 35 %
    :alt: alternate text
    :align: left
    
 Xubo GU obtained his MS degree from Shanghai Jiao Tong University in 2020. His research involves machine learning, reinforcement learning, data analytics, large-scale optimization with heuristic methods, and their applications in the industry. He has one year of working experience in an industrial-intelligence company, where he applied optimization techniques and machine learning to solve practical industrial problems. For NEORL, he developed three evolutionary algorithms, including MFO, JAYA, and ACO. He also developed two hybrid neuroevolutionary algorithms for NEORL - FNEAT and RNEAT. Besides, he is the main developer of OpenNeoMC, which combines NEORL with OpenMC to empower particle transport code with state-of-the-art optimization techniques of NEORL. 
 
+.. image:: ../images/dean.jpg
+   :scale: 17 %
+   :alt: alternate text
+   :align: right
+   
+Dean Price is a graduate student at the University of Michigan studying for a PhD in Nuclear Engineering. Dean has experience in various areas of nuclear reactor modeling and simulation including uncertainty quantification, sensitivity analysis, burnup credit, spent fuel criticality safety, surrogate modeling and multiphysics coupling. For NEORL, he helps maintain the code base and has demonstrated the capabilities of NEORL on microreactor control applications. Currently, he is working to develop new optimization algorithms to be included in future versions of NEORL.
 
- 
+ORCID: https://orcid.org/0000-0003-0999-0111

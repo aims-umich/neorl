@@ -1,0 +1,357 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Exponential Natural Evolution Strategies (XNES) &mdash; NEORL 1.7 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Grey Wolf Optimizer (GWO)" href="gwo.html" />
+    <link rel="prev" title="Differential Evolution (DE)" href="de.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> NEORL
+          
+
+          
+            
+            <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                main (1.7 )
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../guide/guide.html">General Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">Algorithms</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../neural/neural.html">Neural Algorithms (Reinforcement Learning)</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="evolutionary.html">Evolutionary and Swarm Algorithms</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="es.html">Evolution Strategies (<span class="math notranslate nohighlight">\(\mu,\lambda\)</span>) (ES)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pso.html">Particle Swarm Optimisation (PSO)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="de.html">Differential Evolution (DE)</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Exponential Natural Evolution Strategies (XNES)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#what-can-you-use">What can you use?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example">Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#notes">Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gwo.html">Grey Wolf Optimizer (GWO)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sa.html">Simulated Annealing (SA)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ssa.html">Salp Swarm Algorithm (SSA)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="woa.html">Whale Optimization Algorithm (WOA)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mfo.html">Moth-flame Optimization (MFO)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jaya.html">JAYA Algorithm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bat.html">Bat Algorithm (BAT)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hho.html">Harris Hawks Optimization (HHO)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aco.html">Ant Colony Optimization (ACO)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cs.html">Cuckoo Search (CS)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ts.html">Tabu Search (TS)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../neuroevolu/neuroevolu.html">Hybrid and Neuroevolution Algorithms</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tune/tune.html">Hyperparameter Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/examples.html">Examples</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../misc/changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../misc/projects.html">Projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../misc/contrib.html">Contributors</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NEORL</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../modules.html">Algorithms</a> &raquo;</li>
+        
+          <li><a href="evolutionary.html">Evolutionary and Swarm Algorithms</a> &raquo;</li>
+        
+      <li>Exponential Natural Evolution Strategies (XNES)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../_sources/modules/evolutionary/xnes.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <span class="target" id="module-neorl.evolu.xnes"><span id="xnes"></span></span><div class="section" id="exponential-natural-evolution-strategies-xnes">
+<h1>Exponential Natural Evolution Strategies (XNES)<a class="headerlink" href="#exponential-natural-evolution-strategies-xnes" title="Permalink to this headline">¶</a></h1>
+<p>A module for the exponential natural evolution strategies with adaptive sampling.</p>
+<p>Original paper: Glasmachers, T., Schaul, T., Yi, S., Wierstra, D., Schmidhuber, J. (2010). Exponential natural evolution strategies. In: Proceedings of the 12th annual conference on Genetic and evolutionary computation (pp. 393-400).</p>
+<div class="section" id="what-can-you-use">
+<h2>What can you use?<a class="headerlink" href="#what-can-you-use" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Multi processing: ✔️</p></li>
+<li><p>Discrete spaces: ❌</p></li>
+<li><p>Continuous spaces: ✔️</p></li>
+<li><p>Mixed Discrete/Continuous spaces: ❌</p></li>
+</ul>
+</div>
+<div class="section" id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="neorl.evolu.xnes.XNES">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">neorl.evolu.xnes.</span></span><span class="sig-name descname"><span class="pre">XNES</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">npop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eta_mu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eta_sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eta_Bmat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adapt_sampling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ncores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neorl/evolu/xnes.html#XNES"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.evolu.xnes.XNES" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exponential Natural Evolution Strategies</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mode</strong> – (str) problem type, either “min” for minimization problem or “max” for maximization</p></li>
+<li><p><strong>bounds</strong> – (dict) input parameter type and lower/upper bounds in dictionary form. Example: <code class="docutils literal notranslate"><span class="pre">bounds={'x1':</span> <span class="pre">['int',</span> <span class="pre">1,</span> <span class="pre">4],</span> <span class="pre">'x2':</span> <span class="pre">['float',</span> <span class="pre">0.1,</span> <span class="pre">0.8],</span> <span class="pre">'x3':</span> <span class="pre">['float',</span> <span class="pre">2.2,</span> <span class="pre">6.2]}</span></code></p></li>
+<li><p><strong>fit</strong> – (function) the fitness function</p></li>
+<li><p><strong>npop</strong> – (int) total number of individuals in the population (default: if None, it will make an approximation, see <strong>Notes</strong> below)</p></li>
+<li><p><strong>A</strong> – (np.array): initial guess of the covariance matrix A (default: identity matrix, see <strong>Notes</strong> below)</p></li>
+<li><p><strong>eta_mu</strong> – (float) learning rate for updating the center of the search distribution <code class="docutils literal notranslate"><span class="pre">mu</span></code> (see <strong>Notes</strong> below)</p></li>
+<li><p><strong>eta_sigma</strong> – (float) learning rate for updating the step size <code class="docutils literal notranslate"><span class="pre">sigma</span></code> (default: if None, it will make an approximation, see <strong>Notes</strong> below)</p></li>
+<li><p><strong>eta_Bmat</strong> – (float) learning rate for updating the normalized transformation matrix <code class="docutils literal notranslate"><span class="pre">B</span></code>  (default: if None, it will make an approximation, see <strong>Notes</strong> below)</p></li>
+<li><p><strong>adapt_sampling</strong> – (bool): activate the adaption sampling option</p></li>
+<li><p><strong>ncores</strong> – (int) number of parallel processors</p></li>
+<li><p><strong>seed</strong> – (int) random seed for sampling</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="neorl.evolu.xnes.XNES.evolute">
+<span class="sig-name descname"><span class="pre">evolute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ngen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neorl/evolu/xnes.html#XNES.evolute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.evolu.xnes.XNES.evolute" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function evolutes the XNES algorithm for number of generations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ngen</strong> – (int) number of generations to evolute</p></li>
+<li><p><strong>x0</strong> – (list) initial guess for the search (must be of same size as <code class="docutils literal notranslate"><span class="pre">len(bounds)</span></code>)</p></li>
+<li><p><strong>verbose</strong> – (bool) print statistics to screen</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(tuple) (best individual, best fitness, and dictionary containing major search results)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">XNES</span>
+
+<span class="c1">#Define the fitness function</span>
+<span class="k">def</span> <span class="nf">FIT</span><span class="p">(</span><span class="n">individual</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Sphere test objective function.</span>
+<span class="sd">            F(x) = sum_{i=1}^d xi^2</span>
+<span class="sd">            d=1,2,3,...</span>
+<span class="sd">            Range: [-100,100]</span>
+<span class="sd">            Minima: 0</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">y</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">individual</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">y</span>
+
+<span class="c1">#Setup the parameter space (d=5)</span>
+<span class="n">nx</span><span class="o">=</span><span class="mi">5</span>
+<span class="n">BOUNDS</span><span class="o">=</span><span class="p">{}</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">nx</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">BOUNDS</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
+
+<span class="n">xnes</span><span class="o">=</span><span class="n">XNES</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">FIT</span><span class="p">,</span> <span class="n">npop</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">eta_mu</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> 
+          <span class="n">eta_sigma</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">adapt_sampling</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">x_best</span><span class="p">,</span> <span class="n">y_best</span><span class="p">,</span> <span class="n">xnes_hist</span><span class="o">=</span><span class="n">xnes</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="p">[</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">25</span><span class="p">],</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>XNES is controlled by three major search parameters: the center of the search distribution <span class="math notranslate nohighlight">\(\mu\)</span> (<code class="docutils literal notranslate"><span class="pre">mu</span></code>), the step size <span class="math notranslate nohighlight">\(\sigma\)</span> (<code class="docutils literal notranslate"><span class="pre">sigma</span></code>), and the normalized transformation matrix <span class="math notranslate nohighlight">\(B\)</span> (<code class="docutils literal notranslate"><span class="pre">B</span></code>) .</p></li>
+<li><p>The user provides initial guess of the covariance matrix <span class="math notranslate nohighlight">\(A\)</span> using the argument <code class="docutils literal notranslate"><span class="pre">A</span></code>. XNES applies <span class="math notranslate nohighlight">\(A=\sigma . B\)</span> to determine the initial step size <span class="math notranslate nohighlight">\(\sigma\)</span> (<code class="docutils literal notranslate"><span class="pre">sigma</span></code>) and the initial transformation matrix <span class="math notranslate nohighlight">\(B\)</span> (<code class="docutils literal notranslate"><span class="pre">B</span></code>).</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">A</span></code> is not provided, XNES starts from an identity matrix of size <code class="docutils literal notranslate"><span class="pre">d</span></code>, i.e. <code class="docutils literal notranslate"><span class="pre">np.eye(d)</span></code>, where <code class="docutils literal notranslate"><span class="pre">d</span></code> is the size of the parameter space.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">npop</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code>, the following formula is used: <span class="math notranslate nohighlight">\(npop = Integer\{4 + [3log(d)]\}\)</span>, where <code class="docutils literal notranslate"><span class="pre">d</span></code> is the size of the parameter space.</p></li>
+<li><p>The center of the search distribution <span class="math notranslate nohighlight">\(\mu\)</span> (<code class="docutils literal notranslate"><span class="pre">mu</span></code>) is updated by the learning rate <code class="docutils literal notranslate"><span class="pre">eta_mu</span></code>.</p></li>
+<li><p>The step size <span class="math notranslate nohighlight">\(\sigma\)</span> (<code class="docutils literal notranslate"><span class="pre">sigma</span></code>) is updated by the learning rate <code class="docutils literal notranslate"><span class="pre">eta_sigma</span></code>. If <code class="docutils literal notranslate"><span class="pre">eta_sigma</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code>, the following formula is used: <span class="math notranslate nohighlight">\(eta\_sigma = \frac{3}{5} \frac{3+log(d)}{d\sqrt{d}}\)</span>, where <code class="docutils literal notranslate"><span class="pre">d</span></code> is the size of the parameter space.</p></li>
+<li><p>The normalized transformation matrix <span class="math notranslate nohighlight">\(B\)</span> (<code class="docutils literal notranslate"><span class="pre">B</span></code>) is updated by the learning rate <code class="docutils literal notranslate"><span class="pre">eta_Bmat</span></code>. If <code class="docutils literal notranslate"><span class="pre">eta_Bmat</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code>, the following formula is used: <span class="math notranslate nohighlight">\(eta\_Bmat = \frac{3}{5} \frac{3+log(d)}{d\sqrt{d}}\)</span>, where <code class="docutils literal notranslate"><span class="pre">d</span></code> is the size of the parameter space.</p></li>
+<li><p>Activating the option <code class="docutils literal notranslate"><span class="pre">adapt_sampling</span></code> may help improving the performance of XNES.</p></li>
+<li><p>Look for an optimal balance between <code class="docutils literal notranslate"><span class="pre">npop</span></code> and <code class="docutils literal notranslate"><span class="pre">ngen</span></code>, it is recommended to minimize population size to allow for more generations.</p></li>
+<li><p>Total number of cost evaluations for XNES is <code class="docutils literal notranslate"><span class="pre">npop</span></code> * <code class="docutils literal notranslate"><span class="pre">ngen</span></code>.</p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="gwo.html" class="btn btn-neutral float-right" title="Grey Wolf Optimizer (GWO)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="de.html" class="btn btn-neutral float-left" title="Differential Evolution (DE)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Exelon Corp. &amp; MIT.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

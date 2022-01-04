@@ -1,2 +1,6 @@
 include neorl/benchmarks/tools/data.pkl
 include neorl/benchmarks/tools/data08.csv
+include neorl/benchmarks/tools/microreactor_alpha_wtd_gr.csv
+include neorl/benchmarks/tools/microreactor_configA_flux_wtd_b.csv
+include neorl/benchmarks/tools/microreactor_configB_flux_wtd_b.csv
+include neorl/benchmarks/tools/microreactor_power_model.h5

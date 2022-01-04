@@ -1,7 +1,7 @@
 .. _changelog:
 
-Changelog
-==========
+Change Log
+==============
 
 Stable Releases (for users)
 ------------------------------
@@ -30,6 +30,16 @@ Release 1.6 (2021-09-10)
 
 Beta Releases (for developers)
 ---------------------------------
+
+Release 1.7.1b (2022-1-03)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+  pip install neorl==1.7.1b --extra-index-url https://test.pypi.org/simple
+
+- Added new NEORL example 11 on nuclear microreactor application. 
+- Documentation structure updates. Now subsections are part of the documentation structure. 
 
 Release 1.6.2b (2021-10-07)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

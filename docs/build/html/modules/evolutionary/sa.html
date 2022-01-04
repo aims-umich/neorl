@@ -1,0 +1,380 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Simulated Annealing (SA) &mdash; NEORL 1.7 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Salp Swarm Algorithm (SSA)" href="ssa.html" />
+    <link rel="prev" title="Grey Wolf Optimizer (GWO)" href="gwo.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> NEORL
+          
+
+          
+            
+            <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                main (1.7 )
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../guide/guide.html">General Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">Algorithms</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../neural/neural.html">Neural Algorithms (Reinforcement Learning)</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="evolutionary.html">Evolutionary and Swarm Algorithms</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="es.html">Evolution Strategies (<span class="math notranslate nohighlight">\(\mu,\lambda\)</span>) (ES)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pso.html">Particle Swarm Optimisation (PSO)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="de.html">Differential Evolution (DE)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xnes.html">Exponential Natural Evolution Strategies (XNES)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gwo.html">Grey Wolf Optimizer (GWO)</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Simulated Annealing (SA)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#what-can-you-use">What can you use?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example">Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#notes">Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ssa.html">Salp Swarm Algorithm (SSA)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="woa.html">Whale Optimization Algorithm (WOA)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mfo.html">Moth-flame Optimization (MFO)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jaya.html">JAYA Algorithm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bat.html">Bat Algorithm (BAT)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hho.html">Harris Hawks Optimization (HHO)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aco.html">Ant Colony Optimization (ACO)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cs.html">Cuckoo Search (CS)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ts.html">Tabu Search (TS)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../neuroevolu/neuroevolu.html">Hybrid and Neuroevolution Algorithms</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tune/tune.html">Hyperparameter Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/examples.html">Examples</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../misc/changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../misc/projects.html">Projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../misc/contrib.html">Contributors</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NEORL</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../modules.html">Algorithms</a> &raquo;</li>
+        
+          <li><a href="evolutionary.html">Evolutionary and Swarm Algorithms</a> &raquo;</li>
+        
+      <li>Simulated Annealing (SA)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../_sources/modules/evolutionary/sa.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <span class="target" id="module-neorl.evolu.sa"><span id="sa"></span></span><div class="section" id="simulated-annealing-sa">
+<h1>Simulated Annealing (SA)<a class="headerlink" href="#simulated-annealing-sa" title="Permalink to this headline">¶</a></h1>
+<p>A module for parallel Simulated Annealing. A Synchronous Approach with Occasional Enforcement of Best Solution.</p>
+<p>Original paper: Onbaşoğlu, E., Özdamar, L. (2001). Parallel simulated annealing algorithms in global optimization. Journal of global optimization, 19(1), 27-50..</p>
+<a class="reference internal image-reference" href="../../_images/sa.jpeg"><img alt="alternate text" class="align-center" src="../../_images/sa.jpeg" style="width: 384.0px; height: 255.89999999999998px;" /></a>
+<div class="section" id="what-can-you-use">
+<h2>What can you use?<a class="headerlink" href="#what-can-you-use" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Multi processing: ✔️</p></li>
+<li><p>Discrete spaces: ✔️</p></li>
+<li><p>Continuous spaces: ✔️</p></li>
+<li><p>Mixed Discrete/Continuous spaces: ✔️</p></li>
+</ul>
+</div>
+<div class="section" id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="neorl.evolu.sa.SA">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">neorl.evolu.sa.</span></span><span class="sig-name descname"><span class="pre">SA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chain_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Tmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Tmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cooling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fast'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">move_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reinforce_best</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ncores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neorl/evolu/sa.html#SA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.evolu.sa.SA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parallel Simulated Annealing</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mode</strong> – (str) problem type, either <code class="docutils literal notranslate"><span class="pre">min</span></code> for minimization problem or <code class="docutils literal notranslate"><span class="pre">max</span></code> for maximization</p></li>
+<li><p><strong>bounds</strong> – (dict) input parameter type and lower/upper bounds in dictionary form. Example: <code class="docutils literal notranslate"><span class="pre">bounds={'x1':</span> <span class="pre">['int',</span> <span class="pre">1,</span> <span class="pre">4],</span> <span class="pre">'x2':</span> <span class="pre">['float',</span> <span class="pre">0.1,</span> <span class="pre">0.8],</span> <span class="pre">'x3':</span> <span class="pre">['float',</span> <span class="pre">2.2,</span> <span class="pre">6.2]}</span></code></p></li>
+<li><p><strong>fit</strong> – (function) the fitness function</p></li>
+<li><p><strong>cooling</strong> – (str) cooling schedule, choose <code class="docutils literal notranslate"><span class="pre">fast</span></code>, <code class="docutils literal notranslate"><span class="pre">boltzmann</span></code>, <code class="docutils literal notranslate"><span class="pre">cauchy</span></code></p></li>
+<li><p><strong>chain_size</strong> – (int) number of individuals to evaluate in the chain every generation (e.g. like <code class="docutils literal notranslate"><span class="pre">npop</span></code> for other algorithms)</p></li>
+<li><p><strong>Tmax</strong> – (int) initial/maximum temperature</p></li>
+<li><p><strong>Tmin</strong> – (int) final/minimum temperature</p></li>
+<li><p><strong>move_func</strong> – (function) custom self-defined function that controls how to perturb the input space during annealing (See <strong>Notes</strong> below)</p></li>
+<li><p><strong>reinforce_best</strong> – (bool) an option to start the chain every generation with the best individual from previous generation (See <strong>Notes</strong> below)</p></li>
+<li><p><strong>chi</strong> – (float or list of floats) probability of perturbing every attribute of the input <code class="docutils literal notranslate"><span class="pre">x</span></code>, ONLY used if <code class="docutils literal notranslate"><span class="pre">move_func=None</span></code>. 
+For <code class="docutils literal notranslate"><span class="pre">ncores</span> <span class="pre">&gt;</span> <span class="pre">1</span></code>, if a scalar is provided, constant value is used across all <code class="docutils literal notranslate"><span class="pre">ncores</span></code>. If a list of size <code class="docutils literal notranslate"><span class="pre">ncores</span></code>
+is provided, each core/chain uses different value of <code class="docutils literal notranslate"><span class="pre">chi</span></code> (See <strong>Notes</strong> below)</p></li>
+<li><p><strong>ncores</strong> – (int) number of parallel processors</p></li>
+<li><p><strong>seed</strong> – (int) random seed for sampling</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="neorl.evolu.sa.SA.evolute">
+<span class="sig-name descname"><span class="pre">evolute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ngen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neorl/evolu/sa.html#SA.evolute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.evolu.sa.SA.evolute" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function evolutes the SA algorithm for number of generations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ngen</strong> – (int) number of generations to evolute</p></li>
+<li><p><strong>x0</strong> – (list of lists) initial samples to start the evolution (<code class="docutils literal notranslate"><span class="pre">len(x0)</span></code> must be equal to <code class="docutils literal notranslate"><span class="pre">ncores</span></code>)</p></li>
+<li><p><strong>verbose</strong> – (int) print statistics to screen</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(tuple) (best individual, best fitness, and dictionary containing major search results)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">SA</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="c1">#Define the fitness function</span>
+<span class="k">def</span> <span class="nf">FIT</span><span class="p">(</span><span class="n">individual</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Sphere test objective function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">y</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">individual</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">y</span>
+
+<span class="c1">#Setup the parameter space (d=5)</span>
+<span class="n">nx</span><span class="o">=</span><span class="mi">5</span>
+<span class="n">BOUNDS</span><span class="o">=</span><span class="p">{}</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">nx</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">BOUNDS</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
+
+<span class="c1">#define a custom moving function</span>
+<span class="k">def</span> <span class="nf">my_move</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="c1">#-----</span>
+    <span class="c1">#this function selects two random indices in x and perturb their values</span>
+    <span class="c1">#-----</span>
+    <span class="n">x_new</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">indices</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span>
+        <span class="n">x_new</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">BOUNDS</span><span class="p">[</span><span class="s1">&#39;x1&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="n">BOUNDS</span><span class="p">[</span><span class="s1">&#39;x1&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">])</span>
+    
+    <span class="k">return</span> <span class="n">x_new</span>
+
+<span class="c1">#setup and evolute SA</span>
+<span class="n">sa</span><span class="o">=</span><span class="n">SA</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">FIT</span><span class="p">,</span> <span class="n">chain_size</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span><span class="n">chi</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> 
+      <span class="n">move_func</span><span class="o">=</span><span class="n">my_move</span><span class="p">,</span> <span class="n">reinforce_best</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">x_best</span><span class="p">,</span> <span class="n">y_best</span><span class="p">,</span> <span class="n">sa_hist</span><span class="o">=</span><span class="n">sa</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1">#plot different statistics</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sa_hist</span><span class="p">[</span><span class="s1">&#39;accept&#39;</span><span class="p">],</span> <span class="s1">&#39;-o&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Acceptance&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sa_hist</span><span class="p">[</span><span class="s1">&#39;reject&#39;</span><span class="p">],</span> <span class="s1">&#39;-s&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Rejection&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sa_hist</span><span class="p">[</span><span class="s1">&#39;improve&#39;</span><span class="p">],</span> <span class="s1">&#39;-^&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Improvement&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Generation&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Rate (%)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>   <span class="c1">#change to plt.show() for inline plots</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Temperature is annealed between <code class="docutils literal notranslate"><span class="pre">Tmax</span></code> and <code class="docutils literal notranslate"><span class="pre">Tmin</span></code> using three different <code class="docutils literal notranslate"><span class="pre">cooling</span></code> schedules: <code class="docutils literal notranslate"><span class="pre">fast</span></code>, <code class="docutils literal notranslate"><span class="pre">cauchy</span></code>, and <code class="docutils literal notranslate"><span class="pre">boltzmann</span></code>.</p></li>
+<li><p>Custom <code class="docutils literal notranslate"><span class="pre">move_func</span></code> is allowed by following the input/output format in the example above. If <code class="docutils literal notranslate"><span class="pre">None</span></code> the default moving function is used, which is controlled by the <code class="docutils literal notranslate"><span class="pre">chi</span></code> parameter. Therefore, <code class="docutils literal notranslate"><span class="pre">chi</span></code> is used ONLY if <code class="docutils literal notranslate"><span class="pre">move_func=None</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">chi</span></code> controls the probability of perturbing an attribute of the individual. For example, for <code class="docutils literal notranslate"><span class="pre">d=4</span></code>, <span class="math notranslate nohighlight">\(\vec{x}=[x_1,x_2,x_3,x_4]\)</span>, for every <span class="math notranslate nohighlight">\(x_i\)</span>, a uniform random number <span class="math notranslate nohighlight">\(U[0,1]\)</span> is compared to <code class="docutils literal notranslate"><span class="pre">chi</span></code>, if <code class="docutils literal notranslate"><span class="pre">U[0,1]</span> <span class="pre">&lt;</span> <span class="pre">chi</span></code>, the attribute is perturbed. Otherwise, it remains fixed.</p></li>
+<li><p>For every generation, a total of <code class="docutils literal notranslate"><span class="pre">chain_size</span></code> individuals are executed. Therefore, look for an optimal balance between <code class="docutils literal notranslate"><span class="pre">chain_size</span></code> and <code class="docutils literal notranslate"><span class="pre">ngen</span></code>.</p></li>
+<li><p>Total number of cost evaluations for SA is <code class="docutils literal notranslate"><span class="pre">chain_size</span></code> * <code class="docutils literal notranslate"><span class="pre">(ngen</span> <span class="pre">+</span> <span class="pre">1)</span></code>.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">ncores</span> <span class="pre">&gt;</span> <span class="pre">1</span></code>, parallel SA chains are initialized to accelerate the calculations of all <code class="docutils literal notranslate"><span class="pre">chain_size</span></code> * <code class="docutils literal notranslate"><span class="pre">ngen</span></code>.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">ncores</span> <span class="pre">&gt;</span> <span class="pre">1</span></code> and <code class="docutils literal notranslate"><span class="pre">move_func=None</span></code>, parallel SA chains can have different <code class="docutils literal notranslate"><span class="pre">chi</span></code> values, provided as a list/vector.</p></li>
+<li><p>Option <code class="docutils literal notranslate"><span class="pre">reinforce_best=True</span></code> allows enforcing the best solution from previous generation to use as a chain startup in the next generation. For example, if <code class="docutils literal notranslate"><span class="pre">chain_size=10</span></code>, the best of the 10 individuals in the first generation is used to initialize the chain in the second generation, and so on. Different <code class="docutils literal notranslate"><span class="pre">ncores</span></code> chains have different best individuals (initial guess) to avoid biasing the parallel search toward a specific chain.</p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="ssa.html" class="btn btn-neutral float-right" title="Salp Swarm Algorithm (SSA)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="gwo.html" class="btn btn-neutral float-left" title="Grey Wolf Optimizer (GWO)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Exelon Corp. &amp; MIT.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

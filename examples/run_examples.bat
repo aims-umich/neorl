@@ -93,6 +93,7 @@ python ex9_csb.py
 if ERRORLEVEL 1 PAUSE
 python ex10_kp.py 50
 if ERRORLEVEL 1 PAUSE
+python ex11_microreactor.py
 del /S *.png
 del /S *.csv
 del /S *.h5
