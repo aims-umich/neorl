@@ -10,7 +10,7 @@ Original paper: Price, D., Radaideh, M., Kochunas, B. Multiobjective optimizatio
 Summary
 --------------------
 
-- Algorithm: DE, ES, GWO, MFO
+- Algorithm: DE, ES, MFO
 - Type: Multi Objective, Unconstrained
 - Field: Nuclear Engineering
  
@@ -21,7 +21,7 @@ The HOLOS-Quad reactor design is a high-temperature gas-cooled microreactor whic
 
 <<awaiting approval to include picture>>
 
-In this example, one of the 8 drums is immobilized and the positions of the remaining 7 drums needs to be selected to satisfy three criteria:
+In this example, one of the 8 drums is immobilized and the positions of the remaining 7 drums need to be selected to satisfy three criteria:
 
 1. Insert a target reactivity: In order for a nuclear reactor to effectively operate, the control system needs to adjust such that the core can have a criticality of 1.
 2. Minimize the differences in quadrant powers: Nuclear reactors must maintain relatively even power distributions to effectively operate because the maximum reactor power is limited by the highest power region in the core. Even power distributions allow for higher power output while maintaining safe operation.
@@ -67,99 +67,9 @@ Here, :math:`F(\vec{x})` is the function that will be plugged into an optimizer 
 
 NEORL script
 --------------------
-In its full working form, this script can be found at the `public repository <https://github.com/deanrp2/MicroControl/blob/main/neorl_example/example11.py>`_ included with the original paper.
 
-.. code-block:: python
-
-	import numpy as np
-	import matplotlib.pyplot as plt
-	import sys
-	from neorl import DE, ES, MFO
-	
-	sys.path.append("..")
-	
-	from reactivity_model import ReactivityModel
-	from qpower_model import QPowerModel
-	
-	#import models from other files in repo
-	rm = ReactivityModel()
-	pm = QPowerModel()
-	
-	#define unscaled objectives
-	def hatfc(x):
-	    thetas = np.zeros(8)
-	    thetas[0] = x[0]
-	    thetas[2:] = x[1:]
-	    react = rm.eval(thetas)
-	    return np.abs(react - 0.03308)
-	
-	def hatfp(x):
-	    thetas = np.zeros(8)
-	    thetas[0] = x[0]
-	    thetas[2:] = x[1:]
-	    powers = pm.eval(thetas)
-	    targets = np.zeros(4)+0.25
-	    return np.abs(powers - targets).sum()
-	
-	def hatfd(x):
-	    return np.max(np.abs(x))
-	
-	#define objective scaling parameters
-	fc_max = 0.03308
-	fc_min = 0
-	
-	fp_max = 0.0345
-	fp_min = 0
-	
-	fd_max = np.pi
-	fd_min = 0
-	
-	#define scaling objectives
-	fc = lambda x : (hatfc(x) - fc_min)/(fc_max - fc_min)
-	fp = lambda x : (hatfp(x) - fp_min)/(fp_max - fp_min)
-	fd = lambda x : (hatfd(x) - fd_min)/(fd_max - fd_min)
-	
-	#define function weights
-	wc = 0.5
-	wp = 0.4
-	wd = 0.1
-	
-	#define single objective function
-	F = lambda x : wc*fc(x) + wp*fp(x) + wd*fd(x)
-	
-	#define drum rotation bounds
-	BOUNDS = {"x%i"%i : ["float", -1.*np.pi, 1.*np.pi] for i in range(1, 8)}
-	
-	#run de optimization
-	npop = 20
-	F_de = 0.4
-	CR = 0.3
-	de = DE(mode = "min", bounds = BOUNDS, fit = F, npop = npop, F = F_de, CR = CR)
-	de_x, de_y, de_hist = de.evolute(100, verbose = True)
-	
-	#run es optimization
-	mu = 25
-	cxpb = 0.6
-	mutpb = 0.3
-	es = ES(mode = "min", bounds = BOUNDS, fit = F, lambda_ = 50, mu = mu, cxpb = 0.6,
-	        mutpb = 0.3)
-	es_x, es_y, es_hist = es.evolute(100, verbose = True)
-	
-	#run mfo optimization
-	nmoths = 55
-	mfo = MFO(mode = "min", bounds = BOUNDS, fit = F, nmoths = nmoths, b = 1)
-	mfo_x, mfo_y, mfo_hist = mfo.evolute(100, verbose = True)
-	
-	plt.plot(de_hist, label = "DE")
-	plt.plot(es_hist, label = "ES")
-	plt.plot(mfo_hist["global_fitness"], label = "MFO")
-	
-	
-	
-	plt.xlabel("Generation")
-	plt.ylabel("Fitness")
-	plt.legend()
-	plt.show()
+.. literalinclude :: ../scripts/ex11_microreactor.py
+   :language: python
 
 
 Results

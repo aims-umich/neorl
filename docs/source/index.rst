@@ -40,83 +40,19 @@ User Guide
 --------------------------------------
 
 .. toctree::
-   :maxdepth: 1
-   :caption: General Guide
+   :maxdepth: 2
    
-   guide/install
-   guide/detinstall
-   guide/quickstart
-   guide/rl
-   guide/evolu
-   guide/hyperparameter
-
+   guide/guide
+   modules/modules
+   tune/tune
+   examples/examples
+   
 .. toctree::
-  :maxdepth: 1
-  :caption: Algorithms
-  
-  modules/a2c
-  modules/acer
-  modules/acktr
-  modules/dqn
-  modules/ppo2
-  modules/es
-  modules/pso
-  modules/de
-  modules/xnes
-  modules/gwo
-  modules/pesa
-  modules/pesa2
-  modules/sa
-  modules/ssa
-  modules/woa
-  modules/mfo
-  modules/jaya
-  modules/bat
-  modules/hho
-  modules/fneat
-  modules/rneat
-  modules/ppoes
-  modules/ackde
-  modules/aco
-  modules/nga
-  modules/nhho
-  modules/cs
-  modules/ts
-
-.. toctree::
-  :maxdepth: 1
-  :caption: Hyperparameter Tuning
-
-  tune/grid
-  tune/random
-  tune/bayes
-  tune/evolu
-  
-.. toctree::
-  :maxdepth: 1
-  :caption: Examples
-
-  examples/ex1
-  examples/ex2
-  examples/ex3
-  examples/ex4
-  examples/ex5
-  examples/ex6
-  examples/ex7
-  examples/ex8
-  examples/ex9
-  examples/ex10
-  examples/ex11
-
-.. toctree::
-  :maxdepth: 1
-  :caption: Misc
-
-  misc/changelog
-  misc/projects
-  misc/contrib
-
-
+   :maxdepth: 1
+   
+   misc/changelog
+   misc/projects
+   misc/contrib
 
 Projects/Papers Using NEORL
 --------------------------------------

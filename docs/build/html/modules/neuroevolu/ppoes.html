@@ -1,0 +1,393 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>RL-informed Evolution Strategies (PPO-ES) &mdash; NEORL 1.7 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="RL-informed Differential Evolution (ACKTR-DE)" href="ackde.html" />
+    <link rel="prev" title="Modern PESA (PESA2)" href="pesa2.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> NEORL
+          
+
+          
+            
+            <img src="../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                main (1.7 )
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../guide/guide.html">General Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">Algorithms</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../neural/neural.html">Neural Algorithms (Reinforcement Learning)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../evolutionary/evolutionary.html">Evolutionary and Swarm Algorithms</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="neuroevolu.html">Hybrid and Neuroevolution Algorithms</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="fneat.html">Feedforward Neuroevolution of Augmenting Topologies (FNEAT)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rneat.html">Recurrent Neuroevolution of Augmenting Topologies (RNEAT)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pesa.html">Prioritized replay Evolutionary and Swarm Algorithm (PESA)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pesa2.html">Modern PESA (PESA2)</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">RL-informed Evolution Strategies (PPO-ES)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#what-can-you-use">What can you use?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ackde.html">RL-informed Differential Evolution (ACKTR-DE)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nga.html">Neural Genetic Algorithms (NGA)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nhho.html">Neural Harris Hawks Optimization (NHHO)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tune/tune.html">Hyperparameter Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/examples.html">Examples</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../misc/changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../misc/projects.html">Projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../misc/contrib.html">Contributors</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NEORL</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../modules.html">Algorithms</a> &raquo;</li>
+        
+          <li><a href="neuroevolu.html">Hybrid and Neuroevolution Algorithms</a> &raquo;</li>
+        
+      <li>RL-informed Evolution Strategies (PPO-ES)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../_sources/modules/neuroevolu/ppoes.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <span class="target" id="module-neorl.hybrid.ppoes"><span id="ppoes"></span></span><div class="section" id="rl-informed-evolution-strategies-ppo-es">
+<h1>RL-informed Evolution Strategies (PPO-ES)<a class="headerlink" href="#rl-informed-evolution-strategies-ppo-es" title="Permalink to this headline">¶</a></h1>
+<p>The Proximal Policy Optimization algorithm starts the search to collect some individuals given a fitness function through a RL environment. In the second step, the best PPO individuals are used to guide evolution strategies (ES), where RL individuals are randomly introduced into the ES population to enrich their diversity. The user first runs PPO search followed by ES, the best results of both stages are reported to the user.</p>
+<p>Original papers:</p>
+<ul class="simple">
+<li><p>Radaideh, M. I., &amp; Shirvan, K. (2021). Rule-based reinforcement learning methodology to inform evolutionary algorithms for constrained optimization of engineering applications. Knowledge-Based Systems, 217, 106836.</p></li>
+<li><p>Radaideh, M. I., Forget, B., &amp; Shirvan, K. (2021). Large-scale design optimisation of boiling water reactor bundles with neuroevolution. Annals of Nuclear Energy, 160, 108355.</p></li>
+</ul>
+<div class="section" id="what-can-you-use">
+<h2>What can you use?<a class="headerlink" href="#what-can-you-use" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Multi processing: ✔️</p></li>
+<li><p>Discrete spaces: ✔️</p></li>
+<li><p>Continuous spaces: ✔️</p></li>
+<li><p>Mixed Discrete/Continuous spaces: ✔️</p></li>
+</ul>
+</div>
+<div class="section" id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="neorl.hybrid.ppoes.PPOES">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">neorl.hybrid.ppoes.</span></span><span class="sig-name descname"><span class="pre">PPOES</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">npop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">npop_rl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_pop_rl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hyperparam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neorl/hybrid/ppoes.html#PPOES"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.hybrid.ppoes.PPOES" title="Permalink to this definition">¶</a></dt>
+<dd><p>A PPO-informed ES Neuroevolution module</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mode</strong> – (str) problem type, either <code class="docutils literal notranslate"><span class="pre">min</span></code> for minimization problem or <code class="docutils literal notranslate"><span class="pre">max</span></code> for maximization</p></li>
+<li><p><strong>fit</strong> – (function) the fitness function to be used with ES</p></li>
+<li><p><strong>env</strong> – (NEORL environment or Gym environment) The environment to learn with PPO, either use NEORL method <code class="docutils literal notranslate"><span class="pre">CreateEnvironment</span></code> (see <strong>below</strong>) or construct your custom Gym environment.</p></li>
+<li><p><strong>bounds</strong> – (dict) input parameter type and lower/upper bounds in dictionary form. Example: <code class="docutils literal notranslate"><span class="pre">bounds={'x1':</span> <span class="pre">['int',</span> <span class="pre">1,</span> <span class="pre">4],</span> <span class="pre">'x2':</span> <span class="pre">['float',</span> <span class="pre">0.1,</span> <span class="pre">0.8],</span> <span class="pre">'x3':</span> <span class="pre">['float',</span> <span class="pre">2.2,</span> <span class="pre">6.2]}</span></code></p></li>
+<li><p><strong>npop</strong> – (int): population size of ES</p></li>
+<li><p><strong>npop_rl</strong> – (int): number of RL/PPO individuals to use in ES population (<code class="docutils literal notranslate"><span class="pre">npop_rl</span> <span class="pre">&lt;</span> <span class="pre">npop</span></code>)</p></li>
+<li><p><strong>init_pop_rl</strong> – (bool) flag to initialize ES population with PPO individuals</p></li>
+<li><p><strong>hyperparam</strong> – (dict) dictionary of ES hyperparameters (<code class="docutils literal notranslate"><span class="pre">cxpb</span></code>, <code class="docutils literal notranslate"><span class="pre">cxmode</span></code>, <code class="docutils literal notranslate"><span class="pre">mutpb</span></code>, <code class="docutils literal notranslate"><span class="pre">alpha</span></code>, <code class="docutils literal notranslate"><span class="pre">mu</span></code>, <code class="docutils literal notranslate"><span class="pre">smin</span></code>, <code class="docutils literal notranslate"><span class="pre">smax</span></code>) 
+and PPO hyperparameters (<code class="docutils literal notranslate"><span class="pre">n_steps</span></code>, <code class="docutils literal notranslate"><span class="pre">gamma</span></code>, <code class="docutils literal notranslate"><span class="pre">learning_rate</span></code>, <code class="docutils literal notranslate"><span class="pre">ent_coef</span></code>, <code class="docutils literal notranslate"><span class="pre">vf_coef</span></code>, <code class="docutils literal notranslate"><span class="pre">lam</span></code>, <code class="docutils literal notranslate"><span class="pre">cliprange</span></code>, <code class="docutils literal notranslate"><span class="pre">max_grad_norm</span></code>, <code class="docutils literal notranslate"><span class="pre">nminibatches</span></code>, <code class="docutils literal notranslate"><span class="pre">noptephocs</span></code>)</p></li>
+<li><p><strong>seed</strong> – (int) random seed for sampling</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="neorl.hybrid.ppoes.PPOES.evolute">
+<span class="sig-name descname"><span class="pre">evolute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ngen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ncores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neorl/hybrid/ppoes.html#PPOES.evolute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.hybrid.ppoes.PPOES.evolute" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function evolutes the ES algorithm for number of generations with guidance from RL individuals.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ngen</strong> – (int) number of generations to evolute</p></li>
+<li><p><strong>ncores</strong> – (int) number of parallel processors to use with ES</p></li>
+<li><p><strong>verbose</strong> – (bool) print statistics to screen</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(tuple) (best individual, best fitness, and a list of fitness history)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="neorl.hybrid.ppoes.PPOES.learn">
+<span class="sig-name descname"><span class="pre">learn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">total_timesteps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rl_filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neorl/hybrid/ppoes.html#PPOES.learn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.hybrid.ppoes.PPOES.learn" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function starts the learning of PPO algorithm for number of timesteps to create individuals for evolutionary search</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>total_timesteps</strong> – (int) number of timesteps to run</p></li>
+<li><p><strong>rl_filter</strong> – (int) number of top individuals to keep from the full RL search</p></li>
+<li><p><strong>verbose</strong> – (bool) print statistics to screen</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(dataframe) dataframe of individuals/fitness sorted from best to worst</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">neorl.rl.make_env.</span></span><span class="sig-name descname"><span class="pre">CreateEnvironment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ncores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'max'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">episode_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neorl/rl/make_env.html#CreateEnvironment"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>A module to construct a fitness environment for certain algorithms 
+that follow reinforcement learning approach of optimization</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>method</strong> – (str) the supported algorithms, choose either: <code class="docutils literal notranslate"><span class="pre">dqn</span></code>, <code class="docutils literal notranslate"><span class="pre">ppo</span></code>, <code class="docutils literal notranslate"><span class="pre">acktr</span></code>, <code class="docutils literal notranslate"><span class="pre">acer</span></code>, <code class="docutils literal notranslate"><span class="pre">a2c</span></code>.</p></li>
+<li><p><strong>fit</strong> – (function) the fitness function</p></li>
+<li><p><strong>bounds</strong> – (dict) input parameter type and lower/upper bounds in dictionary form. Example: <code class="docutils literal notranslate"><span class="pre">bounds={'x1':</span> <span class="pre">['int',</span> <span class="pre">1,</span> <span class="pre">4],</span> <span class="pre">'x2':</span> <span class="pre">['float',</span> <span class="pre">0.1,</span> <span class="pre">0.8],</span> <span class="pre">'x3':</span> <span class="pre">['float',</span> <span class="pre">2.2,</span> <span class="pre">6.2]}</span></code></p></li>
+<li><p><strong>ncores</strong> – (int) number of parallel processors</p></li>
+<li><p><strong>mode</strong> – (str) problem type, either <code class="docutils literal notranslate"><span class="pre">min</span></code> for minimization problem or <code class="docutils literal notranslate"><span class="pre">max</span></code> for maximization (RL is default to <code class="docutils literal notranslate"><span class="pre">max</span></code>)</p></li>
+<li><p><strong>episode_length</strong> – (int): number of individuals to evaluate before resetting the environment to random initial guess.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>Train a PPO-ES agent to optimize the 5-D sphere function</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">PPOES</span>
+<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">CreateEnvironment</span>
+
+<span class="k">def</span> <span class="nf">Sphere</span><span class="p">(</span><span class="n">individual</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Sphere test objective function.</span>
+<span class="sd">            F(x) = sum_{i=1}^d xi^2</span>
+<span class="sd">            d=1,2,3,...</span>
+<span class="sd">            Range: [-100,100]</span>
+<span class="sd">            Minima: 0</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">y</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">individual</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">y</span>
+
+
+<span class="c1">#Setup the parameter space (d=5)</span>
+<span class="n">nx</span><span class="o">=</span><span class="mi">5</span>
+<span class="n">BOUNDS</span><span class="o">=</span><span class="p">{}</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">nx</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">BOUNDS</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
+    
+
+<span class="k">if</span> <span class="vm">__name__</span><span class="o">==</span><span class="s1">&#39;__main__&#39;</span><span class="p">:</span>  <span class="c1">#use this block for parallel PPO!</span>
+    <span class="c1">#create an enviroment class for RL/PPO</span>
+    <span class="n">env</span><span class="o">=</span><span class="n">CreateEnvironment</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;ppo&#39;</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">Sphere</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>  
+                          <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">episode_length</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+    
+    <span class="c1">#change hyperparameters of PPO/ES if you like (defaults should be good to start with)</span>
+    <span class="n">h</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;cxpb&#39;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span>
+       <span class="s1">&#39;mutpb&#39;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span>
+       <span class="s1">&#39;n_steps&#39;</span><span class="p">:</span> <span class="mi">24</span><span class="p">,</span>
+       <span class="s1">&#39;lam&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">}</span>
+    
+    <span class="c1">#Important: `mode` in CreateEnvironment and `mode` in PPOES must be consistent</span>
+    <span class="c1">#fit is needed to be passed again for ES, must be same as the one used in env</span>
+    <span class="n">ppoes</span><span class="o">=</span><span class="n">PPOES</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">Sphere</span><span class="p">,</span> 
+                <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span> <span class="n">npop_rl</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">init_pop_rl</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">hyperparam</span><span class="o">=</span><span class="n">h</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1">#first run RL for some timesteps</span>
+    <span class="n">rl</span><span class="o">=</span><span class="n">ppoes</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span><span class="n">total_timesteps</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1">#second run ES, which will use RL data for guidance</span>
+    <span class="n">ppoes_x</span><span class="p">,</span> <span class="n">ppoes_y</span><span class="p">,</span> <span class="n">ppoes_hist</span><span class="o">=</span><span class="n">ppoes</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1">#ncores for ES</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="ackde.html" class="btn btn-neutral float-right" title="RL-informed Differential Evolution (ACKTR-DE)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="pesa2.html" class="btn btn-neutral float-left" title="Modern PESA (PESA2)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Exelon Corp. &amp; MIT.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

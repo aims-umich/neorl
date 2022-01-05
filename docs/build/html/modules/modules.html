@@ -1,0 +1,274 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Algorithms &mdash; NEORL 1.7 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Neural Algorithms (Reinforcement Learning)" href="neural/neural.html" />
+    <link rel="prev" title="6. Hyperparameter Tuning" href="../guide/hyperparameter.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> NEORL
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                main (1.7 )
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../guide/guide.html">General Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="neural/neural.html">Neural Algorithms (Reinforcement Learning)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evolutionary/evolutionary.html">Evolutionary and Swarm Algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neuroevolu/neuroevolu.html">Hybrid and Neuroevolution Algorithms</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/tune.html">Hyperparameter Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/examples.html">Examples</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../misc/changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/projects.html">Projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../misc/contrib.html">Contributors</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEORL</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Algorithms</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/modules/modules.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="algorithms">
+<h1>Algorithms<a class="headerlink" href="#algorithms" title="Permalink to this headline">¶</a></h1>
+<p>This section highlights the supported NEORL algorithms and how to setup and solve a problem. The algorithms are classified in three separate categories.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="neural/neural.html">Neural Algorithms (Reinforcement Learning)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="neural/a2c.html">Advantage Actor Critic (A2C)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neural/acer.html">Actor-Critic with Experience Replay (ACER)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neural/acktr.html">Actor Critic using Kronecker-Factored Trust Region (ACKTR)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neural/dqn.html">Deep Q Learning (DQN)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neural/ppo2.html">Proximal Policy Optimisation (PPO)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="evolutionary/evolutionary.html">Evolutionary and Swarm Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="evolutionary/es.html">Evolution Strategies (<span class="math notranslate nohighlight">\(\mu,\lambda\)</span>) (ES)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evolutionary/pso.html">Particle Swarm Optimisation (PSO)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evolutionary/de.html">Differential Evolution (DE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evolutionary/xnes.html">Exponential Natural Evolution Strategies (XNES)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evolutionary/gwo.html">Grey Wolf Optimizer (GWO)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evolutionary/sa.html">Simulated Annealing (SA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evolutionary/ssa.html">Salp Swarm Algorithm (SSA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evolutionary/woa.html">Whale Optimization Algorithm (WOA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evolutionary/mfo.html">Moth-flame Optimization (MFO)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evolutionary/jaya.html">JAYA Algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evolutionary/bat.html">Bat Algorithm (BAT)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evolutionary/hho.html">Harris Hawks Optimization (HHO)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evolutionary/aco.html">Ant Colony Optimization (ACO)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evolutionary/cs.html">Cuckoo Search (CS)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evolutionary/ts.html">Tabu Search (TS)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="neuroevolu/neuroevolu.html">Hybrid and Neuroevolution Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="neuroevolu/fneat.html">Feedforward Neuroevolution of Augmenting Topologies (FNEAT)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neuroevolu/rneat.html">Recurrent Neuroevolution of Augmenting Topologies (RNEAT)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neuroevolu/pesa.html">Prioritized replay Evolutionary and Swarm Algorithm (PESA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neuroevolu/pesa2.html">Modern PESA (PESA2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neuroevolu/ppoes.html">RL-informed Evolution Strategies (PPO-ES)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neuroevolu/ackde.html">RL-informed Differential Evolution (ACKTR-DE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neuroevolu/nga.html">Neural Genetic Algorithms (NGA)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neuroevolu/nhho.html">Neural Harris Hawks Optimization (NHHO)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="neural/neural.html" class="btn btn-neutral float-right" title="Neural Algorithms (Reinforcement Learning)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../guide/hyperparameter.html" class="btn btn-neutral float-left" title="6. Hyperparameter Tuning" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Exelon Corp. &amp; MIT.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
