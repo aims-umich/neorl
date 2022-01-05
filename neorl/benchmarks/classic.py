@@ -213,7 +213,7 @@ all_functions = [
     salomon,
     st,
     shubert,
-    #ridge,
+#    ridge,
     powell,
     qing,
     quartic,
@@ -247,7 +247,7 @@ all_names = [
     'salomon',
     'st',
     'shubert',
-    '#ridge',
+#    'ridge',
     'powell',
     'qing',
     'quartic',
@@ -302,7 +302,7 @@ all_ndim = [
     'arbitrary',#rastrigin_skew
     'arbitrary',#schaffer
     'arbitrary',#schwefel
-    'arbitrary'#schwefel2
+    'arbitrary',#schwefel2
     #alpinen1
     #alpinen2
     '2+',#brown
@@ -339,7 +339,7 @@ all_minima_x = [
     0,#schwefel2
     #alpinen1
     #alpinen2
-    #brown
+    0,#brown
     0,#expo
     0,#yang
     0,#yang2
