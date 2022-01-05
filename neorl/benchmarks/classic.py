@@ -222,6 +222,40 @@ all_functions = [
     levy
 ]
 
+all_names = [
+    'sphere',
+    'cigar',
+    'rosenbrock',
+    'bohachevsky',
+    'griewank',
+    'rastrigin',
+    'ackley',
+    'rastrigin_scaled',
+    'rastrigin_skew',
+    'schaffer',
+    'schwefel',
+    'schwefel2',
+#    alpinen1,
+#    alpinen2,
+    'brown',
+    'expo',
+    'yang',
+    'yang2',
+    'yang3',
+    'yang4',
+    'zakharov',
+    'salomon',
+    'st',
+    'shubert',
+    '#ridge',
+    'powell',
+    'qing',
+    'quartic',
+    'happycat',
+    'dixonprice',
+    'levy'
+]
+
 all_bounds = [
     [-5.12, 5.12],#sphere
     [-100, 100],#cigar
