@@ -201,8 +201,8 @@ all_functions = [
     schaffer,
     schwefel,
     schwefel2,
-    alpinen1,
-    alpinen2,
+#    alpinen1,
+#    alpinen2,
     brown,
     expo,
     yang,
@@ -213,7 +213,7 @@ all_functions = [
     salomon,
     st,
     shubert,
-    ridge,
+    #ridge,
     powell,
     qing,
     quartic,
@@ -231,95 +231,95 @@ all_bounds = [
     [-5.12, 5.12],#rastrigin
     [-32.768, 32.768],#ackley
     [-5.12, 5.12],#rastrigin_scaled
-    #rastrigin_skew
-    #schaffer
-    #schwefel
-    #schwefel2
+    [-5.12, 5.12],#rastrigin_skew
+    [-100, 100],#schaffer
+    [-500, 500],#schwefel
+    [-100, 100],#schwefel2
     #alpinen1
     #alpinen2
-    #brown
-    #expo
-    #yang
-    #yang2
-    #yang3
-    #yang4
-    #zakharov
-    #salomon
-    #st
-    #shubert
+    [-1, 4],#brown
+    [-1, 1],#expo
+    [-5, 5],#yang
+    [-2*pi, 2*pi],#yang2
+    [-20, 20],#yang3
+    [-10, 10],#yang4
+    [-5, 10],#zakharov
+    [-100, 100],#salomon
+    [-5, 5],#st
+    [-10, 10],#shubert
     #ridge
-    #powell
-    #qing
-    #quartic
-    #happycat
-    #dixonprice
-    #levy
+    [-1,1],#powell
+    [-500,500],#qing
+    [-1.28, 1.28],#quartic
+    [-2, 2],#happycat
+    [-10, 10],#dixonprice
+    [-10, 10]#levy
 ]
 
 all_ndim = [
     'arbitrary',#sphere
     'arbitrary',#cigar
     'arbitrary',#rosenbrock
-    2,#bohachevsky
+    'arbitrary',#bohachevsky
     'arbitrary',#griewank
     'arbitrary',#rastrigin
     'arbitrary',#ackley
     '2+',#rastrigin_scaled
-    #rastrigin_skew
-    #schaffer
-    #schwefel
-    #schwefel2
+    'arbitrary',#rastrigin_skew
+    'arbitrary',#schaffer
+    'arbitrary',#schwefel
+    'arbitrary'#schwefel2
     #alpinen1
     #alpinen2
-    #brown
-    #expo
-    #yang
-    #yang2
-    #yang3
-    #yang4
-    #zakharov
-    #salomon
-    #st
-    #shubert
+    '2+',#brown
+    'arbitrary',#expo
+    'arbitrary',#yang
+    'arbitrary',#yang2
+    'arbitrary',#yang3
+    'arbitrary',#yang4
+    'arbitrary',#zakharov
+    'arbitrary',#salomon
+    'arbitrary',#st
+    '2',#shubert
     #ridge
-    #powell
-    #qing
-    #quartic
-    #happycat
-    #dixonprice
-    #levy
+    'arbitrary',#powell
+    'arbitrary',#qing
+    'arbitrary',#quartic
+    'arbitrary',#happycat
+    'arbitrary',#dixonprice
+    'arbitrary'#levy
 ]
 
 all_minima_x = [
     0,#sphere
     0,#cigar
     1,#rosenbrock
-    [0,0],#bohachevsky
+    0,#bohachevsky
     0,#griewank
     0,#rastrigin
     0,#ackley
     0,#rastrigin_scaled
-    #rastrigin_skew
-    #schaffer
-    #schwefel
-    #schwefel2
+    0,#rastrigin_skew
+    0,#schaffer
+    420.96874636,#schwefel
+    0,#schwefel2
     #alpinen1
     #alpinen2
     #brown
-    #expo
-    #yang
-    #yang2
-    #yang3
-    #yang4
-    #zakharov
-    #salomon
-    #st
-    #shubert
+    0,#expo
+    0,#yang
+    0,#yang2
+    0,#yang3
+    0,#yang4
+    0,#zakharov
+    0,#salomon
+    -2.903534,#st
+    [-7.0825, 4.8580],#shubert, multiple x points for minima
     #ridge
-    #powell
-    #qing
-    #quartic
-    #happycat
-    #dixonprice
-    #levy
+    0,#powell
+    "+/-[sqrt(1), sqrt(2), ..., sqrt(ndim)]",#qing
+    "-1 or 2",#quartic
+    -1,#happycat
+    "2^(-(2^i-2)/2^i) for i in [1,2,3,...ndim]",#dixonprice
+    1#levy
 ]
