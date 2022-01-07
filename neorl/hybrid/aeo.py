@@ -487,7 +487,7 @@ class AEO(object):
         elif aorb == 'down':
             return 1 - (ncyc-1)/(Ncyc-1)
 
-    def evolute(self, Ncyc, npop0 = None, x0 = None, pop0 = None, verbose = False):
+    def evolute(self, Ncyc, npop0 = None, x0 = None, pop0 = None, stopping_criteria = False verbose = False):
         """
         This function evolutes the AEO algorithm for a number of cycles. Either
         npop0 or x0 and pop0 are required.
@@ -498,6 +498,8 @@ class AEO(object):
         :param x0: (list of lists) initial positions of individuals in problem space
         :param pop0: (list of ints) population assignments for x0, integer corresponding to assigned population ordered
             according to self.optimize
+        "param feval_cancel: (bool or callable) function which returns condition if evolution should continue, can be
+            used to stop evolution at certain number of function evaluations
         """
         #if npop0, x0 and pop0 are none, detect populations from algos
         if npop0 is None and x0 is None and pop0 is None:
@@ -579,6 +581,7 @@ class AEO(object):
                     'cycle'   : cyclecoords,
                     'var'     : varcoords}
                 )
+        log.data[log.data == 0] = np.nan
         #initial_member_x: positions of all individuals in a population before any evolution
         #member_x: positions of members in each population as through each cycle
         #nmembers: number of members in each population in each cycle
@@ -682,6 +685,10 @@ class AEO(object):
                     allotment_holder[pop_indxs_inotj] += allotment
 
                 log['A'].loc[{'cycle' : i}] = allotment_holder
+
+            #check if desired number of function evaluations has been reached
+            if stop_criteria == True:
+                break
 
         return log
 
