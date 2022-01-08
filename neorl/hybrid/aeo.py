@@ -34,6 +34,14 @@ from neorl import ES
 #     3. eval_algo_popnumber needs to be given some criteria for the minimum number of individuals
 #        to run the evolution phase
 
+def raj_logfact(n):
+    """Ramanujan approximation of log(n!)"""
+    f1 = n*np.log(n)
+    f2 = -n
+    f3 = np.log(n*(1+4*n*(1+2*n)))/6
+    f4 = np.log(np.pi)/2
+    return f1 + f2 + f3 + f4
+
 def detect_algo(obj):
     #simple function to detect object type given neorl
     # algorithm object
@@ -64,7 +72,7 @@ def wtd_remove(lst, ei, wts = None):
     indxs = np.random.choice(range(len(lst)), size=ei, p = wts, replace = False)
     return [lst.pop(i) for i in reversed(sorted(indxs))], indxs
 
-def clone_algo_obj(obj, nmembers, fit):
+def clone_algo_obj(obj, nmembers, fit, bounds):
     # function to return a copy of an algorithm object with anumber of members given as
     # nmembers. This is to circumvent the error when the x0 passed in the evolute function
     # is a different size than the individuals given originally in the initialization of 
@@ -84,26 +92,32 @@ def clone_algo_obj(obj, nmembers, fit):
     if algo == 'WOA':
         attrs['nwhales'] = nmembers
         attrs['fit'] = fit
+        attrs['bounds'] = bounds
         return WOA(**filter_kw(attrs, WOA))
     elif algo == 'GWO':
         attrs['nwolves'] = nmembers
         attrs['fit'] = fit
+        attrs['bounds'] = bounds
         return GWO(**filter_kw(attrs, GWO))
     elif algo == 'PSO':
         attrs['npar'] = nmembers
         attrs['fit'] = fit
+        attrs['bounds'] = bounds
         return PSO(**filter_kw(attrs, PSO))
     elif algo == 'HHO':
         attrs['nhawks'] = nmembers
         attrs['fit'] = fit
+        attrs['bounds'] = bounds
         return HHO(**filter_kw(attrs, HHO))
     elif algo == 'DE':
         attrs['npop'] = nmembers
         attrs['fit'] = fit
+        attrs['bounds'] = bounds
         return DE(**filter_kw(attrs, DE))
     elif algo == 'ES':
         attrs['lambda_'] = nmembers
         attrs['fit'] = fit
+        attrs['bounds'] = bounds
         return ES(**filter_kw(attrs, ES))
 
 def get_algo_nmembers(obj):
@@ -178,7 +192,7 @@ class Population:
     def fitness(self):
         return self.fitlog[-1]
 
-    def evolute(self, ngen, fit, log): #fit is included to avoid needing to pull .fit methods
+    def evolute(self, ngen, fit, bounds, log): #fit is included to avoid needing to pull .fit methods
                                        #    from algo objects that may have been flipped
         #check if there are enouh members to evolve NOT appended to fitlog
         if not eval_algo_popnumber(self.strategy, len(self.members)):
@@ -191,7 +205,7 @@ class Population:
             np.put(log['evolute'].data, [0], True)
 
             #update strategy with new population number
-            self.strategy = clone_algo_obj(self.strategy, len(self.members), fit)
+            self.strategy = clone_algo_obj(self.strategy, len(self.members), fit, bounds)
 
            #store last generation number
             self.last_ngen = ngen
@@ -258,7 +272,10 @@ class Population:
         #decide what members to export and then remove them from members and return them
         if wt == 'uni': #uniform case very easy
             shuffled = list(range(len(self.members)))
-            removed_x, removed_idcs =  wtd_remove(self.members, ei)
+            if self.n > 0:
+                removed_x, removed_idcs =  wtd_remove(self.members, ei)
+            else:
+                removed_x, removed_idcs = [], []
             np.put(log['wb'].data, [0], [False])
             log['export_wts'][:self.n] = 1/self.n
         else:
@@ -286,7 +303,7 @@ class Population:
             #calculate the wts
             seq = np.array(range(1, len(self.members) + 1))
             if wt == 'log':
-                wts = (np.log(seq)+kf)/(self.n*kf + np.log(math.factorial(self.n)))
+                wts = (np.log(seq)+kf)/(self.n*kf + raj_logfact(self.n))
             elif wt == 'lin':
                 wts = (seq-1+kf)/(self.n*(kf-.5)+.5*self.n**2)
             elif wt == 'exp':
@@ -297,7 +314,10 @@ class Population:
             log['export_wts'][:self.n][shuffled] = wts
 
             #draw members and return them
-            removed_x, removed_idcs = wtd_remove(self.members, ei, wts)
+            if self.n > 0:
+                removed_x, removed_idcs = wtd_remove(self.members, ei, wts)
+            else:
+                removed_x, removed_idcs = [], []
 
         np.put(log['exported'].data, [shuffled[j] for j in removed_idcs], [True]*len(removed_idcs))
 
@@ -441,6 +461,7 @@ class AEO(object):
             raise Exception('ret should be boolean type')
 
     def ensure_consistency(self):
+        return #temp, may remove this function
         #loop through all optimizers and make sure all options are set to be the same
         gen_warning = ', check that options of all optimizers are the same as AEO'
         for o, a in zip(self.optimizers, self.algos):
@@ -485,18 +506,17 @@ class AEO(object):
         elif aorb == 'down':
             return 1 - (ncyc-1)/(Ncyc-1)
 
-    def evolute(self, Ncyc, npop0 = None, x0 = None, pop0 = None, stopping_criteria = False, verbose = False):
+    def evolute(self, Ncyc, npop0 = None, x0 = None, pop0 = None, stop_criteria = False, verbose = False):
         """
         This function evolutes the AEO algorithm for a number of cycles. Either
         npop0 or x0 and pop0 are required.
 
         :param Ncyc: (int) number of cycles to evolute
-
         :param pop0: (list of ints) number of individuals in starting population for each optimizer
         :param x0: (list of lists) initial positions of individuals in problem space
         :param pop0: (list of ints) population assignments for x0, integer corresponding to assigned population ordered
             according to self.optimize
-        "param feval_cancel: (bool or callable) function which returns condition if evolution should continue, can be
+        "param stop_criteria: (bool or callable) function which returns condition if evolution should continue, can be
             used to stop evolution at certain number of function evaluations
         """
         #if npop0, x0 and pop0 are none, detect populations from algos
@@ -545,6 +565,8 @@ class AEO(object):
         npp = len(popcoords)
         nv = len(varcoords)
 
+
+
         log = xr.Dataset(
                 {
                     'initial_member_x'   : (['member', 'pop',          'var'], np.zeros((nm, npp,     nv), dtype = np.float64)),
@@ -577,9 +599,9 @@ class AEO(object):
                     'member'  : membercoords,
                     'pop'     : popcoords,
                     'cycle'   : cyclecoords,
-                    'var'     : varcoords}
+                    'var'     : varcoords},
+                attrs = {"Ncycles" : 0}
                 )
-        log.data[log.data == 0] = np.nan
         #initial_member_x: positions of all individuals in a population before any evolution
         #member_x: positions of members in each population as through each cycle
         #nmembers: number of members in each population in each cycle
@@ -613,7 +635,7 @@ class AEO(object):
         #perform evolution/migration cycle
         for i in range(1, Ncyc + 1):
             #evolution phase
-            pop_fits = [p.evolute(self.gpc, self.fit, log.loc[{'pop' : p.popname, 'cycle' : i}]) for p in self.pops]
+            pop_fits = [p.evolute(self.gpc, self.fit, self.bounds, log.loc[{'pop' : p.popname, 'cycle' : i}]) for p in self.pops]
 
             #exportation number
             #  calc weights
@@ -630,7 +652,10 @@ class AEO(object):
                 scaling_minf = minf
             alpha = self.get_alphabeta(self.alpha, i, Ncyc)
             strengths_exp = [p.strength(self.g, self.g_burden, scaling_maxf, scaling_minf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'g')**alpha for p in self.pops]
-            strengths_exp_scaled = [s/sum(strengths_exp) for s in strengths_exp]
+            try:
+                strengths_exp_scaled = [s/sum(strengths_exp) for s in strengths_exp]
+            except:
+                print(strengths_exp_scaled)
             #  sample binomial to get e_i for each population
             binomial_wts = [(.5 - s)*self.q + .5 for s in strengths_exp_scaled]
             eis = [np.random.binomial(len(p.members), binomial_wts[j]) for j, p in enumerate(self.pops)]
@@ -685,6 +710,7 @@ class AEO(object):
                 log['A'].loc[{'cycle' : i}] = allotment_holder
 
             #check if desired number of function evaluations has been reached
+            log.attrs["Ncycles"] = i
             if stop_criteria == True:
                 break
 
