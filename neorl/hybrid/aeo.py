@@ -656,6 +656,7 @@ class AEO(object):
                 strengths_exp_scaled = [s/sum(strengths_exp) for s in strengths_exp]
             except:
                 print(strengths_exp_scaled)
+                exit()
             #  sample binomial to get e_i for each population
             binomial_wts = [(.5 - s)*self.q + .5 for s in strengths_exp_scaled]
             eis = [np.random.binomial(len(p.members), binomial_wts[j]) for j, p in enumerate(self.pops)]
