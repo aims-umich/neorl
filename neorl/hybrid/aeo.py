@@ -335,8 +335,6 @@ class AEO(object):
     :param ret: (bool) True if individual can return to original population in destination selection section
     :param order: (str) 'wb' for worst to best, 'bw' for best to worst, prepend 'a' for annealed starting in the given ordering.
     :param kf: (int) 0 or 1 for variant of weighting functions
-    :param ngtonevals: (list of callables) list of functions which take number of generations and number of individuals and returns
-        number of fitness evaluations ordered according to the algorithms given in optimizers.
     :param ncores: (int) number of parallel processors
     :param seed: (int) random seed for sampling
     """
@@ -344,7 +342,7 @@ class AEO(object):
             optimizers, gen_per_cycle,
             alpha, g, g_burden, q, wt,
             beta, b, b_burden, ret,
-            order = None, kf = None, ngtonevals = None,
+            order = None, kf = None,
             ncores = 1, seed = None):
 
         if not (seed is None):
