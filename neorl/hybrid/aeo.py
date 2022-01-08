@@ -323,8 +323,8 @@ class AEO(object):
     :param optimizers: (list) list of optimizer instances to be included in the ensemble
     :param gen_per_cycle: (int) number of generations performed in evolution phase per cycle
     :param alpha: (float or str) option for exponent on g strength measure, if numeric, alpha is taken to be
-        that value. If alpha is 'up' alpha is annealed from -1 to 1. If alpha is 'down' it is annealed from
-        1 to -1.
+        that value. If alpha is 'up' alpha is annealed from 0 to 1. If alpha is 'down' it is annealed from
+        1 to 0.
     :param g: (str) either 'fitness' or 'improve' for strength measure for exportation number section of migration
     :param g_burden: (bool) True if strength if divided by number of fitness evaluations in evolution phase
     :param q: (float or str) option for favoring weak or strong pops in exportation number
