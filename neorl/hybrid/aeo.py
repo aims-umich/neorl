@@ -487,7 +487,7 @@ class AEO(object):
         elif aorb == 'down':
             return 1 - (ncyc-1)/(Ncyc-1)
 
-    def evolute(self, Ncyc, npop0 = None, x0 = None, pop0 = None, stopping_criteria = False verbose = False):
+    def evolute(self, Ncyc, npop0 = None, x0 = None, pop0 = None, stopping_criteria = False, verbose = False):
         """
         This function evolutes the AEO algorithm for a number of cycles. Either
         npop0 or x0 and pop0 are required.
