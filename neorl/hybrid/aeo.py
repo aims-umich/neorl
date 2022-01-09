@@ -277,7 +277,8 @@ class Population:
             else:
                 removed_x, removed_idcs = [], []
             np.put(log['wb'].data, [0], [False])
-            log['export_wts'][:self.n] = 1/self.n
+            if self.n > 0:
+                log['export_wts'][:self.n] = 1/self.n
         else:
             if order[0] == 'a': #handle the annealed cases
                 if gfrac < 0.5:
@@ -712,8 +713,9 @@ class AEO(object):
 
             #check if desired number of function evaluations has been reached
             log.attrs["Ncycles"] = i
-            if stop_criteria == True:
-                break
+            if not stop_criteria is None:
+                if stop_criteria() == True:
+                    break
 
         return log
 
