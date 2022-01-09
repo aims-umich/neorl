@@ -507,6 +507,15 @@ class AEO(object):
         elif aorb == 'down':
             return 1 - (ncyc-1)/(Ncyc-1)
 
+    def get_q(self, ncyc, Ncyc):
+        if isinstance(self.q, float):
+            return self.q
+        elif self.q == "up":
+            return 2/(1 - Ncyc)*(1 - ncyc)-1
+        elif self.q == "down":
+            return 2/(1 - Ncyc)*(ncyc - 1)+1
+
+
     def evolute(self, Ncyc, npop0 = None, x0 = None, pop0 = None, stop_criteria = False, verbose = False):
         """
         This function evolutes the AEO algorithm for a number of cycles. Either
@@ -653,13 +662,11 @@ class AEO(object):
                 scaling_minf = minf
             alpha = self.get_alphabeta(self.alpha, i, Ncyc)
             strengths_exp = [p.strength(self.g, self.g_burden, scaling_maxf, scaling_minf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'g')**alpha for p in self.pops]
-            try:
-                strengths_exp_scaled = [s/sum(strengths_exp) for s in strengths_exp]
-            except:
-                print(strengths_exp_scaled)
-                exit()
+            strengths_exp_scaled = [s/sum(strengths_exp) for s in strengths_exp]
+
             #  sample binomial to get e_i for each population
-            binomial_wts = [(.5 - s)*self.q + .5 for s in strengths_exp_scaled]
+            qt = self.get_q(i, Ncyc)
+            binomial_wts = [(.5 - s)*qt + .5 for s in strengths_exp_scaled]
             eis = [np.random.binomial(len(p.members), binomial_wts[j]) for j, p in enumerate(self.pops)]
 
             # log pop export info
