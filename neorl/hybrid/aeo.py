@@ -707,10 +707,11 @@ class AEO(object):
                 pop_indxs = list(range(len(self.pops)))
                 allotment_holder = np.zeros(len(self.pops))
                 for j, exported_group in enumerate(exported):
-                    strengths_inotj = strengths_dest_scaled[:j] + strengths_dest_scaled[j+1:]
+                    strengths_inotj = strengths_dest[:j] + strengths_dest[j+1:]
+                    strengths_inotj_scaled = [s/sum(strengths_inotj) for s in strengths_inotj]
                     pop_indxs_inotj = pop_indxs[:j] + pop_indxs[j+1:]
                     random.shuffle(exported_group)
-                    allotment = np.random.multinomial(len(exported_group), strengths_inotj)
+                    allotment = np.random.multinomial(len(exported_group), strengths_inotj_scaled)
                     for a, pi in zip(allotment, pop_indxs_inotj):
                         self.pops[pi].receive(exported_group[:a])
                         exported_group = exported_group[a:]
