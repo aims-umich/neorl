@@ -23,4 +23,3 @@ for i in range(1,nx+1):
 es=ES(mode='min', bounds=BOUNDS, fit=FIT, lambda_=80, mu=40, mutpb=0.1,
      cxmode='blend', cxpb=0.7, ncores=1, seed=1)
 x_best, y_best, es_hist=es.evolute(ngen=5, verbose=1)
-print(FIT(x_best))
