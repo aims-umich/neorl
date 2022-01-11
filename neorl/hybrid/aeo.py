@@ -432,11 +432,11 @@ class AEO(object):
             raise Exception('invalid option for wt')
 
         self.order = order
-        if not self.order in ['wb', 'bw', 'awb', 'abw']:
+        if not self.order in ['wb', 'bw', 'awb', 'abw', None]:
             raise Exception('invalid option for order')
 
         self.kf = kf
-        if not self.kf in [0, 1]:
+        if not self.kf in [0, 1, None]:
             raise Exception('invalid option for kf')
 
         if self.wt == 'uni' and ((self.kf is not None)
