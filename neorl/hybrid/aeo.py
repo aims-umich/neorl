@@ -181,6 +181,7 @@ class Population:
         self.strategy = copy.deepcopy(strategy)
         self.algo = algo
         self.members = init_pop
+        self.n = len(self.members)
         self.mode = mode
 
         self.popname = '' #will be assigned externally after object has been initialized
@@ -196,7 +197,6 @@ class Population:
                                        #    from algo objects that may have been flipped
         #check if there are enouh members to evolve NOT appended to fitlog
         if not eval_algo_popnumber(self.strategy, len(self.members)):
-            self.n = len(self.members)
             if len(self.fitlog) == 0:
                 raise Exception("Starting population for %s too small for evoluation"%self.algo)
             fitness = self.fitness
@@ -220,7 +220,6 @@ class Population:
             elif self.mode == 'min':
                 self.fitlog.append(min(self.member_fitnesses))
 
-            self.n = len(self.members)
             fitness = self.fitness
 
         #log relevant information
@@ -325,6 +324,8 @@ class Population:
         #remove member fitnesses to make sure len(members) == len(member_fitnesses)
         [self.member_fitnesses.pop(j) for j in reversed(sorted(removed_idcs))]
 
+        self.n = len(self.members)
+
         #log which members were exported
         return removed_x
 
@@ -332,6 +333,7 @@ class Population:
         #bring individuals into the populations
         self.members += individuals
         [self.member_fitnesses.append(np.nan) for i in individuals]
+        self.n = len(self.members)
 
 
 class AEO(object):
@@ -687,6 +689,7 @@ class AEO(object):
             beta = self.get_alphabeta(self.beta, i, Ncyc)
             log['beta'].loc[{'cycle' : i}] = beta
             strengths_dest = [p.strength(self.b, self.b_burden, scaling_maxf, scaling_minf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'b')**beta for p in self.pops]
+            a = copy.deepcopy(exported)
 
             if self.ret:#if population can return to original population
                 #manage members that are currently without a home
