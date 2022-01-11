@@ -69,6 +69,7 @@ def wtd_remove(lst, ei, wts = None):
     #wts probability vector
     if wts is None:
         wts = [1/len(lst) for i in range(len(lst))]
+    #start here, caused by zeros in the weight
     indxs = np.random.choice(range(len(lst)), size=ei, p = wts, replace = False)
     return [lst.pop(i) for i in reversed(sorted(indxs))], indxs
 
