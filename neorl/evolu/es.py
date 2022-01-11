@@ -506,7 +506,7 @@ class ES:
 
         
         #---update final logger
-        self.es_hist['last_pop'] = get_population(self.population)
+        self.es_hist['last_pop'] = get_population(offspring)
         if self.mode == 'min':
             self.best_scores=[-item for item in self.best_scores]
             self.es_hist['global_fitness'] = np.minimum.accumulate(self.best_scores)

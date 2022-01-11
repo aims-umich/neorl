@@ -61,7 +61,7 @@ Projects/Papers Using NEORL
 
 2- Radaideh, M. I., Shirvan, K. (2021). Rule-based reinforcement learning methodology to inform evolutionary algorithms for constrained optimization of engineering applications. *Knowledge-Based Systems*, **217**, p. 106836 `[LINK2] <https://doi.org/10.1016/j.knosys.2021.106836>`_.
 
-3- Radaideh, M.I., Forget, B., Shirvan, K. (2021). Application of Reinforcement Learning Optimisation Methodology to BWR Assemblies ," In: *Proc. International Conference on Mathematics & Computational Methods Applied to Nuclear Science & Engineering (M&C 2021)*, Rayleigh, North Carolina, USA, October 3-7, 2021.
+3- Radaideh, M. I., Forget, B., Shirvan, K. (2021). Large-scale design optimisation of boiling water reactor bundles with neuroevolution. Annals of Nuclear Energy, 160, 108355 `[LINK3] <https://doi.org/10.1016/j.anucene.2021.108355>`_.
 
 Citing the Project
 --------------------------------------
