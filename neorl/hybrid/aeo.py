@@ -523,7 +523,7 @@ class AEO(object):
             return 2/(1 - Ncyc)*(ncyc - 1)+1
 
 
-    def evolute(self, Ncyc, npop0 = None, x0 = None, pop0 = None, stop_criteria = False, verbose = False):
+    def evolute(self, Ncyc, npop0 = None, x0 = None, pop0 = None, stop_criteria = None, verbose = False):
         """
         This function evolutes the AEO algorithm for a number of cycles. Either
         npop0 or x0 and pop0 are required.
@@ -533,7 +533,7 @@ class AEO(object):
         :param x0: (list of lists) initial positions of individuals in problem space
         :param pop0: (list of ints) population assignments for x0, integer corresponding to assigned population ordered
             according to self.optimize
-        "param stop_criteria: (bool or callable) function which returns condition if evolution should continue, can be
+        "param stop_criteria: (None or callable) function which returns condition if evolution should continue, can be
             used to stop evolution at certain number of function evaluations
         """
         #if npop0, x0 and pop0 are none, detect populations from algos
