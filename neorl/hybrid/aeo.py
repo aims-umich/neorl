@@ -482,7 +482,6 @@ class AEO(object):
                     inner_test = [np.random.uniform(self.lb[i], self.ub[i]) for i in range(len(self.ub))]
                     assert self.fitcheck(inner_test) == o.fit(inner_test)
                 except:
-                    print("here")
                     raise Exception('i%s has incorrect fitness function'%o + gen_warning)
             else:
                 assert self.mode == o.mode,'%s has incorrect optimization mode'%o + gen_warning
@@ -686,8 +685,12 @@ class AEO(object):
             #destination selection
             beta = self.get_alphabeta(self.beta, i, Ncyc)
             log['beta'].loc[{'cycle' : i}] = beta
-            strengths_dest = [p.strength(self.b, self.b_burden, maxf, minf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'b')**beta for p in self.pops]
-            a = copy.deepcopy(exported)
+
+            if maxf == minf:
+                strengths_dest = [1.]*len(self.pop)
+            else:
+                strengths_dest = [p.strength(self.b, self.b_burden, maxf, minf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'b')**beta for p in self.pops]
+
 
             if self.ret:#if population can return to original population
                 #manage members that are currently without a home
