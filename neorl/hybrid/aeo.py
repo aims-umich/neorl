@@ -602,8 +602,7 @@ class AEO(object):
                     'delta_f'            : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
                     'fmin'               : ([                 'cycle'], np.zeros(          nc , dtype = np.float64)),
                     'fmax'               : ([                 'cycle'], np.zeros(          nc , dtype = np.float64)),
-                    'scaling_fmin'       : ([                 'cycle'], np.zeros(          nc , dtype = np.float64)),
-                    'scaling_fmax'       : ([                 'cycle'], np.zeros(          nc , dtype = np.float64)),
+                    'migration'          : ([                 'cycle'], np.zeros(          nc , dtype = np.bool8)),
                     'export_wts'         : (['member', 'pop', 'cycle'], np.zeros((nm, npp, nc), dtype = np.float64)),
                     'exported'           : (['member', 'pop', 'cycle'], np.zeros((nm, npp, nc), dtype = np.bool8)),
 #                    'pop_after_migrate'  : (['member', 'pop', 'cycle'], np.zeros((nm, npp, nc), dtype = '<U6')),
@@ -633,8 +632,7 @@ class AEO(object):
         #delta_f: difference in current cycle fitness to previous cycle fitness
         #fmin: minimum fitness across all populations for a single cycle
         #fmax: maximum fitness across all populations for a single cycle
-        #scaling_fmin: some conditions make modifications to fmin required, this is modified version
-        #scaling_fmax: some conditions make modifications to fmax required, this is modified version
+        #migration: bool as to whether or not migration is performed, if fmax=fmix, no evolution
         #export_wts: weights used for each individual in the member selection phase
         #exported: boolean as to whether or not an individual was exported
         #beta: beta parameter as it may change over each cycle
@@ -658,32 +656,27 @@ class AEO(object):
             #  calc weights
             maxf = max(pop_fits)
             minf = min(pop_fits)
-            if maxf == minf:
-                if i == 1: #this basically sets all g_i to 1
-                    scaling_minf = .9*minf
-                    scaling_maxf = maxf
-                else:
-                    pass #Leave scaling parameters alone
+            if maxf == minf:#export nobody if this true
+                eis = [0]*len(self.pops)
+                log['migration'].loc[{'cycle' : i}] = False
             else:
-                scaling_maxf = maxf
-                scaling_minf = minf
-            alpha = self.get_alphabeta(self.alpha, i, Ncyc)
-            strengths_exp = [p.strength(self.g, self.g_burden, scaling_maxf, scaling_minf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'g')**alpha for p in self.pops]
-            strengths_exp_scaled = [s/sum(strengths_exp) for s in strengths_exp]
+                alpha = self.get_alphabeta(self.alpha, i, Ncyc)
+                strengths_exp = [p.strength(self.g, self.g_burden, maxf, minf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'g')**alpha for p in self.pops]
+                strengths_exp_scaled = [s/sum(strengths_exp) for s in strengths_exp]
 
-            #  sample binomial to get e_i for each population
-            qt = self.get_q(i, Ncyc)
-            binomial_wts = [(.5 - s)*qt + .5 for s in strengths_exp_scaled]
-            eis = [np.random.binomial(len(p.members), binomial_wts[j]) for j, p in enumerate(self.pops)]
+                #  sample binomial to get e_i for each population
+                qt = self.get_q(i, Ncyc)
+                binomial_wts = [(.5 - s)*qt + .5 for s in strengths_exp_scaled]
+                eis = [np.random.binomial(len(p.members), binomial_wts[j]) for j, p in enumerate(self.pops)]
+                log['migration'].loc[{'cycle' : i}] = True
+
+                log['export_str_scaled'].loc[{'cycle' : i}] = strengths_exp_scaled
+                log['export_pop_wts'].loc[{'cycle' : i}] = binomial_wts
 
             # log pop export info
-            log['export_str_scaled'].loc[{'cycle' : i}] = strengths_exp_scaled
-            log['export_pop_wts'].loc[{'cycle' : i}] = binomial_wts
             log['nexport'].loc[{'cycle' : i}] = eis
             log['fmax'].loc[{'cycle' : i}] = maxf
             log['fmin'].loc[{'cycle' : i}] = minf
-            log['scaling_fmax'].loc[{'cycle' : i}] = scaling_maxf
-            log['scaling_fmin'].loc[{'cycle' : i}] = scaling_minf
             log['alpha'].loc[{'cycle' : i}] = alpha
 
             #member selection
@@ -693,7 +686,7 @@ class AEO(object):
             #destination selection
             beta = self.get_alphabeta(self.beta, i, Ncyc)
             log['beta'].loc[{'cycle' : i}] = beta
-            strengths_dest = [p.strength(self.b, self.b_burden, scaling_maxf, scaling_minf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'b')**beta for p in self.pops]
+            strengths_dest = [p.strength(self.b, self.b_burden, maxf, minf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'b')**beta for p in self.pops]
             a = copy.deepcopy(exported)
 
             if self.ret:#if population can return to original population
