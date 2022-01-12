@@ -686,7 +686,7 @@ class AEO(object):
             beta = self.get_alphabeta(self.beta, i, Ncyc)
             log['beta'].loc[{'cycle' : i}] = beta
 
-            if maxf == minf:
+            if maxf == minf: #doesn't matter because nobody is exported
                 strengths_dest = [1.]*len(self.pop)
             else:
                 strengths_dest = [p.strength(self.b, self.b_burden, maxf, minf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'b')**beta for p in self.pops]
