@@ -69,8 +69,12 @@ def wtd_remove(lst, ei, wts = None):
     #wts probability vector
     if wts is None:
         wts = [1/len(lst) for i in range(len(lst))]
+
+    wts_sum = sum(wts)
+    wts_checked = [a/wts_sum for a in wts] #correct for floating point errors
+
     #start here, caused by zeros in the weight
-    indxs = np.random.choice(range(len(lst)), size=ei, p = wts, replace = False)
+    indxs = np.random.choice(range(len(lst)), size=ei, p = wts_checked, replace = False)
     return [lst.pop(i) for i in reversed(sorted(indxs))], indxs
 
 def clone_algo_obj(obj, nmembers, fit, bounds):
