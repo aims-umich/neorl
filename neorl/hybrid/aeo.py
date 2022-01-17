@@ -655,11 +655,11 @@ class AEO(object):
             #  calc weights
             maxf = max(pop_fits)
             minf = min(pop_fits)
+            alpha = self.get_alphabeta(self.alpha, i, Ncyc)
             if maxf == minf:#export nobody if this true
                 eis = [0]*len(self.pops)
                 log['migration'].loc[{'cycle' : i}] = False
             else:
-                alpha = self.get_alphabeta(self.alpha, i, Ncyc)
                 strengths_exp = [p.strength(self.g, self.g_burden, maxf, minf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'g')**alpha for p in self.pops]
                 strengths_exp_scaled = [s/sum(strengths_exp) for s in strengths_exp]
 
