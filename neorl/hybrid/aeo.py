@@ -360,7 +360,6 @@ class AEO(object):
     :param beta: (float or str) option for exponent on b strength measure. See alpha for details.
     :param b: (str) either 'fitness' or 'improve' for strength measure for destination selection section of migration
     :param b_burden: (bool) True if strength if divided by number of fitness evaluations in evolution phase
-    :param ret: (bool) True if individual can return to original population in destination selection section
     :param order: (str) 'wb' for worst to best, 'bw' for best to worst, prepend 'a' for annealed starting in the given ordering.
     :param kf: (int) 0 or 1 for variant of weighting functions
     :param ncores: (int) number of parallel processors
@@ -369,7 +368,7 @@ class AEO(object):
     def __init__(self, mode, bounds, fit, 
             optimizers, gen_per_cycle,
             alpha, g, g_burden, q, wt,
-            beta, b, b_burden, ret,
+            beta, b, b_burden,
             order = None, kf = None,
             ncores = 1, seed = None):
 
@@ -463,10 +462,6 @@ class AEO(object):
         self.b_burden = b_burden
         if not isinstance(b_burden, bool):
             raise Exception('b_burden should be boolean type')
-
-        self.ret = ret
-        if not isinstance(ret, bool):
-            raise Exception('ret should be boolean type')
 
     def ensure_consistency(self):
         return #temp, may remove this function
@@ -691,37 +686,20 @@ class AEO(object):
             else:
                 strengths_dest = [p.strength(self.b, self.b_burden, maxf, minf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'b')**beta for p in self.pops]
 
+            #manage members that are currently without a home
+            exported = list(itertools.chain.from_iterable(exported))
+            random.shuffle(exported)#in-place randomize order
 
-            if self.ret:#if population can return to original population
-                #manage members that are currently without a home
-                exported = list(itertools.chain.from_iterable(exported))
-                random.shuffle(exported)#in-place randomize order
+            #calculate normalized probabilities and draw samples
+            strengths_dest_scaled = [s/sum(strengths_dest) for s in strengths_dest]
+            allotments = np.random.multinomial(len(exported), strengths_dest_scaled)
+            log['A'].loc[{'cycle' : i}] = allotments
 
-                #calculate normalized probabilities and draw samples
-                strengths_dest_scaled = [s/sum(strengths_dest) for s in strengths_dest]
-                allotments = np.random.multinomial(len(exported), strengths_dest_scaled)
-                log['A'].loc[{'cycle' : i}] = allotments
+            #distribute individuals according to the sample
+            for a, p in zip(allotments, self.pops):
+                p.receive(exported[:a])
+                exported = exported[a:]
 
-                #distribute individuals according to the sample
-                for a, p in zip(allotments, self.pops):
-                    p.receive(exported[:a])
-                    exported = exported[a:]
-
-            else:
-                pop_indxs = list(range(len(self.pops)))
-                allotment_holder = np.zeros(len(self.pops))
-                for j, exported_group in enumerate(exported):
-                    strengths_inotj = strengths_dest[:j] + strengths_dest[j+1:]
-                    strengths_inotj_scaled = [s/sum(strengths_inotj) for s in strengths_inotj]
-                    pop_indxs_inotj = pop_indxs[:j] + pop_indxs[j+1:]
-                    random.shuffle(exported_group)
-                    allotment = np.random.multinomial(len(exported_group), strengths_inotj_scaled)
-                    for a, pi in zip(allotment, pop_indxs_inotj):
-                        self.pops[pi].receive(exported_group[:a])
-                        exported_group = exported_group[a:]
-                    allotment_holder[pop_indxs_inotj] += allotment
-
-                log['A'].loc[{'cycle' : i}] = allotment_holder
 
             #check if desired number of function evaluations has been reached
             log.attrs["Ncycles"] = i
