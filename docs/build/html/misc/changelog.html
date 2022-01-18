@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Change Log &mdash; NEORL 1.7 documentation</title>
+  <title>Change Log &mdash; NEORL 1.7.2b documentation</title>
   
 
   
@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                main (1.7 )
+                main (1.7.2b )
               </div>
             
           
@@ -109,6 +109,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#beta-releases-for-developers">Beta Releases (for developers)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#release-1-7-2b-2022-1-17">Release 1.7.2b (2022-1-17)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#release-1-7-1b-2022-1-03">Release 1.7.1b (2022-1-03)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#release-1-6-2b-2021-10-07">Release 1.6.2b (2021-10-07)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#release-1-6-1b-2021-09-20">Release 1.6.1b (2021-09-20)</a></li>
@@ -232,6 +233,17 @@
 </div>
 <div class="section" id="beta-releases-for-developers">
 <h2>Beta Releases (for developers)<a class="headerlink" href="#beta-releases-for-developers" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="release-1-7-2b-2022-1-17">
+<h3>Release 1.7.2b (2022-1-17)<a class="headerlink" href="#release-1-7-2b-2022-1-17" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install <span class="nv">neorl</span><span class="o">==</span><span class="m">1</span>.7.2b --extra-index-url https://test.pypi.org/simple
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Fixed a plotting bug in NEORL benchmarks.</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">last_pop</span></code> results to the returned history dictionary of ACO, SSA, JAYA, BAT, CS, XNES.</p></li>
+<li><p>Allowed passing annealing parameters via <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code> to WOA, GWO, PSO, MFO, HHO (this is for AEO ensemble research).</p></li>
+</ul>
+</div>
 <div class="section" id="release-1-7-1b-2022-1-03">
 <h3>Release 1.7.1b (2022-1-03)<a class="headerlink" href="#release-1-7-1b-2022-1-03" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install <span class="nv">neorl</span><span class="o">==</span><span class="m">1</span>.7.1b --extra-index-url https://test.pypi.org/simple

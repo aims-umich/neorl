@@ -31,6 +31,17 @@ Release 1.6 (2021-09-10)
 Beta Releases (for developers)
 ---------------------------------
 
+Release 1.7.2b (2022-1-17)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+  pip install neorl==1.7.2b --extra-index-url https://test.pypi.org/simple
+
+- Fixed a plotting bug in NEORL benchmarks. 
+- Added ``last_pop`` results to the returned history dictionary of ACO, SSA, JAYA, BAT, CS, XNES. 
+- Allowed passing annealing parameters via ``**kwargs`` to WOA, GWO, PSO, MFO, HHO (this is for AEO ensemble research). 
+
 Release 1.7.1b (2022-1-03)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

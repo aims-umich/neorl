@@ -81,7 +81,7 @@ plt.plot(mfo_hist["global_fitness"], label = "MFO")
 plt.xlabel("Generation")
 plt.ylabel("Fitness")
 plt.legend()
-plt.show() 
+plt.show()   #or plt.show()
 
 print("MFO fc hat")
 print(hatfc(mfo_x))

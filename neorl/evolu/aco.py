@@ -28,6 +28,7 @@ import random
 import numpy as np
 import joblib
 from neorl.utils.seeding import set_neorl_seed
+from neorl.utils.tools import get_population
 
 class ACO(object):
     """
@@ -127,6 +128,7 @@ class ACO(object):
             pops = Populations(self.nants, self.nvars, self.fit, self.bounds, ncores=self.ncores, x0=None)
             
         fit_hist=[]
+        self.history = {'local_fitness':[], 'global_fitness':[], 'last_pop':[]}
         self.ngen = ngen
         self.__best_solutions = [None]*self.ngen
         self.pops_sorted = pops.ant_populations     # length 10
@@ -180,12 +182,16 @@ class ACO(object):
             self.__final_best_solution = self.pops_sorted[0]
             # Store Best Cost
             self.__best_solutions[iter] = self.__final_best_solution
-            
+
+            self.last_fit=[item.cost_function for item in self.__new_pops] #for logging
+
             #show the value wrt min/max
             if self.mode=='max':
-                y_print = -float(self.__final_best_solution.cost_function)       
+                y_print = -float(self.__final_best_solution.cost_function)
+                self.history['local_fitness'].append(-np.min(self.last_fit))
             else:
                 y_print = float(self.__final_best_solution.cost_function)
+                self.history['local_fitness'].append(np.min(self.last_fit))
             
             fit_hist.append(y_print)
             if verbose:
@@ -196,7 +202,7 @@ class ACO(object):
                 print('Best individual:', self.__final_best_solution.position.flatten())
                 print('Archive mean individual:', self.__means.mean(axis=0))
                 print('************************************************************')
-
+            
 
         if verbose:
             print('------------------------ ACOR Summary --------------------------')
@@ -204,9 +210,18 @@ class ACO(object):
             print('Best individual (x) found:', self.__best_solutions[-1].position.flatten())
             print('--------------------------------------------------------------')
         
-        x_best=self.__best_solutions[-1].position.flatten()
-        y_best=y_print
-        return x_best, y_best, fit_hist
+        self.x_best=self.__best_solutions[-1].position.flatten()
+        self.y_best=y_print
+        
+        self.history['global_fitness'] = fit_hist
+        #obtain last population
+        self.last_pop=[item.position for item in self.__new_pops]
+        
+        self.history['last_pop'] = get_population(self.last_pop, self.last_fit)
+        if self.mode=='max':
+            self.history['last_pop']['fitness'] *= -1
+            
+        return self.x_best, self.y_best, self.history
     
     @property
     def pops(self):

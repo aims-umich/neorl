@@ -220,7 +220,7 @@ class WOA(object):
             self.Positions[i, :] = self.ensure_discrete(self.Positions[i,:])
 
 
-    def evolute(self, ngen, x0=None, verbose=False):
+    def evolute(self, ngen, x0=None, verbose=False, **kwargs):
         """
         This function evolutes the WOA algorithm for number of generations.
         
@@ -250,10 +250,22 @@ class WOA(object):
         for k in range(0, ngen):
             
             self.alpha= 1 - k * ((1) / ngen)  #mir: alpha decreases linearly between 1 to 0, for discrete mutation
-            # a is annealed from 2 to 0
-            self.a = self.a0 - k * ((self.a0) / (ngen))
-            # fac is annealed from -1 to -2 to estimate l
-            self.fac = -1 + k * ((-1) / ngen)
+            
+            if 'a' in kwargs:
+                assert len(kwargs["fac"]) == ngen, '--error: the length of `a` in kwargs must equal to ngen'
+                self.a=kwargs["a"][k]
+            else:
+                # a is annealed from 2 to 0
+                self.a = self.a0 - k * ((self.a0) / (ngen)) 
+                
+            
+            if 'fac' in kwargs:
+                #take it from external vector
+                assert len(kwargs["fac"]) == ngen, '--error: the length of `fac` in kwargs must equal to ngen'
+                self.fac=kwargs["fac"][k]
+            else:
+                # fac is annealed from -1 to -2 to estimate l
+                self.fac = -1 + k * ((-1) / ngen)
             #-----------------------------
             # Update Whale Positions
             #-----------------------------
@@ -296,6 +308,7 @@ class WOA(object):
                     print('Best Whale Position:', self.best_position)
                 print('a:', np.round(self.a,3))
                 print('A:', np.round(self.A,3))
+                print('fac:', np.round(self.fac,3))
                 print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
 
         #mir-grid

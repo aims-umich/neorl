@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.evolu.woa &mdash; NEORL 1.7 documentation</title>
+  <title>neorl.evolu.woa &mdash; NEORL 1.7.2b documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.7 )
+                main (1.7.2b )
               </div>
             
           
@@ -391,7 +391,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensure_discrete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">i</span><span class="p">,:])</span>
 
 
-<div class="viewcode-block" id="WOA.evolute"><a class="viewcode-back" href="../../../modules/evolutionary/woa.html#neorl.evolu.woa.WOA.evolute">[docs]</a>    <span class="k">def</span> <span class="nf">evolute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ngen</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="WOA.evolute"><a class="viewcode-back" href="../../../modules/evolutionary/woa.html#neorl.evolu.woa.WOA.evolute">[docs]</a>    <span class="k">def</span> <span class="nf">evolute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ngen</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function evolutes the WOA algorithm for number of generations.</span>
 <span class="sd">        </span>
@@ -421,10 +421,22 @@
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ngen</span><span class="p">):</span>
             
             <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">k</span> <span class="o">*</span> <span class="p">((</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">ngen</span><span class="p">)</span>  <span class="c1">#mir: alpha decreases linearly between 1 to 0, for discrete mutation</span>
-            <span class="c1"># a is annealed from 2 to 0</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a0</span> <span class="o">-</span> <span class="n">k</span> <span class="o">*</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">a0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">ngen</span><span class="p">))</span>
-            <span class="c1"># fac is annealed from -1 to -2 to estimate l</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fac</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">+</span> <span class="n">k</span> <span class="o">*</span> <span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">ngen</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="s1">&#39;a&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;fac&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="n">ngen</span><span class="p">,</span> <span class="s1">&#39;--error: the length of `a` in kwargs must equal to ngen&#39;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">][</span><span class="n">k</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># a is annealed from 2 to 0</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a0</span> <span class="o">-</span> <span class="n">k</span> <span class="o">*</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">a0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">ngen</span><span class="p">))</span> 
+                
+            
+            <span class="k">if</span> <span class="s1">&#39;fac&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="c1">#take it from external vector</span>
+                <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;fac&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="n">ngen</span><span class="p">,</span> <span class="s1">&#39;--error: the length of `fac` in kwargs must equal to ngen&#39;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fac</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;fac&quot;</span><span class="p">][</span><span class="n">k</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># fac is annealed from -1 to -2 to estimate l</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fac</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">+</span> <span class="n">k</span> <span class="o">*</span> <span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">ngen</span><span class="p">)</span>
             <span class="c1">#-----------------------------</span>
             <span class="c1"># Update Whale Positions</span>
             <span class="c1">#-----------------------------</span>
@@ -467,6 +479,7 @@
                     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best Whale Position:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_position</span><span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;a:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;A:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;fac:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fac</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^&#39;</span><span class="p">)</span>
 
         <span class="c1">#mir-grid</span>

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.evolu.pso &mdash; NEORL 1.7 documentation</title>
+  <title>neorl.evolu.pso &mdash; NEORL 1.7.2b documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.7 )
+                main (1.7.2b )
               </div>
             
           
@@ -511,7 +511,7 @@
     
         <span class="k">return</span> <span class="n">offspring</span>
 
-<div class="viewcode-block" id="PSO.evolute"><a class="viewcode-back" href="../../../modules/evolutionary/pso.html#neorl.evolu.pso.PSO.evolute">[docs]</a>    <span class="k">def</span> <span class="nf">evolute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ngen</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="PSO.evolute"><a class="viewcode-back" href="../../../modules/evolutionary/pso.html#neorl.evolu.pso.PSO.evolute">[docs]</a>    <span class="k">def</span> <span class="nf">evolute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ngen</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function evolutes the PSO algorithm for number of generations.</span>
 <span class="sd">        </span>
@@ -596,10 +596,17 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">partime</span><span class="o">=</span><span class="mi">0</span>
                             
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed_mech</span><span class="o">==</span><span class="s1">&#39;timew&#39;</span><span class="p">:</span>
-                <span class="n">step</span><span class="o">=</span><span class="n">gen</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">npar</span>
-                <span class="n">totsteps</span><span class="o">=</span><span class="n">ngen</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">npar</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wmax</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wmax</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">wmin</span><span class="p">)</span><span class="o">*</span><span class="n">step</span><span class="o">/</span><span class="n">totsteps</span>
-                <span class="c1">#print(&#39;timew&#39;, self.w)</span>
+                
+                <span class="k">if</span> <span class="s1">&#39;w&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                    <span class="c1">#take it from external vector</span>
+                    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;w&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="n">ngen</span><span class="p">,</span> <span class="s1">&#39;--error: the length of `w` in kwargs must equal to ngen&#39;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;w&quot;</span><span class="p">][</span><span class="n">gen</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1">#w is annealed from 0.9 to 0.4</span>
+                    <span class="n">step</span><span class="o">=</span><span class="n">gen</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">npar</span>
+                    <span class="n">totsteps</span><span class="o">=</span><span class="n">ngen</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">npar</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wmax</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wmax</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">wmin</span><span class="p">)</span><span class="o">*</span><span class="n">step</span><span class="o">/</span><span class="n">totsteps</span>
+                    <span class="c1">#print(&#39;timew&#39;, self.w)</span>
             
             <span class="n">fit_best</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="n">offspring</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">offspring</span><span class="p">])</span>  <span class="c1">#get the max fitness for this generation</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">best_scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fit_best</span><span class="p">)</span>
@@ -628,6 +635,8 @@
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Max Speed:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">mean_speed</span><span class="p">),</span><span class="mi">3</span><span class="p">))</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Min Speed:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">mean_speed</span><span class="p">),</span><span class="mi">3</span><span class="p">))</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Average Speed:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">mean_speed</span><span class="p">),</span><span class="mi">3</span><span class="p">))</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed_mech</span><span class="o">==</span><span class="s1">&#39;timew&#39;</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;w:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^&#39;</span><span class="p">)</span>
 
         <span class="c1">#Select and order the last population </span>

@@ -25,6 +25,7 @@ import math
 import joblib
 from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
 from neorl.utils.seeding import set_neorl_seed
+from neorl.utils.tools import get_population
 
 #Main reference of the BAT algorithm:
 #Xie, J., Zhou, Y., & Chen, H. (2013). A novel bat algorithm based on 
@@ -331,6 +332,8 @@ class BAT(object):
                 self.fitness_best_correct=self.fbest
                 self.local_fitness = min(f1 , f2 , f3)
             
+            self.last_pop=self.Positions.copy()
+            self.last_fit=np.array(fitness3).copy()
             self.best_position=self.xbest.copy()
             self.history['local_fitness'].append(self.local_fitness)
             self.history['global_fitness'].append(self.fitness_best_correct)
@@ -363,5 +366,10 @@ class BAT(object):
             print('Best fitness (y) found:', self.fitness_best_correct)
             print('Best individual (x) found:', self.bat_correct)
             print('--------------------------------------------------------------')  
+
+        if self.mode=='max':
+            self.last_fit=-self.last_fit
+        
+        self.history['last_pop'] = get_population(self.last_pop, fits=self.last_fit)
             
         return self.bat_correct, self.fitness_best_correct, self.history

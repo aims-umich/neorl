@@ -22,9 +22,6 @@
 
 import random
 import numpy as np
-import math
-#from solution import solution
-import time
 import joblib
 from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
 from neorl.utils.seeding import set_neorl_seed
@@ -157,7 +154,7 @@ class GWO(object):
         
         return vec
     
-    def evolute(self, ngen, x0=None, verbose=False):
+    def evolute(self, ngen, x0=None, verbose=False, **kwargs):
         """
         This function evolutes the GWO algorithm for number of generations.
         
@@ -251,7 +248,11 @@ class GWO(object):
                 self.history['beta_wolf'].append(Beta_score)
                 self.history['delta_wolf'].append(Delta_score)
                 
-                a = 2 - l * ((2) / ngen)
+                if 'a' in kwargs:
+                    assert len(kwargs["a"]) == ngen, '--error: the length of `a` in kwargs must equal to ngen'
+                    a=kwargs["a"][l]
+                else:
+                    a = 2 - l * ((2) / ngen)
                 # a decreases linearly from 2 to 0
                 
                 #--------------------------------
@@ -325,6 +326,7 @@ class GWO(object):
                     print('Alpha wolf Fitness:', np.round(Alpha_score,6) if self.mode == 'min' else -np.round(Alpha_score,6))
                     print('Beta wolf Fitness:', np.round(Beta_score,6) if self.mode == 'min' else -np.round(Beta_score,6))
                     print('Delta wolf Fitness:', np.round(Delta_score,6) if self.mode == 'min' else -np.round(Delta_score,6))
+                    print('a:', a)
                     print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
     
         
