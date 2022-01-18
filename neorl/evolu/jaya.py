@@ -22,6 +22,7 @@ import numpy as np
 import joblib
 from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
 from neorl.utils.seeding import set_neorl_seed
+from neorl.utils.tools import get_population
 
 class JAYA:
     """
@@ -189,6 +190,7 @@ class JAYA:
         
         :return: (tuple) (best individual, best fitness, and a list of fitness history)
         """
+        self.history = {'local_fitness':[], 'global_fitness':[]}
         N = self.npop # population size
         dim = len(self.bounds) # individual length
 
@@ -260,6 +262,9 @@ class JAYA:
             #-----------------------------
             #Fitness saving 
             #-----------------------------
+            self.last_pop=new_pos.copy()
+            self.last_fit=np.array(fitness_new).copy()  
+            
             gen_avg = sum(fitness_mat) / N                   # current generation avg. fitness
             y_best = Best_score                                # fitness of best individual
             x_best = Best_pos.copy()
@@ -269,8 +274,10 @@ class JAYA:
             if self.mode=='min':
                 y_best_correct=-y_best
                 gen_avg=-gen_avg
+                self.history['local_fitness'].append(-np.max(fitness_new))
             else:
                 y_best_correct=y_best
+                self.history['local_fitness'].append(np.max(fitness_new))
 
             if verbose:
                 print('************************************************************')
@@ -301,5 +308,9 @@ class JAYA:
     
         if self.mode=='min':
             best_scores=[-item for item in best_scores]
-                
-        return x_best_correct, y_best_correct, best_scores
+            self.last_fit=-self.last_fit
+        
+        self.history['last_pop'] = get_population(self.last_pop, fits=self.last_fit)
+        self.history['global_fitness'] = best_scores
+        
+        return x_best_correct, y_best_correct, self.history

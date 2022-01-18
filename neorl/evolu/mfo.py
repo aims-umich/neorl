@@ -169,7 +169,7 @@ class MFO:
         
         return vec
 
-    def evolute(self, ngen, x0=None, verbose=False):
+    def evolute(self, ngen, x0=None, verbose=False, **kwargs):
         """
         This function evolutes the MFO algorithm for number of generations.
         
@@ -274,9 +274,14 @@ class MFO:
             self.previous_population = np.copy(Moth_pos)  # if not using np.copy(),changes of Moth_pos after this code will also change previous_population!  
             self.previous_fitness = np.copy(Moth_fitness) # because of the joblib..
 
-            # r linearly dicreases from -1 to -2 to calculate t in Eq. (3.12)
-            r = -1 + gen * ((-1) / ngen)
-
+            if 'r' in kwargs:
+                #take it from external vector
+                assert len(kwargs["r"]) == ngen, '--error: the length of `r` in kwargs must equal to ngen'
+                r=kwargs["r"][gen-1]
+            else:
+                # r linearly dicreases from -1 to -2 to calculate t in Eq. (3.12)
+                r = -1 + gen * ((-1) / ngen)
+                
             # update moth position
             for i in range(0, N):
                 for j in range(0,dim):
@@ -330,6 +335,7 @@ class MFO:
                 else:
                     print('Best individual:', self.best_position)
                 print('Average fitness:', np.round(gen_avg,6))
+                print('r:', r)
                 print('************************************************************')
 
         #mir-grid

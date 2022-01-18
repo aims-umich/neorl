@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.evolu.aco &mdash; NEORL 1.7 documentation</title>
+  <title>neorl.evolu.aco &mdash; NEORL 1.7.2b documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.7 )
+                main (1.7.2b )
               </div>
             
           
@@ -199,6 +199,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">joblib</span>
 <span class="kn">from</span> <span class="nn">neorl.utils.seeding</span> <span class="kn">import</span> <span class="n">set_neorl_seed</span>
+<span class="kn">from</span> <span class="nn">neorl.utils.tools</span> <span class="kn">import</span> <span class="n">get_population</span>
 
 <div class="viewcode-block" id="ACO"><a class="viewcode-back" href="../../../modules/evolutionary/aco.html#neorl.evolu.aco.ACO">[docs]</a><span class="k">class</span> <span class="nc">ACO</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -298,6 +299,7 @@
             <span class="n">pops</span> <span class="o">=</span> <span class="n">Populations</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nants</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nvars</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
             
         <span class="n">fit_hist</span><span class="o">=</span><span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;local_fitness&#39;</span><span class="p">:[],</span> <span class="s1">&#39;global_fitness&#39;</span><span class="p">:[],</span> <span class="s1">&#39;last_pop&#39;</span><span class="p">:[]}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ngen</span> <span class="o">=</span> <span class="n">ngen</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__best_solutions</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">ngen</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pops_sorted</span> <span class="o">=</span> <span class="n">pops</span><span class="o">.</span><span class="n">ant_populations</span>     <span class="c1"># length 10</span>
@@ -351,12 +353,16 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__final_best_solution</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pops_sorted</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="c1"># Store Best Cost</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__best_solutions</span><span class="p">[</span><span class="nb">iter</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__final_best_solution</span>
-            
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_fit</span><span class="o">=</span><span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">cost_function</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__new_pops</span><span class="p">]</span> <span class="c1">#for logging</span>
+
             <span class="c1">#show the value wrt min/max</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">==</span><span class="s1">&#39;max&#39;</span><span class="p">:</span>
-                <span class="n">y_print</span> <span class="o">=</span> <span class="o">-</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__final_best_solution</span><span class="o">.</span><span class="n">cost_function</span><span class="p">)</span>       
+                <span class="n">y_print</span> <span class="o">=</span> <span class="o">-</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__final_best_solution</span><span class="o">.</span><span class="n">cost_function</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;local_fitness&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_fit</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">y_print</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__final_best_solution</span><span class="o">.</span><span class="n">cost_function</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;local_fitness&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_fit</span><span class="p">))</span>
             
             <span class="n">fit_hist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y_print</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
@@ -367,7 +373,7 @@
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best individual:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__final_best_solution</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Archive mean individual:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__means</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;************************************************************&#39;</span><span class="p">)</span>
-
+            
 
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;------------------------ ACOR Summary --------------------------&#39;</span><span class="p">)</span>
@@ -375,9 +381,18 @@
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best individual (x) found:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__best_solutions</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--------------------------------------------------------------&#39;</span><span class="p">)</span>
         
-        <span class="n">x_best</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__best_solutions</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
-        <span class="n">y_best</span><span class="o">=</span><span class="n">y_print</span>
-        <span class="k">return</span> <span class="n">x_best</span><span class="p">,</span> <span class="n">y_best</span><span class="p">,</span> <span class="n">fit_hist</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_best</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__best_solutions</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_best</span><span class="o">=</span><span class="n">y_print</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;global_fitness&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fit_hist</span>
+        <span class="c1">#obtain last population</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_pop</span><span class="o">=</span><span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">position</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__new_pops</span><span class="p">]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;last_pop&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_population</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_pop</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_fit</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">==</span><span class="s1">&#39;max&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;last_pop&#39;</span><span class="p">][</span><span class="s1">&#39;fitness&#39;</span><span class="p">]</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+            
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_best</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_best</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span></div>
     
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">pops</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

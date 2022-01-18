@@ -5,6 +5,8 @@ from neorl.benchmarks import KP
 from neorl import PPO2, DQN, ACER, ACKTR, A2C
 from neorl import MlpPolicy, DQNPolicy
 from neorl import RLLogger
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np

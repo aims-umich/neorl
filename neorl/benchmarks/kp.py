@@ -29,8 +29,6 @@ import gym
 from gym.spaces import Discrete, Box, MultiDiscrete
 import numpy as np
 import copy
-import matplotlib
-matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import random
 

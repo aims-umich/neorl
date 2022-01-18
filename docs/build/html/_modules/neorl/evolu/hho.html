@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.evolu.hho &mdash; NEORL 1.7 documentation</title>
+  <title>neorl.evolu.hho &mdash; NEORL 1.7.2b documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.7 )
+                main (1.7.2b )
               </div>
             
           
@@ -260,7 +260,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">lb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ub</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">])</span>
         
-<div class="viewcode-block" id="HHO.evolute"><a class="viewcode-back" href="../../../modules/evolutionary/hho.html#neorl.evolu.hho.HHO.evolute">[docs]</a>    <span class="k">def</span> <span class="nf">evolute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ngen</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="HHO.evolute"><a class="viewcode-back" href="../../../modules/evolutionary/hho.html#neorl.evolu.hho.HHO.evolute">[docs]</a>    <span class="k">def</span> <span class="nf">evolute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ngen</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function evolutes the HHO algorithm for number of generations.</span>
 <span class="sd">        </span>
@@ -292,6 +292,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">best_scores</span><span class="o">=</span><span class="p">[]</span>
         <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ngen</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">t</span> <span class="o">*</span> <span class="p">((</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">ngen</span><span class="p">)</span>  <span class="c1">#mir: a decreases linearly between 1 to 0, for discrete mutation</span>
+
+            <span class="k">if</span> <span class="s1">&#39;E1&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="c1">#take it from external vector</span>
+                <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;E1&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="n">ngen</span><span class="p">,</span> <span class="s1">&#39;--error: the length of `E1` in kwargs must equal to ngen&#39;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">E1</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;E1&quot;</span><span class="p">][</span><span class="n">t</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1">#E1 is annealed from 2 to 0</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">E1</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">t</span> <span class="o">/</span> <span class="n">ngen</span><span class="p">))</span>  <span class="c1"># factor to show the decreasing energy of rabbit</span>
+            
             <span class="c1">###########################</span>
             <span class="c1"># Evaluate hawk fitnesses #</span>
             <span class="c1">###########################</span>
@@ -326,12 +335,13 @@
                     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best rabbit position:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rabbit_decoded</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>    
                     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best rabbit position:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rabbit_location</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;E1:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">E1</span><span class="p">)</span>
                 <span class="nb">print</span><span class="p">()</span>
 
             <span class="c1">################################</span>
             <span class="c1"># Update the location of hawks #</span>
             <span class="c1">################################</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">update_hawks</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">ngen</span><span class="p">,</span> <span class="n">fitness_lst</span><span class="p">)</span> <span class="c1"># now self.hawk_positions is updated</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_hawks</span><span class="p">(</span><span class="n">fitness_lst</span><span class="p">)</span> <span class="c1"># now self.hawk_positions is updated</span>
 
             <span class="k">for</span> <span class="n">hawk_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nhawks</span><span class="p">):</span>
                 <span class="c1">#mir: this bound check  line is needed to ensure that choices.remove option to work </span>
@@ -427,7 +437,7 @@
                 <span class="n">fitness_lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fit_worker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hawk_positions</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]))</span>
         <span class="k">return</span> <span class="n">fitness_lst</span>
 
-    <span class="k">def</span> <span class="nf">update_hawks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cur_gen</span><span class="p">,</span> <span class="n">ngen</span><span class="p">,</span> <span class="n">fitness_lst</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">update_hawks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fitness_lst</span><span class="p">):</span>
         <span class="c1">#&quot;&quot;&quot;</span>
         <span class="c1">#Update hawk positions according to HHO rules.</span>
 
@@ -438,12 +448,12 @@
 
         <span class="c1">#Return:</span>
         <span class="c1">#None</span>
-        <span class="c1">#&quot;&quot;&quot;</span>
-        <span class="n">E1</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">cur_gen</span> <span class="o">/</span> <span class="n">ngen</span><span class="p">))</span>  <span class="c1"># factor to show the decreasing energy of rabbit</span>
+        <span class="c1">#&quot;&quot;&quot;            </span>
+        
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nhawks</span><span class="p">):</span>
 
             <span class="n">E0</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span>
-            <span class="n">rabbit_escape_energy</span> <span class="o">=</span> <span class="n">E1</span> <span class="o">*</span> <span class="n">E0</span>  <span class="c1"># escaping energy of rabbit: eq. (3)</span>
+            <span class="n">rabbit_escape_energy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">E1</span> <span class="o">*</span> <span class="n">E0</span>  <span class="c1"># escaping energy of rabbit: eq. (3)</span>
 
             <span class="c1">##############################</span>
             <span class="c1"># Exploration phase: eq. (1) #</span>

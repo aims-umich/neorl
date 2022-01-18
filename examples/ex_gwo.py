@@ -19,7 +19,7 @@ for i in range(1,nx+1):
     BOUNDS['x'+str(i)]=['float', -100, 100]
 
 nwolves=5
-gwo=GWO(mode='min', fit=FIT, bounds=BOUNDS, nwolves=nwolves, ncores=4, seed=1)
+gwo=GWO(mode='min', fit=FIT, bounds=BOUNDS, nwolves=nwolves, ncores=1, seed=1)
 x_best, y_best, gwo_hist=gwo.evolute(ngen=100, verbose=1)
 
 #-----

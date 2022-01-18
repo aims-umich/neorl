@@ -27,6 +27,7 @@ import time
 import joblib
 from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
 from neorl.utils.seeding import set_neorl_seed
+from neorl.utils.tools import get_population
 
 class CS(object):
     """
@@ -279,6 +280,9 @@ class CS(object):
                     self.best_fitness=fits
                     self.best_position=self.Positions[i, :].copy()
             
+            self.last_fit=np.array(fitness)
+            self.last_pop=self.Positions.copy()
+            
             #--mir
             if self.mode=='max':
                 self.fitness_best_correct=-self.best_fitness
@@ -306,10 +310,16 @@ class CS(object):
         if self.grid_flag:
             self.cuckoo_correct = decode_discrete_to_grid(self.best_position, self.orig_bounds, self.bounds_map)
         else:
-            self.cuckoo_correct = self.best_position                
+            self.cuckoo_correct = self.best_position   
+        
+        if self.mode=='max':
+            self.last_fit=-self.last_fit
+        self.history['last_pop'] = get_population(self.last_pop, fits=self.last_fit)
+             
         if self.verbose:
             print('------------------------ CS Summary --------------------------')
             print('Best fitness (y) found:', self.fitness_best_correct)
             print('Best individual (x) found:', self.cuckoo_correct)
-            print('--------------------------------------------------------------')  
+            print('--------------------------------------------------------------') 
+    
         return self.cuckoo_correct, self.fitness_best_correct, self.history

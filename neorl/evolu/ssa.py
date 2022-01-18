@@ -26,6 +26,8 @@ import time
 import joblib
 from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
 from neorl.utils.seeding import set_neorl_seed
+from neorl.utils.tools import get_population
+
 
 class SSA(object):
     """
@@ -280,7 +282,9 @@ class SSA(object):
             else:
                 self.fitness_best_correct=self.best_fitness
                 self.local_fitness=np.min(fitness)
-            
+
+            self.last_pop=self.Positions.copy()
+            self.last_fit=np.array(fitness).copy()            
             self.history['local_fitness'].append(self.local_fitness)
             self.history['global_fitness'].append(self.fitness_best_correct)
             self.history['c1'].append(self.c1r)
@@ -305,6 +309,11 @@ class SSA(object):
         else:
             self.salp_correct = self.best_position                
 
+        if self.mode=='max':
+            self.last_fit=-self.last_fit
+        
+        self.history['last_pop'] = get_population(self.last_pop, fits=self.last_fit)
+        
         if self.verbose:
             print('------------------------ SSA Summary --------------------------')
             print('Best fitness (y) found:', self.fitness_best_correct)

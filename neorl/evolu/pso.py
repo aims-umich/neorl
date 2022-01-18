@@ -340,7 +340,7 @@ class PSO:
     
         return offspring
 
-    def evolute(self, ngen, x0=None, verbose=False):
+    def evolute(self, ngen, x0=None, verbose=False, **kwargs):
         """
         This function evolutes the PSO algorithm for number of generations.
         
@@ -425,10 +425,17 @@ class PSO:
                 self.partime=0
                             
             if self.speed_mech=='timew':
-                step=gen*self.npar
-                totsteps=ngen*self.npar
-                self.w = self.wmax - (self.wmax-self.wmin)*step/totsteps
-                #print('timew', self.w)
+                
+                if 'w' in kwargs:
+                    #take it from external vector
+                    assert len(kwargs["w"]) == ngen, '--error: the length of `w` in kwargs must equal to ngen'
+                    self.w=kwargs["w"][gen-1]
+                else:
+                    #w is annealed from 0.9 to 0.4
+                    step=gen*self.npar
+                    totsteps=ngen*self.npar
+                    self.w = self.wmax - (self.wmax-self.wmin)*step/totsteps
+                    #print('timew', self.w)
             
             fit_best=np.max([offspring[item][2] for item in offspring])  #get the max fitness for this generation
             self.best_scores.append(fit_best)
@@ -457,6 +464,8 @@ class PSO:
                 print('Max Speed:', np.round(np.max(mean_speed),3))
                 print('Min Speed:', np.round(np.min(mean_speed),3))
                 print('Average Speed:', np.round(np.mean(mean_speed),3))
+                if self.speed_mech=='timew':
+                    print('w:', self.w)
                 print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
 
         #Select and order the last population 

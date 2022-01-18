@@ -18,5 +18,5 @@ for i in range(1,nx+1):
     BOUNDS['x'+str(i)]=['float', -100, 100]
 
 #setup and evolute JAYA
-jaya=JAYA(mode='min', bounds=BOUNDS, fit=FIT, npop=60, ncores=8, seed=1)
+jaya=JAYA(mode='min', bounds=BOUNDS, fit=FIT, npop=60, ncores=1, seed=1)
 x_best, y_best, jaya_hist=jaya.evolute(ngen=200, verbose=1)

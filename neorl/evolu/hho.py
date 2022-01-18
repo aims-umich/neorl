@@ -89,7 +89,7 @@ class HHO(object):
         self.lb = np.array([self.bounds[item][1] for item in self.bounds])
         self.ub = np.array([self.bounds[item][2] for item in self.bounds])
         
-    def evolute(self, ngen, x0=None, verbose=False):
+    def evolute(self, ngen, x0=None, verbose=False, **kwargs):
         """
         This function evolutes the HHO algorithm for number of generations.
         
@@ -121,6 +121,15 @@ class HHO(object):
         self.best_scores=[]
         for t in range(ngen):
             self.a= 1 - t * ((1) / ngen)  #mir: a decreases linearly between 1 to 0, for discrete mutation
+
+            if 'E1' in kwargs:
+                #take it from external vector
+                assert len(kwargs["E1"]) == ngen, '--error: the length of `E1` in kwargs must equal to ngen'
+                self.E1=kwargs["E1"][t]
+            else:
+                #E1 is annealed from 2 to 0
+                self.E1 = 2 * (1 - (t / ngen))  # factor to show the decreasing energy of rabbit
+            
             ###########################
             # Evaluate hawk fitnesses #
             ###########################
@@ -155,12 +164,13 @@ class HHO(object):
                     print('Best rabbit position:', self.rabbit_decoded)
                 else:    
                     print('Best rabbit position:', np.round(self.rabbit_location, 6))
+                print('E1:', self.E1)
                 print()
 
             ################################
             # Update the location of hawks #
             ################################
-            self.update_hawks(t, ngen, fitness_lst) # now self.hawk_positions is updated
+            self.update_hawks(fitness_lst) # now self.hawk_positions is updated
 
             for hawk_i in range(self.nhawks):
                 #mir: this bound check  line is needed to ensure that choices.remove option to work 
@@ -256,7 +266,7 @@ class HHO(object):
                 fitness_lst.append(self.fit_worker(self.hawk_positions[i, :]))
         return fitness_lst
 
-    def update_hawks(self, cur_gen, ngen, fitness_lst):
+    def update_hawks(self, fitness_lst):
         #"""
         #Update hawk positions according to HHO rules.
 
@@ -267,12 +277,12 @@ class HHO(object):
 
         #Return:
         #None
-        #"""
-        E1 = 2 * (1 - (cur_gen / ngen))  # factor to show the decreasing energy of rabbit
+        #"""            
+        
         for i in range(self.nhawks):
 
             E0 = 2 * random.random() - 1
-            rabbit_escape_energy = E1 * E0  # escaping energy of rabbit: eq. (3)
+            rabbit_escape_energy = self.E1 * E0  # escaping energy of rabbit: eq. (3)
 
             ##############################
             # Exploration phase: eq. (1) #

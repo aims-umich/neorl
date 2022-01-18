@@ -29,6 +29,7 @@ import random
 import numpy as np
 import copy
 from neorl.utils.seeding import set_neorl_seed
+from neorl.utils.tools import get_population
 
 class XNES(object):
     """
@@ -203,6 +204,9 @@ class XNES(object):
                     if f_try[m] > self.fitness_best:
                         self.fitness_best=f_try[m]
                         self.x_best=copy.deepcopy(z_try[m])
+
+                self.last_pop=z_try.copy()
+                self.last_fit=np.array(f_try).copy()
                         
                 if fitness - 1e-8 > self.fitness_best:
                     self.mu_best = mu.copy()
@@ -268,6 +272,11 @@ class XNES(object):
         #--mir
         if self.mode=='min':
             self.history['fitness']=[-item for item in self.history['fitness']]
+
+            self.last_fit=-self.last_fit
+        
+        self.history['last_pop'] = get_population(self.last_pop, fits=self.last_fit)
+
             
         return self.x_best, self.fitness_best_correct, self.history
 
