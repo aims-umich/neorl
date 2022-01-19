@@ -198,6 +198,13 @@ class Population:
     def fitness(self):
         return self.fitlog[-1]
 
+    @property
+    def dfitness(self):
+        if len(self.fitlog) == 1:
+            return self.fitlog[-1]
+        else:
+            return self.fitlog[-1] - self.fitlog[-2]
+
     def evolute(self, ngen, fit, bounds, log): #fit is included to avoid needing to pull .fit methods
                                        #    from algo objects that may have been flipped
         #check if there are enouh members to evolve NOT appended to fitlog
@@ -220,10 +227,7 @@ class Population:
             self.members = out[2]['last_pop'].iloc[:, :-1].values.tolist()
             self.member_fitnesses = out[2]['last_pop'].iloc[:, -1].values.tolist()
 
-            if self.mode == 'max':
-                self.fitlog.append(max(self.member_fitnesses))
-            elif self.mode == 'min':
-                self.fitlog.append(min(self.member_fitnesses))
+            self.fitlog.append(min(self.member_fitnesses))
 
             fitness = self.fitness
 
@@ -234,24 +238,18 @@ class Population:
         np.put(log['nmembers'].data, [0],  [self.n])
         np.put(log['f'].data, [0], [self.fitness])
         if len(self.fitlog) > 1:
-            np.put(log['delta_f'].data, [0], [self.fitlog[-1] - self.fitlog[-2]])
+            np.put(log['delta_f'].data, [0], [self.dfitness])
 
         return fitness
 
-    def strength(self, g, g_burden, fmax, fmin, log, g_or_b):
-        if self.mode == 'max':
-            fbest, fworst = fmax, fmin
-        elif self.mode == 'min':
-            fworst, fbest = fmax, fmin
-
-        #calculate strength for two different types
-        if g == 'improve' and len(self.fitlog) > 1:
-            unorm = max([self.fitlog[-1] - self.fitlog[-2], 0]) #in case best indiv got exported
-        else: #when g == 'fitness' and also no matter what if on first cycle
-            unorm = self.fitness
-
+    def strength(self, g, g_burden, fselmax, fselmin, log, g_or_b):
         #normalize strength measure
-        normed = (unorm - fworst)/(fbest - fworst)
+        if g == "improve":
+            fsel = self.dfitness
+        else:
+            fsel = self.fitness
+
+        normed = (fsel - fselmax)/(fselmin - fselmax)
 
         if g_or_b == 'g':
             np.put(log['unburdened_g'].data, [0], [normed])
@@ -382,9 +380,7 @@ class AEO(object):
             raise Exception("Max not supported for AEO")
             self.fitcheck=fit
         elif mode == 'min':
-            def fitness_wrapper(*args, **kwargs):
-                return -fit(*args, **kwargs)
-            self.fitcheck=fitness_wrapper
+            self.fitcheck=fit
         else:
             raise ValueError('--error: The mode entered by user is invalid, use either `min` or `max`')
 
@@ -459,30 +455,11 @@ class AEO(object):
             raise Exception('b_burden should be boolean type')
 
     def ensure_consistency(self):
-        return #temp, may remove this function
         #loop through all optimizers and make sure all options are set to be the same
         gen_warning = ', check that options of all optimizers are the same as AEO'
         for o, a in zip(self.optimizers, self.algos):
-            if a in max_algos:
-                assert self.mode == o.mode,'%s has incorrect optimization mode'%o + gen_warning
-                assert self.bounds == o.bounds,'%s has incorrect bounds'%o + gen_warning
-                try:
-                    assert self.fitcheck(self.lb) == o.fit(self.lb)
-                    assert self.fitcheck(self.ub) == o.fit(self.ub)
-                    inner_test = [np.random.uniform(self.lb[i], self.ub[i]) for i in range(len(self.ub))]
-                    assert self.fitcheck(inner_test) == o.fit(inner_test)
-                except:
-                    raise Exception('i%s has incorrect fitness function'%o + gen_warning)
-            else:
-                assert self.mode == o.mode,'%s has incorrect optimization mode'%o + gen_warning
-                assert self.bounds == o.bounds,'%s has incorrect bounds'%o + gen_warning
-                try:
-                    assert self.fitcheck(self.lb) == -o.fit(self.lb)
-                    assert self.fitcheck(self.ub) == -o.fit(self.ub)
-                    inner_test = [np.random.uniform(self.lb[i], self.ub[i]) for i in range(len(self.ub))]
-                    assert self.fitcheck(inner_test) == -o.fit(inner_test)
-                except:
-                    raise Exception('i%s has incorrect fitness function'%o + gen_warning)
+            assert self.mode == o.mode,'%s has incorrect optimization mode'%o + gen_warning
+            assert self.bounds == o.bounds,'%s has incorrect bounds'%o + gen_warning
 
     def init_sample(self, bounds):
         indv=[]
@@ -591,6 +568,8 @@ class AEO(object):
                     'delta_f'            : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
                     'fmin'               : ([                 'cycle'], np.zeros(          nc , dtype = np.float64)),
                     'fmax'               : ([                 'cycle'], np.zeros(          nc , dtype = np.float64)),
+                    'dfmin'               : ([                 'cycle'], np.zeros(          nc , dtype = np.float64)),
+                    'dfmax'               : ([                 'cycle'], np.zeros(          nc , dtype = np.float64)),
                     'migration'          : ([                 'cycle'], np.zeros(          nc , dtype = np.bool8)),
                     'export_wts'         : (['member', 'pop', 'cycle'], np.zeros((nm, npp, nc), dtype = np.float64)),
                     'exported'           : (['member', 'pop', 'cycle'], np.zeros((nm, npp, nc), dtype = np.bool8)),
@@ -621,6 +600,8 @@ class AEO(object):
         #delta_f: difference in current cycle fitness to previous cycle fitness
         #fmin: minimum fitness across all populations for a single cycle
         #fmax: maximum fitness across all populations for a single cycle
+        #dfmin: minimum improvement across all populations for a single cycle
+        #dfmax: maximum improvement across all populations for a single cycle
         #migration: bool as to whether or not migration is performed, if fmax=fmix, no evolution
         #export_wts: weights used for each individual in the member selection phase
         #exported: boolean as to whether or not an individual was exported
@@ -645,12 +626,17 @@ class AEO(object):
             #  calc weights
             maxf = max(pop_fits)
             minf = min(pop_fits)
+            maxdf = max([p.dfitness for p in self.pops])
+            mindf = min([p.dfitness for p in self.pops])
             alpha = self.get_alphabeta(self.alpha, i, Ncyc)
-            if maxf == minf:#export nobody if this true
+            if (maxf == minf and self.g == "fitness") or (maxdf == mindf and self.g == "improve"):#export nobody if this true
                 eis = [0]*len(self.pops)
                 log['migration'].loc[{'cycle' : i}] = False
             else:
-                strengths_exp = [p.strength(self.g, self.g_burden, maxf, minf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'g')**alpha for p in self.pops]
+                if self.g == "fitness":
+                    strengths_exp = [p.strength(self.g, self.g_burden, maxf, minf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'g')**alpha for p in self.pops]
+                else:
+                    strengths_exp = [p.strength(self.g, self.g_burden, maxdf, mindf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'g')**alpha for p in self.pops]
                 strengths_exp_scaled = [s/sum(strengths_exp) for s in strengths_exp]
 
                 #  sample binomial to get e_i for each population
@@ -666,6 +652,8 @@ class AEO(object):
             log['nexport'].loc[{'cycle' : i}] = eis
             log['fmax'].loc[{'cycle' : i}] = maxf
             log['fmin'].loc[{'cycle' : i}] = minf
+            log['dfmax'].loc[{'cycle' : i}] = maxdf
+            log['dfmin'].loc[{'cycle' : i}] = mindf
             log['alpha'].loc[{'cycle' : i}] = alpha
 
             #member selection
@@ -676,10 +664,13 @@ class AEO(object):
             beta = self.get_alphabeta(self.beta, i, Ncyc)
             log['beta'].loc[{'cycle' : i}] = beta
 
-            if maxf == minf: #doesn't matter because nobody is exported
+            if (maxf == minf and self.b == "fitness") or (maxdf == mindf and self.b == "improve"): #doesn't matter because nobody is exported
                 strengths_dest = [1.]*len(self.pops)
             else:
-                strengths_dest = [p.strength(self.b, self.b_burden, maxf, minf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'b')**beta for p in self.pops]
+                if self.b == "fitness":
+                    strengths_dest = [p.strength(self.b, self.b_burden, maxf, minf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'b')**beta for p in self.pops]
+                else:
+                    strengths_dest = [p.strength(self.b, self.b_burden, maxdf, mindf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'b')**beta for p in self.pops]
 
             #manage members that are currently without a home
             exported = list(itertools.chain.from_iterable(exported))
