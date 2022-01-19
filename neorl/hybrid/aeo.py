@@ -212,6 +212,7 @@ class Population:
             if len(self.fitlog) == 0:
                 raise Exception("Starting population for %s too small for evoluation"%self.algo)
             fitness = self.fitness
+            self.Nc = 0
 
         else:
             np.put(log['evolute'].data, [0], True)
@@ -228,6 +229,7 @@ class Population:
             self.member_fitnesses = out[2]['last_pop'].iloc[:, -1].values.tolist()
 
             self.fitlog.append(min(self.member_fitnesses))
+            self.Nc = self.conv(self.last_ngen, self.n)
 
             fitness = self.fitness
 
@@ -236,6 +238,7 @@ class Population:
             log['member_x'][:self.n] = np.array(self.members).reshape(self.n, -1)
             log['member_fitnesses'][:self.n] = self.member_fitnesses
         np.put(log['nmembers'].data, [0],  [self.n])
+        np.put(log['Nc'].data, [0], self.Nc)
         np.put(log['f'].data, [0], [self.fitness])
         if len(self.fitlog) > 1:
             np.put(log['delta_f'].data, [0], [self.dfitness])
@@ -256,11 +259,9 @@ class Population:
         elif g_or_b == 'b':
             np.put(log['unburdened_b'].data, [0], [normed])
 
-        Nc = self.conv(self.last_ngen, self.n)
         #burden, if necessary
         if g_burden:
-            normed /= 1 + Nc
-            np.put(log['Nc'].data, [0], Nc)
+            normed /= 1 + self.Nc
 
         ret = normed
 
