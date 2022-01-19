@@ -437,7 +437,7 @@ class AEO(object):
         if not self.order in ['wb', 'bw', 'awb', 'abw', None]:
             raise Exception('invalid option for order')
 
-        if self.wt == 'uni' and (self.order is not None)):
+        if self.wt == 'uni' and (self.order is not None):
             print('--warning: order options ignored for uniform weighting')
 
         #process variant options for destination selection
