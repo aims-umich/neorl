@@ -272,7 +272,7 @@ class Population:
             np.put(log['b'].data, [0], [ret])
         return ret
 
-    def export(self, ei, wt, order, kf, gfrac, log):
+    def export(self, ei, wt, order, gfrac, log):
         #decide what members to export and then remove them from members and return them
         if wt == 'uni': #uniform case very easy
             shuffled = list(range(len(self.members)))
@@ -308,11 +308,11 @@ class Population:
             #calculate the wts
             seq = np.array(range(1, len(self.members) + 1))
             if wt == 'log':
-                wts = (np.log(seq)+kf)/(self.n*kf + raj_logfact(self.n))
+                wts = (np.log(seq)+1)/(self.n + raj_logfact(self.n))
             elif wt == 'lin':
-                wts = (seq-1+kf)/(self.n*(kf-.5)+.5*self.n**2)
+                wts = (seq-2)/(self.n*.5+.5*self.n**2)
             elif wt == 'exp':
-                wts = (np.exp(seq-1) - 1 + kf)/((kf-1)*self.n+(1-np.exp(self.n))/(1-np.exp(1)))
+                wts = (np.exp(seq-1) - 2)/((1-np.exp(self.n))/(1-np.exp(1)))
 
             #log information
             np.put(log['wb'].data, [0], [o == 'wb'])
@@ -361,7 +361,6 @@ class AEO(object):
     :param b: (str) either 'fitness' or 'improve' for strength measure for destination selection section of migration
     :param b_burden: (bool) True if strength if divided by number of fitness evaluations in evolution phase
     :param order: (str) 'wb' for worst to best, 'bw' for best to worst, prepend 'a' for annealed starting in the given ordering.
-    :param kf: (int) 0 or 1 for variant of weighting functions
     :param ncores: (int) number of parallel processors
     :param seed: (int) random seed for sampling
     """
@@ -369,7 +368,7 @@ class AEO(object):
             optimizers, gen_per_cycle,
             alpha, g, g_burden, q, wt,
             beta, b, b_burden,
-            order = None, kf = None,
+            order = None,
             ncores = 1, seed = None):
 
         if not (seed is None):
@@ -438,13 +437,8 @@ class AEO(object):
         if not self.order in ['wb', 'bw', 'awb', 'abw', None]:
             raise Exception('invalid option for order')
 
-        self.kf = kf
-        if not self.kf in [0, 1, None]:
-            raise Exception('invalid option for kf')
-
-        if self.wt == 'uni' and ((self.kf is not None)
-                or (self.order is not None)):
-            print('--warning: kf and order options ignored for uniform weighting')
+        if self.wt == 'uni' and (self.order is not None)):
+            print('--warning: order options ignored for uniform weighting')
 
         #process variant options for destination selection
         self.beta = beta
@@ -675,7 +669,7 @@ class AEO(object):
 
             #member selection
             #  members removed from population with this export method
-            exported = [p.export(eis[j], self.wt, self.order, self.kf, i/Ncyc, log.loc[{'pop' : p.popname, 'cycle' : i}]) for j, p in enumerate(self.pops)]
+            exported = [p.export(eis[j], self.wt, self.order, i/Ncyc, log.loc[{'pop' : p.popname, 'cycle' : i}]) for j, p in enumerate(self.pops)]
 
             #destination selection
             beta = self.get_alphabeta(self.beta, i, Ncyc)
@@ -712,7 +706,6 @@ class AEO(object):
 
 
     #TODO: Markov Matrix calculation
-    #TODO: Ramanujan approx for log(x!)
     #TODO: Fitness checker outside of consistency method
 
 
