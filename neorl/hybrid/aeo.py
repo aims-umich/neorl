@@ -71,7 +71,7 @@ def wtd_remove(lst, ei, wts = None):
         wts = [1/len(lst) for i in range(len(lst))]
 
     wts_sum = sum(wts)
-    wts_checked = [a/wts_sum for a in wts] #correct for floating point errors
+    wts_checked = [a/wts_sum for a in wts] #correct for errors may come from rajmujan factorial
 
     #start here, caused by zeros in the weight
     indxs = np.random.choice(range(len(lst)), size=ei, p = wts_checked, replace = False)
@@ -310,9 +310,9 @@ class Population:
             if wt == 'log':
                 wts = (np.log(seq)+1)/(self.n + raj_logfact(self.n))
             elif wt == 'lin':
-                wts = (seq-2)/(self.n*.5+.5*self.n**2)
+                wts = (seq)/(self.n*.5+.5*self.n**2)
             elif wt == 'exp':
-                wts = (np.exp(seq-1) - 2)/((1-np.exp(self.n))/(1-np.exp(1)))
+                wts = (np.exp(seq-1))/((1-np.exp(self.n))/(1-np.exp(1)))
 
             #log information
             np.put(log['wb'].data, [0], [o == 'wb'])
@@ -379,6 +379,7 @@ class AEO(object):
         self.fit = fit
 
         if mode == 'max': #create fit attribute to use for checking consistency of fits
+            raise Exception("Max not supported for AEO")
             self.fitcheck=fit
         elif mode == 'min':
             def fitness_wrapper(*args, **kwargs):
