@@ -231,10 +231,10 @@ class Population:
         if self.n != 0:
             log['member_x'][:self.n] = np.array(self.members).reshape(self.n, -1)
             log['member_fitnesses'][:self.n] = self.member_fitnesses
-            np.put(log['nmembers'].data, [0],  [self.n])
-            np.put(log['f'].data, [0], [self.fitness])
-            if len(self.fitlog) > 1:
-                np.put(log['delta_f'].data, [0], [self.fitlog[-1] - self.fitlog[-2]])
+        np.put(log['nmembers'].data, [0],  [self.n])
+        np.put(log['f'].data, [0], [self.fitness])
+        if len(self.fitlog) > 1:
+            np.put(log['delta_f'].data, [0], [self.fitlog[-1] - self.fitlog[-2]])
 
         return fitness
 
