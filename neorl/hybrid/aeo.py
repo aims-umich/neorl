@@ -175,9 +175,9 @@ def eval_algo_popnumber(obj, nmembers):
 
 def get_algo_annealed_kwargs(obj, ncyc, Ncyc, gen_per_cycle):
     total_parm = Ncyc*gen_per_cycle
-    start = (ncyc-1)*gen_per_cycle
-    fracaneal = np.linspace(start/total_parm, (start + gen_per_cycle)/total_parm,
-            gen_per_cycle)
+    start = (ncyc - 1)*gen_per_cycle/(total_parm - 1)
+    stop = ((ncyc - 1)*gen_per_cycle + gen_per_cycle - 1)/(total_parm - 1)
+    fracaneal = np.linspace(start, stop, gen_per_cycle)
 
     algo = detect_algo(obj)
     #for linear annealed parameters is start + (stop - start)*fracaneal
@@ -187,7 +187,7 @@ def get_algo_annealed_kwargs(obj, ncyc, Ncyc, gen_per_cycle):
         k = {'E1' : 2 + (0 - 2)*fracaneal}
     elif algo == 'PSO':
         if obj.speed_mech == 'timew':
-            k = {'w' : 0.9 + (0.4 - 0.9)*fracaneal}
+            k = {'w' : obj.wmax + (obj.wmin - obj.wmax)*fracaneal}
         else:
             k = {}
     elif algo == 'WOA':
