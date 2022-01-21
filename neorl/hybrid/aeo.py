@@ -114,6 +114,11 @@ def clone_algo_obj(obj, nmembers, fit, bounds):
         attrs['fit'] = fit
         attrs['bounds'] = bounds
         return HHO(**filter_kw(attrs, HHO))
+    elif algo == 'MFO':
+        attrs['nmoths'] = nmembers
+        attrs['fit'] = fit
+        attrs['bounds'] = bounds
+        return MFO(**filter_kw(attrs, MFO))
     elif algo == 'DE':
         attrs['npop'] = nmembers
         attrs['fit'] = fit
@@ -143,6 +148,8 @@ def get_algo_nmembers(obj):
         return obj.npop
     elif algo == 'ES':
         return obj.lambda_
+    elif algo == 'MFO':
+        return obj.npop
 
 def get_algo_ngtonevals(obj):
     # function to retrieve the number of function evaluations
@@ -150,7 +157,7 @@ def get_algo_ngtonevals(obj):
     # returns number of fxn evaluations
     algo = detect_algo(obj)
 
-    if algo in ['WOA', 'GWO']:
+    if algo in ['WOA', 'GWO', 'MFO']:
         return lambda i, a : a*i
     elif algo == 'PSO':
         return lambda i, a : (i+1)*a
@@ -170,6 +177,8 @@ def eval_algo_popnumber(obj, nmembers):
     algo = detect_algo(obj)
     if algo in ['WOA', 'GWO', 'PSO', 'HHO', 'DE']:
         return nmembers >= 5
+    elif algo == 'MFO':
+        return nmembers >= 4
     elif algo == 'ES':
         return nmembers >= obj.mu
 
@@ -193,6 +202,8 @@ def get_algo_annealed_kwargs(obj, ncyc, Ncyc, gen_per_cycle):
     elif algo == 'WOA':
         k = {'fac' : -1 + (-2 - -1)*fracaneal,
              'a' : 2 + (0 - 2)*fracaneal}
+    elif algo == 'MFO':
+        k = {'MFO' : -1 + (-2 - -1)*fracaneal}
     else:
         k = {}
 
@@ -244,13 +255,19 @@ class Population:
             np.put(log['evolute'].data, [0], True)
 
             #update strategy with new population number
+            if self.algo == 'MFO':
+                print(self.strategy.npop, len(self.members))
             self.strategy = clone_algo_obj(self.strategy, len(self.members), fit, bounds)
+            if self.algo == 'MFO':
+                print(self.strategy.npop)
+                print(".......")
 
            #store last generation number
             self.last_ngen = ngen
 
             #perform evolution and store relevant information
             annealing_kwargs = get_algo_annealed_kwargs(self.strategy, ncyc, Ncyc, ngen)
+
             out = self.strategy.evolute(ngen, x0 = self.members, **annealing_kwargs)
             self.members = out[2]['last_pop'].iloc[:, :-1].values.tolist()
             self.member_fitnesses = out[2]['last_pop'].iloc[:, -1].values.tolist()
