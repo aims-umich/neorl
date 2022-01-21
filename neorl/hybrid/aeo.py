@@ -173,6 +173,32 @@ def eval_algo_popnumber(obj, nmembers):
     elif algo == 'ES':
         return nmembers >= obj.mu
 
+def get_algo_annealed_kwargs(obj, ncyc, Ncyc, gen_per_cycle):
+    total_parm = Ncyc*gen_per_cycle
+    start = (ncyc-1)*gen_per_cycle
+    fracaneal = np.linspace(start/total_parm, (start + gen_per_cycle)/total_parm,
+            gen_per_cycle)
+
+    algo = detect_algo(obj)
+    #for linear annealed parameters is start + (stop - start)*fracaneal
+    if algo == 'GWO':
+        k = {'a' : 2 + (0 - 2)*fracaneal}
+    elif algo == 'HHO':
+        k = {'E1' : 2 + (0 - 2)*fracaneal}
+    elif algo == 'PSO':
+        if obj.speed_mech == 'timew':
+            k = {'w' : 0.9 + (0.4 - 0.9)*fracaneal}
+        else:
+            k = {}
+    elif algo == 'WOA':
+        k = {'fac' : -1 + (-2 - -1)*fracaneal,
+             'a' : 2 + (0 - 2)*fracaneal}
+    else:
+        k = {}
+
+    return k
+
+
 class Population:
     # Class to store information and functionality related to a single population
     # in the AEO algorithm. Should be characterized by an evolution strategy passed
@@ -205,7 +231,7 @@ class Population:
         else:
             return self.fitlog[-1] - self.fitlog[-2]
 
-    def evolute(self, ngen, fit, bounds, log): #fit is included to avoid needing to pull .fit methods
+    def evolute(self, ngen, fit, bounds, ncyc, Ncyc, log): #fit is included to avoid needing to pull .fit methods
                                        #    from algo objects that may have been flipped
         #check if there are enouh members to evolve NOT appended to fitlog
         if not eval_algo_popnumber(self.strategy, len(self.members)):
@@ -224,7 +250,8 @@ class Population:
             self.last_ngen = ngen
 
             #perform evolution and store relevant information
-            out = self.strategy.evolute(ngen, x0 = self.members)
+            annealing_kwargs = get_algo_annealed_kwargs(self.strategy, ncyc, Ncyc, ngen)
+            out = self.strategy.evolute(ngen, x0 = self.members, **annealing_kwargs)
             self.members = out[2]['last_pop'].iloc[:, :-1].values.tolist()
             self.member_fitnesses = out[2]['last_pop'].iloc[:, -1].values.tolist()
 
@@ -621,7 +648,7 @@ class AEO(object):
         #perform evolution/migration cycle
         for i in range(1, Ncyc + 1):
             #evolution phase
-            pop_fits = [p.evolute(self.gpc, self.fit, self.bounds, log.loc[{'pop' : p.popname, 'cycle' : i}]) for p in self.pops]
+            pop_fits = [p.evolute(self.gpc, self.fit, self.bounds, i, Ncyc, log.loc[{'pop' : p.popname, 'cycle' : i}]) for p in self.pops]
 
             #exportation number
             #  calc weights
