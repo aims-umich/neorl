@@ -99,12 +99,13 @@ class MFO:
                 raise Exception ('unknown data type is given, either int, float, or grid are allowed for parameter bounds')   
         return indv
 
-    def init_population(self, x0=None): # population
+    def init_population(self, x0=None, verbose=False): # population
 
         pop = []
         if x0: # have primary solution
-            print('The first individual provided by the user:', x0[0])
-            print('The last individual provided by the user:', x0[-1])
+            if verbose:
+                print('The first individual provided by the user:', x0[0])
+                print('The last individual provided by the user:', x0[-1])
             for i in range(len(x0)):
                 pop.append(x0[i])
         else: # random init
@@ -191,9 +192,9 @@ class MFO:
         #  moths
         if x0:
             assert len(x0) == N, '--error: the length of x0 ({}) (initial population) must equal to number of individuals npop ({})'.format(len(x0), self.npop)
-            Moth_pos = self.init_population(x0=x0)
+            Moth_pos = self.init_population(x0=x0, verbose=verbose)
         else:
-            Moth_pos = self.init_population()
+            Moth_pos = self.init_population(verbose=verbose)
             
         Moth_pos = Moth_pos * 1.0 #this is to account for mixed intger-cont. problems, data needs to be float
         Moth_fitness = np.full(N, float('inf'))  # set as worst result
