@@ -501,6 +501,7 @@ class AEO(object):
 
     def ensure_consistency(self):
         #loop through all optimizers and make sure all options are set to be the same
+        return
         gen_warning = ', check that options of all optimizers are the same as AEO'
         for o, a in zip(self.optimizers, self.algos):
             assert self.mode == o.mode,'%s has incorrect optimization mode'%o + gen_warning
