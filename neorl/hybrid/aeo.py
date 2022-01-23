@@ -255,12 +255,7 @@ class Population:
             np.put(log['evolute'].data, [0], True)
 
             #update strategy with new population number
-            if self.algo == 'MFO':
-                print(self.strategy.npop, len(self.members))
             self.strategy = clone_algo_obj(self.strategy, len(self.members), fit, bounds)
-            if self.algo == 'MFO':
-                print(self.strategy.npop)
-                print(".......")
 
            #store last generation number
             self.last_ngen = ngen
