@@ -401,13 +401,46 @@ class AEO(object):
     :param order: (str) 'wb' for worst to best, 'bw' for best to worst, prepend 'a' for annealed starting in the given ordering.
     :param ncores: (int) number of parallel processors
     :param seed: (int) random seed for sampling
+    :param config: (int) If none, use given migration parameters, if int, use one of the presets
     """
-    def __init__(self, mode, bounds, fit, 
+    def __init__(self, bounds, fit,
             optimizers, gen_per_cycle,
-            alpha, g, g_burden, q, wt,
-            beta, b, b_burden,
-            order = None,
-            ncores = 1, seed = None):
+            alpha = "up", g = "improve", g_burden = False,
+            q = 'up', wt = 'exp', beta = 'up', b = 'improve',
+            b_burden = False, order = 'bw', mode = 'min',
+            ncores = 1, seed = None, config = None):
+
+        if config is None:
+            pass
+        elif config == 1:
+            alpha = 'up'
+            g = 'improve'
+            g_burden = False
+            q = 'up'
+            wt = 'exp'
+            beta = 'up'
+            b = 'improve'
+            b_burden = False
+        elif config == 2:
+            alpha = 'up'
+            g = 'improve'
+            g_burden = False
+            q = 1.
+            wt = 'log'
+            beta = 'up'
+            b = 'improve'
+            b_burden = True
+        elif config == 3:
+            alpha = 0.
+            g = 'improve'
+            g_burden = False
+            q = -1.
+            wt = 'exp'
+            beta = 'up'
+            b = 'fitness'
+            b_burden = True
+        else:
+            raise Exception("Not approved configuration, select 1, 2 or 3")
 
         if not (seed is None):
             random.seed(seed)
