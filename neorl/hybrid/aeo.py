@@ -332,13 +332,11 @@ class Population:
 
             #order the members and note how they are shuffled
             shuffled = list(range(len(self.members)))
-            if (o == 'wb' and self.mode == 'max') \
-                    or (o == 'bw' and self.mode == 'min'):
+            if o == 'bw':
                 self.members = [a for _, a in sorted(zip(self.member_fitnesses, self.members))]
                 shuffled = [a for _, a in sorted(zip(self.member_fitnesses, shuffled))]
                 self.member_fitnesses = sorted(self.member_fitnesses)
-            if (o == 'bw' and self.mode == 'max') \
-                    or (o == 'wb' and self.mode == 'min'):
+            if o == 'wb':
                 self.members = [a for _, a in sorted(zip(self.member_fitnesses, self.members), reverse = True)]
                 shuffled = [a for _, a in sorted(zip(self.member_fitnesses, shuffled), reverse = True)]
                 self.member_fitnesses = sorted(self.member_fitnesses, reverse = True)
