@@ -19,6 +19,8 @@ import random
 import math
 import inspect
 import copy
+import operator as op
+from functools import reduce
 
 from neorl import WOA
 from neorl import GWO
@@ -33,6 +35,12 @@ from neorl import ES
 #     2. clone_algo_obj needs to be updated to change the correct attribute in the dict
 #     3. eval_algo_popnumber needs to be given some criteria for the minimum number of individuals
 #        to run the evolution phase
+def ncr(n, r):
+    r = min(r, n-r)
+    numer = reduce(op.mul, range(n, n-r, -1), 1)
+    denom = reduce(op.mul, range(1, r+1), 1)
+    return numer // denom
+
 
 def raj_logfact(n):
     """Ramanujan approximation of log(n!)"""
@@ -560,6 +568,18 @@ class AEO(object):
         elif self.q == "down":
             return 2/(1 - Ncyc)*(ncyc - 1)+1
 
+    def fill_M(self, log):
+        h = log["export_pop_wts"].values
+        scale_g = log["str_dest_scaled"].values
+        I = log.coords["pop"].size
+        nmems = log["nmembers"].values
+        for i in range(I):
+            for j in range(I):
+                tot = 0
+                for k in range(nmems[i] + 1):
+                    tot += k/nmems[i]*ncr(nmems[i],k)*h[i]**k*(1-h[i])**(nmems[i]-k)
+                kd = int(i==j) #kroniker delta function
+                log['M'].values[j,i] = kd + (scale_g[j] - kd)*tot
 
     def evolute(self, Ncyc, npop0 = None, x0 = None, pop0 = None, stop_criteria = None, verbose = False):
         """
@@ -650,19 +670,22 @@ class AEO(object):
                     'b'                  : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
                     'unburdened_b'       : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
                     'A'                  : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.int32)),
+                    'M'                  : (['pop','popdest', 'cycle'], np.zeros((npp,npp, nc), dtype = np.float64)),
+                    'str_dest_scaled'    : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
                     'evolute'            : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.bool8))},
                 coords = {
                     'member'  : membercoords,
                     'pop'     : popcoords,
                     'cycle'   : cyclecoords,
-                    'var'     : varcoords},
+                    'var'     : varcoords,
+                    'popdest'     : popcoords}, #only used for migration transition matrix
                 attrs = {"Ncycles" : 0}
                 )
         #initial_member_x: positions of all individuals in a population before any evolution
         #member_x: positions of members in each population as through each cycle
         #nmembers: number of members in each population in each cycle
         #export_str_scaled: scaled strengths of each population each cycle
-        #export_pop_wts: weights passed into binomial function for ei selection
+        #export_pop_wts: weights passed into binomial function for ei selection, called hi in paper
         #alpha: alpha parameter as it may change over each cycle
         #wb: ordering of individuals within the populations when used for member selection
         #g: unscaled strengths of each population each cycle
@@ -681,6 +704,7 @@ class AEO(object):
         #b: unscaled strengths of each population for the destination selection phase
         #unburdened_b: unscaled strengths without burdened applied for member selection phase
         #A: number of members from export pool that end up in a particulat population each cycle
+        #M: stochastic matrix which describes movement of members in a migration phase
         #evolute: is whether or not that population was evoluted each cycle
 
 
@@ -751,6 +775,7 @@ class AEO(object):
             #calculate normalized probabilities and draw samples
             strengths_dest_scaled = [s/sum(strengths_dest) for s in strengths_dest]
             allotments = np.random.multinomial(len(exported), strengths_dest_scaled)
+            log['str_dest_scaled'].loc[{'cycle' : i}] = strengths_dest_scaled
             log['A'].loc[{'cycle' : i}] = allotments
 
             #distribute individuals according to the sample
@@ -758,6 +783,8 @@ class AEO(object):
                 p.receive(exported[:a])
                 exported = exported[a:]
 
+            #calculate migration matrix
+            self.fill_M(log.loc[{'cycle' : i}])
 
             #check if desired number of function evaluations has been reached
             log.attrs["Ncycles"] = i
