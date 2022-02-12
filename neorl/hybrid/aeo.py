@@ -579,7 +579,10 @@ class AEO(object):
                 for k in range(nmems[i] + 1):
                     tot += k/nmems[i]*ncr(nmems[i],k)*h[i]**k*(1-h[i])**(nmems[i]-k)
                 kd = int(i==j) #kroniker delta function
-                log['M'].values[j,i] = kd + (scale_g[j] - kd)*tot
+                if nmems[i] == 0:
+                   log['M'].values[j,i] = 1/len(nmems)#kd
+                else:
+                    log['M'].values[j,i] = kd + (scale_g[j] - kd)*tot
 
     def evolute(self, Ncyc, npop0 = None, x0 = None, pop0 = None, stop_criteria = None, verbose = False):
         """
