@@ -28,6 +28,7 @@ from neorl import PSO
 from neorl import MFO
 from neorl import HHO
 from neorl import DE
+from neorl import SSA
 from neorl import ES
 
 # Note: to incorporate additional algorithms into ensembles, the following needs to be done:
@@ -67,10 +68,12 @@ def detect_algo(obj):
         return 'DE'
     elif isinstance(obj, ES):
         return 'ES'
+    elif isinstance(obj, SSA):
+        return 'SSA'
     raise Exception('%s algorithm object not recognized or supported'%obj)
 
 max_algos = ['PSO', 'DE', 'ES']#algos that change fitness function to make a maximum problem
-min_algos = ['WOA', 'GWO', 'MFO', 'HHO']#algos that change fitness function to make a minimum problem
+min_algos = ['WOA', 'GWO', 'MFO', 'HHO', 'SSA']#algos that change fitness function to make a minimum problem
 
 def wtd_remove(lst, ei, wts = None):
     #quick helper function to handle removing ei items from lst and returning them with
@@ -136,6 +139,10 @@ def clone_algo_obj(obj, nmembers, fit, bounds):
         attrs['lambda_'] = nmembers
         attrs['fit'] = fit
         attrs['bounds'] = bounds
+    elif algo == 'SSA':
+        attrs['nsalps'] = nmembers
+        attrs['fit'] = fit
+        attrs['bounds'] = bounds
         return ES(**filter_kw(attrs, ES))
 
 def get_algo_nmembers(obj):
@@ -158,6 +165,8 @@ def get_algo_nmembers(obj):
         return obj.lambda_
     elif algo == 'MFO':
         return obj.npop
+    elif alfo == 'SSA':
+        return obj.nsalps
 
 def get_algo_ngtonevals(obj):
     # function to retrieve the number of function evaluations
@@ -177,13 +186,15 @@ def get_algo_ngtonevals(obj):
         print('--warning: HHO uses an upper bound for number of function evaluations,'
         ' be careful when using HHO with burdened variants')
         return lambda i, a : 2*i*a
+    elif algo == 'SSA':
+        return lambda i, a : (i+1)*a
 
 def eval_algo_popnumber(obj, nmembers):
     # check if an algorithm is prepared to participate in evolution phase
     # based on its population information
 
     algo = detect_algo(obj)
-    if algo in ['WOA', 'GWO', 'PSO', 'HHO', 'DE']:
+    if algo in ['WOA', 'GWO', 'PSO', 'HHO', 'DE', 'SSA']:
         return nmembers >= 5
     elif algo == 'MFO':
         return nmembers >= 4
@@ -212,6 +223,8 @@ def get_algo_annealed_kwargs(obj, ncyc, Ncyc, gen_per_cycle):
              'a' : 2 + (0 - 2)*fracaneal}
     elif algo == 'MFO':
         k = {'MFO' : -1 + (-2 - -1)*fracaneal}
+    elif algo == 'SSA':
+        #NEED TO DO THIS
     else:
         k = {}
 
