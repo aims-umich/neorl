@@ -19,5 +19,5 @@ for i in range(1,nx+1):
 
 nsalps=20
 #setup and evolute SSA
-ssa=SSA(mode='min', bounds=BOUNDS, fit=FIT, nsalps=nsalps, c1=None, ncores=1, seed=1)
-x_best, y_best, ssa_hist=ssa.evolute(ngen=100, verbose=1)
+ssa=SSA(mode='min', bounds=BOUNDS, fit=FIT, nsalps=nsalps, ncores=1, seed=1)
+x_best, y_best, ssa_hist=ssa.evolute(ngen=100, c1=None, verbose=1)

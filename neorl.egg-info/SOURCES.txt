@@ -52,6 +52,7 @@ neorl/evolu/runners/ga.py
 neorl/evolu/runners/sa.py
 neorl/hybrid/__init__.py
 neorl/hybrid/ackde.py
+neorl/hybrid/aeo.py
 neorl/hybrid/fneat.py
 neorl/hybrid/nga.py
 neorl/hybrid/nhho.py
