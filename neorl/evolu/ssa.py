@@ -37,13 +37,11 @@ class SSA(object):
     :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: ``bounds={'x1': ['int', 1, 4], 'x2': ['float', 0.1, 0.8], 'x3': ['float', 2.2, 6.2]}``
     :param fit: (function) the fitness function 
     :param nsalps: (int): number of salps in the swarm
-    :param c1: (float/list): a scalar value or a list of values with size ``ngen`` for the coefficient that controls exploration/exploitation. 
-                            If ``None``, default annealing formula for ``c1`` is used (see **Notes** below for more info).
     :param int_transform: (str): method of handling int/discrete variables, choose from: ``nearest_int``, ``sigmoid``, ``minmax``.
     :param ncores: (int) number of parallel processors (must be ``<= nsalps``)
     :param seed: (int) random seed for sampling
     """
-    def __init__(self, mode, bounds, fit, nsalps=5, c1=None, int_transform='nearest_int', ncores=1, seed=None):
+    def __init__(self, mode, bounds, fit, nsalps=5, int_transform='nearest_int', ncores=1, seed=None):
         
         set_neorl_seed(seed)
         
@@ -67,7 +65,6 @@ class SSA(object):
         self.bounds=bounds
         self.ncores = ncores
         self.nsalps=nsalps
-        self.c1=c1
         
         #infer variable types 
         self.var_type = np.array([bounds[item][0] for item in bounds])
@@ -218,12 +215,14 @@ class SSA(object):
             self.Positions = np.transpose(self.Positions)
             
 
-    def evolute(self, ngen, x0=None, verbose=False):
+    def evolute(self, ngen, x0=None, c1=None, verbose=False):
         """
         This function evolutes the SSA algorithm for number of generations.
         
         :param ngen: (int) number of generations to evolute
         :param x0: (list of lists) initial position of the salps (must be of same size as ``nsalps``)
+        :param c1: (float/list): a scalar value or a list of values with size ``ngen`` for the coefficient that controls exploration/exploitation. 
+                            If ``None``, default annealing formula for ``c1`` is used (see **Notes** below for more info).
         :param verbose: (bool) print statistics to screen
         
         :return: (tuple) (best individual, best fitness, and dictionary containing major search results)
@@ -231,6 +230,7 @@ class SSA(object):
         self.history = {'local_fitness':[], 'global_fitness':[], 'c1': []}
         self.best_fitness=float("inf") 
         self.verbose=verbose
+        self.c1=c1
         self.Positions = np.zeros((self.nsalps, self.dim))
         if x0:
             assert len(x0) == self.nsalps, '--error: the length of x0 ({}) MUST equal the number of salps in the group ({})'.format(len(x0), self.nsalps)
