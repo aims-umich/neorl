@@ -28,6 +28,7 @@ from neorl import PSO
 from neorl import MFO
 from neorl import HHO
 from neorl import DE
+from neorl import JAYA
 from neorl import SSA
 from neorl import ES
 
@@ -70,9 +71,11 @@ def detect_algo(obj):
         return 'ES'
     elif isinstance(obj, SSA):
         return 'SSA'
+    elif isinstance(obj, JAYA):
+        return 'JAYA'
     raise Exception('%s algorithm object not recognized or supported'%obj)
 
-max_algos = ['PSO', 'DE', 'ES']#algos that change fitness function to make a maximum problem
+max_algos = ['PSO', 'DE', 'ES', 'JAYA']#algos that change fitness function to make a maximum problem
 min_algos = ['WOA', 'GWO', 'MFO', 'HHO', 'SSA']#algos that change fitness function to make a minimum problem
 
 def wtd_remove(lst, ei, wts = None):
@@ -139,11 +142,18 @@ def clone_algo_obj(obj, nmembers, fit, bounds):
         attrs['lambda_'] = nmembers
         attrs['fit'] = fit
         attrs['bounds'] = bounds
+        return ES(**filter_kw(attrs, ES))
     elif algo == 'SSA':
         attrs['nsalps'] = nmembers
         attrs['fit'] = fit
         attrs['bounds'] = bounds
-        return ES(**filter_kw(attrs, ES))
+        return SSA(**filter_kw(attrs, SSA))
+    elif algo == 'JAYA':
+        attrs['npop'] = nmembers
+        attrs['fit'] = fit
+        attrs['bounds'] = bounds
+        return JAYA(**filter_kw(attrs, JAYA))
+
 
 def get_algo_nmembers(obj):
     # function to retrieve the number of 'members' in the starting population of an
@@ -165,8 +175,10 @@ def get_algo_nmembers(obj):
         return obj.lambda_
     elif algo == 'MFO':
         return obj.npop
-    elif alfo == 'SSA':
+    elif algo == 'SSA':
         return obj.nsalps
+    elif algo == 'JAYA':
+        return obj.npop
 
 def get_algo_ngtonevals(obj):
     # function to retrieve the number of function evaluations
@@ -188,6 +200,8 @@ def get_algo_ngtonevals(obj):
         return lambda i, a : 2*i*a
     elif algo == 'SSA':
         return lambda i, a : (i+1)*a
+    elif algo == 'JAYA':
+        return lambda i, a : (i+1)*a
 
 def eval_algo_popnumber(obj, nmembers):
     # check if an algorithm is prepared to participate in evolution phase
@@ -196,7 +210,7 @@ def eval_algo_popnumber(obj, nmembers):
     algo = detect_algo(obj)
     if algo in ['WOA', 'GWO', 'PSO', 'HHO', 'DE', 'SSA']:
         return nmembers >= 5
-    elif algo == 'MFO':
+    elif algo in ['MFO', 'JAYA']:
         return nmembers >= 4
     elif algo == 'ES':
         return nmembers >= obj.mu
@@ -222,9 +236,9 @@ def get_algo_annealed_kwargs(obj, ncyc, Ncyc, gen_per_cycle):
         k = {'fac' : -1 + (-2 - -1)*fracaneal,
              'a' : 2 + (0 - 2)*fracaneal}
     elif algo == 'MFO':
-        k = {'MFO' : -1 + (-2 - -1)*fracaneal}
+        k = {'r' : -1 + (-2 - -1)*fracaneal}
     elif algo == 'SSA':
-        #NEED TO DO THIS
+        k = {'c1' : 2*np.exp(-(4*fracaneal)**2)}
     else:
         k = {}
 
@@ -268,7 +282,7 @@ class Population:
         #check if there are enouh members to evolve NOT appended to fitlog
         if not eval_algo_popnumber(self.strategy, len(self.members)):
             if len(self.fitlog) == 0:
-                raise Exception("Starting population for %s too small for evoluation"%self.algo)
+                raise Exception("Starting population for %s too small for evolution"%self.algo)
             fitness = self.fitness
             self.Nc = 0
 
