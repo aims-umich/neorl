@@ -421,6 +421,7 @@ class AEO(object):
     :param fit: (function) the fitness function
     :param optimizers: (list) list of optimizer instances to be included in the ensemble
     :param gen_per_cycle: (int) number of generations performed in evolution phase per cycle
+    :param config: (int) If none, use migration parameters defined later, if int (1 through 3), use one of the presets
     :param alpha: (float or str) option for exponent on g strength measure, if numeric, alpha is taken to be
         that value. If alpha is 'up' alpha is annealed from 0 to 1. If alpha is 'down' it is annealed from
         1 to 0.
@@ -434,14 +435,13 @@ class AEO(object):
     :param order: (str) 'wb' for worst to best, 'bw' for best to worst, prepend 'a' for annealed starting in the given ordering.
     :param ncores: (int) number of parallel processors
     :param seed: (int) random seed for sampling
-    :param config: (int) If none, use given migration parameters, if int, use one of the presets
     """
     def __init__(self, bounds, fit,
-            optimizers, gen_per_cycle,
+            optimizers, gen_per_cycle, config = 1,
             alpha = "up", g = "improve", g_burden = False,
             q = 'up', wt = 'exp', beta = 'up', b = 'improve',
             b_burden = False, order = 'bw', mode = 'min',
-            ncores = 1, seed = None, config = None):
+            ncores = 1, seed = None):
 
         if config is None:
             pass
