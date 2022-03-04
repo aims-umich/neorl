@@ -37,6 +37,25 @@ from neorl import ES
 #     2. clone_algo_obj needs to be updated to change the correct attribute in the dict
 #     3. eval_algo_popnumber needs to be given some criteria for the minimum number of individuals
 #        to run the evolution phase
+
+class FitWrap:
+    """class to track function calls"""
+    def __init__(self, f):
+        self.n = 0
+        self.outs = []
+        self.ins = []
+        self.fxn = f
+    def f(self, *inputs):
+        ans = self.fxn(*inputs)
+        self.n += 1
+        self.ins.append(inputs)
+        self.outs.append(ans)
+        return ans
+    def reset(self):
+        self.n = 0
+        self.outs = []
+        self.ins = []
+
 def ncr(n, r):
     r = min(r, n-r)
     numer = reduce(op.mul, range(n, n-r, -1), 1)
@@ -480,7 +499,8 @@ class AEO(object):
             np.random.seed(seed)
 
         self.mode=mode
-        self.fit = fit
+        self.wrapped_f = FitWrap(fit)
+        self.fit = self.wrapped_f.f
 
         if mode == 'max': #create fit attribute to use for checking consistency of fits
             raise Exception("Max not supported for AEO")
@@ -621,7 +641,7 @@ class AEO(object):
         :param x0: (list of lists) initial positions of individuals in problem space
         :param pop0: (list of ints) population assignments for x0, integer corresponding to assigned population ordered
             according to self.optimize
-        "param stop_criteria: (None or callable) function which returns condition if evolution should continue, can be
+        :param stop_criteria: (None or callable) function which returns condition if evolution should continue, can be
             used to stop evolution at certain number of function evaluations
         """
         #if npop0, x0 and pop0 are none, detect populations from algos
@@ -822,7 +842,14 @@ class AEO(object):
                 if stop_criteria() == True:
                     break
 
-        return log
+        #get best members
+        bestind = np.argmin(self.wrapped_f.outs)
+
+        xbest = self.wrapped_f.ins[bestind]
+        ybest = self.wrapped_f.outs[bestind]
+
+
+        return xbest[0], ybest, log
 
 
 
