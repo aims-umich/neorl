@@ -80,3 +80,4 @@ from neorl.evolu.cs import CS
 from neorl.hybrid.nga import NGA
 from neorl.hybrid.nhho import NHHO
 from neorl.evolu.ts import TS
+from neorl.hybrid.aeo import AEO
