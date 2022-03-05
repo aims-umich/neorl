@@ -504,7 +504,6 @@ class AEO(object):
 
         if mode == 'max': #create fit attribute to use for checking consistency of fits
             raise Exception("Max not supported for AEO")
-            self.fitcheck=fit
         elif mode == 'min':
             self.fitcheck=fit
         else:
@@ -643,6 +642,8 @@ class AEO(object):
             according to self.optimize
         :param stop_criteria: (None or callable) function which returns condition if evolution should continue, can be
             used to stop evolution at certain number of function evaluations
+
+        :return: (tuple) (best individual, best fitness, xarray.Dataset of various algorithm parameters)
         """
         #if npop0, x0 and pop0 are none, detect populations from algos
         if npop0 is None and x0 is None and pop0 is None:
