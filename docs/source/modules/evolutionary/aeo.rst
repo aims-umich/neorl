@@ -25,7 +25,7 @@ What can you use?
 Parameters
 ----------
 
-.. autoclass:: TS
+.. autoclass:: AEO
   :members:
   :inherited-members:
 
@@ -38,4 +38,11 @@ Example
 Notes
 -----
 
-- Lots of notes here
+- Only valid in ``mode='min'``.
+- AEO supports ``ES``, ``GWO``, ``WOA``, ``MFO``, ``SSA``, ``DE``, ``PSO`` and ``JAYA``.
+- Algorithm objects must be defined prior to their inclusion in ``AEO`` (see example)
+- Parameters such as ``F`` in ``DE`` or ``mu`` in ``ES`` are carried into ``AEO`` after initialization of these algorithms.
+- Population size parameters such as ``nwolves`` in ``GWO`` are used to determine the starting populations but are changed as the algorithm progresses.
+- ``fit``, ``bounds`` and ``mode`` should be consistent across algorithms passed into ``AEO``.
+- The total number of function evaluation changes depending on the algorithms in the ensemble and the distributin of members.
+- Information on the returned `log` can be found in the code for ``AEO``.
