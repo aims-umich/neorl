@@ -45,4 +45,4 @@ Notes
 - Population size parameters such as ``nwolves`` in ``GWO`` are used to determine the starting populations but are changed as the algorithm progresses.
 - ``fit``, ``bounds`` and ``mode`` should be consistent across algorithms passed into ``AEO``.
 - The total number of function evaluation changes depending on the algorithms in the ensemble and the distributin of members.
-- Information on the returned `log` can be found in the code for ``AEO``.
+- Information on the returned `log` can be found in the code for the ``AEO`` class.
