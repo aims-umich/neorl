@@ -254,7 +254,7 @@ class SSA(object):
                 self.c1r = 2 * math.exp(-((4 * l / ngen) ** 2))
             elif isinstance(self.c1, (float, int)):
                 self.c1r=self.c1
-            elif isinstance(self.c1, (list)):
+            elif isinstance(self.c1, (list, np.ndarray)):
                 assert len(self.c1) == ngen, '--error: if c1 is a list of values, it must have equal size ({}) as ngen ({})'.format(len(self.c1), ngen)
                 self.c1r=self.c1[l-1]
             else:

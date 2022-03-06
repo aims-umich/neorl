@@ -93,12 +93,13 @@ class JAYA:
                 indv.append(random.sample(bounds[key][1],1)[0])
         return indv
 
-    def init_population(self, x0=None): # population
+    def init_population(self, x0=None, verbose=False): # population
 
         pop = []
         if x0: # have premary solution
-            print('The first individual provided by the user:', x0[0])
-            print('The last individual provided by the user:', x0[-1])
+            if verbose:
+                print('The first individual provided by the user:', x0[0])
+                print('The last individual provided by the user:', x0[-1])
             for i in range(len(x0)):
                 pop.append(x0[i])
         else: # random init
@@ -206,9 +207,9 @@ class JAYA:
         #  population
         if x0:
             assert len(x0) == N, '--error: the length of x0 ({}) (initial population) must equal to number of individuals npop ({})'.format(len(x0), self.npop)
-            pos = self.init_population(x0=x0)
+            pos = self.init_population(x0=x0, verbose=verbose)
         else:
-            pos = self.init_population()
+            pos = self.init_population(verbose=verbose)
 
         pos = pos*1.0   #this is to account for mixed intger-cont. problems, data needs to be float
         

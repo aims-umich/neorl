@@ -19,6 +19,8 @@ import random
 import math
 import inspect
 import copy
+import operator as op
+from functools import reduce
 
 from neorl import WOA
 from neorl import GWO
@@ -26,6 +28,8 @@ from neorl import PSO
 from neorl import MFO
 from neorl import HHO
 from neorl import DE
+from neorl import JAYA
+from neorl import SSA
 from neorl import ES
 
 # Note: to incorporate additional algorithms into ensembles, the following needs to be done:
@@ -33,6 +37,31 @@ from neorl import ES
 #     2. clone_algo_obj needs to be updated to change the correct attribute in the dict
 #     3. eval_algo_popnumber needs to be given some criteria for the minimum number of individuals
 #        to run the evolution phase
+
+class FitWrap:
+    """class to track function calls"""
+    def __init__(self, f):
+        self.n = 0
+        self.outs = []
+        self.ins = []
+        self.fxn = f
+    def f(self, *inputs):
+        ans = self.fxn(*inputs)
+        self.n += 1
+        self.ins.append(inputs)
+        self.outs.append(ans)
+        return ans
+    def reset(self):
+        self.n = 0
+        self.outs = []
+        self.ins = []
+
+def ncr(n, r):
+    r = min(r, n-r)
+    numer = reduce(op.mul, range(n, n-r, -1), 1)
+    denom = reduce(op.mul, range(1, r+1), 1)
+    return numer // denom
+
 
 def raj_logfact(n):
     """Ramanujan approximation of log(n!)"""
@@ -59,10 +88,14 @@ def detect_algo(obj):
         return 'DE'
     elif isinstance(obj, ES):
         return 'ES'
+    elif isinstance(obj, SSA):
+        return 'SSA'
+    elif isinstance(obj, JAYA):
+        return 'JAYA'
     raise Exception('%s algorithm object not recognized or supported'%obj)
 
-max_algos = ['PSO', 'DE', 'ES']#algos that change fitness function to make a maximum problem
-min_algos = ['WOA', 'GWO', 'MFO', 'HHO']#algos that change fitness function to make a minimum problem
+max_algos = ['PSO', 'DE', 'ES', 'JAYA']#algos that change fitness function to make a maximum problem
+min_algos = ['WOA', 'GWO', 'MFO', 'HHO', 'SSA']#algos that change fitness function to make a minimum problem
 
 def wtd_remove(lst, ei, wts = None):
     #quick helper function to handle removing ei items from lst and returning them with
@@ -71,7 +104,7 @@ def wtd_remove(lst, ei, wts = None):
         wts = [1/len(lst) for i in range(len(lst))]
 
     wts_sum = sum(wts)
-    wts_checked = [a/wts_sum for a in wts] #correct for floating point errors
+    wts_checked = [a/wts_sum for a in wts] #correct for errors may come from rajmujan factorial
 
     #start here, caused by zeros in the weight
     indxs = np.random.choice(range(len(lst)), size=ei, p = wts_checked, replace = False)
@@ -114,6 +147,11 @@ def clone_algo_obj(obj, nmembers, fit, bounds):
         attrs['fit'] = fit
         attrs['bounds'] = bounds
         return HHO(**filter_kw(attrs, HHO))
+    elif algo == 'MFO':
+        attrs['nmoths'] = nmembers
+        attrs['fit'] = fit
+        attrs['bounds'] = bounds
+        return MFO(**filter_kw(attrs, MFO))
     elif algo == 'DE':
         attrs['npop'] = nmembers
         attrs['fit'] = fit
@@ -124,6 +162,17 @@ def clone_algo_obj(obj, nmembers, fit, bounds):
         attrs['fit'] = fit
         attrs['bounds'] = bounds
         return ES(**filter_kw(attrs, ES))
+    elif algo == 'SSA':
+        attrs['nsalps'] = nmembers
+        attrs['fit'] = fit
+        attrs['bounds'] = bounds
+        return SSA(**filter_kw(attrs, SSA))
+    elif algo == 'JAYA':
+        attrs['npop'] = nmembers
+        attrs['fit'] = fit
+        attrs['bounds'] = bounds
+        return JAYA(**filter_kw(attrs, JAYA))
+
 
 def get_algo_nmembers(obj):
     # function to retrieve the number of 'members' in the starting population of an
@@ -143,6 +192,12 @@ def get_algo_nmembers(obj):
         return obj.npop
     elif algo == 'ES':
         return obj.lambda_
+    elif algo == 'MFO':
+        return obj.npop
+    elif algo == 'SSA':
+        return obj.nsalps
+    elif algo == 'JAYA':
+        return obj.npop
 
 def get_algo_ngtonevals(obj):
     # function to retrieve the number of function evaluations
@@ -150,7 +205,7 @@ def get_algo_ngtonevals(obj):
     # returns number of fxn evaluations
     algo = detect_algo(obj)
 
-    if algo in ['WOA', 'GWO']:
+    if algo in ['WOA', 'GWO', 'MFO']:
         return lambda i, a : a*i
     elif algo == 'PSO':
         return lambda i, a : (i+1)*a
@@ -162,16 +217,52 @@ def get_algo_ngtonevals(obj):
         print('--warning: HHO uses an upper bound for number of function evaluations,'
         ' be careful when using HHO with burdened variants')
         return lambda i, a : 2*i*a
+    elif algo == 'SSA':
+        return lambda i, a : (i+1)*a
+    elif algo == 'JAYA':
+        return lambda i, a : (i+1)*a
 
 def eval_algo_popnumber(obj, nmembers):
     # check if an algorithm is prepared to participate in evolution phase
     # based on its population information
 
     algo = detect_algo(obj)
-    if algo in ['WOA', 'GWO', 'PSO', 'HHO', 'DE']:
+    if algo in ['WOA', 'GWO', 'PSO', 'HHO', 'DE', 'SSA']:
         return nmembers >= 5
+    elif algo in ['MFO', 'JAYA']:
+        return nmembers >= 4
     elif algo == 'ES':
         return nmembers >= obj.mu
+
+def get_algo_annealed_kwargs(obj, ncyc, Ncyc, gen_per_cycle):
+    total_parm = Ncyc*gen_per_cycle
+    start = (ncyc - 1)*gen_per_cycle/(total_parm - 1)
+    stop = ((ncyc - 1)*gen_per_cycle + gen_per_cycle - 1)/(total_parm - 1)
+    fracaneal = np.linspace(start, stop, gen_per_cycle)
+
+    algo = detect_algo(obj)
+    #for linear annealed parameters is start + (stop - start)*fracaneal
+    if algo == 'GWO':
+        k = {'a' : 2 + (0 - 2)*fracaneal}
+    elif algo == 'HHO':
+        k = {'E1' : 2 + (0 - 2)*fracaneal}
+    elif algo == 'PSO':
+        if obj.speed_mech == 'timew':
+            k = {'w' : obj.wmax + (obj.wmin - obj.wmax)*fracaneal}
+        else:
+            k = {}
+    elif algo == 'WOA':
+        k = {'fac' : -1 + (-2 - -1)*fracaneal,
+             'a' : 2 + (0 - 2)*fracaneal}
+    elif algo == 'MFO':
+        k = {'r' : -1 + (-2 - -1)*fracaneal}
+    elif algo == 'SSA':
+        k = {'c1' : 2*np.exp(-(4*fracaneal)**2)}
+    else:
+        k = {}
+
+    return k
+
 
 class Population:
     # Class to store information and functionality related to a single population
@@ -198,13 +289,21 @@ class Population:
     def fitness(self):
         return self.fitlog[-1]
 
-    def evolute(self, ngen, fit, bounds, log): #fit is included to avoid needing to pull .fit methods
+    @property
+    def dfitness(self):
+        if len(self.fitlog) == 1:
+            return self.fitlog[-1]
+        else:
+            return self.fitlog[-1] - self.fitlog[-2]
+
+    def evolute(self, ngen, fit, bounds, ncyc, Ncyc, log): #fit is included to avoid needing to pull .fit methods
                                        #    from algo objects that may have been flipped
         #check if there are enouh members to evolve NOT appended to fitlog
         if not eval_algo_popnumber(self.strategy, len(self.members)):
             if len(self.fitlog) == 0:
-                raise Exception("Starting population for %s too small for evoluation"%self.algo)
+                raise Exception("Starting population for %s too small for evolution"%self.algo)
             fitness = self.fitness
+            self.Nc = 0
 
         else:
             np.put(log['evolute'].data, [0], True)
@@ -216,14 +315,14 @@ class Population:
             self.last_ngen = ngen
 
             #perform evolution and store relevant information
-            out = self.strategy.evolute(ngen, x0 = self.members)
+            annealing_kwargs = get_algo_annealed_kwargs(self.strategy, ncyc, Ncyc, ngen)
+
+            out = self.strategy.evolute(ngen, x0 = self.members, **annealing_kwargs)
             self.members = out[2]['last_pop'].iloc[:, :-1].values.tolist()
             self.member_fitnesses = out[2]['last_pop'].iloc[:, -1].values.tolist()
 
-            if self.mode == 'max':
-                self.fitlog.append(max(self.member_fitnesses))
-            elif self.mode == 'min':
-                self.fitlog.append(min(self.member_fitnesses))
+            self.fitlog.append(min(self.member_fitnesses))
+            self.Nc = self.conv(self.last_ngen, self.n)
 
             fitness = self.fitness
 
@@ -231,38 +330,31 @@ class Population:
         if self.n != 0:
             log['member_x'][:self.n] = np.array(self.members).reshape(self.n, -1)
             log['member_fitnesses'][:self.n] = self.member_fitnesses
-            np.put(log['nmembers'].data, [0],  [self.n])
-            np.put(log['f'].data, [0], [self.fitness])
-            if len(self.fitlog) > 1:
-                np.put(log['delta_f'].data, [0], [self.fitlog[-1] - self.fitlog[-2]])
+        np.put(log['nmembers'].data, [0],  [self.n])
+        np.put(log['Nc'].data, [0], self.Nc)
+        np.put(log['f'].data, [0], [self.fitness])
+        if len(self.fitlog) > 1:
+            np.put(log['delta_f'].data, [0], [self.dfitness])
 
         return fitness
 
-    def strength(self, g, g_burden, fmax, fmin, log, g_or_b):
-        if self.mode == 'max':
-            fbest, fworst = fmax, fmin
-        elif self.mode == 'min':
-            fworst, fbest = fmax, fmin
-
-        #calculate strength for two different types
-        if g == 'improve' and len(self.fitlog) > 1:
-            unorm = max([self.fitlog[-1] - self.fitlog[-2], 0]) #in case best indiv got exported
-        else: #when g == 'fitness' and also no matter what if on first cycle
-            unorm = self.fitness
-
+    def strength(self, g, g_burden, fselmax, fselmin, log, g_or_b):
         #normalize strength measure
-        normed = (unorm - fworst)/(fbest - fworst)
+        if g == "improve":
+            fsel = self.dfitness
+        else:
+            fsel = self.fitness
+
+        normed = (fsel - fselmax)/(fselmin - fselmax)
 
         if g_or_b == 'g':
             np.put(log['unburdened_g'].data, [0], [normed])
         elif g_or_b == 'b':
             np.put(log['unburdened_b'].data, [0], [normed])
 
-        Nc = self.conv(self.last_ngen, self.n)
         #burden, if necessary
         if g_burden:
-            normed /= 1 + Nc
-            np.put(log['Nc'].data, [0], Nc)
+            normed /= 1 + self.Nc
 
         ret = normed
 
@@ -272,7 +364,7 @@ class Population:
             np.put(log['b'].data, [0], [ret])
         return ret
 
-    def export(self, ei, wt, order, kf, gfrac, log):
+    def export(self, ei, wt, order, gfrac, log):
         #decide what members to export and then remove them from members and return them
         if wt == 'uni': #uniform case very easy
             shuffled = list(range(len(self.members)))
@@ -294,13 +386,11 @@ class Population:
 
             #order the members and note how they are shuffled
             shuffled = list(range(len(self.members)))
-            if (o == 'wb' and self.mode == 'max') \
-                    or (o == 'bw' and self.mode == 'min'):
+            if o == 'bw':
                 self.members = [a for _, a in sorted(zip(self.member_fitnesses, self.members))]
                 shuffled = [a for _, a in sorted(zip(self.member_fitnesses, shuffled))]
                 self.member_fitnesses = sorted(self.member_fitnesses)
-            if (o == 'bw' and self.mode == 'max') \
-                    or (o == 'wb' and self.mode == 'min'):
+            if o == 'wb':
                 self.members = [a for _, a in sorted(zip(self.member_fitnesses, self.members), reverse = True)]
                 shuffled = [a for _, a in sorted(zip(self.member_fitnesses, shuffled), reverse = True)]
                 self.member_fitnesses = sorted(self.member_fitnesses, reverse = True)
@@ -308,11 +398,11 @@ class Population:
             #calculate the wts
             seq = np.array(range(1, len(self.members) + 1))
             if wt == 'log':
-                wts = (np.log(seq)+kf)/(self.n*kf + raj_logfact(self.n))
+                wts = (np.log(seq)+1)/(self.n + raj_logfact(self.n))
             elif wt == 'lin':
-                wts = (seq-1+kf)/(self.n*(kf-.5)+.5*self.n**2)
+                wts = (seq)/(self.n*.5+.5*self.n**2)
             elif wt == 'exp':
-                wts = (np.exp(seq-1) - 1 + kf)/((kf-1)*self.n+(1-np.exp(self.n))/(1-np.exp(1)))
+                wts = (np.exp(seq-1))/((1-np.exp(self.n))/(1-np.exp(1)))
 
             #log information
             np.put(log['wb'].data, [0], [o == 'wb'])
@@ -350,6 +440,7 @@ class AEO(object):
     :param fit: (function) the fitness function
     :param optimizers: (list) list of optimizer instances to be included in the ensemble
     :param gen_per_cycle: (int) number of generations performed in evolution phase per cycle
+    :param config: (int) If none, use migration parameters defined later, if int (1 through 3), use one of the presets
     :param alpha: (float or str) option for exponent on g strength measure, if numeric, alpha is taken to be
         that value. If alpha is 'up' alpha is annealed from 0 to 1. If alpha is 'down' it is annealed from
         1 to 0.
@@ -360,32 +451,61 @@ class AEO(object):
     :param beta: (float or str) option for exponent on b strength measure. See alpha for details.
     :param b: (str) either 'fitness' or 'improve' for strength measure for destination selection section of migration
     :param b_burden: (bool) True if strength if divided by number of fitness evaluations in evolution phase
-    :param ret: (bool) True if individual can return to original population in destination selection section
     :param order: (str) 'wb' for worst to best, 'bw' for best to worst, prepend 'a' for annealed starting in the given ordering.
-    :param kf: (int) 0 or 1 for variant of weighting functions
     :param ncores: (int) number of parallel processors
     :param seed: (int) random seed for sampling
     """
-    def __init__(self, mode, bounds, fit, 
-            optimizers, gen_per_cycle,
-            alpha, g, g_burden, q, wt,
-            beta, b, b_burden, ret,
-            order = None, kf = None,
+    def __init__(self, bounds, fit,
+            optimizers, gen_per_cycle, config = 1,
+            alpha = "up", g = "improve", g_burden = False,
+            q = 'up', wt = 'exp', beta = 'up', b = 'improve',
+            b_burden = False, order = 'bw', mode = 'min',
             ncores = 1, seed = None):
+
+        if config is None:
+            pass
+        elif config == 1:
+            alpha = 'up'
+            g = 'improve'
+            g_burden = False
+            q = 'up'
+            wt = 'exp'
+            beta = 'up'
+            b = 'improve'
+            b_burden = False
+        elif config == 2:
+            alpha = 'up'
+            g = 'improve'
+            g_burden = False
+            q = 1.
+            wt = 'log'
+            beta = 'up'
+            b = 'improve'
+            b_burden = True
+        elif config == 3:
+            alpha = 0.
+            g = 'improve'
+            g_burden = False
+            q = -1.
+            wt = 'exp'
+            beta = 'up'
+            b = 'fitness'
+            b_burden = True
+        else:
+            raise Exception("Not approved configuration, select 1, 2 or 3")
 
         if not (seed is None):
             random.seed(seed)
             np.random.seed(seed)
 
         self.mode=mode
-        self.fit = fit
+        self.wrapped_f = FitWrap(fit)
+        self.fit = self.wrapped_f.f
 
         if mode == 'max': #create fit attribute to use for checking consistency of fits
-            self.fitcheck=fit
+            raise Exception("Max not supported for AEO")
         elif mode == 'min':
-            def fitness_wrapper(*args, **kwargs):
-                return -fit(*args, **kwargs)
-            self.fitcheck=fitness_wrapper
+            self.fitcheck=fit
         else:
             raise ValueError('--error: The mode entered by user is invalid, use either `min` or `max`')
 
@@ -439,13 +559,8 @@ class AEO(object):
         if not self.order in ['wb', 'bw', 'awb', 'abw', None]:
             raise Exception('invalid option for order')
 
-        self.kf = kf
-        if not self.kf in [0, 1, None]:
-            raise Exception('invalid option for kf')
-
-        if self.wt == 'uni' and ((self.kf is not None)
-                or (self.order is not None)):
-            print('--warning: kf and order options ignored for uniform weighting')
+        if self.wt == 'uni' and (self.order is not None):
+            print('--warning: order options ignored for uniform weighting')
 
         #process variant options for destination selection
         self.beta = beta
@@ -464,35 +579,13 @@ class AEO(object):
         if not isinstance(b_burden, bool):
             raise Exception('b_burden should be boolean type')
 
-        self.ret = ret
-        if not isinstance(ret, bool):
-            raise Exception('ret should be boolean type')
-
     def ensure_consistency(self):
-        return #temp, may remove this function
         #loop through all optimizers and make sure all options are set to be the same
+        return
         gen_warning = ', check that options of all optimizers are the same as AEO'
         for o, a in zip(self.optimizers, self.algos):
-            if a in max_algos:
-                assert self.mode == o.mode,'%s has incorrect optimization mode'%o + gen_warning
-                assert self.bounds == o.bounds,'%s has incorrect bounds'%o + gen_warning
-                try:
-                    assert self.fitcheck(self.lb) == o.fit(self.lb)
-                    assert self.fitcheck(self.ub) == o.fit(self.ub)
-                    inner_test = [np.random.uniform(self.lb[i], self.ub[i]) for i in range(len(self.ub))]
-                    assert self.fitcheck(inner_test) == o.fit(inner_test)
-                except:
-                    raise Exception('i%s has incorrect fitness function'%o + gen_warning)
-            else:
-                assert self.mode == o.mode,'%s has incorrect optimization mode'%o + gen_warning
-                assert self.bounds == o.bounds,'%s has incorrect bounds'%o + gen_warning
-                try:
-                    assert self.fitcheck(self.lb) == -o.fit(self.lb)
-                    assert self.fitcheck(self.ub) == -o.fit(self.ub)
-                    inner_test = [np.random.uniform(self.lb[i], self.ub[i]) for i in range(len(self.ub))]
-                    assert self.fitcheck(inner_test) == -o.fit(inner_test)
-                except:
-                    raise Exception('i%s has incorrect fitness function'%o + gen_warning)
+            assert self.mode == o.mode,'%s has incorrect optimization mode'%o + gen_warning
+            assert self.bounds == o.bounds,'%s has incorrect bounds'%o + gen_warning
 
     def init_sample(self, bounds):
         indv=[]
@@ -521,6 +614,21 @@ class AEO(object):
         elif self.q == "down":
             return 2/(1 - Ncyc)*(ncyc - 1)+1
 
+    def fill_M(self, log):
+        h = log["export_pop_wts"].values
+        scale_g = log["str_dest_scaled"].values
+        I = log.coords["pop"].size
+        nmems = log["nmembers"].values
+        for i in range(I):
+            for j in range(I):
+                tot = 0
+                for k in range(nmems[i] + 1):
+                    tot += k/nmems[i]*ncr(nmems[i],k)*h[i]**k*(1-h[i])**(nmems[i]-k)
+                kd = int(i==j) #kroniker delta function
+                if nmems[i] == 0:
+                   log['M'].values[j,i] = 1/len(nmems)#kd
+                else:
+                    log['M'].values[j,i] = kd + (scale_g[j] - kd)*tot
 
     def evolute(self, Ncyc, npop0 = None, x0 = None, pop0 = None, stop_criteria = None, verbose = False):
         """
@@ -532,8 +640,10 @@ class AEO(object):
         :param x0: (list of lists) initial positions of individuals in problem space
         :param pop0: (list of ints) population assignments for x0, integer corresponding to assigned population ordered
             according to self.optimize
-        "param stop_criteria: (None or callable) function which returns condition if evolution should continue, can be
+        :param stop_criteria: (None or callable) function which returns condition if evolution should continue, can be
             used to stop evolution at certain number of function evaluations
+
+        :return: (tuple) (best individual, best fitness, xarray.Dataset of various algorithm parameters)
         """
         #if npop0, x0 and pop0 are none, detect populations from algos
         if npop0 is None and x0 is None and pop0 is None:
@@ -601,6 +711,8 @@ class AEO(object):
                     'delta_f'            : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
                     'fmin'               : ([                 'cycle'], np.zeros(          nc , dtype = np.float64)),
                     'fmax'               : ([                 'cycle'], np.zeros(          nc , dtype = np.float64)),
+                    'dfmin'               : ([                 'cycle'], np.zeros(          nc , dtype = np.float64)),
+                    'dfmax'               : ([                 'cycle'], np.zeros(          nc , dtype = np.float64)),
                     'migration'          : ([                 'cycle'], np.zeros(          nc , dtype = np.bool8)),
                     'export_wts'         : (['member', 'pop', 'cycle'], np.zeros((nm, npp, nc), dtype = np.float64)),
                     'exported'           : (['member', 'pop', 'cycle'], np.zeros((nm, npp, nc), dtype = np.bool8)),
@@ -609,19 +721,22 @@ class AEO(object):
                     'b'                  : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
                     'unburdened_b'       : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
                     'A'                  : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.int32)),
+                    'M'                  : (['pop','popdest', 'cycle'], np.zeros((npp,npp, nc), dtype = np.float64)),
+                    'str_dest_scaled'    : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
                     'evolute'            : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.bool8))},
                 coords = {
                     'member'  : membercoords,
                     'pop'     : popcoords,
                     'cycle'   : cyclecoords,
-                    'var'     : varcoords},
+                    'var'     : varcoords,
+                    'popdest'     : popcoords}, #only used for migration transition matrix
                 attrs = {"Ncycles" : 0}
                 )
         #initial_member_x: positions of all individuals in a population before any evolution
         #member_x: positions of members in each population as through each cycle
         #nmembers: number of members in each population in each cycle
         #export_str_scaled: scaled strengths of each population each cycle
-        #export_pop_wts: weights passed into binomial function for ei selection
+        #export_pop_wts: weights passed into binomial function for ei selection, called hi in paper
         #alpha: alpha parameter as it may change over each cycle
         #wb: ordering of individuals within the populations when used for member selection
         #g: unscaled strengths of each population each cycle
@@ -631,6 +746,8 @@ class AEO(object):
         #delta_f: difference in current cycle fitness to previous cycle fitness
         #fmin: minimum fitness across all populations for a single cycle
         #fmax: maximum fitness across all populations for a single cycle
+        #dfmin: minimum improvement across all populations for a single cycle
+        #dfmax: maximum improvement across all populations for a single cycle
         #migration: bool as to whether or not migration is performed, if fmax=fmix, no evolution
         #export_wts: weights used for each individual in the member selection phase
         #exported: boolean as to whether or not an individual was exported
@@ -638,6 +755,7 @@ class AEO(object):
         #b: unscaled strengths of each population for the destination selection phase
         #unburdened_b: unscaled strengths without burdened applied for member selection phase
         #A: number of members from export pool that end up in a particulat population each cycle
+        #M: stochastic matrix which describes movement of members in a migration phase
         #evolute: is whether or not that population was evoluted each cycle
 
 
@@ -649,18 +767,23 @@ class AEO(object):
         #perform evolution/migration cycle
         for i in range(1, Ncyc + 1):
             #evolution phase
-            pop_fits = [p.evolute(self.gpc, self.fit, self.bounds, log.loc[{'pop' : p.popname, 'cycle' : i}]) for p in self.pops]
+            pop_fits = [p.evolute(self.gpc, self.fit, self.bounds, i, Ncyc, log.loc[{'pop' : p.popname, 'cycle' : i}]) for p in self.pops]
 
             #exportation number
             #  calc weights
             maxf = max(pop_fits)
             minf = min(pop_fits)
-            if maxf == minf:#export nobody if this true
+            maxdf = max([p.dfitness for p in self.pops])
+            mindf = min([p.dfitness for p in self.pops])
+            alpha = self.get_alphabeta(self.alpha, i, Ncyc)
+            if (maxf == minf and self.g == "fitness") or (maxdf == mindf and self.g == "improve"):#export nobody if this true
                 eis = [0]*len(self.pops)
                 log['migration'].loc[{'cycle' : i}] = False
             else:
-                alpha = self.get_alphabeta(self.alpha, i, Ncyc)
-                strengths_exp = [p.strength(self.g, self.g_burden, maxf, minf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'g')**alpha for p in self.pops]
+                if self.g == "fitness":
+                    strengths_exp = [p.strength(self.g, self.g_burden, maxf, minf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'g')**alpha for p in self.pops]
+                else:
+                    strengths_exp = [p.strength(self.g, self.g_burden, maxdf, mindf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'g')**alpha for p in self.pops]
                 strengths_exp_scaled = [s/sum(strengths_exp) for s in strengths_exp]
 
                 #  sample binomial to get e_i for each population
@@ -676,52 +799,43 @@ class AEO(object):
             log['nexport'].loc[{'cycle' : i}] = eis
             log['fmax'].loc[{'cycle' : i}] = maxf
             log['fmin'].loc[{'cycle' : i}] = minf
+            log['dfmax'].loc[{'cycle' : i}] = maxdf
+            log['dfmin'].loc[{'cycle' : i}] = mindf
             log['alpha'].loc[{'cycle' : i}] = alpha
 
             #member selection
             #  members removed from population with this export method
-            exported = [p.export(eis[j], self.wt, self.order, self.kf, i/Ncyc, log.loc[{'pop' : p.popname, 'cycle' : i}]) for j, p in enumerate(self.pops)]
+            exported = [p.export(eis[j], self.wt, self.order, i/Ncyc, log.loc[{'pop' : p.popname, 'cycle' : i}]) for j, p in enumerate(self.pops)]
 
             #destination selection
             beta = self.get_alphabeta(self.beta, i, Ncyc)
             log['beta'].loc[{'cycle' : i}] = beta
 
-            if maxf == minf: #doesn't matter because nobody is exported
+            if (maxf == minf and self.b == "fitness") or (maxdf == mindf and self.b == "improve"): #doesn't matter because nobody is exported
                 strengths_dest = [1.]*len(self.pops)
             else:
-                strengths_dest = [p.strength(self.b, self.b_burden, maxf, minf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'b')**beta for p in self.pops]
+                if self.b == "fitness":
+                    strengths_dest = [p.strength(self.b, self.b_burden, maxf, minf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'b')**beta for p in self.pops]
+                else:
+                    strengths_dest = [p.strength(self.b, self.b_burden, maxdf, mindf, log.loc[{'pop' : p.popname, 'cycle' : i}], 'b')**beta for p in self.pops]
 
+            #manage members that are currently without a home
+            exported = list(itertools.chain.from_iterable(exported))
+            random.shuffle(exported)#in-place randomize order
 
-            if self.ret:#if population can return to original population
-                #manage members that are currently without a home
-                exported = list(itertools.chain.from_iterable(exported))
-                random.shuffle(exported)#in-place randomize order
+            #calculate normalized probabilities and draw samples
+            strengths_dest_scaled = [s/sum(strengths_dest) for s in strengths_dest]
+            allotments = np.random.multinomial(len(exported), strengths_dest_scaled)
+            log['str_dest_scaled'].loc[{'cycle' : i}] = strengths_dest_scaled
+            log['A'].loc[{'cycle' : i}] = allotments
 
-                #calculate normalized probabilities and draw samples
-                strengths_dest_scaled = [s/sum(strengths_dest) for s in strengths_dest]
-                allotments = np.random.multinomial(len(exported), strengths_dest_scaled)
-                log['A'].loc[{'cycle' : i}] = allotments
+            #distribute individuals according to the sample
+            for a, p in zip(allotments, self.pops):
+                p.receive(exported[:a])
+                exported = exported[a:]
 
-                #distribute individuals according to the sample
-                for a, p in zip(allotments, self.pops):
-                    p.receive(exported[:a])
-                    exported = exported[a:]
-
-            else:
-                pop_indxs = list(range(len(self.pops)))
-                allotment_holder = np.zeros(len(self.pops))
-                for j, exported_group in enumerate(exported):
-                    strengths_inotj = strengths_dest[:j] + strengths_dest[j+1:]
-                    strengths_inotj_scaled = [s/sum(strengths_inotj) for s in strengths_inotj]
-                    pop_indxs_inotj = pop_indxs[:j] + pop_indxs[j+1:]
-                    random.shuffle(exported_group)
-                    allotment = np.random.multinomial(len(exported_group), strengths_inotj_scaled)
-                    for a, pi in zip(allotment, pop_indxs_inotj):
-                        self.pops[pi].receive(exported_group[:a])
-                        exported_group = exported_group[a:]
-                    allotment_holder[pop_indxs_inotj] += allotment
-
-                log['A'].loc[{'cycle' : i}] = allotment_holder
+            #calculate migration matrix
+            self.fill_M(log.loc[{'cycle' : i}])
 
             #check if desired number of function evaluations has been reached
             log.attrs["Ncycles"] = i
@@ -729,12 +843,18 @@ class AEO(object):
                 if stop_criteria() == True:
                     break
 
-        return log
+        #get best members
+        bestind = np.argmin(self.wrapped_f.outs)
+
+        xbest = self.wrapped_f.ins[bestind]
+        ybest = self.wrapped_f.outs[bestind]
+
+
+        return xbest[0], ybest, log
 
 
 
     #TODO: Markov Matrix calculation
-    #TODO: Ramanujan approx for log(x!)
     #TODO: Fitness checker outside of consistency method
 
 
