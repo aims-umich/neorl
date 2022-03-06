@@ -10,6 +10,7 @@ cloudpickle
 scipy
 joblib
 pandas
+xarray
 matplotlib
 pytest
 pytest-cov
