@@ -250,7 +250,12 @@ class PSO:
             elif self.speed_mech=='timew':
                 new_particle[1][i]=self.w*particle[1][i]+speed_cognitive+speed_social
             elif self.speed_mech=='globw':
-                self.w=1.11-local_fit/self.swm_fit
+                
+                try:
+                    self.w=1.1-self.swm_fit/local_fit
+                except:
+                    self.w=random.uniform(0.1,0.9)   #when division by zero occurs for "w"
+                
                 #print('globw', self.w)
                 new_particle[1][i]=self.w*particle[1][i]+speed_cognitive+speed_social
             else:

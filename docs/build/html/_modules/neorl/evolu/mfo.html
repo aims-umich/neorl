@@ -270,12 +270,13 @@
                 <span class="k">raise</span> <span class="ne">Exception</span> <span class="p">(</span><span class="s1">&#39;unknown data type is given, either int, float, or grid are allowed for parameter bounds&#39;</span><span class="p">)</span>   
         <span class="k">return</span> <span class="n">indv</span>
 
-    <span class="k">def</span> <span class="nf">init_population</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span> <span class="c1"># population</span>
+    <span class="k">def</span> <span class="nf">init_population</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span> <span class="c1"># population</span>
 
         <span class="n">pop</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="n">x0</span><span class="p">:</span> <span class="c1"># have primary solution</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The first individual provided by the user:&#39;</span><span class="p">,</span> <span class="n">x0</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The last individual provided by the user:&#39;</span><span class="p">,</span> <span class="n">x0</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The first individual provided by the user:&#39;</span><span class="p">,</span> <span class="n">x0</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The last individual provided by the user:&#39;</span><span class="p">,</span> <span class="n">x0</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">)):</span>
                 <span class="n">pop</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x0</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span> <span class="c1"># random init</span>
@@ -362,9 +363,9 @@
         <span class="c1">#  moths</span>
         <span class="k">if</span> <span class="n">x0</span><span class="p">:</span>
             <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span> <span class="o">==</span> <span class="n">N</span><span class="p">,</span> <span class="s1">&#39;--error: the length of x0 (</span><span class="si">{}</span><span class="s1">) (initial population) must equal to number of individuals npop (</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">npop</span><span class="p">)</span>
-            <span class="n">Moth_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_population</span><span class="p">(</span><span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="p">)</span>
+            <span class="n">Moth_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_population</span><span class="p">(</span><span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">Moth_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_population</span><span class="p">()</span>
+            <span class="n">Moth_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_population</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
             
         <span class="n">Moth_pos</span> <span class="o">=</span> <span class="n">Moth_pos</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="c1">#this is to account for mixed intger-cont. problems, data needs to be float</span>
         <span class="n">Moth_fitness</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">))</span>  <span class="c1"># set as worst result</span>

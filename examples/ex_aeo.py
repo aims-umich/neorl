@@ -19,6 +19,8 @@ def FIT(individual):
             Minima: 0
     """
     y = sum(x**2 for x in individual)
+    
+    return y
 
 #Setup the parameter space (d=5)
 nx=5
@@ -64,5 +66,3 @@ plt.ylabel("Number of Members")
 
 plt.legend()
 plt.show()
-
-

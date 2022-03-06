@@ -169,7 +169,7 @@ def test_mixedea():
         # Setup and evolute SSA
         ########################
         #setup and evolute SSA
-        ssa=SSA(mode='min', bounds=bounds, fit=Vessel, nsalps=50, c1=None, int_transform='sigmoid', ncores=1, seed=1)
+        ssa=SSA(mode='min', bounds=bounds, fit=Vessel, nsalps=50, int_transform='sigmoid', ncores=1, seed=1)
         x_ssa, y_ssa, ssa_hist=ssa.evolute(ngen=ngen, verbose=0)
         assert Vessel(x_ssa) == y_ssa
         

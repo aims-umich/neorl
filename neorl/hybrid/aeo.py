@@ -441,17 +441,17 @@ class AEO(object):
     :param optimizers: (list) list of optimizer instances to be included in the ensemble
     :param gen_per_cycle: (int) number of generations performed in evolution phase per cycle
     :param config: (int) If none, use migration parameters defined later, if int (1 through 3), use one of the presets
-    :param alpha: (float or str) option for exponent on g strength measure, if numeric, alpha is taken to be
-        that value. If alpha is 'up' alpha is annealed from 0 to 1. If alpha is 'down' it is annealed from
+    :param alpha: (float or str) option for exponent on ``g`` strength measure, if numeric, ``alpha`` is taken to be
+        that value. If ``alpha`` is "up" ``alpha`` is annealed from 0 to 1. If ``alpha`` is "down" it is annealed from
         1 to 0.
-    :param g: (str) either 'fitness' or 'improve' for strength measure for exportation number section of migration
+    :param g: (str) either "fitness" or "improve" for strength measure for exportation number section of migration
     :param g_burden: (bool) True if strength if divided by number of fitness evaluations in evolution phase
     :param q: (float or str) option for favoring weak or strong pops in exportation number
-    :param wt: (str) 'log', 'lin', 'exp', 'uni' for different weightings in member selection section of migration
-    :param beta: (float or str) option for exponent on b strength measure. See alpha for details.
-    :param b: (str) either 'fitness' or 'improve' for strength measure for destination selection section of migration
+    :param wt: (str) "log", "lin", "exp", "uni" for different weightings in member selection section of migration
+    :param beta: (float or str) option for exponent on ``b`` strength measure. See ``alpha`` for details.
+    :param b: (str) either "fitness" or "improve" for strength measure for destination selection section of migration
     :param b_burden: (bool) True if strength if divided by number of fitness evaluations in evolution phase
-    :param order: (str) 'wb' for worst to best, 'bw' for best to worst, prepend 'a' for annealed starting in the given ordering.
+    :param order: (str) "wb" for worst to best, "bw" for best to worst, prepend "a" for annealed starting in the given ordering.
     :param ncores: (int) number of parallel processors
     :param seed: (int) random seed for sampling
     """
@@ -633,12 +633,12 @@ class AEO(object):
     def evolute(self, Ncyc, npop0 = None, x0 = None, pop0 = None, stop_criteria = None, verbose = False):
         """
         This function evolutes the AEO algorithm for a number of cycles. Either
-        npop0 or x0 and pop0 are required.
+        (``npop0``) or (``x0`` and ``pop0``) are required.
 
         :param Ncyc: (int) number of cycles to evolute
         :param pop0: (list of ints) number of individuals in starting population for each optimizer
         :param x0: (list of lists) initial positions of individuals in problem space
-        :param pop0: (list of ints) population assignments for x0, integer corresponding to assigned population ordered
+        :param pop0: (list of ints) population assignments for ``x0``, integer corresponding to assigned population ordered
             according to self.optimize
         :param stop_criteria: (None or callable) function which returns condition if evolution should continue, can be
             used to stop evolution at certain number of function evaluations

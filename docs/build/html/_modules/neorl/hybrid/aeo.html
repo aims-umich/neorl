@@ -1,0 +1,1078 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>neorl.hybrid.aeo &mdash; NEORL 1.7.2b documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> NEORL
+          
+
+          
+            
+            <img src="../../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                main (1.7.2b )
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/guide.html">General Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/modules.html">Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tune/tune.html">Hyperparameter Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/examples.html">Examples</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../misc/changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../misc/projects.html">Projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../misc/contrib.html">Contributors</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">NEORL</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>neorl.hybrid.aeo</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for neorl.hybrid.aeo</h1><div class="highlight"><pre>
+<span></span><span class="c1">#    This file is part of NEORL.</span>
+
+<span class="c1">#    Copyright (c) 2021 Exelon Corporation and MIT Nuclear Science and Engineering</span>
+<span class="c1">#    NEORL is free software: you can redistribute it and/or modify</span>
+<span class="c1">#    it under the terms of the MIT LICENSE</span>
+
+<span class="c1">#    THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span class="c1">#    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
+<span class="c1">#    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
+<span class="c1">#    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
+<span class="c1">#    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span>
+<span class="c1">#    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span>
+<span class="c1">#    SOFTWARE.</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">operator</span> <span class="k">as</span> <span class="nn">op</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">reduce</span>
+
+<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">WOA</span>
+<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">GWO</span>
+<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">PSO</span>
+<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">MFO</span>
+<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">HHO</span>
+<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">DE</span>
+<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">JAYA</span>
+<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">SSA</span>
+<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">ES</span>
+
+<span class="c1"># Note: to incorporate additional algorithms into ensembles, the following needs to be done:</span>
+<span class="c1">#     1. detect_algo needs to be updated to return appropriate name</span>
+<span class="c1">#     2. clone_algo_obj needs to be updated to change the correct attribute in the dict</span>
+<span class="c1">#     3. eval_algo_popnumber needs to be given some criteria for the minimum number of individuals</span>
+<span class="c1">#        to run the evolution phase</span>
+
+<span class="k">class</span> <span class="nc">FitWrap</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;class to track function calls&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">outs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ins</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fxn</span> <span class="o">=</span> <span class="n">f</span>
+    <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">inputs</span><span class="p">):</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fxn</span><span class="p">(</span><span class="o">*</span><span class="n">inputs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ins</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">outs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ans</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ans</span>
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">outs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ins</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">def</span> <span class="nf">ncr</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">n</span><span class="o">-</span><span class="n">r</span><span class="p">)</span>
+    <span class="n">numer</span> <span class="o">=</span> <span class="n">reduce</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">mul</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="o">-</span><span class="n">r</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">denom</span> <span class="o">=</span> <span class="n">reduce</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">mul</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">r</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">numer</span> <span class="o">//</span> <span class="n">denom</span>
+
+
+<span class="k">def</span> <span class="nf">raj_logfact</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Ramanujan approximation of log(n!)&quot;&quot;&quot;</span>
+    <span class="n">f1</span> <span class="o">=</span> <span class="n">n</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">f2</span> <span class="o">=</span> <span class="o">-</span><span class="n">n</span>
+    <span class="n">f3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">n</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">4</span><span class="o">*</span><span class="n">n</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="p">)))</span><span class="o">/</span><span class="mi">6</span>
+    <span class="n">f4</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+    <span class="k">return</span> <span class="n">f1</span> <span class="o">+</span> <span class="n">f2</span> <span class="o">+</span> <span class="n">f3</span> <span class="o">+</span> <span class="n">f4</span>
+
+<span class="k">def</span> <span class="nf">detect_algo</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="c1">#simple function to detect object type given neorl</span>
+    <span class="c1"># algorithm object</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">WOA</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;WOA&#39;</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">GWO</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;GWO&#39;</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">PSO</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;PSO&#39;</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">MFO</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;MFO&#39;</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">HHO</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;HHO&#39;</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">DE</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;DE&#39;</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">ES</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;ES&#39;</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">SSA</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;SSA&#39;</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">JAYA</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;JAYA&#39;</span>
+    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> algorithm object not recognized or supported&#39;</span><span class="o">%</span><span class="n">obj</span><span class="p">)</span>
+
+<span class="n">max_algos</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;PSO&#39;</span><span class="p">,</span> <span class="s1">&#39;DE&#39;</span><span class="p">,</span> <span class="s1">&#39;ES&#39;</span><span class="p">,</span> <span class="s1">&#39;JAYA&#39;</span><span class="p">]</span><span class="c1">#algos that change fitness function to make a maximum problem</span>
+<span class="n">min_algos</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;WOA&#39;</span><span class="p">,</span> <span class="s1">&#39;GWO&#39;</span><span class="p">,</span> <span class="s1">&#39;MFO&#39;</span><span class="p">,</span> <span class="s1">&#39;HHO&#39;</span><span class="p">,</span> <span class="s1">&#39;SSA&#39;</span><span class="p">]</span><span class="c1">#algos that change fitness function to make a minimum problem</span>
+
+<span class="k">def</span> <span class="nf">wtd_remove</span><span class="p">(</span><span class="n">lst</span><span class="p">,</span> <span class="n">ei</span><span class="p">,</span> <span class="n">wts</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="c1">#quick helper function to handle removing ei items from lst and returning them with</span>
+    <span class="c1">#wts probability vector</span>
+    <span class="k">if</span> <span class="n">wts</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">wts</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lst</span><span class="p">))]</span>
+
+    <span class="n">wts_sum</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">wts</span><span class="p">)</span>
+    <span class="n">wts_checked</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">/</span><span class="n">wts_sum</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">wts</span><span class="p">]</span> <span class="c1">#correct for errors may come from rajmujan factorial</span>
+
+    <span class="c1">#start here, caused by zeros in the weight</span>
+    <span class="n">indxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lst</span><span class="p">)),</span> <span class="n">size</span><span class="o">=</span><span class="n">ei</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">wts_checked</span><span class="p">,</span> <span class="n">replace</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">lst</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">indxs</span><span class="p">))],</span> <span class="n">indxs</span>
+
+<span class="k">def</span> <span class="nf">clone_algo_obj</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">nmembers</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">bounds</span><span class="p">):</span>
+    <span class="c1"># function to return a copy of an algorithm object with anumber of members given as</span>
+    <span class="c1"># nmembers. This is to circumvent the error when the x0 passed in the evolute function</span>
+    <span class="c1"># is a different size than the individuals given originally in the initialization of </span>
+    <span class="c1"># the algorithm object.</span>
+    <span class="c1"># works for now, has potential of breaking</span>
+
+    <span class="k">def</span> <span class="nf">filter_kw</span><span class="p">(</span><span class="n">dftr</span><span class="p">,</span> <span class="n">twk</span><span class="p">):</span>
+        <span class="n">sig</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">twk</span><span class="p">)</span>
+        <span class="n">fks</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">sig</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="n">p</span><span class="o">.</span><span class="n">POSITIONAL_OR_KEYWORD</span><span class="p">]</span>
+        <span class="n">fd</span> <span class="o">=</span> <span class="p">{</span><span class="n">fk</span><span class="p">:</span><span class="n">dftr</span><span class="p">[</span><span class="n">fk</span><span class="p">]</span> <span class="k">for</span> <span class="n">fk</span> <span class="ow">in</span> <span class="n">fks</span> <span class="k">if</span> <span class="n">fk</span> <span class="ow">in</span> <span class="n">dftr</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
+        <span class="k">return</span> <span class="n">fd</span>
+
+    <span class="n">algo</span> <span class="o">=</span> <span class="n">detect_algo</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+
+    <span class="n">attrs</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="vm">__dict__</span>
+
+    <span class="k">if</span> <span class="n">algo</span> <span class="o">==</span> <span class="s1">&#39;WOA&#39;</span><span class="p">:</span>
+        <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;nwhales&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nmembers</span>
+        <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;fit&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fit</span>
+        <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;bounds&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bounds</span>
+        <span class="k">return</span> <span class="n">WOA</span><span class="p">(</span><span class="o">**</span><span class="n">filter_kw</span><span class="p">(</span><span class="n">attrs</span><span class="p">,</span> <span class="n">WOA</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">algo</span> <span class="o">==</span> <span class="s1">&#39;GWO&#39;</span><span class="p">:</span>
+        <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;nwolves&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nmembers</span>
+        <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;fit&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fit</span>
+        <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;bounds&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bounds</span>
+        <span class="k">return</span> <span class="n">GWO</span><span class="p">(</span><span class="o">**</span><span class="n">filter_kw</span><span class="p">(</span><span class="n">attrs</span><span class="p">,</span> <span class="n">GWO</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">algo</span> <span class="o">==</span> <span class="s1">&#39;PSO&#39;</span><span class="p">:</span>
+        <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;npar&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nmembers</span>
+        <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;fit&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fit</span>
+        <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;bounds&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bounds</span>
+        <span class="k">return</span> <span class="n">PSO</span><span class="p">(</span><span class="o">**</span><span class="n">filter_kw</span><span class="p">(</span><span class="n">attrs</span><span class="p">,</span> <span class="n">PSO</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">algo</span> <span class="o">==</span> <span class="s1">&#39;HHO&#39;</span><span class="p">:</span>
+        <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;nhawks&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nmembers</span>
+        <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;fit&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fit</span>
+        <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;bounds&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bounds</span>
+        <span class="k">return</span> <span class="n">HHO</span><span class="p">(</span><span class="o">**</span><span class="n">filter_kw</span><span class="p">(</span><span class="n">attrs</span><span class="p">,</span> <span class="n">HHO</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">algo</span> <span class="o">==</span> <span class="s1">&#39;MFO&#39;</span><span class="p">:</span>
+        <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;nmoths&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nmembers</span>
+        <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;fit&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fit</span>
+        <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;bounds&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bounds</span>
+        <span class="k">return</span> <span class="n">MFO</span><span class="p">(</span><span class="o">**</span><span class="n">filter_kw</span><span class="p">(</span><span class="n">attrs</span><span class="p">,</span> <span class="n">MFO</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">algo</span> <span class="o">==</span> <span class="s1">&#39;DE&#39;</span><span class="p">:</span>
+        <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;npop&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nmembers</span>
+        <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;fit&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fit</span>
+        <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;bounds&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bounds</span>
+        <span class="k">return</span> <span class="n">DE</span><span class="p">(</span><span class="o">**</span><span class="n">filter_kw</span><span class="p">(</span><span class="n">attrs</span><span class="p">,</span> <span class="n">DE</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">algo</span> <span class="o">==</span> <span class="s1">&#39;ES&#39;</span><span class="p">:</span>
+        <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;lambda_&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nmembers</span>
+        <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;fit&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fit</span>
+        <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;bounds&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bounds</span>
+        <span class="k">return</span> <span class="n">ES</span><span class="p">(</span><span class="o">**</span><span class="n">filter_kw</span><span class="p">(</span><span class="n">attrs</span><span class="p">,</span> <span class="n">ES</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">algo</span> <span class="o">==</span> <span class="s1">&#39;SSA&#39;</span><span class="p">:</span>
+        <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;nsalps&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nmembers</span>
+        <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;fit&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fit</span>
+        <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;bounds&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bounds</span>
+        <span class="k">return</span> <span class="n">SSA</span><span class="p">(</span><span class="o">**</span><span class="n">filter_kw</span><span class="p">(</span><span class="n">attrs</span><span class="p">,</span> <span class="n">SSA</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">algo</span> <span class="o">==</span> <span class="s1">&#39;JAYA&#39;</span><span class="p">:</span>
+        <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;npop&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nmembers</span>
+        <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;fit&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fit</span>
+        <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;bounds&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bounds</span>
+        <span class="k">return</span> <span class="n">JAYA</span><span class="p">(</span><span class="o">**</span><span class="n">filter_kw</span><span class="p">(</span><span class="n">attrs</span><span class="p">,</span> <span class="n">JAYA</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">get_algo_nmembers</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="c1"># function to retrieve the number of &#39;members&#39; in the starting population of an</span>
+    <span class="c1"># algorithm object plassed as obj</span>
+
+    <span class="n">algo</span> <span class="o">=</span> <span class="n">detect_algo</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">algo</span> <span class="o">==</span> <span class="s1">&#39;WOA&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">nwhales</span>
+    <span class="k">elif</span> <span class="n">algo</span> <span class="o">==</span> <span class="s1">&#39;GWO&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">nwolves</span>
+    <span class="k">elif</span> <span class="n">algo</span> <span class="o">==</span> <span class="s1">&#39;PSO&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">npar</span>
+    <span class="k">elif</span> <span class="n">algo</span> <span class="o">==</span> <span class="s1">&#39;HHO&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">nhawks</span>
+    <span class="k">elif</span> <span class="n">algo</span> <span class="o">==</span> <span class="s1">&#39;DE&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">npop</span>
+    <span class="k">elif</span> <span class="n">algo</span> <span class="o">==</span> <span class="s1">&#39;ES&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">lambda_</span>
+    <span class="k">elif</span> <span class="n">algo</span> <span class="o">==</span> <span class="s1">&#39;MFO&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">npop</span>
+    <span class="k">elif</span> <span class="n">algo</span> <span class="o">==</span> <span class="s1">&#39;SSA&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">nsalps</span>
+    <span class="k">elif</span> <span class="n">algo</span> <span class="o">==</span> <span class="s1">&#39;JAYA&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">npop</span>
+
+<span class="k">def</span> <span class="nf">get_algo_ngtonevals</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="c1"># function to retrieve the number of function evaluations</span>
+    <span class="c1"># for a given algo, args are num of generations and number of individuals, </span>
+    <span class="c1"># returns number of fxn evaluations</span>
+    <span class="n">algo</span> <span class="o">=</span> <span class="n">detect_algo</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">algo</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;WOA&#39;</span><span class="p">,</span> <span class="s1">&#39;GWO&#39;</span><span class="p">,</span> <span class="s1">&#39;MFO&#39;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">,</span> <span class="n">a</span> <span class="p">:</span> <span class="n">a</span><span class="o">*</span><span class="n">i</span>
+    <span class="k">elif</span> <span class="n">algo</span> <span class="o">==</span> <span class="s1">&#39;PSO&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">,</span> <span class="n">a</span> <span class="p">:</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">a</span>
+    <span class="k">elif</span> <span class="n">algo</span> <span class="o">==</span> <span class="s1">&#39;DE&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">,</span> <span class="n">a</span> <span class="p">:</span> <span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">*</span><span class="n">a</span>
+    <span class="k">elif</span> <span class="n">algo</span> <span class="o">==</span> <span class="s1">&#39;ES&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">,</span> <span class="n">a</span> <span class="p">:</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">a</span>
+    <span class="k">elif</span> <span class="n">algo</span> <span class="o">==</span> <span class="s1">&#39;HHO&#39;</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--warning: HHO uses an upper bound for number of function evaluations,&#39;</span>
+        <span class="s1">&#39; be careful when using HHO with burdened variants&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">,</span> <span class="n">a</span> <span class="p">:</span> <span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">*</span><span class="n">a</span>
+    <span class="k">elif</span> <span class="n">algo</span> <span class="o">==</span> <span class="s1">&#39;SSA&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">,</span> <span class="n">a</span> <span class="p">:</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">a</span>
+    <span class="k">elif</span> <span class="n">algo</span> <span class="o">==</span> <span class="s1">&#39;JAYA&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">,</span> <span class="n">a</span> <span class="p">:</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">a</span>
+
+<span class="k">def</span> <span class="nf">eval_algo_popnumber</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">nmembers</span><span class="p">):</span>
+    <span class="c1"># check if an algorithm is prepared to participate in evolution phase</span>
+    <span class="c1"># based on its population information</span>
+
+    <span class="n">algo</span> <span class="o">=</span> <span class="n">detect_algo</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">algo</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;WOA&#39;</span><span class="p">,</span> <span class="s1">&#39;GWO&#39;</span><span class="p">,</span> <span class="s1">&#39;PSO&#39;</span><span class="p">,</span> <span class="s1">&#39;HHO&#39;</span><span class="p">,</span> <span class="s1">&#39;DE&#39;</span><span class="p">,</span> <span class="s1">&#39;SSA&#39;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">nmembers</span> <span class="o">&gt;=</span> <span class="mi">5</span>
+    <span class="k">elif</span> <span class="n">algo</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;MFO&#39;</span><span class="p">,</span> <span class="s1">&#39;JAYA&#39;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">nmembers</span> <span class="o">&gt;=</span> <span class="mi">4</span>
+    <span class="k">elif</span> <span class="n">algo</span> <span class="o">==</span> <span class="s1">&#39;ES&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">nmembers</span> <span class="o">&gt;=</span> <span class="n">obj</span><span class="o">.</span><span class="n">mu</span>
+
+<span class="k">def</span> <span class="nf">get_algo_annealed_kwargs</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">ncyc</span><span class="p">,</span> <span class="n">Ncyc</span><span class="p">,</span> <span class="n">gen_per_cycle</span><span class="p">):</span>
+    <span class="n">total_parm</span> <span class="o">=</span> <span class="n">Ncyc</span><span class="o">*</span><span class="n">gen_per_cycle</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="p">(</span><span class="n">ncyc</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">gen_per_cycle</span><span class="o">/</span><span class="p">(</span><span class="n">total_parm</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">stop</span> <span class="o">=</span> <span class="p">((</span><span class="n">ncyc</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">gen_per_cycle</span> <span class="o">+</span> <span class="n">gen_per_cycle</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">total_parm</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">fracaneal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">gen_per_cycle</span><span class="p">)</span>
+
+    <span class="n">algo</span> <span class="o">=</span> <span class="n">detect_algo</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+    <span class="c1">#for linear annealed parameters is start + (stop - start)*fracaneal</span>
+    <span class="k">if</span> <span class="n">algo</span> <span class="o">==</span> <span class="s1">&#39;GWO&#39;</span><span class="p">:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span> <span class="p">:</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="mi">0</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">fracaneal</span><span class="p">}</span>
+    <span class="k">elif</span> <span class="n">algo</span> <span class="o">==</span> <span class="s1">&#39;HHO&#39;</span><span class="p">:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;E1&#39;</span> <span class="p">:</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="mi">0</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">fracaneal</span><span class="p">}</span>
+    <span class="k">elif</span> <span class="n">algo</span> <span class="o">==</span> <span class="s1">&#39;PSO&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">speed_mech</span> <span class="o">==</span> <span class="s1">&#39;timew&#39;</span><span class="p">:</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;w&#39;</span> <span class="p">:</span> <span class="n">obj</span><span class="o">.</span><span class="n">wmax</span> <span class="o">+</span> <span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">wmin</span> <span class="o">-</span> <span class="n">obj</span><span class="o">.</span><span class="n">wmax</span><span class="p">)</span><span class="o">*</span><span class="n">fracaneal</span><span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">elif</span> <span class="n">algo</span> <span class="o">==</span> <span class="s1">&#39;WOA&#39;</span><span class="p">:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;fac&#39;</span> <span class="p">:</span> <span class="o">-</span><span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="o">-</span><span class="mi">2</span> <span class="o">-</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">fracaneal</span><span class="p">,</span>
+             <span class="s1">&#39;a&#39;</span> <span class="p">:</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="mi">0</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">fracaneal</span><span class="p">}</span>
+    <span class="k">elif</span> <span class="n">algo</span> <span class="o">==</span> <span class="s1">&#39;MFO&#39;</span><span class="p">:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;r&#39;</span> <span class="p">:</span> <span class="o">-</span><span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="o">-</span><span class="mi">2</span> <span class="o">-</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">fracaneal</span><span class="p">}</span>
+    <span class="k">elif</span> <span class="n">algo</span> <span class="o">==</span> <span class="s1">&#39;SSA&#39;</span><span class="p">:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;c1&#39;</span> <span class="p">:</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">fracaneal</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">return</span> <span class="n">k</span>
+
+
+<span class="k">class</span> <span class="nc">Population</span><span class="p">:</span>
+    <span class="c1"># Class to store information and functionality related to a single population</span>
+    <span class="c1"># in the AEO algorithm. Should be characterized by an evolution strategy passed</span>
+    <span class="c1"># as one of the optimization classes from the other algorithms in NEORL.</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strategy</span><span class="p">,</span> <span class="n">algo</span><span class="p">,</span> <span class="n">init_pop</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">conv</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># strategy should be one of the optimization objects containing an &quot;evolute&quot; method</span>
+        <span class="c1"># init_pop needs to match the population given to the strategy object initially</span>
+        <span class="c1"># algo is string that identifies which class is being used</span>
+        <span class="c1"># conv is a function which takes ngen and returns number of evaluations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv</span> <span class="o">=</span> <span class="n">conv</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">strategy</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">algo</span> <span class="o">=</span> <span class="n">algo</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">members</span> <span class="o">=</span> <span class="n">init_pop</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">mode</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">popname</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="c1">#will be assigned externally after object has been initialized</span>
+                          <span class="c1">#    used only for loggin purposes</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitlog</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">fitness</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitlog</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">dfitness</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitlog</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitlog</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitlog</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitlog</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">evolute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ngen</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">ncyc</span><span class="p">,</span> <span class="n">Ncyc</span><span class="p">,</span> <span class="n">log</span><span class="p">):</span> <span class="c1">#fit is included to avoid needing to pull .fit methods</span>
+                                       <span class="c1">#    from algo objects that may have been flipped</span>
+        <span class="c1">#check if there are enouh members to evolve NOT appended to fitlog</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">eval_algo_popnumber</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">strategy</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitlog</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Starting population for </span><span class="si">%s</span><span class="s2"> too small for evolution&quot;</span><span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="n">algo</span><span class="p">)</span>
+            <span class="n">fitness</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitness</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Nc</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">log</span><span class="p">[</span><span class="s1">&#39;evolute&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="kc">True</span><span class="p">)</span>
+
+            <span class="c1">#update strategy with new population number</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span> <span class="o">=</span> <span class="n">clone_algo_obj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">strategy</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="p">),</span> <span class="n">fit</span><span class="p">,</span> <span class="n">bounds</span><span class="p">)</span>
+
+           <span class="c1">#store last generation number</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_ngen</span> <span class="o">=</span> <span class="n">ngen</span>
+
+            <span class="c1">#perform evolution and store relevant information</span>
+            <span class="n">annealing_kwargs</span> <span class="o">=</span> <span class="n">get_algo_annealed_kwargs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">strategy</span><span class="p">,</span> <span class="n">ncyc</span><span class="p">,</span> <span class="n">Ncyc</span><span class="p">,</span> <span class="n">ngen</span><span class="p">)</span>
+
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">strategy</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="p">,</span> <span class="n">x0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="p">,</span> <span class="o">**</span><span class="n">annealing_kwargs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">members</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s1">&#39;last_pop&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">member_fitnesses</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s1">&#39;last_pop&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">fitlog</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">member_fitnesses</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Nc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_ngen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
+
+            <span class="n">fitness</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitness</span>
+
+        <span class="c1">#log relevant information</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">log</span><span class="p">[</span><span class="s1">&#39;member_x&#39;</span><span class="p">][:</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">log</span><span class="p">[</span><span class="s1">&#39;member_fitnesses&#39;</span><span class="p">][:</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">member_fitnesses</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">log</span><span class="p">[</span><span class="s1">&#39;nmembers&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span>  <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">])</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">log</span><span class="p">[</span><span class="s1">&#39;Nc&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nc</span><span class="p">)</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">log</span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">fitness</span><span class="p">])</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitlog</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">log</span><span class="p">[</span><span class="s1">&#39;delta_f&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">dfitness</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">fitness</span>
+
+    <span class="k">def</span> <span class="nf">strength</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">g_burden</span><span class="p">,</span> <span class="n">fselmax</span><span class="p">,</span> <span class="n">fselmin</span><span class="p">,</span> <span class="n">log</span><span class="p">,</span> <span class="n">g_or_b</span><span class="p">):</span>
+        <span class="c1">#normalize strength measure</span>
+        <span class="k">if</span> <span class="n">g</span> <span class="o">==</span> <span class="s2">&quot;improve&quot;</span><span class="p">:</span>
+            <span class="n">fsel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfitness</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fsel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitness</span>
+
+        <span class="n">normed</span> <span class="o">=</span> <span class="p">(</span><span class="n">fsel</span> <span class="o">-</span> <span class="n">fselmax</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">fselmin</span> <span class="o">-</span> <span class="n">fselmax</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">g_or_b</span> <span class="o">==</span> <span class="s1">&#39;g&#39;</span><span class="p">:</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">log</span><span class="p">[</span><span class="s1">&#39;unburdened_g&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="n">normed</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">g_or_b</span> <span class="o">==</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">log</span><span class="p">[</span><span class="s1">&#39;unburdened_b&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="n">normed</span><span class="p">])</span>
+
+        <span class="c1">#burden, if necessary</span>
+        <span class="k">if</span> <span class="n">g_burden</span><span class="p">:</span>
+            <span class="n">normed</span> <span class="o">/=</span> <span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nc</span>
+
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">normed</span>
+
+        <span class="k">if</span> <span class="n">g_or_b</span> <span class="o">==</span> <span class="s1">&#39;g&#39;</span><span class="p">:</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">log</span><span class="p">[</span><span class="s1">&#39;g&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="n">ret</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">g_or_b</span> <span class="o">==</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">log</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="n">ret</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">ret</span>
+
+    <span class="k">def</span> <span class="nf">export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ei</span><span class="p">,</span> <span class="n">wt</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">gfrac</span><span class="p">,</span> <span class="n">log</span><span class="p">):</span>
+        <span class="c1">#decide what members to export and then remove them from members and return them</span>
+        <span class="k">if</span> <span class="n">wt</span> <span class="o">==</span> <span class="s1">&#39;uni&#39;</span><span class="p">:</span> <span class="c1">#uniform case very easy</span>
+            <span class="n">shuffled</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="p">)))</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">removed_x</span><span class="p">,</span> <span class="n">removed_idcs</span> <span class="o">=</span>  <span class="n">wtd_remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="p">,</span> <span class="n">ei</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">removed_x</span><span class="p">,</span> <span class="n">removed_idcs</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">log</span><span class="p">[</span><span class="s1">&#39;wb&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="kc">False</span><span class="p">])</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">log</span><span class="p">[</span><span class="s1">&#39;export_wts&#39;</span><span class="p">][:</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">order</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="c1">#handle the annealed cases</span>
+                <span class="k">if</span> <span class="n">gfrac</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">:</span>
+                    <span class="n">o</span> <span class="o">=</span> <span class="n">order</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">o</span> <span class="o">=</span> <span class="n">order</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">order</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span> <span class="c1">#if no annealing</span>
+                <span class="n">o</span> <span class="o">=</span> <span class="n">order</span>
+
+            <span class="c1">#order the members and note how they are shuffled</span>
+            <span class="n">shuffled</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="p">)))</span>
+            <span class="k">if</span> <span class="n">o</span> <span class="o">==</span> <span class="s1">&#39;bw&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">members</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">member_fitnesses</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="p">))]</span>
+                <span class="n">shuffled</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">member_fitnesses</span><span class="p">,</span> <span class="n">shuffled</span><span class="p">))]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">member_fitnesses</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">member_fitnesses</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">o</span> <span class="o">==</span> <span class="s1">&#39;wb&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">members</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">member_fitnesses</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="p">),</span> <span class="n">reverse</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)]</span>
+                <span class="n">shuffled</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">member_fitnesses</span><span class="p">,</span> <span class="n">shuffled</span><span class="p">),</span> <span class="n">reverse</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">member_fitnesses</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">member_fitnesses</span><span class="p">,</span> <span class="n">reverse</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+
+            <span class="c1">#calculate the wts</span>
+            <span class="n">seq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">wt</span> <span class="o">==</span> <span class="s1">&#39;log&#39;</span><span class="p">:</span>
+                <span class="n">wts</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">+</span> <span class="n">raj_logfact</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">wt</span> <span class="o">==</span> <span class="s1">&#39;lin&#39;</span><span class="p">:</span>
+                <span class="n">wts</span> <span class="o">=</span> <span class="p">(</span><span class="n">seq</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="o">*</span><span class="mf">.5</span><span class="o">+</span><span class="mf">.5</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">wt</span> <span class="o">==</span> <span class="s1">&#39;exp&#39;</span><span class="p">:</span>
+                <span class="n">wts</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">seq</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="p">((</span><span class="mi">1</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span>
+
+            <span class="c1">#log information</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">log</span><span class="p">[</span><span class="s1">&#39;wb&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="n">o</span> <span class="o">==</span> <span class="s1">&#39;wb&#39;</span><span class="p">])</span>
+            <span class="n">log</span><span class="p">[</span><span class="s1">&#39;export_wts&#39;</span><span class="p">][:</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">][</span><span class="n">shuffled</span><span class="p">]</span> <span class="o">=</span> <span class="n">wts</span>
+
+            <span class="c1">#draw members and return them</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">removed_x</span><span class="p">,</span> <span class="n">removed_idcs</span> <span class="o">=</span> <span class="n">wtd_remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="p">,</span> <span class="n">ei</span><span class="p">,</span> <span class="n">wts</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">removed_x</span><span class="p">,</span> <span class="n">removed_idcs</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+
+        <span class="n">np</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">log</span><span class="p">[</span><span class="s1">&#39;exported&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="p">[</span><span class="n">shuffled</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">removed_idcs</span><span class="p">],</span> <span class="p">[</span><span class="kc">True</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">removed_idcs</span><span class="p">))</span>
+
+        <span class="c1">#remove member fitnesses to make sure len(members) == len(member_fitnesses)</span>
+        <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">member_fitnesses</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">removed_idcs</span><span class="p">))]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="p">)</span>
+
+        <span class="c1">#log which members were exported</span>
+        <span class="k">return</span> <span class="n">removed_x</span>
+
+    <span class="k">def</span> <span class="nf">receive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">individuals</span><span class="p">):</span>
+        <span class="c1">#bring individuals into the populations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">members</span> <span class="o">+=</span> <span class="n">individuals</span>
+        <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">member_fitnesses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">individuals</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="AEO"><a class="viewcode-back" href="../../../modules/neuroevolu/aeo.html#neorl.hybrid.aeo.AEO">[docs]</a><span class="k">class</span> <span class="nc">AEO</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Animorphoc Ensemble Optimizer</span>
+
+<span class="sd">    :param mode: (str) problem type, either &quot;min&quot; for minimization problem or &quot;max&quot; for maximization</span>
+<span class="sd">    :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: ``bounds={&#39;x1&#39;: [&#39;int&#39;, 1, 4], &#39;x2&#39;: [&#39;float&#39;, 0.1, 0.8], &#39;x3&#39;: [&#39;float&#39;, 2.2, 6.2]}``</span>
+<span class="sd">    :param fit: (function) the fitness function</span>
+<span class="sd">    :param optimizers: (list) list of optimizer instances to be included in the ensemble</span>
+<span class="sd">    :param gen_per_cycle: (int) number of generations performed in evolution phase per cycle</span>
+<span class="sd">    :param config: (int) If none, use migration parameters defined later, if int (1 through 3), use one of the presets</span>
+<span class="sd">    :param alpha: (float or str) option for exponent on ``g`` strength measure, if numeric, ``alpha`` is taken to be</span>
+<span class="sd">        that value. If ``alpha`` is &quot;up&quot; ``alpha`` is annealed from 0 to 1. If ``alpha`` is &quot;down&quot; it is annealed from</span>
+<span class="sd">        1 to 0.</span>
+<span class="sd">    :param g: (str) either &quot;fitness&quot; or &quot;improve&quot; for strength measure for exportation number section of migration</span>
+<span class="sd">    :param g_burden: (bool) True if strength if divided by number of fitness evaluations in evolution phase</span>
+<span class="sd">    :param q: (float or str) option for favoring weak or strong pops in exportation number</span>
+<span class="sd">    :param wt: (str) &quot;log&quot;, &quot;lin&quot;, &quot;exp&quot;, &quot;uni&quot; for different weightings in member selection section of migration</span>
+<span class="sd">    :param beta: (float or str) option for exponent on ``b`` strength measure. See ``alpha`` for details.</span>
+<span class="sd">    :param b: (str) either &quot;fitness&quot; or &quot;improve&quot; for strength measure for destination selection section of migration</span>
+<span class="sd">    :param b_burden: (bool) True if strength if divided by number of fitness evaluations in evolution phase</span>
+<span class="sd">    :param order: (str) &quot;wb&quot; for worst to best, &quot;bw&quot; for best to worst, prepend &quot;a&quot; for annealed starting in the given ordering.</span>
+<span class="sd">    :param ncores: (int) number of parallel processors</span>
+<span class="sd">    :param seed: (int) random seed for sampling</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span>
+            <span class="n">optimizers</span><span class="p">,</span> <span class="n">gen_per_cycle</span><span class="p">,</span> <span class="n">config</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="n">alpha</span> <span class="o">=</span> <span class="s2">&quot;up&quot;</span><span class="p">,</span> <span class="n">g</span> <span class="o">=</span> <span class="s2">&quot;improve&quot;</span><span class="p">,</span> <span class="n">g_burden</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="s1">&#39;up&#39;</span><span class="p">,</span> <span class="n">wt</span> <span class="o">=</span> <span class="s1">&#39;exp&#39;</span><span class="p">,</span> <span class="n">beta</span> <span class="o">=</span> <span class="s1">&#39;up&#39;</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="s1">&#39;improve&#39;</span><span class="p">,</span>
+            <span class="n">b_burden</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">order</span> <span class="o">=</span> <span class="s1">&#39;bw&#39;</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;min&#39;</span><span class="p">,</span>
+            <span class="n">ncores</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">config</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">alpha</span> <span class="o">=</span> <span class="s1">&#39;up&#39;</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="s1">&#39;improve&#39;</span>
+            <span class="n">g_burden</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="s1">&#39;up&#39;</span>
+            <span class="n">wt</span> <span class="o">=</span> <span class="s1">&#39;exp&#39;</span>
+            <span class="n">beta</span> <span class="o">=</span> <span class="s1">&#39;up&#39;</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="s1">&#39;improve&#39;</span>
+            <span class="n">b_burden</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">elif</span> <span class="n">config</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">alpha</span> <span class="o">=</span> <span class="s1">&#39;up&#39;</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="s1">&#39;improve&#39;</span>
+            <span class="n">g_burden</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="mf">1.</span>
+            <span class="n">wt</span> <span class="o">=</span> <span class="s1">&#39;log&#39;</span>
+            <span class="n">beta</span> <span class="o">=</span> <span class="s1">&#39;up&#39;</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="s1">&#39;improve&#39;</span>
+            <span class="n">b_burden</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">config</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="s1">&#39;improve&#39;</span>
+            <span class="n">g_burden</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.</span>
+            <span class="n">wt</span> <span class="o">=</span> <span class="s1">&#39;exp&#39;</span>
+            <span class="n">beta</span> <span class="o">=</span> <span class="s1">&#39;up&#39;</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="s1">&#39;fitness&#39;</span>
+            <span class="n">b_burden</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Not approved configuration, select 1, 2 or 3&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">seed</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wrapped_f</span> <span class="o">=</span> <span class="n">FitWrap</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped_f</span><span class="o">.</span><span class="n">f</span>
+
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;max&#39;</span><span class="p">:</span> <span class="c1">#create fit attribute to use for checking consistency of fits</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Max not supported for AEO&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;min&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fitcheck</span><span class="o">=</span><span class="n">fit</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;--error: The mode entered by user is invalid, use either `min` or `max`&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimizers</span> <span class="o">=</span> <span class="n">optimizers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">algos</span> <span class="o">=</span> <span class="p">[</span><span class="n">detect_algo</span><span class="p">(</span><span class="n">o</span><span class="p">)</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizers</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gpc</span> <span class="o">=</span> <span class="n">gen_per_cycle</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span> <span class="o">=</span> <span class="n">bounds</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span> <span class="o">=</span> <span class="n">ncores</span>
+
+        <span class="c1">#get functions to convert number of generations to number of evaluaions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ngtonevals</span> <span class="o">=</span> <span class="p">[</span><span class="n">get_algo_ngtonevals</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizers</span><span class="p">]</span>
+
+        <span class="c1">#infer variable types</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">bounds</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">bounds</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ub</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">]</span>
+
+        <span class="c1">#check that all optimizers have options that match AEO</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ensure_consistency</span><span class="p">()</span>
+
+        <span class="c1">#process variant options for exportation number</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span>
+            <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;up&#39;</span><span class="p">,</span> <span class="s1">&#39;down&#39;</span><span class="p">]):</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;invalid value for alpha, make sure it is a float!&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;alpha must be equal to or greater than 0&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">g</span> <span class="o">=</span> <span class="n">g</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;fitness&#39;</span><span class="p">,</span> <span class="s1">&#39;improve&#39;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;invalid option for g&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">g_burden</span> <span class="o">=</span> <span class="n">g_burden</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">g_burden</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;g_burden should be boolean type&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">=</span> <span class="n">q</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;up&#39;</span><span class="p">,</span> <span class="s1">&#39;down&#39;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;invalid value for q, make sure it is float or string option&#39;</span><span class="p">)</span>
+
+        <span class="c1">#process variant options for member selection</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wt</span> <span class="o">=</span> <span class="n">wt</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">wt</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;log&#39;</span><span class="p">,</span> <span class="s1">&#39;lin&#39;</span><span class="p">,</span> <span class="s1">&#39;exp&#39;</span><span class="p">,</span> <span class="s1">&#39;uni&#39;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;invalid option for wt&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">order</span> <span class="o">=</span> <span class="n">order</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;wb&#39;</span><span class="p">,</span> <span class="s1">&#39;bw&#39;</span><span class="p">,</span> <span class="s1">&#39;awb&#39;</span><span class="p">,</span> <span class="s1">&#39;abw&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;invalid option for order&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">wt</span> <span class="o">==</span> <span class="s1">&#39;uni&#39;</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--warning: order options ignored for uniform weighting&#39;</span><span class="p">)</span>
+
+        <span class="c1">#process variant options for destination selection</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">beta</span> <span class="o">=</span> <span class="n">beta</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span>
+            <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;up&#39;</span><span class="p">,</span> <span class="s1">&#39;down&#39;</span><span class="p">]):</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;invalid value for beta, make sure it is a float!&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;beta must be equal to or greater than 0&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">b</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;fitness&#39;</span><span class="p">,</span> <span class="s1">&#39;improve&#39;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;invalid option for b&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">b_burden</span> <span class="o">=</span> <span class="n">b_burden</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">b_burden</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;b_burden should be boolean type&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">ensure_consistency</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1">#loop through all optimizers and make sure all options are set to be the same</span>
+        <span class="k">return</span>
+        <span class="n">gen_warning</span> <span class="o">=</span> <span class="s1">&#39;, check that options of all optimizers are the same as AEO&#39;</span>
+        <span class="k">for</span> <span class="n">o</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">optimizers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">algos</span><span class="p">):</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="n">o</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> has incorrect optimization mode&#39;</span><span class="o">%</span><span class="n">o</span> <span class="o">+</span> <span class="n">gen_warning</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span> <span class="o">==</span> <span class="n">o</span><span class="o">.</span><span class="n">bounds</span><span class="p">,</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> has incorrect bounds&#39;</span><span class="o">%</span><span class="n">o</span> <span class="o">+</span> <span class="n">gen_warning</span>
+
+    <span class="k">def</span> <span class="nf">init_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bounds</span><span class="p">):</span>
+        <span class="n">indv</span><span class="o">=</span><span class="p">[]</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">bounds</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;int&#39;</span><span class="p">:</span>
+                <span class="n">indv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">2</span><span class="p">]))</span>
+            <span class="k">elif</span> <span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;float&#39;</span><span class="p">:</span>
+                <span class="n">indv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">2</span><span class="p">]))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span> <span class="p">(</span><span class="s1">&#39;unknown data type is given, either int, float, or grid are allowed for parameter bounds&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">indv</span>
+
+    <span class="k">def</span> <span class="nf">get_alphabeta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aorb</span><span class="p">,</span> <span class="n">ncyc</span><span class="p">,</span> <span class="n">Ncyc</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">aorb</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">aorb</span>
+        <span class="k">elif</span> <span class="n">aorb</span> <span class="o">==</span> <span class="s1">&#39;up&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">ncyc</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">Ncyc</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">aorb</span> <span class="o">==</span> <span class="s1">&#39;down&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">ncyc</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">Ncyc</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_q</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ncyc</span><span class="p">,</span> <span class="n">Ncyc</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">==</span> <span class="s2">&quot;up&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">2</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">Ncyc</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">ncyc</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">==</span> <span class="s2">&quot;down&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">2</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">Ncyc</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">ncyc</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">fill_M</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">log</span><span class="p">):</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s2">&quot;export_pop_wts&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">scale_g</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s2">&quot;str_dest_scaled&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">I</span> <span class="o">=</span> <span class="n">log</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="s2">&quot;pop&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">size</span>
+        <span class="n">nmems</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s2">&quot;nmembers&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">I</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">I</span><span class="p">):</span>
+                <span class="n">tot</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nmems</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="n">tot</span> <span class="o">+=</span> <span class="n">k</span><span class="o">/</span><span class="n">nmems</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">ncr</span><span class="p">(</span><span class="n">nmems</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">**</span><span class="n">k</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">**</span><span class="p">(</span><span class="n">nmems</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">k</span><span class="p">)</span>
+                <span class="n">kd</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="n">j</span><span class="p">)</span> <span class="c1">#kroniker delta function</span>
+                <span class="k">if</span> <span class="n">nmems</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                   <span class="n">log</span><span class="p">[</span><span class="s1">&#39;M&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">nmems</span><span class="p">)</span><span class="c1">#kd</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">log</span><span class="p">[</span><span class="s1">&#39;M&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">kd</span> <span class="o">+</span> <span class="p">(</span><span class="n">scale_g</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">kd</span><span class="p">)</span><span class="o">*</span><span class="n">tot</span>
+
+<div class="viewcode-block" id="AEO.evolute"><a class="viewcode-back" href="../../../modules/neuroevolu/aeo.html#neorl.hybrid.aeo.AEO.evolute">[docs]</a>    <span class="k">def</span> <span class="nf">evolute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Ncyc</span><span class="p">,</span> <span class="n">npop0</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">x0</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">pop0</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">stop_criteria</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function evolutes the AEO algorithm for a number of cycles. Either</span>
+<span class="sd">        (``npop0``) or (``x0`` and ``pop0``) are required.</span>
+
+<span class="sd">        :param Ncyc: (int) number of cycles to evolute</span>
+<span class="sd">        :param pop0: (list of ints) number of individuals in starting population for each optimizer</span>
+<span class="sd">        :param x0: (list of lists) initial positions of individuals in problem space</span>
+<span class="sd">        :param pop0: (list of ints) population assignments for ``x0``, integer corresponding to assigned population ordered</span>
+<span class="sd">            according to self.optimize</span>
+<span class="sd">        :param stop_criteria: (None or callable) function which returns condition if evolution should continue, can be</span>
+<span class="sd">            used to stop evolution at certain number of function evaluations</span>
+
+<span class="sd">        :return: (tuple) (best individual, best fitness, xarray.Dataset of various algorithm parameters)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#if npop0, x0 and pop0 are none, detect populations from algos</span>
+        <span class="k">if</span> <span class="n">npop0</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">x0</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">pop0</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">npop0</span> <span class="o">=</span> <span class="p">[</span><span class="n">get_algo_nmembers</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizers</span><span class="p">]</span>
+        <span class="c1">#intepret npop0 or x0 and pop0 input</span>
+        <span class="k">if</span> <span class="n">x0</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">npop0</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--warning: x0 and npop0 is defined, ignoring npop0&#39;</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">pop0</span><span class="p">),</span> <span class="s1">&#39;x0 and pop0 must be ov equal length&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">x0</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">init_sample</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">npop0</span><span class="p">))]</span>
+            <span class="n">dup</span> <span class="o">=</span> <span class="p">[[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">npop0</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">npop0</span><span class="p">))]</span>
+            <span class="n">pop0</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="n">dup</span><span class="p">))</span>
+
+        <span class="c1">#separate starting positions according to optimizer/strategy, initialize Population objs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pops</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">optimizers</span><span class="p">)):</span>
+            <span class="n">xpop</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">pop0</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">p</span> <span class="o">==</span> <span class="n">i</span><span class="p">:</span>
+                    <span class="n">xpop</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Population</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">optimizers</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">algos</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                    <span class="n">xpop</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ngtonevals</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+
+        <span class="c1">#initialize log Dataset</span>
+        <span class="n">membercoords</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">))</span>
+        <span class="n">cyclecoords</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">Ncyc</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">popcoords</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pops</span><span class="p">:</span>
+            <span class="n">algo</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">algo</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">algo</span> <span class="ow">in</span> <span class="n">popcoords</span><span class="p">):</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">popname</span> <span class="o">=</span> <span class="n">algo</span>
+                <span class="n">popcoords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">popname</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span>
+                <span class="k">while</span> <span class="n">algo</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="ow">in</span> <span class="n">popcoords</span><span class="p">:</span>
+                    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">popname</span> <span class="o">=</span> <span class="n">algo</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+                <span class="n">popcoords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">popname</span><span class="p">)</span>
+
+        <span class="n">varcoords</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="n">nm</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">membercoords</span><span class="p">)</span>
+        <span class="n">nc</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">cyclecoords</span><span class="p">)</span>
+        <span class="n">npp</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">popcoords</span><span class="p">)</span>
+        <span class="n">nv</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">varcoords</span><span class="p">)</span>
+
+
+
+        <span class="n">log</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s1">&#39;initial_member_x&#39;</span>   <span class="p">:</span> <span class="p">([</span><span class="s1">&#39;member&#39;</span><span class="p">,</span> <span class="s1">&#39;pop&#39;</span><span class="p">,</span>          <span class="s1">&#39;var&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nm</span><span class="p">,</span> <span class="n">npp</span><span class="p">,</span>     <span class="n">nv</span><span class="p">),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)),</span>
+                    <span class="s1">&#39;member_x&#39;</span>           <span class="p">:</span> <span class="p">([</span><span class="s1">&#39;member&#39;</span><span class="p">,</span> <span class="s1">&#39;pop&#39;</span><span class="p">,</span> <span class="s1">&#39;cycle&#39;</span><span class="p">,</span> <span class="s1">&#39;var&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nm</span><span class="p">,</span> <span class="n">npp</span><span class="p">,</span> <span class="n">nc</span><span class="p">,</span> <span class="n">nv</span><span class="p">),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)),</span>
+                    <span class="s1">&#39;nmembers&#39;</span>           <span class="p">:</span> <span class="p">([</span>          <span class="s1">&#39;pop&#39;</span><span class="p">,</span> <span class="s1">&#39;cycle&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span>    <span class="n">npp</span><span class="p">,</span> <span class="n">nc</span><span class="p">),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)),</span>
+                    <span class="s1">&#39;member_fitnesses&#39;</span>   <span class="p">:</span> <span class="p">([</span><span class="s1">&#39;member&#39;</span><span class="p">,</span> <span class="s1">&#39;pop&#39;</span><span class="p">,</span> <span class="s1">&#39;cycle&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nm</span><span class="p">,</span> <span class="n">npp</span><span class="p">,</span> <span class="n">nc</span><span class="p">),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)),</span>
+                    <span class="s1">&#39;nexport&#39;</span>            <span class="p">:</span> <span class="p">([</span>          <span class="s1">&#39;pop&#39;</span><span class="p">,</span> <span class="s1">&#39;cycle&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span>    <span class="n">npp</span><span class="p">,</span> <span class="n">nc</span><span class="p">),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)),</span>
+                    <span class="s1">&#39;export_str_scaled&#39;</span>  <span class="p">:</span> <span class="p">([</span>          <span class="s1">&#39;pop&#39;</span><span class="p">,</span> <span class="s1">&#39;cycle&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span>    <span class="n">npp</span><span class="p">,</span> <span class="n">nc</span><span class="p">),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)),</span>
+                    <span class="s1">&#39;export_pop_wts&#39;</span>     <span class="p">:</span> <span class="p">([</span>          <span class="s1">&#39;pop&#39;</span><span class="p">,</span> <span class="s1">&#39;cycle&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span>    <span class="n">npp</span><span class="p">,</span> <span class="n">nc</span><span class="p">),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)),</span>
+                    <span class="s1">&#39;alpha&#39;</span>              <span class="p">:</span> <span class="p">([</span>                 <span class="s1">&#39;cycle&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>          <span class="n">nc</span> <span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)),</span>
+                    <span class="s1">&#39;wb&#39;</span>                 <span class="p">:</span> <span class="p">([</span>                 <span class="s1">&#39;cycle&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>          <span class="n">nc</span> <span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">bool8</span><span class="p">)),</span>
+                    <span class="s1">&#39;g&#39;</span>                  <span class="p">:</span> <span class="p">([</span>          <span class="s1">&#39;pop&#39;</span><span class="p">,</span> <span class="s1">&#39;cycle&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span>    <span class="n">npp</span><span class="p">,</span> <span class="n">nc</span><span class="p">),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)),</span>
+                    <span class="s1">&#39;f&#39;</span>                  <span class="p">:</span> <span class="p">([</span>          <span class="s1">&#39;pop&#39;</span><span class="p">,</span> <span class="s1">&#39;cycle&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span>    <span class="n">npp</span><span class="p">,</span> <span class="n">nc</span><span class="p">),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)),</span>
+                    <span class="s1">&#39;unburdened_g&#39;</span>       <span class="p">:</span> <span class="p">([</span>          <span class="s1">&#39;pop&#39;</span><span class="p">,</span> <span class="s1">&#39;cycle&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span>    <span class="n">npp</span><span class="p">,</span> <span class="n">nc</span><span class="p">),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)),</span>
+                    <span class="s1">&#39;Nc&#39;</span>                 <span class="p">:</span> <span class="p">([</span>          <span class="s1">&#39;pop&#39;</span><span class="p">,</span> <span class="s1">&#39;cycle&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span>    <span class="n">npp</span><span class="p">,</span> <span class="n">nc</span><span class="p">),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)),</span>
+                    <span class="s1">&#39;delta_f&#39;</span>            <span class="p">:</span> <span class="p">([</span>          <span class="s1">&#39;pop&#39;</span><span class="p">,</span> <span class="s1">&#39;cycle&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span>    <span class="n">npp</span><span class="p">,</span> <span class="n">nc</span><span class="p">),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)),</span>
+                    <span class="s1">&#39;fmin&#39;</span>               <span class="p">:</span> <span class="p">([</span>                 <span class="s1">&#39;cycle&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>          <span class="n">nc</span> <span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)),</span>
+                    <span class="s1">&#39;fmax&#39;</span>               <span class="p">:</span> <span class="p">([</span>                 <span class="s1">&#39;cycle&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>          <span class="n">nc</span> <span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)),</span>
+                    <span class="s1">&#39;dfmin&#39;</span>               <span class="p">:</span> <span class="p">([</span>                 <span class="s1">&#39;cycle&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>          <span class="n">nc</span> <span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)),</span>
+                    <span class="s1">&#39;dfmax&#39;</span>               <span class="p">:</span> <span class="p">([</span>                 <span class="s1">&#39;cycle&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>          <span class="n">nc</span> <span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)),</span>
+                    <span class="s1">&#39;migration&#39;</span>          <span class="p">:</span> <span class="p">([</span>                 <span class="s1">&#39;cycle&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>          <span class="n">nc</span> <span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">bool8</span><span class="p">)),</span>
+                    <span class="s1">&#39;export_wts&#39;</span>         <span class="p">:</span> <span class="p">([</span><span class="s1">&#39;member&#39;</span><span class="p">,</span> <span class="s1">&#39;pop&#39;</span><span class="p">,</span> <span class="s1">&#39;cycle&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nm</span><span class="p">,</span> <span class="n">npp</span><span class="p">,</span> <span class="n">nc</span><span class="p">),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)),</span>
+                    <span class="s1">&#39;exported&#39;</span>           <span class="p">:</span> <span class="p">([</span><span class="s1">&#39;member&#39;</span><span class="p">,</span> <span class="s1">&#39;pop&#39;</span><span class="p">,</span> <span class="s1">&#39;cycle&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nm</span><span class="p">,</span> <span class="n">npp</span><span class="p">,</span> <span class="n">nc</span><span class="p">),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">bool8</span><span class="p">)),</span>
+<span class="c1">#                    &#39;pop_after_migrate&#39;  : ([&#39;member&#39;, &#39;pop&#39;, &#39;cycle&#39;], np.zeros((nm, npp, nc), dtype = &#39;&lt;U6&#39;)),</span>
+                    <span class="s1">&#39;beta&#39;</span>               <span class="p">:</span> <span class="p">([</span>                 <span class="s1">&#39;cycle&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>          <span class="n">nc</span> <span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)),</span>
+                    <span class="s1">&#39;b&#39;</span>                  <span class="p">:</span> <span class="p">([</span>          <span class="s1">&#39;pop&#39;</span><span class="p">,</span> <span class="s1">&#39;cycle&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span>    <span class="n">npp</span><span class="p">,</span> <span class="n">nc</span><span class="p">),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)),</span>
+                    <span class="s1">&#39;unburdened_b&#39;</span>       <span class="p">:</span> <span class="p">([</span>          <span class="s1">&#39;pop&#39;</span><span class="p">,</span> <span class="s1">&#39;cycle&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span>    <span class="n">npp</span><span class="p">,</span> <span class="n">nc</span><span class="p">),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)),</span>
+                    <span class="s1">&#39;A&#39;</span>                  <span class="p">:</span> <span class="p">([</span>          <span class="s1">&#39;pop&#39;</span><span class="p">,</span> <span class="s1">&#39;cycle&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span>    <span class="n">npp</span><span class="p">,</span> <span class="n">nc</span><span class="p">),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)),</span>
+                    <span class="s1">&#39;M&#39;</span>                  <span class="p">:</span> <span class="p">([</span><span class="s1">&#39;pop&#39;</span><span class="p">,</span><span class="s1">&#39;popdest&#39;</span><span class="p">,</span> <span class="s1">&#39;cycle&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">npp</span><span class="p">,</span><span class="n">npp</span><span class="p">,</span> <span class="n">nc</span><span class="p">),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)),</span>
+                    <span class="s1">&#39;str_dest_scaled&#39;</span>    <span class="p">:</span> <span class="p">([</span>          <span class="s1">&#39;pop&#39;</span><span class="p">,</span> <span class="s1">&#39;cycle&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span>    <span class="n">npp</span><span class="p">,</span> <span class="n">nc</span><span class="p">),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)),</span>
+                    <span class="s1">&#39;evolute&#39;</span>            <span class="p">:</span> <span class="p">([</span>          <span class="s1">&#39;pop&#39;</span><span class="p">,</span> <span class="s1">&#39;cycle&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span>    <span class="n">npp</span><span class="p">,</span> <span class="n">nc</span><span class="p">),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">bool8</span><span class="p">))},</span>
+                <span class="n">coords</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s1">&#39;member&#39;</span>  <span class="p">:</span> <span class="n">membercoords</span><span class="p">,</span>
+                    <span class="s1">&#39;pop&#39;</span>     <span class="p">:</span> <span class="n">popcoords</span><span class="p">,</span>
+                    <span class="s1">&#39;cycle&#39;</span>   <span class="p">:</span> <span class="n">cyclecoords</span><span class="p">,</span>
+                    <span class="s1">&#39;var&#39;</span>     <span class="p">:</span> <span class="n">varcoords</span><span class="p">,</span>
+                    <span class="s1">&#39;popdest&#39;</span>     <span class="p">:</span> <span class="n">popcoords</span><span class="p">},</span> <span class="c1">#only used for migration transition matrix</span>
+                <span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Ncycles&quot;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+                <span class="p">)</span>
+        <span class="c1">#initial_member_x: positions of all individuals in a population before any evolution</span>
+        <span class="c1">#member_x: positions of members in each population as through each cycle</span>
+        <span class="c1">#nmembers: number of members in each population in each cycle</span>
+        <span class="c1">#export_str_scaled: scaled strengths of each population each cycle</span>
+        <span class="c1">#export_pop_wts: weights passed into binomial function for ei selection, called hi in paper</span>
+        <span class="c1">#alpha: alpha parameter as it may change over each cycle</span>
+        <span class="c1">#wb: ordering of individuals within the populations when used for member selection</span>
+        <span class="c1">#g: unscaled strengths of each population each cycle</span>
+        <span class="c1">#f: fitness of each population each cycle, may have existed across previous cycles</span>
+        <span class="c1">#unburdened_g: unscaled strengths of each pop each cycle without the burden applied</span>
+        <span class="c1">#Nc: Number of function evaluations required to get the f variable associated with that cycle</span>
+        <span class="c1">#delta_f: difference in current cycle fitness to previous cycle fitness</span>
+        <span class="c1">#fmin: minimum fitness across all populations for a single cycle</span>
+        <span class="c1">#fmax: maximum fitness across all populations for a single cycle</span>
+        <span class="c1">#dfmin: minimum improvement across all populations for a single cycle</span>
+        <span class="c1">#dfmax: maximum improvement across all populations for a single cycle</span>
+        <span class="c1">#migration: bool as to whether or not migration is performed, if fmax=fmix, no evolution</span>
+        <span class="c1">#export_wts: weights used for each individual in the member selection phase</span>
+        <span class="c1">#exported: boolean as to whether or not an individual was exported</span>
+        <span class="c1">#beta: beta parameter as it may change over each cycle</span>
+        <span class="c1">#b: unscaled strengths of each population for the destination selection phase</span>
+        <span class="c1">#unburdened_b: unscaled strengths without burdened applied for member selection phase</span>
+        <span class="c1">#A: number of members from export pool that end up in a particulat population each cycle</span>
+        <span class="c1">#M: stochastic matrix which describes movement of members in a migration phase</span>
+        <span class="c1">#evolute: is whether or not that population was evoluted each cycle</span>
+
+
+
+        <span class="c1">#log positions of initial members</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pops</span><span class="p">:</span>
+            <span class="n">log</span><span class="p">[</span><span class="s1">&#39;initial_member_x&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[{</span><span class="s1">&#39;pop&#39;</span> <span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">popname</span><span class="p">}][:</span><span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">members</span><span class="p">)]</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">members</span>
+
+        <span class="c1">#perform evolution/migration cycle</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">Ncyc</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="c1">#evolution phase</span>
+            <span class="n">pop_fits</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">Ncyc</span><span class="p">,</span> <span class="n">log</span><span class="o">.</span><span class="n">loc</span><span class="p">[{</span><span class="s1">&#39;pop&#39;</span> <span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">popname</span><span class="p">,</span> <span class="s1">&#39;cycle&#39;</span> <span class="p">:</span> <span class="n">i</span><span class="p">}])</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pops</span><span class="p">]</span>
+
+            <span class="c1">#exportation number</span>
+            <span class="c1">#  calc weights</span>
+            <span class="n">maxf</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">pop_fits</span><span class="p">)</span>
+            <span class="n">minf</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">pop_fits</span><span class="p">)</span>
+            <span class="n">maxdf</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="n">p</span><span class="o">.</span><span class="n">dfitness</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pops</span><span class="p">])</span>
+            <span class="n">mindf</span> <span class="o">=</span> <span class="nb">min</span><span class="p">([</span><span class="n">p</span><span class="o">.</span><span class="n">dfitness</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pops</span><span class="p">])</span>
+            <span class="n">alpha</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_alphabeta</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">Ncyc</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">maxf</span> <span class="o">==</span> <span class="n">minf</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span> <span class="o">==</span> <span class="s2">&quot;fitness&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">maxdf</span> <span class="o">==</span> <span class="n">mindf</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span> <span class="o">==</span> <span class="s2">&quot;improve&quot;</span><span class="p">):</span><span class="c1">#export nobody if this true</span>
+                <span class="n">eis</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pops</span><span class="p">)</span>
+                <span class="n">log</span><span class="p">[</span><span class="s1">&#39;migration&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[{</span><span class="s1">&#39;cycle&#39;</span> <span class="p">:</span> <span class="n">i</span><span class="p">}]</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span> <span class="o">==</span> <span class="s2">&quot;fitness&quot;</span><span class="p">:</span>
+                    <span class="n">strengths_exp</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">strength</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">g_burden</span><span class="p">,</span> <span class="n">maxf</span><span class="p">,</span> <span class="n">minf</span><span class="p">,</span> <span class="n">log</span><span class="o">.</span><span class="n">loc</span><span class="p">[{</span><span class="s1">&#39;pop&#39;</span> <span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">popname</span><span class="p">,</span> <span class="s1">&#39;cycle&#39;</span> <span class="p">:</span> <span class="n">i</span><span class="p">}],</span> <span class="s1">&#39;g&#39;</span><span class="p">)</span><span class="o">**</span><span class="n">alpha</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pops</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">strengths_exp</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">strength</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">g_burden</span><span class="p">,</span> <span class="n">maxdf</span><span class="p">,</span> <span class="n">mindf</span><span class="p">,</span> <span class="n">log</span><span class="o">.</span><span class="n">loc</span><span class="p">[{</span><span class="s1">&#39;pop&#39;</span> <span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">popname</span><span class="p">,</span> <span class="s1">&#39;cycle&#39;</span> <span class="p">:</span> <span class="n">i</span><span class="p">}],</span> <span class="s1">&#39;g&#39;</span><span class="p">)</span><span class="o">**</span><span class="n">alpha</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pops</span><span class="p">]</span>
+                <span class="n">strengths_exp_scaled</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">/</span><span class="nb">sum</span><span class="p">(</span><span class="n">strengths_exp</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">strengths_exp</span><span class="p">]</span>
+
+                <span class="c1">#  sample binomial to get e_i for each population</span>
+                <span class="n">qt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_q</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">Ncyc</span><span class="p">)</span>
+                <span class="n">binomial_wts</span> <span class="o">=</span> <span class="p">[(</span><span class="mf">.5</span> <span class="o">-</span> <span class="n">s</span><span class="p">)</span><span class="o">*</span><span class="n">qt</span> <span class="o">+</span> <span class="mf">.5</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">strengths_exp_scaled</span><span class="p">]</span>
+                <span class="n">eis</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">binomial</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">members</span><span class="p">),</span> <span class="n">binomial_wts</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pops</span><span class="p">)]</span>
+                <span class="n">log</span><span class="p">[</span><span class="s1">&#39;migration&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[{</span><span class="s1">&#39;cycle&#39;</span> <span class="p">:</span> <span class="n">i</span><span class="p">}]</span> <span class="o">=</span> <span class="kc">True</span>
+
+                <span class="n">log</span><span class="p">[</span><span class="s1">&#39;export_str_scaled&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[{</span><span class="s1">&#39;cycle&#39;</span> <span class="p">:</span> <span class="n">i</span><span class="p">}]</span> <span class="o">=</span> <span class="n">strengths_exp_scaled</span>
+                <span class="n">log</span><span class="p">[</span><span class="s1">&#39;export_pop_wts&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[{</span><span class="s1">&#39;cycle&#39;</span> <span class="p">:</span> <span class="n">i</span><span class="p">}]</span> <span class="o">=</span> <span class="n">binomial_wts</span>
+
+            <span class="c1"># log pop export info</span>
+            <span class="n">log</span><span class="p">[</span><span class="s1">&#39;nexport&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[{</span><span class="s1">&#39;cycle&#39;</span> <span class="p">:</span> <span class="n">i</span><span class="p">}]</span> <span class="o">=</span> <span class="n">eis</span>
+            <span class="n">log</span><span class="p">[</span><span class="s1">&#39;fmax&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[{</span><span class="s1">&#39;cycle&#39;</span> <span class="p">:</span> <span class="n">i</span><span class="p">}]</span> <span class="o">=</span> <span class="n">maxf</span>
+            <span class="n">log</span><span class="p">[</span><span class="s1">&#39;fmin&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[{</span><span class="s1">&#39;cycle&#39;</span> <span class="p">:</span> <span class="n">i</span><span class="p">}]</span> <span class="o">=</span> <span class="n">minf</span>
+            <span class="n">log</span><span class="p">[</span><span class="s1">&#39;dfmax&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[{</span><span class="s1">&#39;cycle&#39;</span> <span class="p">:</span> <span class="n">i</span><span class="p">}]</span> <span class="o">=</span> <span class="n">maxdf</span>
+            <span class="n">log</span><span class="p">[</span><span class="s1">&#39;dfmin&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[{</span><span class="s1">&#39;cycle&#39;</span> <span class="p">:</span> <span class="n">i</span><span class="p">}]</span> <span class="o">=</span> <span class="n">mindf</span>
+            <span class="n">log</span><span class="p">[</span><span class="s1">&#39;alpha&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[{</span><span class="s1">&#39;cycle&#39;</span> <span class="p">:</span> <span class="n">i</span><span class="p">}]</span> <span class="o">=</span> <span class="n">alpha</span>
+
+            <span class="c1">#member selection</span>
+            <span class="c1">#  members removed from population with this export method</span>
+            <span class="n">exported</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">eis</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">wt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">,</span> <span class="n">i</span><span class="o">/</span><span class="n">Ncyc</span><span class="p">,</span> <span class="n">log</span><span class="o">.</span><span class="n">loc</span><span class="p">[{</span><span class="s1">&#39;pop&#39;</span> <span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">popname</span><span class="p">,</span> <span class="s1">&#39;cycle&#39;</span> <span class="p">:</span> <span class="n">i</span><span class="p">}])</span> <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pops</span><span class="p">)]</span>
+
+            <span class="c1">#destination selection</span>
+            <span class="n">beta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_alphabeta</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">Ncyc</span><span class="p">)</span>
+            <span class="n">log</span><span class="p">[</span><span class="s1">&#39;beta&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[{</span><span class="s1">&#39;cycle&#39;</span> <span class="p">:</span> <span class="n">i</span><span class="p">}]</span> <span class="o">=</span> <span class="n">beta</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">maxf</span> <span class="o">==</span> <span class="n">minf</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">==</span> <span class="s2">&quot;fitness&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">maxdf</span> <span class="o">==</span> <span class="n">mindf</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">==</span> <span class="s2">&quot;improve&quot;</span><span class="p">):</span> <span class="c1">#doesn&#39;t matter because nobody is exported</span>
+                <span class="n">strengths_dest</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pops</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">==</span> <span class="s2">&quot;fitness&quot;</span><span class="p">:</span>
+                    <span class="n">strengths_dest</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">strength</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">b_burden</span><span class="p">,</span> <span class="n">maxf</span><span class="p">,</span> <span class="n">minf</span><span class="p">,</span> <span class="n">log</span><span class="o">.</span><span class="n">loc</span><span class="p">[{</span><span class="s1">&#39;pop&#39;</span> <span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">popname</span><span class="p">,</span> <span class="s1">&#39;cycle&#39;</span> <span class="p">:</span> <span class="n">i</span><span class="p">}],</span> <span class="s1">&#39;b&#39;</span><span class="p">)</span><span class="o">**</span><span class="n">beta</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pops</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">strengths_dest</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">strength</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">b_burden</span><span class="p">,</span> <span class="n">maxdf</span><span class="p">,</span> <span class="n">mindf</span><span class="p">,</span> <span class="n">log</span><span class="o">.</span><span class="n">loc</span><span class="p">[{</span><span class="s1">&#39;pop&#39;</span> <span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">popname</span><span class="p">,</span> <span class="s1">&#39;cycle&#39;</span> <span class="p">:</span> <span class="n">i</span><span class="p">}],</span> <span class="s1">&#39;b&#39;</span><span class="p">)</span><span class="o">**</span><span class="n">beta</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pops</span><span class="p">]</span>
+
+            <span class="c1">#manage members that are currently without a home</span>
+            <span class="n">exported</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="n">exported</span><span class="p">))</span>
+            <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">exported</span><span class="p">)</span><span class="c1">#in-place randomize order</span>
+
+            <span class="c1">#calculate normalized probabilities and draw samples</span>
+            <span class="n">strengths_dest_scaled</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">/</span><span class="nb">sum</span><span class="p">(</span><span class="n">strengths_dest</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">strengths_dest</span><span class="p">]</span>
+            <span class="n">allotments</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">multinomial</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">exported</span><span class="p">),</span> <span class="n">strengths_dest_scaled</span><span class="p">)</span>
+            <span class="n">log</span><span class="p">[</span><span class="s1">&#39;str_dest_scaled&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[{</span><span class="s1">&#39;cycle&#39;</span> <span class="p">:</span> <span class="n">i</span><span class="p">}]</span> <span class="o">=</span> <span class="n">strengths_dest_scaled</span>
+            <span class="n">log</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[{</span><span class="s1">&#39;cycle&#39;</span> <span class="p">:</span> <span class="n">i</span><span class="p">}]</span> <span class="o">=</span> <span class="n">allotments</span>
+
+            <span class="c1">#distribute individuals according to the sample</span>
+            <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">allotments</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pops</span><span class="p">):</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">receive</span><span class="p">(</span><span class="n">exported</span><span class="p">[:</span><span class="n">a</span><span class="p">])</span>
+                <span class="n">exported</span> <span class="o">=</span> <span class="n">exported</span><span class="p">[</span><span class="n">a</span><span class="p">:]</span>
+
+            <span class="c1">#calculate migration matrix</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fill_M</span><span class="p">(</span><span class="n">log</span><span class="o">.</span><span class="n">loc</span><span class="p">[{</span><span class="s1">&#39;cycle&#39;</span> <span class="p">:</span> <span class="n">i</span><span class="p">}])</span>
+
+            <span class="c1">#check if desired number of function evaluations has been reached</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;Ncycles&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">stop_criteria</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">stop_criteria</span><span class="p">()</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="k">break</span>
+
+        <span class="c1">#get best members</span>
+        <span class="n">bestind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapped_f</span><span class="o">.</span><span class="n">outs</span><span class="p">)</span>
+
+        <span class="n">xbest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped_f</span><span class="o">.</span><span class="n">ins</span><span class="p">[</span><span class="n">bestind</span><span class="p">]</span>
+        <span class="n">ybest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped_f</span><span class="o">.</span><span class="n">outs</span><span class="p">[</span><span class="n">bestind</span><span class="p">]</span>
+
+
+        <span class="k">return</span> <span class="n">xbest</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ybest</span><span class="p">,</span> <span class="n">log</span></div></div>
+
+
+
+    <span class="c1">#TODO: Markov Matrix calculation</span>
+    <span class="c1">#TODO: Fitness checker outside of consistency method</span>
+
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Exelon Corp. &amp; MIT.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

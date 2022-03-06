@@ -11,4 +11,5 @@ Hybrid and Neuroevolution Algorithms
    ppoes
    ackde
    nga
-   nhho  
+   nhho
+   aeo
