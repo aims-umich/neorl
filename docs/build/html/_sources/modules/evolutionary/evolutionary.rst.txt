@@ -6,6 +6,7 @@ Evolutionary and Swarm Algorithms
    
    es
    pso
+   hclpso
    de
    xnes
    gwo

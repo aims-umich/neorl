@@ -5,7 +5,7 @@
 Animorphic Ensemble Optimization (AEO)
 ===============================================
 
-A module for Animorphic Ensemble Optimization
+A module for Animorphic Ensemble Optimization. A hybrid island model with different evolutionary populations evolved in islands. 
 
 Original paper: in progress
 

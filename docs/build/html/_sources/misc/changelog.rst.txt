@@ -31,6 +31,17 @@ Release 1.6 (2021-09-10)
 Beta Releases (for developers)
 ---------------------------------
 
+Release 1.7.3b (2022-3-6)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+  pip install neorl==1.7.3b --extra-index-url https://test.pypi.org/simple
+
+- Fixed a division by zero bug for PSO mode ``globw``. 
+- Added a first test module for a new hybrid algorithm AEO (Aniormphic Ensemble Optimization). 
+- Added documentation for AEO on the website. 
+
 Release 1.7.2b (2022-1-17)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

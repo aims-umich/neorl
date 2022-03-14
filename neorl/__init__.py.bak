@@ -81,4 +81,4 @@ from neorl.hybrid.nga import NGA
 from neorl.hybrid.nhho import NHHO
 from neorl.evolu.ts import TS
 from neorl.hybrid.aeo import AEO
-from neorl.evolu.hclpso import HCLPSO
+from neorl.evolu.hclpso import AEO
