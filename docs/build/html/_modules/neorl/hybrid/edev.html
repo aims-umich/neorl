@@ -1,0 +1,868 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>neorl.hybrid.edev &mdash; NEORL 1.7.4b documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> NEORL
+          
+
+          
+            
+            <img src="../../../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                main (1.7.4b )
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/guide.html">General Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/modules.html">Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tune/tune.html">Hyperparameter Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples/examples.html">Examples</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../misc/changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../misc/projects.html">Projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../misc/contrib.html">Contributors</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">NEORL</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>neorl.hybrid.edev</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for neorl.hybrid.edev</h1><div class="highlight"><pre>
+<span></span><span class="c1">#    This file is part of NEORL.</span>
+
+<span class="c1">#    Copyright (c) 2021 Exelon Corporation and MIT Nuclear Science and Engineering</span>
+<span class="c1">#    NEORL is free software: you can redistribute it and/or modify</span>
+<span class="c1">#    it under the terms of the MIT LICENSE</span>
+
+<span class="c1">#    THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span class="c1">#    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
+<span class="c1">#    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
+<span class="c1">#    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
+<span class="c1">#    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span>
+<span class="c1">#    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span>
+<span class="c1">#    SOFTWARE.</span>
+
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1">#&quot;&quot;&quot;</span>
+<span class="c1">#Created on Thu Dec  3 14:42:29 2020</span>
+<span class="c1">#</span>
+<span class="c1">#@author: Majdi</span>
+<span class="c1">#&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">arange</span><span class="p">,</span> <span class="n">dot</span><span class="p">,</span> <span class="n">multiply</span><span class="p">,</span> <span class="n">exp</span><span class="p">,</span> <span class="n">ones</span><span class="p">,</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">ceil</span><span class="p">,</span> <span class="n">copy</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">joblib</span>
+<span class="kn">from</span> <span class="nn">neorl.hybrid.edevcore.helpers</span> <span class="kn">import</span> <span class="n">ARCHIVE</span><span class="p">,</span> <span class="n">generator</span><span class="p">,</span> <span class="n">sub2ind</span><span class="p">,</span> <span class="n">gnR1R2</span><span class="p">,</span> <span class="n">randFCR</span>
+<span class="kn">from</span> <span class="nn">neorl.evolu.discrete</span> <span class="kn">import</span> <span class="n">mutate_discrete</span><span class="p">,</span> <span class="n">encode_grid_to_discrete</span><span class="p">,</span> <span class="n">decode_discrete_to_grid</span>
+<span class="kn">from</span> <span class="nn">neorl.utils.seeding</span> <span class="kn">import</span> <span class="n">set_neorl_seed</span>
+<span class="kn">from</span> <span class="nn">neorl.utils.tools</span> <span class="kn">import</span> <span class="n">get_population</span>
+
+
+<div class="viewcode-block" id="EDEV"><a class="viewcode-back" href="../../../modules/neuroevolu/edev.html#neorl.hybrid.edev.EDEV">[docs]</a><span class="k">class</span> <span class="nc">EDEV</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Ensemble of differential evolution variants</span>
+<span class="sd">    </span>
+<span class="sd">    :param mode: (str) problem type, either ``min`` for minimization problem or ``max`` for maximization</span>
+<span class="sd">    :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: ``bounds={&#39;x1&#39;: [&#39;int&#39;, 1, 4], &#39;x2&#39;: [&#39;float&#39;, 0.1, 0.8], &#39;x3&#39;: [&#39;float&#39;, 2.2, 6.2]}``</span>
+<span class="sd">    :param fit: (function) the fitness function </span>
+<span class="sd">    :param npop: (int): total size of the full population, which will be divided into three sub-populations</span>
+<span class="sd">    :param lambda__: (float): fraction of ``npop`` to split into 3 sub-populations. ``pop1 = npop - npop * lambda_``, ``pop2 = pop3 =  npop * lambda_`` (see **Notes** below)</span>
+<span class="sd">    :param int_transform: (str): method of handling int/discrete variables, choose from: ``nearest_int``, ``sigmoid``, ``minmax``.</span>
+<span class="sd">    :param ncores: (int) number of parallel processors (must be ``&lt;= npop``)</span>
+<span class="sd">    :param seed: (int) random seed for sampling</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">npop</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">lambda_</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> 
+                 <span class="n">int_transform</span><span class="o">=</span><span class="s1">&#39;nearest_int&#39;</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        
+        <span class="n">set_neorl_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+        
+        <span class="k">assert</span> <span class="n">ncores</span> <span class="o">&lt;=</span> <span class="n">npop</span><span class="p">,</span> <span class="s1">&#39;--error: ncores (</span><span class="si">{}</span><span class="s1">) must be less than or equal than npop (</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ncores</span><span class="p">,</span> <span class="n">npop</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">lambda_</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;--error: lambda_ must be more than 0 and less than 1&#39;</span>
+        <span class="c1">#--mir</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;min&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="o">=</span><span class="n">fit</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;max&#39;</span><span class="p">:</span>
+            <span class="k">def</span> <span class="nf">fitness_wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                <span class="k">return</span> <span class="o">-</span><span class="n">fit</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="o">=</span><span class="n">fitness_wrapper</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;--error: The mode entered by user is invalid, use either `min` or `max`&#39;</span><span class="p">)</span>
+          
+        <span class="bp">self</span><span class="o">.</span><span class="n">int_transform</span><span class="o">=</span><span class="n">int_transform</span>
+        <span class="k">if</span> <span class="n">int_transform</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;nearest_int&quot;</span><span class="p">,</span> <span class="s2">&quot;sigmoid&quot;</span><span class="p">,</span> <span class="s2">&quot;minmax&quot;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;--error: int_transform entered by user is invalid, must be `nearest_int`, `sigmoid`, or `minmax`&#39;</span><span class="p">)</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span> <span class="o">=</span> <span class="n">ncores</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">npop</span><span class="o">=</span><span class="n">npop</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lambda_</span><span class="o">=</span><span class="n">lambda_</span>
+        
+        <span class="c1">#infer variable types </span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">bounds</span><span class="p">])</span>
+        
+        <span class="c1">#mir-grid</span>
+        <span class="k">if</span> <span class="s2">&quot;grid&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="o">=</span><span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="o">=</span><span class="n">bounds</span>  <span class="c1">#keep original bounds for decoding</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--debug: grid parameter type is found in the space&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="o">=</span><span class="n">encode_grid_to_discrete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span> <span class="c1">#encoding grid to int</span>
+            <span class="c1">#define var_types again by converting grid to int</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="o">=</span><span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span> <span class="o">=</span> <span class="n">bounds</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">bounds</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ub</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">])</span>
+        
+        <span class="n">slice_index</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lambda_</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">npop</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">slice_index</span> <span class="o">&lt;=</span> <span class="mi">6</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;--error: the size of pop2 and pop3 (</span><span class="si">{}</span><span class="s1">) must be more than 6 individuals. Make sure int(lambda_ * npop) &gt;= 7&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">slice_index</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">init_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bounds</span><span class="p">):</span>
+    
+        <span class="n">indv</span><span class="o">=</span><span class="p">[]</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">bounds</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;int&#39;</span><span class="p">:</span>
+                <span class="n">indv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">2</span><span class="p">]))</span>
+            <span class="k">elif</span> <span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;float&#39;</span><span class="p">:</span>
+                <span class="n">indv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">2</span><span class="p">]))</span>
+            <span class="c1">#elif bounds[key][0] == &#39;grid&#39;:</span>
+            <span class="c1">#    indv.append(random.sample(bounds[key][1],1)[0])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span> <span class="p">(</span><span class="s1">&#39;unknown data type is given, either int, float, or grid are allowed for parameter bounds&#39;</span><span class="p">)</span>   
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">indv</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">eval_pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop_to_evaluate</span><span class="p">):</span>
+    
+        <span class="c1">#---------------------</span>
+        <span class="c1"># Fitness calcs</span>
+        <span class="c1">#---------------------</span>
+        <span class="n">core_lst</span><span class="o">=</span><span class="p">[]</span>
+        <span class="k">for</span> <span class="n">case</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">pop_to_evaluate</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="n">core_lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop_to_evaluate</span><span class="p">[</span><span class="n">case</span><span class="p">,</span> <span class="p">:])</span>
+    
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+
+            <span class="k">with</span> <span class="n">joblib</span><span class="o">.</span><span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">)</span> <span class="k">as</span> <span class="n">parallel</span><span class="p">:</span>
+                <span class="n">fitness_lst</span><span class="o">=</span><span class="n">parallel</span><span class="p">(</span><span class="n">joblib</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fit_worker</span><span class="p">)(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">core_lst</span><span class="p">)</span>
+                
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fitness_lst</span><span class="o">=</span><span class="p">[]</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">core_lst</span><span class="p">:</span>
+                <span class="n">fitness_lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fit_worker</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
+        
+        <span class="k">return</span> <span class="n">fitness_lst</span>
+
+    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">fit</span><span class="p">):</span>
+        
+        <span class="n">best_fit</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
+        <span class="n">min_idx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
+        <span class="n">best_pos</span><span class="o">=</span><span class="n">pos</span><span class="p">[</span><span class="n">min_idx</span><span class="p">,:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        
+        <span class="k">return</span> <span class="n">best_pos</span><span class="p">,</span> <span class="n">best_fit</span> <span class="p">,</span> <span class="n">min_idx</span>
+        
+    <span class="k">def</span> <span class="nf">ensure_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vec</span><span class="p">):</span>
+    
+        <span class="n">vec_new</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># cycle through each variable in vector </span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+    
+            <span class="c1"># variable exceedes the minimum boundary</span>
+            <span class="k">if</span> <span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">vec_new</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+    
+            <span class="c1"># variable exceedes the maximum boundary</span>
+            <span class="k">if</span> <span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">2</span><span class="p">]:</span>
+                <span class="n">vec_new</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">2</span><span class="p">])</span>
+    
+            <span class="c1"># the variable is fine</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">2</span><span class="p">]:</span>
+                <span class="n">vec_new</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            
+        <span class="k">return</span> <span class="n">vec_new</span>
+    
+    <span class="k">def</span> <span class="nf">fit_worker</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="c1">#This worker is for parallel calculations</span>
+        
+        <span class="c1"># Clip the position outside the lower/upper bounds and return same position</span>
+        <span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ensure_bounds</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="p">:</span>
+            <span class="c1">#decode the individual back to the int/float/grid mixed space</span>
+            <span class="n">x</span><span class="o">=</span><span class="n">decode_discrete_to_grid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="p">)</span>
+        
+        <span class="c1"># Calculate objective function for each search agent</span>
+        <span class="n">fitness</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FES</span> <span class="o">+=</span> <span class="mi">1</span>
+        
+        <span class="k">return</span> <span class="n">fitness</span>
+    
+    <span class="k">def</span> <span class="nf">ensure_discrete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vec</span><span class="p">):</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        <span class="c1">#to mutate a vector if discrete variables exist </span>
+        <span class="c1">#handy function to be used within SSA phases</span>
+
+        <span class="c1">#Params:</span>
+        <span class="c1">#vec - position in vector/list form</span>
+
+        <span class="c1">#Return:</span>
+        <span class="c1">#vec - updated position vector with discrete values</span>
+        <span class="c1">#&quot;&quot;&quot;</span>
+        
+        <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;int&#39;</span><span class="p">:</span>
+                <span class="n">vec</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span> <span class="o">=</span> <span class="n">mutate_discrete</span><span class="p">(</span><span class="n">x_ij</span><span class="o">=</span><span class="n">vec</span><span class="p">[</span><span class="n">dim</span><span class="p">],</span> 
+                                               <span class="n">x_min</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="n">vec</span><span class="p">),</span>
+                                               <span class="n">x_max</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="n">vec</span><span class="p">),</span>
+                                               <span class="n">lb</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lb</span><span class="p">[</span><span class="n">dim</span><span class="p">],</span> 
+                                               <span class="n">ub</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ub</span><span class="p">[</span><span class="n">dim</span><span class="p">],</span>
+                                               <span class="n">alpha</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span>
+                                               <span class="n">method</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">int_transform</span><span class="p">,</span>
+                                               <span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">vec</span>
+            
+
+<div class="viewcode-block" id="EDEV.evolute"><a class="viewcode-back" href="../../../modules/neuroevolu/edev.html#neorl.hybrid.edev.EDEV.evolute">[docs]</a>    <span class="k">def</span> <span class="nf">evolute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ngen</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function evolutes the EDEV algorithm for a number of generations.</span>
+<span class="sd">        </span>
+<span class="sd">        :param ngen: (int) number of generations to evolute</span>
+<span class="sd">        :param ng: (int) the period or number of generations to determine the best performing DE variant and reward subpopulation assignment, ``ng &lt; ngen`` (see **Notes** below for more info).</span>
+<span class="sd">        :param x0: (list of lists) initial position of the individuals (must be of same size as ``npop``)</span>
+<span class="sd">        :param verbose: (bool) print statistics to screen</span>
+<span class="sd">        </span>
+<span class="sd">        :return: (tuple) (best individual, best fitness, and dictionary containing major search results)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="k">assert</span> <span class="n">ng</span> <span class="o">&lt;</span> <span class="n">ngen</span><span class="p">,</span> <span class="s1">&#39;--error: ng must be less than ngen to allow frequent updates&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;global_fitness&#39;</span><span class="p">:[],</span> <span class="s1">&#39;JADE&#39;</span><span class="p">:[],</span> <span class="s1">&#39;CoDE&#39;</span><span class="p">:[],</span> <span class="s1">&#39;EPSDE&#39;</span><span class="p">:[]}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">best_fitness</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span>   <span class="c1">#for discrete analysis</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">mixPop</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">npop</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">x0</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">npop</span><span class="p">,</span> <span class="s1">&#39;--error: the length of x0 (</span><span class="si">{}</span><span class="s1">) MUST equal the number of npop in the group (</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">npop</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">npop</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">mixPop</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">x0</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Initialize the positions</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">npop</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">mixPop</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">init_sample</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span>
+        
+
+        <span class="c1">#---------------------------------------------------------------------------</span>
+        <span class="c1">#-------------------------------EDEV starts here----------------------------</span>
+        <span class="c1">#---------------------------------------------------------------------------</span>
+        <span class="c1"># Define the dimension of the problem</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FES</span><span class="o">=</span><span class="mi">0</span>
+        <span class="n">arrayGbestChange</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">arrayGbestChangeRate</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">indexBestLN</span><span class="o">=</span><span class="mi">0</span>
+        <span class="n">numViaLN</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">rateViaLN</span><span class="o">=</span><span class="n">zeros</span><span class="p">((</span><span class="n">ngen</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">numViaLN</span><span class="p">)))</span>
+        
+        <span class="c1">#evaluate the first population   </span>
+        <span class="c1">#for discrete mutation</span>
+        <span class="k">for</span> <span class="n">iii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mixPop</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mixPop</span><span class="p">[</span><span class="n">iii</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensure_bounds</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mixPop</span><span class="p">[</span><span class="n">iii</span><span class="p">,</span> <span class="p">:])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mixPop</span><span class="p">[</span><span class="n">iii</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensure_discrete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mixPop</span><span class="p">[</span><span class="n">iii</span><span class="p">,</span> <span class="p">:])</span>
+        <span class="n">mixVal</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eval_pop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mixPop</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">best_position</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">overallBestVal</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mixPop</span><span class="p">,</span> <span class="n">mixVal</span><span class="p">)</span>
+        
+        <span class="n">permutation</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">npop</span><span class="p">)</span>
+                
+        <span class="n">slice_index</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lambda_</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">npop</span><span class="p">)</span>        
+        <span class="n">arrayThird</span><span class="o">=</span><span class="n">permutation</span><span class="p">[:</span><span class="n">slice_index</span><span class="p">]</span> <span class="c1">#for EPSDE</span>
+        <span class="n">arraySecond</span><span class="o">=</span><span class="n">permutation</span><span class="p">[</span><span class="n">slice_index</span> <span class="p">:</span> <span class="mi">2</span><span class="o">*</span><span class="n">slice_index</span><span class="p">]</span>  <span class="c1">#for CoDE</span>
+        <span class="n">arrayFirst</span><span class="o">=</span><span class="n">permutation</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">slice_index</span><span class="p">:]</span>    <span class="c1">#for JADE </span>
+        
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--debug: initial size of EDEV population is </span><span class="si">%i</span><span class="s1">&#39;</span><span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="n">npop</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--debug: initial size of pop1 is </span><span class="si">%i</span><span class="s1">&#39;</span><span class="o">%</span><span class="nb">len</span><span class="p">(</span><span class="n">arrayFirst</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--debug: initial size of pop2 is </span><span class="si">%i</span><span class="s1">&#39;</span><span class="o">%</span><span class="nb">len</span><span class="p">(</span><span class="n">arraySecond</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--debug: initial size of pop3 is </span><span class="si">%i</span><span class="s1">&#39;</span><span class="o">%</span><span class="nb">len</span><span class="p">(</span><span class="n">arrayThird</span><span class="p">))</span>
+        
+        <span class="c1">## Initialize JADE related</span>
+        <span class="n">popold</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mixPop</span><span class="p">[</span><span class="n">arrayFirst</span><span class="p">,:]</span>
+        <span class="n">valParents</span><span class="o">=</span><span class="n">mixVal</span><span class="p">[</span><span class="n">arrayFirst</span><span class="p">]</span>
+        <span class="n">c</span><span class="o">=</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">10</span>
+        <span class="n">pj</span><span class="o">=</span><span class="mf">0.05</span>
+        <span class="n">CRm</span><span class="o">=</span><span class="mf">0.5</span>
+        <span class="n">Fm</span><span class="o">=</span><span class="mf">0.5</span>
+        
+        <span class="c1">#initialize archive</span>
+        <span class="n">archive</span><span class="o">=</span><span class="n">ARCHIVE</span><span class="p">(</span><span class="n">NP</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">arrayFirst</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">)</span>
+        
+        <span class="c1">#the values and indices of the best solutions</span>
+        <span class="c1">#valBest=np.sort(valParents)</span>
+        <span class="n">indBest</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">valParents</span><span class="p">)</span>
+        
+        <span class="c1">#Initialize CoDE related</span>
+        <span class="n">popCODE</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mixPop</span><span class="p">[</span><span class="n">arraySecond</span><span class="p">,:]</span>
+        <span class="n">valCODE</span><span class="o">=</span><span class="n">mixVal</span><span class="p">[</span><span class="n">arraySecond</span><span class="p">]</span>
+        
+        <span class="c1">#Initialize EPSDE related</span>
+        <span class="n">I_D</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span>
+        <span class="n">FM_pop</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mixPop</span><span class="p">[</span><span class="n">arrayThird</span><span class="p">,:]</span>
+        <span class="n">FM_popold</span><span class="o">=</span><span class="n">zeros</span><span class="p">(</span><span class="n">FM_pop</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">I_NP</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">arrayThird</span><span class="p">)</span>
+        <span class="n">val</span><span class="o">=</span><span class="n">zeros</span><span class="p">((</span><span class="n">I_NP</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FVr_bestmem</span><span class="o">=</span><span class="n">zeros</span><span class="p">((</span><span class="n">I_D</span><span class="p">))</span>
+        <span class="c1">#FVr_bestmemit=zeros((I_D))</span>
+        <span class="n">I_nfeval</span><span class="o">=</span><span class="mi">0</span>
+        <span class="n">RATE</span><span class="o">=</span><span class="mi">0</span>
+        
+        <span class="c1">#------Evaluate the best member after initialization----------------------</span>
+        <span class="c1">#for discrete mutation</span>
+        <span class="k">for</span> <span class="n">iii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">FM_pop</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="n">FM_pop</span><span class="p">[</span><span class="n">iii</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensure_bounds</span><span class="p">(</span><span class="n">FM_pop</span><span class="p">[</span><span class="n">iii</span><span class="p">,</span> <span class="p">:])</span>
+            <span class="n">FM_pop</span><span class="p">[</span><span class="n">iii</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensure_discrete</span><span class="p">(</span><span class="n">FM_pop</span><span class="p">[</span><span class="n">iii</span><span class="p">,</span> <span class="p">:])</span>
+            
+        <span class="n">val</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eval_pop</span><span class="p">(</span><span class="n">FM_pop</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FVr_bestmem</span><span class="p">,</span> <span class="n">F_bestval</span><span class="p">,</span> <span class="n">I_best_index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="n">FM_pop</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">val</span><span class="p">)</span>
+        
+        <span class="c1">#------DE-Minimization---------------------------------------------</span>
+        <span class="c1">#------FM_popold is the population which has to compete. It is--------</span>
+        <span class="c1">#------static through one iteration. FM_pop is the newly--------------</span>
+        <span class="c1">#------emerging population.----------------------------------------</span>
+        <span class="n">I_iter</span><span class="o">=</span><span class="mi">0</span>
+        <span class="n">FF</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">])</span>
+        <span class="n">CR</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">])</span>
+        <span class="n">spara</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">PPara</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">inde</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">I_NP</span><span class="p">)</span>
+        <span class="n">RR</span><span class="o">=</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">npop</span><span class="p">))</span>
+        <span class="n">gen</span><span class="o">=</span><span class="mi">0</span>
+        <span class="n">FESj</span><span class="o">=</span><span class="mi">0</span>
+        <span class="n">goodCR</span><span class="o">=</span><span class="p">[]</span>
+        <span class="n">goodF</span><span class="o">=</span><span class="p">[]</span>
+        <span class="n">rate</span><span class="o">=</span><span class="p">[]</span>
+        
+        <span class="k">while</span> <span class="n">gen</span> <span class="o">&lt;</span> <span class="n">ngen</span><span class="p">:</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">gen</span> <span class="o">*</span> <span class="p">((</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">ngen</span><span class="p">)</span>  <span class="c1">#mir: a decreases linearly between 1 to 0, for discrete mutation</span>
+        
+            <span class="c1">## update the index for adjust different algorithms</span>
+            <span class="k">if</span> <span class="n">gen</span> <span class="o">%</span> <span class="p">(</span><span class="n">ng</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">arrayGbestChangeRate</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">arrayGbestChange</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">arrayFirst</span><span class="p">)</span>
+                <span class="n">arrayGbestChangeRate</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">arrayGbestChange</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">arraySecond</span><span class="p">)</span><span class="o">*</span><span class="mi">3</span><span class="p">)</span>
+                <span class="n">arrayGbestChangeRate</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">arrayGbestChange</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">arrayThird</span><span class="p">)</span>
+                <span class="n">indexBestLN</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">arrayGbestChangeRate</span><span class="p">)</span>
+        
+                <span class="n">arrayGbestChange</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+                <span class="n">arrayGbestChangeRate</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        
+            <span class="n">permutation</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">npop</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">indexBestLN</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">arrayThird</span><span class="o">=</span><span class="n">permutation</span><span class="p">[:</span><span class="n">slice_index</span><span class="p">]</span>
+                <span class="n">arraySecond</span><span class="o">=</span><span class="n">permutation</span><span class="p">[</span><span class="n">slice_index</span> <span class="p">:</span> <span class="mi">2</span><span class="o">*</span><span class="n">slice_index</span><span class="p">]</span> 
+                <span class="n">arrayFirst</span><span class="o">=</span><span class="n">permutation</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">slice_index</span><span class="p">:]</span>
+                <span class="n">numViaLN</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">numViaLN</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">indexBestLN</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">arrayThird</span><span class="o">=</span><span class="n">permutation</span><span class="p">[:</span><span class="n">slice_index</span><span class="p">]</span>
+                    <span class="n">arrayFirst</span><span class="o">=</span><span class="n">permutation</span><span class="p">[</span><span class="n">slice_index</span> <span class="p">:</span> <span class="mi">2</span><span class="o">*</span><span class="n">slice_index</span><span class="p">]</span> 
+                    <span class="n">arraySecond</span><span class="o">=</span><span class="n">permutation</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">slice_index</span><span class="p">:]</span>
+                    <span class="n">numViaLN</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">numViaLN</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">indexBestLN</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                        <span class="n">arrayFirst</span><span class="o">=</span><span class="n">permutation</span><span class="p">[:</span><span class="n">slice_index</span><span class="p">]</span>
+                        <span class="n">arraySecond</span><span class="o">=</span><span class="n">permutation</span><span class="p">[</span><span class="n">slice_index</span> <span class="p">:</span> <span class="mi">2</span><span class="o">*</span><span class="n">slice_index</span><span class="p">]</span> 
+                        <span class="n">arrayThird</span><span class="o">=</span><span class="n">permutation</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">slice_index</span><span class="p">:]</span>
+                        <span class="n">numViaLN</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">numViaLN</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+                        
+            <span class="n">rateViaLN</span><span class="p">[</span><span class="n">gen</span><span class="p">,:]</span><span class="o">=</span><span class="n">numViaLN</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">numViaLN</span><span class="p">)</span>
+            
+            <span class="c1">#----------------------------</span>
+            <span class="c1">#JADE</span>
+            <span class="c1">#----------------------------</span>
+            <span class="n">pop</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mixPop</span><span class="p">[</span><span class="n">arrayFirst</span><span class="p">,:]</span>
+            <span class="n">valParents</span><span class="o">=</span><span class="n">mixVal</span><span class="p">[</span><span class="n">arrayFirst</span><span class="p">]</span>
+            <span class="n">popsize</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">arrayFirst</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">FESj</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">goodCR</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">sum</span><span class="p">(</span><span class="n">goodF</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">CRm</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span><span class="o">*</span><span class="n">CRm</span> <span class="o">+</span> <span class="n">c</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">goodCR</span><span class="p">)</span>
+                <span class="n">Fm</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span><span class="o">*</span><span class="n">Fm</span> <span class="o">+</span> <span class="n">c</span> <span class="o">*</span> <span class="nb">sum</span><span class="p">(</span><span class="n">goodF</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">goodF</span><span class="p">)</span>
+        
+            <span class="c1"># Generate CR according to a normal distribution with mean CRm, and std 0.1</span>
+            <span class="c1"># Generate F according to a cauchy distribution with location parameter Fm, and scale parameter 0.1</span>
+            <span class="n">Fj</span><span class="p">,</span><span class="n">CRj</span><span class="o">=</span><span class="n">randFCR</span><span class="p">(</span><span class="n">popsize</span><span class="p">,</span><span class="n">CRm</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="n">Fm</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
+            <span class="n">r0</span><span class="o">=</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">popsize</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">archive</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">popAll</span><span class="o">=</span><span class="n">copy</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">popAll</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">pop</span><span class="p">,</span> <span class="n">archive</span><span class="o">.</span><span class="n">pop</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">r1</span><span class="p">,</span><span class="n">r2</span><span class="o">=</span><span class="n">gnR1R2</span><span class="p">(</span><span class="n">popsize</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">popAll</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">r0</span><span class="p">)</span>   <span class="c1">#-1 for python indexing from 0</span>
+            <span class="n">indBest</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">valParents</span><span class="p">)</span>
+            <span class="n">pNP</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">pj</span><span class="o">*</span><span class="n">popsize</span><span class="p">),</span><span class="mi">2</span><span class="p">)</span>   <span class="c1">#choose at least two best solutions</span>
+            <span class="n">randindex</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">popsize</span><span class="p">))</span><span class="o">*</span><span class="n">pNP</span><span class="p">)</span>  <span class="c1">#select from [1, 2, 3, ..., pNP]</span>
+            <span class="n">randindex</span><span class="p">[</span><span class="n">randindex</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>   <span class="c1">#to avoid the problem that rand = 0 and thus ceil(rand) = 0</span>
+            <span class="n">randindex</span><span class="o">=</span><span class="n">randindex</span><span class="o">-</span><span class="mi">1</span> <span class="c1">#for python indexing</span>
+            <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">randindex</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;--error: one of the indices in randindex is less than 0, the alg does not function properly&#39;</span>
+            <span class="n">pbest</span><span class="o">=</span><span class="n">pop</span><span class="p">[</span><span class="n">indBest</span><span class="p">[</span><span class="n">randindex</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)],:]</span>  <span class="c1">#randomly choose one of the top 100p% solutions</span>
+            
+            <span class="c1"># == == == == == == == == == == == == == == == Mutation == == == == == == == == == == == == ==</span>
+            <span class="n">Ftr</span><span class="o">=</span><span class="n">Fj</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">Fj</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">1</span><span class="p">)</span>   <span class="c1">#transform Fj</span>
+            <span class="n">Ftr</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">Ftr</span><span class="p">,(</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">))</span>   <span class="c1">#convert Fj from npop dimensions to a npop x dim with fixed value in all dimensions</span>
+            <span class="n">vi</span><span class="o">=</span><span class="n">pop</span> <span class="o">+</span> <span class="n">multiply</span><span class="p">(</span><span class="n">Ftr</span><span class="p">,(</span><span class="n">pbest</span> <span class="o">-</span> <span class="n">pop</span> <span class="o">+</span> <span class="n">pop</span><span class="p">[</span><span class="n">r1</span><span class="p">,:]</span> <span class="o">-</span> <span class="n">popAll</span><span class="p">[</span><span class="n">r2</span><span class="p">,:]))</span>
+            
+            <span class="c1">#apply bound constraint check</span>
+            <span class="k">for</span> <span class="n">iii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">vi</span><span class="p">)):</span>
+                <span class="n">vi</span><span class="p">[</span><span class="n">iii</span><span class="p">,:]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ensure_bounds</span><span class="p">(</span><span class="n">vi</span><span class="p">[</span><span class="n">iii</span><span class="p">,:])</span>
+                
+            <span class="c1"># == == == == = Crossover == == == == =</span>
+            <span class="n">CRtr</span><span class="o">=</span><span class="n">CRj</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">CRj</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">1</span><span class="p">)</span>   <span class="c1">#transform Crj</span>
+            <span class="n">CRtr</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">CRtr</span><span class="p">,(</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">))</span>   <span class="c1">#convert Fj from npop dimensions to a npop x dim with fixed value in all dimensions</span>
+            
+            <span class="n">mask</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">popsize</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">))</span> <span class="o">&gt;</span> <span class="n">CRtr</span>  <span class="c1">#mask is used to indicate which elements of ui comes from the parent</span>
+            <span class="n">rows</span><span class="o">=</span><span class="n">arange</span><span class="p">(</span><span class="n">popsize</span><span class="p">)</span>
+            <span class="n">cols</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">popsize</span><span class="p">))</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+            <span class="n">jrand</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sub2ind</span><span class="p">((</span><span class="n">popsize</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">),</span><span class="n">rows</span><span class="p">,</span><span class="n">cols</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+            <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">mask</span><span class="p">[</span><span class="n">jrand</span><span class="p">]</span><span class="o">=</span><span class="kc">False</span>
+            <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">popsize</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">)</span>
+            <span class="n">ui</span><span class="o">=</span><span class="n">copy</span><span class="p">(</span><span class="n">vi</span><span class="p">)</span>
+            <span class="n">ui</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">=</span><span class="n">pop</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+            
+            <span class="c1">#evaluate the offspring</span>
+            <span class="c1">#for discrete mutation</span>
+            <span class="k">for</span> <span class="n">iii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ui</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                <span class="n">ui</span><span class="p">[</span><span class="n">iii</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensure_bounds</span><span class="p">(</span><span class="n">ui</span><span class="p">[</span><span class="n">iii</span><span class="p">,</span> <span class="p">:])</span>
+                <span class="n">ui</span><span class="p">[</span><span class="n">iii</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensure_discrete</span><span class="p">(</span><span class="n">ui</span><span class="p">[</span><span class="n">iii</span><span class="p">,</span> <span class="p">:])</span>
+            <span class="n">valOffspring</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eval_pop</span><span class="p">(</span><span class="n">ui</span><span class="p">))</span>
+            
+            <span class="c1">#== == == == == == == == == == == == == == == Selection == == == == == == == == == == == == ==</span>
+            <span class="c1"># I == 1: the parent is better; I == 2: the offspring is better</span>
+            <span class="n">valParents</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">valParents</span><span class="p">,</span> <span class="n">valOffspring</span><span class="p">)</span>
+            <span class="n">I</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">valOffspring</span> <span class="o">&lt;=</span> <span class="n">valParents</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="c1">#indices where offspring is better than the parents</span>
+            <span class="n">popold</span><span class="o">=</span><span class="n">copy</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+            <span class="n">archive</span><span class="o">.</span><span class="n">UpdateArchive</span><span class="p">(</span><span class="n">popold</span><span class="p">[</span><span class="n">I</span><span class="p">,:],</span><span class="n">valParents</span><span class="p">[</span><span class="n">I</span><span class="p">])</span>
+            <span class="n">popold</span><span class="p">[</span><span class="n">I</span><span class="p">,:]</span><span class="o">=</span><span class="n">ui</span><span class="p">[</span><span class="n">I</span><span class="p">,:]</span>
+            <span class="n">goodCR</span><span class="o">=</span><span class="n">CRj</span><span class="p">[</span><span class="n">I</span><span class="p">]</span>
+            <span class="n">goodCR</span><span class="o">=</span><span class="n">Fj</span><span class="p">[</span><span class="n">I</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">valParents</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">overallBestVal</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">overallBestVal</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">valParents</span><span class="p">)</span>
+                <span class="n">min_best_index</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">valParents</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">best_position</span><span class="o">=</span><span class="n">popold</span><span class="p">[</span><span class="n">min_best_index</span><span class="p">,:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                
+            <span class="bp">self</span><span class="o">.</span><span class="n">jade_fitness</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">valParents</span><span class="p">)</span>  <span class="c1">#store best JADE fitness</span>
+            
+            <span class="n">arrayGbestChange</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">arrayGbestChange</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">mixVal</span><span class="p">[</span><span class="n">arrayFirst</span><span class="p">]</span> <span class="o">-</span> <span class="n">valParents</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mixPop</span><span class="p">[</span><span class="n">arrayFirst</span><span class="p">,:]</span><span class="o">=</span><span class="n">popold</span>
+            <span class="n">mixVal</span><span class="p">[</span><span class="n">arrayFirst</span><span class="p">]</span><span class="o">=</span><span class="n">valParents</span>
+            
+            <span class="c1">#----------------------------</span>
+            <span class="c1">#CoDE</span>
+            <span class="c1">#----------------------------</span>
+            <span class="n">popCODE</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mixPop</span><span class="p">[</span><span class="n">arraySecond</span><span class="p">,:]</span>
+            <span class="n">valCODE</span><span class="o">=</span><span class="n">mixVal</span><span class="p">[</span><span class="n">arraySecond</span><span class="p">]</span>
+            <span class="n">popsizeC</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">arraySecond</span><span class="p">)</span>
+            <span class="n">pTemp</span><span class="o">=</span><span class="n">copy</span><span class="p">(</span><span class="n">popCODE</span><span class="p">)</span>
+            <span class="n">fitTemp</span><span class="o">=</span><span class="n">copy</span><span class="p">(</span><span class="n">valCODE</span><span class="p">)</span>
+            <span class="n">uSet</span><span class="o">=</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="o">*</span><span class="n">popsizeC</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">popsizeC</span><span class="p">):</span>
+                <span class="n">F</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">0.8</span><span class="p">])</span>
+                <span class="n">CRC</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.9</span><span class="p">,</span><span class="mf">0.2</span><span class="p">])</span>
+                <span class="c1">#Uniformly and randomly select one of the control</span>
+                <span class="c1"># parameter settings for each trial vector generation strategy</span>
+                <span class="n">paraIndex</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">F</span><span class="p">))</span>
+                <span class="n">u</span><span class="o">=</span><span class="n">generator</span><span class="p">(</span><span class="n">popCODE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">F</span><span class="p">,</span> <span class="n">CRC</span><span class="p">,</span> <span class="n">popsizeC</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">,</span> <span class="n">paraIndex</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">))</span>
+                <span class="n">uSet</span><span class="p">[(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mi">3</span> <span class="o">-</span> <span class="mi">3</span> <span class="p">:</span> <span class="mi">3</span><span class="o">*</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">),:]</span><span class="o">=</span><span class="n">copy</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+                
+            <span class="c1"># Evaluate the trial vectors</span>
+            <span class="k">for</span> <span class="n">iii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">uSet</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>   <span class="c1">#discrete mutation</span>
+                <span class="n">uSet</span><span class="p">[</span><span class="n">iii</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensure_bounds</span><span class="p">(</span><span class="n">uSet</span><span class="p">[</span><span class="n">iii</span><span class="p">,</span> <span class="p">:])</span>
+                <span class="n">uSet</span><span class="p">[</span><span class="n">iii</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensure_discrete</span><span class="p">(</span><span class="n">uSet</span><span class="p">[</span><span class="n">iii</span><span class="p">,</span> <span class="p">:])</span>
+            <span class="n">fitSet</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eval_pop</span><span class="p">(</span><span class="n">uSet</span><span class="p">))</span>
+            
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">popsizeC</span><span class="p">):</span>
+                <span class="c1">#minVal=np.min(fitSet[(i+1)*3 - 3 : 3*(i+1)])</span>
+                <span class="n">minID</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">fitSet</span><span class="p">[(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mi">3</span> <span class="o">-</span> <span class="mi">3</span> <span class="p">:</span> <span class="mi">3</span><span class="o">*</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)])</span>
+                <span class="n">bestInd</span><span class="o">=</span><span class="n">uSet</span><span class="p">[</span><span class="mi">3</span><span class="o">*</span><span class="n">i</span> <span class="o">+</span> <span class="n">minID</span><span class="p">,:]</span>
+                <span class="n">bestIndFit</span><span class="o">=</span><span class="n">fitSet</span><span class="p">[</span><span class="mi">3</span><span class="o">*</span><span class="n">i</span> <span class="o">+</span> <span class="n">minID</span><span class="p">]</span>
+                <span class="c1"># Choose the better one between the trial vector and the target vector</span>
+                <span class="k">if</span> <span class="n">valCODE</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">bestIndFit</span><span class="p">:</span>
+                    <span class="n">pTemp</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span><span class="o">=</span><span class="n">bestInd</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                    <span class="n">fitTemp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">bestIndFit</span>
+
+            <span class="n">popCODE</span><span class="o">=</span><span class="n">copy</span><span class="p">(</span><span class="n">pTemp</span><span class="p">)</span>
+            <span class="n">valCODE</span><span class="o">=</span><span class="n">copy</span><span class="p">(</span><span class="n">fitTemp</span><span class="p">)</span>
+                    
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">fitTemp</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">overallBestVal</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">overallBestVal</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">fitTemp</span><span class="p">)</span>
+                <span class="n">min_best_index</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">fitTemp</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">best_position</span><span class="o">=</span><span class="n">popCODE</span><span class="p">[</span><span class="n">min_best_index</span><span class="p">,:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">code_fitness</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">fitTemp</span><span class="p">)</span>  <span class="c1">#store best CoDE fitness</span>
+
+            <span class="n">arrayGbestChange</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">arrayGbestChange</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">mixVal</span><span class="p">[</span><span class="n">arraySecond</span><span class="p">]</span> <span class="o">-</span> <span class="n">valCODE</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mixPop</span><span class="p">[</span><span class="n">arraySecond</span><span class="p">,:]</span><span class="o">=</span><span class="n">popCODE</span>
+            <span class="n">mixVal</span><span class="p">[</span><span class="n">arraySecond</span><span class="p">]</span><span class="o">=</span><span class="n">valCODE</span>
+            
+            <span class="c1">#----------------------------</span>
+            <span class="c1">#EPSDE</span>
+            <span class="c1">#----------------------------</span>
+            <span class="n">FM_pop</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mixPop</span><span class="p">[</span><span class="n">arrayThird</span><span class="p">,:]</span>
+            <span class="n">val</span><span class="o">=</span><span class="n">mixVal</span><span class="p">[</span><span class="n">arrayThird</span><span class="p">]</span>
+            <span class="n">I_NP</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">arrayThird</span><span class="p">)</span>
+            <span class="n">inde</span><span class="o">=</span><span class="n">arange</span><span class="p">(</span><span class="n">I_NP</span><span class="p">)</span>
+            <span class="n">Para</span><span class="o">=</span><span class="n">zeros</span><span class="p">((</span><span class="n">I_NP</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+            <span class="n">I_iter</span><span class="o">=</span><span class="n">gen</span>
+            
+            <span class="k">if</span> <span class="p">(</span><span class="n">I_iter</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">Para</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">I_NP</span><span class="p">):</span>
+                <span class="n">Para</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">spara</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">spara</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">size</span><span class="o">=</span><span class="n">inde</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+                <span class="n">Para</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">CR</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">CR</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">size</span><span class="o">=</span><span class="n">inde</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+                <span class="n">Para</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">FF</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">FF</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">size</span><span class="o">=</span><span class="n">inde</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">inde</span><span class="p">)):</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">RATE</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">PPara</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">RR</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">I_NP</span><span class="p">:</span>
+                        <span class="n">RR</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">PPara</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                        <span class="n">Para</span><span class="p">[</span><span class="n">inde</span><span class="p">[</span><span class="n">k</span><span class="p">],:]</span><span class="o">=</span><span class="n">PPara</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">PPara</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),:]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">RR</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span>
+                        <span class="n">Para</span><span class="p">[</span><span class="n">inde</span><span class="p">[</span><span class="n">k</span><span class="p">],:]</span><span class="o">=</span><span class="p">[</span>
+                                        <span class="n">spara</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">spara</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])],</span>
+                                        <span class="n">CR</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">CR</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])],</span>
+                                        <span class="n">FF</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">FF</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+                                        <span class="p">]</span>
+        
+            <span class="n">RRR</span><span class="o">=</span><span class="p">[]</span>
+            <span class="n">count</span><span class="o">=</span><span class="mi">0</span>
+            <span class="n">FM_popold</span><span class="o">=</span><span class="n">copy</span><span class="p">(</span><span class="n">FM_pop</span><span class="p">)</span>
+            <span class="n">par</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">I_NP</span><span class="p">,</span> <span class="n">I_D</span><span class="p">))</span>
+            <span class="n">FM_ui</span><span class="o">=</span><span class="n">par</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">I_NP</span><span class="p">):</span>
+                <span class="n">FM_mui</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">I_D</span><span class="p">))</span> <span class="o">&lt;</span> <span class="n">Para</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+                
+                <span class="n">dd</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">FM_mui</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dd</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">ddd</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">()</span> <span class="o">*</span> <span class="n">I_D</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="n">FM_mui</span><span class="p">[</span><span class="n">ddd</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
+                    
+                <span class="n">FM_mpo</span><span class="o">=</span><span class="n">FM_mui</span> <span class="o">&lt;</span> <span class="mf">0.5</span>
+                <span class="n">FM_bm</span><span class="o">=</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">FVr_bestmem</span><span class="p">)</span>
+                
+                <span class="n">par</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">Para</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span><span class="mf">0.001</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">I_D</span><span class="p">))</span>
+                
+                <span class="k">if</span> <span class="p">(</span><span class="n">Para</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+                    <span class="c1">#DE/best/2/bin</span>
+                    <span class="n">ind</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">I_NP</span><span class="p">)</span>
+                    <span class="n">FM_pm3</span><span class="o">=</span><span class="n">FM_popold</span><span class="p">[</span><span class="n">ind</span><span class="p">[</span><span class="mi">0</span><span class="p">],:]</span>
+                    <span class="n">FM_pm4</span><span class="o">=</span><span class="n">FM_popold</span><span class="p">[</span><span class="n">ind</span><span class="p">[</span><span class="mi">1</span><span class="p">],:]</span>
+                    <span class="n">FM_pm5</span><span class="o">=</span><span class="n">FM_popold</span><span class="p">[</span><span class="n">ind</span><span class="p">[</span><span class="mi">2</span><span class="p">],:]</span>
+                    <span class="n">FM_pm6</span><span class="o">=</span><span class="n">FM_popold</span><span class="p">[</span><span class="n">ind</span><span class="p">[</span><span class="mi">3</span><span class="p">],:]</span>
+                    <span class="n">FM_ui</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span><span class="o">=</span><span class="n">FM_bm</span> <span class="o">+</span> <span class="p">(</span><span class="n">FM_pm3</span> <span class="o">-</span> <span class="n">FM_pm4</span> <span class="o">+</span> <span class="n">FM_pm5</span> <span class="o">-</span> <span class="n">FM_pm6</span><span class="p">)</span> <span class="o">*</span> <span class="n">par</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span>
+                    <span class="n">FM_ui</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span><span class="o">=</span><span class="n">multiply</span><span class="p">(</span><span class="n">FM_popold</span><span class="p">[</span><span class="n">i</span><span class="p">,:],</span><span class="n">FM_mpo</span><span class="p">)</span> <span class="o">+</span> <span class="n">multiply</span><span class="p">(</span><span class="n">FM_ui</span><span class="p">[</span><span class="n">i</span><span class="p">,:],</span><span class="n">FM_mui</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">Para</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="c1">#DE/rand/1/bin</span>
+                    <span class="n">ind</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">I_NP</span><span class="p">)</span>
+                    <span class="n">FM_pm7</span><span class="o">=</span><span class="n">FM_popold</span><span class="p">[</span><span class="n">ind</span><span class="p">[</span><span class="mi">0</span><span class="p">],:]</span>
+                    <span class="n">FM_pm8</span><span class="o">=</span><span class="n">FM_popold</span><span class="p">[</span><span class="n">ind</span><span class="p">[</span><span class="mi">1</span><span class="p">],:]</span>
+                    <span class="n">FM_pm9</span><span class="o">=</span><span class="n">FM_popold</span><span class="p">[</span><span class="n">ind</span><span class="p">[</span><span class="mi">2</span><span class="p">],:]</span>
+                    <span class="n">FM_ui</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span><span class="o">=</span><span class="n">FM_pm7</span> <span class="o">+</span> <span class="n">par</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">*</span> <span class="p">(</span><span class="n">FM_pm8</span> <span class="o">-</span> <span class="n">FM_pm9</span><span class="p">)</span>
+                    <span class="n">FM_ui</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span><span class="o">=</span><span class="n">multiply</span><span class="p">(</span><span class="n">FM_popold</span><span class="p">[</span><span class="n">i</span><span class="p">,:],</span><span class="n">FM_mpo</span><span class="p">)</span> <span class="o">+</span> <span class="n">multiply</span><span class="p">(</span><span class="n">FM_ui</span><span class="p">[</span><span class="n">i</span><span class="p">,:],</span><span class="n">FM_mui</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">Para</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">):</span>
+                    <span class="c1"># DE/current-to-rand/1/bin/</span>
+                    <span class="n">ind</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">I_NP</span><span class="p">)</span>
+                    <span class="n">FM_pm21</span><span class="o">=</span><span class="n">FM_popold</span><span class="p">[</span><span class="n">ind</span><span class="p">[</span><span class="mi">0</span><span class="p">],:]</span>
+                    <span class="n">FM_pm22</span><span class="o">=</span><span class="n">FM_popold</span><span class="p">[</span><span class="n">ind</span><span class="p">[</span><span class="mi">1</span><span class="p">],:]</span>
+                    <span class="n">FM_pm23</span><span class="o">=</span><span class="n">FM_popold</span><span class="p">[</span><span class="n">ind</span><span class="p">[</span><span class="mi">2</span><span class="p">],:]</span>
+                    <span class="n">FM_ui</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span><span class="o">=</span><span class="n">FM_popold</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">I_D</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">FM_pm21</span> <span class="o">-</span> <span class="n">FM_popold</span><span class="p">[</span><span class="n">i</span><span class="p">,:])</span> <span class="o">+</span> <span class="n">par</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">*</span> <span class="p">(</span><span class="n">FM_pm22</span> <span class="o">-</span> <span class="n">FM_pm23</span><span class="p">)</span>
+        
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">FM_ui</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">lb</span><span class="p">)</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">FM_ui</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">ub</span><span class="p">):</span>
+                    <span class="c1">#reset an individual outside the bounds</span>
+                    <span class="n">FM_ui</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lb</span> <span class="o">+</span> <span class="n">multiply</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">ub</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lb</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">I_D</span><span class="p">))</span>
+                        
+            <span class="c1">#evaluate the updated population</span>
+            <span class="k">for</span> <span class="n">iii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">FM_ui</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>   <span class="c1">#discrete mutation</span>
+                <span class="n">FM_ui</span><span class="p">[</span><span class="n">iii</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensure_bounds</span><span class="p">(</span><span class="n">FM_ui</span><span class="p">[</span><span class="n">iii</span><span class="p">,</span> <span class="p">:])</span>
+                <span class="n">FM_ui</span><span class="p">[</span><span class="n">iii</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensure_discrete</span><span class="p">(</span><span class="n">FM_ui</span><span class="p">[</span><span class="n">iii</span><span class="p">,</span> <span class="p">:])</span>
+            <span class="n">tempval</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eval_pop</span><span class="p">(</span><span class="n">FM_ui</span><span class="p">))</span>
+                    
+        
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">I_NP</span><span class="p">):</span>
+                <span class="n">I_nfeval</span><span class="o">=</span><span class="n">I_nfeval</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">tempval</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">val</span><span class="p">[</span><span class="n">i</span><span class="p">]):</span>
+                    <span class="n">FM_pop</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span><span class="o">=</span><span class="n">FM_ui</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span>
+                    <span class="n">val</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">tempval</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                    <span class="n">PPara</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PPara</span><span class="p">,</span> <span class="n">Para</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">RR</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">RRR</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">RR</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+                    <span class="k">if</span> <span class="n">tempval</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">F_bestval</span><span class="p">:</span>
+                        <span class="n">F_bestval</span><span class="o">=</span><span class="n">tempval</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">FVr_bestmem</span><span class="o">=</span><span class="n">FM_ui</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span>
+                        <span class="n">I_best_index</span><span class="o">=</span><span class="n">i</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">count</span><span class="o">=</span><span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
+                    
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">overallBestVal</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">overallBestVal</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+                <span class="n">min_best_index</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">best_position</span><span class="o">=</span><span class="n">FM_pop</span><span class="p">[</span><span class="n">min_best_index</span><span class="p">,:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">epsde_fitness</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>  <span class="c1">#store best EPSDE fitness</span>
+                
+            <span class="n">arrayGbestChange</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">arrayGbestChange</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">mixVal</span><span class="p">[</span><span class="n">arrayThird</span><span class="p">]</span> <span class="o">-</span> <span class="n">val</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mixPop</span><span class="p">[</span><span class="n">arrayThird</span><span class="p">,:]</span><span class="o">=</span><span class="n">FM_pop</span>
+            <span class="n">mixVal</span><span class="p">[</span><span class="n">arrayThird</span><span class="p">]</span><span class="o">=</span><span class="n">val</span>
+            <span class="n">PPara</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">PPara</span><span class="p">,</span> <span class="n">RRR</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">rate</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">count</span> <span class="o">/</span> <span class="n">I_NP</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">I_iter</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
+                <span class="n">RATE</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rate</span><span class="p">[(</span><span class="n">I_iter</span> <span class="o">-</span> <span class="mi">10</span><span class="p">)</span> <span class="p">:</span> <span class="n">I_iter</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">RATE</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rate</span><span class="p">)</span>
+            <span class="n">I_iter</span><span class="o">=</span><span class="n">I_iter</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">gen</span><span class="o">=</span><span class="n">gen</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="c1">#---------------------------------------------------------------------------</span>
+        <span class="c1">#-------------------------------EDEV ends here----------------------------</span>
+        <span class="c1">#---------------------------------------------------------------------------</span>
+                
+            <span class="c1">#--mir</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">==</span><span class="s1">&#39;max&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fitness_best_correct</span><span class="o">=-</span><span class="bp">self</span><span class="o">.</span><span class="n">overallBestVal</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">jade_fitness</span><span class="o">=-</span><span class="bp">self</span><span class="o">.</span><span class="n">jade_fitness</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">code_fitness</span><span class="o">=-</span><span class="bp">self</span><span class="o">.</span><span class="n">code_fitness</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">epsde_fitness</span><span class="o">=-</span><span class="bp">self</span><span class="o">.</span><span class="n">epsde_fitness</span>
+                
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fitness_best_correct</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">overallBestVal</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_pop</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mixPop</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_fit</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mixVal</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>            
+            <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;global_fitness&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitness_best_correct</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;JADE&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jade_fitness</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;CoDE&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">code_fitness</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;EPSDE&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">epsde_fitness</span><span class="p">)</span>
+                        
+            <span class="c1"># Print statistics</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;EDEV step </span><span class="si">{}</span><span class="s1">/</span><span class="si">{}</span><span class="s1">, npop=</span><span class="si">{}</span><span class="s1">, Ncores=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">((</span><span class="n">gen</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">npop</span><span class="p">,</span> <span class="n">ngen</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">npop</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">npop</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best EDEV Fitness:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitness_best_correct</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">ind_decoded</span> <span class="o">=</span> <span class="n">decode_discrete_to_grid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">best_position</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best Position:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ind_decoded</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best Position:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_position</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;JADE Fitness:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">jade_fitness</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;CoDE Fitness:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">code_fitness</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;EPSDE Fitness:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">epsde_fitness</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^&#39;</span><span class="p">)</span>
+
+        <span class="c1">#mir-grid</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ind_correct</span> <span class="o">=</span> <span class="n">decode_discrete_to_grid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">best_position</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ind_correct</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_position</span>                
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">==</span><span class="s1">&#39;max&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_fit</span><span class="o">=-</span><span class="bp">self</span><span class="o">.</span><span class="n">last_fit</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;last_pop&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_population</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_pop</span><span class="p">,</span> <span class="n">fits</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">last_fit</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;F-Evals&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">FES</span>   <span class="c1">#function evaluations </span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;------------------------ EDEV Summary --------------------------&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best fitness (y) found:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitness_best_correct</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best individual (x) found:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ind_correct</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--------------------------------------------------------------&#39;</span><span class="p">)</span>  
+            
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ind_correct</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitness_best_correct</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span></div></div>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Exelon Corp. &amp; MIT.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

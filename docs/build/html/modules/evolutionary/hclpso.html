@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Heterogeneous comprehensive learning particle swarm optimization (HCLPSO) &mdash; NEORL 1.7.3b documentation</title>
+  <title>Heterogeneous comprehensive learning particle swarm optimization (HCLPSO) &mdash; NEORL 1.7.4b documentation</title>
   
 
   
@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                main (1.7.3b )
+                main (1.7.4b )
               </div>
             
           
@@ -234,7 +234,7 @@
 <li><p><strong>g1</strong> – (int): number of particles in the exploration group</p></li>
 <li><p><strong>g2</strong> – (int): number of particles in the exploitation group (total swarm size is <code class="docutils literal notranslate"><span class="pre">g1</span> <span class="pre">+</span> <span class="pre">g2</span></code>)</p></li>
 <li><p><strong>int_transform</strong> – (str): method of handling int/discrete variables, choose from: <code class="docutils literal notranslate"><span class="pre">nearest_int</span></code>, <code class="docutils literal notranslate"><span class="pre">sigmoid</span></code>, <code class="docutils literal notranslate"><span class="pre">minmax</span></code>.</p></li>
-<li><p><strong>ncores</strong> – (int) number of parallel processors (must be <code class="docutils literal notranslate"><span class="pre">&lt;=</span> <span class="pre">nsalps</span></code>)</p></li>
+<li><p><strong>ncores</strong> – (int) number of parallel processors (must be <code class="docutils literal notranslate"><span class="pre">&lt;=</span> <span class="pre">g1+g2</span></code>)</p></li>
 <li><p><strong>seed</strong> – (int) random seed for sampling</p></li>
 </ul>
 </dd>
@@ -281,16 +281,16 @@
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">nx</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
     <span class="n">BOUNDS</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
 
-<span class="c1">#setup and evolute PSO</span>
+<span class="c1">#setup and evolute HCLPSO</span>
 <span class="n">hclpso</span><span class="o">=</span><span class="n">HCLPSO</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">g1</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">g2</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">FIT</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">x_best</span><span class="p">,</span> <span class="n">y_best</span><span class="p">,</span> <span class="n">pso_hist</span><span class="o">=</span><span class="n">hclpso</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">x_best</span><span class="p">,</span> <span class="n">y_best</span><span class="p">,</span> <span class="n">hclpso_hist</span><span class="o">=</span><span class="n">hclpso</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="notes">
 <h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p>Choosing the number of particles in the exploration subgroup (<code class="docutils literal notranslate"><span class="pre">g1</span></code>) and exploitation subgroup (<code class="docutils literal notranslate"><span class="pre">g2</span></code>) are the only hyperparameters for HCLPSO. In the original algorithm, <code class="docutils literal notranslate"><span class="pre">g1</span></code> tends to be smaller than <code class="docutils literal notranslate"><span class="pre">g2</span></code>.</p></li>
+<li><p>The number of particles in the exploration subgroup (<code class="docutils literal notranslate"><span class="pre">g1</span></code>) and exploitation subgroup (<code class="docutils literal notranslate"><span class="pre">g2</span></code>) are the only hyperparameters for HCLPSO. In the original algorithm, <code class="docutils literal notranslate"><span class="pre">g1</span></code> tends to be smaller than <code class="docutils literal notranslate"><span class="pre">g2</span></code>.</p></li>
 <li><p>HCLPSO provides time dependent (annealing) behavior for all major PSO hyperparameters over the number of search generations (<code class="docutils literal notranslate"><span class="pre">ngen</span></code>). The cognitive speed constant (<code class="docutils literal notranslate"><span class="pre">c1</span></code>) is linearly annealed from 2.5-0.5, social speed constant (<code class="docutils literal notranslate"><span class="pre">c2</span></code>) is annealed from 0.5-2.5, inertia weight (<code class="docutils literal notranslate"><span class="pre">w</span></code>) is annealed from 0.99-0.2, while constriction coefficient (<code class="docutils literal notranslate"><span class="pre">K</span></code>) is annealed from 3-1.5. Therefore, the HCLPSO user does not need to tune these values.</p></li>
 <li><p>Look for an optimal balance between <code class="docutils literal notranslate"><span class="pre">g1</span></code>, <code class="docutils literal notranslate"><span class="pre">g2</span></code>, and <code class="docutils literal notranslate"><span class="pre">ngen</span></code>, it is recommended to minimize particle size to allow for more generations.</p></li>
 <li><p>Total number of cost evaluations for PSO is <code class="docutils literal notranslate"><span class="pre">(g1</span> <span class="pre">+</span> <span class="pre">g2)</span></code> * <code class="docutils literal notranslate"><span class="pre">(ngen</span> <span class="pre">+</span> <span class="pre">1)</span></code>.</p></li>

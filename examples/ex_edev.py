@@ -1,4 +1,4 @@
-from neorl import HCLPSO
+from neorl import EDEV
 
 #Define the fitness function
 def FIT(individual):
@@ -17,6 +17,6 @@ BOUNDS={}
 for i in range(1,nx+1):
     BOUNDS['x'+str(i)]=['float', -100, 100]
 
-#setup and evolute HCLPSO
-hclpso=HCLPSO(mode='min', bounds=BOUNDS, g1=15, g2=25, fit=FIT, ncores=1, seed=1)
-x_best, y_best, hclpso_hist=hclpso.evolute(ngen=120, verbose=1)
+#setup and evolute EDEV
+edev=EDEV(mode='min', bounds=BOUNDS, fit=FIT, npop=100, lambda_=0.1, ncores=1, seed=1)
+x_best, y_best, edev_hist=edev.evolute(ngen=100, ng=10, verbose=1)

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.evolu.hclpso &mdash; NEORL 1.7.3b documentation</title>
+  <title>neorl.evolu.hclpso &mdash; NEORL 1.7.4b documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.7.3b )
+                main (1.7.4b )
               </div>
             
           
@@ -209,7 +209,7 @@
 <span class="sd">    :param g1: (int): number of particles in the exploration group</span>
 <span class="sd">    :param g2: (int): number of particles in the exploitation group (total swarm size is ``g1 + g2``)</span>
 <span class="sd">    :param int_transform: (str): method of handling int/discrete variables, choose from: ``nearest_int``, ``sigmoid``, ``minmax``.</span>
-<span class="sd">    :param ncores: (int) number of parallel processors (must be ``&lt;= nsalps``)</span>
+<span class="sd">    :param ncores: (int) number of parallel processors (must be ``&lt;= g1+g2``)</span>
 <span class="sd">    :param seed: (int) random seed for sampling</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">g1</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">g2</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">int_transform</span><span class="o">=</span><span class="s1">&#39;nearest_int&#39;</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -367,7 +367,6 @@
         <span class="c1">#last particle index</span>
         <span class="c1">#number of particles to sample a friend</span>
         
-
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
 
             <span class="k">if</span> <span class="n">check_slope</span><span class="p">:</span>
@@ -407,6 +406,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">best_fitness</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)</span> 
         <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">num_g</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span>
         <span class="k">if</span> <span class="n">x0</span><span class="p">:</span>
             <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_g</span><span class="p">,</span> <span class="s1">&#39;--error: the length of x0 (</span><span class="si">{}</span><span class="s1">) MUST equal the number of particles in the group `g1+g2 `(</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_g</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_g</span><span class="p">):</span>
@@ -436,6 +436,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">range_min</span> <span class="o">+</span> <span class="n">multiply</span><span class="p">(</span><span class="n">interval</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_g</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">)))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">vel</span><span class="o">=</span><span class="n">v_min</span> <span class="o">+</span> <span class="n">multiply</span><span class="p">((</span><span class="n">v_max</span> <span class="o">-</span> <span class="n">v_min</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_g</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">)))</span>
         
+        <span class="c1">#ensure discrete mutation</span>
+        <span class="k">for</span> <span class="n">iii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">iii</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensure_bounds</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">iii</span><span class="p">,</span> <span class="p">:])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">iii</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensure_discrete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">iii</span><span class="p">,</span> <span class="p">:])</span>
+                
         <span class="n">fitness0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">eval_particles</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gbest_pos</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gbest_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">,</span> <span class="n">fitness0</span><span class="p">)</span>
         
@@ -452,7 +457,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">UpdateParticles</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_g1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_g</span><span class="p">,</span> <span class="n">friend_num</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_g</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">check_slope</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>        
                        
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ngen</span><span class="p">):</span>
-
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">k</span> <span class="o">*</span> <span class="p">((</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">ngen</span><span class="p">)</span>  <span class="c1">#mir: a decreases linearly between 1 to 0, for discrete mutation</span>
+            
             <span class="c1">#----------------------------</span>
             <span class="c1">#  Position/Veclocity Update</span>
             <span class="c1">#----------------------------</span>
@@ -478,6 +485,11 @@
             
             <span class="c1">#whole group concatenatation</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">pos_g1</span><span class="p">,</span> <span class="n">pos_g2</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="c1">#ensure discrete mutation</span>
+            <span class="k">for</span> <span class="n">iii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">iii</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensure_bounds</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">iii</span><span class="p">,</span> <span class="p">:])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">iii</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensure_discrete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">iii</span><span class="p">,</span> <span class="p">:])</span>
+            
             <span class="bp">self</span><span class="o">.</span><span class="n">vel</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">vel_g1</span><span class="p">,</span> <span class="n">vel_g2</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
                     
             <span class="c1">#----------------------</span>

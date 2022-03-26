@@ -39,7 +39,7 @@ Example
 Notes
 -----
 
-- Choosing the number of particles in the exploration subgroup (``g1``) and exploitation subgroup (``g2``) are the only hyperparameters for HCLPSO. In the original algorithm, ``g1`` tends to be smaller than ``g2``. 
+- The number of particles in the exploration subgroup (``g1``) and exploitation subgroup (``g2``) are the only hyperparameters for HCLPSO. In the original algorithm, ``g1`` tends to be smaller than ``g2``. 
 - HCLPSO provides time dependent (annealing) behavior for all major PSO hyperparameters over the number of search generations (``ngen``). The cognitive speed constant (``c1``) is linearly annealed from 2.5-0.5, social speed constant (``c2``) is annealed from 0.5-2.5, inertia weight (``w``) is annealed from 0.99-0.2, while constriction coefficient (``K``) is annealed from 3-1.5. Therefore, the HCLPSO user does not need to tune these values.  
 - Look for an optimal balance between ``g1``, ``g2``, and ``ngen``, it is recommended to minimize particle size to allow for more generations.
 - Total number of cost evaluations for PSO is ``(g1 + g2)`` * ``(ngen + 1)``.

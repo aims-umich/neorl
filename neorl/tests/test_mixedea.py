@@ -2,7 +2,7 @@
 # Import Packages
 ########################
 
-from neorl import HHO, ES, PESA, BAT, GWO, MFO, WOA, SSA, DE, JAYA, PESA2, PSO
+from neorl import HHO, ES, PESA, BAT, GWO, MFO, WOA, SSA, DE, JAYA, PESA2, PSO, HCLPSO, EDEV
 import math
 
 def test_mixedea():
@@ -196,43 +196,64 @@ def test_mixedea():
         assert Vessel(x_pso) == y_pso
         
         ########################
+        # Setup and evolute HCLPSO
+        ########################
+        hclpso=HCLPSO(mode='min', bounds=bounds, g1=15, g2=25, fit=Vessel, ncores=1, seed=1)
+        x_hclpso, y_hclpso, pso_hist=hclpso.evolute(ngen=100, verbose=0)
+        assert Vessel(x_hclpso) == y_hclpso
+        
+        ########################
+        # Setup and evolute EDEV
+        ########################
+        edev=EDEV(mode='min', bounds=bounds, fit=Vessel, npop=100, lambda_=0.1, ncores=1, seed=1)
+        x_edev, y_edev, edev_hist=edev.evolute(ngen=100, ng=10, verbose=0)
+        assert Vessel(x_edev) == y_edev
+        
+        ########################
         # Comparison
         ########################
-        print('---Best HHO Results---')
-        print(x_hho)
-        print(y_hho)
-        print('---Best ES Results---')
-        print(x_es)
-        print(y_es)
-        print('---Best PESA Results---')
-        print(x_pesa)
-        print(y_pesa)
-        print('---Best BAT Results---')
-        print(x_bat)
-        print(y_bat)
-        print('---Best GWO Results---')
-        print(x_gwo)
-        print(y_gwo)
-        print('---Best WOA Results---')
-        print(x_woa)
-        print(y_woa)
-        print('---Best SSA Results---')
-        print(x_ssa)
-        print(y_ssa)
-        print('---Best MFO Results---')
-        print(x_mfo)
-        print(y_mfo)
-        print('---Best DE Results---')
-        print(x_de)
-        print(y_de)
-        print('---Best JAYA Results---')
-        print(x_jaya)
-        print(y_jaya)
-        print('---Best PESA2 Results---')
-        print(x_pesa2)
-        print(y_pesa2)
-        print('---Best PSO Results---')
-        print(x_pso)
-        print(y_pso)
+        if 1:
+            print('---Best HHO Results---')
+            print(x_hho)
+            print(y_hho)
+            print('---Best ES Results---')
+            print(x_es)
+            print(y_es)
+            print('---Best PESA Results---')
+            print(x_pesa)
+            print(y_pesa)
+            print('---Best BAT Results---')
+            print(x_bat)
+            print(y_bat)
+            print('---Best GWO Results---')
+            print(x_gwo)
+            print(y_gwo)
+            print('---Best WOA Results---')
+            print(x_woa)
+            print(y_woa)
+            print('---Best SSA Results---')
+            print(x_ssa)
+            print(y_ssa)
+            print('---Best MFO Results---')
+            print(x_mfo)
+            print(y_mfo)
+            print('---Best DE Results---')
+            print(x_de)
+            print(y_de)
+            print('---Best JAYA Results---')
+            print(x_jaya)
+            print(y_jaya)
+            print('---Best PESA2 Results---')
+            print(x_pesa2)
+            print(y_pesa2)
+            print('---Best PSO Results---')
+            print(x_pso)
+            print(y_pso)
+            print('---Best HCLPSO Results---')
+            print(x_hclpso)
+            print(y_hclpso)
+            print('---Best EDEV Results---')
+            print(x_edev)
+            print(y_edev)
     
 test_mixedea()

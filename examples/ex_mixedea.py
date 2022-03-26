@@ -2,7 +2,7 @@
 # Import Packages
 ########################
 
-from neorl import HHO, ES, PESA, BAT, GWO, MFO, WOA, SSA, DE, JAYA, PESA2, PSO
+from neorl import HHO, ES, PESA, BAT, GWO, MFO, WOA, SSA, DE, JAYA, PESA2, PSO, HCLPSO, EDEV
 import math
 
 #################################
@@ -166,7 +166,7 @@ for item in ['float', 'grid', 'float/int', 'float/grid', 'int/grid', 'mixed', 'i
     # Setup and evolute SSA
     ########################
     #setup and evolute SSA
-    ssa=SSA(mode='min', bounds=bounds, fit=Vessel, nsalps=50, c1=None, int_transform='sigmoid', ncores=1, seed=1)
+    ssa=SSA(mode='min', bounds=bounds, fit=Vessel, nsalps=50, int_transform='sigmoid', ncores=1, seed=1)
     x_ssa, y_ssa, ssa_hist=ssa.evolute(ngen=ngen, verbose=0)
     assert Vessel(x_ssa) == y_ssa
     
@@ -191,6 +191,20 @@ for item in ['float', 'grid', 'float/int', 'float/grid', 'int/grid', 'mixed', 'i
                     speed_mech='constric', ncores=1, seed=1)
     x_pso, y_pso, pso_hist=pso.evolute(ngen=ngen, verbose=0)
     assert Vessel(x_pso) == y_pso
+    
+    ########################
+    # Setup and evolute HCLPSO
+    ########################
+    hclpso=HCLPSO(mode='min', bounds=bounds, g1=15, g2=25, fit=Vessel, ncores=1, seed=1)
+    x_hclpso, y_hclpso, pso_hist=hclpso.evolute(ngen=100, verbose=0)
+    assert Vessel(x_hclpso) == y_hclpso
+    
+    ########################
+    # Setup and evolute EDEV
+    ########################
+    edev=EDEV(mode='min', bounds=bounds, fit=Vessel, npop=100, lambda_=0.1, ncores=1, seed=1)
+    x_edev, y_edev, edev_hist=edev.evolute(ngen=100, ng=10, verbose=0)
+    assert Vessel(x_edev) == y_edev
     
     ########################
     # Comparison
@@ -232,3 +246,9 @@ for item in ['float', 'grid', 'float/int', 'float/grid', 'int/grid', 'mixed', 'i
         print('---Best PSO Results---')
         print(x_pso)
         print(y_pso)
+        print('---Best HCLPSO Results---')
+        print(x_hclpso)
+        print(y_hclpso)
+        print('---Best EDEV Results---')
+        print(x_edev)
+        print(y_edev)

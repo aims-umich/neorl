@@ -38,7 +38,7 @@ class HCLPSO(object):
     :param g1: (int): number of particles in the exploration group
     :param g2: (int): number of particles in the exploitation group (total swarm size is ``g1 + g2``)
     :param int_transform: (str): method of handling int/discrete variables, choose from: ``nearest_int``, ``sigmoid``, ``minmax``.
-    :param ncores: (int) number of parallel processors (must be ``<= nsalps``)
+    :param ncores: (int) number of parallel processors (must be ``<= g1+g2``)
     :param seed: (int) random seed for sampling
     """
     def __init__(self, mode, bounds, fit, g1=15, g2=25, int_transform='nearest_int', ncores=1, seed=None):
@@ -196,7 +196,6 @@ class HCLPSO(object):
         #last particle index
         #number of particles to sample a friend
         
-
         for i in range(a,b):
 
             if check_slope:
@@ -236,6 +235,7 @@ class HCLPSO(object):
         self.best_fitness=float("inf") 
         self.verbose=verbose
         self.Positions = np.zeros((self.num_g, self.dim))
+        self.a=1
         if x0:
             assert len(x0) == self.num_g, '--error: the length of x0 ({}) MUST equal the number of particles in the group `g1+g2 `({})'.format(len(x0), self.num_g)
             for i in range(self.num_g):
@@ -265,6 +265,11 @@ class HCLPSO(object):
         self.Positions=self.range_min + multiply(interval,np.random.uniform(size=(self.num_g,self.dim)))
         self.vel=v_min + multiply((v_max - v_min),np.random.uniform(size=(self.num_g,self.dim)))
         
+        #ensure discrete mutation
+        for iii in range(self.Positions.shape[0]):
+            self.Positions[iii, :] = self.ensure_bounds(self.Positions[iii, :])
+            self.Positions[iii, :] = self.ensure_discrete(self.Positions[iii, :])
+                
         fitness0=self.eval_particles()
         self.gbest_pos, self.gbest_val = self.select(self.Positions, fitness0)
         
@@ -281,7 +286,9 @@ class HCLPSO(object):
         self.UpdateParticles(a=self.num_g1, b=self.num_g, friend_num=self.num_g-1, check_slope=False)        
                        
         for k in range(ngen):
-
+            
+            self.a= 1 - k * ((1) / ngen)  #mir: a decreases linearly between 1 to 0, for discrete mutation
+            
             #----------------------------
             #  Position/Veclocity Update
             #----------------------------
@@ -307,6 +314,11 @@ class HCLPSO(object):
             
             #whole group concatenatation
             self.Positions=np.concatenate((pos_g1, pos_g2), axis=0)
+            #ensure discrete mutation
+            for iii in range(self.Positions.shape[0]):
+                self.Positions[iii, :] = self.ensure_bounds(self.Positions[iii, :])
+                self.Positions[iii, :] = self.ensure_discrete(self.Positions[iii, :])
+            
             self.vel=np.concatenate((vel_g1, vel_g2), axis=0)
                     
             #----------------------
