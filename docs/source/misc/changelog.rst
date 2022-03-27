@@ -36,7 +36,7 @@ Release 1.7.4b (2022-3-26)
 
 .. code-block:: bash
 
-  pip install neorl==1.7.3b --extra-index-url https://test.pypi.org/simple
+  pip install neorl==1.7.4b --extra-index-url https://test.pypi.org/simple
 
 - Added a full module for HCLPSO with parallel support and all space types. 
 - Added a full module for EDEV with parallel support and all space types. 

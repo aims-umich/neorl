@@ -37,6 +37,7 @@ neorl/evolu/discrete.py
 neorl/evolu/es.py
 neorl/evolu/ga.py
 neorl/evolu/gwo.py
+neorl/evolu/hclpso.py
 neorl/evolu/hho.py
 neorl/evolu/jaya.py
 neorl/evolu/mfo.py
@@ -53,6 +54,7 @@ neorl/evolu/runners/sa.py
 neorl/hybrid/__init__.py
 neorl/hybrid/ackde.py
 neorl/hybrid/aeo.py
+neorl/hybrid/edev.py
 neorl/hybrid/fneat.py
 neorl/hybrid/nga.py
 neorl/hybrid/nhho.py
@@ -61,6 +63,8 @@ neorl/hybrid/pesa2.py
 neorl/hybrid/pesax.py
 neorl/hybrid/ppoes.py
 neorl/hybrid/rneat.py
+neorl/hybrid/edevcore/__init__.py
+neorl/hybrid/edevcore/helpers.py
 neorl/hybrid/ngacore/GA.py
 neorl/hybrid/ngacore/Latin.py
 neorl/hybrid/ngacore/RBFN.py
@@ -173,12 +177,14 @@ neorl/tests/test_benchmarks2.py
 neorl/tests/test_cs.py
 neorl/tests/test_de.py
 neorl/tests/test_dqn.py
+neorl/tests/test_edev.py
 neorl/tests/test_es.py
 neorl/tests/test_evolutune.py
 neorl/tests/test_fneat.py
 neorl/tests/test_globalmin.py
 neorl/tests/test_grid.py
 neorl/tests/test_gwo.py
+neorl/tests/test_hclpso.py
 neorl/tests/test_hho.py
 neorl/tests/test_jaya.py
 neorl/tests/test_mfo.py
