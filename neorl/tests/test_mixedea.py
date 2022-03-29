@@ -2,7 +2,7 @@
 # Import Packages
 ########################
 
-from neorl import HHO, ES, PESA, BAT, GWO, MFO, WOA, SSA, DE, JAYA, PESA2, PSO, HCLPSO, EDEV
+from neorl import HHO, ES, PESA, BAT, GWO, MFO, WOA, SSA, DE, JAYA, PESA2, PSO, HCLPSO, EDEV, EPSO
 import math
 
 def test_mixedea():
@@ -210,6 +210,13 @@ def test_mixedea():
         assert Vessel(x_edev) == y_edev
         
         ########################
+        # Setup and evolute EPSO
+        ########################
+        epso=EPSO(mode='min', bounds=bounds, g1=15, g2=25, fit=Vessel, ncores=1, seed=1)
+        x_epso, y_epso, epso_hist=epso.evolute(ngen=100, LP=3, verbose=0)
+        assert Vessel(x_epso) == y_epso
+        
+        ########################
         # Comparison
         ########################
         if 1:
@@ -255,5 +262,8 @@ def test_mixedea():
             print('---Best EDEV Results---')
             print(x_edev)
             print(y_edev)
-    
+            print('---Best EPSO Results---')
+            print(x_epso)
+            print(y_epso)
+        
 test_mixedea()

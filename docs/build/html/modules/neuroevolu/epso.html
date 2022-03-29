@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Heterogeneous comprehensive learning particle swarm optimization (HCLPSO) &mdash; NEORL 1.7.5b documentation</title>
+  <title>Ensemble Particle Swarm Optimization (EPSO) &mdash; NEORL 1.7.5b documentation</title>
   
 
   
@@ -42,8 +42,8 @@
     
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Differential Evolution (DE)" href="de.html" />
-    <link rel="prev" title="Particle Swarm Optimisation (PSO)" href="pso.html" /> 
+    <link rel="next" title="Hyperparameter Tuning" href="../../tune/tune.html" />
+    <link rel="prev" title="Ensemble of Differential Evolution Variants (EDEV)" href="edev.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -99,32 +99,27 @@
 <li class="toctree-l1"><a class="reference internal" href="../../guide/guide.html">General Guide</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../modules.html">Algorithms</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../neural/neural.html">Neural Algorithms (Reinforcement Learning)</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="evolutionary.html">Evolutionary and Swarm Algorithms</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="es.html">Evolution Strategies (<span class="math notranslate nohighlight">\(\mu,\lambda\)</span>) (ES)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pso.html">Particle Swarm Optimisation (PSO)</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Heterogeneous comprehensive learning particle swarm optimization (HCLPSO)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../evolutionary/evolutionary.html">Evolutionary and Swarm Algorithms</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="neuroevolu.html">Hybrid and Neuroevolution Algorithms</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="fneat.html">Feedforward Neuroevolution of Augmenting Topologies (FNEAT)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rneat.html">Recurrent Neuroevolution of Augmenting Topologies (RNEAT)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pesa.html">Prioritized replay Evolutionary and Swarm Algorithm (PESA)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pesa2.html">Modern PESA (PESA2)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ppoes.html">RL-informed Evolution Strategies (PPO-ES)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ackde.html">RL-informed Differential Evolution (ACKTR-DE)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nga.html">Neural Genetic Algorithms (NGA)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nhho.html">Neural Harris Hawks Optimization (NHHO)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aeo.html">Animorphic Ensemble Optimization (AEO)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="edev.html">Ensemble of Differential Evolution Variants (EDEV)</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Ensemble Particle Swarm Optimization (EPSO)</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#what-can-you-use">What can you use?</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#example">Example</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#notes">Notes</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="de.html">Differential Evolution (DE)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="xnes.html">Exponential Natural Evolution Strategies (XNES)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="gwo.html">Grey Wolf Optimizer (GWO)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sa.html">Simulated Annealing (SA)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ssa.html">Salp Swarm Algorithm (SSA)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="woa.html">Whale Optimization Algorithm (WOA)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="mfo.html">Moth-flame Optimization (MFO)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="jaya.html">JAYA Algorithm</a></li>
-<li class="toctree-l3"><a class="reference internal" href="bat.html">Bat Algorithm (BAT)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="hho.html">Harris Hawks Optimization (HHO)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="aco.html">Ant Colony Optimization (ACO)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="cs.html">Cuckoo Search (CS)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ts.html">Tabu Search (TS)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../neuroevolu/neuroevolu.html">Hybrid and Neuroevolution Algorithms</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../tune/tune.html">Hyperparameter Tuning</a></li>
@@ -184,15 +179,15 @@
         
           <li><a href="../modules.html">Algorithms</a> &raquo;</li>
         
-          <li><a href="evolutionary.html">Evolutionary and Swarm Algorithms</a> &raquo;</li>
+          <li><a href="neuroevolu.html">Hybrid and Neuroevolution Algorithms</a> &raquo;</li>
         
-      <li>Heterogeneous comprehensive learning particle swarm optimization (HCLPSO)</li>
+      <li>Ensemble Particle Swarm Optimization (EPSO)</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="../../_sources/modules/evolutionary/hclpso.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/modules/neuroevolu/epso.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -205,11 +200,10 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <span class="target" id="module-neorl.evolu.hclpso"><span id="hclpso"></span></span><div class="section" id="heterogeneous-comprehensive-learning-particle-swarm-optimization-hclpso">
-<h1>Heterogeneous comprehensive learning particle swarm optimization (HCLPSO)<a class="headerlink" href="#heterogeneous-comprehensive-learning-particle-swarm-optimization-hclpso" title="Permalink to this headline">¶</a></h1>
-<p>A module for parallel heterogeneous comprehensive learning particle swarm optimization with both constriction and inertia weight support. HCLPSO leverages two subpopulations, one focuses on exploration (you) and one focuses on exploitation (your friend).</p>
-<p>Original paper: Lynn, N., Suganthan, P. N. (2015). Heterogeneous comprehensive learning particle swarm optimization with enhanced exploration and exploitation. Swarm and Evolutionary Computation, 24, 11-24.</p>
-<a class="reference internal image-reference" href="../../_images/hclpso.png"><img alt="alternate text" class="align-center" src="../../_images/hclpso.png" style="width: 469.8px; height: 151.20000000000002px;" /></a>
+  <span class="target" id="module-neorl.hybrid.epso"><span id="epso"></span></span><div class="section" id="ensemble-particle-swarm-optimization-epso">
+<h1>Ensemble Particle Swarm Optimization (EPSO)<a class="headerlink" href="#ensemble-particle-swarm-optimization-epso" title="Permalink to this headline">¶</a></h1>
+<p>A powerful hybrid ensemble of five particle swarm optimization variants: classical inertia weight particle swarm optimization (PSO), self-organizing hierarchical particle swarm optimizer withtime-varying acceleration coefficients (HPSO-TVAC), Fitness-Distance-Ratio based PSO (FDR-PSO), Distance-based locally informed PSO (LIPS), and Comprehensive Learning PSO (CLPSO).</p>
+<p>Original paper: Lynn, N., Suganthan, P. N. (2017). Ensemble particle swarm optimizer. Applied Soft Computing, 55, 533-548.</p>
 <div class="section" id="what-can-you-use">
 <h2>What can you use?<a class="headerlink" href="#what-can-you-use" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
@@ -222,9 +216,9 @@
 <div class="section" id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt class="sig sig-object py" id="neorl.evolu.hclpso.HCLPSO">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">neorl.evolu.hclpso.</span></span><span class="sig-name descname"><span class="pre">HCLPSO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int_transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'nearest_int'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ncores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neorl/evolu/hclpso.html#HCLPSO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.evolu.hclpso.HCLPSO" title="Permalink to this definition">¶</a></dt>
-<dd><p>Heterogeneous comprehensive learning particle swarm optimization (HCLPSO)</p>
+<dt class="sig sig-object py" id="neorl.hybrid.epso.EPSO">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">neorl.hybrid.epso.</span></span><span class="sig-name descname"><span class="pre">EPSO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int_transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'nearest_int'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ncores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neorl/hybrid/epso.html#EPSO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.hybrid.epso.EPSO" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensemble Particle Swarm Optimization (EPSO)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -240,13 +234,14 @@
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="neorl.evolu.hclpso.HCLPSO.evolute">
-<span class="sig-name descname"><span class="pre">evolute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ngen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neorl/evolu/hclpso.html#HCLPSO.evolute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.evolu.hclpso.HCLPSO.evolute" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function evolutes the HCLPSO algorithm for a number of generations.</p>
+<dt class="sig sig-object py" id="neorl.hybrid.epso.EPSO.evolute">
+<span class="sig-name descname"><span class="pre">evolute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ngen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">LP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neorl/hybrid/epso.html#EPSO.evolute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.hybrid.epso.EPSO.evolute" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function evolutes the EPSO algorithm for a number of generations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ngen</strong> – (int) number of generations to evolute</p></li>
+<li><p><strong>LP</strong> – (int) number of generations before updating the success and failure memories for the ensemble variants (i.e. learning period)</p></li>
 <li><p><strong>x0</strong> – (list of lists) initial position of the particles (must be of same size as <code class="docutils literal notranslate"><span class="pre">g1</span> <span class="pre">+</span> <span class="pre">g2</span></code>)</p></li>
 <li><p><strong>verbose</strong> – (bool) print statistics to screen</p></li>
 </ul>
@@ -262,7 +257,7 @@
 </div>
 <div class="section" id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">HCLPSO</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">EPSO</span>
 
 <span class="c1">#Define the fitness function</span>
 <span class="k">def</span> <span class="nf">FIT</span><span class="p">(</span><span class="n">individual</span><span class="p">):</span>
@@ -281,19 +276,20 @@
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">nx</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
     <span class="n">BOUNDS</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
 
-<span class="c1">#setup and evolute HCLPSO</span>
-<span class="n">hclpso</span><span class="o">=</span><span class="n">HCLPSO</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">g1</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">g2</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">FIT</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">x_best</span><span class="p">,</span> <span class="n">y_best</span><span class="p">,</span> <span class="n">hclpso_hist</span><span class="o">=</span><span class="n">hclpso</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1">#setup and evolute EPSO</span>
+<span class="n">epso</span><span class="o">=</span><span class="n">EPSO</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">g1</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">g2</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">FIT</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">x_best</span><span class="p">,</span> <span class="n">y_best</span><span class="p">,</span> <span class="n">epso_hist</span><span class="o">=</span><span class="n">epso</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="n">ngen</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">LP</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="notes">
 <h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p>The number of particles in the exploration subgroup (<code class="docutils literal notranslate"><span class="pre">g1</span></code>) and exploitation subgroup (<code class="docutils literal notranslate"><span class="pre">g2</span></code>) are the only hyperparameters for HCLPSO. In the original algorithm, <code class="docutils literal notranslate"><span class="pre">g1</span></code> tends to be smaller than <code class="docutils literal notranslate"><span class="pre">g2</span></code>.</p></li>
-<li><p>HCLPSO provides time dependent (annealing) behavior for all major PSO hyperparameters over the number of search generations (<code class="docutils literal notranslate"><span class="pre">ngen</span></code>). The cognitive speed constant (<code class="docutils literal notranslate"><span class="pre">c1</span></code>) is linearly annealed from 2.5-0.5, social speed constant (<code class="docutils literal notranslate"><span class="pre">c2</span></code>) is annealed from 0.5-2.5, inertia weight (<code class="docutils literal notranslate"><span class="pre">w</span></code>) is annealed from 0.99-0.2, while constriction coefficient (<code class="docutils literal notranslate"><span class="pre">K</span></code>) is annealed from 3-1.5. Therefore, the HCLPSO user does not need to tune these values.</p></li>
+<li><p>The number of particles in the exploration subgroup (<code class="docutils literal notranslate"><span class="pre">g1</span></code>) and exploitation subgroup (<code class="docutils literal notranslate"><span class="pre">g2</span></code>) are needed for EPSO. In the original algorithm, <code class="docutils literal notranslate"><span class="pre">g1</span></code> tends to be smaller than <code class="docutils literal notranslate"><span class="pre">g2</span></code>.</p></li>
+<li><p>For EPSO, in the first 90% of the generations, both exploration and exploitation subgroups are involved, where <code class="docutils literal notranslate"><span class="pre">g1</span></code> is controlled by CLPSO and <code class="docutils literal notranslate"><span class="pre">g2</span></code> is controlled by all five variants. In the last 10% of the generations, the search focuses on exploitation only, where both <code class="docutils literal notranslate"><span class="pre">g1</span> <span class="pre">+</span> <span class="pre">g2</span></code> are controlled by the five variants.</p></li>
+<li><p>The value of LP represents the learning period at which the success and fail memories are updated to calculate the success rate for each PSO variant. The success rate represents the probability for each PSO variant to update the position and velocity of the next particle in the group. <code class="docutils literal notranslate"><span class="pre">LP=3</span></code> means the update will occur every 3 generations.</p></li>
 <li><p>Look for an optimal balance between <code class="docutils literal notranslate"><span class="pre">g1</span></code>, <code class="docutils literal notranslate"><span class="pre">g2</span></code>, and <code class="docutils literal notranslate"><span class="pre">ngen</span></code>, it is recommended to minimize particle size to allow for more generations.</p></li>
-<li><p>Total number of cost evaluations for PSO is <code class="docutils literal notranslate"><span class="pre">(g1</span> <span class="pre">+</span> <span class="pre">g2)</span></code> * <code class="docutils literal notranslate"><span class="pre">(ngen</span> <span class="pre">+</span> <span class="pre">1)</span></code>.</p></li>
+<li><p>Total number of cost evaluations for EPSO is <code class="docutils literal notranslate"><span class="pre">(g1</span> <span class="pre">+</span> <span class="pre">g2)</span></code> * <code class="docutils literal notranslate"><span class="pre">(ngen</span> <span class="pre">+</span> <span class="pre">1)</span></code>.</p></li>
 </ul>
 </div>
 </div>
@@ -304,8 +300,8 @@
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="de.html" class="btn btn-neutral float-right" title="Differential Evolution (DE)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="pso.html" class="btn btn-neutral float-left" title="Particle Swarm Optimisation (PSO)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../tune/tune.html" class="btn btn-neutral float-right" title="Hyperparameter Tuning" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="edev.html" class="btn btn-neutral float-left" title="Ensemble of Differential Evolution Variants (EDEV)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

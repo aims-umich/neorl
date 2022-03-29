@@ -205,8 +205,8 @@ class HCLPSO(object):
                     
             if slope_cond:
                 self.fri_best[i,:]=dot(i,ones((1,self.dim)))
-                friend1=ceil(dot(friend_num,np.random.uniform(size=(self.dim))))
-                friend2=ceil(dot(friend_num,np.random.uniform(size=(self.dim))))
+                friend1=ceil(dot(friend_num,np.random.uniform(size=(self.dim)))) - 1
+                friend2=ceil(dot(friend_num,np.random.uniform(size=(self.dim)))) - 1
                 friend=multiply((self.pbest_val[friend1.astype(int)] < self.pbest_val[friend2.astype(int)]),friend1) \
                     + multiply((self.pbest_val[friend1.astype(int)] >= self.pbest_val[friend2.astype(int)]),friend2)
                 toss=ceil(np.random.uniform(size=(self.dim)) - self.Pc[:,i].T)
@@ -283,7 +283,7 @@ class HCLPSO(object):
         self.UpdateParticles(a=0, b=self.num_g1, friend_num=self.num_g1, check_slope=False)
 
         #Updating particles for group 2 (exploitation)
-        self.UpdateParticles(a=self.num_g1, b=self.num_g, friend_num=self.num_g-1, check_slope=False)        
+        self.UpdateParticles(a=self.num_g1, b=self.num_g, friend_num=self.num_g, check_slope=False)        
                        
         for k in range(ngen):
             

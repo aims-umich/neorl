@@ -2,7 +2,7 @@
 # Import Packages
 ########################
 
-from neorl import HHO, ES, PESA, BAT, GWO, MFO, WOA, SSA, DE, JAYA, PESA2, PSO, HCLPSO, EDEV
+from neorl import HHO, ES, PESA, BAT, GWO, MFO, WOA, SSA, DE, JAYA, PESA2, PSO, HCLPSO, EDEV, EPSO
 import math
 
 #################################
@@ -205,6 +205,13 @@ for item in ['float', 'grid', 'float/int', 'float/grid', 'int/grid', 'mixed', 'i
     edev=EDEV(mode='min', bounds=bounds, fit=Vessel, npop=100, lambda_=0.1, ncores=1, seed=1)
     x_edev, y_edev, edev_hist=edev.evolute(ngen=100, ng=10, verbose=0)
     assert Vessel(x_edev) == y_edev
+
+    ########################
+    # Setup and evolute EPSO
+    ########################
+    epso=EPSO(mode='min', bounds=bounds, g1=15, g2=25, fit=Vessel, ncores=1, seed=1)
+    x_epso, y_epso, epso_hist=epso.evolute(ngen=100, LP=3, verbose=0)
+    assert Vessel(x_epso) == y_epso
     
     ########################
     # Comparison
@@ -252,3 +259,6 @@ for item in ['float', 'grid', 'float/int', 'float/grid', 'int/grid', 'mixed', 'i
         print('---Best EDEV Results---')
         print(x_edev)
         print(y_edev)
+        print('---Best EPSO Results---')
+        print(x_epso)
+        print(y_epso)

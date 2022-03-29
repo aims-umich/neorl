@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.hybrid.edev &mdash; NEORL 1.7.4b documentation</title>
+  <title>neorl.hybrid.edev &mdash; NEORL 1.7.5b documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.7.4b )
+                main (1.7.5b )
               </div>
             
           
@@ -192,9 +192,7 @@
 
 <span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">arange</span><span class="p">,</span> <span class="n">dot</span><span class="p">,</span> <span class="n">multiply</span><span class="p">,</span> <span class="n">exp</span><span class="p">,</span> <span class="n">ones</span><span class="p">,</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">ceil</span><span class="p">,</span> <span class="n">copy</span>
-<span class="kn">import</span> <span class="nn">math</span>
-<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">arange</span><span class="p">,</span> <span class="n">multiply</span><span class="p">,</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">copy</span>
 <span class="kn">import</span> <span class="nn">joblib</span>
 <span class="kn">from</span> <span class="nn">neorl.hybrid.edevcore.helpers</span> <span class="kn">import</span> <span class="n">ARCHIVE</span><span class="p">,</span> <span class="n">generator</span><span class="p">,</span> <span class="n">sub2ind</span><span class="p">,</span> <span class="n">gnR1R2</span><span class="p">,</span> <span class="n">randFCR</span>
 <span class="kn">from</span> <span class="nn">neorl.evolu.discrete</span> <span class="kn">import</span> <span class="n">mutate_discrete</span><span class="p">,</span> <span class="n">encode_grid_to_discrete</span><span class="p">,</span> <span class="n">decode_discrete_to_grid</span>
@@ -210,7 +208,7 @@
 <span class="sd">    :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: ``bounds={&#39;x1&#39;: [&#39;int&#39;, 1, 4], &#39;x2&#39;: [&#39;float&#39;, 0.1, 0.8], &#39;x3&#39;: [&#39;float&#39;, 2.2, 6.2]}``</span>
 <span class="sd">    :param fit: (function) the fitness function </span>
 <span class="sd">    :param npop: (int): total size of the full population, which will be divided into three sub-populations</span>
-<span class="sd">    :param lambda__: (float): fraction of ``npop`` to split into 3 sub-populations. ``pop1 = npop - npop * lambda_``, ``pop2 = pop3 =  npop * lambda_`` (see **Notes** below)</span>
+<span class="sd">    :param lambda_: (float): fraction of ``npop`` to split into 3 sub-populations. ``pop1 = npop - npop * lambda_``, ``pop2 = pop3 =  npop * lambda_`` (see **Notes** below)</span>
 <span class="sd">    :param int_transform: (str): method of handling int/discrete variables, choose from: ``nearest_int``, ``sigmoid``, ``minmax``.</span>
 <span class="sd">    :param ncores: (int) number of parallel processors (must be ``&lt;= npop``)</span>
 <span class="sd">    :param seed: (int) random seed for sampling</span>

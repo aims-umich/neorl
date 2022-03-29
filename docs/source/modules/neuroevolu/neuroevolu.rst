@@ -14,3 +14,4 @@ Hybrid and Neuroevolution Algorithms
    nhho
    aeo
    edev
+   epso

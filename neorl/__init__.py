@@ -83,3 +83,4 @@ from neorl.evolu.ts import TS
 from neorl.hybrid.aeo import AEO
 from neorl.evolu.hclpso import HCLPSO
 from neorl.hybrid.edev import EDEV
+from neorl.hybrid.epso import EPSO

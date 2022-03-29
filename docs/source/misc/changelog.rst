@@ -31,6 +31,16 @@ Release 1.6 (2021-09-10)
 Beta Releases (for developers)
 ---------------------------------
 
+Release 1.7.5b (2022-3-29)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+  pip install neorl==1.7.5b --extra-index-url https://test.pypi.org/simple
+
+- Added a full module for EPSO with parallel support and all space types. 
+- Fixed a minor bug in HCLPSO. 
+
 Release 1.7.4b (2022-3-26)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
