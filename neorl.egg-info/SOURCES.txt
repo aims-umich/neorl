@@ -55,6 +55,7 @@ neorl/hybrid/__init__.py
 neorl/hybrid/ackde.py
 neorl/hybrid/aeo.py
 neorl/hybrid/edev.py
+neorl/hybrid/epso.py
 neorl/hybrid/fneat.py
 neorl/hybrid/nga.py
 neorl/hybrid/nhho.py
@@ -178,6 +179,7 @@ neorl/tests/test_cs.py
 neorl/tests/test_de.py
 neorl/tests/test_dqn.py
 neorl/tests/test_edev.py
+neorl/tests/test_epso.py
 neorl/tests/test_es.py
 neorl/tests/test_evolutune.py
 neorl/tests/test_fneat.py

@@ -1,0 +1,289 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Contribution Guide &mdash; NEORL 1.7.5b documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Contributors" href="contrib.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> NEORL
+          
+
+          
+            
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                main (1.7.5b )
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../guide/guide.html">General Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/modules.html">Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tune/tune.html">Hyperparameter Tuning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/examples.html">Examples</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projects.html">Projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contrib.html">Contributors</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Contribution Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#bug-reporting">Bug Reporting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getting-started">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#incorporating-changes-from-the-main-repository">Incorporating Changes From the Main Repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#submitting-a-pull-request">Submitting a Pull Request</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NEORL</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Contribution Guide</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/misc/contribguide.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="contribution-guide">
+<span id="contribguide"></span><h1>Contribution Guide<a class="headerlink" href="#contribution-guide" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="bug-reporting">
+<h2>Bug Reporting<a class="headerlink" href="#bug-reporting" title="Permalink to this headline">¶</a></h2>
+<p>All bugs or general issues can be reported on the Github issues page:
+<a class="reference external" href="https://github.com/mradaideh/neorl/issues">https://github.com/mradaideh/neorl/issues</a></p>
+</div>
+<div class="section" id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
+<p>In order to contribute code that may be included in the main NEORL distribution, the following steps can be taken. In general, all contributions should be submitted as a pull request to the main NEORL repository. Specifically, the steps provided below can be used to incorporate code into the NEORL repository.</p>
+<ol class="arabic">
+<li><p>Create a fork of the main NEORL repository. Through Github, this can be done by selecting the “fork” button on the NEORL page found at: <a class="reference external" href="https://github.com/mradaideh/neorl">https://github.com/mradaideh/neorl</a></p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../_images/fork_button_red.png"><img alt="alternate text" class="align-center" src="../_images/fork_button_red.png" style="width: 949.1999999999999px; height: 72.1px;" /></a>
+</div></blockquote>
+</li>
+<li><p>Once this is done, a new repository will be created under your ownership. It will exist under <cite>github_username/neorl</cite>. From here, the forked repository can be cloned like any other repository. Navigate to a directory you plan on working in and enter the command: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">git&#64;github.com:github-un/neorl.git</span></code></p>
+<p>Replace the <strong>github-un</strong> with your Github username</p>
+</li>
+<li><p>From here, the forked repository can be committed to using typical <cite>git</cite> practices.</p></li>
+</ol>
+</div>
+<div class="section" id="incorporating-changes-from-the-main-repository">
+<h2>Incorporating Changes From the Main Repository<a class="headerlink" href="#incorporating-changes-from-the-main-repository" title="Permalink to this headline">¶</a></h2>
+<p>Often when making large contributions, it may be necessary to work on the fork for an extended period of time where updates have been pushed to the upstream (<cite>mradaideh/neorl</cite>) repository after you originally created the fork. In order to incorporate these new updates into your local fork:</p>
+<ol class="arabic simple">
+<li><p>Commit and push all work in your local repository with regular <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">commit</span></code> and <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span></code> commands.</p></li>
+<li><p>First add the upstream repository into known remote repositories:
+<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">remote</span> <span class="pre">add</span> <span class="pre">upstream</span> <span class="pre">https://github.com/mradaideh/neorl</span></code></p></li>
+<li><p>Fetch changes that have been made to upstream repository:
+<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">fetch</span> <span class="pre">upstream</span></code></p></li>
+<li><p>Merge changes made to upstream repository into your local repository:
+<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">merge</span> <span class="pre">upstream/master</span> <span class="pre">master</span></code></p></li>
+<li><p>Push from your local fork (on your PC) to your remote fork (on Github):
+<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span></code></p></li>
+</ol>
+</div>
+<div class="section" id="submitting-a-pull-request">
+<h2>Submitting a Pull Request<a class="headerlink" href="#submitting-a-pull-request" title="Permalink to this headline">¶</a></h2>
+<p>Once a major contribution to the NEORL code base has been developed and is ready to be incorporated into
+the upstream repository (<cite>mradaideh/neorl</cite>), a pull request can be submitted:</p>
+<ol class="arabic">
+<li><p>While logged into the account with the forked repository containing the changes, navigate to the Github
+page for the upstream NEORL repository: <a class="reference external" href="https://github.com/mradaideh/neorl">https://github.com/mradaideh/neorl</a></p></li>
+<li><p>Select the “Pull requests” tab near the top of the page and select “new pull request”.</p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../_images/annotate_prerequest.png"><img alt="alternate text" class="align-center" src="../_images/annotate_prerequest.png" style="width: 944.3px; height: 278.59999999999997px;" /></a>
+</div></blockquote>
+</li>
+<li><p>Select “compare across forks” link.</p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../_images/compare_across.png"><img alt="alternate text" class="align-center" src="../_images/compare_across.png" style="width: 946.4px; height: 343.7px;" /></a>
+</div></blockquote>
+</li>
+<li><p>From here, the “base repository” should be set to <cite>mradaideh/neorl/master</cite> and the “head repository”
+should point to the repository that is under your name.</p></li>
+<li><p>Press the “Create pull request” button and fill out the submission fields and submit it for review!</p></li>
+</ol>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="contrib.html" class="btn btn-neutral float-left" title="Contributors" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Exelon Corp. &amp; MIT.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
