@@ -53,6 +53,7 @@ User Guide
    misc/changelog
    misc/projects
    misc/contrib
+   misc/contribguide
 
 Projects/Papers Using NEORL
 --------------------------------------
