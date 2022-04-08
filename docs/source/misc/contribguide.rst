@@ -32,10 +32,11 @@ Specifically, the steps provided below can be used to incorporate code into the 
 3. From here, the forked repository can be comitted to using typical `git` practices.
 
 Incorporating Changes in master Repository
-----------------------------------------
+------------------------------------------
 Often when making large contributions, it may be necessary to work on the fork for an extended period of time where
  updates have been pushed to the upstream (`mradaideh/neorl`) repository after you originally created the fork.
  In order to incorporate these new updates into your local fork:
+
 1. Commit and push all work in the local repository.
 2. First add the upstream repository into known remote repositories::
    git remote add upstream https://github.com/mradaideh/neorl
@@ -49,8 +50,8 @@ Often when making large contributions, it may be necessary to work on the fork f
 Submitting a Pull Request
 -------------------------
 Once a major contribution to the NEORL code base has been developed and is ready to be incorporated into 
-the upstream repository (`mradaideh/neorl`), a pull request can be submitted.
-To do this::
+the upstream repository (`mradaideh/neorl`), a pull request can be submitted::
+
 1. While logged into the account with the forked repository containing the changes, navigate to the github 
    page for the upstream NEORL repository: https://github.com/mradaideh/neorl
 2. Select the "Pull requests" tab near the top of the page and select "new pull request"
