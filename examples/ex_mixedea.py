@@ -2,7 +2,7 @@
 # Import Packages
 ########################
 
-from neorl import HHO, ES, PESA, BAT, GWO, MFO, WOA, SSA, DE, JAYA, PESA2, PSO, HCLPSO, EDEV, EPSO
+from neorl import HHO, ES, PESA, BAT, GWO, MFO, WOA, SSA, DE, JAYA, PESA2, PSO, HCLPSO, EDEV, EPSO, AEO
 import math
 
 #################################
@@ -212,7 +212,14 @@ for item in ['float', 'grid', 'float/int', 'float/grid', 'int/grid', 'mixed', 'i
     epso=EPSO(mode='min', bounds=bounds, g1=15, g2=25, fit=Vessel, ncores=1, seed=1)
     x_epso, y_epso, epso_hist=epso.evolute(ngen=100, LP=3, verbose=0)
     assert Vessel(x_epso) == y_epso
-    
+
+    ########################
+    # Setup and evolute AEO
+    ########################
+    aeo = AEO(mode='min', bounds=bounds, optimizers=[de,ssa,woa,gwo], gen_per_cycle=3, fit = Vessel)
+    x_aeo, y_aeo, aeo_hist = aeo.evolute(30, verbose = 0)
+    assert Vessel(x_aeo) == y_aeo
+
     ########################
     # Comparison
     ########################
@@ -262,3 +269,6 @@ for item in ['float', 'grid', 'float/int', 'float/grid', 'int/grid', 'mixed', 'i
         print('---Best EPSO Results---')
         print(x_epso)
         print(y_epso)
+        print('---Best AEO Results---')
+        print(x_aeo)
+        print(y_aeo)
