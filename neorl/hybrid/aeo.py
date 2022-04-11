@@ -435,11 +435,11 @@ class AEO(object):
     """
     Animorphoc Ensemble Optimizer
 
-    :param mode: (str) problem type, either "min" for minimization problem or "max" for maximization
     :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: ``bounds={'x1': ['int', 1, 4], 'x2': ['float', 0.1, 0.8], 'x3': ['float', 2.2, 6.2]}``
     :param fit: (function) the fitness function
     :param optimizers: (list) list of optimizer instances to be included in the ensemble
     :param gen_per_cycle: (int) number of generations performed in evolution phase per cycle
+    :param mode: (str) problem type, either "min" for minimization problem or "max" for maximization
     :param seed: (int) random seed for sampling
     """
 #    :param config: (int) If none, use migration parameters defined later, if int (1 through 3), use one of the presets
