@@ -435,32 +435,39 @@ class AEO(object):
     """
     Animorphoc Ensemble Optimizer
 
-    :param mode: (str) problem type, either "min" for minimization problem or "max" for maximization
     :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: ``bounds={'x1': ['int', 1, 4], 'x2': ['float', 0.1, 0.8], 'x3': ['float', 2.2, 6.2]}``
     :param fit: (function) the fitness function
     :param optimizers: (list) list of optimizer instances to be included in the ensemble
     :param gen_per_cycle: (int) number of generations performed in evolution phase per cycle
-    :param config: (int) If none, use migration parameters defined later, if int (1 through 3), use one of the presets
-    :param alpha: (float or str) option for exponent on ``g`` strength measure, if numeric, ``alpha`` is taken to be
-        that value. If ``alpha`` is "up" ``alpha`` is annealed from 0 to 1. If ``alpha`` is "down" it is annealed from
-        1 to 0.
-    :param g: (str) either "fitness" or "improve" for strength measure for exportation number section of migration
-    :param g_burden: (bool) True if strength if divided by number of fitness evaluations in evolution phase
-    :param q: (float or str) option for favoring weak or strong pops in exportation number
-    :param wt: (str) "log", "lin", "exp", "uni" for different weightings in member selection section of migration
-    :param beta: (float or str) option for exponent on ``b`` strength measure. See ``alpha`` for details.
-    :param b: (str) either "fitness" or "improve" for strength measure for destination selection section of migration
-    :param b_burden: (bool) True if strength if divided by number of fitness evaluations in evolution phase
-    :param order: (str) "wb" for worst to best, "bw" for best to worst, prepend "a" for annealed starting in the given ordering.
-    :param ncores: (int) number of parallel processors
+    :param mode: (str) problem type, either "min" for minimization problem or "max" for maximization
     :param seed: (int) random seed for sampling
     """
+#    :param config: (int) If none, use migration parameters defined later, if int (1 through 3), use one of the presets
+#    :param alpha: (float or str) option for exponent on ``g`` strength measure, if numeric, ``alpha`` is taken to be
+#        that value. If ``alpha`` is "up" ``alpha`` is annealed from 0 to 1. If ``alpha`` is "down" it is annealed from
+#        1 to 0.
+#    :param g: (str) either "fitness" or "improve" for strength measure for exportation number section of migration
+#    :param g_burden: (bool) True if strength if divided by number of fitness evaluations in evolution phase
+#    :param q: (float or str) option for favoring weak or strong pops in exportation number
+#    :param wt: (str) "log", "lin", "exp", "uni" for different weightings in member selection section of migration
+#    :param beta: (float or str) option for exponent on ``b`` strength measure. See ``alpha`` for details.
+#    :param b: (str) either "fitness" or "improve" for strength measure for destination selection section of migration
+#    :param b_burden: (bool) True if strength if divided by number of fitness evaluations in evolution phase
+#    :param order: (str) "wb" for worst to best, "bw" for best to worst, prepend "a" for annealed starting in the given ordering.
+#    :param ncores: (int) number of parallel processors
     def __init__(self, bounds, fit,
-            optimizers, gen_per_cycle, config = 1,
-            alpha = "up", g = "improve", g_burden = False,
-            q = 'up', wt = 'exp', beta = 'up', b = 'improve',
-            b_burden = False, order = 'bw', mode = 'min',
-            ncores = 1, seed = None):
+            optimizers, gen_per_cycle, mode = "min", seed = None, **kwargs):
+
+        config = kwargs.get("config", 1)
+        alpha = kwargs.get("alpha", "up")
+        g = kwargs.get("g", "improve")
+        g_burden = kwargs.get("g_burden", False)
+        q = kwargs.get("q", "up")
+        wt = kwargs.get("wt", "exp")
+        beta = kwargs.get("beta", "up")
+        b = kwargs.get("b", "improve")
+        b_burden = kwargs.get("b_burden", False)
+        order = kwargs.get("order", "bw")
 
         if config is None:
             pass
@@ -514,7 +521,6 @@ class AEO(object):
         self.gpc = gen_per_cycle
 
         self.bounds = bounds
-        self.ncores = ncores
 
         #get functions to convert number of generations to number of evaluaions
         self.ngtonevals = [get_algo_ngtonevals(a) for a in self.optimizers]
