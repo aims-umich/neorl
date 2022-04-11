@@ -456,7 +456,7 @@ class AEO(object):
 #    :param order: (str) "wb" for worst to best, "bw" for best to worst, prepend "a" for annealed starting in the given ordering.
 #    :param ncores: (int) number of parallel processors
     def __init__(self, bounds, fit,
-            optimizers, gen_per_cycle, mode = "min", **kwargs):
+            optimizers, gen_per_cycle, mode = "min", seed = None, **kwargs):
 
         config = kwargs.get("config", 1)
         alpha = kwargs.get("alpha", "up")
