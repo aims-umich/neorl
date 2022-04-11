@@ -22,6 +22,8 @@ import copy
 import operator as op
 from functools import reduce
 
+from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
+
 from neorl import WOA
 from neorl import GWO
 from neorl import PSO
@@ -521,6 +523,14 @@ class AEO(object):
         self.gpc = gen_per_cycle
 
         self.bounds = bounds
+        self.var_type = np.array([bounds[item][0] for item in bounds])
+
+        if "grid" in self.var_type:
+            self.grid_flag=True
+            self.orig_bounds=bounds  #keep original bounds for decoding
+            self.bounds, self.bounds_map=encode_grid_to_discrete(self.bounds) #encoding grid to int
+            #define var_types again by converting grid to int
+            self.var_type = np.array([self.bounds[item][0] for item in self.bounds])
 
         #get functions to convert number of generations to number of evaluaions
         self.ngtonevals = [get_algo_ngtonevals(a) for a in self.optimizers]
