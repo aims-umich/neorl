@@ -455,8 +455,8 @@ class AEO(object):
 #    :param b_burden: (bool) True if strength if divided by number of fitness evaluations in evolution phase
 #    :param order: (str) "wb" for worst to best, "bw" for best to worst, prepend "a" for annealed starting in the given ordering.
 #    :param ncores: (int) number of parallel processors
-    def __init__(self, mode = 'min', bounds, fit,
-            optimizers, gen_per_cycle, **kwargs):
+    def __init__(self, bounds, fit,
+            optimizers, gen_per_cycle, mode = "min", **kwargs):
 
         config = kwargs.get("config", 1)
         alpha = kwargs.get("alpha", "up")
