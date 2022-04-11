@@ -521,7 +521,6 @@ class AEO(object):
         self.gpc = gen_per_cycle
 
         self.bounds = bounds
-        self.ncores = ncores
 
         #get functions to convert number of generations to number of evaluaions
         self.ngtonevals = [get_algo_ngtonevals(a) for a in self.optimizers]
