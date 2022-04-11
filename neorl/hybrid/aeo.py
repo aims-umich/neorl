@@ -529,8 +529,6 @@ class AEO(object):
         self.var_type = np.array([bounds[item][0] for item in bounds])
 
         self.dim = len(bounds)
-        self.lb=[self.bounds[item][1] for item in self.bounds]
-        self.ub=[self.bounds[item][2] for item in self.bounds]
 
         #check that all optimizers have options that match AEO
         self.ensure_consistency()
