@@ -186,6 +186,7 @@ setup(
                       'h5py < 2.10.0',    #for windows version (NHHO fails with model load)
 					  'scikit-learn <= 0.24.2',
                       'neat-python', 
+                      'xarray==0.16',
                       'scipy',
                       'joblib',
                       'pandas',

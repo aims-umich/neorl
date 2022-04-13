@@ -104,7 +104,7 @@ class ES:
         if "grid" in self.datatype:
             self.grid_flag=True
             self.orig_bounds=bounds  #keep original bounds for decoding
-            print('--debug: grid parameter type is found in the space')
+            #print('--debug: grid parameter type is found in the space')
             self.bounds, self.bounds_map=encode_grid_to_discrete(self.bounds) #encoding grid to int
             #define var_types again by converting grid to int
             self.datatype = np.array([self.bounds[item][0] for item in self.bounds])
