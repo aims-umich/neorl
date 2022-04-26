@@ -16,7 +16,7 @@
 #"""
 #Created on Sun Jun 14 13:45:54 2020
 #
-#@author: Majdi
+#@author: Majdi and Paul
 #"""
 
 import random
