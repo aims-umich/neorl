@@ -20,6 +20,7 @@
 #"""
 
 import random
+import math
 import numpy as np
 import copy
 import joblib
@@ -32,20 +33,24 @@ class SA:
     :param mode: (str) problem type, either ``min`` for minimization problem or ``max`` for maximization
     :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: ``bounds={'x1': ['int', 1, 4], 'x2': ['float', 0.1, 0.8], 'x3': ['float', 2.2, 6.2]}``
     :param fit: (function) the fitness function 
-    :param cooling: (str) cooling schedule, choose ``fast``, ``boltzmann``, ``cauchy``
+    :param cooling: (str) cooling schedule, choose ``fast``, ``boltzmann``, ``cauchy``,``equilibrium``. The ``equilibrium`` mode is only valid with ``ncores > 1`` (See **Notes** below)
     :param chain_size: (int) number of individuals to evaluate in the chain every generation (e.g. like ``npop`` for other algorithms)
     :param Tmax: (int) initial/maximum temperature
     :param Tmin: (int) final/minimum temperature
-    :param move_func: (function) custom self-defined function that controls how to perturb the input space during annealing (See **Notes** below)
-    :param reinforce_best: (bool) an option to start the chain every generation with the best individual from previous generation (See **Notes** below)
     :param chi: (float or list of floats) probability of perturbing every attribute of the input ``x``, ONLY used if ``move_func=None``. 
                 For ``ncores > 1``, if a scalar is provided, constant value is used across all ``ncores``. If a list of size ``ncores``
                 is provided, each core/chain uses different value of ``chi`` (See **Notes** below)
-    :param ncores: (int) number of parallel processors
+    :param move_func: (function) custom self-defined function that controls how to perturb the input space during annealing (See **Notes** below)
+    :param reinforce_best: (str) an option to control the starting individual of the chain at every generation. Choose ``None``, ``hard``, ``soft`` (See **Notes** below).
+    :param lmbda: (float) ONLY used if ``cooling = equilibrium``, control the cooling rate, and the speed at which the algorithm converges.
+    :param alpha: (float) ONLY used if ``cooling = equilibrium``, control the initial temperature of the cooling schedule.
+    :param threshold: (float) ONLY used if ``cooling = equilibrium``. The threshold (in %) for the acceptance rate of solution under which the algorithm stops running. 
+    :param ncores: (int) number of parallel processors (``ncores > 1`` is required for ``cooling = equilibrium``)
     :param seed: (int) random seed for sampling
     """
-    def __init__ (self, mode, bounds, fit, chain_size=10, chi=0.1, Tmax=10000, Tmin=1, 
-                  cooling='fast', move_func=None, reinforce_best=False, ncores=1, seed=None):  
+    def __init__ (self, mode, bounds, fit, cooling='fast', chain_size=10,  
+                  Tmax=10000, Tmin=1, chi=0.1, move_func=None, reinforce_best='soft', 
+                  lmbda = 1.5, alpha = 1.5, threshold = 10 ,ncores=1, seed=None):  
 
         set_neorl_seed(seed)
         
@@ -65,6 +70,7 @@ class SA:
         self.reinforce_best=reinforce_best
         self.ncores=ncores
         self.npop=chain_size
+        self.threshold = threshold
         #assert npop % self.ncores == 0, 'The number of population (npop) to run must be divisible by ncores, {} mod {} != 0'.format(npop,self.ncores)
         self.Tmax=Tmax
         self.Tmin=Tmin
@@ -75,9 +81,22 @@ class SA:
             self.chi=[chi]*ncores
         else:
             raise Exception ('for chi, either list of floats or scalar float are allowed')
-            
+        
+        
+        assert cooling in ['fast', 'boltzmann', 'cauchy', 'equilibrium'], '--error: invalid cooling is provided'
+        assert reinforce_best in ['soft', 'hard', None], '--error: invalid `reinforce_best` option is provided'
+        
         self.cooling=cooling 
-        self.T=Tmax #initialize T
+        self.equilib_deactivate=False
+        if self.cooling == 'equilibrium' and self.ncores == 1:#Paul.
+            print("-- warning: equilibrium cooling is implemented ONLY for ncores > 1. The cooling is changed to default cooling --> 'fast'")
+            self.cooling = 'fast'
+            self.equilib_deactivate=True
+        if not self.cooling=='equilibrium':# Paul
+            self.T=Tmax #initialize T
+        else:
+            self.lmbda = lmbda
+            self.alpha = alpha
         self.move_func=move_func
         if self.move_func is None:
             self.move=self.def_move
@@ -161,7 +180,7 @@ class SA:
         #"""
         # Function to anneal temperature
         #"""
-        
+
         if self.cooling=='fast':
             Tfac = -np.log(float(self.Tmax) / self.Tmin)
             T = self.Tmax * np.exp( Tfac * step / self.steps)
@@ -169,12 +188,18 @@ class SA:
             T = self.Tmax / np.log(step + 1)
         elif self.cooling=='cauchy':
             T = self.Tmax / (step + 1)
+        # Paul
+        elif self.cooling=='equilibrium':
+            accept_rate = np.mean(self.accepts)
+            sigma = np.std(self.accepted_energy)
+            g_rho = 4 * accept_rate * (1 - accept_rate)**2 / ((2 - accept_rate)**2)
+            T = np.max([1 / (1 / self.T + self.lmbda * (1 / sigma) * (self.T / sigma)**2 * g_rho),self.Tmin])
         else:
-            raise Exception ('--error: unknown cooling mode is entered, fast, boltzmann, or cauchy are ONLY allowed')
+            raise Exception ('--error: unknown cooling mode is entered, fast, boltzmann, cauchy, or equilibrium are ONLY allowed')
         
         return T
     
-    def chain_object (self,inp):
+    def chain_object(self,inp):
         #"""
         #This function is a multiprocessing object, used to be passed to Pool, that respresents 
         #an individual SA chain. 
@@ -200,11 +225,18 @@ class SA:
         
         if not (self.seed is None):
             random.seed(self.seed + core_seed)
+            np.random.seed(self.seed + core_seed)
         
         rejects=0; accepts=0; improves=0
         k=min_step
+        
+        if self.cooling == 'equilibrium':#Paul.
+            T = copy.deepcopy(self.T)#Paul
+            accepted_energy = []#Paul
         while k <= max_step:
-            T=self.temp(step=k)
+            if self.cooling != 'equilibrium': #Paul. if updated here may not return nan in first few steps
+                T=self.temp(step=k)
+                
             if self.move_func is None:
                 x=copy.deepcopy(self.move(x=x_prev,chi=self.chi[core_seed-1]))
             else:
@@ -225,17 +257,22 @@ class SA:
                 if E > E_best:
                     x_best = copy.deepcopy(x)
                     E_best = E     
-                
+                if self.cooling == 'equilibrium':# Paul
+                    accepted_energy.append(E)
             elif np.exp(dE/T) >= random.random(): #accept the state
                 accepts += 1
                 x_prev = copy.deepcopy(x)
                 E_prev = E
+                if self.cooling == 'equilibrium':# Paul
+                    accepted_energy.append(E)
             else:
                 # Reject the new solution (maintain the current state!)
                 rejects += 1
             k+=1
-        
-        return x_prev, E_prev, T, accepts, rejects, improves, x_best, E_best
+        if self.cooling == 'equilibrium':#Paul.
+            return x_prev, E_prev, T, accepts, rejects, improves, x_best, E_best,accepted_energy
+        else:
+            return x_prev, E_prev, T, accepts, rejects, improves, x_best, E_best
         
     def chain(self, x0, E0, step0):
         #"""
@@ -257,7 +294,7 @@ class SA:
             core_step_max=step0+j*self.npop-1
             core_list.append([x0[j-1], E0[j-1], core_step_min, core_step_max, j])
             core_step_min=core_step_max+1
-        
+            
         
         if self.ncores > 1:
 
@@ -276,6 +313,14 @@ class SA:
         self.rejects=[np.round(item[4]/self.npop*100,1) for item in results] #convert to rate
         self.improves=[np.round(item[5]/self.npop*100,1) for item in results] #convert to rate
         
+        if self.cooling == 'equilibrium':#Paul
+            self.accepted_energy = [item[8] for item in results]#Paul
+            self.accepted_energy = [elem for energy in self.accepted_energy for elem in energy]
+            if np.std(self.accepted_energy) == 0: # prevent the std to be 0
+                pass
+            else:
+                self.T=self.temp(step=None)
+            
         self.x_best, self.E_best=[item[6] for item in results], [item[7] for item in results]
         
         return self.x_last, self.E_last, self.T, self.accepts, self.rejects, self.improves, self.x_best, self.E_best
@@ -300,13 +345,16 @@ class SA:
            
             with joblib.Parallel(n_jobs=self.ncores) as parallel:
                 E0=parallel(joblib.delayed(self.fit)(item) for item in core_list)
-            
+            if self.cooling == 'equilibrium': # Paul
+                self.T = np.max([self.alpha * np.std(E0),self.Tmin,1e-10])
+
         else: #evaluate swarm in series
             E0=[]
             for ind in x0:
                 fitness=self.fit(ind)
                 E0.append(fitness)
         
+
         return x0, E0 #return initial guess and initial fitness      
     
     def evolute(self, ngen, x0=None, verbose=False):
@@ -348,6 +396,8 @@ class SA:
         
         ngen=int(ngen/self.ncores)
         for i in range (ngen):
+            #if self.cooling == 'equilibrium':# Paul
+            #    self.accepted_energy = [] # initialize list of accepted energy to empty at step i
             x_next,E_next,self.T, acc, rej, imp, x_best, E_best=self.chain(x0=x_next, E0=E_next, step0=step0)
             step0=step0+self.npop*self.ncores
             arg_max=np.argmax(E_best)
@@ -365,14 +415,45 @@ class SA:
                 E_opt=max(E_best)
                 x_opt=copy.deepcopy(x_best[arg_max])
             
-            if self.reinforce_best:
+            if self.cooling == 'equilibrium': # Paul
+                if np.mean(self.accepts) <= self.threshold: # help prevent the std to be 0
+                    print("--warning: The SA stopped because the average acceptance rate throughout the chain {} % falls below the threshold {} %".format(np.mean(self.accepts),self.threshold))
+                    break
+                elif np.mean(self.accepts) == 0:
+                    print("--warning: The SA stopped because the average acceptance rate throughout the chain {} % reaches 0%".format(np.mean(self.accepts),self.threshold))
+                    break
+            # Paul
+            if self.reinforce_best == 'hard':
                 x_next=[x_opt]*self.ncores
                 E_next=[E_opt]*self.ncores
-            
+            elif self.reinforce_best == 'soft':
+                sampling = np.zeros(self.ncores)
+                normalization = 1 / np.sum(np.exp(- np.abs(E_next) / self.T)) # cte to generate a probability
+                sampling[0] = np.exp(- abs(E_next[0]) / self.T) # utilize last accepted solution to generate the sampling
+                if self.ncores != 1:
+                    rho = np.random.uniform(0,1,size = self.ncores) # sample random number between 0 and 1
+                else:
+                    rho = [1] # probability of choosing itself is 1    
+                for i in range(1,self.ncores):
+                    sampling[i] = sampling[i - 1] + np.exp(- abs(E_next[i]) / self.T)
+                sampling = sampling * normalization
+                for count,prob in enumerate(rho):
+                    if prob == 1:
+                        index = self.ncores - 1
+                    elif math.isnan(sampling[count]):# exponantial can lead to numerical erros
+                        index = np.argmax(E_next)
+                    else:
+                        if prob <= sampling[0]:
+                            index = 0
+                        else:
+                            index = np.where(sampling > rho)[0][0]
+                    x_next[count] = x_best[index] # re-initialize with the best ever found by the index'th Markov Chain
+                    E_next[count] = E_best[index]
+
             if verbose:
-                print('************************************************************')
-                print('SA step {}/{}, T={}'.format(step0-1,self.steps,np.round(self.T)))
-                print('************************************************************')
+                print('***********************************************************************')
+                print('SA step {}/{}, T={}, Ncores={}, Cooling={}, Reinforce={}'.format(step0-1,self.steps,np.round(self.T), self.ncores, self.cooling, self.reinforce_best))
+                print('***********************************************************************')
                 print('Statistics for the {} parallel chains'.format(self.ncores))
                 if self.mode=='max': 
                     print('Best fitness:', np.round(max(E_best),6))
@@ -382,8 +463,8 @@ class SA:
                 print('Acceptance Rate (%):', acc)
                 print('Rejection Rate (%):', rej)
                 print('Improvment Rate (%):', imp)
-                print('************************************************************')
-
+                print('***********************************************************************')
+            
         #--mir
         if self.mode=='max':
             self.E_opt_correct=E_opt
@@ -395,6 +476,8 @@ class SA:
             print('Best fitness (y) found:', self.E_opt_correct)
             print('Best individual (x) found:', x_opt)
             print('--------------------------------------------------------------')
+
+        if self.equilib_deactivate: #Paul.
+            print("-- warning: equilibrium cooling is implemented ONLY for ncores > 1. The cooling is changed to default cooling --> 'fast'")
             
         return x_opt, self.E_opt_correct, stat
-

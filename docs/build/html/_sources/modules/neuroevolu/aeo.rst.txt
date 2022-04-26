@@ -46,3 +46,4 @@ Notes
 - ``fit``, ``bounds`` and ``mode`` should be consistent across algorithms passed into ``AEO``.
 - The total number of function evaluation changes depending on the algorithms in the ensemble and the distribution of members.
 - Information on the returned `log` can be found in the code for the ``AEO`` class.
+- Extra options around the migration process can be accessed through the ``kwargs`` paramter.

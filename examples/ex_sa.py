@@ -27,9 +27,14 @@ def my_move(x, **kwargs):
     
     return x_new
 
-#setup and evolute SA
-sa=SA(mode='min', bounds=BOUNDS, fit=FIT, chain_size=30,chi=0.2, 
-      move_func=my_move, reinforce_best=True, ncores=1, seed=1)
+#setup and evolute a serial SA
+sa=SA(mode='min', bounds=BOUNDS, fit=FIT, chain_size=50, chi=0.2, Tmax=10000,
+      move_func=my_move, reinforce_best='soft', cooling='boltzmann', ncores=1, seed=1)
+
+#setup and evolute parallel SA with `equilibrium` cooling
+#sa=SA(mode='min', bounds=BOUNDS, fit=FIT, chain_size=20, chi=0.2, Tmax=10000, threshold = 1, lmbda=0.05,
+#      move_func=my_move, reinforce_best='soft', cooling='equilibrium', ncores=8, seed=1)
+
 x_best, y_best, sa_hist=sa.evolute(ngen=100, verbose=1)
 
 #plot different statistics

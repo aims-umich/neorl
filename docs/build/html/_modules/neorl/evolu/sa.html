@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.evolu.sa &mdash; NEORL 1.7.5b documentation</title>
+  <title>neorl.evolu.sa &mdash; NEORL 1.7.6b documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.7.5b )
+                main (1.7.6b )
               </div>
             
           
@@ -192,6 +192,7 @@
 <span class="c1">#&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">copy</span>
 <span class="kn">import</span> <span class="nn">joblib</span>
@@ -204,20 +205,24 @@
 <span class="sd">    :param mode: (str) problem type, either ``min`` for minimization problem or ``max`` for maximization</span>
 <span class="sd">    :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: ``bounds={&#39;x1&#39;: [&#39;int&#39;, 1, 4], &#39;x2&#39;: [&#39;float&#39;, 0.1, 0.8], &#39;x3&#39;: [&#39;float&#39;, 2.2, 6.2]}``</span>
 <span class="sd">    :param fit: (function) the fitness function </span>
-<span class="sd">    :param cooling: (str) cooling schedule, choose ``fast``, ``boltzmann``, ``cauchy``</span>
+<span class="sd">    :param cooling: (str) cooling schedule, choose ``fast``, ``boltzmann``, ``cauchy``,``equilibrium``. The ``equilibrium`` mode is only valid with ``ncores &gt; 1`` (See **Notes** below)</span>
 <span class="sd">    :param chain_size: (int) number of individuals to evaluate in the chain every generation (e.g. like ``npop`` for other algorithms)</span>
 <span class="sd">    :param Tmax: (int) initial/maximum temperature</span>
 <span class="sd">    :param Tmin: (int) final/minimum temperature</span>
-<span class="sd">    :param move_func: (function) custom self-defined function that controls how to perturb the input space during annealing (See **Notes** below)</span>
-<span class="sd">    :param reinforce_best: (bool) an option to start the chain every generation with the best individual from previous generation (See **Notes** below)</span>
 <span class="sd">    :param chi: (float or list of floats) probability of perturbing every attribute of the input ``x``, ONLY used if ``move_func=None``. </span>
 <span class="sd">                For ``ncores &gt; 1``, if a scalar is provided, constant value is used across all ``ncores``. If a list of size ``ncores``</span>
 <span class="sd">                is provided, each core/chain uses different value of ``chi`` (See **Notes** below)</span>
-<span class="sd">    :param ncores: (int) number of parallel processors</span>
+<span class="sd">    :param move_func: (function) custom self-defined function that controls how to perturb the input space during annealing (See **Notes** below)</span>
+<span class="sd">    :param reinforce_best: (str) an option to control the starting individual of the chain at every generation. Choose ``None``, ``hard``, ``soft`` (See **Notes** below).</span>
+<span class="sd">    :param lmbda: (float) ONLY used if ``cooling = equilibrium``, control the cooling rate, and the speed at which the algorithm converges.</span>
+<span class="sd">    :param alpha: (float) ONLY used if ``cooling = equilibrium``, control the initial temperature of the cooling schedule.</span>
+<span class="sd">    :param threshold: (float) ONLY used if ``cooling = equilibrium``. The threshold (in %) for the acceptance rate of solution under which the algorithm stops running. </span>
+<span class="sd">    :param ncores: (int) number of parallel processors (``ncores &gt; 1`` is required for ``cooling = equilibrium``)</span>
 <span class="sd">    :param seed: (int) random seed for sampling</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">chain_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">chi</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">Tmax</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">Tmin</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
-                  <span class="n">cooling</span><span class="o">=</span><span class="s1">&#39;fast&#39;</span><span class="p">,</span> <span class="n">move_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reinforce_best</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  
+    <span class="k">def</span> <span class="fm">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">cooling</span><span class="o">=</span><span class="s1">&#39;fast&#39;</span><span class="p">,</span> <span class="n">chain_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>  
+                  <span class="n">Tmax</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">Tmin</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">chi</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">move_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reinforce_best</span><span class="o">=</span><span class="s1">&#39;soft&#39;</span><span class="p">,</span> 
+                  <span class="n">lmbda</span> <span class="o">=</span> <span class="mf">1.5</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">1.5</span><span class="p">,</span> <span class="n">threshold</span> <span class="o">=</span> <span class="mi">10</span> <span class="p">,</span><span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  
 
         <span class="n">set_neorl_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
         
@@ -237,6 +242,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">reinforce_best</span><span class="o">=</span><span class="n">reinforce_best</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="o">=</span><span class="n">ncores</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">npop</span><span class="o">=</span><span class="n">chain_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span> <span class="o">=</span> <span class="n">threshold</span>
         <span class="c1">#assert npop % self.ncores == 0, &#39;The number of population (npop) to run must be divisible by ncores, {} mod {} != 0&#39;.format(npop,self.ncores)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Tmax</span><span class="o">=</span><span class="n">Tmax</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Tmin</span><span class="o">=</span><span class="n">Tmin</span>
@@ -247,9 +253,22 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">chi</span><span class="o">=</span><span class="p">[</span><span class="n">chi</span><span class="p">]</span><span class="o">*</span><span class="n">ncores</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span> <span class="p">(</span><span class="s1">&#39;for chi, either list of floats or scalar float are allowed&#39;</span><span class="p">)</span>
-            
+        
+        
+        <span class="k">assert</span> <span class="n">cooling</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;fast&#39;</span><span class="p">,</span> <span class="s1">&#39;boltzmann&#39;</span><span class="p">,</span> <span class="s1">&#39;cauchy&#39;</span><span class="p">,</span> <span class="s1">&#39;equilibrium&#39;</span><span class="p">],</span> <span class="s1">&#39;--error: invalid cooling is provided&#39;</span>
+        <span class="k">assert</span> <span class="n">reinforce_best</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;soft&#39;</span><span class="p">,</span> <span class="s1">&#39;hard&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="s1">&#39;--error: invalid `reinforce_best` option is provided&#39;</span>
+        
         <span class="bp">self</span><span class="o">.</span><span class="n">cooling</span><span class="o">=</span><span class="n">cooling</span> 
-        <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="o">=</span><span class="n">Tmax</span> <span class="c1">#initialize T</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">equilib_deactivate</span><span class="o">=</span><span class="kc">False</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cooling</span> <span class="o">==</span> <span class="s1">&#39;equilibrium&#39;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span><span class="c1">#Paul.</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-- warning: equilibrium cooling is implemented ONLY for ncores &gt; 1. The cooling is changed to default cooling --&gt; &#39;fast&#39;&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cooling</span> <span class="o">=</span> <span class="s1">&#39;fast&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">equilib_deactivate</span><span class="o">=</span><span class="kc">True</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">cooling</span><span class="o">==</span><span class="s1">&#39;equilibrium&#39;</span><span class="p">:</span><span class="c1"># Paul</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="o">=</span><span class="n">Tmax</span> <span class="c1">#initialize T</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lmbda</span> <span class="o">=</span> <span class="n">lmbda</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">move_func</span><span class="o">=</span><span class="n">move_func</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">move_func</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">move</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">def_move</span>
@@ -333,7 +352,7 @@
         <span class="c1">#&quot;&quot;&quot;</span>
         <span class="c1"># Function to anneal temperature</span>
         <span class="c1">#&quot;&quot;&quot;</span>
-        
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cooling</span><span class="o">==</span><span class="s1">&#39;fast&#39;</span><span class="p">:</span>
             <span class="n">Tfac</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Tmax</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">Tmin</span><span class="p">)</span>
             <span class="n">T</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Tmax</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span> <span class="n">Tfac</span> <span class="o">*</span> <span class="n">step</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">)</span>
@@ -341,12 +360,18 @@
             <span class="n">T</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Tmax</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">step</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">cooling</span><span class="o">==</span><span class="s1">&#39;cauchy&#39;</span><span class="p">:</span>
             <span class="n">T</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Tmax</span> <span class="o">/</span> <span class="p">(</span><span class="n">step</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># Paul</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">cooling</span><span class="o">==</span><span class="s1">&#39;equilibrium&#39;</span><span class="p">:</span>
+            <span class="n">accept_rate</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">accepts</span><span class="p">)</span>
+            <span class="n">sigma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">accepted_energy</span><span class="p">)</span>
+            <span class="n">g_rho</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">accept_rate</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">accept_rate</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">((</span><span class="mi">2</span> <span class="o">-</span> <span class="n">accept_rate</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">lmbda</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">sigma</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">/</span> <span class="n">sigma</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">g_rho</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">Tmin</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span> <span class="p">(</span><span class="s1">&#39;--error: unknown cooling mode is entered, fast, boltzmann, or cauchy are ONLY allowed&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">Exception</span> <span class="p">(</span><span class="s1">&#39;--error: unknown cooling mode is entered, fast, boltzmann, cauchy, or equilibrium are ONLY allowed&#39;</span><span class="p">)</span>
         
         <span class="k">return</span> <span class="n">T</span>
     
-    <span class="k">def</span> <span class="nf">chain_object</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">inp</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">chain_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">inp</span><span class="p">):</span>
         <span class="c1">#&quot;&quot;&quot;</span>
         <span class="c1">#This function is a multiprocessing object, used to be passed to Pool, that respresents </span>
         <span class="c1">#an individual SA chain. </span>
@@ -372,11 +397,18 @@
         
         <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
             <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span> <span class="o">+</span> <span class="n">core_seed</span><span class="p">)</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span> <span class="o">+</span> <span class="n">core_seed</span><span class="p">)</span>
         
         <span class="n">rejects</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">accepts</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">improves</span><span class="o">=</span><span class="mi">0</span>
         <span class="n">k</span><span class="o">=</span><span class="n">min_step</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cooling</span> <span class="o">==</span> <span class="s1">&#39;equilibrium&#39;</span><span class="p">:</span><span class="c1">#Paul.</span>
+            <span class="n">T</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="c1">#Paul</span>
+            <span class="n">accepted_energy</span> <span class="o">=</span> <span class="p">[]</span><span class="c1">#Paul</span>
         <span class="k">while</span> <span class="n">k</span> <span class="o">&lt;=</span> <span class="n">max_step</span><span class="p">:</span>
-            <span class="n">T</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">(</span><span class="n">step</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cooling</span> <span class="o">!=</span> <span class="s1">&#39;equilibrium&#39;</span><span class="p">:</span> <span class="c1">#Paul. if updated here may not return nan in first few steps</span>
+                <span class="n">T</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">(</span><span class="n">step</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
+                
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">move_func</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">x</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_prev</span><span class="p">,</span><span class="n">chi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">chi</span><span class="p">[</span><span class="n">core_seed</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
             <span class="k">else</span><span class="p">:</span>
@@ -397,17 +429,22 @@
                 <span class="k">if</span> <span class="n">E</span> <span class="o">&gt;</span> <span class="n">E_best</span><span class="p">:</span>
                     <span class="n">x_best</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
                     <span class="n">E_best</span> <span class="o">=</span> <span class="n">E</span>     
-                
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cooling</span> <span class="o">==</span> <span class="s1">&#39;equilibrium&#39;</span><span class="p">:</span><span class="c1"># Paul</span>
+                    <span class="n">accepted_energy</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">E</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">dE</span><span class="o">/</span><span class="n">T</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">():</span> <span class="c1">#accept the state</span>
                 <span class="n">accepts</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="n">x_prev</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
                 <span class="n">E_prev</span> <span class="o">=</span> <span class="n">E</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cooling</span> <span class="o">==</span> <span class="s1">&#39;equilibrium&#39;</span><span class="p">:</span><span class="c1"># Paul</span>
+                    <span class="n">accepted_energy</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">E</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># Reject the new solution (maintain the current state!)</span>
                 <span class="n">rejects</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="n">k</span><span class="o">+=</span><span class="mi">1</span>
-        
-        <span class="k">return</span> <span class="n">x_prev</span><span class="p">,</span> <span class="n">E_prev</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">accepts</span><span class="p">,</span> <span class="n">rejects</span><span class="p">,</span> <span class="n">improves</span><span class="p">,</span> <span class="n">x_best</span><span class="p">,</span> <span class="n">E_best</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cooling</span> <span class="o">==</span> <span class="s1">&#39;equilibrium&#39;</span><span class="p">:</span><span class="c1">#Paul.</span>
+            <span class="k">return</span> <span class="n">x_prev</span><span class="p">,</span> <span class="n">E_prev</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">accepts</span><span class="p">,</span> <span class="n">rejects</span><span class="p">,</span> <span class="n">improves</span><span class="p">,</span> <span class="n">x_best</span><span class="p">,</span> <span class="n">E_best</span><span class="p">,</span><span class="n">accepted_energy</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">x_prev</span><span class="p">,</span> <span class="n">E_prev</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">accepts</span><span class="p">,</span> <span class="n">rejects</span><span class="p">,</span> <span class="n">improves</span><span class="p">,</span> <span class="n">x_best</span><span class="p">,</span> <span class="n">E_best</span>
         
     <span class="k">def</span> <span class="nf">chain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">E0</span><span class="p">,</span> <span class="n">step0</span><span class="p">):</span>
         <span class="c1">#&quot;&quot;&quot;</span>
@@ -429,7 +466,7 @@
             <span class="n">core_step_max</span><span class="o">=</span><span class="n">step0</span><span class="o">+</span><span class="n">j</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">npop</span><span class="o">-</span><span class="mi">1</span>
             <span class="n">core_list</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">x0</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">E0</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">core_step_min</span><span class="p">,</span> <span class="n">core_step_max</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
             <span class="n">core_step_min</span><span class="o">=</span><span class="n">core_step_max</span><span class="o">+</span><span class="mi">1</span>
-        
+            
         
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
 
@@ -448,6 +485,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">rejects</span><span class="o">=</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">npop</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span> <span class="c1">#convert to rate</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">improves</span><span class="o">=</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">npop</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span> <span class="c1">#convert to rate</span>
         
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cooling</span> <span class="o">==</span> <span class="s1">&#39;equilibrium&#39;</span><span class="p">:</span><span class="c1">#Paul</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">accepted_energy</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span><span class="c1">#Paul</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">accepted_energy</span> <span class="o">=</span> <span class="p">[</span><span class="n">elem</span> <span class="k">for</span> <span class="n">energy</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">accepted_energy</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">energy</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">accepted_energy</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># prevent the std to be 0</span>
+                <span class="k">pass</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">(</span><span class="n">step</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+            
         <span class="bp">self</span><span class="o">.</span><span class="n">x_best</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">E_best</span><span class="o">=</span><span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">results</span><span class="p">],</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
         
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_last</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">E_last</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">accepts</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rejects</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">improves</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_best</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">E_best</span>
@@ -472,13 +517,16 @@
            
             <span class="k">with</span> <span class="n">joblib</span><span class="o">.</span><span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">)</span> <span class="k">as</span> <span class="n">parallel</span><span class="p">:</span>
                 <span class="n">E0</span><span class="o">=</span><span class="n">parallel</span><span class="p">(</span><span class="n">joblib</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">)(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">core_list</span><span class="p">)</span>
-            
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cooling</span> <span class="o">==</span> <span class="s1">&#39;equilibrium&#39;</span><span class="p">:</span> <span class="c1"># Paul</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">E0</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">Tmin</span><span class="p">,</span><span class="mf">1e-10</span><span class="p">])</span>
+
         <span class="k">else</span><span class="p">:</span> <span class="c1">#evaluate swarm in series</span>
             <span class="n">E0</span><span class="o">=</span><span class="p">[]</span>
             <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="n">x0</span><span class="p">:</span>
                 <span class="n">fitness</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span>
                 <span class="n">E0</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fitness</span><span class="p">)</span>
         
+
         <span class="k">return</span> <span class="n">x0</span><span class="p">,</span> <span class="n">E0</span> <span class="c1">#return initial guess and initial fitness      </span>
     
 <div class="viewcode-block" id="SA.evolute"><a class="viewcode-back" href="../../../modules/evolutionary/sa.html#neorl.evolu.sa.SA.evolute">[docs]</a>    <span class="k">def</span> <span class="nf">evolute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ngen</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -520,6 +568,8 @@
         
         <span class="n">ngen</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">ngen</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="n">ngen</span><span class="p">):</span>
+            <span class="c1">#if self.cooling == &#39;equilibrium&#39;:# Paul</span>
+            <span class="c1">#    self.accepted_energy = [] # initialize list of accepted energy to empty at step i</span>
             <span class="n">x_next</span><span class="p">,</span><span class="n">E_next</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">acc</span><span class="p">,</span> <span class="n">rej</span><span class="p">,</span> <span class="n">imp</span><span class="p">,</span> <span class="n">x_best</span><span class="p">,</span> <span class="n">E_best</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="n">x0</span><span class="o">=</span><span class="n">x_next</span><span class="p">,</span> <span class="n">E0</span><span class="o">=</span><span class="n">E_next</span><span class="p">,</span> <span class="n">step0</span><span class="o">=</span><span class="n">step0</span><span class="p">)</span>
             <span class="n">step0</span><span class="o">=</span><span class="n">step0</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">npop</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">ncores</span>
             <span class="n">arg_max</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">E_best</span><span class="p">)</span>
@@ -537,14 +587,45 @@
                 <span class="n">E_opt</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="n">E_best</span><span class="p">)</span>
                 <span class="n">x_opt</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">x_best</span><span class="p">[</span><span class="n">arg_max</span><span class="p">])</span>
             
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">reinforce_best</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cooling</span> <span class="o">==</span> <span class="s1">&#39;equilibrium&#39;</span><span class="p">:</span> <span class="c1"># Paul</span>
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">accepts</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">:</span> <span class="c1"># help prevent the std to be 0</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;--warning: The SA stopped because the average acceptance rate throughout the chain </span><span class="si">{}</span><span class="s2"> </span><span class="si">% f</span><span class="s2">alls below the threshold </span><span class="si">{}</span><span class="s2"> %&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">accepts</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">))</span>
+                    <span class="k">break</span>
+                <span class="k">elif</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">accepts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;--warning: The SA stopped because the average acceptance rate throughout the chain </span><span class="si">{}</span><span class="s2"> </span><span class="si">% r</span><span class="s2">eaches 0%&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">accepts</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">))</span>
+                    <span class="k">break</span>
+            <span class="c1"># Paul</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">reinforce_best</span> <span class="o">==</span> <span class="s1">&#39;hard&#39;</span><span class="p">:</span>
                 <span class="n">x_next</span><span class="o">=</span><span class="p">[</span><span class="n">x_opt</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">ncores</span>
                 <span class="n">E_next</span><span class="o">=</span><span class="p">[</span><span class="n">E_opt</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">ncores</span>
-            
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">reinforce_best</span> <span class="o">==</span> <span class="s1">&#39;soft&#39;</span><span class="p">:</span>
+                <span class="n">sampling</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">)</span>
+                <span class="n">normalization</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">E_next</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">))</span> <span class="c1"># cte to generate a probability</span>
+                <span class="n">sampling</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span> <span class="nb">abs</span><span class="p">(</span><span class="n">E_next</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="c1"># utilize last accepted solution to generate the sampling</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">rho</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">)</span> <span class="c1"># sample random number between 0 and 1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">rho</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># probability of choosing itself is 1    </span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">):</span>
+                    <span class="n">sampling</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sampling</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span> <span class="nb">abs</span><span class="p">(</span><span class="n">E_next</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+                <span class="n">sampling</span> <span class="o">=</span> <span class="n">sampling</span> <span class="o">*</span> <span class="n">normalization</span>
+                <span class="k">for</span> <span class="n">count</span><span class="p">,</span><span class="n">prob</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">rho</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">prob</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span> <span class="o">-</span> <span class="mi">1</span>
+                    <span class="k">elif</span> <span class="n">math</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">sampling</span><span class="p">[</span><span class="n">count</span><span class="p">]):</span><span class="c1"># exponantial can lead to numerical erros</span>
+                        <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">E_next</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">prob</span> <span class="o">&lt;=</span> <span class="n">sampling</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                            <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">sampling</span> <span class="o">&gt;</span> <span class="n">rho</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">x_next</span><span class="p">[</span><span class="n">count</span><span class="p">]</span> <span class="o">=</span> <span class="n">x_best</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="c1"># re-initialize with the best ever found by the index&#39;th Markov Chain</span>
+                    <span class="n">E_next</span><span class="p">[</span><span class="n">count</span><span class="p">]</span> <span class="o">=</span> <span class="n">E_best</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+
             <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;************************************************************&#39;</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;SA step </span><span class="si">{}</span><span class="s1">/</span><span class="si">{}</span><span class="s1">, T=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">step0</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">)))</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;************************************************************&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;***********************************************************************&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;SA step </span><span class="si">{}</span><span class="s1">/</span><span class="si">{}</span><span class="s1">, T=</span><span class="si">{}</span><span class="s1">, Ncores=</span><span class="si">{}</span><span class="s1">, Cooling=</span><span class="si">{}</span><span class="s1">, Reinforce=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">step0</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cooling</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reinforce_best</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;***********************************************************************&#39;</span><span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Statistics for the </span><span class="si">{}</span><span class="s1"> parallel chains&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">))</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">==</span><span class="s1">&#39;max&#39;</span><span class="p">:</span> 
                     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best fitness:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">E_best</span><span class="p">),</span><span class="mi">6</span><span class="p">))</span>
@@ -554,8 +635,8 @@
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Acceptance Rate (%):&#39;</span><span class="p">,</span> <span class="n">acc</span><span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Rejection Rate (%):&#39;</span><span class="p">,</span> <span class="n">rej</span><span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Improvment Rate (%):&#39;</span><span class="p">,</span> <span class="n">imp</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;************************************************************&#39;</span><span class="p">)</span>
-
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;***********************************************************************&#39;</span><span class="p">)</span>
+            
         <span class="c1">#--mir</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">==</span><span class="s1">&#39;max&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">E_opt_correct</span><span class="o">=</span><span class="n">E_opt</span>
@@ -567,9 +648,11 @@
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best fitness (y) found:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">E_opt_correct</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best individual (x) found:&#39;</span><span class="p">,</span> <span class="n">x_opt</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--------------------------------------------------------------&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">equilib_deactivate</span><span class="p">:</span> <span class="c1">#Paul.</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-- warning: equilibrium cooling is implemented ONLY for ncores &gt; 1. The cooling is changed to default cooling --&gt; &#39;fast&#39;&quot;</span><span class="p">)</span>
             
         <span class="k">return</span> <span class="n">x_opt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">E_opt_correct</span><span class="p">,</span> <span class="n">stat</span></div></div>
-
 </pre></div>
 
            </div>

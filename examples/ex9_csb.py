@@ -77,7 +77,7 @@ de_x, de_y, de_hist=de.evolute(ngen=300, verbose=0)
 #---------------------------------
 # SSA
 #---------------------------------
-ssa=SSA(mode='min', bounds=BOUNDS, fit=CSB, nsalps=50, c1=None, ncores=1, seed=1)
+ssa=SSA(mode='min', bounds=BOUNDS, fit=CSB, nsalps=50, ncores=1, seed=1)
 ssa_x, ssa_y, ssa_hist=ssa.evolute(ngen=300, verbose=0)
 
 #---------------------------------
@@ -184,7 +184,7 @@ de_x, de_y, de_hist=de.evolute(ngen=200, verbose=0)
 #---------------------------------
 # SSA
 #---------------------------------
-ssa=SSA(mode='min', bounds=BOUNDS, fit=CSB_square, nsalps=50, c1=0.05, ncores=1, seed=1)
+ssa=SSA(mode='min', bounds=BOUNDS, fit=CSB_square, nsalps=50, ncores=1, seed=1)
 ssa_x, ssa_y, ssa_hist=ssa.evolute(ngen=200, verbose=0)
 
 #---------------------------------

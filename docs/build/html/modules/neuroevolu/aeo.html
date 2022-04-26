@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Animorphic Ensemble Optimization (AEO) &mdash; NEORL 1.7.5b documentation</title>
+  <title>Animorphic Ensemble Optimization (AEO) &mdash; NEORL 1.7.6b documentation</title>
   
 
   
@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                main (1.7.5b )
+                main (1.7.6b )
               </div>
             
           
@@ -219,29 +219,16 @@
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="neorl.hybrid.aeo.AEO">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">neorl.hybrid.aeo.</span></span><span class="sig-name descname"><span class="pre">AEO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bounds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gen_per_cycle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'up'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'improve'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g_burden</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'up'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'exp'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'up'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'improve'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b_burden</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bw'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'min'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ncores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neorl/hybrid/aeo.html#AEO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.hybrid.aeo.AEO" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">neorl.hybrid.aeo.</span></span><span class="sig-name descname"><span class="pre">AEO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bounds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gen_per_cycle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'min'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/neorl/hybrid/aeo.html#AEO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.hybrid.aeo.AEO" title="Permalink to this definition">¶</a></dt>
 <dd><p>Animorphoc Ensemble Optimizer</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>mode</strong> – (str) problem type, either “min” for minimization problem or “max” for maximization</p></li>
 <li><p><strong>bounds</strong> – (dict) input parameter type and lower/upper bounds in dictionary form. Example: <code class="docutils literal notranslate"><span class="pre">bounds={'x1':</span> <span class="pre">['int',</span> <span class="pre">1,</span> <span class="pre">4],</span> <span class="pre">'x2':</span> <span class="pre">['float',</span> <span class="pre">0.1,</span> <span class="pre">0.8],</span> <span class="pre">'x3':</span> <span class="pre">['float',</span> <span class="pre">2.2,</span> <span class="pre">6.2]}</span></code></p></li>
 <li><p><strong>fit</strong> – (function) the fitness function</p></li>
 <li><p><strong>optimizers</strong> – (list) list of optimizer instances to be included in the ensemble</p></li>
 <li><p><strong>gen_per_cycle</strong> – (int) number of generations performed in evolution phase per cycle</p></li>
-<li><p><strong>config</strong> – (int) If none, use migration parameters defined later, if int (1 through 3), use one of the presets</p></li>
-<li><p><strong>alpha</strong> – (float or str) option for exponent on <code class="docutils literal notranslate"><span class="pre">g</span></code> strength measure, if numeric, <code class="docutils literal notranslate"><span class="pre">alpha</span></code> is taken to be
-that value. If <code class="docutils literal notranslate"><span class="pre">alpha</span></code> is “up” <code class="docutils literal notranslate"><span class="pre">alpha</span></code> is annealed from 0 to 1. If <code class="docutils literal notranslate"><span class="pre">alpha</span></code> is “down” it is annealed from
-1 to 0.</p></li>
-<li><p><strong>g</strong> – (str) either “fitness” or “improve” for strength measure for exportation number section of migration</p></li>
-<li><p><strong>g_burden</strong> – (bool) True if strength if divided by number of fitness evaluations in evolution phase</p></li>
-<li><p><strong>q</strong> – (float or str) option for favoring weak or strong pops in exportation number</p></li>
-<li><p><strong>wt</strong> – (str) “log”, “lin”, “exp”, “uni” for different weightings in member selection section of migration</p></li>
-<li><p><strong>beta</strong> – (float or str) option for exponent on <code class="docutils literal notranslate"><span class="pre">b</span></code> strength measure. See <code class="docutils literal notranslate"><span class="pre">alpha</span></code> for details.</p></li>
-<li><p><strong>b</strong> – (str) either “fitness” or “improve” for strength measure for destination selection section of migration</p></li>
-<li><p><strong>b_burden</strong> – (bool) True if strength if divided by number of fitness evaluations in evolution phase</p></li>
-<li><p><strong>order</strong> – (str) “wb” for worst to best, “bw” for best to worst, prepend “a” for annealed starting in the given ordering.</p></li>
-<li><p><strong>ncores</strong> – (int) number of parallel processors</p></li>
+<li><p><strong>mode</strong> – (str) problem type, either “min” for minimization problem or “max” for maximization</p></li>
 <li><p><strong>seed</strong> – (int) random seed for sampling</p></li>
 </ul>
 </dd>
@@ -356,6 +343,7 @@ used to stop evolution at certain number of function evaluations</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">fit</span></code>, <code class="docutils literal notranslate"><span class="pre">bounds</span></code> and <code class="docutils literal notranslate"><span class="pre">mode</span></code> should be consistent across algorithms passed into <code class="docutils literal notranslate"><span class="pre">AEO</span></code>.</p></li>
 <li><p>The total number of function evaluation changes depending on the algorithms in the ensemble and the distribution of members.</p></li>
 <li><p>Information on the returned <cite>log</cite> can be found in the code for the <code class="docutils literal notranslate"><span class="pre">AEO</span></code> class.</p></li>
+<li><p>Extra options around the migration process can be accessed through the <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> paramter.</p></li>
 </ul>
 </div>
 </div>

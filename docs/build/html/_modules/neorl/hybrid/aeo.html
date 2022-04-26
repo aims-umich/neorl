@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.hybrid.aeo &mdash; NEORL 1.7.5b documentation</title>
+  <title>neorl.hybrid.aeo &mdash; NEORL 1.7.6b documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.7.5b )
+                main (1.7.6b )
               </div>
             
           
@@ -193,6 +193,8 @@
 <span class="kn">import</span> <span class="nn">copy</span>
 <span class="kn">import</span> <span class="nn">operator</span> <span class="k">as</span> <span class="nn">op</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">reduce</span>
+
+<span class="kn">from</span> <span class="nn">neorl.evolu.discrete</span> <span class="kn">import</span> <span class="n">mutate_discrete</span><span class="p">,</span> <span class="n">encode_grid_to_discrete</span><span class="p">,</span> <span class="n">decode_discrete_to_grid</span>
 
 <span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">WOA</span>
 <span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">GWO</span>
@@ -607,32 +609,39 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Animorphoc Ensemble Optimizer</span>
 
-<span class="sd">    :param mode: (str) problem type, either &quot;min&quot; for minimization problem or &quot;max&quot; for maximization</span>
 <span class="sd">    :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: ``bounds={&#39;x1&#39;: [&#39;int&#39;, 1, 4], &#39;x2&#39;: [&#39;float&#39;, 0.1, 0.8], &#39;x3&#39;: [&#39;float&#39;, 2.2, 6.2]}``</span>
 <span class="sd">    :param fit: (function) the fitness function</span>
 <span class="sd">    :param optimizers: (list) list of optimizer instances to be included in the ensemble</span>
 <span class="sd">    :param gen_per_cycle: (int) number of generations performed in evolution phase per cycle</span>
-<span class="sd">    :param config: (int) If none, use migration parameters defined later, if int (1 through 3), use one of the presets</span>
-<span class="sd">    :param alpha: (float or str) option for exponent on ``g`` strength measure, if numeric, ``alpha`` is taken to be</span>
-<span class="sd">        that value. If ``alpha`` is &quot;up&quot; ``alpha`` is annealed from 0 to 1. If ``alpha`` is &quot;down&quot; it is annealed from</span>
-<span class="sd">        1 to 0.</span>
-<span class="sd">    :param g: (str) either &quot;fitness&quot; or &quot;improve&quot; for strength measure for exportation number section of migration</span>
-<span class="sd">    :param g_burden: (bool) True if strength if divided by number of fitness evaluations in evolution phase</span>
-<span class="sd">    :param q: (float or str) option for favoring weak or strong pops in exportation number</span>
-<span class="sd">    :param wt: (str) &quot;log&quot;, &quot;lin&quot;, &quot;exp&quot;, &quot;uni&quot; for different weightings in member selection section of migration</span>
-<span class="sd">    :param beta: (float or str) option for exponent on ``b`` strength measure. See ``alpha`` for details.</span>
-<span class="sd">    :param b: (str) either &quot;fitness&quot; or &quot;improve&quot; for strength measure for destination selection section of migration</span>
-<span class="sd">    :param b_burden: (bool) True if strength if divided by number of fitness evaluations in evolution phase</span>
-<span class="sd">    :param order: (str) &quot;wb&quot; for worst to best, &quot;bw&quot; for best to worst, prepend &quot;a&quot; for annealed starting in the given ordering.</span>
-<span class="sd">    :param ncores: (int) number of parallel processors</span>
+<span class="sd">    :param mode: (str) problem type, either &quot;min&quot; for minimization problem or &quot;max&quot; for maximization</span>
 <span class="sd">    :param seed: (int) random seed for sampling</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+<span class="c1">#    :param config: (int) If none, use migration parameters defined later, if int (1 through 3), use one of the presets</span>
+<span class="c1">#    :param alpha: (float or str) option for exponent on ``g`` strength measure, if numeric, ``alpha`` is taken to be</span>
+<span class="c1">#        that value. If ``alpha`` is &quot;up&quot; ``alpha`` is annealed from 0 to 1. If ``alpha`` is &quot;down&quot; it is annealed from</span>
+<span class="c1">#        1 to 0.</span>
+<span class="c1">#    :param g: (str) either &quot;fitness&quot; or &quot;improve&quot; for strength measure for exportation number section of migration</span>
+<span class="c1">#    :param g_burden: (bool) True if strength if divided by number of fitness evaluations in evolution phase</span>
+<span class="c1">#    :param q: (float or str) option for favoring weak or strong pops in exportation number</span>
+<span class="c1">#    :param wt: (str) &quot;log&quot;, &quot;lin&quot;, &quot;exp&quot;, &quot;uni&quot; for different weightings in member selection section of migration</span>
+<span class="c1">#    :param beta: (float or str) option for exponent on ``b`` strength measure. See ``alpha`` for details.</span>
+<span class="c1">#    :param b: (str) either &quot;fitness&quot; or &quot;improve&quot; for strength measure for destination selection section of migration</span>
+<span class="c1">#    :param b_burden: (bool) True if strength if divided by number of fitness evaluations in evolution phase</span>
+<span class="c1">#    :param order: (str) &quot;wb&quot; for worst to best, &quot;bw&quot; for best to worst, prepend &quot;a&quot; for annealed starting in the given ordering.</span>
+<span class="c1">#    :param ncores: (int) number of parallel processors</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span>
-            <span class="n">optimizers</span><span class="p">,</span> <span class="n">gen_per_cycle</span><span class="p">,</span> <span class="n">config</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
-            <span class="n">alpha</span> <span class="o">=</span> <span class="s2">&quot;up&quot;</span><span class="p">,</span> <span class="n">g</span> <span class="o">=</span> <span class="s2">&quot;improve&quot;</span><span class="p">,</span> <span class="n">g_burden</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-            <span class="n">q</span> <span class="o">=</span> <span class="s1">&#39;up&#39;</span><span class="p">,</span> <span class="n">wt</span> <span class="o">=</span> <span class="s1">&#39;exp&#39;</span><span class="p">,</span> <span class="n">beta</span> <span class="o">=</span> <span class="s1">&#39;up&#39;</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="s1">&#39;improve&#39;</span><span class="p">,</span>
-            <span class="n">b_burden</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">order</span> <span class="o">=</span> <span class="s1">&#39;bw&#39;</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;min&#39;</span><span class="p">,</span>
-            <span class="n">ncores</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">optimizers</span><span class="p">,</span> <span class="n">gen_per_cycle</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+        <span class="n">config</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;config&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;alpha&quot;</span><span class="p">,</span> <span class="s2">&quot;up&quot;</span><span class="p">)</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="s2">&quot;improve&quot;</span><span class="p">)</span>
+        <span class="n">g_burden</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;g_burden&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;q&quot;</span><span class="p">,</span> <span class="s2">&quot;up&quot;</span><span class="p">)</span>
+        <span class="n">wt</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;wt&quot;</span><span class="p">,</span> <span class="s2">&quot;exp&quot;</span><span class="p">)</span>
+        <span class="n">beta</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;beta&quot;</span><span class="p">,</span> <span class="s2">&quot;up&quot;</span><span class="p">)</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;improve&quot;</span><span class="p">)</span>
+        <span class="n">b_burden</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;b_burden&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">order</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;order&quot;</span><span class="p">,</span> <span class="s2">&quot;bw&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">pass</span>
@@ -686,7 +695,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">gpc</span> <span class="o">=</span> <span class="n">gen_per_cycle</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span> <span class="o">=</span> <span class="n">bounds</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span> <span class="o">=</span> <span class="n">ncores</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">bounds</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="s2">&quot;grid&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="o">=</span><span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="o">=</span><span class="n">bounds</span>  <span class="c1">#keep original bounds for decoding</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="o">=</span><span class="n">encode_grid_to_discrete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span> <span class="c1">#encoding grid to int</span>
+            <span class="c1">#define var_types again by converting grid to int</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">])</span>
 
         <span class="c1">#get functions to convert number of generations to number of evaluaions</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ngtonevals</span> <span class="o">=</span> <span class="p">[</span><span class="n">get_algo_ngtonevals</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizers</span><span class="p">]</span>
@@ -695,8 +711,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">bounds</span><span class="p">])</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">bounds</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">lb</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ub</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">]</span>
 
         <span class="c1">#check that all optimizers have options that match AEO</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ensure_consistency</span><span class="p">()</span>
