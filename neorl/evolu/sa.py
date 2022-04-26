@@ -88,7 +88,7 @@ class SA:
         
         self.cooling=cooling 
         self.equilib_deactivate=False
-        if self.cooling == 'equilibrium' and self.ncores == 1:#Paul.
+        if self.cooling == 'equilibrium' and self.ncores == 1:#Paul. The equilibrium cooling is only available with multiple chains working at the same time.
             print("-- warning: equilibrium cooling is implemented ONLY for ncores > 1. The cooling is changed to default cooling --> 'fast'")
             self.cooling = 'fast'
             self.equilib_deactivate=True
