@@ -537,6 +537,8 @@ class AEO(object):
             self.trans_bounds, self.bounds_map=encode_grid_to_discrete(self.bounds) #encoding grid to int
             #define var_types again by converting grid to int
             self.var_type = np.array([self.bounds[item][0] for item in self.bounds])
+        else:
+            self.trans_bounds = copy.copy(self.bounds)
 
         #get functions to convert number of generations to number of evaluaions
         self.ngtonevals = [get_algo_ngtonevals(a) for a in self.optimizers]
@@ -795,7 +797,7 @@ class AEO(object):
             if "grid" in self.var_type:
                 pop_fits = [p.evolute(self.gpc, self.fit, self.bounds, i, Ncyc, self.var_type, self.bounds_map, self.trans_bounds, log.loc[{'pop' : p.popname, 'cycle' : i}]) for p in self.pops]
             else:
-                pop_fits = [p.evolute(self.gpc, self.fit, self.bounds, i, Ncyc, None, None, log.loc[{'pop' : p.popname, 'cycle' : i}]) for p in self.pops]
+                pop_fits = [p.evolute(self.gpc, self.fit, self.bounds, i, Ncyc, self.var_type, None, self.trans_bounds, log.loc[{'pop' : p.popname, 'cycle' : i}]) for p in self.pops]
 
             #exportation number
             #  calc weights
