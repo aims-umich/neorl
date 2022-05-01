@@ -31,10 +31,11 @@ import numpy as np
 import math
 import time
 import joblib
-from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
 import matplotlib.pyplot as plt
+from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete 
+from neorl.evolu.discrete import decode_discrete_to_grid, encode_grid_indv_to_discrete
 from neorl.utils.seeding import set_neorl_seed
-from neorl.utils.tools import get_population
+from neorl.utils.tools import get_population, check_mixed_individual
 
 class HHO(object):
     """
@@ -85,6 +86,7 @@ class HHO(object):
         else:
             self.grid_flag=False
             self.bounds = bounds
+            self.orig_bounds=bounds
         
         self.lb = np.array([self.bounds[item][1] for item in self.bounds])
         self.ub = np.array([self.bounds[item][2] for item in self.bounds])
@@ -112,7 +114,12 @@ class HHO(object):
         self.hawk_positions = np.zeros((self.nhawks, self.dim))
         if x0:
             assert len(x0) == self.nhawks, 'Length of x0 array MUST equal the number of hawks (self.nhawks).'
-            self.hawk_positions = x0
+            for i in range(self.nhawks):
+                check_mixed_individual(x=x0[i], bounds=self.orig_bounds) #assert the type provided is consistent
+                if self.grid_flag:
+                    self.hawk_positions[i,:] = encode_grid_indv_to_discrete(x0[i], bounds=self.orig_bounds, bounds_map=self.bounds_map)
+                else:
+                    self.hawk_positions[i,:] = x0[i]
         else:
             # self.hawk_positions = np.asarray([x * (self.ub - self.lb) + self.lb for x in np.random.uniform(0, 1, (self.nhawks, self.dim))])
             for hawk_i in range(self.nhawks):
@@ -206,7 +213,14 @@ class HHO(object):
             self.history['global_fitness'] = np.minimum.accumulate(self.best_scores)
             
         self.history['local_fitness'] = self.best_scores
-        self.history['last_pop'] = get_population(self.prev_pop, fits=self.prev_fits)
+                
+        #--mir return the last population for restart calculations
+        if self.grid_flag:
+            self.history['last_pop'] = get_population(self.prev_pop, fits=self.prev_fits, grid_flag=True, 
+                                                     bounds=self.orig_bounds, bounds_map=self.bounds_map)
+        else:
+            self.history['last_pop'] = get_population(self.prev_pop, fits=self.prev_fits, grid_flag=False)
+            
         
         return self.rabbit_correct, self.best_global_fitness, self.history
 

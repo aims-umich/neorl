@@ -25,9 +25,10 @@ import numpy as np
 import math
 import time
 import joblib
-from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
+from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete 
+from neorl.evolu.discrete import decode_discrete_to_grid, encode_grid_indv_to_discrete
 from neorl.utils.seeding import set_neorl_seed
-from neorl.utils.tools import get_population
+from neorl.utils.tools import get_population, check_mixed_individual
 
 class CS(object):
     """
@@ -79,6 +80,7 @@ class CS(object):
         else:
             self.grid_flag=False
             self.bounds = bounds
+            self.orig_bounds=bounds
         
         self.dim = len(bounds)
         self.lb=np.array([self.bounds[item][1] for item in self.bounds])
@@ -205,7 +207,7 @@ class CS(object):
             s = s + stepsize * np.random.randn(len(s))
             tempnest[j,:]=self.ensure_bounds(s)
             tempnest[j,:] = self.ensure_discrete(s)
- 
+         
         return tempnest
         
     def evolute(self, ngen, x0=None, verbose=False):
@@ -225,7 +227,11 @@ class CS(object):
         if x0:
             assert len(x0) == self.ncuckoos, '--error: the length of x0 ({}) MUST equal the number of cuckoos in the group ({})'.format(len(x0), self.ncuckoos)
             for i in range(self.ncuckoos):
-                self.Positions[i,:] = x0[i]
+                check_mixed_individual(x=x0[i], bounds=self.orig_bounds) #assert the type provided is consistent
+                if self.grid_flag:
+                    self.Positions[i,:] = encode_grid_indv_to_discrete(x0[i], bounds=self.orig_bounds, bounds_map=self.bounds_map)
+                else:
+                    self.Positions[i,:] = x0[i]
         else:
             #self.Positions=self.init_sample(self.bounds)  #TODO, update later for mixed-integer optimisation
             # Initialize the positions of cuckoos
@@ -235,6 +241,8 @@ class CS(object):
         fitness=self.eval_cuckoos() # evaluate the first cuckoos
         self.best_position, self.best_fitness = self.select(pos = self.Positions,fit = fitness) # find the initial best position and fitness
         for l in range(1, ngen+1):# Main loop
+            
+            self.a= 1 - (l-1) * ((1) / ngen)  #mir: a decreases linearly between 1 to 0, for discrete mutation
             #-----------------------------
             # Obtain new Cuckoo Positions by Lévy flights
             #-----------------------------
@@ -314,7 +322,13 @@ class CS(object):
         
         if self.mode=='max':
             self.last_fit=-self.last_fit
-        self.history['last_pop'] = get_population(self.last_pop, fits=self.last_fit)
+            
+        #--mir return the last population for restart calculations
+        if self.grid_flag:
+            self.history['last_pop'] = get_population(self.last_pop, fits=self.last_fit, grid_flag=True, 
+                                                     bounds=self.orig_bounds, bounds_map=self.bounds_map)
+        else:
+            self.history['last_pop'] = get_population(self.last_pop, fits=self.last_fit, grid_flag=False)
              
         if self.verbose:
             print('------------------------ CS Summary --------------------------')

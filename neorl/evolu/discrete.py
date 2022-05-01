@@ -133,4 +133,22 @@ def decode_discrete_to_grid(individual, bounds, bounds_map):
     return new_indv   
 
 x=[0.2, 45, 2, 1]
-decode_discrete_to_grid(x, bounds, bounds_map)
+y=decode_discrete_to_grid(x, bounds, bounds_map)
+
+def encode_grid_indv_to_discrete(individual, bounds, bounds_map):
+    
+    new_indv=[]
+    
+    for i, key in enumerate(bounds):
+        if bounds[key][0]=='grid':
+            indv_map=bounds_map[key]   #obtain the map for this parameter
+            indv_disc=[k for k,v in indv_map.items() if v == individual[i]] #find the key (discrete) value that corresponds to the categorical value
+            assert len(indv_disc) == 1, '--error: two key values in the bounds_map {} correspond to same categorical value {}'.format(indv_disc, individual[i])
+            new_indv.append(indv_disc[0])
+        else:
+            new_indv.append(individual[i])
+    
+    return new_indv
+        
+x2=[0.2,40, 0.3, 'cx2point']
+y2=encode_grid_indv_to_discrete(x2, bounds, bounds_map)

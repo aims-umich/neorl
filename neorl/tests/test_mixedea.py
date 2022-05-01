@@ -205,7 +205,7 @@ def test_mixedea():
         ########################
         # Setup and evolute EDEV
         ########################
-        edev=EDEV(mode='min', bounds=bounds, fit=Vessel, npop=100, lambda_=0.1, ncores=1, seed=1)
+        edev=EDEV(mode='min', bounds=bounds, fit=Vessel, npop=100, ncores=1, seed=1)
         x_edev, y_edev, edev_hist=edev.evolute(ngen=100, ng=10, verbose=0)
         assert Vessel(x_edev) == y_edev
         

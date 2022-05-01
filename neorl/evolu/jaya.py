@@ -20,9 +20,10 @@
 import random
 import numpy as np
 import joblib
-from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
+from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete 
+from neorl.evolu.discrete import decode_discrete_to_grid, encode_grid_indv_to_discrete
 from neorl.utils.seeding import set_neorl_seed
-from neorl.utils.tools import get_population
+from neorl.utils.tools import get_population, check_mixed_individual
 
 class JAYA:
     """
@@ -76,6 +77,7 @@ class JAYA:
         else:
             self.grid_flag=False
             self.bounds = bounds
+            self.orig_bounds=bounds
         
         self.dim = len(bounds)
         self.lb=[self.bounds[item][1] for item in self.bounds]
@@ -100,8 +102,12 @@ class JAYA:
             if verbose:
                 print('The first individual provided by the user:', x0[0])
                 print('The last individual provided by the user:', x0[-1])
-            for i in range(len(x0)):
-                pop.append(x0[i])
+            for i in range(self.npop):
+                check_mixed_individual(x=x0[i], bounds=self.orig_bounds) #assert the type provided is consistent
+                if self.grid_flag:
+                    pop.append(encode_grid_indv_to_discrete(x0[i], bounds=self.orig_bounds, bounds_map=self.bounds_map))
+                else:
+                    pop.append(x0[i])
         else: # random init
             for i in range(self.npop):
                 indv=self.gen_indv(self.bounds)
@@ -311,7 +317,13 @@ class JAYA:
             best_scores=[-item for item in best_scores]
             self.last_fit=-self.last_fit
         
-        self.history['last_pop'] = get_population(self.last_pop, fits=self.last_fit)
         self.history['global_fitness'] = best_scores
+        
+        #--mir return the last population for restart calculations
+        if self.grid_flag:
+            self.history['last_pop'] = get_population(self.last_pop, fits=self.last_fit, grid_flag=True, 
+                                                     bounds=self.orig_bounds, bounds_map=self.bounds_map)
+        else:
+            self.history['last_pop'] = get_population(self.last_pop, fits=self.last_fit, grid_flag=False)
         
         return x_best_correct, y_best_correct, self.history

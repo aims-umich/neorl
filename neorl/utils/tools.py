@@ -22,7 +22,48 @@
 
 import pandas as pd
 import numpy as np
-def get_population(pop, fits=None):
+from neorl.evolu.discrete import decode_discrete_to_grid
+
+def is_integer_num(n):
+    if isinstance(n, int):
+        return True
+    if isinstance(n, float):
+        return n.is_integer()
+    return False
+
+bounds = {}
+x=[20.0, 0.1875, 59.0, 149.0, 'Hi', -4.0]
+bounds['x1'] = ['int', 1, 20]
+bounds['x2'] = ['grid', (0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625)]
+bounds['x3'] = ['int', 10, 200]
+bounds['x4'] = ['int', 10, 200]
+bounds['x5'] = ['grid', ('Hi', 'Bye', 'New')]
+bounds['x6'] = ['int', -5, 5]
+
+def check_mixed_individual(x, bounds):
+    #auxiliary function to assert the type of the individual passed to x0 as initial guess
+    # to check if it fits the discrete, float, grid types.
+    #x: an individual vector to check 
+    #bounds: a typical NEORL dictionary containing the parameter space    
+
+    for index, (key, value) in enumerate(bounds.items()):
+        #print('Index:: ', index, ' :: ', key, '-', value)
+        
+        if value[0] == 'grid':
+            assert x[index] in value[1], '--error: the value ({}) in individual ({}) provided to x0 does not belong to grid provided ({})'.format(x[index], x, value[1])
+        
+        if value[0] == 'int':
+            assert is_integer_num(x[index]), '--error: the value ({}) in individual ({}) provided to x0 is not consistent with the type ({})'.format(x[index], x, value[0])
+            assert value[1] <= x[index] <= value[2], '--error: the value ({}) in individual ({}) provided to x0 is not within the bounds [{}, {}]'.format(x[index], x, value[1], value[2])
+
+        if value[0] == 'float':
+            try:
+                float(x[index])
+            except:
+                raise Exception ('--error: the value ({}) in individual ({}) provided to x0 is not consistent with the type ({})'.format(x[index], x, value[0]))
+            assert value[1] <= x[index] <= value[2], '--error: the value ({}) in individual ({}) provided to x0 is not within the bounds [{}, {}]'.format(x[index], x, value[1], value[2]) 
+   
+def get_population(pop, fits=None, grid_flag=False, bounds=None, bounds_map=None):
     
     if isinstance(pop, dict):
         #either ES or PSO
@@ -53,6 +94,7 @@ def get_population(pop, fits=None):
     else:
         raise ('--warning: population data structure type cannot be identified, the population cannot be reconstructed')
     
+    
     try:    
         colnames=['var'+str(i) for i in range(1,d+1)] + ['fitness']
         rownames=['indv'+str(i) for i in range(1,npop+1)]
@@ -60,4 +102,12 @@ def get_population(pop, fits=None):
     except:
         df_pop=pd.DataFrame(np.zeros((5, 5)))   #return an empty dataframe
     
+    if grid_flag:
+        #convert the categorical value from the discrete space to its orignal grid space
+        for k in range (df_pop.shape[0]):
+            xx=list(df_pop.iloc[k,:-1].values)
+            yy=decode_discrete_to_grid(xx, bounds, bounds_map)
+            #print(yy)
+            df_pop.iloc[k,:-1] = yy
+        
     return df_pop

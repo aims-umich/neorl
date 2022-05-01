@@ -24,9 +24,10 @@ import numpy as np
 from numpy import arange, multiply, zeros, copy
 import joblib
 from neorl.hybrid.edevcore.helpers import ARCHIVE, generator, sub2ind, gnR1R2, randFCR
-from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
+from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete 
+from neorl.evolu.discrete import decode_discrete_to_grid, encode_grid_indv_to_discrete
 from neorl.utils.seeding import set_neorl_seed
-from neorl.utils.tools import get_population
+from neorl.utils.tools import get_population, check_mixed_individual
 
 
 class EDEV(object):
@@ -37,16 +38,18 @@ class EDEV(object):
     :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: ``bounds={'x1': ['int', 1, 4], 'x2': ['float', 0.1, 0.8], 'x3': ['float', 2.2, 6.2]}``
     :param fit: (function) the fitness function 
     :param npop: (int): total size of the full population, which will be divided into three sub-populations
-    :param lambda_: (float): fraction of ``npop`` to split into 3 sub-populations. ``pop1 = npop - npop * lambda_``, ``pop2 = pop3 =  npop * lambda_`` (see **Notes** below)
     :param int_transform: (str): method of handling int/discrete variables, choose from: ``nearest_int``, ``sigmoid``, ``minmax``.
     :param ncores: (int) number of parallel processors (must be ``<= npop``)
     :param seed: (int) random seed for sampling
     """
-    def __init__(self, mode, bounds, fit, npop=100, lambda_=0.1, 
+    #:param lambda_: (float): fraction of ``npop`` to split into 3 sub-populations. ``pop1 = npop - npop * lambda_``, ``pop2 = pop3 =  npop * lambda_`` (see **Notes** below)        
+    def __init__(self, mode, bounds, fit, npop=100, 
                  int_transform='nearest_int', ncores=1, seed=None):
-        
+
         set_neorl_seed(seed)
         
+        lambda_=0.1   #for EDEV stability, better to keep this parameter fixed. 
+        assert npop >= 70, '--error: EDEV ensemble requires a large population of 70 or more'
         assert ncores <= npop, '--error: ncores ({}) must be less than or equal than npop ({})'.format(ncores, npop)
         assert 0 < lambda_ < 1, '--error: lambda_ must be more than 0 and less than 1'
         #--mir
@@ -83,6 +86,7 @@ class EDEV(object):
         else:
             self.grid_flag=False
             self.bounds = bounds
+            self.orig_bounds=bounds
         
         self.dim = len(bounds)
         self.lb=np.array([self.bounds[item][1] for item in self.bounds])
@@ -219,8 +223,13 @@ class EDEV(object):
         self.mixPop = np.zeros((self.npop, self.dim))
         if x0:
             assert len(x0) == self.npop, '--error: the length of x0 ({}) MUST equal the number of npop in the group ({})'.format(len(x0), self.npop)
+                
             for i in range(self.npop):
-                self.mixPop[i,:] = x0[i]
+                check_mixed_individual(x=x0[i], bounds=self.orig_bounds) #assert the type provided is consistent
+                if self.grid_flag:
+                    self.mixPop[i,:] = encode_grid_indv_to_discrete(x0[i], bounds=self.orig_bounds, bounds_map=self.bounds_map)
+                else:
+                    self.mixPop[i,:] = x0[i]
         else:
             # Initialize the positions
             for i in range(self.npop):
@@ -248,7 +257,7 @@ class EDEV(object):
         
         permutation=np.random.permutation(self.npop)
                 
-        slice_index=int(self.lambda_*self.npop)        
+        slice_index=int(self.lambda_*self.npop)
         arrayThird=permutation[:slice_index] #for EPSDE
         arraySecond=permutation[slice_index : 2*slice_index]  #for CoDE
         arrayFirst=permutation[2*slice_index:]    #for JADE 
@@ -636,8 +645,14 @@ class EDEV(object):
 
         if self.mode=='max':
             self.last_fit=-self.last_fit
-        
-        self.history['last_pop'] = get_population(self.last_pop, fits=self.last_fit)
+
+        #--mir return the last population for restart calculations
+        if self.grid_flag:
+            self.history['last_pop'] = get_population(self.last_pop, fits=self.last_fit, grid_flag=True, 
+                                                     bounds=self.orig_bounds, bounds_map=self.bounds_map)
+        else:
+            self.history['last_pop'] = get_population(self.last_pop, fits=self.last_fit, grid_flag=False)
+            
         self.history['F-Evals'] = self.FES   #function evaluations 
         if self.verbose:
             print('------------------------ EDEV Summary --------------------------')

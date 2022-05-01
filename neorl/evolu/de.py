@@ -19,9 +19,10 @@
 import random
 import numpy as np
 import joblib 
-from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
+from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete 
+from neorl.evolu.discrete import decode_discrete_to_grid, encode_grid_indv_to_discrete
 from neorl.utils.seeding import set_neorl_seed
-from neorl.utils.tools import get_population
+from neorl.utils.tools import get_population, check_mixed_individual
 
 class DE:
     """
@@ -91,6 +92,7 @@ class DE:
         else:
             self.grid_flag=False
             self.bounds = bounds
+            self.orig_bounds=bounds
         
         self.dim = len(bounds)
         self.lb=[self.bounds[item][1] for item in self.bounds]
@@ -146,8 +148,14 @@ class DE:
             if verbose:
                 print('The first individual provided by the user:', x0[0])
                 print('The last individual provided by the user:', x0[-1])
-            for i in range(len(x0)):
-                pop.append(x0[i])
+
+            for i in range(self.npop):
+                check_mixed_individual(x=x0[i], bounds=self.orig_bounds) #assert the type provided is consistent
+                if self.grid_flag:
+                    pop.append(encode_grid_indv_to_discrete(x0[i], bounds=self.orig_bounds, bounds_map=self.bounds_map))
+                else:
+                    pop.append(x0[i])
+                    
         else:
             for i in range (self.npop):
                 indv=self.GenIndv(self.bounds)
@@ -351,7 +359,13 @@ class DE:
             print('--------------------------------------------------------------')
             
         #---update final logger
-        self.de_hist['last_pop'] = get_population(self.population, fits=gen_scores)
+        #--mir return the last population for restart calculations
+        if self.grid_flag:
+            self.de_hist['last_pop'] = get_population(self.population, fits=gen_scores, grid_flag=True, 
+                                                     bounds=self.orig_bounds, bounds_map=self.bounds_map)
+        else:
+            self.de_hist['last_pop'] = get_population(self.population, fits=gen_scores, grid_flag=False)
+            
         if self.mode == 'min':
             self.best_scores=[-item for item in self.best_scores]
             self.de_hist['global_fitness'] = np.minimum.accumulate(self.best_scores)

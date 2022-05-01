@@ -22,9 +22,10 @@ from collections import defaultdict
 import copy
 import time
 import joblib
-from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
+from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete 
+from neorl.evolu.discrete import decode_discrete_to_grid, encode_grid_indv_to_discrete
 from neorl.utils.seeding import set_neorl_seed
-from neorl.utils.tools import get_population
+from neorl.utils.tools import get_population, check_mixed_individual
 
 class PSO:
     """
@@ -94,6 +95,7 @@ class PSO:
         else:
             self.grid_flag=False
             self.bounds = bounds
+            self.orig_bounds=bounds
         
         self.low = np.array([self.bounds[item][1] for item in self.bounds])
         self.up = np.array([self.bounds[item][2] for item in self.bounds])
@@ -182,10 +184,18 @@ class PSO:
             if verbose:
                 print('The first particle provided by the user:', x0[0])
                 print('The last particle provided by the user:', x0[-1])
-            for i in range(len(x0)):
-                pop[i].append(x0[i])
-                speed = list(self.v0*np.array(x0[i]))
+            for i in range(len(x0)):                
+                check_mixed_individual(x=x0[i], bounds=self.orig_bounds) #assert the type provided is consistent
+                if self.grid_flag:
+                    x_encoded=encode_grid_indv_to_discrete(x0[i], bounds=self.orig_bounds, bounds_map=self.bounds_map)
+                    speed = list(self.v0*np.array(x_encoded))
+                    pop[i].append(x_encoded)
+                else:
+                    pop[i].append(x0[i])
+                    speed = list(self.v0*np.array(x0[i]))
+                
                 pop[i].append(speed)
+            
         else:
             for i in range (self.npar):
                 particle, speed=self.GenParticle(self.bounds)
@@ -492,8 +502,14 @@ class PSO:
             print('Best individual (x) found:', self.swm_pos_correct)
             print('--------------------------------------------------------------')
     
-        #---update final logger
-        self.pso_hist['last_pop'] = get_population(self.population)
+
+        #--mir return the last population for restart calculations
+        if self.grid_flag:
+            self.pso_hist['last_pop'] = get_population(self.population, grid_flag=True, 
+                                                     bounds=self.orig_bounds, bounds_map=self.bounds_map)
+        else:
+            self.pso_hist['last_pop'] = get_population(self.population, grid_flag=False)
+            
         if self.mode == 'min':
             self.best_scores=[-item for item in self.best_scores]
             self.pso_hist['global_fitness'] = np.minimum.accumulate(self.best_scores)

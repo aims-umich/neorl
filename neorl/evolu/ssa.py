@@ -24,9 +24,10 @@ import numpy as np
 import math
 import time
 import joblib
-from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
+from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete 
+from neorl.evolu.discrete import decode_discrete_to_grid, encode_grid_indv_to_discrete
 from neorl.utils.seeding import set_neorl_seed
-from neorl.utils.tools import get_population
+from neorl.utils.tools import get_population, check_mixed_individual
 
 
 class SSA(object):
@@ -80,6 +81,7 @@ class SSA(object):
         else:
             self.grid_flag=False
             self.bounds = bounds
+            self.orig_bounds=bounds
         
         self.dim = len(bounds)
         self.lb=np.array([self.bounds[item][1] for item in self.bounds])
@@ -235,11 +237,14 @@ class SSA(object):
         if x0:
             assert len(x0) == self.nsalps, '--error: the length of x0 ({}) MUST equal the number of salps in the group ({})'.format(len(x0), self.nsalps)
             for i in range(self.nsalps):
-                self.Positions[i,:] = x0[i]
+                check_mixed_individual(x=x0[i], bounds=self.orig_bounds) #assert the type provided is consistent
+                if self.grid_flag:
+                    self.Positions[i,:] = encode_grid_indv_to_discrete(x0[i], bounds=self.orig_bounds, bounds_map=self.bounds_map)
+                else:
+                    self.Positions[i,:] = x0[i]
+                    
         else:
-            #self.Positions=self.init_sample(self.bounds)  #TODO, update later for mixed-integer optimisation
             # Initialize the positions of salps
-            
             for i in range(self.nsalps):
                 self.Positions[i,:]=self.init_sample(self.bounds)
         
@@ -312,7 +317,12 @@ class SSA(object):
         if self.mode=='max':
             self.last_fit=-self.last_fit
         
-        self.history['last_pop'] = get_population(self.last_pop, fits=self.last_fit)
+        #--mir return the last population for restart calculations
+        if self.grid_flag:
+            self.history['last_pop'] = get_population(self.last_pop, fits=self.last_fit, grid_flag=True, 
+                                                     bounds=self.orig_bounds, bounds_map=self.bounds_map)
+        else:
+            self.history['last_pop'] = get_population(self.last_pop, fits=self.last_fit, grid_flag=False)
         
         if self.verbose:
             print('------------------------ SSA Summary --------------------------')

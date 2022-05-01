@@ -2,7 +2,7 @@
 # Import Packages
 ########################
 
-from neorl import HHO, ES, PESA, BAT, GWO, MFO, WOA, SSA, DE, JAYA, PESA2, PSO, HCLPSO, EDEV, EPSO, AEO
+from neorl import HHO, ES, PESA, BAT, GWO, MFO, WOA, SSA, DE, JAYA, PESA2, PSO, HCLPSO, EDEV, EPSO, AEO, CS
 import math
 
 #################################
@@ -202,7 +202,7 @@ for item in ['float', 'grid', 'float/int', 'float/grid', 'int/grid', 'mixed', 'i
     ########################
     # Setup and evolute EDEV
     ########################
-    edev=EDEV(mode='min', bounds=bounds, fit=Vessel, npop=100, lambda_=0.1, ncores=1, seed=1)
+    edev=EDEV(mode='min', bounds=bounds, fit=Vessel, npop=100, ncores=1, seed=1)
     x_edev, y_edev, edev_hist=edev.evolute(ngen=100, ng=10, verbose=0)
     assert Vessel(x_edev) == y_edev
 
@@ -216,9 +216,16 @@ for item in ['float', 'grid', 'float/int', 'float/grid', 'int/grid', 'mixed', 'i
     ########################
     # Setup and evolute AEO
     ########################
-    aeo = AEO(mode='min', bounds=bounds, optimizers=[de,ssa,woa,gwo], gen_per_cycle=3, fit = Vessel)
-    x_aeo, y_aeo, aeo_hist = aeo.evolute(30, verbose = 0)
-    assert Vessel(x_aeo) == y_aeo
+    #aeo = AEO(mode='min', bounds=bounds, optimizers=[de,ssa,woa,gwo], gen_per_cycle=3, fit = Vessel)
+    #x_aeo, y_aeo, aeo_hist = aeo.evolute(30, verbose = 0)
+    #assert Vessel(x_aeo) == y_aeo
+    
+    ########################
+    # Setup and evolute CS
+    ########################
+    #cs = CS(mode = 'min', bounds = bounds, fit = Vessel, ncuckoos = 6, pa = 0.25, seed=1)
+    #x_cs, y_cs, cs_hist=cs.evolute(ngen=ngen, verbose=0)
+    #assert Vessel(x_cs) == y_cs
 
     ########################
     # Comparison
@@ -269,6 +276,6 @@ for item in ['float', 'grid', 'float/int', 'float/grid', 'int/grid', 'mixed', 'i
         print('---Best EPSO Results---')
         print(x_epso)
         print(y_epso)
-        print('---Best AEO Results---')
-        print(x_aeo)
-        print(y_aeo)
+        #print('---Best AEO Results---')
+        #print(x_aeo)
+        #print(y_aeo)

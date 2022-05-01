@@ -19,7 +19,7 @@ def test_edev():
         BOUNDS['x'+str(i)]=['float', -100, 100]
     
     #setup and evolute EDEV
-    edev=EDEV(mode='min', bounds=BOUNDS, fit=FIT, npop=100, lambda_=0.1, ncores=1, seed=1)
+    edev=EDEV(mode='min', bounds=BOUNDS, fit=FIT, npop=100, ncores=1, seed=1)
     x_best, y_best, edev_hist=edev.evolute(ngen=100, ng=10, verbose=1)
 
 test_edev()

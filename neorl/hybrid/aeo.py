@@ -775,6 +775,7 @@ class AEO(object):
 
 
         #log positions of initial members
+
         for p in self.pops:
             log['initial_member_x'].loc[{'pop' : p.popname}][:len(p.members)] = p.members
 
@@ -782,7 +783,7 @@ class AEO(object):
         for i in range(1, Ncyc + 1):
             #evolution phase
             pop_fits = [p.evolute(self.gpc, self.fit, self.bounds, i, Ncyc, log.loc[{'pop' : p.popname, 'cycle' : i}]) for p in self.pops]
-
+            
             #exportation number
             #  calc weights
             maxf = max(pop_fits)
@@ -863,8 +864,13 @@ class AEO(object):
         xbest = self.wrapped_f.ins[bestind]
         ybest = self.wrapped_f.outs[bestind]
 
-
-        return xbest[0], ybest, log
+        #mir: added by majdi
+        if self.grid_flag:
+            xbest_correct = decode_discrete_to_grid(xbest[0], self.orig_bounds, self.bounds_map)
+        else:
+            xbest_correct = xbest[0]
+            
+        return xbest_correct, ybest, log
 
 
 

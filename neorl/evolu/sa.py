@@ -25,6 +25,7 @@ import numpy as np
 import copy
 import joblib
 from neorl.utils.seeding import set_neorl_seed
+from neorl.utils.tools import check_mixed_individual
 
 class SA:
     """
@@ -332,6 +333,8 @@ class SA:
         if x0:
             print('The first SA x0 individual provided by the user:', x0[0])
             print('The last SA x0 individual provided by the user:', x0[-1])
+            for i in range(len(x0)):
+                check_mixed_individual(x=x0[i], bounds=self.bounds) #assert the type provided is consistent
         else:
             x0=[]
             for i in range (self.ncores):
