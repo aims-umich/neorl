@@ -22,7 +22,7 @@ import copy
 import operator as op
 from functools import reduce
 
-from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
+from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid, encode_grid_indv_to_discrete
 
 from neorl import WOA
 from neorl import GWO
@@ -298,7 +298,7 @@ class Population:
         else:
             return self.fitlog[-1] - self.fitlog[-2]
 
-    def evolute(self, ngen, fit, bounds, ncyc, Ncyc, log): #fit is included to avoid needing to pull .fit methods
+    def evolute(self, ngen, fit, bounds, ncyc, Ncyc, var_type, bounds_map, tbounds, log): #fit is included to avoid needing to pull .fit methods
                                        #    from algo objects that may have been flipped
         #check if there are enouh members to evolve NOT appended to fitlog
         if not eval_algo_popnumber(self.strategy, len(self.members)):
@@ -330,7 +330,13 @@ class Population:
 
         #log relevant information
         if self.n != 0:
-            log['member_x'][:self.n] = np.array(self.members).reshape(self.n, -1)
+            if 'grid' in var_type:
+                p2 = []
+                for m in self.members:
+                    p2.append(encode_grid_indv_to_discrete(m, bounds, bounds_map))
+                log['member_x'][:self.n] = np.array(p2).reshape(self.n, -1)
+            else:
+                log['member_x'][:self.n] = np.array(self.members).reshape(self.n, -1)
             log['member_fitnesses'][:self.n] = self.member_fitnesses
         np.put(log['nmembers'].data, [0],  [self.n])
         np.put(log['Nc'].data, [0], self.Nc)
@@ -528,9 +534,11 @@ class AEO(object):
         if "grid" in self.var_type:
             self.grid_flag=True
             self.orig_bounds=bounds  #keep original bounds for decoding
-            self.bounds, self.bounds_map=encode_grid_to_discrete(self.bounds) #encoding grid to int
+            self.trans_bounds, self.bounds_map=encode_grid_to_discrete(self.bounds) #encoding grid to int
             #define var_types again by converting grid to int
             self.var_type = np.array([self.bounds[item][0] for item in self.bounds])
+        else:
+            self.trans_bounds = copy.copy(self.bounds)
 
         #get functions to convert number of generations to number of evaluaions
         self.ngtonevals = [get_algo_ngtonevals(a) for a in self.optimizers]
@@ -668,7 +676,10 @@ class AEO(object):
                 print('--warning: x0 and npop0 is defined, ignoring npop0')
             assert len(x0) == len(pop0), 'x0 and pop0 must be ov equal length'
         else:
-            x0 = [self.init_sample(self.bounds) for i in range(sum(npop0))]
+            x0 = [self.init_sample(self.trans_bounds) for i in range(sum(npop0))]
+            if 'grid' in self.var_type:
+                x0_encode = copy.copy(x0)
+                x0 = [decode_discrete_to_grid(a, self.bounds, self.bounds_map) for a in x0]
             dup = [[i]*npop0[i] for i in range(len(npop0))]
             pop0 = list(itertools.chain.from_iterable(dup))
 
@@ -776,14 +787,18 @@ class AEO(object):
 
         #log positions of initial members
 
-        for p in self.pops:
-            log['initial_member_x'].loc[{'pop' : p.popname}][:len(p.members)] = p.members
+        if not 'grid' in self.var_type:
+            for p in self.pops:
+                log['initial_member_x'].loc[{'pop' : p.popname}][:len(p.members)] = p.members
 
         #perform evolution/migration cycle
         for i in range(1, Ncyc + 1):
             #evolution phase
-            pop_fits = [p.evolute(self.gpc, self.fit, self.bounds, i, Ncyc, log.loc[{'pop' : p.popname, 'cycle' : i}]) for p in self.pops]
-            
+            if "grid" in self.var_type:
+                pop_fits = [p.evolute(self.gpc, self.fit, self.bounds, i, Ncyc, self.var_type, self.bounds_map, self.trans_bounds, log.loc[{'pop' : p.popname, 'cycle' : i}]) for p in self.pops]
+            else:
+                pop_fits = [p.evolute(self.gpc, self.fit, self.bounds, i, Ncyc, self.var_type, None, self.trans_bounds, log.loc[{'pop' : p.popname, 'cycle' : i}]) for p in self.pops]
+
             #exportation number
             #  calc weights
             maxf = max(pop_fits)
@@ -864,18 +879,6 @@ class AEO(object):
         xbest = self.wrapped_f.ins[bestind]
         ybest = self.wrapped_f.outs[bestind]
 
-        #mir: added by majdi
-        if self.grid_flag:
-            xbest_correct = decode_discrete_to_grid(xbest[0], self.orig_bounds, self.bounds_map)
-        else:
-            xbest_correct = xbest[0]
-            
+        xbest_correct = xbest[0]
+
         return xbest_correct, ybest, log
-
-
-
-    #TODO: Markov Matrix calculation
-    #TODO: Fitness checker outside of consistency method
-
-
-
