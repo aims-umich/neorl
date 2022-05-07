@@ -207,13 +207,11 @@ NEORL offers a wide range of algorithms, where some algorithms could be used wit
 To cite this repository in publications:
 
 ```
-@misc{neorl,
-  author = {Radaideh, Majdi I. and Du, Katelin and Seurin, Paul and Seyler, Devin and Gu, Xubo and Wang, Haijia and Shirvan, Koroush},
-  title = {NEORL},
-  year = {2021},
-  publisher = {GitHub},
-  journal = {GitHub repository},
-  howpublished = {\url{https://github.com/mradaideh/neorl}},
+@article{radaideh2021neorl,
+  title={NEORL: NeuroEvolution Optimization with Reinforcement Learning},
+  author={Radaideh, Majdi I and Du, Katelin and Seurin, Paul and Seyler, Devin and Gu, Xubo and Wang, Haijia and Shirvan, Koroush},
+  journal={arXiv preprint arXiv:2112.07057},
+  year={2021}
 }
 ```
 

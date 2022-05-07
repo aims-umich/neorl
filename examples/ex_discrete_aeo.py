@@ -52,7 +52,8 @@ def init_sample(bounds):
     
 ngen=5
 
-for item in ['mixed', 'grid', 'float/int', 'float/grid', 'int/grid', 'float', 'int']:
+#for item in ['mixed', 'grid', 'float/int', 'float/grid', 'int/grid', 'float', 'int']:
+for item in ['float/int', 'float/grid', 'float']:
     bounds = {}
     btype=item  #float, int, grid, float/int, float/grid, int/grid, mixed. 
     
@@ -125,7 +126,7 @@ for item in ['mixed', 'grid', 'float/int', 'float/grid', 'int/grid', 'float', 'i
     gwo=GWO(mode='min', fit=Vessel, bounds=bounds, nwolves=npop, ncores=1, seed=1)
     x_gwo, y_gwo, gwo_hist=gwo.evolute(ngen=ngen, x0=x0, verbose=0)
     assert Vessel(x_gwo) == y_gwo
-    print('GWO=', x_gwo, y_gwo)
+    #print('GWO=', x_gwo, y_gwo)
     
     ########################
     # Setup and evolute WOA
@@ -186,20 +187,20 @@ for item in ['mixed', 'grid', 'float/int', 'float/grid', 'int/grid', 'float', 'i
     es = ES(mode='min', fit=Vessel, cxmode='cx2point', bounds=bounds, 
                      lambda_=npop, mu=5, cxpb=0.7, mutpb=0.2, seed=1)
     x_es, y_es, es_hist=es.evolute(ngen=ngen, x0=x0, verbose=0)
-    print('ES=', x_es, y_es)
+    #print('ES=', x_es, y_es)
     assert Vessel(x_es) == y_es
     
     ########################
     # Setup and evolute AEO
     ########################
-    aeo = AEO(mode='min', bounds=bounds, optimizers=[de, gwo, woa, jaya, hho, pso, es, ssa, mfo], gen_per_cycle=3, fit = Vessel)
+    #aeo = AEO(mode='min', bounds=bounds, optimizers=[de, gwo, woa, jaya, hho, pso, es, ssa], gen_per_cycle=3, fit = Vessel)
+    aeo = AEO(mode='min', bounds=bounds, optimizers=[mfo], gen_per_cycle=3, fit = Vessel)
     x_aeo, y_aeo, aeo_hist = aeo.evolute(30, verbose = 1)
     print('AEO=', x_aeo, y_aeo)   #not consistent wit other methods
     print()
     print('--- Something wrong here, the grid variable is not in the original space')
-    print(aeo.pops[0].members)
+    #print(aeo.pops[0].members)
+    print(aeo.wrapped_f.ins[0])
     assert Vessel(x_aeo) == y_aeo
-    
-    
     
     sys.exit()   #remove to complete the full test
