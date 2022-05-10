@@ -180,8 +180,8 @@ class TS(object):
         tempposition = copy.deepcopy(Position)
         if self.swap_mode == "swap":
             # job index in the Position:
-            i_index = tempposition.index(i)
-            j_index = tempposition.index(j)
+            i_index = np.where(tempposition == i)[0]#tempposition.index(i)
+            j_index = np.where(tempposition == j)[0]#tempposition.index(j)
             tempposition[i_index], tempposition[j_index] = tempposition[j_index], tempposition[i_index]# Swap
         elif self.swap_mode == "perturb":
             if self.bounds['x'+str(i + 1)][0] == 'int':
@@ -234,6 +234,7 @@ class TS(object):
             for move in tabu_structure:# Searching the whole neighborhood of the current solution:
                 if self.swap_mode == "swap":
                     candidate_solution = self.UpdateTabu(x_prev, move[0], move[1])
+                    temp_candidate.append(candidate_solution)
                 elif self.swap_mode == "perturb":
                     candidate_solution = self.UpdateTabu(x_prev, increment,[self.lb[increment], self.ub[increment]])
                     temp_candidate.append(candidate_solution)
@@ -255,7 +256,10 @@ class TS(object):
                     # make the move
                     best_loc = np.argmin([tabu_structure[x]['Penalized_MV'] for x in tabu_structure.keys()])
                     x_prev = temp_candidate[best_loc].copy()
-                    E_prev = MoveValue.copy()
+                    try:
+                        E_prev = MoveValue.copy()
+                    except:
+                        E_prev = np.float64(MoveValue).copy()
                     if MoveValue < E_best:# Best Improving move
                         x_best = x_prev.copy()
                         E_best = copy.deepcopy(E_prev)
@@ -270,7 +274,10 @@ class TS(object):
                         # make the move
                         best_loc = np.argmin([tabu_structure[x]['Penalized_MV'] for x in tabu_structure.keys()])
                         x_prev = temp_candidate[best_loc].copy()
-                        E_prev = MoveValue.copy()
+                        try:
+                            E_prev = MoveValue.copy()
+                        except:
+                            E_prev = np.float64(MoveValue).copy()
                         x_best = x_prev.copy()
                         E_best = copy.deepcopy(E_prev)
                         tabu_structure[best_move]['freq'] += 1
