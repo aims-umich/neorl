@@ -410,11 +410,11 @@ class TS(object):
         E_next=copy.deepcopy(Einit)
         globalx_best=copy.deepcopy(xinit)
         globalE_best=copy.deepcopy(Einit)
-        Tabu_next=copy.deepcopy(Tabuinit)
+        self.Tabu_next=copy.deepcopy(Tabuinit)
         iter_next=copy.deepcopy(iterinit)
         ngen=int(ngen/self.ncores)
         for l in range(1, ngen+1):# Main loop
-            x_next,E_next, x_best, E_best, Tabu_next, iter_next =self.chain(x0=x_next, E0=E_next,tabu0 = Tabu_next, iter0 = iter_next, globalx0 = globalx_best, globalE0 = globalE_best, step0=step0)
+            x_next,E_next, x_best, E_best, self.Tabu_next, iter_next =self.chain(x0=x_next, E0=E_next,tabu0 = self.Tabu_next, iter0 = iter_next, globalx0 = globalx_best, globalE0 = globalE_best, step0=step0)
             globalE_best = E_best.copy()
             globalx_best = x_best.copy()
             step0=step0+self.npop*self.ncores
@@ -436,7 +436,7 @@ class TS(object):
                 globalx_best=[x_best[arg_min]]*self.ncores#[x_opt]*self.ncores
                 E_next = [E_next[arg_min]]*self.ncores
                 globalE_best=[E_best[arg_min]]*self.ncores#[E_opt]*self.ncores
-                Tabu_next = [Tabu_next[arg_min]]*self.ncores
+                self.Tabu_next = [self.Tabu_next[arg_min]]*self.ncores
                 iter_next = [iter_next[arg_min]]*self.ncores
 
             elif self.reinforce_best == 'soft':
@@ -465,7 +465,7 @@ class TS(object):
                     E_next[count] = copy.deepcopy(E_next[index])
                     globalx_best[count] = x_best[index].copy() # re-initialize with the best ever found by the index'th Markov Chain
                     globalE_best[count] = copy.deepcopy(E_best[index])
-                    Tabu_next[count] = copy.deepcopy(Tabu_next[index])
+                    self.Tabu_next[count] = copy.deepcopy(self.Tabu_next[index])
                     iter_next[count] = copy.deepcopy(iter_next[index])
             elif self.reinforce_best == 'roulette':
                 temp_E =  1 / copy.deepcopy(np.abs(E_next)) 
@@ -488,7 +488,7 @@ class TS(object):
                     E_next[count] = copy.deepcopy(E_next[index])
                     globalx_best[count] = x_best[index].copy() # re-initialize with the best ever found by the index'th Markov Chain
                     globalE_best[count] = copy.deepcopy(E_best[index])
-                    Tabu_next[count] = copy.deepcopy(Tabu_next[index])
+                    self.Tabu_next[count] = copy.deepcopy(self.Tabu_next[index])
                     iter_next[count] = copy.deepcopy(iter_next[index])
             elif self.reinforce_best == 'rank':# linear ranking-based strategy
                 if self.ncores != 1:
@@ -516,7 +516,7 @@ class TS(object):
                         E_next[count] = copy.deepcopy(E_next[index])
                         globalx_best[count] = x_best[index].copy() # re-initialize with the best ever found by the index'th Markov Chain
                         globalE_best[count] = copy.deepcopy(E_best[index])
-                        Tabu_next[count] = copy.deepcopy(Tabu_next[index])
+                        self.Tabu_next[count] = copy.deepcopy(self.Tabu_next[index])
                         iter_next[count] = copy.deepcopy(iter_next[index])
             if verbose:
                 print('************************************************************')
