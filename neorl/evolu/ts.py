@@ -29,7 +29,7 @@ import copy
 import math
 from neorl.utils.seeding import set_neorl_seed
 import sys
-class TS2(object):
+class TS(object):
     """
     Tabu Search Algorithm
     
