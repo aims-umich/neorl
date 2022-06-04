@@ -31,6 +31,29 @@ Release 1.6 (2021-09-10)
 Beta Releases (for developers)
 ---------------------------------
 
+Release 1.7.7b (2022-6-4)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+  pip install neorl==1.7.7b --extra-index-url https://test.pypi.org/simple
+
+- Fixed bugs when initializing methods (ES, PSO, GWO, etc.) for discrete/mixed optimization with the argument ``x0``. 
+- Fixed bugs in TS, CS, SA for discrete/mixed optimization.
+- Enabled discrete/mixed optimization for AEO.  
+
+
+Release 1.7.6b (2022-4-25)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+  pip install neorl==1.7.6b --extra-index-url https://test.pypi.org/simple
+
+- Added a new features for parallel simulated annealing (PSA). 
+- PSA Features include new equilibrium schedule and new solution enforcement. 
+
+
 Release 1.7.5b (2022-3-29)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

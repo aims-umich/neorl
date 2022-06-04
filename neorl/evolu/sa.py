@@ -24,8 +24,10 @@ import math
 import numpy as np
 import copy
 import joblib
+from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete 
+from neorl.evolu.discrete import decode_discrete_to_grid, encode_grid_indv_to_discrete
 from neorl.utils.seeding import set_neorl_seed
-from neorl.utils.tools import check_mixed_individual
+from neorl.utils.tools import get_population, check_mixed_individual
 
 class SA:
     """
@@ -104,6 +106,27 @@ class SA:
         else:
             self.move=move_func
             
+            
+        #infer variable types 
+        self.var_type = np.array([bounds[item][0] for item in bounds])
+        
+        #mir-grid
+        if "grid" in self.var_type:
+            self.grid_flag=True
+            self.orig_bounds=bounds  #keep original bounds for decoding
+            #print('--debug: grid parameter type is found in the space')
+            self.bounds, self.bounds_map=encode_grid_to_discrete(self.bounds) #encoding grid to int
+            #define var_types again by converting grid to int
+            self.var_type = np.array([self.bounds[item][0] for item in self.bounds])
+        else:
+            self.grid_flag=False
+            self.bounds = bounds
+            self.orig_bounds=bounds
+        
+        self.dim = len(bounds)
+        self.lb=[self.bounds[item][1] for item in self.bounds]
+        self.ub=[self.bounds[item][2] for item in self.bounds]
+            
     def GenInd(self, bounds):
         #"""
         #Individual generator
@@ -157,6 +180,21 @@ class SA:
                 vec_new.append(vec[i])
         
         return vec_new
+
+    def fit_worker(self, x):
+        #This worker is for parallel calculations of the GWO
+        
+        # Clip the wolf with position outside the lower/upper bounds and return same position
+        x=self.ensure_bounds(x)
+        
+        if self.grid_flag:
+            #decode the individual back to the int/float/grid mixed space
+            x=decode_discrete_to_grid(x,self.orig_bounds,self.bounds_map)
+        
+        # Calculate objective function for each search agent
+        fitness = self.fit(x)
+        
+        return fitness
     
     def def_move(self, x, chi):
         #"""
@@ -245,7 +283,7 @@ class SA:
             
             x=self.ensure_bounds(x)
             #SA is programmed to maximize reward
-            E=self.fit(x)
+            E=self.fit_worker(x)
             dE = E - E_prev        
             #-----------------------------------
             # Improve/Accept/Reject
@@ -331,10 +369,16 @@ class SA:
         #initialize the chain and run them in parallel (these samples will be used to initialize the annealing process)
         #Establish the chain
         if x0:
-            print('The first SA x0 individual provided by the user:', x0[0])
-            print('The last SA x0 individual provided by the user:', x0[-1])
+            if self.ncores==1:  
+                if not any(isinstance(el, list) for el in x0):  #ensure a list of list is submitted for ncores=1
+                    x0=[x0]
+            assert len(x0) == self.ncores, '--error: the length of x0 ({}) MUST equal the number of ncores/parallel chains ({})'.format(len(x0), self.ncores)
+
             for i in range(len(x0)):
-                check_mixed_individual(x=x0[i], bounds=self.bounds) #assert the type provided is consistent
+                check_mixed_individual(x=x0[i], bounds=self.orig_bounds) #assert the type provided is consistent
+                if self.grid_flag:
+                    x0[i] = encode_grid_indv_to_discrete(x0[i], bounds=self.orig_bounds, bounds_map=self.bounds_map)       
+        
         else:
             x0=[]
             for i in range (self.ncores):
@@ -347,14 +391,14 @@ class SA:
                 core_list.append(ind)
            
             with joblib.Parallel(n_jobs=self.ncores) as parallel:
-                E0=parallel(joblib.delayed(self.fit)(item) for item in core_list)
+                E0=parallel(joblib.delayed(self.fit_worker)(item) for item in core_list)
             if self.cooling == 'equilibrium': # Paul
                 self.T = np.max([self.alpha * np.std(E0),self.Tmin,1e-10])
 
         else: #evaluate swarm in series
             E0=[]
             for ind in x0:
-                fitness=self.fit(ind)
+                fitness=self.fit_worker(ind)
                 E0.append(fitness)
         
 
@@ -453,6 +497,12 @@ class SA:
                     x_next[count] = x_best[index] # re-initialize with the best ever found by the index'th Markov Chain
                     E_next[count] = E_best[index]
 
+            #mir-grid
+            if self.grid_flag:
+                x_opt_correct = decode_discrete_to_grid(x_opt, self.orig_bounds, self.bounds_map)
+            else:
+                x_opt_correct = x_opt
+                    
             if verbose:
                 print('***********************************************************************')
                 print('SA step {}/{}, T={}, Ncores={}, Cooling={}, Reinforce={}'.format(step0-1,self.steps,np.round(self.T), self.ncores, self.cooling, self.reinforce_best))
@@ -462,11 +512,12 @@ class SA:
                     print('Best fitness:', np.round(max(E_best),6))
                 else: 
                     print('Best fitness:', -np.round(max(E_best),6))
-                print('Best individual:', x_best[arg_max])
+                print('Best individual:', x_opt_correct)
                 print('Acceptance Rate (%):', acc)
                 print('Rejection Rate (%):', rej)
                 print('Improvment Rate (%):', imp)
                 print('***********************************************************************')
+
             
         #--mir
         if self.mode=='max':
@@ -477,10 +528,10 @@ class SA:
         if verbose:
             print('------------------------ SA Summary --------------------------')
             print('Best fitness (y) found:', self.E_opt_correct)
-            print('Best individual (x) found:', x_opt)
+            print('Best individual (x) found:', x_opt_correct)
             print('--------------------------------------------------------------')
 
         if self.equilib_deactivate: #Paul.
             print("-- warning: equilibrium cooling is implemented ONLY for ncores > 1. The cooling is changed to default cooling --> 'fast'")
             
-        return x_opt, self.E_opt_correct, stat
+        return x_opt_correct, self.E_opt_correct, stat

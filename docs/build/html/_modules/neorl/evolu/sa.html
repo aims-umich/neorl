@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.evolu.sa &mdash; NEORL 1.7.6b documentation</title>
+  <title>neorl.evolu.sa &mdash; NEORL 1.7.7b documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.7.6b )
+                main (1.7.7b )
               </div>
             
           
@@ -188,7 +188,7 @@
 <span class="c1">#&quot;&quot;&quot;</span>
 <span class="c1">#Created on Sun Jun 14 13:45:54 2020</span>
 <span class="c1">#</span>
-<span class="c1">#@author: Majdi</span>
+<span class="c1">#@author: Majdi and Paul</span>
 <span class="c1">#&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">random</span>
@@ -196,7 +196,10 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">copy</span>
 <span class="kn">import</span> <span class="nn">joblib</span>
+<span class="kn">from</span> <span class="nn">neorl.evolu.discrete</span> <span class="kn">import</span> <span class="n">mutate_discrete</span><span class="p">,</span> <span class="n">encode_grid_to_discrete</span> 
+<span class="kn">from</span> <span class="nn">neorl.evolu.discrete</span> <span class="kn">import</span> <span class="n">decode_discrete_to_grid</span><span class="p">,</span> <span class="n">encode_grid_indv_to_discrete</span>
 <span class="kn">from</span> <span class="nn">neorl.utils.seeding</span> <span class="kn">import</span> <span class="n">set_neorl_seed</span>
+<span class="kn">from</span> <span class="nn">neorl.utils.tools</span> <span class="kn">import</span> <span class="n">get_population</span><span class="p">,</span> <span class="n">check_mixed_individual</span>
 
 <div class="viewcode-block" id="SA"><a class="viewcode-back" href="../../../modules/evolutionary/sa.html#neorl.evolu.sa.SA">[docs]</a><span class="k">class</span> <span class="nc">SA</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -260,7 +263,7 @@
         
         <span class="bp">self</span><span class="o">.</span><span class="n">cooling</span><span class="o">=</span><span class="n">cooling</span> 
         <span class="bp">self</span><span class="o">.</span><span class="n">equilib_deactivate</span><span class="o">=</span><span class="kc">False</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cooling</span> <span class="o">==</span> <span class="s1">&#39;equilibrium&#39;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span><span class="c1">#Paul.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cooling</span> <span class="o">==</span> <span class="s1">&#39;equilibrium&#39;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span><span class="c1">#Paul. The equilibrium cooling is only available with multiple chains working at the same time.</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-- warning: equilibrium cooling is implemented ONLY for ncores &gt; 1. The cooling is changed to default cooling --&gt; &#39;fast&#39;&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">cooling</span> <span class="o">=</span> <span class="s1">&#39;fast&#39;</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">equilib_deactivate</span><span class="o">=</span><span class="kc">True</span>
@@ -274,6 +277,27 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">move</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">def_move</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">move</span><span class="o">=</span><span class="n">move_func</span>
+            
+            
+        <span class="c1">#infer variable types </span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">bounds</span><span class="p">])</span>
+        
+        <span class="c1">#mir-grid</span>
+        <span class="k">if</span> <span class="s2">&quot;grid&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="o">=</span><span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="o">=</span><span class="n">bounds</span>  <span class="c1">#keep original bounds for decoding</span>
+            <span class="c1">#print(&#39;--debug: grid parameter type is found in the space&#39;)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="o">=</span><span class="n">encode_grid_to_discrete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span> <span class="c1">#encoding grid to int</span>
+            <span class="c1">#define var_types again by converting grid to int</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="o">=</span><span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span> <span class="o">=</span> <span class="n">bounds</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="o">=</span><span class="n">bounds</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">bounds</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ub</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">]</span>
             
     <span class="k">def</span> <span class="nf">GenInd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bounds</span><span class="p">):</span>
         <span class="c1">#&quot;&quot;&quot;</span>
@@ -328,6 +352,21 @@
                 <span class="n">vec_new</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vec</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
         
         <span class="k">return</span> <span class="n">vec_new</span>
+
+    <span class="k">def</span> <span class="nf">fit_worker</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="c1">#This worker is for parallel calculations of the GWO</span>
+        
+        <span class="c1"># Clip the wolf with position outside the lower/upper bounds and return same position</span>
+        <span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ensure_bounds</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="p">:</span>
+            <span class="c1">#decode the individual back to the int/float/grid mixed space</span>
+            <span class="n">x</span><span class="o">=</span><span class="n">decode_discrete_to_grid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="p">)</span>
+        
+        <span class="c1"># Calculate objective function for each search agent</span>
+        <span class="n">fitness</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">fitness</span>
     
     <span class="k">def</span> <span class="nf">def_move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">chi</span><span class="p">):</span>
         <span class="c1">#&quot;&quot;&quot;</span>
@@ -416,7 +455,7 @@
             
             <span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ensure_bounds</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
             <span class="c1">#SA is programmed to maximize reward</span>
-            <span class="n">E</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">E</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fit_worker</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
             <span class="n">dE</span> <span class="o">=</span> <span class="n">E</span> <span class="o">-</span> <span class="n">E_prev</span>        
             <span class="c1">#-----------------------------------</span>
             <span class="c1"># Improve/Accept/Reject</span>
@@ -502,8 +541,16 @@
         <span class="c1">#initialize the chain and run them in parallel (these samples will be used to initialize the annealing process)</span>
         <span class="c1">#Establish the chain</span>
         <span class="k">if</span> <span class="n">x0</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The first SA x0 individual provided by the user:&#39;</span><span class="p">,</span> <span class="n">x0</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The last SA x0 individual provided by the user:&#39;</span><span class="p">,</span> <span class="n">x0</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>  
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">el</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="n">x0</span><span class="p">):</span>  <span class="c1">#ensure a list of list is submitted for ncores=1</span>
+                    <span class="n">x0</span><span class="o">=</span><span class="p">[</span><span class="n">x0</span><span class="p">]</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">,</span> <span class="s1">&#39;--error: the length of x0 (</span><span class="si">{}</span><span class="s1">) MUST equal the number of ncores/parallel chains (</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">)):</span>
+                <span class="n">check_mixed_individual</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x0</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">bounds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">)</span> <span class="c1">#assert the type provided is consistent</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="p">:</span>
+                    <span class="n">x0</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">encode_grid_indv_to_discrete</span><span class="p">(</span><span class="n">x0</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">bounds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">,</span> <span class="n">bounds_map</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="p">)</span>       
+        
         <span class="k">else</span><span class="p">:</span>
             <span class="n">x0</span><span class="o">=</span><span class="p">[]</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">):</span>
@@ -516,14 +563,14 @@
                 <span class="n">core_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span>
            
             <span class="k">with</span> <span class="n">joblib</span><span class="o">.</span><span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">)</span> <span class="k">as</span> <span class="n">parallel</span><span class="p">:</span>
-                <span class="n">E0</span><span class="o">=</span><span class="n">parallel</span><span class="p">(</span><span class="n">joblib</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">)(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">core_list</span><span class="p">)</span>
+                <span class="n">E0</span><span class="o">=</span><span class="n">parallel</span><span class="p">(</span><span class="n">joblib</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fit_worker</span><span class="p">)(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">core_list</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cooling</span> <span class="o">==</span> <span class="s1">&#39;equilibrium&#39;</span><span class="p">:</span> <span class="c1"># Paul</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">E0</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">Tmin</span><span class="p">,</span><span class="mf">1e-10</span><span class="p">])</span>
 
         <span class="k">else</span><span class="p">:</span> <span class="c1">#evaluate swarm in series</span>
             <span class="n">E0</span><span class="o">=</span><span class="p">[]</span>
             <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="n">x0</span><span class="p">:</span>
-                <span class="n">fitness</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span>
+                <span class="n">fitness</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fit_worker</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span>
                 <span class="n">E0</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fitness</span><span class="p">)</span>
         
 
@@ -622,6 +669,12 @@
                     <span class="n">x_next</span><span class="p">[</span><span class="n">count</span><span class="p">]</span> <span class="o">=</span> <span class="n">x_best</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="c1"># re-initialize with the best ever found by the index&#39;th Markov Chain</span>
                     <span class="n">E_next</span><span class="p">[</span><span class="n">count</span><span class="p">]</span> <span class="o">=</span> <span class="n">E_best</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
 
+            <span class="c1">#mir-grid</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="p">:</span>
+                <span class="n">x_opt_correct</span> <span class="o">=</span> <span class="n">decode_discrete_to_grid</span><span class="p">(</span><span class="n">x_opt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">x_opt_correct</span> <span class="o">=</span> <span class="n">x_opt</span>
+                    
             <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;***********************************************************************&#39;</span><span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;SA step </span><span class="si">{}</span><span class="s1">/</span><span class="si">{}</span><span class="s1">, T=</span><span class="si">{}</span><span class="s1">, Ncores=</span><span class="si">{}</span><span class="s1">, Cooling=</span><span class="si">{}</span><span class="s1">, Reinforce=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">step0</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cooling</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reinforce_best</span><span class="p">))</span>
@@ -631,11 +684,12 @@
                     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best fitness:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">E_best</span><span class="p">),</span><span class="mi">6</span><span class="p">))</span>
                 <span class="k">else</span><span class="p">:</span> 
                     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best fitness:&#39;</span><span class="p">,</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">E_best</span><span class="p">),</span><span class="mi">6</span><span class="p">))</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best individual:&#39;</span><span class="p">,</span> <span class="n">x_best</span><span class="p">[</span><span class="n">arg_max</span><span class="p">])</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best individual:&#39;</span><span class="p">,</span> <span class="n">x_opt_correct</span><span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Acceptance Rate (%):&#39;</span><span class="p">,</span> <span class="n">acc</span><span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Rejection Rate (%):&#39;</span><span class="p">,</span> <span class="n">rej</span><span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Improvment Rate (%):&#39;</span><span class="p">,</span> <span class="n">imp</span><span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;***********************************************************************&#39;</span><span class="p">)</span>
+
             
         <span class="c1">#--mir</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">==</span><span class="s1">&#39;max&#39;</span><span class="p">:</span>
@@ -646,13 +700,13 @@
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;------------------------ SA Summary --------------------------&#39;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best fitness (y) found:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">E_opt_correct</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best individual (x) found:&#39;</span><span class="p">,</span> <span class="n">x_opt</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best individual (x) found:&#39;</span><span class="p">,</span> <span class="n">x_opt_correct</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--------------------------------------------------------------&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">equilib_deactivate</span><span class="p">:</span> <span class="c1">#Paul.</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-- warning: equilibrium cooling is implemented ONLY for ncores &gt; 1. The cooling is changed to default cooling --&gt; &#39;fast&#39;&quot;</span><span class="p">)</span>
             
-        <span class="k">return</span> <span class="n">x_opt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">E_opt_correct</span><span class="p">,</span> <span class="n">stat</span></div></div>
+        <span class="k">return</span> <span class="n">x_opt_correct</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">E_opt_correct</span><span class="p">,</span> <span class="n">stat</span></div></div>
 </pre></div>
 
            </div>

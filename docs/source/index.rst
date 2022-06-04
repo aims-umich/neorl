@@ -20,9 +20,11 @@ Welcome to NEORL Website!
    :alt: alternate text
    :align: right
    
-NEORL (**N**\ euro\ **E**\ volution **O**\ ptimisation with **R**\ einforcement **L**\ earning) is a set of implementations of hybrid algorithms combining neural networks and evolutionary computation based on a wide range of machine learning and evolutionary intelligence architectures. NEORL aims to solve large-scale optimisation problems relevant to operation & optimisation research, engineering, business, and other disciplines. 
+NEORL (**N**\ euro\ **E**\ volution **O**\ ptimisation with **R**\ einforcement **L**\ earning) is a set of implementations of hybrid algorithms combining neural networks and evolutionary computation based on a wide range of machine learning and evolutionary intelligence architectures. NEORL aims to solve large-scale optimization problems relevant to operation & optimisation research, engineering, business, and other disciplines. 
 
 Github repository: https://github.com/mradaideh/neorl
+
+NEORL paper: https://arxiv.org/abs/2112.07057
 
 Copyright
 --------------------------------------

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.hybrid.aeo &mdash; NEORL 1.7.6b documentation</title>
+  <title>neorl.hybrid.aeo &mdash; NEORL 1.7.7b documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.7.6b )
+                main (1.7.7b )
               </div>
             
           
@@ -194,7 +194,7 @@
 <span class="kn">import</span> <span class="nn">operator</span> <span class="k">as</span> <span class="nn">op</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">reduce</span>
 
-<span class="kn">from</span> <span class="nn">neorl.evolu.discrete</span> <span class="kn">import</span> <span class="n">mutate_discrete</span><span class="p">,</span> <span class="n">encode_grid_to_discrete</span><span class="p">,</span> <span class="n">decode_discrete_to_grid</span>
+<span class="kn">from</span> <span class="nn">neorl.evolu.discrete</span> <span class="kn">import</span> <span class="n">mutate_discrete</span><span class="p">,</span> <span class="n">encode_grid_to_discrete</span><span class="p">,</span> <span class="n">decode_discrete_to_grid</span><span class="p">,</span> <span class="n">encode_grid_indv_to_discrete</span>
 
 <span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">WOA</span>
 <span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">GWO</span>
@@ -219,7 +219,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">outs</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ins</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fxn</span> <span class="o">=</span> <span class="n">f</span>
-    <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">inputs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">inputs</span><span class="p">):</span> 
         <span class="n">ans</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fxn</span><span class="p">(</span><span class="o">*</span><span class="n">inputs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ins</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
@@ -470,7 +470,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitlog</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitlog</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">evolute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ngen</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">ncyc</span><span class="p">,</span> <span class="n">Ncyc</span><span class="p">,</span> <span class="n">log</span><span class="p">):</span> <span class="c1">#fit is included to avoid needing to pull .fit methods</span>
+    <span class="k">def</span> <span class="nf">evolute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ngen</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">ncyc</span><span class="p">,</span> <span class="n">Ncyc</span><span class="p">,</span> <span class="n">var_type</span><span class="p">,</span> <span class="n">bounds_map</span><span class="p">,</span> <span class="n">tbounds</span><span class="p">,</span> <span class="n">log</span><span class="p">):</span> <span class="c1">#fit is included to avoid needing to pull .fit methods</span>
                                        <span class="c1">#    from algo objects that may have been flipped</span>
         <span class="c1">#check if there are enouh members to evolve NOT appended to fitlog</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">eval_algo_popnumber</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">strategy</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="p">)):</span>
@@ -502,7 +502,13 @@
 
         <span class="c1">#log relevant information</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">log</span><span class="p">[</span><span class="s1">&#39;member_x&#39;</span><span class="p">][:</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s1">&#39;grid&#39;</span> <span class="ow">in</span> <span class="n">var_type</span><span class="p">:</span>
+                <span class="n">p2</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="p">:</span>
+                    <span class="n">p2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">encode_grid_indv_to_discrete</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">bounds_map</span><span class="p">))</span>
+                <span class="n">log</span><span class="p">[</span><span class="s1">&#39;member_x&#39;</span><span class="p">][:</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">p2</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">log</span><span class="p">[</span><span class="s1">&#39;member_x&#39;</span><span class="p">][:</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
             <span class="n">log</span><span class="p">[</span><span class="s1">&#39;member_fitnesses&#39;</span><span class="p">][:</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">member_fitnesses</span>
         <span class="n">np</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">log</span><span class="p">[</span><span class="s1">&#39;nmembers&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span>  <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">])</span>
         <span class="n">np</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">log</span><span class="p">[</span><span class="s1">&#39;Nc&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">Nc</span><span class="p">)</span>
@@ -700,9 +706,11 @@
         <span class="k">if</span> <span class="s2">&quot;grid&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="o">=</span><span class="kc">True</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="o">=</span><span class="n">bounds</span>  <span class="c1">#keep original bounds for decoding</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="o">=</span><span class="n">encode_grid_to_discrete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span> <span class="c1">#encoding grid to int</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">trans_bounds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="o">=</span><span class="n">encode_grid_to_discrete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span> <span class="c1">#encoding grid to int</span>
             <span class="c1">#define var_types again by converting grid to int</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">trans_bounds</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span>
 
         <span class="c1">#get functions to convert number of generations to number of evaluaions</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ngtonevals</span> <span class="o">=</span> <span class="p">[</span><span class="n">get_algo_ngtonevals</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizers</span><span class="p">]</span>
@@ -840,7 +848,10 @@
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--warning: x0 and npop0 is defined, ignoring npop0&#39;</span><span class="p">)</span>
             <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">pop0</span><span class="p">),</span> <span class="s1">&#39;x0 and pop0 must be ov equal length&#39;</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">x0</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">init_sample</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">npop0</span><span class="p">))]</span>
+            <span class="n">x0</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">init_sample</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trans_bounds</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">npop0</span><span class="p">))]</span>
+            <span class="k">if</span> <span class="s1">&#39;grid&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span><span class="p">:</span>
+                <span class="n">x0_encode</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span>
+                <span class="n">x0</span> <span class="o">=</span> <span class="p">[</span><span class="n">decode_discrete_to_grid</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">x0</span><span class="p">]</span>
             <span class="n">dup</span> <span class="o">=</span> <span class="p">[[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">npop0</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">npop0</span><span class="p">))]</span>
             <span class="n">pop0</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="n">dup</span><span class="p">))</span>
 
@@ -947,13 +958,18 @@
 
 
         <span class="c1">#log positions of initial members</span>
-        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pops</span><span class="p">:</span>
-            <span class="n">log</span><span class="p">[</span><span class="s1">&#39;initial_member_x&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[{</span><span class="s1">&#39;pop&#39;</span> <span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">popname</span><span class="p">}][:</span><span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">members</span><span class="p">)]</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">members</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="s1">&#39;grid&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pops</span><span class="p">:</span>
+                <span class="n">log</span><span class="p">[</span><span class="s1">&#39;initial_member_x&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[{</span><span class="s1">&#39;pop&#39;</span> <span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">popname</span><span class="p">}][:</span><span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">members</span><span class="p">)]</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">members</span>
 
         <span class="c1">#perform evolution/migration cycle</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">Ncyc</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
             <span class="c1">#evolution phase</span>
-            <span class="n">pop_fits</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">Ncyc</span><span class="p">,</span> <span class="n">log</span><span class="o">.</span><span class="n">loc</span><span class="p">[{</span><span class="s1">&#39;pop&#39;</span> <span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">popname</span><span class="p">,</span> <span class="s1">&#39;cycle&#39;</span> <span class="p">:</span> <span class="n">i</span><span class="p">}])</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pops</span><span class="p">]</span>
+            <span class="k">if</span> <span class="s2">&quot;grid&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span><span class="p">:</span>
+                <span class="n">pop_fits</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">Ncyc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">trans_bounds</span><span class="p">,</span> <span class="n">log</span><span class="o">.</span><span class="n">loc</span><span class="p">[{</span><span class="s1">&#39;pop&#39;</span> <span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">popname</span><span class="p">,</span> <span class="s1">&#39;cycle&#39;</span> <span class="p">:</span> <span class="n">i</span><span class="p">}])</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pops</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">pop_fits</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">Ncyc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">trans_bounds</span><span class="p">,</span> <span class="n">log</span><span class="o">.</span><span class="n">loc</span><span class="p">[{</span><span class="s1">&#39;pop&#39;</span> <span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">popname</span><span class="p">,</span> <span class="s1">&#39;cycle&#39;</span> <span class="p">:</span> <span class="n">i</span><span class="p">}])</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pops</span><span class="p">]</span>
 
             <span class="c1">#exportation number</span>
             <span class="c1">#  calc weights</span>
@@ -1028,6 +1044,11 @@
             <span class="k">if</span> <span class="ow">not</span> <span class="n">stop_criteria</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">stop_criteria</span><span class="p">()</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
                     <span class="k">break</span>
+            
+            <span class="c1">#bestind = np.argmin(self.wrapped_f.outs)</span>
+            <span class="c1">#print(self.wrapped_f.ins[bestind][0], self.wrapped_f.outs[bestind])</span>
+            <span class="c1">#assert self.fit(self.wrapped_f.ins[bestind][0]) == self.wrapped_f.outs[bestind]</span>
+            <span class="c1">#print(self.wrapped_f.outs[bestind])</span>
 
         <span class="c1">#get best members</span>
         <span class="n">bestind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapped_f</span><span class="o">.</span><span class="n">outs</span><span class="p">)</span>
@@ -1035,16 +1056,9 @@
         <span class="n">xbest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped_f</span><span class="o">.</span><span class="n">ins</span><span class="p">[</span><span class="n">bestind</span><span class="p">]</span>
         <span class="n">ybest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped_f</span><span class="o">.</span><span class="n">outs</span><span class="p">[</span><span class="n">bestind</span><span class="p">]</span>
 
+        <span class="n">xbest_correct</span> <span class="o">=</span> <span class="n">xbest</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="n">xbest</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ybest</span><span class="p">,</span> <span class="n">log</span></div></div>
-
-
-
-    <span class="c1">#TODO: Markov Matrix calculation</span>
-    <span class="c1">#TODO: Fitness checker outside of consistency method</span>
-
-
-
+        <span class="k">return</span> <span class="n">xbest_correct</span><span class="p">,</span> <span class="n">ybest</span><span class="p">,</span> <span class="n">log</span></div></div>
 </pre></div>
 
            </div>

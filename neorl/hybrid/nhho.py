@@ -25,12 +25,14 @@ import numpy as np
 import warnings
 warnings.filterwarnings('ignore')
 import joblib
-from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
 from neorl.hybrid.nhhocore.nnmodel import NNmodel
 from neorl.hybrid.nhhocore.hho import HHO
 from tensorflow.keras.models import load_model
 import shutil
+from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete 
+from neorl.evolu.discrete import decode_discrete_to_grid, encode_grid_indv_to_discrete
 from neorl.utils.seeding import set_neorl_seed
+from neorl.utils.tools import get_population, check_mixed_individual
 
 import multiprocessing
 import multiprocessing.pool
@@ -101,6 +103,7 @@ class NHHO(object):
         else:
             self.grid_flag=False
             self.bounds = bounds
+            self.orig_bounds = bounds
 
         self.lb = np.array([self.bounds[item][1] for item in self.bounds])
         self.ub = np.array([self.bounds[item][2] for item in self.bounds])
@@ -195,8 +198,14 @@ class NHHO(object):
         self.hawk_positions = np.zeros((self.nhawks, self.dim))
 
         if x0:
-            assert len(x0) == self.nhawks, 'Length of x0 array MUST equal the number of hawks (self.nhawks).'
-            self.hawk_positions = x0
+            assert len(x0) == self.nhawks, '--error: the length of x0 ({}) MUST equal the number of hawks in the group ({})'.format(len(x0), self.nhawks)
+            for i in range(self.nhawks):
+                check_mixed_individual(x=x0[i], bounds=self.orig_bounds) #assert the type provided is consistent
+                if self.grid_flag:
+                    self.hawk_positions[i,:] = encode_grid_indv_to_discrete(x0[i], bounds=self.orig_bounds, bounds_map=self.bounds_map)
+                else:
+                    self.hawk_positions[i,:] = x0[i]           
+            
         else:
             self.hawk_positions = self.hho.init_sample()
 
@@ -205,6 +214,7 @@ class NHHO(object):
         for t in range(ngen):
             # "a" decreases linearly from 1 to 0 for discrete mutation
             self.a= 1 - t * ((1) / ngen)
+            self.hho.a=self.a
 
             #########################################################
             # Update NN model and Evaluate hawk fitnesses 
@@ -228,18 +238,18 @@ class NHHO(object):
             self.best_local_fitness = fitness_lst[best_fitarg] if self.mode == 'min' else -fitness_lst[best_fitarg]
             self.best_hawk = self.hawk_positions[best_fitarg]
 
+            if self.grid_flag:
+                self.hawk_decoded=decode_discrete_to_grid(self.best_hawk,self.orig_bounds,self.bounds_map)
+            else:
+                self.hawk_decoded=list(self.best_hawk.copy())
+                    
             self.history['local_fitness'].append(self.best_local_fitness)
-            self.history['best_hawk'].append(self.best_hawk)
+            self.history['best_hawk'].append(self.hawk_decoded)
 
             if self.verbose: # change depending on how often message should be displayed
                 print(f'NHHO step {(t+1)*self.nhawks}/{ngen*self.nhawks}, nhawks={self.nhawks}, ncores={self.ncores}')
                 print('Best generation fitness:', np.round(self.best_local_fitness, 6))
-                #mir-grid
-                if self.grid_flag:
-                    self.hawk_decoded=decode_discrete_to_grid(self.best_hawk,self.orig_bounds,self.bounds_map)
-                    print('Best hawk position:', self.hawk_decoded)
-                else:
-                    print('Best hawk position:', self.best_hawk)
+                print('Best hawk position:', self.hawk_decoded)
                 print()
 
             ################################
@@ -265,10 +275,7 @@ class NHHO(object):
             print('------------------------ HHO Summary --------------------------')
             print('Function:', self.fit.__name__)
             print('Final fitness (y) found:', self.best_local_fitness)
-            if self.grid_flag:
-                print('Final individual (x) found:', self.hawk_decoded)
-            else:
-                print('Final individual (x) found:', self.best_hawk)
+            print('Final individual (x) found:', self.hawk_decoded)
             print('-------------------------------------------------------------- \n \n')
         
         if self.nn_params['save_models']:

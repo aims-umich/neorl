@@ -23,10 +23,12 @@
 import random
 import numpy as np
 import joblib
-from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
 from itertools import combinations
 import copy 
+from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete 
+from neorl.evolu.discrete import decode_discrete_to_grid, encode_grid_indv_to_discrete
 from neorl.utils.seeding import set_neorl_seed
+from neorl.utils.tools import get_population, check_mixed_individual
 
 class TS(object):
     """
@@ -84,6 +86,7 @@ class TS(object):
         else:
             self.grid_flag=False
             self.bounds = bounds
+            self.orig_bounds=bounds
         
         self.dim = len(bounds)
         self.lb=np.array([self.bounds[item][1] for item in self.bounds])
@@ -101,7 +104,7 @@ class TS(object):
                 indv.append(random.uniform(bounds[key][1], bounds[key][2]))
             else:
                 raise Exception ('unknown data type is given, either int, float, or grid are allowed for parameter bounds')   
-        return np.array(indv)
+        return indv
 
         def eval_tabus(self,tabu_list = None):
             #---------------------
@@ -202,9 +205,9 @@ class TS(object):
             j_index = tempposition.index(j)
             tempposition[i_index], tempposition[j_index] = tempposition[j_index], tempposition[i_index]# Swap
         elif self.swap_mode == "perturb":
-            if self.bounds['x'+str(i)][0] == 'int':
+            if self.var_type[i] == 'int':
                 tempposition[i] = random.randint(j[0],j[1])
-            elif self.bounds['x'+str(i)][0] == 'float':
+            elif self.var_type[i] == 'float':
                 tempposition[i] = random.uniform(j[0],j[1])
         return tempposition
         
@@ -223,8 +226,20 @@ class TS(object):
         self.verbose=verbose
         self.Positions = np.zeros(self.dim)#np.zeros((self.ntabus, self.dim))
         if x0:
-            assert len(x0) == self.ntabus, '--error: the length of x0 ({}) MUST equal the size of the problem ({})'.format(len(x0), self.ntabus)
-            self.Positions = x0
+            if self.ncores==1:  
+                if not any(isinstance(el, list) for el in x0):  #ensure a list of list is submitted for ncores=1
+                    x0=[x0]
+                    
+            assert len(x0[0]) == self.ntabus, '--error: the length of individual in x0 ({}) MUST equal the size of the problem ({})'.format(len(x0[0]), self.ntabus)        
+            assert len(x0) == self.ncores, '--error: the length of x0 ({}) MUST equal the number of ncores/parallel chains ({})'.format(len(x0), self.ncores)
+
+            for i in range(self.ncores):
+                check_mixed_individual(x=x0[i], bounds=self.orig_bounds) #assert the type provided is consistent
+                if self.grid_flag:
+                    self.Positions = encode_grid_indv_to_discrete(x0[i], bounds=self.orig_bounds, bounds_map=self.bounds_map)
+                else:
+                    self.Positions = x0[i]
+                    
         else:
             #self.Positions=self.init_sample(self.bounds)  #TODO, update later for mixed-integer optimisation
             # Initialize the positions of tabu
@@ -234,7 +249,7 @@ class TS(object):
             elif self.swap_mode == "perturb":
                 self.Positions = self.init_sample(self.bounds)
 
-        fitness=self.fit(self.Positions) # evaluate the initial tabu
+        fitness=self.fit_worker(self.Positions) # evaluate the initial tabu
         self.best_position, self.best_fitness = self.Positions.copy(), fitness#self.select(pos = self.Positions,fit = fitness) # find the initial best position and fitness
         current_solution = self.Positions.copy()
     
@@ -260,7 +275,7 @@ class TS(object):
                     candidate_solution = self.UpdateTabu(self.Positions, increment,[self.lb[increment], self.ub[increment]])
                     temp_candidate.append(candidate_solution)
                     increment +=1
-                fitness = self.fit(candidate_solution)
+                fitness = self.fit_worker(candidate_solution)
                 tabu_structure[move]['MoveValue'] = fitness
                 tabu_structure[move]['Penalized_MV'] = fitness + (tabu_structure[move]['freq'] *
                                                                              self.penalization_weight)# Penalized fitness by simply adding freq to it (minimization):
@@ -298,7 +313,7 @@ class TS(object):
                         elif self.swap_mode == "perturb":
                             best_loc = np.argmin([tabu_structure[x]['Penalized_MV'] for x in tabu_structure.keys()])
                             self.Positions = temp_candidate[best_loc].copy()
-                        fitness = self.fit(self.Positions)
+                        fitness = self.fit_worker(self.Positions)
                         self.best_position = self.Positions.copy()
                         self.best_fitness = fitness
                         tabu_structure[best_move]['freq'] += 1

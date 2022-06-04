@@ -268,6 +268,11 @@ class CS(object):
                 newnest[np.random.permutation(self.ncuckoos), :] - newnest[np.random.permutation(self.ncuckoos), :]
             )
             new_nest = newnest + stepsize * K # Update a fraction ~pa of Cuckoo after the Lévy flights
+            
+            #ensure bounds and discrete for the newnest
+            for cuckoo in range(self.ncuckoos):
+                new_nest[cuckoo,:]=self.ensure_bounds(new_nest[cuckoo,:])
+                new_nest[cuckoo,:] = self.ensure_discrete(new_nest[cuckoo,:])
             #----------------------
             #  Re-evaluate the Cuckoos obtained and update to get the fittest individuals
             #----------------------
