@@ -17,7 +17,7 @@
 #Created on Tues May 24 19:37:04 2022
 #
 #@author: Paul
-# The following implementation is adapted to NEORL
+#  The following implementation of NSGA-III is adapted to NEORL
 #  from DEAP implementation: https://github.com/DEAP/deap/blob/master/deap/tools/emo.py#L15 
 #"""
 
@@ -40,14 +40,19 @@ import bisect
 
 import pandas as pd
 
+##############################################################
+# Helper functions for sorting individuals in the population #
+##############################################################
+
 def isDominated(wvalues1, wvalues2):
     """
     
     Returns whether or not *wvalues2* dominates *wvalues1*.
-    :param wvalues1: The weighted fitness values that would be dominated.
-    :param wvalues2: The weighted fitness values of the dominant.
-    :returns: :obj:`True` if wvalues2 dominates wvalues1, :obj:`False`
-              otherwise.
+    
+    :param wvalues1: (list) The weighted fitness values that would be dominated.
+    :param wvalues2: (list) The weighted fitness values of the dominant.
+    :Returns obj: (bool) `True` if wvalues2 dominates wvalues1, `False` otherwise.
+    
     """
     not_equal = False
     for self_wvalue, other_wvalue in zip(wvalues1, wvalues2):
@@ -59,19 +64,15 @@ def isDominated(wvalues1, wvalues2):
 
 def sortNondominated(pop, k, first_front_only=False):
     """
-    Sort the first *k* *pop* into different nondomination levels
-    using the "Fast Nondominated Sorting Approach" proposed by Deb et al.,
-    see [Deb2002]_. This algorithm has a time complexity of :math:`O(MN^2)`,
-    where :math:`M` is the number of objectives and :math:`N` the number of
-    pop.
-    :param pop: A list of pop to select from.
-    :param k: The number of pop to select.
-    :param first_front_only: If :obj:`True` sort only the first front and
-                             exit.
-    :returns: A list of Pareto fronts (lists), the first list includes
-              nondominated pop.
+    Sort the first *k* *pop* into different nondomination levels.
+    
+    :param pop: (dict) population in dictionary structure
+    :param k: (int) top k individuals are selected
+    :param first_front_only [DEPRECATED]: (bool) If :obj:`True` sort only the first front and exit. 
+    :Returns pareto_front: (list) A list of Pareto fronts, the first list includes nondominated pop.
     .. 
-    [Deb2002] Deb, Pratab, Agarwal, and Meyarivan, "A fast elitist
+
+    reference: [Deb2002] Deb, Pratab, Agarwal, and Meyarivan, "A fast elitist
     non-dominated sorting genetic algorithm for multi-objective
     optimization: NSGA-II", 2002.
     """
@@ -130,13 +131,17 @@ def sortNondominated(pop, k, first_front_only=False):
 #######################################
 
 def identity(obj):
-    """Returns directly the argument *obj*.
+    """
+    Returns directly the argument *obj*.
+    :param obj: (type)
+    :Returns obj: (type)
     """
     return obj
 
 
 def median(seq, key=identity):
-    """Returns the median of *seq* - the numeric value separating the higher
+    """
+    Returns the median of *seq* - the numeric value separating the higher
     half of a sample from the lower half. If there is an even number of
     elements in *seq*, it returns the mean of the two middle values.
     """
@@ -148,12 +153,17 @@ def median(seq, key=identity):
         return (key(sseq[(length - 1) // 2]) + key(sseq[length // 2])) / 2.0
 
 def sortLogNondominated(pop, k, first_front_only=False):
-    """Sort *individuals* in pareto non-dominated fronts using the Generalized
-    Reduced Run-Time Complexity Non-Dominated Sorting Algorithm presented by
-    Fortin et al. (2013).
-    :param individuals: A list of individuals to select from.
-    :returns: A list of Pareto fronts (lists), with the first list being the
-              true Pareto front.
+    """
+    Sort the first *k* *pop* into different nondomination levels.
+    
+    :param pop: (dict) population in dictionary structure
+    :param k: (int) top k individuals are selected
+    :param first_front_only [DEPRECATED]: (bool) If :obj:`True` sort only the first front and exit. 
+    :Returns pareto_front: (list) A list of Pareto fronts, the first list includes nondominated pop.
+    .. 
+
+    reference: [Fortin2013] Fortin, Grenier, Parizeau, "Generalizing the improved run-time complexity algorithm for non-dominated sorting",
+    Proceedings of the 15th annual conference on Genetic and evolutionary computation, 2013. 
     """
     if k == 0:
         return []
@@ -193,7 +203,9 @@ def sortLogNondominated(pop, k, first_front_only=False):
         return pareto_fronts[0]
 
 def sortNDHelperA(fitnesses, obj, front):
-    """Create a non-dominated sorting of S on the first M objectives"""
+    """
+    Create a non-dominated sorting of S on the first M objectives
+    """
     if len(fitnesses) < 2:
         return
     elif len(fitnesses) == 2:
@@ -214,7 +226,8 @@ def sortNDHelperA(fitnesses, obj, front):
         sortNDHelperA(worst, obj, front)
 
 def splitA(fitnesses, obj):
-    """Partition the set of fitnesses in two according to the median of
+    """
+    Partition the set of fitnesses in two according to the median of
     the objective index *obj*. The values equal to the median are put in
     the set containing the least elements.
     """
@@ -242,7 +255,8 @@ def splitA(fitnesses, obj):
         return best_b, worst_b
 
 def sweepA(fitnesses, front):
-    """Update rank number associated to the fitnesses according
+    """
+    Update rank number associated to the fitnesses according
     to the first two objectives using a geometric sweep procedure.
     """
     stairs = [-fitnesses[0][1]]
@@ -261,10 +275,12 @@ def sweepA(fitnesses, front):
         fstairs.insert(idx, fit)
 
 def sortNDHelperB(best, worst, obj, front):
-    """Assign front numbers to the solutions in H according to the solutions
+    """
+    Assign front numbers to the solutions in H according to the solutions
     in L. The solutions in L are assumed to have correct front numbers and the
     solutions in H are not compared with each other, as this is supposed to
-    happen after sortNDHelperB is called."""
+    happen after sortNDHelperB is called.
+    """
     key = itemgetter(obj)
     if len(worst) == 0 or len(best) == 0:
         #One of the lists is empty: nothing to do
@@ -290,7 +306,8 @@ def sortNDHelperB(best, worst, obj, front):
         sortNDHelperB(best2, worst2, obj, front)
 
 def splitB(best, worst, obj):
-    """Split both best individual and worst sets of fitnesses according
+    """
+    Split both best individual and worst sets of fitnesses according
     to the median of objective *obj* computed on the set containing the
     most elements. The values equal to the median are attributed so as
     to balance the four resulting sets as much as possible.
@@ -329,7 +346,8 @@ def splitB(best, worst, obj):
         return best1_b, best2_b, worst1_b, worst2_b
 
 def sweepB(best, worst, front):
-    """Adjust the rank number of the worst fitnesses according to
+    """
+    Adjust the rank number of the worst fitnesses according to
     the best fitnesses on the first two objectives using a sweep
     procedure.
     """
@@ -357,13 +375,24 @@ def sweepB(best, worst, front):
             fstair = max(fstairs[:idx], key=front.__getitem__)
             front[h] = max(front[h], front[fstair]+1)
 
-#######################################
-# niching - based Selection functions #
-#######################################
+##########################################################################
+# niching - based Selection functions 
+# reference: [Deb2014] Deb, K., & Jain, H. (2014). 
+# An Evolutionary Many-Objective Optimization
+# Algorithm Using Reference-Point-Based Nondominated Sorting Approach,
+# Part I: Solving Problems With Box Constraints. IEEE Transactions on
+# Evolutionary Computation, 18(4), 577-601. doi:10.1109/TEVC.2013.2281535.
+##########################################################################
 
 def find_extreme_points(fitnesses, best_point, extreme_points=None):
     """
     Finds the individuals with extreme values for each objective function.
+    :param fitnesses: (list) list of fitness for each individual
+    :param best_point: (list) list of the best fitness found for each objective
+    :param extreme_points: (list) Extreme points found at previous generation. If not provided
+    find the extreme points only from current pop.  
+
+    :Returns fitness with minimal asf (new extreme points)
     """
     # Keep track of last generation extreme points
     if extreme_points is not None:
@@ -386,6 +415,13 @@ def find_intercepts(extreme_points, best_point, current_worst, front_worst):
     """
     Find intercepts between the hyperplane and each axis with
     the ideal point as origin.
+
+    :param extreme_points: (list) list of extreme points for each objective
+    :param best_point: (list) list of best points for each objective
+    :param current_worst: (list) list of worst fitness for each objective (ever found if memory is implemented: TO DO!!)
+    :Param front_worst: (list) current list of worst fitness for each objective (equal to current_worst for the current version)
+
+    :Returns intercepts: (list) Obj-dimensional intercept.
     """
     # Construct hyperplane sum(f_i^n) = 1
     b = np.ones(extreme_points.shape[1])
@@ -412,6 +448,14 @@ def associate_to_niche(fitnesses, reference_points, best_point, intercepts):
     """
     Associates individuals to reference points and calculates niche number.
     Corresponds to Algorithm 3 of Deb & Jain (2014).
+    
+    :param fitnesses: (list) list of fitness for each individual
+    :param reference_points: (list) list of Obj-dimensional reference points leveraged to obtain a well-spread pareto front
+    :param best_point: (list) list of the best fitness found for each objective
+    :param intercepts: (list) Obj-dimensional intercept.
+    :Returns
+    niches: (list) associated reference point for each individual
+    distances: (list) distance of each individual to its associated niche
     """
     # Normalize by ideal point and intercepts
     fn = (fitnesses - best_point) / (intercepts - best_point)
@@ -434,6 +478,14 @@ def niching(pop, k, niches, distances, niche_counts):
     """
     niche preserving operator. Choose elements which are associated to reference points
     with the lowest number of association from the already choosen batch of solution Pt
+    
+    :param pop: (dict) population in dictionary structure
+    :param k: (int) top k individuals to select to complete the population
+    :param niches: (list) associated reference point for each individual
+    :param distances: (list) distance of each individual to its associated niche
+    :param niching: (list) count per niche 
+
+    :Returns selected: (list) remaining individual to complete the population
     """
     selected = []
     available = np.ones(len(pop), dtype=np.bool)
@@ -476,6 +528,11 @@ def uniform_reference_points(nobj, p=4, scaling=None):
     Generate reference points uniformly on the hyperplane intersecting
     each axis at 1. The scaling factor is used to combine multiple layers of
     reference points.
+
+    :param nobj: (int) number of objective
+    :param p: (int) number of division along each objective
+    :param scaling [DEPRECATED]:
+    :Returns ref_points: (list) list of Obj-dimensional reference points 
     """
     def gen_refs_recursive(ref, nobj, left, total, depth):
         points = []
@@ -499,8 +556,8 @@ class NSGAIII(ES):
     """
     Parallel Fast Non-dominated Sorting Gentic Algorithm - III
     
-    Only the seleciton operator differ from the ES implementation
-    The statistic also changed.
+    Only the seleciton operator differ from classical GA implementation. Hence, we choose create a subclass
+    of ES implementation
 
     :param mode: (str) problem type, either ``min`` for minimization problem or ``max`` for maximization
     :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: ``bounds={'x1': ['int', 1, 4], 'x2': ['float', 0.1, 0.8], 'x3': ['float', 2.2, 6.2]}``
@@ -514,10 +571,11 @@ class NSGAIII(ES):
     :param ncores: (int) number of parallel processors
     :param seed: (int) random seed for sampling
     
+    NSGA-III specific parameters:
+
     :param sorting: (str) sorting type, ``standard`` or ``log``. The latter should be faster and is used as default.#Paul
     :param: p: (int) number of divisions along each objective for the reference points. The number of reference points is Combination(M + p - 1, p), where M is the number of objective
-    :param ref_points: (list) of user inputs reference points. If none the reference points are generated uniformly on the hyperplane intersecting
-    each axis at 1.
+    :param ref_points: (list) of user inputs reference points. If none the reference points are generated uniformly on the hyperplane intersecting each axis at 1.
     """
     def __init__ (self, mode, bounds, fit, lambda_=60, cxmode='cx2point', 
                   alpha=0.5, cxpb=0.6, mutpb=0.3, smin=0.01, smax=0.5, clip=True, ncores=1, seed=None, p = 4,ref_points = None,sorting = 'log',**kwargs):  
@@ -530,7 +588,6 @@ class NSGAIII(ES):
         #NSGA-III specific
         self.p = p
         self.ref_points = ref_points
-
     def fit_worker(self, x):
         #"""
         #Evaluates fitness of an individual.
@@ -551,36 +608,20 @@ class NSGAIII(ES):
     def select(self,pop, k, ref_points, nd='standard', best_point=None,
              worst_point=None, extreme_points=None):
         """
-        Implementation of NSGA-III selection as presented in [Deb2014]_.
-        This implementation is partly based on `lmarti/nsgaiii
-        <https://github.com/lmarti/nsgaiii>`_. It departs slightly from the
-        original implementation in that it does not use memory to keep track
-        of ideal and extreme points. This choice has been made to fit the
-        functional api of DEAP. For a version of NSGA-III see
-        :class:`~deap.tools.selNSGA3WithMemory`.
-        :param pop: A list of pop to select from.
-        :param k: The number of pop to select.
-        :param ref_points: Reference points to use for niching.
-        :param nd: Specify the non-dominated algorithm to use: 'standard' or 'log'.
-        :param best_point: Best point found at previous generation. If not provided
+        Implementation of NSGA-III selection
+
+        :param pop: (dict) A list of pop to select from.
+        :param k: (int) The number of pop to select.
+        :param ref_points: (list) Reference points to use for niching.
+        :param nd: (str) Specify the non-dominated algorithm to use: 'standard' or 'log'.
+        :param best_point: (list) Best point found at previous generation. If not provided
             find the best point only from current pop.
-        :param worst_point: Worst point found at previous generation. If not provided
+        :param worst_point: (list) Worst point found at previous generation. If not provided
             find the worst point only from current pop.
-        :param extreme_points: Extreme points found at previous generation. If not provided
+        :param extreme_points: (list) Extreme points found at previous generation. If not provided
             find the extreme points only from current pop.
-        :param return_memory: If :data:`True`, return the best, worst and extreme points
-            in addition to the chosen pop.
-        :returns: A list of selected pop.
-        :returns: If `return_memory` is :data:`True`, a namedtuple with the
-            `best_point`, `worst_point`, and `extreme_points`.
-        You can generate the reference points using the :func:`uniform_reference_points`
-        function::
-            >>> ref_points = tools.uniform_reference_points(nobj=3, p=12)   # doctest: +SKIP
-            >>> selected = selNSGA3(population, k, ref_points)              # doctest: +SKIP
-        .. [Deb2014] Deb, K., & Jain, H. (2014). An Evolutionary Many-Objective Optimization
-            Algorithm Using Reference-Point-Based Nondominated Sorting Approach,
-            Part I: Solving Problems With Box Constraints. IEEE Transactions on
-            Evolutionary Computation, 18(4), 577-601. doi:10.1109/TEVC.2013.2281535.
+        :Returns best_dict: (dict) next population in dictionary structure
+        
         """
         if nd == "standard":
             pareto_fronts = sortNondominated(pop, k)
@@ -606,7 +647,7 @@ class NSGAIII(ES):
         front_worst = np.max(fitnesses[:sum(len(f) for f in pareto_fronts), :], axis=0)
         intercepts = find_intercepts(extreme_points, best_point, worst_point, front_worst)
         niches, dist = associate_to_niche(fitnesses, ref_points, best_point, intercepts)
-
+        
         # Get counts per niche for individuals in all front but the last
         niche_counts = np.zeros(len(ref_points), dtype=np.int64)
         index, counts = np.unique(niches[:-len(pareto_fronts[-1])], return_counts=True)
@@ -698,7 +739,7 @@ class NSGAIII(ES):
                
     def evolute(self, ngen, x0=None, verbose=False):
         """
-        This function evolutes the ES algorithm for number of generations.
+        This function evolutes the NSGA-III algorithm for number of generations.
         
         :param ngen: (int) number of generations to evolute
         :param x0: (list of lists) the initial position of the swarm particles
@@ -721,7 +762,7 @@ class NSGAIII(ES):
             self.sorting = "standard"
         # generate reference points
         if self.ref_points is None:
-            self.ref_points = uniform_reference_points(nobj = len(self.population[1][2]), p = self.p)      
+            self.ref_points = uniform_reference_points(nobj = len(self.population[1][2]), p = self.p)   
         # Begin the evolution process
         for gen in range(1, ngen + 1):
             
@@ -819,6 +860,12 @@ class NSGAIII(ES):
         return self.x_opt_correct, self.y_opt_correct, self.es_hist
     
 def get_population_nsga(pop,mode):#Paul
+    """
+    Modified get_population from neorl.utils.tools to fit the multi-objective framework
+    :param pop: (dict) population in dictionnary strucuture
+    :param mode: (str) type of optimization
+    :Returns df_pop: (DataFrame) position and value of each objective for each individual in the population
+    """
     d=len(pop[0][0])
     p= len(pop[0][2])
     npop=len(pop)

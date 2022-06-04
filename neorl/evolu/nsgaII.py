@@ -17,7 +17,7 @@
 #Created on Tues May 24 19:37:04 2022
 #
 #@author: Paul
-# The following implementation is adapted to NEORL
+# The following implementation of NSGA-II is adapted to NEORL
 #  from DEAP implementation: https://github.com/DEAP/deap/blob/master/deap/tools/emo.py#L15 
 #"""
 
@@ -39,14 +39,20 @@ import bisect
 import sys
 
 import pandas as pd
+##############################################################
+# Helper functions for sorting individuals in the population #
+##############################################################
+
 def isDominated(wvalues1, wvalues2):
     """
     
     Returns whether or not *wvalues2* dominates *wvalues1*.
-    :param wvalues1: The weighted fitness values that would be dominated.
-    :param wvalues2: The weighted fitness values of the dominant.
-    :returns: :obj:`True` if wvalues2 dominates wvalues1, :obj:`False`
-              otherwise.
+    
+    :param wvalues1: (list) The weighted fitness values that would be dominated.
+    :param wvalues2: (list) The weighted fitness values of the dominant.
+    :Returns: 
+        obj (bool) `True` if wvalues2 dominates wvalues1, `False` otherwise.
+    
     """
     not_equal = False
     for self_wvalue, other_wvalue in zip(wvalues1, wvalues2):
@@ -58,19 +64,16 @@ def isDominated(wvalues1, wvalues2):
 
 def sortNondominated(pop, k, first_front_only=False):
     """
-    Sort the first *k* *pop* into different nondomination levels
-    using the "Fast Nondominated Sorting Approach" proposed by Deb et al.,
-    see [Deb2002]_. This algorithm has a time complexity of :math:`O(MN^2)`,
-    where :math:`M` is the number of objectives and :math:`N` the number of
-    pop.
-    :param pop: A list of pop to select from.
-    :param k: The number of pop to select.
-    :param first_front_only: If :obj:`True` sort only the first front and
-                             exit.
-    :returns: A list of Pareto fronts (lists), the first list includes
-              nondominated pop.
+    Sort the first *k* *pop* into different nondomination levels.
+    
+    :param pop: (dict) population in dictionary structure
+    :param k: (int) top k individuals are selected
+    :param first_front_only [DEPRECATED]: (bool) If :obj:`True` sort only the first front and exit. 
+    :Returns: 
+        pareto_front (list) A list of Pareto fronts, the first list includes nondominated pop.
     .. 
-    [Deb2002] Deb, Pratab, Agarwal, and Meyarivan, "A fast elitist
+
+    reference: [Deb2002] Deb, Pratab, Agarwal, and Meyarivan, "A fast elitist
     non-dominated sorting genetic algorithm for multi-objective
     optimization: NSGA-II", 2002.
     """
@@ -129,13 +132,18 @@ def sortNondominated(pop, k, first_front_only=False):
 #######################################
 
 def identity(obj):
-    """Returns directly the argument *obj*.
+    """
+    Returns directly the argument *obj*.
+    :param obj: (type)
+    :Returns:
+        obj (type)
     """
     return obj
 
 
 def median(seq, key=identity):
-    """Returns the median of *seq* - the numeric value separating the higher
+    """
+    Returns the median of *seq* - the numeric value separating the higher
     half of a sample from the lower half. If there is an even number of
     elements in *seq*, it returns the mean of the two middle values.
     """
@@ -147,12 +155,18 @@ def median(seq, key=identity):
         return (key(sseq[(length - 1) // 2]) + key(sseq[length // 2])) / 2.0
 
 def sortLogNondominated(pop, k, first_front_only=False):
-    """Sort *individuals* in pareto non-dominated fronts using the Generalized
-    Reduced Run-Time Complexity Non-Dominated Sorting Algorithm presented by
-    Fortin et al. (2013).
-    :param individuals: A list of individuals to select from.
-    :returns: A list of Pareto fronts (lists), with the first list being the
-              true Pareto front.
+    """
+    Sort the first *k* *pop* into different nondomination levels.
+    
+    :param pop: (dict) population in dictionary structure
+    :param k: (int) top k individuals are selected
+    :param first_front_only [DEPRECATED]: (bool) If :obj:`True` sort only the first front and exit. 
+    :Returns: 
+        pareto_front (list) A list of Pareto fronts, the first list includes nondominated pop.
+    .. 
+
+    reference: [Fortin2013] Fortin, Grenier, Parizeau, "Generalizing the improved run-time complexity algorithm for non-dominated sorting",
+    Proceedings of the 15th annual conference on Genetic and evolutionary computation, 2013. 
     """
     if k == 0:
         return []
@@ -162,6 +176,8 @@ def sortLogNondominated(pop, k, first_front_only=False):
     unique_fits = defaultdict(list)
     for i, ind in enumerate(pop):
         unique_fits[tuple(ind[1][2])].append(ind)
+            
+
     #Launch the sorting algorithm
     obj = len(pop[0][1][2])-1
     fitnesses = list(unique_fits.keys())
@@ -190,7 +206,9 @@ def sortLogNondominated(pop, k, first_front_only=False):
         return pareto_fronts[0]
 
 def sortNDHelperA(fitnesses, obj, front):
-    """Create a non-dominated sorting of S on the first M objectives"""
+    """
+    Create a non-dominated sorting of S on the first M objectives
+    """
     if len(fitnesses) < 2:
         return
     elif len(fitnesses) == 2:
@@ -211,7 +229,8 @@ def sortNDHelperA(fitnesses, obj, front):
         sortNDHelperA(worst, obj, front)
 
 def splitA(fitnesses, obj):
-    """Partition the set of fitnesses in two according to the median of
+    """
+    Partition the set of fitnesses in two according to the median of
     the objective index *obj*. The values equal to the median are put in
     the set containing the least elements.
     """
@@ -239,7 +258,8 @@ def splitA(fitnesses, obj):
         return best_b, worst_b
 
 def sweepA(fitnesses, front):
-    """Update rank number associated to the fitnesses according
+    """
+    Update rank number associated to the fitnesses according
     to the first two objectives using a geometric sweep procedure.
     """
     stairs = [-fitnesses[0][1]]
@@ -258,10 +278,12 @@ def sweepA(fitnesses, front):
         fstairs.insert(idx, fit)
 
 def sortNDHelperB(best, worst, obj, front):
-    """Assign front numbers to the solutions in H according to the solutions
+    """
+    Assign front numbers to the solutions in H according to the solutions
     in L. The solutions in L are assumed to have correct front numbers and the
     solutions in H are not compared with each other, as this is supposed to
-    happen after sortNDHelperB is called."""
+    happen after sortNDHelperB is called.
+    """
     key = itemgetter(obj)
     if len(worst) == 0 or len(best) == 0:
         #One of the lists is empty: nothing to do
@@ -287,7 +309,8 @@ def sortNDHelperB(best, worst, obj, front):
         sortNDHelperB(best2, worst2, obj, front)
 
 def splitB(best, worst, obj):
-    """Split both best individual and worst sets of fitnesses according
+    """
+    Split both best individual and worst sets of fitnesses according
     to the median of objective *obj* computed on the set containing the
     most elements. The values equal to the median are attributed so as
     to balance the four resulting sets as much as possible.
@@ -326,7 +349,8 @@ def splitB(best, worst, obj):
         return best1_b, best2_b, worst1_b, worst2_b
 
 def sweepB(best, worst, front):
-    """Adjust the rank number of the worst fitnesses according to
+    """
+    Adjust the rank number of the worst fitnesses according to
     the best fitnesses on the first two objectives using a sweep
     procedure.
     """
@@ -354,12 +378,20 @@ def sweepB(best, worst, front):
             fstair = max(fstairs[:idx], key=front.__getitem__)
             front[h] = max(front[h], front[fstair]+1)
 
+##########################################################################
+# crowding distance - based Selection functions 
+# reference: [Deb2002] Deb, Pratab, Agarwal, and Meyarivan, "A fast elitist
+# non-dominated sorting genetic algorithm for multi-objective
+# optimization: NSGA-II", 2002.
+##########################################################################
+
 def assignCrowdingDist(pop):
     """
-    Assign a crowding distance to each individual's fitness. The
-    crowding distance can be retrieve via the :attr:`crowding_dist`
-    attribute of each individual's fitness.
-    
+    Assign a crowding distance to each individual's fitness. 
+
+    :param pop: (list) list of individuals and assocated positions, strategy vector, and fitness
+    :Returns:
+    CrowDist: (dict) dictionnary of element of pop and associated crowding distance
     """
     if len(pop) == 0:
         return
@@ -381,13 +413,15 @@ def assignCrowdingDist(pop):
 
     for i, dist in enumerate(distances):
         CrowdDist[pop[i][0]] = dist
-        #individuals[i].fitness.crowding_dist = dist
     return CrowdDist
 
 class NSGAII(ES):
     """
     Parallel Fast Non-dominated Sorting Gentic Algorithm - II
     
+    Only the seleciton operator differ from classical GA implementation. Hence, we choose create a subclass
+    of ES implementation
+
     :param mode: (str) problem type, either ``min`` for minimization problem or ``max`` for maximization
     :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: ``bounds={'x1': ['int', 1, 4], 'x2': ['float', 0.1, 0.8], 'x3': ['float', 2.2, 6.2]}``
     :param lambda\_: (int) total number of individuals in the population
@@ -399,6 +433,9 @@ class NSGAII(ES):
     :param smax: (float): maximum bound for the strategy vector
     :param ncores: (int) number of parallel processors
     :param seed: (int) random seed for sampling
+    
+    NSGA-II specific parameters:
+
     :param sorting: (str) sorting type, ``standard`` or ``log``. The latter should be faster and is used as default.#Paul
     """
     def __init__ (self, mode, bounds, fit, lambda_=60, cxmode='cx2point', 
@@ -430,20 +467,12 @@ class NSGAII(ES):
 
     def select(self,pop, k = 1, nd='standard'):
         """
-        Apply NSGA-II selection operator on the *pop*. Usually, the
-        size of *pop* will be larger than *k* because any individual
-        present in *pop* will appear in the returned list at most once.
-        Having the size of *pop* equals to *k* will have no effect other
-        than sorting the population according to their front rank. The
-        list returned contains references to the input *pop*. For more
-        details on the NSGA-II operator see [Deb2002]_.
-        :param pop: A list of pop to select from.
-        :param k: The number of pop to select.
-        :param nd: Specify the non-dominated algorithm to use: 'standard' or 'log'.
-        :returns: A list of selected pop.
-        .. [Deb2002] Deb, Pratab, Agarwal, and Meyarivan, "A fast elitist
-           non-dominated sorting genetic algorithm for multi-objective
-           optimization: NSGA-II", 2002.
+        Apply NSGA-II selection operator on the *pop*. 
+
+        :param pop: (dict) A list of pop to select from.
+        :param k: (int) The number of pop to select.
+        :param nd: (str) Specify the non-dominated algorithm to use: 'standard' or 'log'.
+        :Returns best_dict: (dict) next population in dictionary structure
         """
         if nd == 'standard':
             pareto_fronts = sortNondominated(pop, k)
@@ -661,6 +690,12 @@ class NSGAII(ES):
         return self.x_opt_correct, self.y_opt_correct, self.es_hist
     
 def get_population_nsga(pop,mode):#Paul
+    """
+    Modified get_population from neorl.utils.tools to fit the multi-objective framework
+    :param pop: (dict) population in dictionnary strucuture
+    :param mode: (str) type of optimization
+    :Returns df_pop: (DataFrame) position and value of each objective for each individual in the population
+    """
     d=len(pop[0][0])
     p= len(pop[0][2])
     npop=len(pop)
