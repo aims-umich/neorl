@@ -146,11 +146,11 @@ class MFO:
 
     def fit_worker(self, x):
         
+        x=self.ensure_bounds(x)
+        
         if self.grid_flag:
             #decode the individual back to the int/float/grid mixed space
             x=decode_discrete_to_grid(x,self.orig_bounds,self.bounds_map)
-
-        x=self.ensure_bounds(x)
             
         fitness = self.fit(x)
 
@@ -314,7 +314,10 @@ class MFO:
                             distance_to_flame*math.exp(self.b*t)*math.cos(t*2*math.pi)
                         + sorted_population[Flame_no,j] 
                         )
-            
+
+                Moth_pos[i,:]=self.ensure_bounds(Moth_pos[i,:])
+                Moth_pos[i,:] = self.ensure_discrete(Moth_pos[i, :])
+                
             #-----------------------------
             #Fitness saving 
             #-----------------------------

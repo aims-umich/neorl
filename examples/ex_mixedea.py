@@ -310,23 +310,11 @@ for item in ['mixed', 'grid', 'float/int', 'float/grid', 'int/grid', 'float', 'i
     x_pesa2, y_pesa2, pesa2_hist=pesa2.evolute(ngen=ngen, x0=x0, replay_every=2, verbose=0)
     assert Vessel(x_pesa2) == y_pesa2
 
-
     ########################
     # Setup and evolute AEO
     ########################
-    #this one works!
-    #aeo = AEO(mode='min', bounds=bounds, optimizers=[de, gwo, woa, jaya, hho, pso, es, ssa], gen_per_cycle=3, fit = Vessel)
-    
-    #This one fails!!!
-    aeo = AEO(mode='min', bounds=bounds, optimizers=[mfo], gen_per_cycle=3, fit = Vessel)
-    
-    x_aeo, y_aeo, aeo_hist = aeo.evolute(30, verbose = 1)
-    print('AEO=', x_aeo, y_aeo)   #not consistent wit other methods
-    print()
-    print('--- Something wrong here, the grid variable is not in the original space')
-    print(aeo.pops[0].members)
-    print()
-    print(aeo.wrapped_f.ins[0])
+    aeo = AEO(mode='min', bounds=bounds, optimizers=[mfo, de, gwo, woa, jaya, hho, pso, es, ssa], gen_per_cycle=3, fit = Vessel)
+    x_aeo, y_aeo, aeo_hist = aeo.evolute(3, verbose = 1)
     assert Vessel(x_aeo) == y_aeo
     
     #sys.exit()   #remove to complete the full test

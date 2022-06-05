@@ -318,5 +318,8 @@ def test_mixedea():
         ########################
         # Setup and evolute AEO
         ########################
-        
+        aeo = AEO(mode='min', bounds=bounds, optimizers=[mfo, de, gwo, woa, jaya, hho, pso, es, ssa], gen_per_cycle=3, fit = Vessel)
+        x_aeo, y_aeo, aeo_hist = aeo.evolute(3, verbose = 1)
+        assert Vessel(x_aeo) == y_aeo
+       
 test_mixedea()
