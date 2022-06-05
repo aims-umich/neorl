@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.evolu.mfo &mdash; NEORL 1.7.7b documentation</title>
+  <title>neorl.evolu.mfo &mdash; NEORL 1.7.8b documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.7.7b )
+                main (1.7.8b )
               </div>
             
           
@@ -318,6 +318,8 @@
 
     <span class="k">def</span> <span class="nf">fit_worker</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         
+        <span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ensure_bounds</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="p">:</span>
             <span class="c1">#decode the individual back to the int/float/grid mixed space</span>
             <span class="n">x</span><span class="o">=</span><span class="n">decode_discrete_to_grid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="p">)</span>
@@ -484,10 +486,9 @@
                             <span class="n">distance_to_flame</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">*</span><span class="n">t</span><span class="p">)</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">t</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
                         <span class="o">+</span> <span class="n">sorted_population</span><span class="p">[</span><span class="n">Flame_no</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> 
                         <span class="p">)</span>
-            
-                
+
                 <span class="n">Moth_pos</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ensure_bounds</span><span class="p">(</span><span class="n">Moth_pos</span><span class="p">[</span><span class="n">i</span><span class="p">,:])</span>
-                <span class="n">Moth_pos</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ensure_discrete</span><span class="p">(</span><span class="n">Moth_pos</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]))</span>
+                <span class="n">Moth_pos</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensure_discrete</span><span class="p">(</span><span class="n">Moth_pos</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:])</span>
                 
             <span class="c1">#-----------------------------</span>
             <span class="c1">#Fitness saving </span>

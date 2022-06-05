@@ -6,6 +6,19 @@ Change Log
 Stable Releases (for users)
 ------------------------------
 
+Release 1.8 (2022-6-5)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+  pip install neorl==1.8
+
+- Improvements in mixed-discrete optimization for various algorithms. 
+- Introducing new ensemble optimization algorithms: AEO, EPSO, EDEV, HCLPSO.
+- New features for simulated annealing. 
+- More organized documentation with subsections. 
+- Application of NEORL to nuclear microreactors, recently published here: https://doi.org/10.1016/j.nucengdes.2022.111776
+
 Release 1.7 (2021-11-24)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -30,6 +43,38 @@ Release 1.6 (2021-09-10)
 
 Beta Releases (for developers)
 ---------------------------------
+
+Release 1.7.8b (2022-6-4)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+  pip install neorl==1.7.8b --extra-index-url https://test.pypi.org/simple
+
+- Fixed bug related to ``protobuf <= 3.20`` version to avoid tensorflow error when installation. 
+
+Release 1.7.7b (2022-6-4)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+  pip install neorl==1.7.7b --extra-index-url https://test.pypi.org/simple
+
+- Fixed bugs when initializing methods (ES, PSO, GWO, etc.) for discrete/mixed optimization with the argument ``x0``. 
+- Fixed bugs in TS, CS, SA for discrete/mixed optimization.
+- Enabled discrete/mixed optimization for AEO.  
+
+
+Release 1.7.6b (2022-4-25)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+  pip install neorl==1.7.6b --extra-index-url https://test.pypi.org/simple
+
+- Added a new features for parallel simulated annealing (PSA). 
+- PSA features include new equilibrium schedule and new solution enforcement. 
+
 
 Release 1.7.5b (2022-3-29)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -6,6 +6,19 @@ Change Log
 Stable Releases (for users)
 ------------------------------
 
+Release 1.8 (2022-6-5)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+  pip install neorl==1.8
+
+- Improvements in mixed-discrete optimization for various algorithms. 
+- Introducing new ensemble optimization algorithms: AEO, EPSO, EDEV, HCLPSO.
+- New features for simulated annealing. 
+- More organized documentation with subsections. 
+- Application of NEORL to nuclear microreactors, recently published here: https://doi.org/10.1016/j.nucengdes.2022.111776
+
 Release 1.7 (2021-11-24)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

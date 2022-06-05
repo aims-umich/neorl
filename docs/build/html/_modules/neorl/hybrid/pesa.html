@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.hybrid.pesa &mdash; NEORL 1.7.7b documentation</title>
+  <title>neorl.hybrid.pesa &mdash; NEORL 1.7.8b documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.7.7b )
+                main (1.7.8b )
               </div>
             
           
@@ -377,7 +377,7 @@
 <span class="sd">        </span>
 <span class="sd">        :return: (tuple) (best individual, best fitness, and a list of fitness history)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        
         <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">NGEN</span><span class="o">=</span><span class="n">ngen</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">STEPS</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">NGEN</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">NPOP</span> <span class="c1">#all </span>
@@ -389,7 +389,8 @@
         <span class="c1">#-------------------------------------------------------</span>
         <span class="c1"># Check if initial pop is provided as initial guess </span>
         <span class="c1">#-------------------------------------------------------</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">x0</span><span class="p">:</span> 
+        <span class="k">if</span> <span class="n">x0</span><span class="p">:</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
             <span class="c1"># use provided initial guess</span>
             <span class="n">warm</span><span class="o">=</span><span class="n">ESMod</span><span class="p">(</span><span class="n">bounds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fit_worker</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">MU</span><span class="p">,</span> <span class="n">lambda_</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">LAMBDA</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">)</span>
             <span class="n">x0size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x0</span><span class="p">)</span>

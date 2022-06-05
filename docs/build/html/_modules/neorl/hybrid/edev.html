@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.hybrid.edev &mdash; NEORL 1.7.7b documentation</title>
+  <title>neorl.hybrid.edev &mdash; NEORL 1.7.8b documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.7.7b )
+                main (1.7.8b )
               </div>
             
           
@@ -501,7 +501,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">gen</span> <span class="o">*</span> <span class="p">((</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">ngen</span><span class="p">)</span>  <span class="c1">#mir: a decreases linearly between 1 to 0, for discrete mutation</span>
         
             <span class="c1">## update the index for adjust different algorithms</span>
-            <span class="k">if</span> <span class="n">gen</span> <span class="o">%</span> <span class="p">(</span><span class="n">ng</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">gen</span> <span class="o">%</span> <span class="n">ng</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">arrayGbestChangeRate</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">arrayGbestChange</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">arrayFirst</span><span class="p">)</span>
                 <span class="n">arrayGbestChangeRate</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">arrayGbestChange</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">arraySecond</span><span class="p">)</span><span class="o">*</span><span class="mi">3</span><span class="p">)</span>
                 <span class="n">arrayGbestChangeRate</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">arrayGbestChange</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">arrayThird</span><span class="p">)</span>

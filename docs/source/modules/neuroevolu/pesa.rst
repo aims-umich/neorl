@@ -8,7 +8,9 @@ Prioritized replay Evolutionary and Swarm Algorithm (PESA)
 
 A module for the parallel hybrid PESA algorithm with prioritized experience replay from reinforcement learning. This is the classical PESA that hybridizes PSO, ES, and SA modules within NEORL.
 
-Original paper: Radaideh, M. I., Shirvan, K. (2021). Prioritized Experience Replay for Parallel Hybrid Evolutionary and Swarm Algorithms: Application to Nuclear Fuel, *Under Review*.
+Original paper: Radaideh, M. I., & Shirvan, K. (2022). PESA: Prioritized experience replay for parallel hybrid evolutionary and swarm algorithms-Application to nuclear fuel. Nuclear Engineering and Technology.
+
+https://doi.org/10.1016/j.net.2022.05.001
 
 
 What can you use?
