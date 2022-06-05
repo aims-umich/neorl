@@ -149,6 +149,8 @@ class MFO:
         if self.grid_flag:
             #decode the individual back to the int/float/grid mixed space
             x=decode_discrete_to_grid(x,self.orig_bounds,self.bounds_map)
+
+        x=self.ensure_bounds(x)
             
         fitness = self.fit(x)
 
@@ -313,10 +315,6 @@ class MFO:
                         + sorted_population[Flame_no,j] 
                         )
             
-                
-                Moth_pos[i,:]=self.ensure_bounds(Moth_pos[i,:])
-                Moth_pos[i, :] = list(self.ensure_discrete(Moth_pos[i, :]))
-                
             #-----------------------------
             #Fitness saving 
             #-----------------------------
