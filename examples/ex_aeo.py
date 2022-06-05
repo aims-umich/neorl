@@ -63,6 +63,5 @@ for p in log.coords['pop']:
 
 plt.xlabel("Cycle")
 plt.ylabel("Number of Members")
-
 plt.legend()
 plt.show()

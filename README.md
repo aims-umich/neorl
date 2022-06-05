@@ -13,6 +13,7 @@ NEORL can be used for multidisciplinary applications for research, industrial, a
 ## Documentation
 
 Documentation is available online: [https://neorl.readthedocs.io/en/latest/index.html](https://neorl.readthedocs.io/en/latest/index.html)
+
 The framework paper is available online: [https://arxiv.org/abs/2112.07057](https://arxiv.org/abs/2112.07057)
 
 ## Copyright

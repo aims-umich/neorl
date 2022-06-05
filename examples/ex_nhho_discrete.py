@@ -56,7 +56,10 @@ def init_sample(bounds):
             raise Exception ('unknown data type is given, either int, float, or grid are allowed for parameter bounds')   
     return indv
     
-ngen=2
+try:
+    ngen=int(sys.argv[1])  #get ngen as external argument for testing
+except:
+    ngen=50      #or use default ngen
 
 for item in ['mixed', 'grid', 'float/int', 'float/grid', 'int/grid', 'float', 'int']:
     bounds = {}
@@ -138,7 +141,7 @@ for item in ['mixed', 'grid', 'float/int', 'float/grid', 'int/grid', 'float', 'i
     nn_params['save_models'] = False  #will accelerate training
     
     nhho = NHHO(mode='min', bounds=bounds, fit=Vessel, nhawks=npop, 
-                nn_params=nn_params, ncores=1, seed=1)
+                nn_params=nn_params, ncores=3, seed=1)
     individuals, fitnesses = nhho.evolute(ngen=ngen, x0=x0, verbose=True)
     
     #make evaluation of the best individuals using the real fitness function

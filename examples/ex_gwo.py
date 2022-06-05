@@ -36,4 +36,4 @@ plt.plot(gwo_hist['fitness'], label='best')
 plt.xlabel('Generation')
 plt.ylabel('Fitness')
 plt.legend()
-plt.close()   #change to plt.show() for inline plot
+plt.show()

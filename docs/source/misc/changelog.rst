@@ -31,6 +31,15 @@ Release 1.6 (2021-09-10)
 Beta Releases (for developers)
 ---------------------------------
 
+Release 1.7.8b (2022-6-4)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+  pip install neorl==1.7.8b --extra-index-url https://test.pypi.org/simple
+
+- Fixed bug related to ``protobuf <= 3.20`` version to avoid tensorflow error when installation. 
+
 Release 1.7.7b (2022-6-4)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -51,7 +60,7 @@ Release 1.7.6b (2022-4-25)
   pip install neorl==1.7.6b --extra-index-url https://test.pypi.org/simple
 
 - Added a new features for parallel simulated annealing (PSA). 
-- PSA Features include new equilibrium schedule and new solution enforcement. 
+- PSA features include new equilibrium schedule and new solution enforcement. 
 
 
 Release 1.7.5b (2022-3-29)
