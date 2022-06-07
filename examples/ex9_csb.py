@@ -120,7 +120,7 @@ plt.xlabel('Generation')
 plt.ylabel('Fitness')
 plt.ylim(0,150000)
 plt.savefig('CSB_fitness.png',format='png', dpi=300, bbox_inches="tight")
-plt.close()
+plt.show()
 
 #************************************************************
 #              Square Cantilever Stepped Beam
@@ -226,4 +226,4 @@ plt.legend()
 plt.xlabel('Generation')
 plt.ylabel('Fitness')
 plt.savefig('CSB_square_fitness.png',format='png', dpi=300, bbox_inches="tight")
-plt.close()
+plt.show()

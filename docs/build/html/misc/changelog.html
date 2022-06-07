@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Change Log &mdash; NEORL 1.7.6b documentation</title>
+  <title>Change Log &mdash; NEORL 1.7.8b documentation</title>
   
 
   
@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                main (1.7.6b )
+                main (1.7.8b )
               </div>
             
           
@@ -104,11 +104,15 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Change Log</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#stable-releases-for-users">Stable Releases (for users)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#release-1-8-2022-6-5">Release 1.8 (2022-6-5)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#release-1-7-2021-11-24">Release 1.7 (2021-11-24)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#release-1-6-2021-09-10">Release 1.6 (2021-09-10)</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#beta-releases-for-developers">Beta Releases (for developers)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#release-1-7-8b-2022-6-4">Release 1.7.8b (2022-6-4)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#release-1-7-7b-2022-6-4">Release 1.7.7b (2022-6-4)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#release-1-7-6b-2022-4-25">Release 1.7.6b (2022-4-25)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#release-1-7-5b-2022-3-29">Release 1.7.5b (2022-3-29)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#release-1-7-4b-2022-3-26">Release 1.7.4b (2022-3-26)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#release-1-7-3b-2022-3-6">Release 1.7.3b (2022-3-6)</a></li>
@@ -212,6 +216,19 @@
 <span id="changelog"></span><h1>Change Log<a class="headerlink" href="#change-log" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="stable-releases-for-users">
 <h2>Stable Releases (for users)<a class="headerlink" href="#stable-releases-for-users" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="release-1-8-2022-6-5">
+<h3>Release 1.8 (2022-6-5)<a class="headerlink" href="#release-1-8-2022-6-5" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install <span class="nv">neorl</span><span class="o">==</span><span class="m">1</span>.8
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Improvements in mixed-discrete optimization for various algorithms.</p></li>
+<li><p>Introducing new ensemble optimization algorithms: AEO, EPSO, EDEV, HCLPSO.</p></li>
+<li><p>New features for simulated annealing.</p></li>
+<li><p>More organized documentation with subsections.</p></li>
+<li><p>Application of NEORL to nuclear microreactors, recently published here: <a class="reference external" href="https://doi.org/10.1016/j.nucengdes.2022.111776">https://doi.org/10.1016/j.nucengdes.2022.111776</a></p></li>
+</ul>
+</div>
 <div class="section" id="release-1-7-2021-11-24">
 <h3>Release 1.7 (2021-11-24)<a class="headerlink" href="#release-1-7-2021-11-24" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install <span class="nv">neorl</span><span class="o">==</span><span class="m">1</span>.7
@@ -237,6 +254,36 @@
 </div>
 <div class="section" id="beta-releases-for-developers">
 <h2>Beta Releases (for developers)<a class="headerlink" href="#beta-releases-for-developers" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="release-1-7-8b-2022-6-4">
+<h3>Release 1.7.8b (2022-6-4)<a class="headerlink" href="#release-1-7-8b-2022-6-4" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install <span class="nv">neorl</span><span class="o">==</span><span class="m">1</span>.7.8b --extra-index-url https://test.pypi.org/simple
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Fixed bug related to <code class="docutils literal notranslate"><span class="pre">protobuf</span> <span class="pre">&lt;=</span> <span class="pre">3.20</span></code> version to avoid tensorflow error when installation.</p></li>
+</ul>
+</div>
+<div class="section" id="release-1-7-7b-2022-6-4">
+<h3>Release 1.7.7b (2022-6-4)<a class="headerlink" href="#release-1-7-7b-2022-6-4" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install <span class="nv">neorl</span><span class="o">==</span><span class="m">1</span>.7.7b --extra-index-url https://test.pypi.org/simple
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Fixed bugs when initializing methods (ES, PSO, GWO, etc.) for discrete/mixed optimization with the argument <code class="docutils literal notranslate"><span class="pre">x0</span></code>.</p></li>
+<li><p>Fixed bugs in TS, CS, SA for discrete/mixed optimization.</p></li>
+<li><p>Enabled discrete/mixed optimization for AEO.</p></li>
+</ul>
+</div>
+<div class="section" id="release-1-7-6b-2022-4-25">
+<h3>Release 1.7.6b (2022-4-25)<a class="headerlink" href="#release-1-7-6b-2022-4-25" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install <span class="nv">neorl</span><span class="o">==</span><span class="m">1</span>.7.6b --extra-index-url https://test.pypi.org/simple
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Added a new features for parallel simulated annealing (PSA).</p></li>
+<li><p>PSA features include new equilibrium schedule and new solution enforcement.</p></li>
+</ul>
+</div>
 <div class="section" id="release-1-7-5b-2022-3-29">
 <h3>Release 1.7.5b (2022-3-29)<a class="headerlink" href="#release-1-7-5b-2022-3-29" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install <span class="nv">neorl</span><span class="o">==</span><span class="m">1</span>.7.5b --extra-index-url https://test.pypi.org/simple

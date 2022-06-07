@@ -47,7 +47,7 @@ class FitWrap:
         self.outs = []
         self.ins = []
         self.fxn = f
-    def f(self, *inputs):
+    def f(self, *inputs): 
         ans = self.fxn(*inputs)
         self.n += 1
         self.ins.append(inputs)
@@ -872,6 +872,11 @@ class AEO(object):
             if not stop_criteria is None:
                 if stop_criteria() == True:
                     break
+            
+            #bestind = np.argmin(self.wrapped_f.outs)
+            #print(self.wrapped_f.ins[bestind][0], self.wrapped_f.outs[bestind])
+            #assert self.fit(self.wrapped_f.ins[bestind][0]) == self.wrapped_f.outs[bestind]
+            #print(self.wrapped_f.outs[bestind])
 
         #get best members
         bestind = np.argmin(self.wrapped_f.outs)

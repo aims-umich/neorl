@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.evolu.gwo &mdash; NEORL 1.7.6b documentation</title>
+  <title>neorl.evolu.gwo &mdash; NEORL 1.7.7b documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.7.6b )
+                main (1.7.7b )
               </div>
             
           
@@ -195,9 +195,10 @@
 <span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">joblib</span>
-<span class="kn">from</span> <span class="nn">neorl.evolu.discrete</span> <span class="kn">import</span> <span class="n">mutate_discrete</span><span class="p">,</span> <span class="n">encode_grid_to_discrete</span><span class="p">,</span> <span class="n">decode_discrete_to_grid</span>
+<span class="kn">from</span> <span class="nn">neorl.evolu.discrete</span> <span class="kn">import</span> <span class="n">mutate_discrete</span><span class="p">,</span> <span class="n">encode_grid_to_discrete</span> 
+<span class="kn">from</span> <span class="nn">neorl.evolu.discrete</span> <span class="kn">import</span> <span class="n">decode_discrete_to_grid</span><span class="p">,</span> <span class="n">encode_grid_indv_to_discrete</span>
 <span class="kn">from</span> <span class="nn">neorl.utils.seeding</span> <span class="kn">import</span> <span class="n">set_neorl_seed</span>
-<span class="kn">from</span> <span class="nn">neorl.utils.tools</span> <span class="kn">import</span> <span class="n">get_population</span>
+<span class="kn">from</span> <span class="nn">neorl.utils.tools</span> <span class="kn">import</span> <span class="n">get_population</span><span class="p">,</span> <span class="n">check_mixed_individual</span>
 
 <div class="viewcode-block" id="GWO"><a class="viewcode-back" href="../../../modules/evolutionary/gwo.html#neorl.evolu.gwo.GWO">[docs]</a><span class="k">class</span> <span class="nc">GWO</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -250,6 +251,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="o">=</span><span class="kc">False</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span> <span class="o">=</span> <span class="n">bounds</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="o">=</span><span class="n">bounds</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">bounds</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lb</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">]</span>
@@ -342,15 +344,19 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">nwolves</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">x0</span><span class="p">:</span>
             <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">nwolves</span><span class="p">,</span> <span class="s1">&#39;--error: the length of x0 (</span><span class="si">{}</span><span class="s1">) MUST equal the number of wolves in the group (</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">nwolves</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nwolves</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">x0</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1">#self.Positions=self.init_sample(self.bounds)  #TODO, update GWO laterfor mixed-integer optimisation</span>
-            <span class="c1"># Initialize the positions of search agents</span>
             
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nwolves</span><span class="p">):</span>
+                <span class="n">check_mixed_individual</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x0</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">bounds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">)</span> <span class="c1">#assert the type provided is consistent</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">encode_grid_indv_to_discrete</span><span class="p">(</span><span class="n">x0</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">bounds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">,</span> <span class="n">bounds_map</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">x0</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                    
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Initialize the positions of search agents</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nwolves</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">init_sample</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span>
-                <span class="c1">#self.Positions[:, i] = (np.random.uniform(0, 1, self.nwolves) * (self.ub[i] - self.lb[i]) + self.lb[i])       </span>
+            
  
         <span class="c1"># initialize alpha, beta, and delta_pos</span>
         <span class="n">Alpha_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">)</span>
@@ -524,7 +530,13 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;fitness&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;fitness&#39;</span><span class="p">]]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">last_fit</span><span class="o">=-</span><span class="bp">self</span><span class="o">.</span><span class="n">last_fit</span>
         
-        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;last_pop&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_population</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_pop</span><span class="p">,</span> <span class="n">fits</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">last_fit</span><span class="p">)</span>
+        <span class="c1">#--mir return the last population for restart calculations</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;last_pop&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_population</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_pop</span><span class="p">,</span> <span class="n">fits</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">last_fit</span><span class="p">,</span> <span class="n">grid_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                                                     <span class="n">bounds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">,</span> <span class="n">bounds_map</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;last_pop&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_population</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_pop</span><span class="p">,</span> <span class="n">fits</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">last_fit</span><span class="p">,</span> <span class="n">grid_flag</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wolf_correct</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitness_best_correct</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span></div></div>
 
 </pre></div>

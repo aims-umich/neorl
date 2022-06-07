@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.hybrid.epso &mdash; NEORL 1.7.6b documentation</title>
+  <title>neorl.hybrid.epso &mdash; NEORL 1.7.7b documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.7.6b )
+                main (1.7.7b )
               </div>
             
           
@@ -196,9 +196,10 @@
 <span class="kn">import</span> <span class="nn">joblib</span><span class="o">,</span> <span class="nn">sys</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">arange</span><span class="p">,</span> <span class="n">multiply</span><span class="p">,</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">copy</span><span class="p">,</span> <span class="n">ones</span><span class="p">,</span> <span class="n">exp</span><span class="p">,</span> <span class="n">dot</span><span class="p">,</span> <span class="n">ceil</span>
 <span class="kn">from</span> <span class="nn">numpy.random</span> <span class="kn">import</span> <span class="n">uniform</span>
-<span class="kn">from</span> <span class="nn">neorl.evolu.discrete</span> <span class="kn">import</span> <span class="n">mutate_discrete</span><span class="p">,</span> <span class="n">encode_grid_to_discrete</span><span class="p">,</span> <span class="n">decode_discrete_to_grid</span>
+<span class="kn">from</span> <span class="nn">neorl.evolu.discrete</span> <span class="kn">import</span> <span class="n">mutate_discrete</span><span class="p">,</span> <span class="n">encode_grid_to_discrete</span> 
+<span class="kn">from</span> <span class="nn">neorl.evolu.discrete</span> <span class="kn">import</span> <span class="n">decode_discrete_to_grid</span><span class="p">,</span> <span class="n">encode_grid_indv_to_discrete</span>
 <span class="kn">from</span> <span class="nn">neorl.utils.seeding</span> <span class="kn">import</span> <span class="n">set_neorl_seed</span>
-<span class="kn">from</span> <span class="nn">neorl.utils.tools</span> <span class="kn">import</span> <span class="n">get_population</span>
+<span class="kn">from</span> <span class="nn">neorl.utils.tools</span> <span class="kn">import</span> <span class="n">get_population</span><span class="p">,</span> <span class="n">check_mixed_individual</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="c1"># Description </span>
@@ -264,6 +265,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="o">=</span><span class="kc">False</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span> <span class="o">=</span> <span class="n">bounds</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="o">=</span><span class="n">bounds</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">bounds</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lb</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">])</span>
@@ -429,7 +431,11 @@
         <span class="k">if</span> <span class="n">x0</span><span class="p">:</span>
             <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_g</span><span class="p">,</span> <span class="s1">&#39;--error: the length of x0 (</span><span class="si">{}</span><span class="s1">) MUST equal the number of particles in the group `g1+g2 `(</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_g</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_g</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">x0</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">check_mixed_individual</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x0</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">bounds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">)</span> <span class="c1">#assert the type provided is consistent</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">encode_grid_indv_to_discrete</span><span class="p">(</span><span class="n">x0</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">bounds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">,</span> <span class="n">bounds_map</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">x0</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
 
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_g</span><span class="p">):</span>
@@ -873,7 +879,13 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">==</span><span class="s1">&#39;max&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">last_fit</span><span class="o">=-</span><span class="bp">self</span><span class="o">.</span><span class="n">last_fit</span>
         
-        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;last_pop&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_population</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_pop</span><span class="p">,</span> <span class="n">fits</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">last_fit</span><span class="p">)</span>
+        <span class="c1">#--mir return the last population for restart calculations</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;last_pop&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_population</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_pop</span><span class="p">,</span> <span class="n">fits</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">last_fit</span><span class="p">,</span> <span class="n">grid_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                                                     <span class="n">bounds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">,</span> <span class="n">bounds_map</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;last_pop&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_population</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_pop</span><span class="p">,</span> <span class="n">fits</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">last_fit</span><span class="p">,</span> <span class="n">grid_flag</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            
         <span class="n">success_hist</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">success_hist</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;PSO&#39;</span><span class="p">,</span> <span class="s1">&#39;FDR-PSO&#39;</span><span class="p">,</span> <span class="s1">&#39;HPSO&#39;</span><span class="p">,</span> <span class="s1">&#39;LIPS&#39;</span><span class="p">,</span> <span class="s1">&#39;CLPSO&#39;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;success_rate&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">success_hist</span>
         

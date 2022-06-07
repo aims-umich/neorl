@@ -8,6 +8,8 @@ Welcome to NEORL Website!
 
 *Latest News*: 
 
+- June 5, 2022: Stable release 1.8 is out.
+- Major features of 1.8 release: ensemble optimizers are added (AEO, EDEV, EPSO, HCLPSO). 
 - November 24, 2021: Stable release 1.7 is out. 
 - September 10, 2021: First NEORL stable release 1.6 is out. 
 
@@ -20,9 +22,11 @@ Welcome to NEORL Website!
    :alt: alternate text
    :align: right
    
-NEORL (**N**\ euro\ **E**\ volution **O**\ ptimisation with **R**\ einforcement **L**\ earning) is a set of implementations of hybrid algorithms combining neural networks and evolutionary computation based on a wide range of machine learning and evolutionary intelligence architectures. NEORL aims to solve large-scale optimisation problems relevant to operation & optimisation research, engineering, business, and other disciplines. 
+NEORL (**N**\ euro\ **E**\ volution **O**\ ptimisation with **R**\ einforcement **L**\ earning) is a set of implementations of hybrid algorithms combining neural networks and evolutionary computation based on a wide range of machine learning and evolutionary intelligence architectures. NEORL aims to solve large-scale optimization problems relevant to operation & optimisation research, engineering, business, and other disciplines. 
 
 Github repository: https://github.com/mradaideh/neorl
+
+NEORL paper: https://arxiv.org/abs/2112.07057
 
 Copyright
 --------------------------------------
@@ -71,13 +75,11 @@ To cite this repository in publications:
 
 .. code-block:: bibtex
 
-	@misc{neorl,
-	  author = {Radaideh, Majdi I. and Seurin, Paul and Wang, Haijia and Shirvan, Koroush},
-	  title = {NEORL},
-	  year = {2021},
-	  publisher = {GitHub},
-	  journal = {GitHub repository},
-	  howpublished = {\url{https://github.com/mradaideh/neorl}},
+	@article{radaideh2021neorl,
+	  title={NEORL: NeuroEvolution Optimization with Reinforcement Learning},
+	  author={Radaideh, Majdi I and Du, Katelin and Seurin, Paul and Seyler, Devin and Gu, Xubo and Wang, Haijia and Shirvan, Koroush},
+	  journal={arXiv preprint arXiv:2112.07057},
+	  year={2021}
 	}
 
 

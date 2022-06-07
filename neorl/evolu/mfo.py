@@ -146,6 +146,8 @@ class MFO:
 
     def fit_worker(self, x):
         
+        x=self.ensure_bounds(x)
+        
         if self.grid_flag:
             #decode the individual back to the int/float/grid mixed space
             x=decode_discrete_to_grid(x,self.orig_bounds,self.bounds_map)
@@ -209,7 +211,6 @@ class MFO:
         Moth_fitness = np.full(N, float('inf'))  # set as worst result
         
         
-
         # sort moths
         sorted_population = np.copy(Moth_pos)
         fitness_sorted = np.zeros(N)
@@ -227,6 +228,7 @@ class MFO:
         
         ## main loop
         for gen in range(1, ngen+1):
+            #print(Moth_pos)
             self.a= 1 - gen * ((1) / ngen)  #mir: a decreases linearly between 1 to 0, for discrete mutation
             Flame_no = round(N - gen*((N-1) / (ngen+1)))
 
@@ -248,7 +250,7 @@ class MFO:
                 #save the best of the best!!!
                 if fits < self.best_fitness:
                     self.best_fitness=fits
-                    self.best_position=Moth_pos[i, :].copy()
+                    self.best_position=list(Moth_pos[i, :].copy())
                                                             
             if gen == 1: # OF # equal to OM #
                 # sort the moths
@@ -312,10 +314,9 @@ class MFO:
                             distance_to_flame*math.exp(self.b*t)*math.cos(t*2*math.pi)
                         + sorted_population[Flame_no,j] 
                         )
-            
-                
+
                 Moth_pos[i,:]=self.ensure_bounds(Moth_pos[i,:])
-                Moth_pos[i, :] = self.ensure_discrete(Moth_pos[i, :])
+                Moth_pos[i,:] = self.ensure_discrete(Moth_pos[i, :])
                 
             #-----------------------------
             #Fitness saving 
@@ -353,7 +354,7 @@ class MFO:
             self.moth_correct = decode_discrete_to_grid(self.best_position, self.orig_bounds, self.bounds_map)
         else:
             self.moth_correct = self.best_position.copy()
-
+                
         if verbose:
             print('------------------------ MFO Summary --------------------------')
             print('Best fitness (y) found:', self.fitness_best_correct)

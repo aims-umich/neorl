@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.evolu.ts &mdash; NEORL 1.7.6b documentation</title>
+  <title>neorl.evolu.ts &mdash; NEORL 1.7.7b documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.7.6b )
+                main (1.7.7b )
               </div>
             
           
@@ -195,10 +195,12 @@
 <span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">joblib</span>
-<span class="kn">from</span> <span class="nn">neorl.evolu.discrete</span> <span class="kn">import</span> <span class="n">mutate_discrete</span><span class="p">,</span> <span class="n">encode_grid_to_discrete</span><span class="p">,</span> <span class="n">decode_discrete_to_grid</span>
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">combinations</span>
 <span class="kn">import</span> <span class="nn">copy</span> 
+<span class="kn">from</span> <span class="nn">neorl.evolu.discrete</span> <span class="kn">import</span> <span class="n">mutate_discrete</span><span class="p">,</span> <span class="n">encode_grid_to_discrete</span> 
+<span class="kn">from</span> <span class="nn">neorl.evolu.discrete</span> <span class="kn">import</span> <span class="n">decode_discrete_to_grid</span><span class="p">,</span> <span class="n">encode_grid_indv_to_discrete</span>
 <span class="kn">from</span> <span class="nn">neorl.utils.seeding</span> <span class="kn">import</span> <span class="n">set_neorl_seed</span>
+<span class="kn">from</span> <span class="nn">neorl.utils.tools</span> <span class="kn">import</span> <span class="n">get_population</span><span class="p">,</span> <span class="n">check_mixed_individual</span>
 
 <div class="viewcode-block" id="TS"><a class="viewcode-back" href="../../../modules/evolutionary/ts.html#neorl.evolu.ts.TS">[docs]</a><span class="k">class</span> <span class="nc">TS</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -256,6 +258,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="o">=</span><span class="kc">False</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span> <span class="o">=</span> <span class="n">bounds</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="o">=</span><span class="n">bounds</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">bounds</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lb</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">])</span>
@@ -273,7 +276,7 @@
                 <span class="n">indv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">bounds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">2</span><span class="p">]))</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">Exception</span> <span class="p">(</span><span class="s1">&#39;unknown data type is given, either int, float, or grid are allowed for parameter bounds&#39;</span><span class="p">)</span>   
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">indv</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">indv</span>
 
         <span class="k">def</span> <span class="nf">eval_tabus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tabu_list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
             <span class="c1">#---------------------</span>
@@ -374,9 +377,9 @@
             <span class="n">j_index</span> <span class="o">=</span> <span class="n">tempposition</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
             <span class="n">tempposition</span><span class="p">[</span><span class="n">i_index</span><span class="p">],</span> <span class="n">tempposition</span><span class="p">[</span><span class="n">j_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">tempposition</span><span class="p">[</span><span class="n">j_index</span><span class="p">],</span> <span class="n">tempposition</span><span class="p">[</span><span class="n">i_index</span><span class="p">]</span><span class="c1"># Swap</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">swap_mode</span> <span class="o">==</span> <span class="s2">&quot;perturb&quot;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;int&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;int&#39;</span><span class="p">:</span>
                 <span class="n">tempposition</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">j</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">j</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;float&#39;</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;float&#39;</span><span class="p">:</span>
                 <span class="n">tempposition</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">j</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">j</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">tempposition</span>
         
@@ -395,8 +398,20 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">)</span><span class="c1">#np.zeros((self.ntabus, self.dim))</span>
         <span class="k">if</span> <span class="n">x0</span><span class="p">:</span>
-            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">ntabus</span><span class="p">,</span> <span class="s1">&#39;--error: the length of x0 (</span><span class="si">{}</span><span class="s1">) MUST equal the size of the problem (</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">ntabus</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span> <span class="o">=</span> <span class="n">x0</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>  
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">el</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="n">x0</span><span class="p">):</span>  <span class="c1">#ensure a list of list is submitted for ncores=1</span>
+                    <span class="n">x0</span><span class="o">=</span><span class="p">[</span><span class="n">x0</span><span class="p">]</span>
+                    
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">ntabus</span><span class="p">,</span> <span class="s1">&#39;--error: the length of individual in x0 (</span><span class="si">{}</span><span class="s1">) MUST equal the size of the problem (</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">ntabus</span><span class="p">)</span>        
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">,</span> <span class="s1">&#39;--error: the length of x0 (</span><span class="si">{}</span><span class="s1">) MUST equal the number of ncores/parallel chains (</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ncores</span><span class="p">):</span>
+                <span class="n">check_mixed_individual</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x0</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">bounds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">)</span> <span class="c1">#assert the type provided is consistent</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span> <span class="o">=</span> <span class="n">encode_grid_indv_to_discrete</span><span class="p">(</span><span class="n">x0</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">bounds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">,</span> <span class="n">bounds_map</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span> <span class="o">=</span> <span class="n">x0</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                    
         <span class="k">else</span><span class="p">:</span>
             <span class="c1">#self.Positions=self.init_sample(self.bounds)  #TODO, update later for mixed-integer optimisation</span>
             <span class="c1"># Initialize the positions of tabu</span>
@@ -406,7 +421,7 @@
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">swap_mode</span> <span class="o">==</span> <span class="s2">&quot;perturb&quot;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_sample</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span>
 
-        <span class="n">fitness</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">)</span> <span class="c1"># evaluate the initial tabu</span>
+        <span class="n">fitness</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fit_worker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">)</span> <span class="c1"># evaluate the initial tabu</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">best_position</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_fitness</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">fitness</span><span class="c1">#self.select(pos = self.Positions,fit = fitness) # find the initial best position and fitness</span>
         <span class="n">current_solution</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     
@@ -432,7 +447,7 @@
                     <span class="n">candidate_solution</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">UpdateTabu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">,</span> <span class="n">increment</span><span class="p">,[</span><span class="bp">self</span><span class="o">.</span><span class="n">lb</span><span class="p">[</span><span class="n">increment</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">ub</span><span class="p">[</span><span class="n">increment</span><span class="p">]])</span>
                     <span class="n">temp_candidate</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">candidate_solution</span><span class="p">)</span>
                     <span class="n">increment</span> <span class="o">+=</span><span class="mi">1</span>
-                <span class="n">fitness</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">candidate_solution</span><span class="p">)</span>
+                <span class="n">fitness</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit_worker</span><span class="p">(</span><span class="n">candidate_solution</span><span class="p">)</span>
                 <span class="n">tabu_structure</span><span class="p">[</span><span class="n">move</span><span class="p">][</span><span class="s1">&#39;MoveValue&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fitness</span>
                 <span class="n">tabu_structure</span><span class="p">[</span><span class="n">move</span><span class="p">][</span><span class="s1">&#39;Penalized_MV&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fitness</span> <span class="o">+</span> <span class="p">(</span><span class="n">tabu_structure</span><span class="p">[</span><span class="n">move</span><span class="p">][</span><span class="s1">&#39;freq&#39;</span><span class="p">]</span> <span class="o">*</span>
                                                                              <span class="bp">self</span><span class="o">.</span><span class="n">penalization_weight</span><span class="p">)</span><span class="c1"># Penalized fitness by simply adding freq to it (minimization):</span>
@@ -470,7 +485,7 @@
                         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">swap_mode</span> <span class="o">==</span> <span class="s2">&quot;perturb&quot;</span><span class="p">:</span>
                             <span class="n">best_loc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">([</span><span class="n">tabu_structure</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="s1">&#39;Penalized_MV&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">tabu_structure</span><span class="o">.</span><span class="n">keys</span><span class="p">()])</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span> <span class="o">=</span> <span class="n">temp_candidate</span><span class="p">[</span><span class="n">best_loc</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-                        <span class="n">fitness</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">)</span>
+                        <span class="n">fitness</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit_worker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="p">)</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">best_position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Positions</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">best_fitness</span> <span class="o">=</span> <span class="n">fitness</span>
                         <span class="n">tabu_structure</span><span class="p">[</span><span class="n">best_move</span><span class="p">][</span><span class="s1">&#39;freq&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>

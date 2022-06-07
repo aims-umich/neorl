@@ -187,6 +187,7 @@ setup(
 					  'scikit-learn <= 0.24.2',
                       'neat-python', 
                       'xarray==0.16',
+                      'protobuf==3.20',
                       'scipy',
                       'joblib',
                       'pandas',

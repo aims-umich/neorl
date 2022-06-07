@@ -31,8 +31,10 @@ from collections import defaultdict
 import time
 import sys
 import uuid
-from neorl.evolu.discrete import encode_grid_to_discrete, decode_discrete_to_grid
+from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete 
+from neorl.evolu.discrete import decode_discrete_to_grid, encode_grid_indv_to_discrete
 from neorl.utils.seeding import set_neorl_seed
+from neorl.utils.tools import get_population, check_mixed_individual
 
 #multiprocessing trick to paralllelize nested functions in python (un-picklable objects!)
 def globalize(func):
@@ -173,6 +175,7 @@ class PESA(ExperienceReplay):
         else:
             self.grid_flag=False
             self.bounds = bounds
+            self.orig_bounds=bounds
         
         self.lb = np.array([self.bounds[item][1] for item in self.bounds])
         self.ub = np.array([self.bounds[item][2] for item in self.bounds])
@@ -215,11 +218,17 @@ class PESA(ExperienceReplay):
         # Check if initial pop is provided as initial guess 
         #-------------------------------------------------------
         if x0: 
+            self.x0=x0.copy()
             # use provided initial guess
             warm=ESMod(bounds=self.bounds, fit=self.fit_worker, mu=self.MU, lambda_=self.LAMBDA, ncores=self.ncores)
-            x0size=len(x0)
+            x0size=len(self.x0)
             assert x0size >= self.NPOP, 'the number of lists in x0 ({}) must be more than or equal npop ({})'.format(x0size, self.NPOP)
-            self.pop0=warm.init_pop(warmup=x0size, x_known=x0)  #initial population for ES
+            for i in range(x0size):
+                check_mixed_individual(x=self.x0[i], bounds=self.orig_bounds) #assert the type provided is consistent
+                if self.grid_flag:
+                    self.x0[i] = encode_grid_indv_to_discrete(self.x0[i], bounds=self.orig_bounds, bounds_map=self.bounds_map)    
+            
+            self.pop0=warm.init_pop(warmup=x0size, x_known=self.x0)  #initial population for ES
         else:
             #create initial guess 
             assert warmup > self.NPOP, 'the number of warmup samples ({}) must be more than npop ({})'.format(warmup, self.NPOP)

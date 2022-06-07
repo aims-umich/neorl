@@ -10,7 +10,7 @@ def FIT(individual):
 nx=5
 BOUNDS={}
 for i in range(1,nx+1):
-        BOUNDS['x'+str(i)]=['float', -100, 100]
+    BOUNDS['x'+str(i)]=['float', -100, 100]
             
 if __name__=='__main__':
 

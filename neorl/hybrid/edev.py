@@ -329,7 +329,7 @@ class EDEV(object):
             self.a= 1 - gen * ((1) / ngen)  #mir: a decreases linearly between 1 to 0, for discrete mutation
         
             ## update the index for adjust different algorithms
-            if gen % (ng - 1) == 0:
+            if gen % ng == 0:
                 arrayGbestChangeRate[0]=arrayGbestChange[0] / len(arrayFirst)
                 arrayGbestChangeRate[1]=arrayGbestChange[1] / (len(arraySecond)*3)
                 arrayGbestChangeRate[2]=arrayGbestChange[2] / len(arrayThird)

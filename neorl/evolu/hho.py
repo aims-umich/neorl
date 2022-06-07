@@ -113,7 +113,7 @@ class HHO(object):
         ##################################
         self.hawk_positions = np.zeros((self.nhawks, self.dim))
         if x0:
-            assert len(x0) == self.nhawks, 'Length of x0 array MUST equal the number of hawks (self.nhawks).'
+            assert len(x0) == self.nhawks, '--error: the length of x0 ({}) MUST equal the number of hawks in the group ({})'.format(len(x0), self.nhawks)
             for i in range(self.nhawks):
                 check_mixed_individual(x=x0[i], bounds=self.orig_bounds) #assert the type provided is consistent
                 if self.grid_flag:

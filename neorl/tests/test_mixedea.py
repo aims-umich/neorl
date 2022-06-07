@@ -2,8 +2,9 @@
 # Import Packages
 ########################
 
-from neorl import HHO, ES, PESA, BAT, GWO, MFO, WOA, SSA, DE, JAYA, PESA2, PSO, HCLPSO, EDEV, EPSO
-import math
+from neorl import DE, GWO, SSA, WOA, AEO, MFO, JAYA, HHO, PSO, ES, EPSO
+from neorl import EDEV, HCLPSO, BAT, SA, CS, TS, PESA, PESA2
+import math, random
 
 def test_mixedea():
     #################################
@@ -19,7 +20,6 @@ def test_mixedea():
         x4: length (L)  ---> cont. value between [10, 200]
         """
         
-        #print(individual)
         x=individual.copy()
         x[0] *= 0.0625   #convert d1 to "in" 
     
@@ -41,8 +41,23 @@ def test_mixedea():
             fitness=y
         return fitness
     
+    def init_sample(bounds):
+        #generate an individual from a bounds dictionary
+        indv=[]
+        for key in bounds:
+            if bounds[key][0] == 'int':
+                indv.append(random.randint(bounds[key][1], bounds[key][2]))
+            elif bounds[key][0] == 'float':
+                indv.append(random.uniform(bounds[key][1], bounds[key][2]))
+            elif bounds[key][0] == 'grid':
+                indv.append(random.sample(bounds[key][1],1)[0])
+            else:
+                raise Exception ('unknown data type is given, either int, float, or grid are allowed for parameter bounds')   
+        return indv
+        
+    ngen=5
     
-    for item in ['float', 'grid', 'float/int', 'float/grid', 'int/grid', 'mixed', 'int']:
+    for item in ['mixed', 'grid', 'float/int', 'float/grid', 'int/grid', 'float', 'int']:
         bounds = {}
         btype=item  #float, int, grid, float/int, float/grid, int/grid, mixed. 
         
@@ -103,167 +118,208 @@ def test_mixedea():
             bounds['x5'] = ['grid', ('Hi', 'Bye', 'New')]
             bounds['x6'] = ['grid', ('Cat', 'Dog', 'Bird', 'Fish')]
     
-        ngen=5
-        ########################
-        # Setup and evolute HHO
-        ########################
-        hho = HHO(mode='min', bounds=bounds, fit=Vessel, nhawks=50, 
-                          int_transform='minmax', ncores=1, seed=1)
-        x_hho, y_hho, hho_hist=hho.evolute(ngen=ngen, verbose=0)
-        assert Vessel(x_hho) == y_hho
-        
-        ########################
-        # Setup and evolute ES 
-        ########################
-        es = ES(mode='min', fit=Vessel, cxmode='cx2point', bounds=bounds, 
-                         lambda_=60, mu=30, cxpb=0.7, mutpb=0.2, seed=1)
-        x_es, y_es, es_hist=es.evolute(ngen=ngen, verbose=0)
-        assert Vessel(x_es) == y_es
-        
-        ########################
-        # Setup and evolute PESA
-        ########################
-        pesa=PESA(mode='min', bounds=bounds, fit=Vessel, npop=60, mu=30, alpha_init=0.01,
-                  alpha_end=1.0, cxpb=0.7, mutpb=0.2, alpha_backdoor=0.05)
-        x_pesa, y_pesa, pesa_hist=pesa.evolute(ngen=ngen, verbose=0)
-        assert Vessel(x_pesa) == y_pesa
-        
-        ########################
-        # Setup and evolute BAT
-        ########################
-        bat=BAT(mode='min', bounds=bounds, fit=Vessel, nbats=50, fmin = 0 , fmax = 1, 
-                A=0.5, r0=0.5, levy = True, seed = 1, ncores=1)
-        x_bat, y_bat, bat_hist=bat.evolute(ngen=ngen, verbose=0)
-        assert Vessel(x_bat) == y_bat
-        
-        ########################
-        # Setup and evolute MFO
-        ########################
-        mfo=MFO(mode='min', bounds=bounds, fit=Vessel, nmoths=50, int_transform='minmax', ncores=1, seed=1)
-        x_mfo, y_mfo, mfo_hist=mfo.evolute(ngen=ngen, verbose=0)
-        assert Vessel(x_mfo) == y_mfo
     
-        ########################
-        # Setup and evolute JAYA
-        ########################
-        jaya=JAYA(mode='min', bounds=bounds, fit=Vessel, npop=60, int_transform='sigmoid', ncores=1, seed=1)
-        x_jaya, y_jaya, jaya_hist=jaya.evolute(ngen=ngen, verbose=0)
-        print(item)
-        assert Vessel(x_jaya) == y_jaya
-        
+        npop=70
+        x0=[]
+        for i in range(npop):
+            x0.append(init_sample(bounds))
+            
         ########################
         # Setup and evolute GWO
         ########################
-        gwo=GWO(mode='min', fit=Vessel, bounds=bounds, nwolves=5, ncores=1, seed=1)
+        gwo=GWO(mode='min', fit=Vessel, bounds=bounds, nwolves=npop, ncores=1, seed=1)
         x_gwo, y_gwo, gwo_hist=gwo.evolute(ngen=ngen, verbose=0)
+        assert Vessel(x_gwo) == y_gwo
+        x_gwo, y_gwo, gwo_hist=gwo.evolute(ngen=ngen, x0=x0, verbose=0)
         assert Vessel(x_gwo) == y_gwo
         
         ########################
         # Setup and evolute WOA
         ########################
-        woa=WOA(mode='min', bounds=bounds, fit=Vessel, nwhales=20, a0=1.5, b=1, ncores=1, seed=1)
+        woa=WOA(mode='min', bounds=bounds, fit=Vessel, nwhales=npop, a0=1.5, b=1, ncores=1, seed=1)
         x_woa, y_woa, woa_hist=woa.evolute(ngen=ngen, verbose=0)
         assert Vessel(x_woa) == y_woa
-        
+        x_woa, y_woa, woa_hist=woa.evolute(ngen=ngen, x0=x0, verbose=0)
+        assert Vessel(x_woa) == y_woa
+    
         ########################
         # Setup and evolute SSA
         ########################
         #setup and evolute SSA
-        ssa=SSA(mode='min', bounds=bounds, fit=Vessel, nsalps=50, int_transform='sigmoid', ncores=1, seed=1)
+        ssa=SSA(mode='min', bounds=bounds, fit=Vessel, nsalps=npop, int_transform='sigmoid', ncores=1, seed=1)
         x_ssa, y_ssa, ssa_hist=ssa.evolute(ngen=ngen, verbose=0)
+        assert Vessel(x_ssa) == y_ssa    
+        x_ssa, y_ssa, ssa_hist=ssa.evolute(ngen=ngen, x0=x0, verbose=0)
         assert Vessel(x_ssa) == y_ssa
         
         ########################
         # Setup and evolute DE
         ########################
-        de=DE(mode='min', bounds=bounds, fit=Vessel, npop=60, F=0.5, CR=0.7, int_transform='sigmoid', ncores=1, seed=1)
+        de=DE(mode='min', bounds=bounds, fit=Vessel, npop=npop, F=0.5, CR=0.7, int_transform='sigmoid', ncores=1, seed=1)
         x_de, y_de, de_hist=de.evolute(ngen=ngen, verbose=0)
+        assert Vessel(x_de) == y_de
+        x_de, y_de, de_hist=de.evolute(ngen=ngen, x0=x0, verbose=0)
         assert Vessel(x_de) == y_de
         
         ########################
-        # Setup and evolute PESA2
+        # Setup and evolute MFO
         ########################
-        pesa2=PESA2(mode='min', bounds=bounds, fit=Vessel, npop=60, nwolves=5)
-        x_pesa2, y_pesa2, pesa2_hist=pesa2.evolute(ngen=ngen, replay_every=2, verbose=0)
-        assert Vessel(x_pesa2) == y_pesa2
+        mfo=MFO(mode='min', bounds=bounds, fit=Vessel, nmoths=npop, int_transform='minmax', ncores=1, seed=1)
+        x_mfo, y_mfo, mfo_hist=mfo.evolute(ngen=ngen, verbose=0)
+        assert Vessel(x_mfo) == y_mfo
+        x_mfo, y_mfo, mfo_hist=mfo.evolute(ngen=ngen, x0=x0, verbose=0)
+        assert Vessel(x_mfo) == y_mfo
+    
+        ########################
+        # Setup and evolute JAYA
+        ########################
+        jaya=JAYA(mode='min', bounds=bounds, fit=Vessel, npop=npop, int_transform='sigmoid', ncores=1, seed=1)
+        x_jaya, y_jaya, jaya_hist=jaya.evolute(ngen=ngen, verbose=0)
+        assert Vessel(x_jaya) == y_jaya
+        x_jaya, y_jaya, jaya_hist=jaya.evolute(ngen=ngen, x0=x0, verbose=0)
+        assert Vessel(x_jaya) == y_jaya
+        
+        ########################
+        # Setup and evolute HHO
+        ########################
+        hho = HHO(mode='min', bounds=bounds, fit=Vessel, nhawks=npop, 
+                          int_transform='minmax', ncores=1, seed=1)
+        x_hho, y_hho, hho_hist=hho.evolute(ngen=ngen, x0=x0, verbose=0)
+        assert Vessel(x_hho) == y_hho
         
         ########################
         # Setup and evolute PSO
         ########################
-        pso=PSO(mode='min', bounds=bounds, fit=Vessel, c1=2.05, c2=2.1, npar=50,
+        pso=PSO(mode='min', bounds=bounds, fit=Vessel, c1=2.05, c2=2.1, npar=npop,
                         speed_mech='constric', ncores=1, seed=1)
         x_pso, y_pso, pso_hist=pso.evolute(ngen=ngen, verbose=0)
         assert Vessel(x_pso) == y_pso
+        x_pso, y_pso, pso_hist=pso.evolute(ngen=ngen, x0=x0, verbose=0)
+        assert Vessel(x_pso) == y_pso
         
         ########################
-        # Setup and evolute HCLPSO
+        # Setup and evolute ES 
         ########################
-        hclpso=HCLPSO(mode='min', bounds=bounds, g1=15, g2=25, fit=Vessel, ncores=1, seed=1)
-        x_hclpso, y_hclpso, pso_hist=hclpso.evolute(ngen=100, verbose=0)
-        assert Vessel(x_hclpso) == y_hclpso
-        
+        es = ES(mode='min', fit=Vessel, cxmode='cx2point', bounds=bounds, 
+                         lambda_=npop, mu=5, cxpb=0.7, mutpb=0.2, seed=1)
+        x_es, y_es, es_hist=es.evolute(ngen=ngen, verbose=0)
+        assert Vessel(x_es) == y_es
+        x_es, y_es, es_hist=es.evolute(ngen=ngen, x0=x0, verbose=0)
+        assert Vessel(x_es) == y_es
+    
         ########################
-        # Setup and evolute EDEV
+        # Setup and evolute ES 
         ########################
-        edev=EDEV(mode='min', bounds=bounds, fit=Vessel, npop=100, ncores=1, seed=1)
-        x_edev, y_edev, edev_hist=edev.evolute(ngen=100, ng=10, verbose=0)
-        assert Vessel(x_edev) == y_edev
+        #setup and evolute BAT
+        bat=BAT(mode='min', bounds=bounds, fit=Vessel, nbats=npop, 
+                fmin=0, fmax=1, A=1.0, r0=0.7,
+                ncores=1, seed=1)
+        x_bat, y_bat, bat_hist=bat.evolute(ngen=ngen, verbose=0)
+        assert Vessel(x_bat) == y_bat
+        x_bat, y_bat, bat_hist=bat.evolute(ngen=ngen, x0=x0, verbose=0)
+        assert Vessel(x_bat) == y_bat
+    
         
         ########################
         # Setup and evolute EPSO
-        ########################
-        epso=EPSO(mode='min', bounds=bounds, g1=15, g2=25, fit=Vessel, ncores=1, seed=1)
-        x_epso, y_epso, epso_hist=epso.evolute(ngen=100, LP=3, verbose=0)
+        ########################   
+        #setup and evolute EPSO
+        epso=EPSO(mode='min', bounds=bounds, g1=int(npop/2), g2=int(npop/2), fit=Vessel, ncores=1, seed=None)
+        x_epso, y_epso, epso_hist=epso.evolute(ngen=ngen, LP=1, verbose=0)
         assert Vessel(x_epso) == y_epso
+        x_epso, y_epso, epso_hist=epso.evolute(ngen=ngen, x0=x0, LP=1, verbose=0)
+        assert Vessel(x_epso) == y_epso
+    
+        ########################
+        # Setup and evolute EDEV
+        ########################  
+        #setup and evolute EDEV
+        edev=EDEV(mode='min', bounds=bounds, fit=Vessel, npop=npop, ncores=1, seed=1)
+        x_edev, y_edev, edev_hist=edev.evolute(ngen=ngen, ng=1, verbose=0)
+        assert Vessel(x_edev) == y_edev
+        x_edev, y_edev, edev_hist=edev.evolute(ngen=ngen, x0=x0, ng=1, verbose=0)
+        assert Vessel(x_edev) == y_edev
         
         ########################
-        # Comparison
+        # Setup and evolute HCLPSO
+        ########################  
+        #setup and evolute HCLPSO
+        hclpso=HCLPSO(mode='min', bounds=bounds, g1=int(npop/2), g2=int(npop/2), fit=Vessel, ncores=1, seed=1)
+        x_hclpso, y_hclpso, hclpso_hist=hclpso.evolute(ngen=ngen, verbose=0)
+        assert Vessel(x_hclpso) == y_hclpso
+        x_hclpso, y_hclpso, hclpso_hist=hclpso.evolute(ngen=ngen, x0=x0, verbose=0)
+        assert Vessel(x_hclpso) == y_hclpso
+    
         ########################
-        if 1:
-            print('---Best HHO Results---')
-            print(x_hho)
-            print(y_hho)
-            print('---Best ES Results---')
-            print(x_es)
-            print(y_es)
-            print('---Best PESA Results---')
-            print(x_pesa)
-            print(y_pesa)
-            print('---Best BAT Results---')
-            print(x_bat)
-            print(y_bat)
-            print('---Best GWO Results---')
-            print(x_gwo)
-            print(y_gwo)
-            print('---Best WOA Results---')
-            print(x_woa)
-            print(y_woa)
-            print('---Best SSA Results---')
-            print(x_ssa)
-            print(y_ssa)
-            print('---Best MFO Results---')
-            print(x_mfo)
-            print(y_mfo)
-            print('---Best DE Results---')
-            print(x_de)
-            print(y_de)
-            print('---Best JAYA Results---')
-            print(x_jaya)
-            print(y_jaya)
-            print('---Best PESA2 Results---')
-            print(x_pesa2)
-            print(y_pesa2)
-            print('---Best PSO Results---')
-            print(x_pso)
-            print(y_pso)
-            print('---Best HCLPSO Results---')
-            print(x_hclpso)
-            print(y_hclpso)
-            print('---Best EDEV Results---')
-            print(x_edev)
-            print(y_edev)
-            print('---Best EPSO Results---')
-            print(x_epso)
-            print(y_epso)
+        # Setup and evolute SA
+        ########################  
+        #define a custom moving function
+        def my_move(x, **kwargs):
+            #-----
+            #this function selects two random indices in x and perturb their values
+            #-----
+            x_new=x.copy()
+            #indices=random.sample(range(0,len(x)), 2)
+            #for i in indices:
+            #    x_new[i] = random.uniform(bounds['x1'][1],bounds['x1'][2])
+            x_new=init_sample(sa.bounds)
+            
+            return x_new
+    
+        #setup and evolute parallel SA with `equilibrium` cooling
+        sa=SA(mode='min', bounds=bounds, fit=Vessel, chain_size=50, chi=0.2, Tmax=10000,
+              move_func=my_move, reinforce_best='soft', cooling='boltzmann', ncores=1, seed=1)
+    
+        x_sa, y_sa, sa_hist=sa.evolute(ngen=ngen, verbose=0)
+        assert Vessel(x_sa) == y_sa
+        x_sa, y_sa, sa_hist=sa.evolute(ngen=ngen, x0=x0[0], verbose=0)
+        assert Vessel(x_sa) == y_sa
+    
+        ########################
+        # Setup and evolute CS
+        ########################  
+        #setup and evolute CS
+        cs = CS(mode = 'min', bounds = bounds, fit = Vessel, ncuckoos = npop, pa = 0.25, seed=None)
+        x_cs, y_cs, cs_hist=cs.evolute(ngen = ngen, verbose=0)
+        assert Vessel(x_cs) == y_cs
+        x_cs, y_cs, cs_hist=cs.evolute(ngen = ngen, x0=x0, verbose=0)
+        assert Vessel(x_cs) == y_cs
+    
+        ########################
+        # Setup and evolute TS
+        ########################  
+        #setup and evolute TS
+        ts=TS(mode = "min", bounds = bounds, fit = Vessel, tabu_tenure=60, 
+              penalization_weight = 0.8, swap_mode = "perturb", ncores=1, seed=None)
+        x_ts, y_ts, ts_hist=ts.evolute(ngen = ngen, verbose=0)
+        assert Vessel(x_ts) == y_ts
+        x_ts, y_ts, ts_hist=ts.evolute(ngen = ngen, x0=x0[0], verbose=0)
+        assert Vessel(x_ts) == y_ts
         
+        ########################
+        # Setup and evolute PESA
+        ######################## 
+        pesa=PESA(mode='min', bounds=bounds, fit=Vessel, npop=npop, mu=40, alpha_init=0.2, 
+                  alpha_end=1.0, alpha_backdoor=0.1, ncores=1)
+        x_pesa, y_pesa, pesa_hist=pesa.evolute(ngen=ngen, verbose=0)
+        assert Vessel(x_pesa) == y_pesa
+        x_pesa, y_pesa, pesa_hist=pesa.evolute(ngen=ngen, x0=x0, verbose=0)
+        assert Vessel(x_pesa) == y_pesa
+    
+        ########################
+        # Setup and evolute PESA2
+        ######################## 
+        pesa2=PESA2(mode='min', bounds=bounds, fit=Vessel, npop=npop, nwolves=5, nwhales=5, ncores=1)
+        x_pesa2, y_pesa2, pesa2_hist=pesa2.evolute(ngen=ngen, replay_every=2, verbose=0)
+        assert Vessel(x_pesa2) == y_pesa2
+        x_pesa2, y_pesa2, pesa2_hist=pesa2.evolute(ngen=ngen, x0=x0, replay_every=2, verbose=0)
+        assert Vessel(x_pesa2) == y_pesa2
+    
+        ########################
+        # Setup and evolute AEO
+        ########################
+        aeo = AEO(mode='min', bounds=bounds, optimizers=[mfo, de, gwo, woa, jaya, hho, pso, es, ssa], gen_per_cycle=3, fit = Vessel)
+        x_aeo, y_aeo, aeo_hist = aeo.evolute(3, verbose = 1)
+        assert Vessel(x_aeo) == y_aeo
+       
 test_mixedea()

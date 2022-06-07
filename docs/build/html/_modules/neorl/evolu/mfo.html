@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>neorl.evolu.mfo &mdash; NEORL 1.7.6b documentation</title>
+  <title>neorl.evolu.mfo &mdash; NEORL 1.7.8b documentation</title>
   
 
   
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                main (1.7.6b )
+                main (1.7.8b )
               </div>
             
           
@@ -193,9 +193,11 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">joblib</span>
-<span class="kn">from</span> <span class="nn">neorl.evolu.discrete</span> <span class="kn">import</span> <span class="n">mutate_discrete</span><span class="p">,</span> <span class="n">encode_grid_to_discrete</span><span class="p">,</span> <span class="n">decode_discrete_to_grid</span>
+<span class="kn">from</span> <span class="nn">neorl.evolu.discrete</span> <span class="kn">import</span> <span class="n">mutate_discrete</span><span class="p">,</span> <span class="n">encode_grid_to_discrete</span> 
+<span class="kn">from</span> <span class="nn">neorl.evolu.discrete</span> <span class="kn">import</span> <span class="n">decode_discrete_to_grid</span><span class="p">,</span> <span class="n">encode_grid_indv_to_discrete</span>
 <span class="kn">from</span> <span class="nn">neorl.utils.seeding</span> <span class="kn">import</span> <span class="n">set_neorl_seed</span>
-<span class="kn">from</span> <span class="nn">neorl.utils.tools</span> <span class="kn">import</span> <span class="n">get_population</span>
+<span class="kn">from</span> <span class="nn">neorl.utils.tools</span> <span class="kn">import</span> <span class="n">get_population</span><span class="p">,</span> <span class="n">check_mixed_individual</span>
+
 
 <div class="viewcode-block" id="MFO"><a class="viewcode-back" href="../../../modules/evolutionary/mfo.html#neorl.evolu.mfo.MFO">[docs]</a><span class="k">class</span> <span class="nc">MFO</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -252,6 +254,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="o">=</span><span class="kc">False</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span> <span class="o">=</span> <span class="n">bounds</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="o">=</span><span class="n">bounds</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">bounds</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lb</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">item</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">])</span>
@@ -278,8 +281,14 @@
             <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The first individual provided by the user:&#39;</span><span class="p">,</span> <span class="n">x0</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The last individual provided by the user:&#39;</span><span class="p">,</span> <span class="n">x0</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x0</span><span class="p">)):</span>
-                <span class="n">pop</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x0</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">npop</span><span class="p">):</span>
+                <span class="n">check_mixed_individual</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x0</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">bounds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">)</span> <span class="c1">#assert the type provided is consistent</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="p">:</span>
+                    <span class="n">pop</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">encode_grid_indv_to_discrete</span><span class="p">(</span><span class="n">x0</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">bounds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">,</span> <span class="n">bounds_map</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">pop</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x0</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                    
         <span class="k">else</span><span class="p">:</span> <span class="c1"># random init</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">npop</span><span class="p">):</span>
                 <span class="n">indv</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gen_indv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span>
@@ -308,6 +317,8 @@
         <span class="k">return</span> <span class="n">vec_new</span>
 
     <span class="k">def</span> <span class="nf">fit_worker</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        
+        <span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ensure_bounds</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="p">:</span>
             <span class="c1">#decode the individual back to the int/float/grid mixed space</span>
@@ -372,7 +383,6 @@
         <span class="n">Moth_fitness</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">))</span>  <span class="c1"># set as worst result</span>
         
         
-
         <span class="c1"># sort moths</span>
         <span class="n">sorted_population</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">Moth_pos</span><span class="p">)</span>
         <span class="n">fitness_sorted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
@@ -390,6 +400,7 @@
         
         <span class="c1">## main loop</span>
         <span class="k">for</span> <span class="n">gen</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ngen</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="c1">#print(Moth_pos)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">gen</span> <span class="o">*</span> <span class="p">((</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">ngen</span><span class="p">)</span>  <span class="c1">#mir: a decreases linearly between 1 to 0, for discrete mutation</span>
             <span class="n">Flame_no</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="n">gen</span><span class="o">*</span><span class="p">((</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">ngen</span><span class="o">+</span><span class="mi">1</span><span class="p">)))</span>
 
@@ -411,7 +422,7 @@
                 <span class="c1">#save the best of the best!!!</span>
                 <span class="k">if</span> <span class="n">fits</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_fitness</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">best_fitness</span><span class="o">=</span><span class="n">fits</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">best_position</span><span class="o">=</span><span class="n">Moth_pos</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">best_position</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">Moth_pos</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
                                                             
             <span class="k">if</span> <span class="n">gen</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> <span class="c1"># OF # equal to OM #</span>
                 <span class="c1"># sort the moths</span>
@@ -475,10 +486,9 @@
                             <span class="n">distance_to_flame</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">*</span><span class="n">t</span><span class="p">)</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">t</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
                         <span class="o">+</span> <span class="n">sorted_population</span><span class="p">[</span><span class="n">Flame_no</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> 
                         <span class="p">)</span>
-            
-                
+
                 <span class="n">Moth_pos</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ensure_bounds</span><span class="p">(</span><span class="n">Moth_pos</span><span class="p">[</span><span class="n">i</span><span class="p">,:])</span>
-                <span class="n">Moth_pos</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensure_discrete</span><span class="p">(</span><span class="n">Moth_pos</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:])</span>
+                <span class="n">Moth_pos</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensure_discrete</span><span class="p">(</span><span class="n">Moth_pos</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:])</span>
                 
             <span class="c1">#-----------------------------</span>
             <span class="c1">#Fitness saving </span>
@@ -516,7 +526,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">moth_correct</span> <span class="o">=</span> <span class="n">decode_discrete_to_grid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">best_position</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">moth_correct</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_position</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-
+                
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;------------------------ MFO Summary --------------------------&#39;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best fitness (y) found:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitness_best_correct</span><span class="p">)</span>
@@ -526,8 +536,13 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">==</span><span class="s1">&#39;max&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">previous_fitness</span><span class="o">=-</span><span class="bp">self</span><span class="o">.</span><span class="n">previous_fitness</span>
             
-        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;last_pop&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_population</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">previous_population</span><span class="p">,</span> <span class="n">fits</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">previous_fitness</span><span class="p">)</span>        
-                
+        <span class="c1">#--mir return the last population for restart calculations</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_flag</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;last_pop&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_population</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">previous_population</span><span class="p">,</span> <span class="n">fits</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">previous_fitness</span><span class="p">,</span> <span class="n">grid_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                                                     <span class="n">bounds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">orig_bounds</span><span class="p">,</span> <span class="n">bounds_map</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds_map</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;last_pop&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_population</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">previous_population</span><span class="p">,</span> <span class="n">fits</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">previous_fitness</span><span class="p">,</span> <span class="n">grid_flag</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">moth_correct</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitness_best_correct</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span></div></div>
 </pre></div>
 

@@ -94,7 +94,7 @@ plt.ylabel('Fitness')
 #plt.ylim([0,10000]) #zoom in
 plt.legend()
 plt.savefig('ex7_pv_fitness.png',format='png', dpi=300, bbox_inches="tight")
-plt.close()
+plt.show()
 
 ########################
 # Comparison

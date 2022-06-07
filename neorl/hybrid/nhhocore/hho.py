@@ -29,9 +29,11 @@ import random
 import numpy as np
 import math
 import joblib
-from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete, decode_discrete_to_grid
 from neorl.hybrid.nhhocore.Latin import latin
+from neorl.evolu.discrete import mutate_discrete, encode_grid_to_discrete 
+from neorl.evolu.discrete import decode_discrete_to_grid, encode_grid_indv_to_discrete
 from neorl.utils.seeding import set_neorl_seed
+from neorl.utils.tools import get_population, check_mixed_individual
 
 class HHO(object):
     """
@@ -65,7 +67,7 @@ class HHO(object):
         if "grid" in self.var_type:
             self.grid_flag=True
             self.orig_bounds=bounds  #keep original bounds for decoding
-            print('--debug: grid parameter type is found in the space')
+            #print('--debug: grid parameter type is found in the space')
             self.bounds, self.bounds_map=encode_grid_to_discrete(self.bounds) #encoding grid to int
             #define var_types again by converting grid to int
             self.var_type = np.array([self.bounds[item][0] for item in self.bounds])
