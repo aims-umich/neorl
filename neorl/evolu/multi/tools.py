@@ -27,32 +27,7 @@ import pandas as pd
 import numpy as np
 from collections import defaultdict
 
-def get_population_nsga(pop,mode):#Paul
-    """
-    Modified get_population from neorl.utils.tools to fit the multi-objective framework
-    :param pop: (dict) population in dictionnary strucuture
-    :param mode: (str) type of optimization
-    :Returns df_pop: (DataFrame) position and value of each objective for each individual in the population
-    """
-    d=len(pop[0][0])
-    p= len(pop[0][2])
-    npop=len(pop)
-    df_pop=np.zeros((npop, d+p))   #additional column for fitness        
-    for i, indv in enumerate(pop):
-        df_pop[i,:d]=pop[indv][0]
-        if mode == 'min':
-            df_pop[i,-p:]= - pop[indv][2]
-        else:
-            df_pop[i,-p:]=pop[indv][2]
-    try:    
-        colnames=['var'+str(i) for i in range(1,d+1)] + ['obj'+str(i) for i in range(1,p+1)]
-        rownames=['indv'+str(i) for i in range(1,npop+1)]
-        df_pop=pd.DataFrame(df_pop, index=rownames, columns=colnames)
-    except:
-        df_pop=pd.DataFrame(np.zeros((5, 5)))   #return an empty dataframe
-    
-    return df_pop
-    
+
 ##############################################################
 # Helper functions for sorting individuals in the population #
 ##############################################################
