@@ -84,3 +84,5 @@ from neorl.hybrid.aeo import AEO
 from neorl.evolu.hclpso import HCLPSO
 from neorl.hybrid.edev import EDEV
 from neorl.hybrid.epso import EPSO
+from neorl.multi.nsgaII import NSGAII
+from neorl.multi.nsgaIII import NSGAIII

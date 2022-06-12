@@ -17,8 +17,8 @@
 #Created on Tues May 24 19:37:04 2022
 #
 #@author: Paul
-#  The following implementation of NSGA-III is adapted to NEORL
-#  from DEAP implementation: https://github.com/DEAP/deap/blob/master/deap/tools/emo.py#L15 
+# The following implementation of NSGA-II is adapted to NEORL
+# from DEAP implementation: https://github.com/DEAP/deap/blob/master/deap/tools/emo.py#L15 
 #"""
 
 import random
@@ -32,19 +32,19 @@ from neorl.utils.seeding import set_neorl_seed
 
 from neorl.evolu.es import ES
 from itertools import chain
-from multi.tools import sortNondominated, sortLogNondominated, find_extreme_points, find_intercepts, associate_to_niche, niching, uniform_reference_points
+from neorl.multi.tools import sortNondominated, sortLogNondominated, assignCrowdingDist
 from neorl.utils.tools import get_population_nsga
 
-class NSGAIII(ES):
+class NSGAII(ES):
     """
-    Parallel Fast Non-dominated Sorting Gentic Algorithm - III
+    Parallel Fast Non-dominated Sorting Gentic Algorithm - II
     
     Only the seleciton operator differ from classical GA implementation. Hence, we choose create a subclass
     of ES implementation
 
     :param mode: (str) problem type, either ``min`` for minimization problem or ``max`` for maximization
     :param bounds: (dict) input parameter type and lower/upper bounds in dictionary form. Example: ``bounds={'x1': ['int', 1, 4], 'x2': ['float', 0.1, 0.8], 'x3': ['float', 2.2, 6.2]}``
-    :param lambda\_: (int) total number of individuals in the population. Use Combination(M + p - 1, p) for nicely spaced points on the pareto front.
+    :param lambda\_: (int) total number of individuals in the population
     :param cxmode: (str): the crossover mode, either 'cx2point' or 'blend'
     :param alpha: (float) Extent of the blending between [0,1], the blend crossover randomly selects a child in the range [x1-alpha(x2-x1), x2+alpha(x2-x1)] (Only used for cxmode='blend')
     :param cxpb: (float) population crossover probability between [0,1]
@@ -54,23 +54,20 @@ class NSGAIII(ES):
     :param ncores: (int) number of parallel processors
     :param seed: (int) random seed for sampling
     
-    NSGA-III specific parameters:
+    NSGA-II specific parameters:
 
     :param sorting: (str) sorting type, ``standard`` or ``log``. The latter should be faster and is used as default.#Paul
-    :param: p: (int) number of divisions along each objective for the reference points. The number of reference points is Combination(M + p - 1, p), where M is the number of objective
-    :param ref_points: (list) of user inputs reference points. If none the reference points are generated uniformly on the hyperplane intersecting each axis at 1.
     """
     def __init__ (self, mode, bounds, fit, lambda_=60, cxmode='cx2point', 
-                  alpha=0.5, cxpb=0.6, mutpb=0.3, smin=0.01, smax=0.5, clip=True, ncores=1, seed=None, p = 4,ref_points = None,sorting = 'log',**kwargs):  
+                  alpha=0.5, cxpb=0.6, mutpb=0.3, smin=0.01, smax=0.5, clip=True, ncores=1, seed=None,sorting = 'log', **kwargs):  
         
         set_neorl_seed(seed)
         super().__init__(mode = mode, bounds = bounds, fit = fit, lambda_=lambda_, mu=lambda_, cxmode=cxmode, 
                   alpha=alpha, cxpb=cxpb, mutpb=mutpb, smin=smin, smax=smax, clip=clip, ncores=ncores, seed=seed)
+
         # new hyper-parameters #Paul
         self.sorting = sorting
-        #NSGA-III specific
-        self.p = p
-        self.ref_points = ref_points
+    
     def fit_worker(self, x):
         #"""
         #Evaluates fitness of an individual.
@@ -88,69 +85,41 @@ class NSGAIII(ES):
         else:
             return np.array([fitness])
 
-    def select(self,pop, k, ref_points, nd='standard', best_point=None,
-             worst_point=None, extreme_points=None):
+    def select(self,pop, k = 1, nd='standard'):
         """
-        Implementation of NSGA-III selection
+        Apply NSGA-II selection operator on the *pop*. 
 
         :param pop: (dict) A list of pop to select from.
         :param k: (int) The number of pop to select.
-        :param ref_points: (list) Reference points to use for niching.
         :param nd: (str) Specify the non-dominated algorithm to use: 'standard' or 'log'.
-        :param best_point: (list) Best point found at previous generation. If not provided
-            find the best point only from current pop.
-        :param worst_point: (list) Worst point found at previous generation. If not provided
-            find the worst point only from current pop.
-        :param extreme_points: (list) Extreme points found at previous generation. If not provided
-            find the extreme points only from current pop.
         :Returns best_dict: (dict) next population in dictionary structure
-        
         """
-        if nd == "standard":
+        if nd == 'standard':
             pareto_fronts = sortNondominated(pop, k)
         elif nd == 'log':
             pareto_fronts = sortLogNondominated(pop, k)
         else:
-            raise Exception("NSGA3: The choice of non-dominated sorting "
-                            "method '{0}' is invalid.".format(nd))
-        # Extract fitnesses as a np array in the nd-sort order
-        # Use * -1 to tackle always as a minimization problem. Necessary here as well
-        fitnesses = np.array([ind[1][2] for f in pareto_fronts for ind in f])
-        fitnesses *= -1
-        # Get best and worst point of population, contrary to pymoo
-        # we don't use memory
-        if best_point is not None and worst_point is not None:
-            best_point = np.min(np.concatenate((fitnesses, best_point), axis=0), axis=0)
-            worst_point = np.max(np.concatenate((fitnesses, worst_point), axis=0), axis=0)
-        else:
-            best_point = np.min(fitnesses, axis=0)
-            worst_point = np.max(fitnesses, axis=0)
+            raise Exception('NSGA2: The choice of non-dominated sorting '
+                            'method "{0}" is invalid.'.format(nd))
 
-        extreme_points = find_extreme_points(fitnesses, best_point, extreme_points)
-        front_worst = np.max(fitnesses[:sum(len(f) for f in pareto_fronts), :], axis=0)
-        intercepts = find_intercepts(extreme_points, best_point, worst_point, front_worst)
-        niches, dist = associate_to_niche(fitnesses, ref_points, best_point, intercepts)
-        
-        # Get counts per niche for individuals in all front but the last
-        niche_counts = np.zeros(len(ref_points), dtype=np.int64)
-        index, counts = np.unique(niches[:-len(pareto_fronts[-1])], return_counts=True)
-        niche_counts[index] = counts
+        #for front in pareto_fronts:
+        #    assignCrowdingDist(front)
 
-        # Choose individuals from all fronts but the last
         chosen = list(chain(*pareto_fronts[:-1]))
-
-        # Use niching to select the remaining individuals
-        sel_count = len(chosen)
-        n = k - sel_count
-        selected = niching(pareto_fronts[-1], n, niches[sel_count:], dist[sel_count:], niche_counts)
-        chosen.extend(selected)
+        k = k - len(chosen)
+        if k > 0:
+            CrowdDist = assignCrowdingDist(pareto_fronts[-1])# Moved here. did not see need of computing it outside
+            sorted_front = sorted(CrowdDist,key = lambda k: CrowdDist[k],reverse=True)    
+            sorted_front = [(x , pop[x]) for x in sorted_front]
+            #sorted_front = sorted(pareto_fronts[-1], key=attrgetter("fitness.crowding_dist"), reverse=True)
+            chosen.extend(sorted_front[:k])
+        
         # re-cast into a dictionary to comply with NEORL 
         best_dict=defaultdict(list)
         index=0
         for key in chosen:
             best_dict[index] = key[1]
             index+=1
-        
         return best_dict
     def GenOffspring(self, pop):
         #"""
@@ -219,10 +188,10 @@ class NSGAIII(ES):
                 offspring[item][1]=list(np.clip(offspring[item][1], self.smin, self.smax))
         
         return offspring
-               
+          
     def evolute(self, ngen, x0=None, verbose=False):
         """
-        This function evolutes the NSGA-III algorithm for number of generations.
+        This function evolutes the ES algorithm for number of generations.
         
         :param ngen: (int) number of generations to evolute
         :param x0: (list of lists) the initial position of the swarm particles
@@ -244,12 +213,8 @@ class NSGAIII(ES):
         if len(self.population[1][2]) == 1:
             print("--warning: length of output is 1, the sorting method is changed to ``standard``.")
             self.sorting = "standard"
-        # generate reference points
-        if self.ref_points is None:
-            self.ref_points = uniform_reference_points(nobj = len(self.population[1][2]), p = self.p)   
         # Begin the evolution process
         for gen in range(1, ngen + 1):
-            
             # Vary the population and generate new offspring
             offspring = self.GenOffspring(pop=self.population)
             # Evaluate the individuals with an invalid fitness with multiprocessign Pool
@@ -261,7 +226,6 @@ class NSGAIII(ES):
 
                 with joblib.Parallel(n_jobs=self.ncores) as parallel:
                     fitness=parallel(joblib.delayed(self.fit_worker)(item) for item in core_list)
-                    
                 for ind in range(len(offspring)):
                     offspring[ind + len(self.population)].append(fitness[ind]) 
                 
@@ -271,10 +235,12 @@ class NSGAIII(ES):
                     fitness=self.fit_worker(offspring[ind][0])
                     offspring[ind].append(fitness)
         
-                
+            #print(print(offspring))
+            #print(self.population)
+            #sys.exit() 
             # Select the next generation population
             offspring.update(self.population) # concatenate offspring and parents dictionnaries
-            self.population = copy.deepcopy(self.select(pop=offspring, k=self.mu, ref_points = self.ref_points, nd = self.sorting))
+            self.population = copy.deepcopy(self.select(pop=offspring, k=self.mu, nd = self.sorting))
             if self.RLmode:  #perform RL informed ES
                 self.population=self.mix_population(self.population)
                 
@@ -322,7 +288,7 @@ class NSGAIII(ES):
             self.es_hist['mean_strategy'].append(np.mean(mean_strategy))
             if verbose:
                 print('##############################################################################')
-                print('NSGA-III step {}/{}, CX={}, MUT={}, MU={}, LAMBDA={}, Ncores={}'.format(gen*self.lambda_,ngen*self.lambda_, np.round(self.cxpb,2), np.round(self.mutpb,2), self.mu, self.lambda_, self.ncores))
+                print('NSGA-II step {}/{}, CX={}, MUT={}, MU={}, LAMBDA={}, Ncores={}'.format(gen*self.lambda_,ngen*self.lambda_, np.round(self.cxpb,2), np.round(self.mutpb,2), self.mu, self.lambda_, self.ncores))
                 print('##############################################################################')
                 print('Statistics for generation {}'.format(gen))
                 print('Best Fitness:', np.min(rwd_par,axis=0) if self.mode == 'max' else -np.min(rwd_par,axis=0))
@@ -333,13 +299,12 @@ class NSGAIII(ES):
                 print('Average Strategy:', np.round(np.mean(mean_strategy),3))
                 print('##############################################################################')
         if verbose:#Paul
-            print('------------------------ NSGA-III Summary --------------------------')
+            print('------------------------ NSGA-II Summary --------------------------')
             print('Best fitness (y) found:', self.y_opt_correct)
             print('Best individual (x) found:', self.x_opt_correct)
             #print('Length of the pareto front / length of the population: {} / {}'.format(len(self.y_opt_correct),len(self.population)))
             print('--------------------------------------------------------------') 
 
-        
         #---update final logger
         self.es_hist['last_pop'] = get_population_nsga(self.population,mode = self.mode)
         self.best_scores=[-np.array(item) for item in self.best_scores]
@@ -353,4 +318,5 @@ class NSGAIII(ES):
         self.es_hist['local_pop'] = self.best_indvs
         
         return self.x_opt_correct, self.y_opt_correct, self.es_hist
+    
     
