@@ -67,6 +67,24 @@ class NSGAII(ES):
 
         # new hyper-parameters #Paul
         self.sorting = sorting
+        def fitness_wrapper(*args, **kwargs):
+            fitness = fit(*args, **kwargs) 
+            if isinstance(fitness,np.ndarray):
+                if mode == 'max':
+                    return fitness
+                elif mode == 'min':
+                    return -fitness
+            elif isinstance(fitness,list):
+                if mode == 'max':
+                    return np.array(fitness)
+                elif mode == 'min':
+                    return -np.array(fitness)
+            else:
+                if mode == 'max':
+                    return np.array([fitness])
+                elif mode == 'min':
+                    return -np.array([fitness])
+        self.fit=fitness_wrapper   
     
     def fit_worker(self, x):
         #"""
@@ -80,11 +98,8 @@ class NSGAII(ES):
             x=decode_discrete_to_grid(x,self.orig_bounds,self.bounds_map) 
                     
         fitness = self.fit(x)
-        if isinstance(fitness,np.ndarray):
-            return fitness
-        else:
-            return np.array([fitness])
-
+        return fitness
+        
     def select(self,pop, k = 1, nd='standard'):
         """
         Apply NSGA-II selection operator on the *pop*. 
@@ -235,17 +250,13 @@ class NSGAII(ES):
                     fitness=self.fit_worker(offspring[ind][0])
                     offspring[ind].append(fitness)
         
-            #print(print(offspring))
-            #print(self.population)
-            #sys.exit() 
+            
             # Select the next generation population
             offspring.update(self.population) # concatenate offspring and parents dictionnaries
             self.population = copy.deepcopy(self.select(pop=offspring, k=self.mu, nd = self.sorting))
             if self.RLmode:  #perform RL informed ES
                 self.population=self.mix_population(self.population)
                 
-            #inds, rwd=[self.population[i][0] for i in self.population], [self.population[i][2] for i in self.population]
-            
             #Paul many changes: simply provide the pareto front (add a layer of calculation)
             if self.sorting == "standard":#Paul
                 pareto_front = sortNondominated(self.population, len(self.population))[0]
@@ -253,11 +264,14 @@ class NSGAII(ES):
                 pareto_front = sortLogNondominated(self.population, len(self.population))[0]  
             inds_par, rwd_par=[i[1][0] for i in pareto_front], [i[1][2] for i in pareto_front]
             self.best_scores.append(rwd_par)
-            #arg_max=np.argmax(rwd)
-            self.best_indvs.append(inds_par)
-            #if rwd[arg_max] > self.y_opt:
-            #    self.y_opt=rwd[arg_max]
-            #    self.x_opt=copy.deepcopy(inds[arg_max])
+            if self.grid_flag:
+                temp_indvs = []
+                for count,elem in enumerate(inds_par):
+                    temp_indvs.append(decode_discrete_to_grid(elem,self.orig_bounds,self.bounds_map))
+                self.best_indvs.append(temp_indvs)
+            else:
+                self.best_indvs.append(inds_par)
+            
             for fitn in range(len(np.min(rwd_par,axis=0))):
                 if self.mode == 'min':
                     if  - np.min(rwd_par,axis=0)[fitn] > self.y_opt[fitn]:
@@ -274,13 +288,11 @@ class NSGAII(ES):
                 self.y_opt_correct=self.y_opt
 
             #mir-grid
-            if self.grid_flag:
-                self.x_opt_correct=decode_discrete_to_grid(self.x_opt,self.orig_bounds,self.bounds_map)
-            else:
-                self.x_opt_correct=self.x_opt
             
             if self.grid_flag:
-                self.x_opt_correct=decode_discrete_to_grid([inds_par[x] for x in np.argmin(rwd_par,axis=0)],self.orig_bounds,self.bounds_map)#self>x_opt
+                self.x_opt_correct = []
+                for count,elem in enumerate([inds_par[x] for x in np.argmin(rwd_par,axis=0)]):
+                    self.x_opt_correct.append(decode_discrete_to_grid(elem,self.orig_bounds,self.bounds_map))#self>x_opt
             else:
                 self.x_opt_correct=[inds_par[x] for x in np.argmin(rwd_par,axis=0)]#inds_par#self.x_opt
             
@@ -292,7 +304,7 @@ class NSGAII(ES):
                 print('##############################################################################')
                 print('Statistics for generation {}'.format(gen))
                 print('Best Fitness:', np.min(rwd_par,axis=0) if self.mode == 'max' else -np.min(rwd_par,axis=0))
-                print('Best Individual(s):', [inds_par[x] for x in np.argmin(rwd_par,axis=0)] if not self.grid_flag else decode_discrete_to_grid([inds_par[x] for x in np.argmin(rwd_par,axis=0)],self.orig_bounds,self.bounds_map))
+                print('Best Individual(s):', self.x_opt_correct)
                 print('Length of the pareto front / length of the population: {} / {}'.format(len(inds_par),len(self.population)))
                 print('Max Strategy:', np.round(np.max(mean_strategy),3))
                 print('Min Strategy:', np.round(np.min(mean_strategy),3))
@@ -307,13 +319,12 @@ class NSGAII(ES):
 
         #---update final logger
         self.es_hist['last_pop'] = get_population_nsga(self.population,mode = self.mode)
-        self.best_scores=[-np.array(item) for item in self.best_scores]
         if self.mode == 'min':
             self.es_hist['global_fitness'] = [- x for x in rwd_par]
+            self.best_scores=[-np.array(item) for item in self.best_scores]
         else:
             self.es_hist['global_fitness'] = rwd_par # pareto of last population
         self.es_hist['global_pop'] = inds_par
-        
         self.es_hist['local_fitness'] = self.best_scores # full history of pareto front
         self.es_hist['local_pop'] = self.best_indvs
         
