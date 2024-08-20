@@ -14,13 +14,15 @@ NEORL can be used for multidisciplinary applications for research, industrial, a
 
 Documentation is available online: [https://neorl.readthedocs.io/en/latest/index.html](https://neorl.readthedocs.io/en/latest/index.html)
 
-The framework paper is available online: [https://arxiv.org/abs/2112.07057](https://arxiv.org/abs/2112.07057)
+The framework paper is available online: [https://doi.org/10.1016/j.nucengdes.2023.112423](https://doi.org/10.1016/j.nucengdes.2023.112423)
 
 ## Copyright
 
 <img src="docs/copyright.png" align="right" width="40%"/>
 
 This repository and its content are copyright of [Exelon Corporation](https://www.exeloncorp.com/) © in collaboration with [MIT](https://web.mit.edu/nse/) Nuclear Science and Engineering 2021. All rights reserved.
+
+In January 2023, a [University of Michigan team](https://ners.engin.umich.edu/) took over maintaining this repository after its founder, [Majdi Radadideh](https://ners.engin.umich.edu/people/radaideh-majdi/), joined their faculty. Now NEORL is part of the Artificial Intelligence and Multiphysics Simulations (AIMS) Lab at the University of Michigan. 
 
 You can read the first successful and the baseline application of NEORL for nuclear fuel optimization in this [News Article](https://news.mit.edu/2020/want-cheaper-nuclear-energy-turn-design-process-game-1217).
 
@@ -198,24 +200,31 @@ NEORL offers a wide range of algorithms, where some algorithms could be used wit
 
 ## Major Founding Papers of NEORL
 
-1- Radaideh, M. I., Wolverton, I., Joseph, J., Tusar, J. J., Otgonbaatar, U., Roy, N., Forget, B., Shirvan, K. (2021). Physics-informed reinforcement learning optimization of nuclear assembly design. *Nuclear Engineering and Design*, **372**, p. 110966.
+1- Radaideh, M. I., Du, K., Seurin, P., Seyler, D., Gu, X., Wang, H., & Shirvan, K. (2023). NEORL: NeuroEvolution Optimization with Reinforcement Learning—Applications to carbon-free energy systems. Nuclear Engineering and Design, 412, 112423.
 
-2- Radaideh, M. I., Shirvan, K. (2021). Rule-based reinforcement learning methodology to inform evolutionary algorithms for constrained optimization of engineering applications. *Knowledge-Based Systems*, **217**, p. 106836.
+2- Radaideh, M. I., Wolverton, I., Joseph, J., Tusar, J. J., Otgonbaatar, U., Roy, N., Forget, B., Shirvan, K. (2021). Physics-informed reinforcement learning optimization of nuclear assembly design. *Nuclear Engineering and Design*, **372**, p. 110966.
 
-3- Radaideh, M. I., Forget, B., & Shirvan, K. (2021). Large-scale design optimisation of boiling water reactor bundles with neuroevolution. *Annals of Nuclear Energy*, **160**, p. 108355.
+3- Radaideh, M. I., Shirvan, K. (2021). Rule-based reinforcement learning methodology to inform evolutionary algorithms for constrained optimization of engineering applications. *Knowledge-Based Systems*, **217**, p. 106836.
+
+4- Radaideh, M. I., Forget, B., & Shirvan, K. (2021). Large-scale design optimisation of boiling water reactor bundles with neuroevolution. *Annals of Nuclear Energy*, **160**, p. 108355.
 
 ## Citing the Project
 
 To cite this repository in publications:
 
 ```
-@article{radaideh2021neorl,
-  title={NEORL: NeuroEvolution Optimization with Reinforcement Learning},
+@article{radaideh2023neorl,
+  title={NEORL: NeuroEvolution Optimization with Reinforcement Learning—Applications to carbon-free energy systems},
   author={Radaideh, Majdi I and Du, Katelin and Seurin, Paul and Seyler, Devin and Gu, Xubo and Wang, Haijia and Shirvan, Koroush},
-  journal={arXiv preprint arXiv:2112.07057},
-  year={2021}
+  journal={Nuclear Engineering and Design},
+  volume={412},
+  pages={112423},
+  year={2023},
+  publisher={Elsevier}
 }
 ```
+
+Paper link: [https://doi.org/10.1016/j.nucengdes.2023.112423](https://doi.org/10.1016/j.nucengdes.2023.112423)
 
 ## Maintainers
 
@@ -225,4 +234,6 @@ See our team here [Contributors](https://neorl.readthedocs.io/en/latest/misc/con
 
 ## Acknowledgments
 
-NEORL was established in MIT back to 2020 with feedback, validation, and usage of different colleagues: Issac Wolverton (MIT Quest for Intelligence), Joshua Joseph (MIT Quest for Intelligence), Benoit Forget (MIT Nuclear Science and Engineering), Ugi Otgonbaatar (Exelon Corporation), and James Tusar (Exelon Corporation). We also thank our fellows at [Stable Baselines](https://github.com/hill-a/stable-baselines), [DEAP](https://github.com/DEAP/deap), and [EvoloPy](https://github.com/7ossam81/EvoloPy) for sharing their implementation, which inspired us to leverage our optimization classes. 
+NEORL was established in MIT back to 2020 with feedback, validation, and usage of different colleagues: Issac Wolverton (MIT Quest for Intelligence), Joshua Joseph (MIT Quest for Intelligence), Benoit Forget (MIT Nuclear Science and Engineering), Ugi Otgonbaatar (Exelon Corporation), and James Tusar (Exelon Corporation). We also thank our fellows at [Stable Baselines](https://github.com/hill-a/stable-baselines), [DEAP](https://github.com/DEAP/deap), and [EvoloPy](https://github.com/7ossam81/EvoloPy) for sharing their implementation, which inspired us to leverage our optimization classes.  
+
+In January 2023, a University of Michigan team took over maintaining this repository after its founder, Majdi Radadideh, joined their faculty. Now NEORL is part of the Artificial Intelligence and Multiphysics Simulations (AIMS) Lab at the University of Michigan. 
