@@ -476,6 +476,7 @@ class AEO(object):
         b = kwargs.get("b", "improve")
         b_burden = kwargs.get("b_burden", False)
         order = kwargs.get("order", "bw")
+        self.ncores = kwargs.get("ncores", 1)
 
         if config is None:
             pass
@@ -798,6 +799,12 @@ class AEO(object):
                 pop_fits = [p.evolute(self.gpc, self.fit, self.bounds, i, Ncyc, self.var_type, self.bounds_map, self.trans_bounds, log.loc[{'pop' : p.popname, 'cycle' : i}]) for p in self.pops]
             else:
                 pop_fits = [p.evolute(self.gpc, self.fit, self.bounds, i, Ncyc, self.var_type, None, self.trans_bounds, log.loc[{'pop' : p.popname, 'cycle' : i}]) for p in self.pops]
+
+            if self.ncores > 1: # When multiprocessing used in the evaluations, fitness wrapper object returns empty, the values are written to object afterwards
+                for p in self.pops:
+                    self.wrapped_f.ins.append(p.members)
+                for fit_val in pop_fits:
+                    self.wrapped_f.outs.append(fit_val)
 
             #exportation number
             #  calc weights
