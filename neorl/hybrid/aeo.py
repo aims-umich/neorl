@@ -112,7 +112,7 @@ def wtd_remove(lst, ei, wts = None):
     indxs = np.random.choice(range(len(lst)), size=ei, p = wts_checked, replace = False)
     return [lst.pop(i) for i in reversed(sorted(indxs))], indxs
 
-def clone_algo_obj(obj, nmembers, fit, bounds):
+def clone_algo_obj(obj, nmembers, fit, bounds, ncores):
     # function to return a copy of an algorithm object with anumber of members given as
     # nmembers. This is to circumvent the error when the x0 passed in the evolute function
     # is a different size than the individuals given originally in the initialization of 
@@ -128,6 +128,7 @@ def clone_algo_obj(obj, nmembers, fit, bounds):
     algo = detect_algo(obj)
 
     attrs = obj.__dict__
+    attrs['ncores'] = ncores
 
     if algo == 'WOA':
         attrs['nwhales'] = nmembers
@@ -270,7 +271,7 @@ class Population:
     # Class to store information and functionality related to a single population
     # in the AEO algorithm. Should be characterized by an evolution strategy passed
     # as one of the optimization classes from the other algorithms in NEORL.
-    def __init__(self, strategy, algo, init_pop, mode, conv = None):
+    def __init__(self, strategy, algo, init_pop, mode, ncores, conv = None):
         # strategy should be one of the optimization objects containing an "evolute" method
         # init_pop needs to match the population given to the strategy object initially
         # algo is string that identifies which class is being used
@@ -281,6 +282,7 @@ class Population:
         self.members = init_pop
         self.n = len(self.members)
         self.mode = mode
+        self.ncores = ncores
 
         self.popname = '' #will be assigned externally after object has been initialized
                           #    used only for loggin purposes
@@ -311,7 +313,7 @@ class Population:
             np.put(log['evolute'].data, [0], True)
 
             #update strategy with new population number
-            self.strategy = clone_algo_obj(self.strategy, len(self.members), fit, bounds)
+            self.strategy = clone_algo_obj(self.strategy, len(self.members), fit, bounds, self.ncores)
 
            #store last generation number
             self.last_ngen = ngen
@@ -692,7 +694,7 @@ class AEO(object):
                 if p == i:
                     xpop.append(x)
             self.pops.append(Population(self.optimizers[i], self.algos[i],
-                    xpop, self.mode, self.ngtonevals[i]))
+                    xpop, self.mode, self.ncores, self.ngtonevals[i]))
 
         #initialize log Dataset
         membercoords = range(len(x0))
