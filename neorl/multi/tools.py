@@ -25,6 +25,7 @@ import bisect
 
 import pandas as pd
 import numpy as np
+import random
 from collections import defaultdict
 
 
@@ -32,23 +33,19 @@ from collections import defaultdict
 # Helper functions for sorting individuals in the population #
 ##############################################################
 
-def isDominated(wvalues1, wvalues2):
+def isDominated(a, b, mode="min"):
     """
+    Check if solution a dominates solution b
     
-    Returns whether or not *wvalues2* dominates *wvalues1*.
-    
-    :param wvalues1: (list) The weighted fitness values that would be dominated.
-    :param wvalues2: (list) The weighted fitness values of the dominant.
-    :Returns obj: (bool) `True` if wvalues2 dominates wvalues1, `False` otherwise.
-    
+    :param a: (array-like) The potentially dominant solution
+    :param b: (array-like) The potentially dominated solution  
+    :param mode: (str) "min" for minimization, "max" for maximization
+    :returns: (bool) True if a dominates b, False otherwise
     """
-    not_equal = False
-    for self_wvalue, other_wvalue in zip(wvalues1, wvalues2):
-        if self_wvalue > other_wvalue:
-            return False
-        elif self_wvalue < other_wvalue:
-            not_equal = True
-    return not_equal
+    if mode == "min":
+        return np.all(a <= b) and np.any(a < b)
+    else:  # max
+        return np.all(a >= b) and np.any(a > b)
 
 def sortNondominated(pop, k, first_front_only=False):
     """
@@ -82,10 +79,10 @@ def sortNondominated(pop, k, first_front_only=False):
     # Rank first Pareto front
     for i, fit_i in enumerate(fits):
         for fit_j in fits[i+1:]:
-            if isDominated(map_fit_ind[fit_j][0][1][2], map_fit_ind[fit_i][0][1][2]):
+            if isDominated(map_fit_ind[fit_i][0][1][2], map_fit_ind[fit_j][0][1][2]):
                 dominating_fits[fit_j] += 1
                 dominated_fits[fit_i].append(fit_j)
-            elif isDominated(map_fit_ind[fit_i][0][1][2], map_fit_ind[fit_j][0][1][2]):
+            elif isDominated(map_fit_ind[fit_j][0][1][2], map_fit_ind[fit_i][0][1][2]):
                 dominating_fits[fit_i] += 1
                 dominated_fits[fit_j].append(fit_i)
         if dominating_fits[fit_i] == 0:
@@ -199,7 +196,7 @@ def sortNDHelperA(fitnesses, obj, front):
     elif len(fitnesses) == 2:
         # Only two individuals, compare them and adjust front number
         s1, s2 = fitnesses[0], fitnesses[1]
-        if isDominated(s2[:obj+1], s1[:obj+1]):
+        if isDominated(s1[:obj+1], s2[:obj+1]):
             front[s2] = max(front[s2], front[s1] + 1)
     elif obj == 1:
         sweepA(fitnesses, front)
@@ -277,7 +274,7 @@ def sortNDHelperB(best, worst, obj, front):
         #One of the lists has one individual: compare directly
         for hi in worst:
             for li in best:
-                if isDominated(hi[:obj+1], li[:obj+1]) or hi[:obj+1] == li[:obj+1]:
+                if isDominated(li[:obj+1], hi[:obj+1]) or hi[:obj+1] == li[:obj+1]:
                     front[hi] = max(front[hi], front[li] + 1)
     elif obj == 1:
         sweepB(best, worst, front)
@@ -577,3 +574,204 @@ def assignCrowdingDist(pop):
     for i, dist in enumerate(distances):
         CrowdDist[pop[i][0]] = dist
     return CrowdDist
+
+##########################################################################
+# Functions specific to MAEO
+##########################################################################
+
+# Hypervolume calculation function
+def hypervolume_nd(pareto_points, reference_point, mode="min"):
+    """
+    Recursive nD hypervolume calculation.
+    
+    Args:
+        pareto_points: List of objective vectors
+        reference_point: Reference point for hypervolume calculation
+        mode: "min" for minimization, "max" for maximization
+    """
+    def recursive_hv(points, ref, dim, minimize=True):
+        if len(points) == 0:
+            return 0.0
+        if dim == 1:
+            # 1D base case
+            if minimize:
+                return sum(ref[0] - p[0] for p in points if p[0] < ref[0])
+            else:
+                return sum(p[0] - ref[0] for p in points if p[0] > ref[0])
+
+        # Sort by the last dimension
+        if minimize:
+            points = sorted(points, key=lambda x: x[dim - 1])
+        else:
+            points = sorted(points, key=lambda x: -x[dim - 1])
+
+        total_hv = 0.0
+        prev_coord = ref[dim - 1]
+
+        for i, p in enumerate(points):
+            if minimize:
+                height = prev_coord - p[dim - 1]
+                if height <= 0:
+                    continue
+                # Filter points that dominate p in all earlier dimensions for minimization
+                sub_points = [
+                    q[:dim - 1]
+                    for q in points[i:]
+                    if all(q[d] <= p[d] for d in range(dim - 1))
+                ]
+            else:
+                height = p[dim - 1] - prev_coord
+                if height <= 0:
+                    continue
+                # Filter points that dominate p in all earlier dimensions for maximization
+                sub_points = [
+                    q[:dim - 1]
+                    for q in points[i:]
+                    if all(q[d] >= p[d] for d in range(dim - 1))
+                ]
+
+            sub_ref = ref[:dim - 1]
+            sub_hv = recursive_hv(sub_points, sub_ref, dim - 1, minimize)
+
+            total_hv += height * sub_hv
+            prev_coord = p[dim - 1]
+
+        return total_hv
+
+    if not pareto_points:
+        return 0.0
+
+    dimension = len(reference_point)
+    return recursive_hv(pareto_points, reference_point, dimension, mode == "min")
+
+# Pareto dominance and sorting functions
+def multinomial_sample(n, probabilities):
+    """
+    Pure Python implementation of multinomial sampling.
+    """
+    if abs(sum(probabilities) - 1.0) > 1e-10:
+        # Normalize probabilities if they don't sum to 1
+        total = sum(probabilities)
+        probabilities = [p/total for p in probabilities]
+    
+    counts = [0] * len(probabilities)
+    
+    # Generate n random samples
+    for _ in range(n):
+        # Generate random number between 0 and 1
+        rand_val = random.random()
+        
+        # Find which category this sample falls into
+        cumulative_prob = 0.0
+        for i, prob in enumerate(probabilities):
+            cumulative_prob += prob
+            if rand_val <= cumulative_prob:
+                counts[i] += 1
+                break
+    
+    return counts
+
+def non_dominated_sort_MAEO(population, mode="min"):
+    """Non-dominated sorting for both minimization and maximization"""
+    n = len(population)
+    ranks = np.zeros(n, dtype=int)
+    dominated_counts = np.zeros(n)
+    dominates_list = [[] for _ in range(n)]
+    fronts = [[]]
+
+    for i in range(n):
+        for j in range(n):
+            if i == j:
+                continue
+            if isDominated(population[i], population[j], mode):
+                dominates_list[i].append(j)
+            elif isDominated(population[j], population[i], mode):
+                dominated_counts[i] += 1
+        if dominated_counts[i] == 0:
+            fronts[0].append(i)
+
+    current_rank = 0
+    while fronts[current_rank]:
+        next_front = []
+        for i in fronts[current_rank]:
+            for j in dominates_list[i]:
+                dominated_counts[j] -= 1
+                if dominated_counts[j] == 0:
+                    ranks[j] = current_rank + 1
+                    next_front.append(j)
+        current_rank += 1
+        fronts.append(next_front)
+
+    return ranks, fronts[:-1]  # Remove the final empty front
+
+def compute_crowding_distance_MAEO(front, population):
+    """Compute crowding distance (same for both min and max)"""
+    n = len(front)
+    distances = np.zeros(n)
+    if n == 0:
+        return distances
+
+    front_points = population[front]
+    num_objectives = front_points.shape[1]
+
+    for m in range(num_objectives):
+        sorted_indices = np.argsort(front_points[:, m])
+        f_min = front_points[sorted_indices[0], m]
+        f_max = front_points[sorted_indices[-1], m]
+        norm = f_max - f_min if f_max > f_min else 1.0
+
+        # Edges get max crowding
+        distances[sorted_indices[0]] = np.inf
+        distances[sorted_indices[-1]] = np.inf
+
+        for i in range(1, n - 1):
+            prev = front_points[sorted_indices[i - 1], m]
+            next = front_points[sorted_indices[i + 1], m]
+            distances[sorted_indices[i]] += (next - prev) / norm
+
+    # Normalize finite distances
+    is_finite = np.isfinite(distances)
+    if np.any(is_finite):
+        d_finite = distances[is_finite]
+        d_norm = (d_finite - d_finite.min()) / (d_finite.max() - d_finite.min() + 1e-10)
+        distances[is_finite] = d_norm
+
+    distances[~is_finite] = 1.0  # Edge points
+    return distances
+
+def ind_performance_metric(population, mode="min"):
+    """Calculate normalized performance score for both min and max modes"""
+    population = np.array(population)
+    ranks, fronts = non_dominated_sort_MAEO(population, mode)
+    n = len(population)
+
+    # Distance from reference point
+    if mode == "min":
+        # For minimization: distance from nadir point (worst corner)
+        reference = np.max(population, axis=0)
+    else:
+        # For maximization: distance from nadir point (worst corner)
+        reference = np.min(population, axis=0)
+    
+    distances = np.linalg.norm(population - reference, axis=1)
+    reference_distance = distances / (np.max(distances) + 1e-10)
+
+    # Crowding distance
+    crowding_distance = np.zeros(n)
+    for front in fronts:
+        if len(front) > 0:
+            cd = compute_crowding_distance_MAEO(front, population)
+            for idx, i in enumerate(front):
+                crowding_distance[i] = cd[idx]
+
+    # Rank component
+    max_rank = np.max(ranks)
+    rank_component = 1 - (ranks / max_rank) if max_rank > 0 else np.ones_like(ranks)
+
+    # Strict front separation: scale diversity part to fit within 1/(max_rank + 1)
+    diversity_band = 1 / (max_rank + 1)
+    diversity_component = (reference_distance + crowding_distance) / 2
+
+    # Final score: rank + scaled diversity component
+    score = rank_component + diversity_component * diversity_band
+    return score
