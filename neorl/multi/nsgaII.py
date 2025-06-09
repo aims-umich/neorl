@@ -239,8 +239,8 @@ class NSGAII(ES):
                 for key in offspring:
                     core_list.append(offspring[key][0])
 
-                with joblib.Parallel(n_jobs=self.ncores) as parallel:
-                    fitness=parallel(joblib.delayed(self.fit_worker)(item) for item in core_list)
+                with joblib.parallel_backend('loky', n_jobs=self.ncores):
+                    fitness = joblib.Parallel(batch_size=1)(joblib.delayed(self.fit_worker)(item) for item in core_list)
                 for ind in range(len(offspring)):
                     offspring[ind + len(self.population)].append(fitness[ind]) 
                 

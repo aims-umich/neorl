@@ -197,7 +197,8 @@ setup(
                       'pytest-cov',
                       'sphinx',
                       'sphinx-rtd-theme',
-                      'sphinx-autobuild'] + find_tf_dependency(),               
+                      'sphinx-autobuild',
+                      'autograd'] + find_tf_dependency(),               
      extras_require={'tests': ['pytest', 'pytest-cov', 'pytest-env', 'pytest-xdist', 'pytype'],
                      'docs': ['sphinx', 'sphinx-autobuild', 'sphinx-rtd-theme']},   
     
