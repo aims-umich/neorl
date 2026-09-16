@@ -1,8 +1,7 @@
 import time
 
-import gym
+import gymnasium as gym
 import numpy as np
-import tensorflow as tf
 
 from neorl.rl.baselines.shared import logger
 from neorl.rl.baselines.shared import explained_variance, tf_util, ActorCriticRLModel, SetVerbosity, TensorboardWriter
@@ -20,7 +19,7 @@ import warnings
 # https://stackoverflow.com/questions/15777951/how-to-suppress-pandas-future-warning
 warnings.simplefilter(action='ignore', category=FutureWarning)
 warnings.simplefilter(action='ignore', category=Warning)
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 tf.get_logger().setLevel('INFO')
 tf.autograph.set_verbosity(0)
 import logging
@@ -391,7 +390,7 @@ class A2CRunner(AbstractEnvRunner):
         mb_rewards = np.asarray(mb_rewards, dtype=np.float32).swapaxes(0, 1)
         mb_actions = np.asarray(mb_actions, dtype=self.env.action_space.dtype).swapaxes(0, 1)
         mb_values = np.asarray(mb_values, dtype=np.float32).swapaxes(0, 1)
-        mb_dones = np.asarray(mb_dones, dtype=np.bool).swapaxes(0, 1)
+        mb_dones = np.asarray(mb_dones, dtype=bool).swapaxes(0, 1)
         mb_masks = mb_dones[:, :-1]
         mb_dones = mb_dones[:, 1:]
         true_rewards = np.copy(mb_rewards)

@@ -7,10 +7,10 @@ from abc import ABC, abstractmethod
 from collections import OrderedDict, deque
 from typing import Union, List, Callable, Optional
 
-import gym
+import gymnasium as gym
 import cloudpickle
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 from neorl.rl.baselines.shared.misc_util import set_global_seeds
 from neorl.rl.baselines.shared.save_util import data_to_json, json_to_data, params_to_bytes, bytes_to_params
@@ -42,6 +42,11 @@ class BaseRLModel(ABC):
 
     def __init__(self, policy, env, verbose=0, *, requires_vec_env, policy_base,
                  policy_kwargs=None, seed=None, n_cpu_tf_sess=None):
+        # Deferred here (rather than at module import time) so that merely importing neorl, or any
+        # part of it that doesn't use these TF1/graph-mode RL algorithms, does not disable eager
+        # execution process-wide and break unrelated eager-mode Keras 3 code elsewhere in neorl
+        # (e.g. NHHO's neural network surrogate). Only actually constructing an RL model triggers it.
+        tf.disable_v2_behavior()
         if isinstance(policy, str) and policy_base is not None:
             self.policy = get_policy_from_name(policy_base, policy)
         else:
@@ -1126,14 +1131,15 @@ class SetVerbosity:
     def __enter__(self):
         self.tf_level = os.environ.get('TF_CPP_MIN_LOG_LEVEL', '0')
         self.log_level = logger.get_level()
-        self.gym_level = gym.logger.MIN_LEVEL
+        self.gym_level = gym.logger.min_level
 
         if self.verbose <= 1:
             os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
         if self.verbose <= 0:
             logger.set_level(logger.DISABLED)
-            gym.logger.set_level(gym.logger.DISABLED)
+            # gymnasium's logger has no DISABLED level; use a threshold above ERROR to fully silence it
+            gym.logger.min_level = gym.logger.ERROR + 10
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self.verbose <= 1:
@@ -1141,7 +1147,7 @@ class SetVerbosity:
 
         if self.verbose <= 0:
             logger.set_level(self.log_level)
-            gym.logger.set_level(self.gym_level)
+            gym.logger.min_level = self.gym_level
 
 
 class TensorboardWriter:

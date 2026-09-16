@@ -142,7 +142,7 @@ class ExperienceReplay:
             idxs = np.random.choice(range(len(self.storage)),p=priors, size=batch_size)
             return [self.storage[i] for i in idxs]
         else:
-            raise ('unknown mode is entered for experience replay: either uniform, greedy, or prior are allowed')
+            raise Exception('unknown mode is entered for experience replay: either uniform, greedy, or prior are allowed')
     
     def remove_duplicates(self):
         
@@ -158,7 +158,7 @@ class ExperienceReplay:
             self.storage = [(a, b) for a, b in self.storage 
                      if not (a in seen or seen.append(a))]
         else:
-            raise ('memory content is corrupted and cannot be filtered')
+            raise Exception('memory content is corrupted and cannot be filtered')
 
 #if __name__=='__main__':
 #    random.seed(1)

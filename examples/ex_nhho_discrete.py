@@ -61,95 +61,96 @@ try:
 except:
     ngen=50      #or use default ngen
 
-for item in ['mixed', 'grid', 'float/int', 'float/grid', 'int/grid', 'float', 'int']:
-    bounds = {}
-    btype=item  #float, int, grid, float/int, float/grid, int/grid, mixed. 
-    
-    print(item, 'is running -----')
-    if btype=='mixed':
-        bounds['x1'] = ['int', 1, 99]
-        bounds['x2'] = ['grid', (0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625)]
-        bounds['x3'] = ['float', 10, 200]
-        bounds['x4'] = ['float', 10, 200]
-        bounds['x5'] = ['grid', ('Hi', 'Bye', 'New')]
-        bounds['x6'] = ['int', -5, 5]
-    
-    elif btype=='int/grid':      
-        bounds['x1'] = ['int', 1, 20]
-        bounds['x2'] = ['grid', (0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625)]
-        bounds['x3'] = ['int', 10, 200]
-        bounds['x4'] = ['int', 10, 200]
-        bounds['x5'] = ['grid', ('Hi', 'Bye', 'New')]
-        bounds['x6'] = ['int', -5, 5]
-    
-    elif btype=='float/grid':      
-        bounds['x1'] = ['float', 1, 20]
-        bounds['x2'] = ['grid', (0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625)]
-        bounds['x3'] = ['float', 10, 200]
-        bounds['x4'] = ['float', 10, 200]
-        bounds['x5'] = ['grid', ('Hi', 'Bye', 'New')]
-        bounds['x6'] = ['float', -5, 5]
-        
-    elif btype=='float/int':      
-        bounds['x1'] = ['int', 1, 20]
-        bounds['x2'] = ['float', 1, 20]
-        bounds['x3'] = ['int', 10, 200]
-        bounds['x4'] = ['float', 10, 200]
-        bounds['x5'] = ['float', -5, 5]
-        bounds['x6'] = ['int', -5, 5]
-    
-    elif btype=='float':      
-        bounds['x1'] = ['float', 1, 20]
-        bounds['x2'] = ['float', 1, 20]
-        bounds['x3'] = ['float', 10, 200]
-        bounds['x4'] = ['float', 10, 200]
-        bounds['x5'] = ['float', -5, 5]
-        bounds['x6'] = ['float', -5, 5]
-        
-    elif btype=='int':      
-        bounds['x1'] = ['int', 1, 20]
-        bounds['x2'] = ['int', 1, 20]
-        bounds['x3'] = ['int', 10, 200]
-        bounds['x4'] = ['int', 10, 200]
-        bounds['x5'] = ['int', -5, 5]
-        bounds['x6'] = ['int', -5, 5]
-        
-    elif btype=='grid':      
-        bounds['x1'] = ['grid', (0.0625, 0.125, 0.375, 0.4375, 0.5625, 0.625)]
-        bounds['x2'] = ['grid', (0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625)]
-        bounds['x3'] = ['grid', (1,2,3,4,5)]
-        bounds['x4'] = ['grid', (32,64,128)]
-        bounds['x5'] = ['grid', ('Hi', 'Bye', 'New')]
-        bounds['x6'] = ['grid', ('Cat', 'Dog', 'Bird', 'Fish')]
+if __name__ == "__main__":
+    for item in ['mixed', 'grid', 'float/int', 'float/grid', 'int/grid', 'float', 'int']:
+        bounds = {}
+        btype=item  #float, int, grid, float/int, float/grid, int/grid, mixed.
+
+        print(item, 'is running -----')
+        if btype=='mixed':
+            bounds['x1'] = ['int', 1, 99]
+            bounds['x2'] = ['grid', (0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625)]
+            bounds['x3'] = ['float', 10, 200]
+            bounds['x4'] = ['float', 10, 200]
+            bounds['x5'] = ['grid', ('Hi', 'Bye', 'New')]
+            bounds['x6'] = ['int', -5, 5]
+
+        elif btype=='int/grid':
+            bounds['x1'] = ['int', 1, 20]
+            bounds['x2'] = ['grid', (0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625)]
+            bounds['x3'] = ['int', 10, 200]
+            bounds['x4'] = ['int', 10, 200]
+            bounds['x5'] = ['grid', ('Hi', 'Bye', 'New')]
+            bounds['x6'] = ['int', -5, 5]
+
+        elif btype=='float/grid':
+            bounds['x1'] = ['float', 1, 20]
+            bounds['x2'] = ['grid', (0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625)]
+            bounds['x3'] = ['float', 10, 200]
+            bounds['x4'] = ['float', 10, 200]
+            bounds['x5'] = ['grid', ('Hi', 'Bye', 'New')]
+            bounds['x6'] = ['float', -5, 5]
+
+        elif btype=='float/int':
+            bounds['x1'] = ['int', 1, 20]
+            bounds['x2'] = ['float', 1, 20]
+            bounds['x3'] = ['int', 10, 200]
+            bounds['x4'] = ['float', 10, 200]
+            bounds['x5'] = ['float', -5, 5]
+            bounds['x6'] = ['int', -5, 5]
+
+        elif btype=='float':
+            bounds['x1'] = ['float', 1, 20]
+            bounds['x2'] = ['float', 1, 20]
+            bounds['x3'] = ['float', 10, 200]
+            bounds['x4'] = ['float', 10, 200]
+            bounds['x5'] = ['float', -5, 5]
+            bounds['x6'] = ['float', -5, 5]
+
+        elif btype=='int':
+            bounds['x1'] = ['int', 1, 20]
+            bounds['x2'] = ['int', 1, 20]
+            bounds['x3'] = ['int', 10, 200]
+            bounds['x4'] = ['int', 10, 200]
+            bounds['x5'] = ['int', -5, 5]
+            bounds['x6'] = ['int', -5, 5]
+
+        elif btype=='grid':
+            bounds['x1'] = ['grid', (0.0625, 0.125, 0.375, 0.4375, 0.5625, 0.625)]
+            bounds['x2'] = ['grid', (0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375, 0.5, 0.5625, 0.625)]
+            bounds['x3'] = ['grid', (1,2,3,4,5)]
+            bounds['x4'] = ['grid', (32,64,128)]
+            bounds['x5'] = ['grid', ('Hi', 'Bye', 'New')]
+            bounds['x6'] = ['grid', ('Cat', 'Dog', 'Bird', 'Fish')]
 
 
-    npop=20
-    x0=[]
-    for i in range(npop):
-        x0.append(init_sample(bounds))
-        
-    ########################
-    # Setup and evolute NHHO
-    ######################## 
+        npop=20
+        x0=[]
+        for i in range(npop):
+            x0.append(init_sample(bounds))
 
-    nn_params = {}
-    nn_params['num_nodes'] = [10, 5, 3]
-    nn_params['learning_rate'] = 8e-4
-    nn_params['epochs'] = 1
-    nn_params['plot'] = False #will accelerate training
-    nn_params['verbose'] = False #will accelerate training
-    nn_params['save_models'] = False  #will accelerate training
-    
-    nhho = NHHO(mode='min', bounds=bounds, fit=Vessel, nhawks=npop, 
-                nn_params=nn_params, ncores=3, seed=1)
-    individuals, fitnesses = nhho.evolute(ngen=ngen, x0=x0, verbose=True)
-    
-    #make evaluation of the best individuals using the real fitness function
-    real_fit=[Vessel(item) for item in individuals]
-    
-    #print the best individuals/fitness found
-    min_index=real_fit.index(min(real_fit))
-    print('------------------------ Final Summary --------------------------')
-    print('Best real individual:', individuals[min_index])
-    print('Best real fitness:', real_fit[min_index])
-    print('-----------------------------------------------------------------')
+        ########################
+        # Setup and evolute NHHO
+        ########################
+
+        nn_params = {}
+        nn_params['num_nodes'] = [10, 5, 3]
+        nn_params['learning_rate'] = 8e-4
+        nn_params['epochs'] = 1
+        nn_params['plot'] = False #will accelerate training
+        nn_params['verbose'] = False #will accelerate training
+        nn_params['save_models'] = False  #will accelerate training
+
+        nhho = NHHO(mode='min', bounds=bounds, fit=Vessel, nhawks=npop,
+                    nn_params=nn_params, ncores=3, seed=1)
+        individuals, fitnesses = nhho.evolute(ngen=ngen, x0=x0, verbose=True)
+
+        #make evaluation of the best individuals using the real fitness function
+        real_fit=[Vessel(item) for item in individuals]
+
+        #print the best individuals/fitness found
+        min_index=real_fit.index(min(real_fit))
+        print('------------------------ Final Summary --------------------------')
+        print('Best real individual:', individuals[min_index])
+        print('Best real fitness:', real_fit[min_index])
+        print('-----------------------------------------------------------------')

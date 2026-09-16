@@ -2,8 +2,7 @@ import time
 import warnings
 
 import numpy as np
-import tensorflow as tf
-from gym.spaces import Discrete, Box
+from gymnasium.spaces import Discrete, Box
 from collections import deque
 
 from neorl.rl.baselines.shared import logger
@@ -23,7 +22,7 @@ import warnings
 # https://stackoverflow.com/questions/15777951/how-to-suppress-pandas-future-warning
 warnings.simplefilter(action='ignore', category=FutureWarning)
 warnings.simplefilter(action='ignore', category=Warning)
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 tf.get_logger().setLevel('INFO')
 tf.autograph.set_verbosity(0)
 import logging
@@ -755,7 +754,7 @@ class _Runner(AbstractEnvRunner):
         mb_actions = np.asarray(mb_actions, dtype=np.int64).swapaxes(1, 0)
         mb_rewards = np.asarray(mb_rewards, dtype=np.float32).swapaxes(1, 0)
         mb_mus = np.asarray(mb_mus, dtype=np.float32).swapaxes(1, 0)
-        mb_dones = np.asarray(mb_dones, dtype=np.bool).swapaxes(1, 0)
+        mb_dones = np.asarray(mb_dones, dtype=bool).swapaxes(1, 0)
 
         mb_masks = mb_dones  # Used for statefull models like LSTM's to mask state when done
         mb_dones = mb_dones[:, 1:]  # Used for calculating returns. The dones array is now aligned with rewards

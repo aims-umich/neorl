@@ -1,8 +1,8 @@
 import numpy as np
 from typing import Optional
 
-from gym import Env, Space
-from gym.spaces import Discrete, MultiDiscrete, MultiBinary, Box
+from gymnasium import Env, Space
+from gymnasium.spaces import Discrete, MultiDiscrete, MultiBinary, Box
 
 
 class IdentityEnv(Env):
@@ -33,18 +33,20 @@ class IdentityEnv(Env):
         self.num_resets = -1  # Becomes 0 after __init__ exits.
         self.reset()
 
-    def reset(self):
+    def reset(self, *, seed=None, options=None):
+        super().reset(seed=seed)
         self.current_step = 0
         self.num_resets += 1
         self._choose_next_state()
-        return self.state
+        return self.state, {}
 
     def step(self, action):
         reward = self._get_reward(action)
         self._choose_next_state()
         self.current_step += 1
-        done = self.current_step >= self.ep_length
-        return self.state, reward, done, {}
+        terminated = False
+        truncated = self.current_step >= self.ep_length
+        return self.state, reward, terminated, truncated, {}
 
     def _choose_next_state(self):
         self.state = self.action_space.sample()
@@ -52,7 +54,7 @@ class IdentityEnv(Env):
     def _get_reward(self, action):
         return 1 if np.all(self.state == action) else 0
 
-    def render(self, mode='human'):
+    def render(self):
         pass
 
 
@@ -74,8 +76,9 @@ class IdentityEnvBox(IdentityEnv):
         reward = self._get_reward(action)
         self._choose_next_state()
         self.current_step += 1
-        done = self.current_step >= self.ep_length
-        return self.state, reward, done, {}
+        terminated = False
+        truncated = self.current_step >= self.ep_length
+        return self.state, reward, terminated, truncated, {}
 
     def _get_reward(self, action):
         return 1 if (self.state - self.eps) <= action <= (self.state + self.eps) else 0

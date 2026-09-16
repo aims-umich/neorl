@@ -39,16 +39,25 @@ import copy
 
 class NoDaemonProcess(multiprocessing.Process):
     # make 'daemon' attribute always return False
-    def _get_daemon(self):
+    @property
+    def daemon(self):
         return False
-    def _set_daemon(self, value):
+    @daemon.setter
+    def daemon(self, value):
         pass
-    daemon = property(_get_daemon, _set_daemon)
+
+# a context whose Process class is the non-daemonic one above, so that
+# Pool._repopulate_pool_static (which calls self._ctx.Process(...)) spawns
+# non-daemonic workers instead of the raw multiprocessing.Process
+class NoDaemonContext(type(multiprocessing.get_context())):
+    Process = NoDaemonProcess
 
 # We sub-class multiprocessing.pool.Pool instead of multiprocessing.Pool
 # because the latter is only a wrapper function, not a proper class.
 class MyPool(multiprocessing.pool.Pool):
-    Process = NoDaemonProcess
+    def __init__(self, *args, **kwargs):
+        kwargs['context'] = NoDaemonContext()
+        super().__init__(*args, **kwargs)
 
 class GA:
     """
@@ -61,25 +70,46 @@ class GA:
     :param mutpb: (float) population mutation probability between [0,1]
     :param chi: (float) individual mutation probability between [0,1]
     :param ncores: (int) number of parallel processors
+    :param smin: (float) minimum bound for the strategy vector
+    :param smax: (float) maximum bound for the strategy vector
+    :param check_freq: (int) frequency (in generations) at which progress statistics are printed
     :param seed: (int) random seed for sampling
     """
-    def __init__ (self, bounds, fit, npop=50, mu=50, cxpb=0.7, cxfunc='cx2point', 
-                  mutfunc='', mutpb=0.2, 
-                  chi=0.1, ncores=1, seed=None):    
+    def __init__ (self, bounds, fit, npop=50, mu=50, cxpb=0.7, cxfunc='cx2point',
+                  mutfunc='', mutpb=0.2,
+                  chi=0.1, ncores=1, smin=0.01, smax=0.5, check_freq=1, seed=None):
 
-        
+
         set_neorl_seed(seed)
-        
+
         self.bounds=bounds
         self.fit=fit
+        self.env=self  #gen_object/init_pop call self.env.fit(...), which is just self.fit(...)
         self.npop=npop
+        self.lambda_=npop  #total offspring generated per generation, mirrors npop
         self.mu=mu
         self.cxpb=cxpb
         self.mutpb=mutpb
         self.chi=chi
         self.ncores=ncores
+        self.smin=smin
+        self.smax=smax
+        self.check_freq=check_freq
         self.seed=seed
-        
+        self.callback=None  #no plotting callback is wired up for this class
+
+        #knowledge-base-seeding (KBS) feature is disabled by default;
+        #no constructor parameter currently exposes an external KBS dataset
+        self.kbs_path=None
+        self.kbs_data=None
+        self.kbs_pop=0
+        self.kbs_append=False
+
+        #infer variable types and bounds for GenES/mutES
+        self.datatype=np.array([bounds[item][0] for item in bounds])
+        self.lbound=[bounds[item][1] for item in bounds]
+        self.ubound=[bounds[item][2] for item in bounds]
+
         assert mu <= npop, '--error: the value of `mu` must be less than or equal `npop`'
         assert 0 <= chi <= 1, '--error: `chi` must be between [0,1]'
         assert 0 <= cxpb <= 1, '--error: `cxpb` must be between [0,1]'
@@ -126,31 +156,37 @@ class GA:
         strategy = [random.uniform(smin,smax) for _ in range(size)]
         return ind, strategy
 
-    def init_pop(self, warmup):
+    def init_pop(self, warmup, x0=None):
         #"""
-        #Population intializer 
+        #Population intializer
         #Inputs:
         #    -warmup (int): number of individuals to create and evaluate initially
-        #Returns 
+        #    -x0 (list of lists): optional user-provided initial individuals (length must equal warmup)
+        #Returns
         #    -pop (dict): initial population in a dictionary form, looks like this
-            
+
         #"""
         #initialize the population and strategy and run them in parallel (these samples will be used to initialize the memory)
         pop=defaultdict(list)
         # dict key runs from 0 to warmup-1
-        # index 0: individual, index 1: strategy, index 2: fitness 
-        # Example: 
+        # index 0: individual, index 1: strategy, index 2: fitness
+        # Example:
         """
         pop={key: [ind, strategy, fitness]}
-        pop={0: [[1,2,3,4,5], [0.1,0.2,0.3,0.4,0.5], 1.2], 
-             ... 
+        pop={0: [[1,2,3,4,5], [0.1,0.2,0.3,0.4,0.5], 1.2],
+             ...
              99: [[1.1,2.1,3.1,4.1,5.1], [0.1,0.2,0.3,0.4,0.5], 5.2]}
         """
         for i in range (warmup):
             #caseid='es_gen{}_ind{}'.format(0,i+1)  #caseid are only for logging purposes to distinguish sample source
-            data=self.GenES(lb=self.lbound, ub=self.ubound, datatype=self.datatype, smax=self.smax, smin=self.smin)
-            pop[i].append(data[0])
-            pop[i].append(data[1])
+            if x0 is not None:
+                ind = list(x0[i])
+                strategy = [random.uniform(self.smin, self.smax) for _ in range(len(ind))]
+            else:
+                data=self.GenES(lb=self.lbound, ub=self.ubound, datatype=self.datatype, smax=self.smax, smin=self.smin)
+                ind, strategy = data[0], data[1]
+            pop[i].append(ind)
+            pop[i].append(strategy)
         
         if self.ncores > 1:  #evaluate warmup in parallel
             core_list=[]
@@ -217,7 +253,7 @@ class GA:
             #------------------------------
             if alpha < self.cxpb:            
                 index1, index2 = random.sample(pop_indices,2)
-                ind1, ind2, strat1, strat2 = cx2point(ind1=list(pop[index1][0]),ind2=list(pop[index2][0]), 
+                ind1, ind2, strat1, strat2 = cxES2point(ind1=list(pop[index1][0]),ind2=list(pop[index2][0]),
                                                      strat1=list(pop[index1][1]),strat2=list(pop[index2][1]))
                 offspring[i].append(ind1)
                 offspring[i].append(strat1)
@@ -253,12 +289,13 @@ class GA:
         :return: (dict) dictionary containing major GA search results
         """
         set_neorl_seed(self.seed)
+        self.ngen=ngen
 
         if x0:
             assert len(x0) == self.npop, '--error: the length of `x0` ({}) (initial population) must equal to number of individuals `npop` ({})'.format(len(x0), self.npop)
-            population = self.InitPopulation(x0=x0)
+            population = self.init_pop(warmup=self.npop, x0=x0)
         else:
-            population = self.InitPopulation()
+            population = self.init_pop(warmup=self.npop)
         
         # Begin the evolution process
         for gen in range(1, ngen + 1):
@@ -301,9 +338,10 @@ class GA:
                 inds, rwd=[population[i][0] for i in population], [population[i][2] for i in population]
                 mean_strategy=[np.mean(population[i][1]) for i in population]
                 #------------
-                # plot progress 
+                # plot progress
                 #------------
-                self.callback.plot_progress('Generation')
+                if self.callback is not None:
+                    self.callback.plot_progress('Generation')
                 
                 if verbose:
                     print('############################################################')

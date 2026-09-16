@@ -1,9 +1,11 @@
+LICENSE
 MANIFEST.in
 README.md
 setup.py
 neorl/__init__.py
 neorl/scripts.py
 neorl/version.py
+neorl/version.txt
 neorl.egg-info/PKG-INFO
 neorl.egg-info/SOURCES.txt
 neorl.egg-info/dependency_links.txt
@@ -14,6 +16,7 @@ neorl/benchmarks/__init__.py
 neorl/benchmarks/cec08.py
 neorl/benchmarks/cec17.py
 neorl/benchmarks/classic.py
+neorl/benchmarks/dtlz.py
 neorl/benchmarks/kp.py
 neorl/benchmarks/qpower_model.py
 neorl/benchmarks/reactivity_model.py
@@ -74,6 +77,7 @@ neorl/hybrid/nhhocore/Latin.py
 neorl/hybrid/nhhocore/__init__.py
 neorl/hybrid/nhhocore/hho.py
 neorl/hybrid/nhhocore/nnmodel.py
+neorl/hybrid/nhhocore/tf_isolate.py
 neorl/hybrid/pesacore/__init__.py
 neorl/hybrid/pesacore/de.py
 neorl/hybrid/pesacore/er.py
@@ -83,6 +87,10 @@ neorl/hybrid/pesacore/pso.py
 neorl/hybrid/pesacore/sa.py
 neorl/hybrid/pesacore/woa.py
 neorl/hybrid/pesacore/xnes.py
+neorl/multi/__init__.py
+neorl/multi/nsgaII.py
+neorl/multi/nsgaIII.py
+neorl/multi/tools.py
 neorl/parsers/PARSER.py
 neorl/parsers/ParamList.py
 neorl/parsers/TuneChecker.py
@@ -194,6 +202,7 @@ neorl/tests/test_mixedea.py
 neorl/tests/test_mixedrl.py
 neorl/tests/test_nga.py
 neorl/tests/test_nhho.py
+neorl/tests/test_nsga.py
 neorl/tests/test_pesa.py
 neorl/tests/test_pesa2.py
 neorl/tests/test_ppo2.py

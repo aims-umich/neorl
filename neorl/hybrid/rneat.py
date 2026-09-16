@@ -62,22 +62,23 @@ class RNEAT(object):
     def eval_genomes(self, genomes, config):
 
         for genome_id, genome in genomes:
-            if self.x0: # input user's data 
+            if self.x0: # input user's data
                 ob=self.x0.copy()
-            else: # no user's data 
-                ob = self.env.reset()
-                
+            else: # no user's data
+                ob, _ = self.env.reset()
+
             net = neat.nn.recurrent.RecurrentNetwork.create(genome, config)
             local_fit = float("-inf")
             counter = 0
             xpos = 0
             done = False
-            
+
             while not done:
-                
+
                 nnOutput = net.activate(ob)
-                ob, rew, done, info = self.env.step(nnOutput)
-                xpos = info['x']  
+                ob, rew, terminated, truncated, info = self.env.step(nnOutput)
+                done = terminated or truncated
+                xpos = info['x']
                                 
                 if rew > local_fit:
                     local_fit = rew
@@ -243,7 +244,7 @@ class RNEAT(object):
             },
     
             'DefaultGenome':{
-            'activation_default':'identity',
+            'activation_default':'sigmoid',
             'activation_mutate_rate':0.05,
             'activation_options': 'sigmoid',
     
@@ -316,7 +317,7 @@ class RNEAT(object):
             'DefaultReproduction':{
             'elitism': 1,
             'survival_threshold': 0.3,
-            'min_species_size': 2
+            'min_species_size': 1
             }
         }
     
@@ -341,22 +342,23 @@ class NEATWorker(object):
         
     def work(self):
         
-        if self.x0: # input user's data 
+        if self.x0: # input user's data
             ob=self.x0.copy()
-        else: # no user's data 
-            ob = self.env.reset()
-            
+        else: # no user's data
+            ob, _ = self.env.reset()
+
         net = neat.nn.recurrent.RecurrentNetwork.create(self.genome, self.config)
         local_fit = float("-inf")
         counter = 0
         xpos = 0
         done = False
-        
+
         while not done:
-            
+
             nnOutput = net.activate(ob)
-            ob, rew, done, info = self.env.step(nnOutput)
-            xpos = info['x']  
+            ob, rew, terminated, truncated, info = self.env.step(nnOutput)
+            done = terminated or truncated
+            xpos = info['x']
                             
             if rew > local_fit:
                 local_fit = rew

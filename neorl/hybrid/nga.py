@@ -219,18 +219,18 @@ class NGA(object):
 
         error = abs(pre1-pre2)
         seq = np.ravel(np.where(error == np.min(error)))[0]
-        xtemp = np.row_stack((self.warmup_x0, self.ga.pop[seq]))
+        xtemp = np.vstack((self.warmup_x0, self.ga.pop[seq]))
         ytemp = np.append(self.warmup_y0, (pre1[seq]+pre2[seq])/2)
         self.models[0].fit(xtemp, ytemp)
 
         error = abs(pre0-pre2)
         seq = np.ravel(np.where(error == np.min(error)))[0]
-        xtemp = np.row_stack((self.warmup_x1, self.ga.pop[seq]))
+        xtemp = np.vstack((self.warmup_x1, self.ga.pop[seq]))
         ytemp = np.append(self.warmup_y1, (pre0[seq]+pre2[seq])/2)
         self.models[1].fit(xtemp, ytemp)
 
         error = abs(pre0-pre1)
         seq = np.ravel(np.where(error == np.min(error)))[0]
-        xtemp = np.row_stack((self.warmup_x2, self.ga.pop[seq]))
+        xtemp = np.vstack((self.warmup_x2, self.ga.pop[seq]))
         ytemp = np.append(self.warmup_y2, (pre0[seq]+pre1[seq])/2)
         self.models[2].fit(xtemp, ytemp)

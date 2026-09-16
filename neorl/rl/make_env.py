@@ -24,8 +24,8 @@ from neorl.evolu.discrete import encode_grid_to_discrete, decode_discrete_to_gri
 from neorl.rl.baselines.shared import set_global_seeds
 from neorl.rl.baselines.shared.vec_env import SubprocVecEnv
 import numpy as np
-import gym
-from gym.spaces import Box, MultiDiscrete, Discrete
+import gymnasium as gym
+from gymnasium.spaces import Box, MultiDiscrete, Discrete
 import random
 
 
@@ -208,11 +208,14 @@ class BaseEnvironment(gym.Env):
         if self.counter == self.episode_length:
             self.done=True
             self.counter = 0
-        
+
         #print(state, action, reward)
-        return state, reward, self.done, {'x':action}
-    
-    def reset(self):
+        return state, reward, self.done, False, {'x':action}
+
+    def reset(self, seed=None, options=None):
+        super().reset(seed=seed)
+        if seed is not None:
+            self.seed(seed)
         self.done=False
         if self.method in ['ppo', 'a2c', 'acktr', 'rneat', 'fneat']:
             init_state=self.action_space.sample()
@@ -221,7 +224,7 @@ class BaseEnvironment(gym.Env):
             self.full_action=init_state.copy()
         else:
             pass
-        return init_state
+        return init_state, {}
 
     def render(self, mode='human'):
         pass
@@ -328,9 +331,9 @@ def CreateEnvironment(method, fit, bounds, ncores=1, mode='max', episode_length=
         #:param rank: (int) index of the subprocess
         #"""
         def _init():
-            env=BaseEnvironment(method=method, fit=fit, 
+            env=BaseEnvironment(method=method, fit=fit,
                           bounds=bounds, mode=mode, episode_length=episode_length)
-            env.seed(seed + rank)
+            env.reset(seed=seed + rank)
             return env
         set_global_seeds(seed)
         return _init

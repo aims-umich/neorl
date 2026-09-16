@@ -4,7 +4,7 @@ Helpers for dealing with vectorized environments.
 
 from collections import OrderedDict
 
-import gym
+import gymnasium as gym
 import numpy as np
 
 

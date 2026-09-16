@@ -29,7 +29,7 @@ sys.path.insert(0, './neorl/utils')
 sys.path.insert(0, './neorl/evolu')
 sys.path.insert(0, './neorl/parsers')
 import numpy as np
-import gym
+import gymnasium as gym
 import time
 import argparse
 
@@ -190,7 +190,8 @@ def main():
             elif inp.gen_dict['neorl_mode'][0] == 'env_only':
                 print('neorl_mode is set to run env_only, attempting to run the enviroment')
                 env = gym.make(inp.gen_dict['env'][0], log_dir=inp.gen_dict['log_dir'],
-                                    exepath=inp.gen_dict['exepath'][0], env_data=inp.gen_dict['env_data'][0])
+                                    exepath=inp.gen_dict['exepath'][0], env_data=inp.gen_dict['env_data'][0],
+                                    disable_env_checker=True).unwrapped
             else:
                 raise Exception ('neorl_mode is either check or run, the one given by the user is not defined')
             

@@ -17,7 +17,7 @@ from autograd.tracer import new_box, isbox, toposort
 
 # runs the function by making sure the calculations are traced using autograd
 def run_and_trace(fun, x, *args, **kwargs):
-    start_node = VJPNode.new_root(x)
+    start_node = VJPNode.new_root()
 
     start_box = new_box(x, 0, start_node)
     out = fun(start_box, *args, **kwargs)
@@ -38,7 +38,7 @@ def calc_jacobian(start, end):
     for j in range(end.shape[1]):
         b = anp.zeros(end.shape)
         b[:, j] = 1
-        n = new_box(b, 0, VJPNode.new_root(b))
+        n = new_box(b, 0, VJPNode.new_root())
         _jac = backward_pass(n, end._node)
         jac.append(_jac)
 
@@ -345,7 +345,7 @@ class Problem:
         elif G.shape[1] == 0:
             return np.zeros(G.shape[0])[:, None]
         else:
-            return np.sum(G * (G > 0).astype(np.float), axis=1)[:, None]
+            return np.sum(G * (G > 0).astype(float), axis=1)[:, None]
 
 
 # makes all the output at least 2-d dimensional

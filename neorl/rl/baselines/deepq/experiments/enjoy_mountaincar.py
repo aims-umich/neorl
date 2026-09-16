@@ -1,6 +1,6 @@
 import argparse
 
-import gym
+import gymnasium as gym
 import numpy as np
 
 from neorl.rl.baselines.deepq import DQN
@@ -16,7 +16,8 @@ def main(args):
     model = DQN.load("mountaincar_model.zip", env)
 
     while True:
-        obs, done = env.reset(), False
+        obs, _ = env.reset()
+        done = False
         episode_rew = 0
         while not done:
             if not args.no_render:
@@ -26,7 +27,8 @@ def main(args):
                 action = env.action_space.sample()
             else:
                 action, _ = model.predict(obs, deterministic=True)
-            obs, rew, done, _ = env.step(action)
+            obs, rew, terminated, truncated, _ = env.step(action)
+            done = terminated or truncated
             episode_rew += rew
         print("Episode reward", episode_rew)
         # No render is only used for automatic testing

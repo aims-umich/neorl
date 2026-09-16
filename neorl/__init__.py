@@ -18,10 +18,9 @@ import warnings, os
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 warnings.filterwarnings("ignore", message=r"Passing", category=FutureWarning)
 
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 from tensorflow.python.util import deprecation
 tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
-if type(tf.contrib) != type(tf): tf.contrib._warning = None
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 deprecation._PRINT_DEPRECATION_WARNINGS = False
 

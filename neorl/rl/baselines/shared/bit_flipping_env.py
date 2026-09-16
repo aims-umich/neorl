@@ -1,7 +1,19 @@
 from collections import OrderedDict
 
 import numpy as np
-from gym import GoalEnv, spaces
+import gymnasium as gym
+from gymnasium import spaces
+
+
+class GoalEnv(gym.Env):
+    """
+    Minimal replacement for gym's GoalEnv, which is not part of gymnasium's core API
+    (moved out to the separate gymnasium-robotics package). Subclasses must implement
+    compute_reward(achieved_goal, desired_goal, info).
+    """
+
+    def compute_reward(self, achieved_goal, desired_goal, info):
+        raise NotImplementedError
 
 
 class BitFlippingEnv(GoalEnv):
@@ -79,10 +91,11 @@ class BitFlippingEnv(GoalEnv):
             ('desired_goal', self.convert_if_needed(self.desired_goal.copy()))
         ])
 
-    def reset(self):
+    def reset(self, *, seed=None, options=None):
+        super().reset(seed=seed)
         self.current_step = 0
         self.state = self.obs_space.sample()
-        return self._get_obs()
+        return self._get_obs(), {}
 
     def step(self, action):
         if self.continuous:
@@ -91,12 +104,12 @@ class BitFlippingEnv(GoalEnv):
             self.state[action] = 1 - self.state[action]
         obs = self._get_obs()
         reward = self.compute_reward(obs['achieved_goal'], obs['desired_goal'], None)
-        done = reward == 0
+        terminated = reward == 0
         self.current_step += 1
-        # Episode terminate when we reached the goal or the max number of steps
-        info = {'is_success': done}
-        done = done or self.current_step >= self.max_steps
-        return obs, reward, done, info
+        # Episode terminates when we reached the goal, truncates at the max number of steps
+        info = {'is_success': terminated}
+        truncated = self.current_step >= self.max_steps
+        return obs, reward, terminated, truncated, info
 
     def compute_reward(self,
                        achieved_goal: np.ndarray,

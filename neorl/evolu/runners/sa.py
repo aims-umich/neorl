@@ -23,7 +23,7 @@
 import warnings
 warnings.filterwarnings("ignore")
 import random
-import gym
+import gymnasium as gym
 import pandas as pd
 import numpy as np
 from neorl.parsers.PARSER import InputChecker
@@ -40,8 +40,8 @@ class SAAgent(InputChecker):
                   to process data and save models
         """
         self.inp= inp 
-        self.env = gym.make(self.inp.gen_dict['env'][0], casename=self.inp.sa_dict['casename'][0], exepath=self.inp.gen_dict['exepath'][0], 
-                            log_dir=self.inp.gen_dict['log_dir'], env_data=self.inp.gen_dict['env_data'][0])
+        self.env = gym.make(self.inp.gen_dict['env'][0], disable_env_checker=True, casename=self.inp.sa_dict['casename'][0], exepath=self.inp.gen_dict['exepath'][0],
+                            log_dir=self.inp.gen_dict['log_dir'], env_data=self.inp.gen_dict['env_data'][0]).unwrapped
         self.fit=self.env.fit
         
         np.random.seed(10)

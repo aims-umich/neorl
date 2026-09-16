@@ -4,6 +4,12 @@
 # Required
 version: 2
 
+# Set the OS, and the Python version to build your docs
+build:
+  os: ubuntu-24.04
+  tools:
+    python: "3.13"
+
 # Build documentation in the docs/ directory with Sphinx
 sphinx:
   configuration: docs/source/conf.py
@@ -11,8 +17,7 @@ sphinx:
 # Optionally build your docs in additional formats such as PDF and ePub
 formats: all
 
-# Optionally set the version of Python and requirements required to build your docs
+# Requirements required to build your docs
 python:
-  version: 3.7
   install:
     - requirements: docs/requirements.txt

@@ -3,7 +3,7 @@ import multiprocessing
 from collections import OrderedDict
 from typing import Sequence
 
-import gym
+import gymnasium as gym
 import numpy as np
 
 from neorl.rl.baselines.shared.vec_env.base_vec_env import VecEnv, CloudpickleWrapper
@@ -16,19 +16,22 @@ def _worker(remote, parent_remote, env_fn_wrapper):
         try:
             cmd, data = remote.recv()
             if cmd == 'step':
-                observation, reward, done, info = env.step(data)
+                observation, reward, terminated, truncated, info = env.step(data)
+                done = terminated or truncated
                 if done:
                     # save final observation where user can get it, then reset
                     info['terminal_observation'] = observation
-                    observation = env.reset()
+                    observation, _ = env.reset()
                 remote.send((observation, reward, done, info))
             elif cmd == 'seed':
-                remote.send(env.seed(data))
+                env.reset(seed=data)
+                remote.send(data)
             elif cmd == 'reset':
-                observation = env.reset()
+                observation, _ = env.reset()
                 remote.send(observation)
             elif cmd == 'render':
-                remote.send(env.render(data))
+                # gymnasium fixes the render mode at env construction (env.render_mode) rather than per-call
+                remote.send(env.render())
             elif cmd == 'close':
                 env.close()
                 remote.close()
@@ -113,7 +116,8 @@ class SubprocVecEnv(VecEnv):
 
     def seed(self, seed=None):
         for idx, remote in enumerate(self.remotes):
-            remote.send(('seed', seed + idx))
+            env_seed = seed + idx if seed is not None else None
+            remote.send(('seed', env_seed))
         return [remote.recv() for remote in self.remotes]
 
     def reset(self):

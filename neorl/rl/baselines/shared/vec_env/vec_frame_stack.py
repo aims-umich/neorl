@@ -1,7 +1,7 @@
 import warnings
 
 import numpy as np
-from gym import spaces
+from gymnasium import spaces
 
 from neorl.rl.baselines.shared.vec_env.base_vec_env import VecEnvWrapper
 

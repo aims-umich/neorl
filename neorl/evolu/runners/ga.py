@@ -22,7 +22,7 @@
 import warnings
 warnings.filterwarnings("ignore")
 import random
-import gym
+import gymnasium as gym
 import pandas as pd
 import numpy as np
 # import input parameters from the user
@@ -38,16 +38,25 @@ import copy
 
 class NoDaemonProcess(multiprocessing.Process):
     # make 'daemon' attribute always return False
-    def _get_daemon(self):
+    @property
+    def daemon(self):
         return False
-    def _set_daemon(self, value):
+    @daemon.setter
+    def daemon(self, value):
         pass
-    daemon = property(_get_daemon, _set_daemon)
+
+# a context whose Process class is the non-daemonic one above, so that
+# Pool._repopulate_pool_static (which calls self._ctx.Process(...)) spawns
+# non-daemonic workers instead of the raw multiprocessing.Process
+class NoDaemonContext(type(multiprocessing.get_context())):
+    Process = NoDaemonProcess
 
 # We sub-class multiprocessing.pool.Pool instead of multiprocessing.Pool
 # because the latter is only a wrapper function, not a proper class.
 class MyPool(multiprocessing.pool.Pool):
-    Process = NoDaemonProcess
+    def __init__(self, *args, **kwargs):
+        kwargs['context'] = NoDaemonContext()
+        super().__init__(*args, **kwargs)
 
 class GAAgent(InputChecker):
     
@@ -61,8 +70,8 @@ class GAAgent(InputChecker):
         """
         random.seed(42)
         self.inp= inp
-        self.env = gym.make(self.inp.gen_dict['env'][0], casename=self.inp.ga_dict['casename'][0], exepath=self.inp.gen_dict['exepath'][0], 
-                            log_dir=self.inp.gen_dict['log_dir'], env_data=self.inp.gen_dict['env_data'][0])
+        self.env = gym.make(self.inp.gen_dict['env'][0], disable_env_checker=True, casename=self.inp.ga_dict['casename'][0], exepath=self.inp.gen_dict['exepath'][0],
+                            log_dir=self.inp.gen_dict['log_dir'], env_data=self.inp.gen_dict['env_data'][0]).unwrapped
         self.log_dir=self.inp.gen_dict['log_dir']+self.inp.ga_dict["casename"][0]
         self.callback=callback
         

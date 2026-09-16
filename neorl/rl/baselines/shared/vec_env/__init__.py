@@ -1,7 +1,7 @@
 from typing import Union
 from copy import deepcopy
 
-import gym
+import gymnasium as gym
 
 # flake8: noqa F401
 from neorl.rl.baselines.shared.vec_env.base_vec_env import AlreadySteppingError, NotSteppingError, VecEnv, VecEnvWrapper, \

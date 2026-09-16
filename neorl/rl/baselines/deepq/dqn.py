@@ -1,8 +1,7 @@
 from functools import partial
 
-import tensorflow as tf
 import numpy as np
-import gym
+import gymnasium as gym
 
 from neorl.rl.baselines.shared import logger
 from neorl.rl.baselines.shared import tf_util, OffPolicyRLModel, SetVerbosity, TensorboardWriter
@@ -20,7 +19,7 @@ import warnings
 # https://stackoverflow.com/questions/15777951/how-to-suppress-pandas-future-warning
 warnings.simplefilter(action='ignore', category=FutureWarning)
 warnings.simplefilter(action='ignore', category=Warning)
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 tf.get_logger().setLevel('INFO')
 tf.autograph.set_verbosity(0)
 import logging
@@ -186,7 +185,10 @@ class DQN(OffPolicyRLModel):
             callback.on_rollout_start()
 
             reset = True
-            obs = self.env.reset()
+            is_vec_env = isinstance(self.env, VecEnv)
+            # VecEnv (including _UnvecWrapper) keeps the legacy obs-only reset / 4-tuple step
+            # contract; a raw gymnasium Env returns (obs, info) / a 5-tuple
+            obs = self.env.reset() if is_vec_env else self.env.reset()[0]
             # Retrieve unnormalized observation for saving into the buffer
             if self._vec_normalize_env is not None:
                 obs_ = self._vec_normalize_env.get_original_obs().squeeze()
@@ -213,7 +215,11 @@ class DQN(OffPolicyRLModel):
                     action = self.act(np.array(obs)[None], update_eps=update_eps, **kwargs)[0]
                 env_action = action
                 reset = False
-                new_obs, rew, done, info = self.env.step(env_action)
+                if is_vec_env:
+                    new_obs, rew, done, info = self.env.step(env_action)
+                else:
+                    new_obs, rew, terminated, truncated, info = self.env.step(env_action)
+                    done = terminated or truncated
 
                 self.num_timesteps += 1
 
@@ -247,8 +253,8 @@ class DQN(OffPolicyRLModel):
                     maybe_is_success = info.get('is_success')
                     if maybe_is_success is not None:
                         episode_successes.append(float(maybe_is_success))
-                    if not isinstance(self.env, VecEnv):
-                        obs = self.env.reset()
+                    if not is_vec_env:
+                        obs = self.env.reset()[0]
                     episode_rewards.append(0.0)
                     reset = True
 
