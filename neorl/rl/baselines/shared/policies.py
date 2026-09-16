@@ -3,8 +3,8 @@ from itertools import zip_longest
 from abc import ABC, abstractmethod
 
 import numpy as np
-import tensorflow as tf
-from gym.spaces import Discrete
+import tensorflow.compat.v1 as tf
+from gymnasium.spaces import Discrete
 
 from neorl.rl.baselines.shared.tf_util import batch_to_seq, seq_to_batch
 from neorl.rl.baselines.shared.tf_layers import conv, linear, conv_to_fc, lstm
@@ -421,7 +421,7 @@ class LstmPolicy(RecurrentActorCriticPolicy):
                 if feature_extraction == "cnn":
                     extracted_features = cnn_extractor(self.processed_obs, **kwargs)
                 else:
-                    extracted_features = tf.layers.flatten(self.processed_obs)
+                    extracted_features = conv_to_fc(self.processed_obs)
                     for i, layer_size in enumerate(layers):
                         extracted_features = act_fun(linear(extracted_features, 'pi_fc' + str(i), n_hidden=layer_size,
                                                             init_scale=np.sqrt(2)))
@@ -443,7 +443,7 @@ class LstmPolicy(RecurrentActorCriticPolicy):
                 raise NotImplementedError()
 
             with tf.variable_scope("model", reuse=reuse):
-                latent = tf.layers.flatten(self.processed_obs)
+                latent = conv_to_fc(self.processed_obs)
                 policy_only_layers = []  # Layer sizes of the network that only belongs to the policy network
                 value_only_layers = []  # Layer sizes of the network that only belongs to the value network
 
@@ -562,7 +562,7 @@ class FeedForwardPolicy(ActorCriticPolicy):
             if feature_extraction == "cnn":
                 pi_latent = vf_latent = cnn_extractor(self.processed_obs, **kwargs)
             else:
-                pi_latent, vf_latent = mlp_extractor(tf.layers.flatten(self.processed_obs), net_arch, act_fun)
+                pi_latent, vf_latent = mlp_extractor(conv_to_fc(self.processed_obs), net_arch, act_fun)
 
             self._value_fn = linear(vf_latent, 'vf', 1)
 

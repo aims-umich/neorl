@@ -25,18 +25,25 @@ def evaluate_policy(model, env, n_eval_episodes=10, deterministic=True,
     :return: (float, float) Mean reward per episode, std of reward per episode
         returns ([float], [int]) when `return_episode_rewards` is True
     """
-    if isinstance(env, VecEnv):
+    is_vec_env = isinstance(env, VecEnv)
+    if is_vec_env:
         assert env.num_envs == 1, "You must pass only one environment when using this function"
 
     episode_rewards, episode_lengths = [], []
     for _ in range(n_eval_episodes):
-        obs = env.reset()
+        # VecEnv keeps the legacy obs-only reset / 4-tuple step contract;
+        # a raw gymnasium Env returns (obs, info) / a 5-tuple
+        obs = env.reset() if is_vec_env else env.reset()[0]
         done, state = False, None
         episode_reward = 0.0
         episode_length = 0
         while not done:
             action, state = model.predict(obs, state=state, deterministic=deterministic)
-            obs, reward, done, _info = env.step(action)
+            if is_vec_env:
+                obs, reward, done, _info = env.step(action)
+            else:
+                obs, reward, terminated, truncated, _info = env.step(action)
+                done = terminated or truncated
             episode_reward += reward
             if callback is not None:
                 callback(locals(), globals())

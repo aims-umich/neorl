@@ -78,3 +78,12 @@ Xubo GU obtained his MS degree from Shanghai Jiao Tong University in 2020. His r
 Dean Price is a graduate student at the University of Michigan studying for a PhD in Nuclear Engineering. Dean has experience in various areas of nuclear reactor modeling and simulation including uncertainty quantification, sensitivity analysis, burnup credit, spent fuel criticality safety, surrogate modeling and multiphysics coupling. For NEORL, he helps maintain the code base and has demonstrated the capabilities of NEORL on microreactor control applications. Currently, he is working to develop new optimization algorithms to be included in future versions of NEORL.
 
 ORCID: https://orcid.org/0000-0003-0999-0111
+
+.. image:: ../images/omer.jpg
+   :scale: 23 %
+   :alt: alternate text
+   :align: left
+
+Omer Erdem is a PhD candidate in Nuclear Engineering at the University of Michigan. Research interests of Omer includes nuclear reactor modeling, simulation and analysis including fuel loading and shuffling optimization, surrogate modeling, code verification, uncertainty quantification and licensing. He maintains the NEORL code base and expands NEORL in multiobjective optimization applications.
+
+Linkedin: https://www.linkedin.com/in/omer-faruk-erdem-985932155

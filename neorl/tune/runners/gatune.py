@@ -103,7 +103,7 @@ class GATUNE:
             if ('END TUNE' in self.template[i]):
                 last=i
         if first == 0 and last==0:
-            raise ('TUNE card cannot be found')
+            raise Exception('TUNE card cannot be found')
         
         del self.template[first : last+1]  
         self.template="".join(self.template)  
@@ -383,7 +383,7 @@ class GATUNE:
         des_data2=csvdata.sort_values(by=['max_reward'],ascending=False)
         asc_data.to_csv('tune.csv', index=False)
         
-        mean = np.mean(des_data.iloc[:,4:5])
+        mean = des_data.iloc[:,4:5].mean()
         totalmean=mean.tolist()[0]
         
         try:
@@ -468,9 +468,9 @@ class GATUNE:
                     paramname=self.paraminds[i]
                     individual[i]=random.sample(self.paramvals[paramname],1)[0]
 
-            if type(individual[i]) == int: # Random integer distribution received 
+            if type(individual[i]) == int: # Random integer distribution received
                 if random.random() <= indpb:
-                    individual[i] == random.randint(xl, xu)
+                    individual[i] = random.randint(xl, xu)
 
             if type(individual[i]) == float: # Uniform float distribution received
                 if random.random() <= indpb:

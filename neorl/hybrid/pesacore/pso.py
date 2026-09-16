@@ -30,16 +30,25 @@ import joblib
 from neorl.utils.seeding import set_neorl_seed
 class NoDaemonProcess(multiprocessing.Process):
     # make 'daemon' attribute always return False
-    def _get_daemon(self):
+    @property
+    def daemon(self):
         return False
-    def _set_daemon(self, value):
+    @daemon.setter
+    def daemon(self, value):
         pass
-    daemon = property(_get_daemon, _set_daemon)
+
+# a context whose Process class is the non-daemonic one above, so that
+# Pool._repopulate_pool_static (which calls self._ctx.Process(...)) spawns
+# non-daemonic workers instead of the raw multiprocessing.Process
+class NoDaemonContext(type(multiprocessing.get_context())):
+    Process = NoDaemonProcess
 
 # We sub-class multiprocessing.pool.Pool instead of multiprocessing.Pool
 # because the latter is only a wrapper function, not a proper class.
 class MyPool(multiprocessing.pool.Pool):
-    Process = NoDaemonProcess
+    def __init__(self, *args, **kwargs):
+        kwargs['context'] = NoDaemonContext()
+        super().__init__(*args, **kwargs)
 
 class PSOMod:
     def __init__ (self, bounds, fit, npar, swm0=None, ncores=1, c1=2.05, c2=2.05, speed_mech='constric', seed=None):  
@@ -92,7 +101,7 @@ class PSOMod:
         elif self.speed_mech=='globw':
             pass
         else:
-            raise ('only timew, globw, or constric are allowed for speed_mech, the mechanism used is not defined')
+            raise Exception('only timew, globw, or constric are allowed for speed_mech, the mechanism used is not defined')
         
         assert self.ncores >=1, "Number of cores must be more than or equal 1"
             
@@ -155,7 +164,7 @@ class PSOMod:
                 #print('globw', self.w)
                 new_particle[1][i]=self.w*particle[1][i]+speed_cognitive+speed_social
             else:
-                raise ('only constric, timew, globw, are allowed for speed_mech, the mechanism used is not defined')
+                raise Exception('only constric, timew, globw, are allowed for speed_mech, the mechanism used is not defined')
             
             #***********************************   
             #Update Position based on data type

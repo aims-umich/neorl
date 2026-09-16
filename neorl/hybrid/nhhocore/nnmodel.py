@@ -161,3 +161,15 @@ class NNmodel(object):
         plt.legend()
         plt.savefig(os.path.join(self.paths['error'], 'error{0:0}_{1:04}.png'.format(self.model_num, self.gen)))  #mir: same as the previous figure
         plt.close()
+
+
+# Top-level (picklable) helpers meant to be run through
+# neorl.hybrid.nhhocore.tf_isolate.run_isolated, so each Keras fit/predict
+# starts in a clean child process instead of possibly-graph-mode TF state.
+def _fit_nnmodel(nn_params, gen, model_num, logger_paths, X, Y):
+    NNmodel(nn_params, gen, model_num, logger_paths).fit(X, Y)
+
+
+def _fit_and_predict_nnmodel(nn_params, gen, model_num, logger_paths, X, Y, predict_X):
+    model = NNmodel(nn_params, gen, model_num, logger_paths).fit(X, Y)
+    return model.predict(predict_X).flatten()

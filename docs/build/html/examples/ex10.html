@@ -1,101 +1,50 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <title>10. Example 10: Knapsack Problem &mdash; NEORL 1.7.8b documentation</title>
-  
+  <title>10. Example 10: Knapsack Problem &mdash; NEORL 1.9.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme_overrides.css?v=8fd5583c" />
 
   
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c4cb232b"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="11. Example 11: Microreactor Control with Malfunction" href="ex11.html" />
     <link rel="prev" title="9. Example 9: Cantilever Stepped Beam" href="ex9.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="../index.html" class="icon icon-home"> NEORL
           
-
-          
-            
-            <img src="../_static/logo.png" class="logo" alt="Logo"/>
-          
+          <a href="../index.html" class="icon icon-home">
+            NEORL
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
-              <div class="version">
-                main (1.7.8b )
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../guide/guide.html">General Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../modules/modules.html">Algorithms</a></li>
@@ -128,121 +77,80 @@
 <li class="toctree-l1"><a class="reference internal" href="../misc/contribguide.html">Contribution Guide</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">NEORL</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="examples.html">Examples</a> &raquo;</li>
-        
-      <li><span class="section-number">10. </span>Example 10: Knapsack Problem</li>
-    
-    
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="examples.html">Examples</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">10. </span>Example 10: Knapsack Problem</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="../_sources/examples/ex10.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="example-10-knapsack-problem">
-<span id="ex10"></span><h1><span class="section-number">10. </span>Example 10: Knapsack Problem<a class="headerlink" href="#example-10-knapsack-problem" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="example-10-knapsack-problem">
+<span id="ex10"></span><h1><span class="section-number">10. </span>Example 10: Knapsack Problem<a class="headerlink" href="#example-10-knapsack-problem" title="Link to this heading"></a></h1>
 <p>Example of solving the classical discrete optimization problem “Knapsack Problem” (KP) using NEORL with state-of-the-art reinforcement learning algorithms to demonstrate compatibility with discrete space.</p>
-<div class="section" id="summary">
-<h2><span class="section-number">10.1. </span>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<section id="summary">
+<h2><span class="section-number">10.1. </span>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Algorithm: PPO,A2C, ACKTR, DQN, ACER</p></li>
 <li><p>Type: Discrete/Combinatorial, Single Objective, Constrained</p></li>
 <li><p>Field: Computational mathematics</p></li>
 </ul>
-</div>
-<div class="section" id="problem-description">
-<h2><span class="section-number">10.2. </span>Problem Description<a class="headerlink" href="#problem-description" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="problem-description">
+<h2><span class="section-number">10.2. </span>Problem Description<a class="headerlink" href="#problem-description" title="Link to this heading"></a></h2>
 <p>The Knapsack Problem (KP) is another combinatorial problem that has been studied for decades. It often arises in resource allocation problem, machine scheduling, and asset optimization for instance. It consists in maximizing the value of a set of items placed in a bag limited by the weight capacity <span class="math notranslate nohighlight">\(W\)</span> of the bag. The figure below illustrates the problem. The maximum weight that the bag can contain is 15kg. The optimum set of items is obtained by taking all of them instead of the 12 kg one. A good heuristic is to choose the item with the lowest weight-to-value ratio.</p>
-<a class="reference internal image-reference" href="../_images/kp.png"><img alt="alternate text" class="align-center" src="../_images/kp.png" style="width: 360.0px; height: 312.0px;" /></a>
+<a class="reference internal image-reference" href="../_images/kp.png"><img alt="alternate text" class="align-center" height="312" src="../_images/kp.png" width="360" />
+</a>
 <p>Formally, with <span class="math notranslate nohighlight">\(i = 1,...,n\)</span> items, each characterized by their values and weights <span class="math notranslate nohighlight">\((\nu_i,w_i)\)</span>, the problem can be formulated as:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}&amp;\max \sum_{i=1}^n\nu_ix_i \\
 &amp;s.t. \quad \sum_{i=1}^nw_ix_i \le W \\
 &amp;x_i \in \{0,1\}\end{split}\]</div>
 <p>where <span class="math notranslate nohighlight">\(x_i=1\)</span> if the item <span class="math notranslate nohighlight">\(i\)</span> is in the bag, otherwise <span class="math notranslate nohighlight">\(x_i=0\)</span>. This is called the 0-1 Knapsack Problem. The constraint characterizes the fact that the capacity of the bag is limited by <span class="math notranslate nohighlight">\(W\)</span>, hence the sum of the weights <span class="math notranslate nohighlight">\(\sum_{i=1}^nw_ix_i\)</span> of the items should not exceed <span class="math notranslate nohighlight">\(W\)</span>.</p>
-</div>
-<div class="section" id="neorl-script">
-<h2><span class="section-number">10.3. </span>NEORL script<a class="headerlink" href="#neorl-script" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="neorl-script">
+<h2><span class="section-number">10.3. </span>NEORL script<a class="headerlink" href="#neorl-script" title="Link to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#--------------------------------------------------------</span>
 <span class="c1"># Import Packages</span>
 <span class="c1">#--------------------------------------------------------</span>
-<span class="kn">from</span> <span class="nn">neorl.benchmarks</span> <span class="kn">import</span> <span class="n">KP</span>
-<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">PPO2</span><span class="p">,</span> <span class="n">DQN</span><span class="p">,</span> <span class="n">ACER</span><span class="p">,</span> <span class="n">ACKTR</span><span class="p">,</span> <span class="n">A2C</span>
-<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">MlpPolicy</span><span class="p">,</span> <span class="n">DQNPolicy</span>
-<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">RLLogger</span>
-<span class="kn">import</span> <span class="nn">matplotlib</span>
-<span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;Agg&#39;</span><span class="p">)</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neorl.benchmarks</span><span class="w"> </span><span class="kn">import</span> <span class="n">KP</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neorl</span><span class="w"> </span><span class="kn">import</span> <span class="n">PPO2</span><span class="p">,</span> <span class="n">DQN</span><span class="p">,</span> <span class="n">ACER</span><span class="p">,</span> <span class="n">ACKTR</span><span class="p">,</span> <span class="n">A2C</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neorl</span><span class="w"> </span><span class="kn">import</span> <span class="n">MlpPolicy</span><span class="p">,</span> <span class="n">DQNPolicy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neorl</span><span class="w"> </span><span class="kn">import</span> <span class="n">RLLogger</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">'Agg'</span><span class="p">)</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 
 <span class="c1">#--------------------------------------------------------</span>
 <span class="c1"># KP Data</span>
 <span class="c1">#--------------------------------------------------------</span>
-<span class="k">def</span> <span class="nf">KP_Data</span><span class="p">(</span><span class="n">n_objects</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;&quot;</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">KP_Data</span><span class="p">(</span><span class="n">n_objects</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">""""</span>
 <span class="sd">    Function provides initial data to construct a Knapsack problem enviroment</span>
 <span class="sd">    </span>
 <span class="sd">    :param n_objects: (int) number of objects, choose either 50 or 100</span>
 <span class="sd">    :return: obj_list (list), optimum_knapsack (list), episode_length (int), weight_capacity (int)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">n_objects</span> <span class="o">==</span> <span class="mi">50</span><span class="p">:</span>
         <span class="c1">#---50 objects </span>
         <span class="n">obj_list</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],[</span><span class="mi">8</span><span class="p">,</span><span class="mi">4</span><span class="p">],[</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="mi">9</span><span class="p">,</span><span class="mi">4</span><span class="p">],[</span><span class="mi">5</span><span class="p">,</span><span class="mi">9</span><span class="p">],[</span><span class="mi">3</span><span class="p">,</span><span class="mi">6</span><span class="p">],[</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">9</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="mi">8</span><span class="p">,</span><span class="mi">3</span><span class="p">],[</span><span class="mi">6</span><span class="p">,</span><span class="mi">8</span><span class="p">],[</span><span class="mi">9</span><span class="p">,</span><span class="mi">4</span><span class="p">],[</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="mi">4</span><span class="p">,</span><span class="mi">7</span><span class="p">],[</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">6</span><span class="p">,</span><span class="mi">4</span><span class="p">],[</span><span class="mi">5</span><span class="p">,</span><span class="mi">8</span><span class="p">],[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">],[</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">],[</span><span class="mi">7</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span>\
@@ -270,7 +178,7 @@
         <span class="n">episode_length</span> <span class="o">=</span> <span class="mi">2</span>
         <span class="n">weight_capacity</span><span class="o">=</span> <span class="mi">250</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;--error: n_objects is not defined, either choose 50 or 100&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">'--error: n_objects is not defined, either choose 50 or 100'</span><span class="p">)</span>
     
     <span class="k">return</span> <span class="n">obj_list</span><span class="p">,</span> <span class="n">optimum_knapsack</span><span class="p">,</span> <span class="n">episode_length</span><span class="p">,</span> <span class="n">weight_capacity</span>
 
@@ -293,11 +201,11 @@
 <span class="c1">#--------------------------------------------------------</span>
 <span class="c1">#create an enviroment object from the class</span>
 <span class="n">env</span><span class="o">=</span><span class="n">KP</span><span class="p">(</span><span class="n">obj_list</span><span class="o">=</span><span class="n">obj_list</span><span class="p">,</span> <span class="n">optimum_knapsack</span><span class="o">=</span><span class="n">optimum_knapsack</span><span class="p">,</span> 
-        <span class="n">episode_length</span><span class="o">=</span><span class="n">episode_length</span><span class="p">,</span> <span class="n">weight_capacity</span><span class="o">=</span><span class="n">weight_capacity</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;dqn&#39;</span><span class="p">)</span>
+        <span class="n">episode_length</span><span class="o">=</span><span class="n">episode_length</span><span class="p">,</span> <span class="n">weight_capacity</span><span class="o">=</span><span class="n">weight_capacity</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s1">'dqn'</span><span class="p">)</span>
 <span class="c1">#create a callback function to log data</span>
 <span class="n">cb_dqn</span><span class="o">=</span><span class="n">RLLogger</span><span class="p">(</span><span class="n">check_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="c1">#To activate logger plotter, add following arguments to cb_dqn: </span>
-<span class="c1">#plot_freq = 50,n_avg_steps=10,pngname=&#39;DQN-reward&#39; </span>
+<span class="c1">#plot_freq = 50,n_avg_steps=10,pngname='DQN-reward' </span>
 <span class="c1">#Also applicable to ACER.</span>
 
 <span class="c1">#create a RL object based on the env object</span>
@@ -308,7 +216,7 @@
 <span class="c1"># ACER</span>
 <span class="c1">#--------------------------------------------------------</span>
 <span class="n">env</span><span class="o">=</span><span class="n">KP</span><span class="p">(</span><span class="n">obj_list</span><span class="o">=</span><span class="n">obj_list</span><span class="p">,</span> <span class="n">optimum_knapsack</span><span class="o">=</span><span class="n">optimum_knapsack</span><span class="p">,</span> 
-        <span class="n">episode_length</span><span class="o">=</span><span class="n">episode_length</span><span class="p">,</span> <span class="n">weight_capacity</span><span class="o">=</span><span class="n">weight_capacity</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;acer&#39;</span><span class="p">)</span>
+        <span class="n">episode_length</span><span class="o">=</span><span class="n">episode_length</span><span class="p">,</span> <span class="n">weight_capacity</span><span class="o">=</span><span class="n">weight_capacity</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s1">'acer'</span><span class="p">)</span>
 <span class="n">cb_acer</span><span class="o">=</span><span class="n">RLLogger</span><span class="p">(</span><span class="n">check_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">acer</span> <span class="o">=</span> <span class="n">ACER</span><span class="p">(</span><span class="n">MlpPolicy</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">acer</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span><span class="n">total_timesteps</span><span class="o">=</span><span class="n">total_steps</span><span class="o">*</span><span class="n">n_sum_steps</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">cb_acer</span><span class="p">)</span>
@@ -316,10 +224,10 @@
 <span class="c1"># PPO</span>
 <span class="c1">#--------------------------------------------------------</span>
 <span class="n">env</span><span class="o">=</span><span class="n">KP</span><span class="p">(</span><span class="n">obj_list</span><span class="o">=</span><span class="n">obj_list</span><span class="p">,</span> <span class="n">optimum_knapsack</span><span class="o">=</span><span class="n">optimum_knapsack</span><span class="p">,</span> 
-        <span class="n">episode_length</span><span class="o">=</span><span class="n">episode_length</span><span class="p">,</span> <span class="n">weight_capacity</span><span class="o">=</span><span class="n">weight_capacity</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;ppo&#39;</span><span class="p">)</span>
+        <span class="n">episode_length</span><span class="o">=</span><span class="n">episode_length</span><span class="p">,</span> <span class="n">weight_capacity</span><span class="o">=</span><span class="n">weight_capacity</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s1">'ppo'</span><span class="p">)</span>
 <span class="n">cb_ppo</span><span class="o">=</span><span class="n">RLLogger</span><span class="p">(</span><span class="n">check_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="c1">#To activate logger plotter, add following arguments to cb_ppo: </span>
-<span class="c1">#plot_freq = 1, n_avg_steps=10, pngname=&#39;PPO-reward&#39; </span>
+<span class="c1">#plot_freq = 1, n_avg_steps=10, pngname='PPO-reward' </span>
 <span class="c1">#Also applicable to A2C, ACKTR.</span>
 <span class="n">ppo</span> <span class="o">=</span> <span class="n">PPO2</span><span class="p">(</span><span class="n">MlpPolicy</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span> <span class="n">n_steps</span><span class="o">=</span><span class="n">n_steps</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">ppo</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span><span class="n">total_timesteps</span><span class="o">=</span><span class="n">total_steps</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">cb_ppo</span><span class="p">)</span>
@@ -327,7 +235,7 @@
 <span class="c1"># ACKTR</span>
 <span class="c1">#--------------------------------------------------------</span>
 <span class="n">env</span><span class="o">=</span><span class="n">KP</span><span class="p">(</span><span class="n">obj_list</span><span class="o">=</span><span class="n">obj_list</span><span class="p">,</span> <span class="n">optimum_knapsack</span><span class="o">=</span><span class="n">optimum_knapsack</span><span class="p">,</span> 
-        <span class="n">episode_length</span><span class="o">=</span><span class="n">episode_length</span><span class="p">,</span> <span class="n">weight_capacity</span><span class="o">=</span><span class="n">weight_capacity</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;acktr&#39;</span><span class="p">)</span>
+        <span class="n">episode_length</span><span class="o">=</span><span class="n">episode_length</span><span class="p">,</span> <span class="n">weight_capacity</span><span class="o">=</span><span class="n">weight_capacity</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s1">'acktr'</span><span class="p">)</span>
 <span class="n">cb_acktr</span><span class="o">=</span><span class="n">RLLogger</span><span class="p">(</span><span class="n">check_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">acktr</span> <span class="o">=</span> <span class="n">ACKTR</span><span class="p">(</span><span class="n">MlpPolicy</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span> <span class="n">n_steps</span><span class="o">=</span><span class="n">n_steps</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">acktr</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span><span class="n">total_timesteps</span><span class="o">=</span><span class="n">total_steps</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">cb_acktr</span><span class="p">)</span>
@@ -335,7 +243,7 @@
 <span class="c1"># A2C</span>
 <span class="c1">#--------------------------------------------------------</span>
 <span class="n">env</span><span class="o">=</span><span class="n">KP</span><span class="p">(</span><span class="n">obj_list</span><span class="o">=</span><span class="n">obj_list</span><span class="p">,</span> <span class="n">optimum_knapsack</span><span class="o">=</span><span class="n">optimum_knapsack</span><span class="p">,</span> 
-        <span class="n">episode_length</span><span class="o">=</span><span class="n">episode_length</span><span class="p">,</span> <span class="n">weight_capacity</span><span class="o">=</span><span class="n">weight_capacity</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;a2c&#39;</span><span class="p">)</span>
+        <span class="n">episode_length</span><span class="o">=</span><span class="n">episode_length</span><span class="p">,</span> <span class="n">weight_capacity</span><span class="o">=</span><span class="n">weight_capacity</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s1">'a2c'</span><span class="p">)</span>
 <span class="n">cb_a2c</span><span class="o">=</span><span class="n">RLLogger</span><span class="p">(</span><span class="n">check_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">a2c</span> <span class="o">=</span> <span class="n">A2C</span><span class="p">(</span><span class="n">MlpPolicy</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span> <span class="n">n_steps</span><span class="o">=</span><span class="n">n_steps</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">a2c</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span><span class="n">total_timesteps</span><span class="o">=</span><span class="n">total_steps</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">cb_a2c</span><span class="p">)</span>
@@ -343,21 +251,21 @@
 <span class="c1">#--------------------------------</span>
 <span class="c1">#Summary Results</span>
 <span class="c1">#--------------------------------</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--------------- DQN results ---------------&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The best value of x found:&#39;</span><span class="p">,</span> <span class="n">cb_dqn</span><span class="o">.</span><span class="n">xbest</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The best value of y found:&#39;</span><span class="p">,</span> <span class="n">cb_dqn</span><span class="o">.</span><span class="n">rbest</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--------------- ACER results ---------------&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The best value of x found:&#39;</span><span class="p">,</span> <span class="n">cb_acer</span><span class="o">.</span><span class="n">xbest</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The best value of y found:&#39;</span><span class="p">,</span> <span class="n">cb_acer</span><span class="o">.</span><span class="n">rbest</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--------------- PPO results ---------------&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The best value of x found:&#39;</span><span class="p">,</span> <span class="n">cb_ppo</span><span class="o">.</span><span class="n">xbest</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The best value of y found:&#39;</span><span class="p">,</span> <span class="n">cb_ppo</span><span class="o">.</span><span class="n">rbest</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--------------- ACKTR results ---------------&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The best value of x found:&#39;</span><span class="p">,</span> <span class="n">cb_acktr</span><span class="o">.</span><span class="n">xbest</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The best value of y found:&#39;</span><span class="p">,</span> <span class="n">cb_acktr</span><span class="o">.</span><span class="n">rbest</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--------------- A2C results ---------------&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The best value of x found:&#39;</span><span class="p">,</span> <span class="n">cb_a2c</span><span class="o">.</span><span class="n">xbest</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The best value of y found:&#39;</span><span class="p">,</span> <span class="n">cb_a2c</span><span class="o">.</span><span class="n">rbest</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'--------------- DQN results ---------------'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'The best value of x found:'</span><span class="p">,</span> <span class="n">cb_dqn</span><span class="o">.</span><span class="n">xbest</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'The best value of y found:'</span><span class="p">,</span> <span class="n">cb_dqn</span><span class="o">.</span><span class="n">rbest</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'--------------- ACER results ---------------'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'The best value of x found:'</span><span class="p">,</span> <span class="n">cb_acer</span><span class="o">.</span><span class="n">xbest</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'The best value of y found:'</span><span class="p">,</span> <span class="n">cb_acer</span><span class="o">.</span><span class="n">rbest</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'--------------- PPO results ---------------'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'The best value of x found:'</span><span class="p">,</span> <span class="n">cb_ppo</span><span class="o">.</span><span class="n">xbest</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'The best value of y found:'</span><span class="p">,</span> <span class="n">cb_ppo</span><span class="o">.</span><span class="n">rbest</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'--------------- ACKTR results ---------------'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'The best value of x found:'</span><span class="p">,</span> <span class="n">cb_acktr</span><span class="o">.</span><span class="n">xbest</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'The best value of y found:'</span><span class="p">,</span> <span class="n">cb_acktr</span><span class="o">.</span><span class="n">rbest</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'--------------- A2C results ---------------'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'The best value of x found:'</span><span class="p">,</span> <span class="n">cb_a2c</span><span class="o">.</span><span class="n">xbest</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'The best value of y found:'</span><span class="p">,</span> <span class="n">cb_a2c</span><span class="o">.</span><span class="n">rbest</span><span class="p">)</span>
 
 <span class="c1">#--------------------------------</span>
 <span class="c1">#Summary Plots</span>
@@ -369,7 +277,7 @@
 <span class="n">log_acktr</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">cb_acktr</span><span class="o">.</span><span class="n">r_hist</span><span class="p">)</span><span class="o">.</span><span class="n">cummax</span><span class="p">(</span><span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
 <span class="n">log_a2c</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">cb_a2c</span><span class="o">.</span><span class="n">r_hist</span><span class="p">)</span><span class="o">.</span><span class="n">cummax</span><span class="p">(</span><span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
 
-<span class="k">def</span> <span class="nf">update_log_dqn_acer</span><span class="p">(</span><span class="n">log</span><span class="p">,</span> <span class="n">n_sum_steps</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">update_log_dqn_acer</span><span class="p">(</span><span class="n">log</span><span class="p">,</span> <span class="n">n_sum_steps</span><span class="p">):</span>
     <span class="c1"># This is a helper function to convert right logger for DQN/ACER to</span>
     <span class="c1"># to be equivalent to other algs. </span>
     <span class="c1">#Inputs:</span>
@@ -389,95 +297,81 @@
 
 <span class="c1">#plots</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_dqn</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;DQN&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_acer</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;ACER&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_ppo</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;PPO&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_acktr</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;ACKTR&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_a2c</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;A2C&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Step&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Best Knapsack value&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_dqn</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">"DQN"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_acer</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">"ACER"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_ppo</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">"PPO"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_acktr</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">"ACKTR"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_a2c</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">"A2C"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">'Step'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">'Best Knapsack value'</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;kp_history.png&quot;</span><span class="p">,</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;png&#39;</span> <span class="p">,</span><span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">"kp_history.png"</span><span class="p">,</span><span class="nb">format</span><span class="o">=</span><span class="s1">'png'</span> <span class="p">,</span><span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="results">
-<h2><span class="section-number">10.4. </span>Results<a class="headerlink" href="#results" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="results">
+<h2><span class="section-number">10.4. </span>Results<a class="headerlink" href="#results" title="Link to this heading"></a></h2>
 <p>A summary of the results is shown below for the case of <strong>50 items/objects</strong>. First, all five reinforcement algorithms are compared in terms of maximizing the sum of item weights. The fitness convergence shows that PPO and ACKTR are the best algorithms in this case, with PPO slightly achieved a better fitness. Therefore, we will limit the reported results to PPO.</p>
-<a class="reference internal image-reference" href="../_images/kp_cost.png"><img alt="alternate text" class="align-center" src="../_images/kp_cost.png" style="width: 428.75px; height: 324.5px;" /></a>
+<a class="reference internal image-reference" href="../_images/kp_cost.png"><img alt="alternate text" class="align-center" height="324" src="../_images/kp_cost.png" width="429" />
+</a>
 <p>The maximum value of the Knapsack tour cost found by PPO is 188, which is fairly close to the optimal sum of item values of 204. The <strong>PPO Knapsack</strong> is below</p>
-<a class="reference internal image-reference" href="../_images/best_kp.png"><img alt="alternate text" class="align-center" src="../_images/best_kp.png" style="width: 415.5px; height: 368.0px;" /></a>
+<a class="reference internal image-reference" href="../_images/best_kp.png"><img alt="alternate text" class="align-center" height="368" src="../_images/best_kp.png" width="416" />
+</a>
 <p>while here is the target <strong>optimal</strong> Knapsack</p>
-<a class="reference internal image-reference" href="../_images/optimal_kp.png"><img alt="alternate text" class="align-center" src="../_images/optimal_kp.png" style="width: 415.5px; height: 382.0px;" /></a>
+<a class="reference internal image-reference" href="../_images/optimal_kp.png"><img alt="alternate text" class="align-center" height="382" src="../_images/optimal_kp.png" width="416" />
+</a>
 <p>And here are the final results of all algorithms:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">---------------</span> <span class="n">DQN</span> <span class="n">results</span> <span class="o">---------------</span>
-<span class="n">The</span> <span class="n">best</span> <span class="n">value</span> <span class="n">of</span> <span class="n">x</span> <span class="n">found</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;7&#39;</span><span class="p">,</span> <span class="s1">&#39;8&#39;</span><span class="p">,</span> <span class="s1">&#39;9&#39;</span><span class="p">,</span> <span class="s1">&#39;10&#39;</span><span class="p">,</span> <span class="s1">&#39;11&#39;</span><span class="p">,</span> <span class="s1">&#39;12&#39;</span><span class="p">,</span> <span class="s1">&#39;13&#39;</span><span class="p">,</span> <span class="s1">&#39;14&#39;</span><span class="p">,</span> <span class="s1">&#39;15&#39;</span><span class="p">,</span> <span class="s1">&#39;16&#39;</span><span class="p">,</span> <span class="s1">&#39;17&#39;</span><span class="p">,</span> <span class="s1">&#39;18&#39;</span><span class="p">,</span> <span class="s1">&#39;19&#39;</span><span class="p">,</span> <span class="s1">&#39;20&#39;</span><span class="p">,</span> <span class="s1">&#39;21&#39;</span><span class="p">,</span> <span class="s1">&#39;22&#39;</span><span class="p">,</span> <span class="s1">&#39;23&#39;</span><span class="p">,</span> <span class="s1">&#39;24&#39;</span><span class="p">,</span> <span class="s1">&#39;25&#39;</span><span class="p">,</span> <span class="s1">&#39;26&#39;</span><span class="p">,</span> <span class="s1">&#39;27&#39;</span><span class="p">,</span> <span class="s1">&#39;28&#39;</span><span class="p">,</span> <span class="s1">&#39;29&#39;</span><span class="p">,</span> <span class="s1">&#39;33&#39;</span><span class="p">,</span> <span class="s1">&#39;45&#39;</span><span class="p">,</span> <span class="s1">&#39;36&#39;</span><span class="p">,</span> <span class="s1">&#39;48&#39;</span><span class="p">,</span> <span class="s1">&#39;35&#39;</span><span class="p">,</span> <span class="s1">&#39;6&#39;</span><span class="p">,</span> <span class="s1">&#39;37&#39;</span><span class="p">,</span> <span class="s1">&#39;4&#39;</span><span class="p">,</span> <span class="s1">&#39;30&#39;</span><span class="p">,</span> <span class="s1">&#39;41&#39;</span><span class="p">]</span>
+<span class="n">The</span> <span class="n">best</span> <span class="n">value</span> <span class="n">of</span> <span class="n">x</span> <span class="n">found</span><span class="p">:</span> <span class="p">[</span><span class="s1">'7'</span><span class="p">,</span> <span class="s1">'8'</span><span class="p">,</span> <span class="s1">'9'</span><span class="p">,</span> <span class="s1">'10'</span><span class="p">,</span> <span class="s1">'11'</span><span class="p">,</span> <span class="s1">'12'</span><span class="p">,</span> <span class="s1">'13'</span><span class="p">,</span> <span class="s1">'14'</span><span class="p">,</span> <span class="s1">'15'</span><span class="p">,</span> <span class="s1">'16'</span><span class="p">,</span> <span class="s1">'17'</span><span class="p">,</span> <span class="s1">'18'</span><span class="p">,</span> <span class="s1">'19'</span><span class="p">,</span> <span class="s1">'20'</span><span class="p">,</span> <span class="s1">'21'</span><span class="p">,</span> <span class="s1">'22'</span><span class="p">,</span> <span class="s1">'23'</span><span class="p">,</span> <span class="s1">'24'</span><span class="p">,</span> <span class="s1">'25'</span><span class="p">,</span> <span class="s1">'26'</span><span class="p">,</span> <span class="s1">'27'</span><span class="p">,</span> <span class="s1">'28'</span><span class="p">,</span> <span class="s1">'29'</span><span class="p">,</span> <span class="s1">'33'</span><span class="p">,</span> <span class="s1">'45'</span><span class="p">,</span> <span class="s1">'36'</span><span class="p">,</span> <span class="s1">'48'</span><span class="p">,</span> <span class="s1">'35'</span><span class="p">,</span> <span class="s1">'6'</span><span class="p">,</span> <span class="s1">'37'</span><span class="p">,</span> <span class="s1">'4'</span><span class="p">,</span> <span class="s1">'30'</span><span class="p">,</span> <span class="s1">'41'</span><span class="p">]</span>
 <span class="n">The</span> <span class="n">best</span> <span class="n">value</span> <span class="n">of</span> <span class="n">y</span> <span class="n">found</span><span class="p">:</span> <span class="mf">175.0</span>
 <span class="o">---------------</span> <span class="n">ACER</span> <span class="n">results</span> <span class="o">---------------</span>
-<span class="n">The</span> <span class="n">best</span> <span class="n">value</span> <span class="n">of</span> <span class="n">x</span> <span class="n">found</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;41&#39;</span><span class="p">,</span> <span class="s1">&#39;36&#39;</span><span class="p">,</span> <span class="s1">&#39;10&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;6&#39;</span><span class="p">,</span> <span class="s1">&#39;22&#39;</span><span class="p">,</span> <span class="s1">&#39;13&#39;</span><span class="p">,</span> <span class="s1">&#39;7&#39;</span><span class="p">,</span> <span class="s1">&#39;15&#39;</span><span class="p">,</span> <span class="s1">&#39;48&#39;</span><span class="p">,</span> <span class="s1">&#39;19&#39;</span><span class="p">,</span> <span class="s1">&#39;8&#39;</span><span class="p">,</span> <span class="s1">&#39;21&#39;</span><span class="p">,</span> <span class="s1">&#39;17&#39;</span><span class="p">,</span> <span class="s1">&#39;49&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;11&#39;</span><span class="p">,</span> <span class="s1">&#39;4&#39;</span><span class="p">,</span> <span class="s1">&#39;23&#39;</span><span class="p">,</span> <span class="s1">&#39;26&#39;</span><span class="p">,</span> <span class="s1">&#39;25&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;28&#39;</span><span class="p">,</span> <span class="s1">&#39;50&#39;</span><span class="p">,</span> <span class="s1">&#39;9&#39;</span><span class="p">,</span> <span class="s1">&#39;20&#39;</span><span class="p">,</span> <span class="s1">&#39;24&#39;</span><span class="p">,</span> <span class="s1">&#39;33&#39;</span><span class="p">,</span> <span class="s1">&#39;29&#39;</span><span class="p">,</span> <span class="s1">&#39;32&#39;</span><span class="p">,</span> <span class="s1">&#39;31&#39;</span><span class="p">,</span> <span class="s1">&#39;14&#39;</span><span class="p">,</span> <span class="s1">&#39;43&#39;</span><span class="p">,</span> <span class="s1">&#39;27&#39;</span><span class="p">]</span>
+<span class="n">The</span> <span class="n">best</span> <span class="n">value</span> <span class="n">of</span> <span class="n">x</span> <span class="n">found</span><span class="p">:</span> <span class="p">[</span><span class="s1">'41'</span><span class="p">,</span> <span class="s1">'36'</span><span class="p">,</span> <span class="s1">'10'</span><span class="p">,</span> <span class="s1">'2'</span><span class="p">,</span> <span class="s1">'6'</span><span class="p">,</span> <span class="s1">'22'</span><span class="p">,</span> <span class="s1">'13'</span><span class="p">,</span> <span class="s1">'7'</span><span class="p">,</span> <span class="s1">'15'</span><span class="p">,</span> <span class="s1">'48'</span><span class="p">,</span> <span class="s1">'19'</span><span class="p">,</span> <span class="s1">'8'</span><span class="p">,</span> <span class="s1">'21'</span><span class="p">,</span> <span class="s1">'17'</span><span class="p">,</span> <span class="s1">'49'</span><span class="p">,</span> <span class="s1">'3'</span><span class="p">,</span> <span class="s1">'11'</span><span class="p">,</span> <span class="s1">'4'</span><span class="p">,</span> <span class="s1">'23'</span><span class="p">,</span> <span class="s1">'26'</span><span class="p">,</span> <span class="s1">'25'</span><span class="p">,</span> <span class="s1">'1'</span><span class="p">,</span> <span class="s1">'28'</span><span class="p">,</span> <span class="s1">'50'</span><span class="p">,</span> <span class="s1">'9'</span><span class="p">,</span> <span class="s1">'20'</span><span class="p">,</span> <span class="s1">'24'</span><span class="p">,</span> <span class="s1">'33'</span><span class="p">,</span> <span class="s1">'29'</span><span class="p">,</span> <span class="s1">'32'</span><span class="p">,</span> <span class="s1">'31'</span><span class="p">,</span> <span class="s1">'14'</span><span class="p">,</span> <span class="s1">'43'</span><span class="p">,</span> <span class="s1">'27'</span><span class="p">]</span>
 <span class="n">The</span> <span class="n">best</span> <span class="n">value</span> <span class="n">of</span> <span class="n">y</span> <span class="n">found</span><span class="p">:</span> <span class="mf">186.0</span>
 <span class="o">---------------</span> <span class="n">PPO</span> <span class="n">results</span> <span class="o">---------------</span>
-<span class="n">The</span> <span class="n">best</span> <span class="n">value</span> <span class="n">of</span> <span class="n">x</span> <span class="n">found</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;11&#39;</span><span class="p">,</span> <span class="s1">&#39;28&#39;</span><span class="p">,</span> <span class="s1">&#39;12&#39;</span><span class="p">,</span> <span class="s1">&#39;4&#39;</span><span class="p">,</span> <span class="s1">&#39;30&#39;</span><span class="p">,</span> <span class="s1">&#39;47&#39;</span><span class="p">,</span> <span class="s1">&#39;33&#39;</span><span class="p">,</span> <span class="s1">&#39;9&#39;</span><span class="p">,</span> <span class="s1">&#39;17&#39;</span><span class="p">,</span> <span class="s1">&#39;29&#39;</span><span class="p">,</span> <span class="s1">&#39;49&#39;</span><span class="p">,</span> <span class="s1">&#39;26&#39;</span><span class="p">,</span> <span class="s1">&#39;41&#39;</span><span class="p">,</span> <span class="s1">&#39;43&#39;</span><span class="p">,</span> <span class="s1">&#39;6&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;45&#39;</span><span class="p">,</span> <span class="s1">&#39;22&#39;</span><span class="p">,</span> <span class="s1">&#39;35&#39;</span><span class="p">,</span> <span class="s1">&#39;8&#39;</span><span class="p">,</span> <span class="s1">&#39;48&#39;</span><span class="p">,</span> <span class="s1">&#39;15&#39;</span><span class="p">,</span> <span class="s1">&#39;36&#39;</span><span class="p">,</span> <span class="s1">&#39;44&#39;</span><span class="p">,</span> <span class="s1">&#39;23&#39;</span><span class="p">,</span> <span class="s1">&#39;7&#39;</span><span class="p">,</span> <span class="s1">&#39;32&#39;</span><span class="p">,</span> <span class="s1">&#39;21&#39;</span><span class="p">,</span> <span class="s1">&#39;34&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;25&#39;</span><span class="p">,</span> <span class="s1">&#39;27&#39;</span><span class="p">,</span> <span class="s1">&#39;19&#39;</span><span class="p">,</span> <span class="s1">&#39;20&#39;</span><span class="p">,</span> <span class="s1">&#39;14&#39;</span><span class="p">,</span> <span class="s1">&#39;40&#39;</span><span class="p">]</span>
+<span class="n">The</span> <span class="n">best</span> <span class="n">value</span> <span class="n">of</span> <span class="n">x</span> <span class="n">found</span><span class="p">:</span> <span class="p">[</span><span class="s1">'11'</span><span class="p">,</span> <span class="s1">'28'</span><span class="p">,</span> <span class="s1">'12'</span><span class="p">,</span> <span class="s1">'4'</span><span class="p">,</span> <span class="s1">'30'</span><span class="p">,</span> <span class="s1">'47'</span><span class="p">,</span> <span class="s1">'33'</span><span class="p">,</span> <span class="s1">'9'</span><span class="p">,</span> <span class="s1">'17'</span><span class="p">,</span> <span class="s1">'29'</span><span class="p">,</span> <span class="s1">'49'</span><span class="p">,</span> <span class="s1">'26'</span><span class="p">,</span> <span class="s1">'41'</span><span class="p">,</span> <span class="s1">'43'</span><span class="p">,</span> <span class="s1">'6'</span><span class="p">,</span> <span class="s1">'3'</span><span class="p">,</span> <span class="s1">'45'</span><span class="p">,</span> <span class="s1">'22'</span><span class="p">,</span> <span class="s1">'35'</span><span class="p">,</span> <span class="s1">'8'</span><span class="p">,</span> <span class="s1">'48'</span><span class="p">,</span> <span class="s1">'15'</span><span class="p">,</span> <span class="s1">'36'</span><span class="p">,</span> <span class="s1">'44'</span><span class="p">,</span> <span class="s1">'23'</span><span class="p">,</span> <span class="s1">'7'</span><span class="p">,</span> <span class="s1">'32'</span><span class="p">,</span> <span class="s1">'21'</span><span class="p">,</span> <span class="s1">'34'</span><span class="p">,</span> <span class="s1">'1'</span><span class="p">,</span> <span class="s1">'25'</span><span class="p">,</span> <span class="s1">'27'</span><span class="p">,</span> <span class="s1">'19'</span><span class="p">,</span> <span class="s1">'20'</span><span class="p">,</span> <span class="s1">'14'</span><span class="p">,</span> <span class="s1">'40'</span><span class="p">]</span>
 <span class="n">The</span> <span class="n">best</span> <span class="n">value</span> <span class="n">of</span> <span class="n">y</span> <span class="n">found</span><span class="p">:</span> <span class="mf">188.0</span>
 <span class="o">---------------</span> <span class="n">ACKTR</span> <span class="n">results</span> <span class="o">---------------</span>
-<span class="n">The</span> <span class="n">best</span> <span class="n">value</span> <span class="n">of</span> <span class="n">x</span> <span class="n">found</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;29&#39;</span><span class="p">,</span> <span class="s1">&#39;12&#39;</span><span class="p">,</span> <span class="s1">&#39;31&#39;</span><span class="p">,</span> <span class="s1">&#39;4&#39;</span><span class="p">,</span> <span class="s1">&#39;7&#39;</span><span class="p">,</span> <span class="s1">&#39;36&#39;</span><span class="p">,</span> <span class="s1">&#39;39&#39;</span><span class="p">,</span> <span class="s1">&#39;24&#39;</span><span class="p">,</span> <span class="s1">&#39;10&#39;</span><span class="p">,</span> <span class="s1">&#39;40&#39;</span><span class="p">,</span> <span class="s1">&#39;15&#39;</span><span class="p">,</span> <span class="s1">&#39;22&#39;</span><span class="p">,</span> <span class="s1">&#39;33&#39;</span><span class="p">,</span> <span class="s1">&#39;48&#39;</span><span class="p">,</span> <span class="s1">&#39;9&#39;</span><span class="p">,</span> <span class="s1">&#39;19&#39;</span><span class="p">,</span> <span class="s1">&#39;32&#39;</span><span class="p">,</span> <span class="s1">&#39;45&#39;</span><span class="p">,</span> <span class="s1">&#39;34&#39;</span><span class="p">,</span> <span class="s1">&#39;14&#39;</span><span class="p">,</span> <span class="s1">&#39;8&#39;</span><span class="p">,</span> <span class="s1">&#39;25&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;11&#39;</span><span class="p">,</span> <span class="s1">&#39;46&#39;</span><span class="p">,</span> <span class="s1">&#39;28&#39;</span><span class="p">,</span> <span class="s1">&#39;23&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;49&#39;</span><span class="p">,</span>
-<span class="s1">&#39;26&#39;</span><span class="p">,</span> <span class="s1">&#39;21&#39;</span><span class="p">,</span> <span class="s1">&#39;35&#39;</span><span class="p">,</span> <span class="s1">&#39;16&#39;</span><span class="p">,</span> <span class="s1">&#39;38&#39;</span><span class="p">]</span>
+<span class="n">The</span> <span class="n">best</span> <span class="n">value</span> <span class="n">of</span> <span class="n">x</span> <span class="n">found</span><span class="p">:</span> <span class="p">[</span><span class="s1">'29'</span><span class="p">,</span> <span class="s1">'12'</span><span class="p">,</span> <span class="s1">'31'</span><span class="p">,</span> <span class="s1">'4'</span><span class="p">,</span> <span class="s1">'7'</span><span class="p">,</span> <span class="s1">'36'</span><span class="p">,</span> <span class="s1">'39'</span><span class="p">,</span> <span class="s1">'24'</span><span class="p">,</span> <span class="s1">'10'</span><span class="p">,</span> <span class="s1">'40'</span><span class="p">,</span> <span class="s1">'15'</span><span class="p">,</span> <span class="s1">'22'</span><span class="p">,</span> <span class="s1">'33'</span><span class="p">,</span> <span class="s1">'48'</span><span class="p">,</span> <span class="s1">'9'</span><span class="p">,</span> <span class="s1">'19'</span><span class="p">,</span> <span class="s1">'32'</span><span class="p">,</span> <span class="s1">'45'</span><span class="p">,</span> <span class="s1">'34'</span><span class="p">,</span> <span class="s1">'14'</span><span class="p">,</span> <span class="s1">'8'</span><span class="p">,</span> <span class="s1">'25'</span><span class="p">,</span> <span class="s1">'2'</span><span class="p">,</span> <span class="s1">'11'</span><span class="p">,</span> <span class="s1">'46'</span><span class="p">,</span> <span class="s1">'28'</span><span class="p">,</span> <span class="s1">'23'</span><span class="p">,</span> <span class="s1">'3'</span><span class="p">,</span> <span class="s1">'49'</span><span class="p">,</span>
+<span class="s1">'26'</span><span class="p">,</span> <span class="s1">'21'</span><span class="p">,</span> <span class="s1">'35'</span><span class="p">,</span> <span class="s1">'16'</span><span class="p">,</span> <span class="s1">'38'</span><span class="p">]</span>
 <span class="n">The</span> <span class="n">best</span> <span class="n">value</span> <span class="n">of</span> <span class="n">y</span> <span class="n">found</span><span class="p">:</span> <span class="mf">187.0</span>
 <span class="o">---------------</span> <span class="n">A2C</span> <span class="n">results</span> <span class="o">---------------</span>
-<span class="n">The</span> <span class="n">best</span> <span class="n">value</span> <span class="n">of</span> <span class="n">x</span> <span class="n">found</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;16&#39;</span><span class="p">,</span> <span class="s1">&#39;28&#39;</span><span class="p">,</span> <span class="s1">&#39;15&#39;</span><span class="p">,</span> <span class="s1">&#39;4&#39;</span><span class="p">,</span> <span class="s1">&#39;32&#39;</span><span class="p">,</span> <span class="s1">&#39;23&#39;</span><span class="p">,</span> <span class="s1">&#39;20&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;43&#39;</span><span class="p">,</span> <span class="s1">&#39;8&#39;</span><span class="p">,</span> <span class="s1">&#39;36&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;35&#39;</span><span class="p">,</span> <span class="s1">&#39;46&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;22&#39;</span><span class="p">,</span> <span class="s1">&#39;21&#39;</span><span class="p">,</span> <span class="s1">&#39;41&#39;</span><span class="p">,</span> <span class="s1">&#39;18&#39;</span><span class="p">,</span> <span class="s1">&#39;7&#39;</span><span class="p">,</span> <span class="s1">&#39;24&#39;</span><span class="p">,</span> <span class="s1">&#39;38&#39;</span><span class="p">,</span> <span class="s1">&#39;40&#39;</span><span class="p">,</span> <span class="s1">&#39;11&#39;</span><span class="p">,</span> <span class="s1">&#39;12&#39;</span><span class="p">,</span> <span class="s1">&#39;29&#39;</span><span class="p">,</span> <span class="s1">&#39;44&#39;</span><span class="p">,</span> <span class="s1">&#39;49&#39;</span><span class="p">,</span> <span class="s1">&#39;48&#39;</span><span class="p">,</span> <span class="s1">&#39;37&#39;</span><span class="p">,</span> <span class="s1">&#39;33&#39;</span><span class="p">,</span> <span class="s1">&#39;9&#39;</span><span class="p">]</span>
+<span class="n">The</span> <span class="n">best</span> <span class="n">value</span> <span class="n">of</span> <span class="n">x</span> <span class="n">found</span><span class="p">:</span> <span class="p">[</span><span class="s1">'16'</span><span class="p">,</span> <span class="s1">'28'</span><span class="p">,</span> <span class="s1">'15'</span><span class="p">,</span> <span class="s1">'4'</span><span class="p">,</span> <span class="s1">'32'</span><span class="p">,</span> <span class="s1">'23'</span><span class="p">,</span> <span class="s1">'20'</span><span class="p">,</span> <span class="s1">'1'</span><span class="p">,</span> <span class="s1">'43'</span><span class="p">,</span> <span class="s1">'8'</span><span class="p">,</span> <span class="s1">'36'</span><span class="p">,</span> <span class="s1">'3'</span><span class="p">,</span> <span class="s1">'35'</span><span class="p">,</span> <span class="s1">'46'</span><span class="p">,</span> <span class="s1">'2'</span><span class="p">,</span> <span class="s1">'22'</span><span class="p">,</span> <span class="s1">'21'</span><span class="p">,</span> <span class="s1">'41'</span><span class="p">,</span> <span class="s1">'18'</span><span class="p">,</span> <span class="s1">'7'</span><span class="p">,</span> <span class="s1">'24'</span><span class="p">,</span> <span class="s1">'38'</span><span class="p">,</span> <span class="s1">'40'</span><span class="p">,</span> <span class="s1">'11'</span><span class="p">,</span> <span class="s1">'12'</span><span class="p">,</span> <span class="s1">'29'</span><span class="p">,</span> <span class="s1">'44'</span><span class="p">,</span> <span class="s1">'49'</span><span class="p">,</span> <span class="s1">'48'</span><span class="p">,</span> <span class="s1">'37'</span><span class="p">,</span> <span class="s1">'33'</span><span class="p">,</span> <span class="s1">'9'</span><span class="p">]</span>
 <span class="n">The</span> <span class="n">best</span> <span class="n">value</span> <span class="n">of</span> <span class="n">y</span> <span class="n">found</span><span class="p">:</span> <span class="mf">181.0</span>
 </pre></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="ex11.html" class="btn btn-neutral float-right" title="11. Example 11: Microreactor Control with Malfunction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="ex9.html" class="btn btn-neutral float-left" title="9. Example 9: Cantilever Stepped Beam" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ex11.html" class="btn btn-neutral float-right" title="11. Example 11: Microreactor Control with Malfunction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2021, Exelon Corp. &amp; MIT.
-
-    </p>
+    <p>&#169; Copyright 2021, Exelon Corp. &amp; MIT.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

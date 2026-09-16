@@ -1,101 +1,50 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <title>11. Example 11: Microreactor Control with Malfunction &mdash; NEORL 1.7.8b documentation</title>
-  
+  <title>11. Example 11: Microreactor Control with Malfunction &mdash; NEORL 1.9.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme_overrides.css?v=8fd5583c" />
 
   
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c4cb232b"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Change Log" href="../misc/changelog.html" />
     <link rel="prev" title="10. Example 10: Knapsack Problem" href="ex10.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="../index.html" class="icon icon-home"> NEORL
           
-
-          
-            
-            <img src="../_static/logo.png" class="logo" alt="Logo"/>
-          
+          <a href="../index.html" class="icon icon-home">
+            NEORL
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
-              <div class="version">
-                main (1.7.8b )
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../guide/guide.html">General Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../modules/modules.html">Algorithms</a></li>
@@ -128,88 +77,46 @@
 <li class="toctree-l1"><a class="reference internal" href="../misc/contribguide.html">Contribution Guide</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">NEORL</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="examples.html">Examples</a> &raquo;</li>
-        
-      <li><span class="section-number">11. </span>Example 11: Microreactor Control with Malfunction</li>
-    
-    
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="examples.html">Examples</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">11. </span>Example 11: Microreactor Control with Malfunction</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="../_sources/examples/ex11.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="example-11-microreactor-control-with-malfunction">
-<span id="ex11"></span><h1><span class="section-number">11. </span>Example 11: Microreactor Control with Malfunction<a class="headerlink" href="#example-11-microreactor-control-with-malfunction" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="example-11-microreactor-control-with-malfunction">
+<span id="ex11"></span><h1><span class="section-number">11. </span>Example 11: Microreactor Control with Malfunction<a class="headerlink" href="#example-11-microreactor-control-with-malfunction" title="Link to this heading"></a></h1>
 <p>Example demonstrating NEORL used to find optimal control mechanism positions to acheive favorable operation of a nuclear microreactor.</p>
 <p>Original paper: Price, D., Radaideh, M. I., Kochunas, B. (2022). Multiobjective optimization of nuclear microreactor reactivity control system operation with swarm and evolutionary algorithms. Nuclear Engineering and Design, 393, 111776.</p>
 <p><a class="reference external" href="https://doi.org/10.1016/j.nucengdes.2022.111776">https://doi.org/10.1016/j.nucengdes.2022.111776</a></p>
-<div class="section" id="summary">
-<h2><span class="section-number">11.1. </span>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<section id="summary">
+<h2><span class="section-number">11.1. </span>Summary<a class="headerlink" href="#summary" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Algorithm: DE, ES, MFO</p></li>
 <li><p>Type: Multi Objective, Unconstrained</p></li>
 <li><p>Field: Nuclear Engineering</p></li>
 </ul>
-</div>
-<div class="section" id="problem-description">
-<h2><span class="section-number">11.2. </span>Problem Description<a class="headerlink" href="#problem-description" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="problem-description">
+<h2><span class="section-number">11.2. </span>Problem Description<a class="headerlink" href="#problem-description" title="Link to this heading"></a></h2>
 <p>The HOLOS-Quad reactor design is a high-temperature gas-cooled microreactor which has 8 cylindrical control drums for reactivity control. Each of the drums has a portion of their outer surface covered by absorbing material which, when rotated towards the body of the core, can absorb neutrons. The position of a drum will refer to its rotation angle from fully inserted. A view of the core design is given below:</p>
 <p>&lt;&lt;awaiting approval to include picture&gt;&gt;</p>
 <p>In this example, one of the 8 drums is immobilized and the positions of the remaining 7 drums need to be selected to satisfy three criteria:</p>
@@ -239,29 +146,29 @@
 <div class="math notranslate nohighlight">
 \[F(\vec{x}) = w_c f_c(\vec{x}) + w_p f_p(\vec{x}) + w_d f_d(\vec{x})\]</div>
 <p>Here, <span class="math notranslate nohighlight">\(F(\vec{x})\)</span> is the function that will be plugged into an optimizer and <span class="math notranslate nohighlight">\(w\)</span> is used to indicate the weight assigned to each of the objective functions. Moreover, the selection of these weights is nontrivial and an important part of complex optimization analyses. For this application, <span class="math notranslate nohighlight">\(w_c = 0.50, w_p = 0.40\)</span> and <span class="math notranslate nohighlight">\(w_d = 0.10\)</span>. More discussion is given in the original paper on the selection of these weights.</p>
-</div>
-<div class="section" id="neorl-script">
-<h2><span class="section-number">11.3. </span>NEORL script<a class="headerlink" href="#neorl-script" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">DE</span><span class="p">,</span> <span class="n">ES</span><span class="p">,</span> <span class="n">MFO</span>
-<span class="kn">from</span> <span class="nn">neorl.benchmarks.reactivity_model</span> <span class="kn">import</span> <span class="n">ReactivityModel</span>
-<span class="kn">from</span> <span class="nn">neorl.benchmarks.qpower_model</span> <span class="kn">import</span> <span class="n">QPowerModel</span>
+</section>
+<section id="neorl-script">
+<h2><span class="section-number">11.3. </span>NEORL script<a class="headerlink" href="#neorl-script" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neorl</span><span class="w"> </span><span class="kn">import</span> <span class="n">DE</span><span class="p">,</span> <span class="n">ES</span><span class="p">,</span> <span class="n">MFO</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neorl.benchmarks.reactivity_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">ReactivityModel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neorl.benchmarks.qpower_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">QPowerModel</span>
 
 <span class="c1">#import models from other files in repo</span>
 <span class="n">rm</span> <span class="o">=</span> <span class="n">ReactivityModel</span><span class="p">()</span>
 <span class="n">pm</span> <span class="o">=</span> <span class="n">QPowerModel</span><span class="p">()</span>
 
 <span class="c1">#define unscaled objectives</span>
-<span class="k">def</span> <span class="nf">hatfc</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">hatfc</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="n">thetas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
     <span class="n">thetas</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">thetas</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
     <span class="n">react</span> <span class="o">=</span> <span class="n">rm</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">thetas</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">react</span> <span class="o">-</span> <span class="mf">0.03308</span><span class="p">)</span>
 
-<span class="k">def</span> <span class="nf">hatfp</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">hatfp</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="n">thetas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
     <span class="n">thetas</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">thetas</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
@@ -269,7 +176,7 @@
     <span class="n">targets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">+</span><span class="mf">0.25</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">powers</span> <span class="o">-</span> <span class="n">targets</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 
-<span class="k">def</span> <span class="nf">hatfd</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">hatfd</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
 
 <span class="c1">#define objective scaling parameters</span>
@@ -296,50 +203,51 @@
 <span class="n">F</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">wc</span><span class="o">*</span><span class="n">fc</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">wp</span><span class="o">*</span><span class="n">fp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">wd</span><span class="o">*</span><span class="n">fd</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
 <span class="c1">#define drum rotation bounds</span>
-<span class="n">BOUNDS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;x</span><span class="si">%i</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">i</span> <span class="p">:</span> <span class="p">[</span><span class="s2">&quot;float&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mf">1.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">)}</span>
+<span class="n">BOUNDS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"x</span><span class="si">%i</span><span class="s2">"</span><span class="o">%</span><span class="n">i</span> <span class="p">:</span> <span class="p">[</span><span class="s2">"float"</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mf">1.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">)}</span>
 
 <span class="c1">#run de optimization</span>
 <span class="n">npop</span> <span class="o">=</span> <span class="mi">20</span>
 <span class="n">F_de</span> <span class="o">=</span> <span class="mf">0.4</span>
 <span class="n">CR</span> <span class="o">=</span> <span class="mf">0.3</span>
-<span class="n">de</span> <span class="o">=</span> <span class="n">DE</span><span class="p">(</span><span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="n">bounds</span> <span class="o">=</span> <span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span> <span class="o">=</span> <span class="n">F</span><span class="p">,</span> <span class="n">npop</span> <span class="o">=</span> <span class="n">npop</span><span class="p">,</span> <span class="n">F</span> <span class="o">=</span> <span class="n">F_de</span><span class="p">,</span> <span class="n">CR</span> <span class="o">=</span> <span class="n">CR</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">de</span> <span class="o">=</span> <span class="n">DE</span><span class="p">(</span><span class="n">mode</span> <span class="o">=</span> <span class="s2">"min"</span><span class="p">,</span> <span class="n">bounds</span> <span class="o">=</span> <span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span> <span class="o">=</span> <span class="n">F</span><span class="p">,</span> <span class="n">npop</span> <span class="o">=</span> <span class="n">npop</span><span class="p">,</span> <span class="n">F</span> <span class="o">=</span> <span class="n">F_de</span><span class="p">,</span> <span class="n">CR</span> <span class="o">=</span> <span class="n">CR</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">de_x</span><span class="p">,</span> <span class="n">de_y</span><span class="p">,</span> <span class="n">de_hist</span> <span class="o">=</span> <span class="n">de</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
 
 <span class="c1">#run es optimization</span>
 <span class="n">mu</span> <span class="o">=</span> <span class="mi">25</span>
 <span class="n">cxpb</span> <span class="o">=</span> <span class="mf">0.6</span>
 <span class="n">mutpb</span> <span class="o">=</span> <span class="mf">0.3</span>
-<span class="n">es</span> <span class="o">=</span> <span class="n">ES</span><span class="p">(</span><span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="n">bounds</span> <span class="o">=</span> <span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span> <span class="o">=</span> <span class="n">F</span><span class="p">,</span> <span class="n">lambda_</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span> <span class="n">mu</span> <span class="o">=</span> <span class="n">mu</span><span class="p">,</span> <span class="n">cxpb</span> <span class="o">=</span> <span class="mf">0.6</span><span class="p">,</span>
+<span class="n">es</span> <span class="o">=</span> <span class="n">ES</span><span class="p">(</span><span class="n">mode</span> <span class="o">=</span> <span class="s2">"min"</span><span class="p">,</span> <span class="n">bounds</span> <span class="o">=</span> <span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span> <span class="o">=</span> <span class="n">F</span><span class="p">,</span> <span class="n">lambda_</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span> <span class="n">mu</span> <span class="o">=</span> <span class="n">mu</span><span class="p">,</span> <span class="n">cxpb</span> <span class="o">=</span> <span class="mf">0.6</span><span class="p">,</span>
         <span class="n">mutpb</span> <span class="o">=</span> <span class="mf">0.3</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">es_x</span><span class="p">,</span> <span class="n">es_y</span><span class="p">,</span> <span class="n">es_hist</span> <span class="o">=</span> <span class="n">es</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
 
 <span class="c1">#run mfo optimization</span>
 <span class="n">nmoths</span> <span class="o">=</span> <span class="mi">55</span>
-<span class="n">mfo</span> <span class="o">=</span> <span class="n">MFO</span><span class="p">(</span><span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="n">bounds</span> <span class="o">=</span> <span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span> <span class="o">=</span> <span class="n">F</span><span class="p">,</span> <span class="n">nmoths</span> <span class="o">=</span> <span class="n">nmoths</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">mfo</span> <span class="o">=</span> <span class="n">MFO</span><span class="p">(</span><span class="n">mode</span> <span class="o">=</span> <span class="s2">"min"</span><span class="p">,</span> <span class="n">bounds</span> <span class="o">=</span> <span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span> <span class="o">=</span> <span class="n">F</span><span class="p">,</span> <span class="n">nmoths</span> <span class="o">=</span> <span class="n">nmoths</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">mfo_x</span><span class="p">,</span> <span class="n">mfo_y</span><span class="p">,</span> <span class="n">mfo_hist</span> <span class="o">=</span> <span class="n">mfo</span><span class="o">.</span><span class="n">evolute</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">de_hist</span><span class="p">[</span><span class="s2">&quot;global_fitness&quot;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;DE&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">es_hist</span><span class="p">[</span><span class="s2">&quot;global_fitness&quot;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;ES&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mfo_hist</span><span class="p">[</span><span class="s2">&quot;global_fitness&quot;</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;MFO&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">de_hist</span><span class="p">[</span><span class="s2">"global_fitness"</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">"DE"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">es_hist</span><span class="p">[</span><span class="s2">"global_fitness"</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">"ES"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mfo_hist</span><span class="p">[</span><span class="s2">"global_fitness"</span><span class="p">],</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">"MFO"</span><span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Generation&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Fitness&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">"Generation"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">"Fitness"</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;MFO fc hat&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"MFO fc hat"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">hatfc</span><span class="p">(</span><span class="n">mfo_x</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;MFO fp hat&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"MFO fp hat"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">hatfp</span><span class="p">(</span><span class="n">mfo_x</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;MFO fd hat&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"MFO fd hat"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">hatfd</span><span class="p">(</span><span class="n">mfo_x</span><span class="p">))</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="results">
-<h2><span class="section-number">11.4. </span>Results<a class="headerlink" href="#results" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="results">
+<h2><span class="section-number">11.4. </span>Results<a class="headerlink" href="#results" title="Link to this heading"></a></h2>
 <p>A summary of the results for the different methods is shown below with the best <span class="math notranslate nohighlight">\(\vec{x}\)</span> and <span class="math notranslate nohighlight">\(F(\vec{x})\)</span>. All methods seem to reasonably seek minima.</p>
-<a class="reference internal image-reference" href="../_images/ex11_square_fitness.png"><img alt="alternate text" class="align-center" src="../_images/ex11_square_fitness.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="../_images/ex11_square_fitness.png"><img alt="alternate text" class="align-center" height="480" src="../_images/ex11_square_fitness.png" width="640" />
+</a>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">------------------------</span> <span class="n">DE</span> <span class="n">Summary</span> <span class="o">--------------------------</span>
 <span class="n">Best</span> <span class="n">fitness</span> <span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="n">found</span><span class="p">:</span> <span class="mf">0.12723682745792148</span>
 <span class="n">Best</span> <span class="n">individual</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">found</span><span class="p">:</span> <span class="p">[</span><span class="mf">3.113469132155524</span><span class="p">,</span> <span class="mf">2.52205504536713</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.940784552123703</span><span class="p">,</span> <span class="mf">2.3264933610351117</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.0539691214048084</span><span class="p">,</span> <span class="mf">3.089626887713435</span><span class="p">,</span> <span class="mf">1.4072560227038484</span><span class="p">]</span>
@@ -355,11 +263,11 @@
 </pre></div>
 </div>
 <p>The errors in the unscaled objectives can also be obtained:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;MFO fc hat&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">"MFO fc hat"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">hatfc</span><span class="p">(</span><span class="n">mfo_x</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;MFO fp hat&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"MFO fp hat"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">hatfp</span><span class="p">(</span><span class="n">mfo_x</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;MFO fd hat&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"MFO fd hat"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">hatfd</span><span class="p">(</span><span class="n">mfo_x</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -371,55 +279,38 @@
 <span class="mf">3.141592653589793</span>
 </pre></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="../misc/changelog.html" class="btn btn-neutral float-right" title="Change Log" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="ex10.html" class="btn btn-neutral float-left" title="10. Example 10: Knapsack Problem" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../misc/changelog.html" class="btn btn-neutral float-right" title="Change Log" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2021, Exelon Corp. &amp; MIT.
-
-    </p>
+    <p>&#169; Copyright 2021, Exelon Corp. &amp; MIT.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

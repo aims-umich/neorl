@@ -8,11 +8,11 @@ Use this guide if you are an expert Python user and aware of Python virtual envi
 Prerequisites
 --------------
 
-NEORL is tested on ``python3 (3.6-3.7)`` with the development headers. **Please, avoid using python 3.5 or lower** (as dictionary ordering is not preserved), or **python 3.8 or newer** (as tensorflow-1.14.0 will not be stable).
+NEORL is tested on ``python3 (3.10-3.13)`` with the development headers. **Please avoid using newer Python versions**, as ``tensorflow-2.21.0`` will be unstable. For older Python versions, please use **NEORL 1.8**.
 
 .. note::
 
-    NEORL supports ``tensorflow`` versions from 1.8.0 to 1.14.0, **we do not support tensorflow >= 2.0**. Please, make sure to uninstall ``tensorflow`` if already installed on your environment or have a proper version. If ``tensorflow`` is left in the virtual environment, NEORL will automatically force ``tensorflow-1.14.0`` for most stability.
+    NEORL supports ``tensorflow`` versions from ``2.21.0``. Please make sure to uninstall ``tensorflow`` if it is already installed in your environment, or ensure you have a compatible version. If ``tensorflow`` is left in the virtual environment, NEORL will automatically force ``tensorflow-2.21.0`` for maximum stability. If you require older ``tensorflow`` versions, please use **NEORL 1.8**.
 
 Ubuntu Prerequisites
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -21,8 +21,8 @@ Ubuntu Prerequisites
 
   sudo apt-get update && sudo apt-get install cmake python3-dev
 
-Windows 10 Prerequisites
-~~~~~~~~~~~~~~~~~~~~~~~~
+Windows 10-11 Prerequisites
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To install NEORL on Windows, it is recommended to install Anaconda3 on the machine first to have some pre-installed packages, then open "Anaconda Prompt" as an administrator and use the instructions below for **Install using pip**.
 
@@ -36,7 +36,7 @@ To install NEORL on Windows, it is recommended to install Anaconda3 on the machi
 	
 	.. code-block:: bash
 	
-		conda create --name neorl python=3.7
+		conda create --name neorl python=3.13
 		conda activate neorl
 
 Install using pip

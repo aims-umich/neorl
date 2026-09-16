@@ -6,6 +6,17 @@ Change Log
 Stable Releases (for users)
 ------------------------------
 
+Release 1.9 (2026-09-16)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+  pip install neorl==1.9
+
+- Migration of NEORL into newer Python versions, including 3.10, 3.11, 3.12 and 3.13.
+- Updated the prerequisities
+- Updated installation documentation.
+
 Release 1.8 (2022-6-5)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

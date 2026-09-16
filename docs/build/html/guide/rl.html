@@ -1,101 +1,50 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <title>4. Reinforcement Learning &mdash; NEORL 1.7.8b documentation</title>
-  
+  <title>4. Reinforcement Learning &mdash; NEORL 1.9.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme_overrides.css?v=8fd5583c" />
 
   
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c4cb232b"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="5. Evolutionary Algorithms" href="evolu.html" />
     <link rel="prev" title="3. Getting Started" href="quickstart.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="../index.html" class="icon icon-home"> NEORL
           
-
-          
-            
-            <img src="../_static/logo.png" class="logo" alt="Logo"/>
-          
+          <a href="../index.html" class="icon icon-home">
+            NEORL
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
-              <div class="version">
-                main (1.7.8b )
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="guide.html">General Guide</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="install.html">1. Quick Installation</a></li>
@@ -124,77 +73,36 @@
 <li class="toctree-l1"><a class="reference internal" href="../misc/contribguide.html">Contribution Guide</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">NEORL</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="guide.html">General Guide</a> &raquo;</li>
-        
-      <li><span class="section-number">4. </span>Reinforcement Learning</li>
-    
-    
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="guide.html">General Guide</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">4. </span>Reinforcement Learning</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="../_sources/guide/rl.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="reinforcement-learning">
-<span id="rl"></span><h1><span class="section-number">4. </span>Reinforcement Learning<a class="headerlink" href="#reinforcement-learning" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="reinforcement-learning">
+<span id="rl"></span><h1><span class="section-number">4. </span>Reinforcement Learning<a class="headerlink" href="#reinforcement-learning" title="Link to this heading"></a></h1>
 <p>Reinforcement learning (RL) is a paradigm of machine learning concerned with developing intelligent systems, that know how to take actions in an environment in order to maximize cumulative reward. RL does not need labelled input/output data as other machine learning algorithms. Instead, RL collects the data on-the-fly as needed to maximize the reward. This advantage makes RL a natural choice for optimization problems, for which the search space is usually too complex and too high to generate a representative dataset.</p>
-<a class="reference internal image-reference" href="../_images/rl.png"><img alt="alternate text" class="align-center" src="../_images/rl.png" style="width: 362.0px; height: 217.25px;" /></a>
+<a class="reference internal image-reference" href="../_images/rl.png"><img alt="alternate text" class="align-center" height="217" src="../_images/rl.png" width="362" />
+</a>
 <p>RL algorithms, like evolutionary algorithms, focus on finding a balance between exploration (new knowledge) and exploitation (of current knowledge) to maximize the fitness/reward function. We can take this analogy to make RL intuitive in solving optimization problems through:</p>
 <blockquote>
 <div><p>1- The agent: which is the optimizer. The agent is controlled by the RL algorithm that trains the agent to take proper actions. The algorithm takes the current state (<span class="math notranslate nohighlight">\(s_t\)</span>) and the current reward (<span class="math notranslate nohighlight">\(r_t\)</span>) as inputs, and decides the next action to take (<span class="math notranslate nohighlight">\(a_t\)</span>) as output. The action <span class="math notranslate nohighlight">\(a_t\)</span> in this case is a sample drawn from the parameter space for optimization (<span class="math notranslate nohighlight">\(\vec{x}=[x_1, x_2, ..., x_d]\)</span>).</p>
@@ -205,74 +113,57 @@
 <p>6-The best action taken by the agent represents the optimized input (<span class="math notranslate nohighlight">\(\vec{x}\)</span>), while the best reward is similar to the best fitness, <span class="math notranslate nohighlight">\(y=f(\vec{x})\)</span>.</p>
 </div></blockquote>
 <p>Currently we have a support of some RL algorithms and hybrid neuroevolution, some are listed below</p>
-<div class="section" id="deep-q-learning">
-<h2><span class="section-number">4.1. </span>Deep Q Learning<a class="headerlink" href="#deep-q-learning" title="Permalink to this headline">¶</a></h2>
+<section id="deep-q-learning">
+<h2><span class="section-number">4.1. </span>Deep Q Learning<a class="headerlink" href="#deep-q-learning" title="Link to this heading"></a></h2>
 <p>See the <a class="reference internal" href="../modules/neural/dqn.html#dqn"><span class="std std-ref">DQN</span></a> section</p>
-</div>
-<div class="section" id="proximal-policy-optimization">
-<h2><span class="section-number">4.2. </span>Proximal Policy Optimization<a class="headerlink" href="#proximal-policy-optimization" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="proximal-policy-optimization">
+<h2><span class="section-number">4.2. </span>Proximal Policy Optimization<a class="headerlink" href="#proximal-policy-optimization" title="Link to this heading"></a></h2>
 <p>See the <a class="reference internal" href="../modules/neural/ppo2.html#ppo2"><span class="std std-ref">PPO</span></a> section</p>
-</div>
-<div class="section" id="advantage-actor-critic">
-<h2><span class="section-number">4.3. </span>Advantage Actor Critic<a class="headerlink" href="#advantage-actor-critic" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="advantage-actor-critic">
+<h2><span class="section-number">4.3. </span>Advantage Actor Critic<a class="headerlink" href="#advantage-actor-critic" title="Link to this heading"></a></h2>
 <p>See the <a class="reference internal" href="../modules/neural/a2c.html#a2c"><span class="std std-ref">A2C</span></a> section</p>
-</div>
-<div class="section" id="recurrent-neuroevolution-of-augmenting-topologies">
-<h2><span class="section-number">4.4. </span>Recurrent Neuroevolution of Augmenting Topologies<a class="headerlink" href="#recurrent-neuroevolution-of-augmenting-topologies" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="recurrent-neuroevolution-of-augmenting-topologies">
+<h2><span class="section-number">4.4. </span>Recurrent Neuroevolution of Augmenting Topologies<a class="headerlink" href="#recurrent-neuroevolution-of-augmenting-topologies" title="Link to this heading"></a></h2>
 <p>See the <a class="reference internal" href="../modules/neuroevolu/rneat.html#rneat"><span class="std std-ref">RNEAT</span></a> section</p>
-</div>
-<div class="section" id="feedforward-neuroevolution-of-augmenting-topologies">
-<h2><span class="section-number">4.5. </span>Feedforward Neuroevolution of Augmenting Topologies<a class="headerlink" href="#feedforward-neuroevolution-of-augmenting-topologies" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="feedforward-neuroevolution-of-augmenting-topologies">
+<h2><span class="section-number">4.5. </span>Feedforward Neuroevolution of Augmenting Topologies<a class="headerlink" href="#feedforward-neuroevolution-of-augmenting-topologies" title="Link to this heading"></a></h2>
 <p>See the <a class="reference internal" href="../modules/neuroevolu/fneat.html#fneat"><span class="std std-ref">FNEAT</span></a> section</p>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="evolu.html" class="btn btn-neutral float-right" title="5. Evolutionary Algorithms" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="quickstart.html" class="btn btn-neutral float-left" title="3. Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="evolu.html" class="btn btn-neutral float-right" title="5. Evolutionary Algorithms" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2021, Exelon Corp. &amp; MIT.
-
-    </p>
+    <p>&#169; Copyright 2021, Exelon Corp. &amp; MIT.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

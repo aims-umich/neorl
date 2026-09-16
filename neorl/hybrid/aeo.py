@@ -112,10 +112,10 @@ def wtd_remove(lst, ei, wts = None):
     indxs = np.random.choice(range(len(lst)), size=ei, p = wts_checked, replace = False)
     return [lst.pop(i) for i in reversed(sorted(indxs))], indxs
 
-def clone_algo_obj(obj, nmembers, fit, bounds):
+def clone_algo_obj(obj, nmembers, fit, bounds, ncores):
     # function to return a copy of an algorithm object with anumber of members given as
     # nmembers. This is to circumvent the error when the x0 passed in the evolute function
-    # is a different size than the individuals given originally in the initialization of 
+    # is a different size than the individuals given originally in the initialization of
     # the algorithm object.
     # works for now, has potential of breaking
 
@@ -128,6 +128,7 @@ def clone_algo_obj(obj, nmembers, fit, bounds):
     algo = detect_algo(obj)
 
     attrs = obj.__dict__
+    attrs['ncores'] = ncores
 
     if algo == 'WOA':
         attrs['nwhales'] = nmembers
@@ -270,7 +271,7 @@ class Population:
     # Class to store information and functionality related to a single population
     # in the AEO algorithm. Should be characterized by an evolution strategy passed
     # as one of the optimization classes from the other algorithms in NEORL.
-    def __init__(self, strategy, algo, init_pop, mode, conv = None):
+    def __init__(self, strategy, algo, init_pop, mode, ncores, conv = None):
         # strategy should be one of the optimization objects containing an "evolute" method
         # init_pop needs to match the population given to the strategy object initially
         # algo is string that identifies which class is being used
@@ -281,6 +282,7 @@ class Population:
         self.members = init_pop
         self.n = len(self.members)
         self.mode = mode
+        self.ncores = ncores
 
         self.popname = '' #will be assigned externally after object has been initialized
                           #    used only for loggin purposes
@@ -311,7 +313,7 @@ class Population:
             np.put(log['evolute'].data, [0], True)
 
             #update strategy with new population number
-            self.strategy = clone_algo_obj(self.strategy, len(self.members), fit, bounds)
+            self.strategy = clone_algo_obj(self.strategy, len(self.members), fit, bounds, self.ncores)
 
            #store last generation number
             self.last_ngen = ngen
@@ -476,6 +478,7 @@ class AEO(object):
         b = kwargs.get("b", "improve")
         b_burden = kwargs.get("b_burden", False)
         order = kwargs.get("order", "bw")
+        self.ncores = kwargs.get("ncores", 1)
 
         if config is None:
             pass
@@ -516,6 +519,13 @@ class AEO(object):
         self.mode=mode
         self.wrapped_f = FitWrap(fit)
         self.fit = self.wrapped_f.f
+        # Running best individual/fitness, updated directly from each Population's own
+        # (members, member_fitnesses) each cycle. This is used instead of wrapped_f's call
+        # history to determine the final result, since wrapped_f's history is only reliable
+        # when ncores=1 (multiprocessing workers mutate their own copy of wrapped_f, so those
+        # calls never reach this object when ncores>1).
+        self.gbest_x = None
+        self.gbest_y = float("inf")
 
         if mode == 'max': #create fit attribute to use for checking consistency of fits
             raise Exception("Max not supported for AEO")
@@ -691,7 +701,7 @@ class AEO(object):
                 if p == i:
                     xpop.append(x)
             self.pops.append(Population(self.optimizers[i], self.algos[i],
-                    xpop, self.mode, self.ngtonevals[i]))
+                    xpop, self.mode, self.ncores, self.ngtonevals[i]))
 
         #initialize log Dataset
         membercoords = range(len(x0))
@@ -728,7 +738,7 @@ class AEO(object):
                     'export_str_scaled'  : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
                     'export_pop_wts'     : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
                     'alpha'              : ([                 'cycle'], np.zeros(          nc , dtype = np.float64)),
-                    'wb'                 : ([                 'cycle'], np.zeros(          nc , dtype = np.bool8)),
+                    'wb'                 : ([                 'cycle'], np.zeros(          nc , dtype = bool)),
                     'g'                  : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
                     'f'                  : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
                     'unburdened_g'       : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
@@ -738,9 +748,9 @@ class AEO(object):
                     'fmax'               : ([                 'cycle'], np.zeros(          nc , dtype = np.float64)),
                     'dfmin'               : ([                 'cycle'], np.zeros(          nc , dtype = np.float64)),
                     'dfmax'               : ([                 'cycle'], np.zeros(          nc , dtype = np.float64)),
-                    'migration'          : ([                 'cycle'], np.zeros(          nc , dtype = np.bool8)),
+                    'migration'          : ([                 'cycle'], np.zeros(          nc , dtype = bool)),
                     'export_wts'         : (['member', 'pop', 'cycle'], np.zeros((nm, npp, nc), dtype = np.float64)),
-                    'exported'           : (['member', 'pop', 'cycle'], np.zeros((nm, npp, nc), dtype = np.bool8)),
+                    'exported'           : (['member', 'pop', 'cycle'], np.zeros((nm, npp, nc), dtype = bool)),
 #                    'pop_after_migrate'  : (['member', 'pop', 'cycle'], np.zeros((nm, npp, nc), dtype = '<U6')),
                     'beta'               : ([                 'cycle'], np.zeros(          nc , dtype = np.float64)),
                     'b'                  : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
@@ -748,7 +758,7 @@ class AEO(object):
                     'A'                  : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.int32)),
                     'M'                  : (['pop','popdest', 'cycle'], np.zeros((npp,npp, nc), dtype = np.float64)),
                     'str_dest_scaled'    : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.float64)),
-                    'evolute'            : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = np.bool8))},
+                    'evolute'            : ([          'pop', 'cycle'], np.zeros((    npp, nc), dtype = bool))},
                 coords = {
                     'member'  : membercoords,
                     'pop'     : popcoords,
@@ -798,6 +808,16 @@ class AEO(object):
                 pop_fits = [p.evolute(self.gpc, self.fit, self.bounds, i, Ncyc, self.var_type, self.bounds_map, self.trans_bounds, log.loc[{'pop' : p.popname, 'cycle' : i}]) for p in self.pops]
             else:
                 pop_fits = [p.evolute(self.gpc, self.fit, self.bounds, i, Ncyc, self.var_type, None, self.trans_bounds, log.loc[{'pop' : p.popname, 'cycle' : i}]) for p in self.pops]
+
+            #track the running global best directly from each population's own
+            #(members, member_fitnesses), which stay correctly paired regardless of ncores
+            for p in self.pops:
+                if len(p.member_fitnesses) > 0:
+                    local_idx = int(np.argmin(p.member_fitnesses))
+                    local_best_y = p.member_fitnesses[local_idx]
+                    if local_best_y < self.gbest_y:
+                        self.gbest_y = local_best_y
+                        self.gbest_x = list(p.members[local_idx])
 
             #exportation number
             #  calc weights
@@ -878,12 +898,5 @@ class AEO(object):
             #assert self.fit(self.wrapped_f.ins[bestind][0]) == self.wrapped_f.outs[bestind]
             #print(self.wrapped_f.outs[bestind])
 
-        #get best members
-        bestind = np.argmin(self.wrapped_f.outs)
-
-        xbest = self.wrapped_f.ins[bestind]
-        ybest = self.wrapped_f.outs[bestind]
-
-        xbest_correct = xbest[0]
-
-        return xbest_correct, ybest, log
+        #get best members (tracked directly during the run, correct regardless of ncores)
+        return self.gbest_x, self.gbest_y, log

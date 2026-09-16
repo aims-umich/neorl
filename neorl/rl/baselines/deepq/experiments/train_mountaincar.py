@@ -1,6 +1,6 @@
 import argparse
 
-import gym
+import gymnasium as gym
 
 from neorl.rl.baselines.deepq import DQN
 

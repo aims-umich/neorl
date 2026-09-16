@@ -25,4 +25,4 @@ def test_ts():
           penalization_weight = 0.8, swap_mode = "perturb", ncores=1, seed=1)
     x_best, y_best, ts_hist=ts.evolute(ngen = 700, x0=x0, verbose=0)
 
-test_ts
+test_ts()

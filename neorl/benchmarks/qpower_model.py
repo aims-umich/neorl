@@ -23,11 +23,14 @@ class QPowerModel:
     def __init__(self):
         #Find and load file
         model_file = cpath / Path("tools/microreactor_power_model.h5")
-        self.raw_model = load_model(model_file)
+        self.raw_model = load_model(model_file, compile=False)
 
     def eval(self, pert):
         pert2 = pert.copy()
-        pertn = np.array([pert2, ])
+        # Keras 3 reconstructs this legacy Sequential model's input spec as
+        # (batch, None, features) instead of (batch, features); add the extra axis
+        # to match (Dense layers apply to the last axis, so this doesn't change the result).
+        pertn = np.array([[pert2]])
         unorm = self.raw_model.predict(pertn).flatten()
         return unorm/unorm.sum()
 

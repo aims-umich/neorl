@@ -1,101 +1,50 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <title>4. Evolutionary Search &mdash; NEORL 1.7.8b documentation</title>
-  
+  <title>4. Evolutionary Search &mdash; NEORL 1.9.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme_overrides.css?v=8fd5583c" />
 
   
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c4cb232b"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Examples" href="../examples/examples.html" />
     <link rel="prev" title="3. Bayesian Search" href="bayes.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="../index.html" class="icon icon-home"> NEORL
           
-
-          
-            
-            <img src="../_static/logo.png" class="logo" alt="Logo"/>
-          
+          <a href="../index.html" class="icon icon-home">
+            NEORL
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
-              <div class="version">
-                main (1.7.8b )
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../guide/guide.html">General Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../modules/modules.html">Algorithms</a></li>
@@ -105,7 +54,10 @@
 <li class="toctree-l2"><a class="reference internal" href="bayes.html">3. Bayesian Search</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">4. Evolutionary Search</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#what-can-you-use">4.1. What can you use?</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#parameters">4.2. Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parameters">4.2. Parameters</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#neorl.tune.estune.ESTUNE"><code class="docutils literal notranslate"><span class="pre">ESTUNE</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#example">4.3. Example</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#notes">4.4. Notes</a></li>
 </ul>
@@ -121,80 +73,38 @@
 <li class="toctree-l1"><a class="reference internal" href="../misc/contribguide.html">Contribution Guide</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">NEORL</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="tune.html">Hyperparameter Tuning</a> &raquo;</li>
-        
-      <li><span class="section-number">4. </span>Evolutionary Search</li>
-    
-    
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="tune.html">Hyperparameter Tuning</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">4. </span>Evolutionary Search</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="../_sources/tune/evolu.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <span class="target" id="module-neorl.tune.estune"><span id="evolsearch"></span></span><div class="section" id="evolutionary-search">
-<h1><span class="section-number">4. </span>Evolutionary Search<a class="headerlink" href="#evolutionary-search" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="evolutionary-search">
+<span id="module-neorl.tune.estune"></span><span id="evolsearch"></span><h1><span class="section-number">4. </span>Evolutionary Search<a class="headerlink" href="#evolutionary-search" title="Link to this heading"></a></h1>
 <p>A module of evolutionary search for hyperparameter tuning of NEORL algorithms.</p>
 <p>Original paper: E. Bochinski, T. Senst and T. Sikora, “Hyper-parameter optimization for convolutional neural network committees based on evolutionary algorithms,” 2017 IEEE International Conference on Image Processing (ICIP), Beijing, China, 2017, pp. 3924-3928, doi: 10.1109/ICIP.2017.8297018.</p>
 <p>We have used a compact evolution strategies (ES) module for the purpose of tuning the hyperparameters of NEORL algorithms. See the <a class="reference internal" href="../modules/evolutionary/es.html#es"><span class="std std-ref">ES algorithm</span></a> section for more details about the (<span class="math notranslate nohighlight">\(\mu,\lambda\)</span>) algorithm. ES tuner leverages a population of individuals, where each individual represents a sample from the hyperparameter space. ES uses recombination, crossover, and mutation operations to improve the individuals from generation to the other. The best of the best individuals in all generations are reported as the top hyperparameter sets to use further with the algorithm.</p>
-<div class="section" id="what-can-you-use">
-<h2><span class="section-number">4.1. </span>What can you use?<a class="headerlink" href="#what-can-you-use" title="Permalink to this headline">¶</a></h2>
+<section id="what-can-you-use">
+<h2><span class="section-number">4.1. </span>What can you use?<a class="headerlink" href="#what-can-you-use" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Multi processing: ✔️</p></li>
 <li><p>Discrete/Continuous/Mixed spaces: ✔️</p></li>
@@ -202,15 +112,15 @@
 <li><p>Evolutionary Algorithms: ✔️</p></li>
 <li><p>Hybrid Neuroevolution Algorithms: ✔️</p></li>
 </ul>
-</div>
-<div class="section" id="parameters">
-<h2><span class="section-number">4.2. </span>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="parameters">
+<h2><span class="section-number">4.2. </span>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="neorl.tune.estune.ESTUNE">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">neorl.tune.estune.</span></span><span class="sig-name descname"><span class="pre">ESTUNE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param_grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'max'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ngen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/tune/estune.html#ESTUNE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.tune.estune.ESTUNE" title="Permalink to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">neorl.tune.estune.</span></span><span class="sig-name descname"><span class="pre">ESTUNE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param_grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'max'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ngen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/tune/estune.html#ESTUNE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.tune.estune.ESTUNE" title="Link to this definition"></a></dt>
 <dd><p>A module for Evolutionary search for hyperparameter tuning based on ES algorithm</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>param_grid</strong> – (dict) the type and range of each hyperparameter in a dictionary form (types are <code class="docutils literal notranslate"><span class="pre">int/discrete</span></code> or <code class="docutils literal notranslate"><span class="pre">float/continuous</span></code> or <code class="docutils literal notranslate"><span class="pre">grid/categorical</span></code>).</p></li>
 <li><p><strong>fit</strong> – (function) the self-defined fitness function that includes the hyperparameters as input and algorithm score as output</p></li>
@@ -224,10 +134,10 @@ is set to maximize an objective</p></li>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="neorl.tune.estune.ESTUNE.tune">
-<span class="sig-name descname"><span class="pre">tune</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ncores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">csvname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/tune/estune.html#ESTUNE.tune"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.tune.estune.ESTUNE.tune" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">tune</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ncores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">csvname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neorl/tune/estune.html#ESTUNE.tune"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neorl.tune.estune.ESTUNE.tune" title="Link to this definition"></a></dt>
 <dd><p>This function starts the tuning process with specified number of processors</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ncores</strong> – (int) number of parallel processors.</p></li>
 <li><p><strong>csvname</strong> – (str) the name of the csv file name to save the tuning results (useful for expensive cases as the csv file is updated directly after the case is done)</p></li>
@@ -239,44 +149,44 @@ is set to maximize an objective</p></li>
 
 </dd></dl>
 
-</div>
-<div class="section" id="example">
-<h2><span class="section-number">4.3. </span>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">neorl.tune</span> <span class="kn">import</span> <span class="n">ESTUNE</span>
-<span class="kn">from</span> <span class="nn">neorl</span> <span class="kn">import</span> <span class="n">PSO</span>
+</section>
+<section id="example">
+<h2><span class="section-number">4.3. </span>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">neorl.tune</span><span class="w"> </span><span class="kn">import</span> <span class="n">ESTUNE</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neorl</span><span class="w"> </span><span class="kn">import</span> <span class="n">PSO</span>
 
 <span class="c1">#**********************************************************</span>
 <span class="c1"># Part I: Original Problem Settings</span>
 <span class="c1">#**********************************************************</span>
 
 <span class="c1">#Define the fitness function (for original optimisation)</span>
-<span class="k">def</span> <span class="nf">sphere</span><span class="p">(</span><span class="n">individual</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">sphere</span><span class="p">(</span><span class="n">individual</span><span class="p">):</span>
     <span class="n">y</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">individual</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">y</span>
 
 <span class="c1">#*************************************************************</span>
 <span class="c1"># Part II: Define fitness function for hyperparameter tuning</span>
 <span class="c1">#*************************************************************</span>
-<span class="k">def</span> <span class="nf">tune_fit</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">tune_fit</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     
     <span class="n">npar</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">c1</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> 
     <span class="n">c2</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">speed_mech</span><span class="o">=</span><span class="s1">&#39;constric&#39;</span>
+        <span class="n">speed_mech</span><span class="o">=</span><span class="s1">'constric'</span>
     <span class="k">elif</span> <span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="n">speed_mech</span><span class="o">=</span><span class="s1">&#39;timew&#39;</span>
+        <span class="n">speed_mech</span><span class="o">=</span><span class="s1">'timew'</span>
     <span class="k">elif</span> <span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-        <span class="n">speed_mech</span><span class="o">=</span><span class="s1">&#39;globw&#39;</span>
+        <span class="n">speed_mech</span><span class="o">=</span><span class="s1">'globw'</span>
 
     <span class="c1">#--setup the parameter space</span>
     <span class="n">nx</span><span class="o">=</span><span class="mi">5</span>
     <span class="n">BOUNDS</span><span class="o">=</span><span class="p">{}</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">nx</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
-            <span class="n">BOUNDS</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
+            <span class="n">BOUNDS</span><span class="p">[</span><span class="s1">'x'</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="o">=</span><span class="p">[</span><span class="s1">'float'</span><span class="p">,</span> <span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
 
     <span class="c1">#--setup the PSO algorithm</span>
-    <span class="n">pso</span><span class="o">=</span><span class="n">PSO</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">sphere</span><span class="p">,</span> <span class="n">npar</span><span class="o">=</span><span class="n">npar</span><span class="p">,</span> <span class="n">c1</span><span class="o">=</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="o">=</span><span class="n">c2</span><span class="p">,</span>
+    <span class="n">pso</span><span class="o">=</span><span class="n">PSO</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">'min'</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">BOUNDS</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">sphere</span><span class="p">,</span> <span class="n">npar</span><span class="o">=</span><span class="n">npar</span><span class="p">,</span> <span class="n">c1</span><span class="o">=</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="o">=</span><span class="n">c2</span><span class="p">,</span>
              <span class="n">speed_mech</span><span class="o">=</span><span class="n">speed_mech</span><span class="p">,</span> <span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="c1">#--Evolute the PSO object and obtains y_best</span>
@@ -293,23 +203,23 @@ is set to maximize an objective</p></li>
 <span class="c1">#see tune_fit</span>
 <span class="n">param_grid</span><span class="o">=</span><span class="p">{</span>
 <span class="c1">#def tune_fit(npar, c1, c2, speed_mech):</span>
-<span class="s1">&#39;npar&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;int&#39;</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">60</span><span class="p">],</span>        <span class="c1">#npar is first (low=30, high=60, type=int/discrete)</span>
-<span class="s1">&#39;c1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="mf">2.05</span><span class="p">,</span> <span class="mf">2.15</span><span class="p">],</span>    <span class="c1">#c1 is second (low=2.05, high=2.15, type=float/continuous)</span>
-<span class="s1">&#39;c2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="mf">2.05</span><span class="p">,</span> <span class="mf">2.15</span><span class="p">],</span>    <span class="c1">#c2 is third (low=2.05, high=2.15, type=float/continuous)</span>
-<span class="s1">&#39;speed_mech&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;int&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]}</span>    <span class="c1">#speed_mech is fourth (categorial variable encoded as integer, see tune_fit)</span>
+<span class="s1">'npar'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'int'</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">60</span><span class="p">],</span>        <span class="c1">#npar is first (low=30, high=60, type=int/discrete)</span>
+<span class="s1">'c1'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'float'</span><span class="p">,</span> <span class="mf">2.05</span><span class="p">,</span> <span class="mf">2.15</span><span class="p">],</span>    <span class="c1">#c1 is second (low=2.05, high=2.15, type=float/continuous)</span>
+<span class="s1">'c2'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'float'</span><span class="p">,</span> <span class="mf">2.05</span><span class="p">,</span> <span class="mf">2.15</span><span class="p">],</span>    <span class="c1">#c2 is third (low=2.05, high=2.15, type=float/continuous)</span>
+<span class="s1">'speed_mech'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'int'</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]}</span>    <span class="c1">#speed_mech is fourth (categorial variable encoded as integer, see tune_fit)</span>
 
 <span class="c1">#setup a evolutionary tune object</span>
-<span class="n">etune</span><span class="o">=</span><span class="n">ESTUNE</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">param_grid</span><span class="o">=</span><span class="n">param_grid</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">tune_fit</span><span class="p">,</span> <span class="n">ngen</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span> <span class="c1">#total cases is ngen * 10</span>
+<span class="n">etune</span><span class="o">=</span><span class="n">ESTUNE</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">'min'</span><span class="p">,</span> <span class="n">param_grid</span><span class="o">=</span><span class="n">param_grid</span><span class="p">,</span> <span class="n">fit</span><span class="o">=</span><span class="n">tune_fit</span><span class="p">,</span> <span class="n">ngen</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span> <span class="c1">#total cases is ngen * 10</span>
 <span class="c1">#tune the parameters with method .tune</span>
-<span class="n">evolures</span><span class="o">=</span><span class="n">etune</span><span class="o">.</span><span class="n">tune</span><span class="p">(</span><span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">csvname</span><span class="o">=</span><span class="s1">&#39;evolutune.csv&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">evolures</span> <span class="o">=</span> <span class="n">evolures</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s1">&#39;score&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1">#rank the scores from min to max</span>
+<span class="n">evolures</span><span class="o">=</span><span class="n">etune</span><span class="o">.</span><span class="n">tune</span><span class="p">(</span><span class="n">ncores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">csvname</span><span class="o">=</span><span class="s1">'evolutune.csv'</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">evolures</span> <span class="o">=</span> <span class="n">evolures</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s1">'score'</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="s1">'index'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1">#rank the scores from min to max</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">evolures</span><span class="p">)</span>
-<span class="n">etune</span><span class="o">.</span><span class="n">plot_results</span><span class="p">(</span><span class="n">pngname</span><span class="o">=</span><span class="s1">&#39;evolu_conv&#39;</span><span class="p">)</span>
+<span class="n">etune</span><span class="o">.</span><span class="n">plot_results</span><span class="p">(</span><span class="n">pngname</span><span class="o">=</span><span class="s1">'evolu_conv'</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="notes">
-<h2><span class="section-number">4.4. </span>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="notes">
+<h2><span class="section-number">4.4. </span>Notes<a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Evolutionary search uses fixed values for <code class="docutils literal notranslate"><span class="pre">lambda_=10</span></code> and <code class="docutils literal notranslate"><span class="pre">mu=10</span></code>.</p></li>
 <li><p>Therefore, the total cost of evolutionary search or the total number of hyperparameter tests is <code class="docutils literal notranslate"><span class="pre">ngen</span> <span class="pre">*</span> <span class="pre">10</span></code>.</p></li>
@@ -317,55 +227,38 @@ is set to maximize an objective</p></li>
 <li><p>The strategy and individual vectors in the ES tuner are updated similarly to the ES algorithm module described <a class="reference internal" href="../modules/evolutionary/es.html#es"><span class="std std-ref">here</span></a>.</p></li>
 <li><p>For difficult problems, the analyst can start with a random search first to narrow the choices of the important hyperparameters. Then, an evolutionary search can be executed on those important parameters to refine their values.</p></li>
 </ul>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="../examples/examples.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="bayes.html" class="btn btn-neutral float-left" title="3. Bayesian Search" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../examples/examples.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2021, Exelon Corp. &amp; MIT.
-
-    </p>
+    <p>&#169; Copyright 2021, Exelon Corp. &amp; MIT.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

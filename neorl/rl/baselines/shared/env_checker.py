@@ -1,11 +1,12 @@
 import warnings
 from typing import Union
 
-import gym
-from gym import spaces
+import gymnasium as gym
+from gymnasium import spaces
 import numpy as np
 
 from neorl.rl.baselines.shared.vec_env import DummyVecEnv, VecCheckNan
+from neorl.rl.baselines.shared.bit_flipping_env import GoalEnv
 
 
 def _enforce_array_obs(observation_space: spaces.Space) -> bool:
@@ -43,7 +44,7 @@ def _check_image_input(observation_space: spaces.Box) -> None:
 def _check_unsupported_obs_spaces(env: gym.Env, observation_space: spaces.Space) -> None:
     """Emit warnings when the observation space used is not supported by Stable-Baselines."""
 
-    if isinstance(observation_space, spaces.Dict) and not isinstance(env, gym.GoalEnv):
+    if isinstance(observation_space, spaces.Dict) and not isinstance(env, GoalEnv):
         warnings.warn("The observation space is a Dict but the environment is not a gym.GoalEnv "
                       "(cf https://github.com/openai/gym/blob/master/gym/core.py), "
                       "this is currently not supported by Stable Baselines "
@@ -94,27 +95,29 @@ def _check_returned_values(env: gym.Env, observation_space: spaces.Space, action
     Check the returned values by the env when calling `.reset()` or `.step()` methods.
     """
     # because env inherits from gym.Env, we assume that `reset()` and `step()` methods exists
-    obs = env.reset()
+    obs, reset_info = env.reset()
 
     _check_obs(obs, observation_space, 'reset')
+    assert isinstance(reset_info, dict), "The `info` returned by `reset()` must be a python dictionary"
 
     # Sample a random action
     action = action_space.sample()
     data = env.step(action)
 
-    assert len(data) == 4, "The `step()` method must return four values: obs, reward, done, info"
+    assert len(data) == 5, "The `step()` method must return five values: obs, reward, terminated, truncated, info"
 
     # Unpack
-    obs, reward, done, info = data
+    obs, reward, terminated, truncated, info = data
 
     _check_obs(obs, observation_space, 'step')
 
     # We also allow int because the reward will be cast to float
     assert isinstance(reward, (float, int)), "The reward returned by `step()` must be a float"
-    assert isinstance(done, bool), "The `done` signal must be a boolean"
+    assert isinstance(terminated, bool), "The `terminated` signal must be a boolean"
+    assert isinstance(truncated, bool), "The `truncated` signal must be a boolean"
     assert isinstance(info, dict), "The `info` returned by `step()` must be a python dictionary"
 
-    if isinstance(env, gym.GoalEnv):
+    if isinstance(env, GoalEnv):
         # For a GoalEnv, the keys are checked at reset
         assert reward == env.compute_reward(obs['achieved_goal'], obs['desired_goal'], info)
 
@@ -145,11 +148,11 @@ def _check_render(env: gym.Env, warn: bool = True, headless: bool = False) -> No
     :param headless: (bool) Whether to disable render modes
         that require a graphical interface. False by default.
     """
-    render_modes = env.metadata.get('render.modes')
+    render_modes = env.metadata.get('render_modes')
     if render_modes is None:
         if warn:
             warnings.warn("No render modes was declared in the environment "
-                          " (env.metadata['render.modes'] is None or not defined), "
+                          " (env.metadata['render_modes'] is None or not defined), "
                           "you may have trouble when calling `.render()`")
 
     else:
@@ -157,9 +160,9 @@ def _check_render(env: gym.Env, warn: bool = True, headless: bool = False) -> No
         # graphical interface (useful for CI)
         if headless and 'human' in render_modes:
             render_modes.remove('human')
-        # Check all declared render modes
-        for render_mode in render_modes:
-            env.render(mode=render_mode)
+        # gymnasium fixes the render mode at env construction (env.render_mode) rather than
+        # per-call, so just confirm render() runs without error for however the env was made
+        env.render()
         env.close()
 
 

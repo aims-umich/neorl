@@ -57,7 +57,7 @@ class GA():
                 p2 = random.choice(populationList)
                 par1 = self.pop[i]
                 par2 = self.pop[p2]
-                a = np.row_stack((par1, par2))
+                a = np.vstack((par1, par2))
                 p1 = a.min(axis=0)
                 p2 = a.max(axis=0)
                 alfa1 = np.array([0.0] * self.chrom_length)
@@ -96,11 +96,11 @@ class GA():
                 tp1 = np.min(np.vstack((tp1, np.array([self.max_value] * self.chrom_length))), 0)
                 tp2 = np.max(np.vstack((tp2, np.array([self.min_value] * self.chrom_length))), 0)
                 tp2 = np.min(np.vstack((tp2, np.array([self.max_value] * self.chrom_length))), 0)
-                self.pop = np.row_stack((self.pop, tp1, tp2))
+                self.pop = np.vstack((self.pop, tp1, tp2))
 
     def mutation(self, pm):
         for i in range(self.pop_size):
-            self.pop = np.row_stack((self.pop, self.pop[i]))
+            self.pop = np.vstack((self.pop, self.pop[i]))
             for j in range(self.chrom_length):
                 if (random.random() < pm):
                     mpoint = self.pop[i][j]

@@ -116,7 +116,7 @@ class InputParser():
             gen_test = self.input_file[self.input_file.index("READ GENERAL") + 1 : self.input_file.index("END GENERAL")]
             print ('--debug: General block is identified')
         except:
-            raise('ERR: The general block is required but not found in the input --> READ GENERAL ... END GENERAL is missing')
+            raise Exception('ERR: The general block is required but not found in the input --> READ GENERAL ... END GENERAL is missing')
         
         
     def parse_card(self, card):

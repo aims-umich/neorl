@@ -43,13 +43,14 @@ def evaluate_policy(model, env, log_dir, n_eval_episodes=10, render=False):
     
     episode_rewards, episode_lengths = [], []
     for _ in range(n_eval_episodes):
-        obs = env.reset()
+        obs, _info = env.reset()
         done, state = False, None
         episode_reward = 0.0
         episode_length = 0
         while not done:
             action, state = model.predict(obs, state=state)
-            obs, reward, done, _info = env.step(action)
+            obs, reward, terminated, truncated, _info = env.step(action)
+            done = terminated or truncated
             episode_reward += reward
             episode_length += 1
             #if render:

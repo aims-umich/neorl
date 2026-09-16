@@ -66,7 +66,7 @@ class GRIDTUNE:
             if ('END TUNE' in self.template[i]):
                 last=i
         if first == 0 and last==0:
-            raise ('TUNE card cannot be found')
+            raise Exception('TUNE card cannot be found')
         
         del self.template[first : last+1]  
         

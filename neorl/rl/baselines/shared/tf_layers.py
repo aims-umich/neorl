@@ -1,5 +1,5 @@
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 
 def ortho_init(scale=1.0):
@@ -54,8 +54,12 @@ def mlp(input_tensor, layers, activ_fn=tf.nn.relu, layer_norm=False):
     """
     output = input_tensor
     for i, layer_size in enumerate(layers):
-        output = tf.layers.dense(output, layer_size, name='fc' + str(i))
+        # tf.layers.dense is unavailable under Keras 3 (TF2); use this module's own linear() instead
+        output = linear(output, 'fc' + str(i), layer_size)
         if layer_norm:
+            # tf.contrib was removed entirely in TF2 with no direct replacement;
+            # this path is unreachable from any policy/algorithm in this codebase (see _ln() for the
+            # layer-norm implementation actually used by CnnLnLstmPolicy/MlpLnLstmPolicy)
             output = tf.contrib.layers.layer_norm(output, center=True, scale=True)
         output = activ_fn(output)
     return output

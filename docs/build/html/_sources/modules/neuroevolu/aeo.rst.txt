@@ -7,7 +7,7 @@ Animorphic Ensemble Optimization (AEO)
 
 A module for Animorphic Ensemble Optimization. A hybrid island model with different evolutionary populations evolved in islands. 
 
-Original paper: in progress
+Original paper: Price, Dean, and Majdi I. Radaideh. "Animorphic ensemble optimization: a large-scale island model." Neural Computing and Applications 35.4 (2023): 3221-3243.
 
 .. image:: ../../images/full_aeo.png
    :scale: 15%

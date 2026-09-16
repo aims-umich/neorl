@@ -29,7 +29,7 @@ class DummyVecEnv(VecEnv):
         self.buf_obs = OrderedDict([
             (k, np.zeros((self.num_envs,) + tuple(shapes[k]), dtype=dtypes[k]))
             for k in self.keys])
-        self.buf_dones = np.zeros((self.num_envs,), dtype=np.bool)
+        self.buf_dones = np.zeros((self.num_envs,), dtype=bool)
         self.buf_rews = np.zeros((self.num_envs,), dtype=np.float32)
         self.buf_infos = [{} for _ in range(self.num_envs)]
         self.actions = None
@@ -40,12 +40,13 @@ class DummyVecEnv(VecEnv):
 
     def step_wait(self):
         for env_idx in range(self.num_envs):
-            obs, self.buf_rews[env_idx], self.buf_dones[env_idx], self.buf_infos[env_idx] =\
+            obs, self.buf_rews[env_idx], terminated, truncated, self.buf_infos[env_idx] =\
                 self.envs[env_idx].step(self.actions[env_idx])
+            self.buf_dones[env_idx] = terminated or truncated
             if self.buf_dones[env_idx]:
                 # save final observation where user can get it, then reset
                 self.buf_infos[env_idx]['terminal_observation'] = obs
-                obs = self.envs[env_idx].reset()
+                obs, _ = self.envs[env_idx].reset()
             self._save_obs(env_idx, obs)
         return (self._obs_from_buf(), np.copy(self.buf_rews), np.copy(self.buf_dones),
                 deepcopy(self.buf_infos))
@@ -53,12 +54,14 @@ class DummyVecEnv(VecEnv):
     def seed(self, seed=None):
         seeds = list()
         for idx, env in enumerate(self.envs):
-            seeds.append(env.seed(seed + idx))
+            env_seed = seed + idx if seed is not None else None
+            env.reset(seed=env_seed)
+            seeds.append(env_seed)
         return seeds
 
     def reset(self):
         for env_idx in range(self.num_envs):
-            obs = self.envs[env_idx].reset()
+            obs, _ = self.envs[env_idx].reset()
             self._save_obs(env_idx, obs)
         return self._obs_from_buf()
 
@@ -67,7 +70,9 @@ class DummyVecEnv(VecEnv):
             env.close()
 
     def get_images(self) -> Sequence[np.ndarray]:
-        return [env.render(mode='rgb_array') for env in self.envs]
+        # gymnasium fixes the render mode at env construction (env.render_mode) rather than per-call,
+        # so this assumes each sub-env was created with render_mode='rgb_array'
+        return [env.render() for env in self.envs]
 
     def render(self, mode: str = 'human'):
         """
@@ -82,7 +87,8 @@ class DummyVecEnv(VecEnv):
         :param mode: The rendering type.
         """
         if self.num_envs == 1:
-            return self.envs[0].render(mode=mode)
+            # gymnasium fixes the render mode at env construction (env.render_mode) rather than per-call
+            return self.envs[0].render()
         else:
             return super().render(mode=mode)
 
