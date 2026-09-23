@@ -20,8 +20,9 @@
 #"""
 
 
-from scipy import dot, eye, randn, asarray, array, trace, log, exp, sqrt 
-from scipy import mean, sum, argsort, arange
+from numpy import dot, eye, asarray, array, trace, log, exp, sqrt
+from numpy import mean, sum, argsort, arange
+from numpy.random import randn
 from scipy.stats import multivariate_normal, norm
 from scipy.linalg import det, expm
 import joblib
@@ -35,16 +36,25 @@ import multiprocessing
 import multiprocessing.pool
 class NoDaemonProcess(multiprocessing.Process):
     # make 'daemon' attribute always return False
-    def _get_daemon(self):
+    @property
+    def daemon(self):
         return False
-    def _set_daemon(self, value):
+    @daemon.setter
+    def daemon(self, value):
         pass
-    daemon = property(_get_daemon, _set_daemon)
+
+# a context whose Process class is the non-daemonic one above, so that
+# Pool._repopulate_pool_static (which calls self._ctx.Process(...)) spawns
+# non-daemonic workers instead of the raw multiprocessing.Process
+class NoDaemonContext(type(multiprocessing.get_context())):
+    Process = NoDaemonProcess
 
 # We sub-class multiprocessing.pool.Pool instead of multiprocessing.Pool
 # because the latter is only a wrapper function, not a proper class.
 class MyPool(multiprocessing.pool.Pool):
-    Process = NoDaemonProcess
+    def __init__(self, *args, **kwargs):
+        kwargs['context'] = NoDaemonContext()
+        super().__init__(*args, **kwargs)
 
 class XNESmod(object):
     """

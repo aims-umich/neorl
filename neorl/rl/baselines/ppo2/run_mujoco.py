@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import numpy as np
-import gym
+import gymnasium as gym
 
 from neorl.rl.baselines.shared.cmd_util import mujoco_arg_parser
 from neorl.rl.baselines.shared import logger

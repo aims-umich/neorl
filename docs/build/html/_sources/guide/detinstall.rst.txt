@@ -17,13 +17,13 @@ Anaconda3 will provide you with OS-independent framework that hosts Python packa
 
 .. code-block:: bash
 	
-	wget --no-check-certificate https://repo.continuum.io/archive/Anaconda3-2019.03-Linux-x86_64.sh
-	
+	wget --no-check-certificate https://repo.anaconda.com/archive/Anaconda3-2026.07-1-Linux-x86_64.sh
+
 2- Start the installer
 
 .. code-block:: bash
-	
-	bash Anaconda3-2019.03-Linux-x86_64.sh
+
+	bash Anaconda3-2026.07-1-Linux-x86_64.sh
 	
 3- Follow the instructions on the screen and wait until completion (See the notes below on how to respond to certain prompts)
 
@@ -46,18 +46,22 @@ Anaconda3 will provide you with OS-independent framework that hosts Python packa
 Step 1: Create virtual environment for NEORL
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-NEORL is tested on ``python3 (3.6-3.7)`` with the development headers. **Please, avoid using python 3.5 or lower** (as dictionary ordering is not preserved), or **python 3.8 or newer** (as tensorflow-1.14.0 will not be stable).
+NEORL is tested on ``python3 (3.10-3.13)`` with the development headers. **Please avoid using newer Python versions**, as ``tensorflow-2.21.0`` will be unstable. For older Python versions, please use **NEORL 1.8**.
 
-1- Create a new python-3.7 environment with name ``neorl``
+.. note::
+
+    NEORL supports ``tensorflow`` versions from ``2.21.0``. Please make sure to uninstall ``tensorflow`` if it is already installed in your environment, or ensure you have a compatible version. If ``tensorflow`` is left in the virtual environment, NEORL will automatically force ``tensorflow-2.21.0`` for maximum stability. If you require older ``tensorflow`` versions, please use **NEORL 1.8**.
+
+1- Create a new python-3.13 environment with name ``neorl``
 
 .. code-block:: bash
-	
-	conda create --name neorl python=3.7	
+
+	conda create --name neorl python=3.13
 
 .. warning::
 
-	For some machines that are not updated frequently (e.g. clusters), TensforFlow may fail to load due to outdated gcc libraries. If you encounter those errors, we typically recommend to downgrade python by using python=3.6, when creating the virtual environment.  
-	
+	For some machines that are not updated frequently (e.g. clusters), TensforFlow may fail to load due to outdated gcc libraries. If you encounter those errors, we typically recommend to downgrade python by using python=3.10, when creating the virtual environment.
+
 2- Activate the environment 
 
 .. code-block:: bash
@@ -108,7 +112,7 @@ and you can run unit tests by running:
   neorl --test
   
 
-Windows 10
+Windows 10-11
 ------------------
 
 Step 0: Prerequisites (Anaconda3 Installation)
@@ -116,7 +120,7 @@ Step 0: Prerequisites (Anaconda3 Installation)
 
 Anaconda3 will provide you with OS-independent framework that hosts Python packages, including NEORL. **If you have Anaconda3 installed on your machine, move to Step 1**. 
 
-1- First download the Anaconda3 package by visiting the link in the note below and search for ``Anaconda3-2019.03-Windows-x86_64.exe``
+1- First download the Anaconda3 package by visiting the link in the note below and search for ``Anaconda3-2026.07-1-Windows-x86_64.exe``
 
 .. note::
 
@@ -124,13 +128,13 @@ Anaconda3 will provide you with OS-independent framework that hosts Python packa
 	
 or simply click on the link below to download:
 
-https://repo.anaconda.com/archive/Anaconda3-2019.03-Windows-x86_64.exe
+https://repo.anaconda.com/archive/Anaconda3-2026.07-1-Windows-x86_64.exe
 	
 2- Start the exe installer, follow the instructions on the screen, and wait until completion. See the notes below on what options to choose. 
 
 .. note::
 
-	- Choose the option "Register Anaconda as your default Python-3.7". 
+	- Choose the option "Register Anaconda as your default Python-3.13".
 	- For the option of "adding anaconda to your PATH variables", choose this option only if you have cleaned all previous Anaconda3 releases from your machine. 	
 	
 	    
@@ -139,13 +143,13 @@ Step 1: Create virtual environment for NEORL
 
 Search for ``Anaconda Prompt`` and open a new terminal as an administrator  
 
-1- Create a new python-3.7 environment with name ``neorl``
+1- Create a new python-3.13 environment with name ``neorl``
 
 .. code-block:: bash
-	
-	conda create --name neorl python=3.7	
-	
-2- Activate the environment 
+
+	conda create --name neorl python=3.13
+
+2- Activate the environment
 
 .. code-block:: bash
 	

@@ -25,8 +25,8 @@
 #
 ########################
 
-import gym
-from gym.spaces import Discrete, Box, MultiDiscrete
+import gymnasium as gym
+from gymnasium.spaces import Discrete, Box, MultiDiscrete
 import numpy as np
 import bisect
 import copy
@@ -60,8 +60,8 @@ class TSP(gym.Env):
             if index != i:
                 loc2 = np.array([city_loc_list[index][0],city_loc_list[index][1]])
                 dist2 = np.sqrt(np.sum(np.power(loc1 - loc2,2)))
-                bisect.insort_left(close_dist,dist2) 
-                new_index = np.where(close_dist == dist2)[0][0]
+                bisect.insort_left(close_dist,dist2)
+                new_index = np.where(np.array(close_dist) == dist2)[0][0]
                 i_close_dist = np.insert(i_close_dist,new_index,"%d"%(index+1))
         self.city_clost_to_each_other["%d"%(i + 1)] = close_dist 
         self.city_clost_to_each_other_for_helperfunc["%d"%(i + 1)] = i_close_dist #  evaluate the closest city to each city and store it in a dictionnary
@@ -95,7 +95,11 @@ class TSP(gym.Env):
         title_map = " Length of Tour : {} \n".format(optimum_tour_value)
         _plot_tour_map(optimum_tour_map,flag = False, name = "Optimum_Tour_map_%d.png"%(len(self.city_id)), title_map = title_map)
 
-  def step(self, x): 
+  def seed(self, seed_id):
+    np.random.seed(seed_id)
+    random.seed(seed_id)
+
+  def step(self, x):
     if self.method in ['ppo', 'a2c', 'acktr', 'neat']:
         self.counter = 0 # initialize the per tour counter
         for action in x: 
@@ -211,16 +215,17 @@ class TSP(gym.Env):
         self.done = True
         self._iter_episode += 1
         self.subcounter = 0
-    return ([self.state.flatten(),reward, self.done, {'x':individual}])
+    return (self.state.flatten(), reward, self.done, False, {'x':individual})
 
-  def reset(self):
+  def reset(self, seed=None, options=None):
+    super().reset(seed=seed)
     self.done = False
     self.city_id = copy.deepcopy(list(self.city_library.keys()))
     self.state[:,0] = - 10**6.0 * np.ones(self.number_of_cities)
     self.state[:,1] = - 10**6.0 * np.ones(self.number_of_cities)
     self.state[:,2] = - 10**6.0 * np.ones(self.number_of_cities)
     self.state[:,3] = - 10**6.0 * np.ones(self.number_of_cities)
-    return (self.state.flatten())
+    return self.state.flatten(), {}
 
   def Compute_tour_cost(self, tour = None):
     if tour is None:

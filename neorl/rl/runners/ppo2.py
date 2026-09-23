@@ -25,7 +25,7 @@ matplotlib.use('Agg')
 import warnings
 warnings.filterwarnings("ignore")
 # External dependencies
-import gym
+import gymnasium as gym
 from neorl.rl.baselines.shared.policies import MlpPolicy
 from neorl.rl.baselines.ppo2.ppo2 import PPO2
 from neorl.rl.baselines.shared import set_global_seeds
@@ -63,9 +63,10 @@ class PPOAgent(InputChecker):
         Returns: _init, which is a gym enviroment with specific seed
         """
         def _init():
-            env = gym.make(env_id, casename=self.inp.ppo_dict['casename'][0], exepath=self.inp.gen_dict['exepath'][0], 
-                           log_dir=self.log_dir, env_data=self.inp.gen_dict['env_data'][0], env_seed=seed+rank)
-            env.seed(seed+rank)
+            env = gym.make(env_id, casename=self.inp.ppo_dict['casename'][0], exepath=self.inp.gen_dict['exepath'][0],
+                           log_dir=self.log_dir, env_data=self.inp.gen_dict['env_data'][0], env_seed=seed+rank,
+                           disable_env_checker=True).unwrapped
+            env.reset(seed=seed+rank)
             return env
         set_global_seeds(seed)
         return _init
@@ -83,7 +84,8 @@ class PPOAgent(InputChecker):
             self.env = SubprocVecEnv([self.make_env(self.inp.gen_dict['env'][0], i) for i in range(self.inp.ppo_dict['ncores'][0])], daemon=self.inp.gen_dict['daemon'][0])
         else:
             self.env = gym.make(self.inp.gen_dict['env'][0], casename=self.inp.ppo_dict['casename'][0], log_dir=self.log_dir,
-                                exepath=self.inp.gen_dict['exepath'][0], env_data=self.inp.gen_dict['env_data'][0], env_seed=1)
+                                exepath=self.inp.gen_dict['exepath'][0], env_data=self.inp.gen_dict['env_data'][0], env_seed=1,
+                                disable_env_checker=True).unwrapped
         
         
         #tensorboard activation (if used)
@@ -133,8 +135,9 @@ class PPOAgent(InputChecker):
         if self.mode=='test':
             # load and test the agent. Env is recreated since test mode only works in single core
             print('debug: ppo is running in test mode, single core is used to test the policy')
-            env = gym.make(self.inp.gen_dict['env'][0], log_dir=self.log_dir, casename=self.inp.ppo_dict['casename'][0], 
-                           exepath=self.inp.gen_dict['exepath'][0], env_data=self.inp.gen_dict['env_data'][0], env_seed=1)
+            env = gym.make(self.inp.gen_dict['env'][0], log_dir=self.log_dir, casename=self.inp.ppo_dict['casename'][0],
+                           exepath=self.inp.gen_dict['exepath'][0], env_data=self.inp.gen_dict['env_data'][0], env_seed=1,
+                           disable_env_checker=True).unwrapped
             model = PPO2.load(self.inp.ppo_dict['model_load_path'][0])
             evaluate_policy(model, env, log_dir=self.log_dir+'ppo', 
                             n_eval_episodes=self.inp.ppo_dict["n_eval_episodes"][0], render=self.inp.ppo_dict["render"][0])

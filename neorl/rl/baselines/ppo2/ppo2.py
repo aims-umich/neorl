@@ -1,8 +1,7 @@
 import time
 
-import gym
+import gymnasium as gym
 import numpy as np
-import tensorflow as tf
 
 from neorl.rl.baselines.shared import logger
 from neorl.rl.baselines.shared import explained_variance, ActorCriticRLModel, tf_util, SetVerbosity, TensorboardWriter
@@ -20,7 +19,7 @@ import warnings
 # https://stackoverflow.com/questions/15777951/how-to-suppress-pandas-future-warning
 warnings.simplefilter(action='ignore', category=FutureWarning)
 warnings.simplefilter(action='ignore', category=Warning)
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 tf.get_logger().setLevel('INFO')
 tf.autograph.set_verbosity(0)
 import logging
@@ -501,7 +500,7 @@ class Runner(AbstractEnvRunner):
         mb_actions = np.asarray(mb_actions)
         mb_values = np.asarray(mb_values, dtype=np.float32)
         mb_neglogpacs = np.asarray(mb_neglogpacs, dtype=np.float32)
-        mb_dones = np.asarray(mb_dones, dtype=np.bool)
+        mb_dones = np.asarray(mb_dones, dtype=bool)
         last_values = self.model.value(self.obs, self.states, self.dones)
         # discount/bootstrap off value fn
         mb_advs = np.zeros_like(mb_rewards)

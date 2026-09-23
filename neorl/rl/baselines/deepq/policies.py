@@ -1,9 +1,23 @@
-import tensorflow as tf
-import tensorflow.contrib.layers as tf_layers
+import tensorflow.compat.v1 as tf
 import numpy as np
-from gym.spaces import Discrete
+from gymnasium.spaces import Discrete
 
 from neorl.rl.baselines.shared.policies import BasePolicy, nature_cnn, register_policy
+from neorl.rl.baselines.shared.tf_layers import linear, conv_to_fc
+
+
+def _layer_norm(input_tensor, name, epsilon=1e-5):
+    """
+    Minimal replacement for the deleted tf.contrib.layers.layer_norm(center=True, scale=True):
+    normalizes over the last axis with learnable scale/bias, matching its default behavior.
+    """
+    with tf.variable_scope(name):
+        shape = input_tensor.get_shape()[-1:]
+        gamma = tf.get_variable('gamma', shape=shape, initializer=tf.ones_initializer())
+        beta = tf.get_variable('beta', shape=shape, initializer=tf.zeros_initializer())
+        mean, variance = tf.nn.moments(input_tensor, axes=[-1], keep_dims=True)
+        normalized = (input_tensor - mean) / tf.sqrt(variance + epsilon)
+        return normalized * gamma + beta
 
 
 class DQNPolicy(BasePolicy):
@@ -106,25 +120,25 @@ class FeedForwardPolicy(DQNPolicy):
                     extracted_features = cnn_extractor(self.processed_obs, **kwargs)
                     action_out = extracted_features
                 else:
-                    extracted_features = tf.layers.flatten(self.processed_obs)
+                    extracted_features = conv_to_fc(self.processed_obs)
                     action_out = extracted_features
-                    for layer_size in layers:
-                        action_out = tf_layers.fully_connected(action_out, num_outputs=layer_size, activation_fn=None)
+                    for i, layer_size in enumerate(layers):
+                        action_out = linear(action_out, 'action_fc{}'.format(i), layer_size)
                         if layer_norm:
-                            action_out = tf_layers.layer_norm(action_out, center=True, scale=True)
+                            action_out = _layer_norm(action_out, 'action_ln{}'.format(i))
                         action_out = act_fun(action_out)
 
-                action_scores = tf_layers.fully_connected(action_out, num_outputs=self.n_actions, activation_fn=None)
+                action_scores = linear(action_out, 'action_scores', self.n_actions)
 
             if self.dueling:
                 with tf.variable_scope("state_value"):
                     state_out = extracted_features
-                    for layer_size in layers:
-                        state_out = tf_layers.fully_connected(state_out, num_outputs=layer_size, activation_fn=None)
+                    for i, layer_size in enumerate(layers):
+                        state_out = linear(state_out, 'state_fc{}'.format(i), layer_size)
                         if layer_norm:
-                            state_out = tf_layers.layer_norm(state_out, center=True, scale=True)
+                            state_out = _layer_norm(state_out, 'state_ln{}'.format(i))
                         state_out = act_fun(state_out)
-                    state_score = tf_layers.fully_connected(state_out, num_outputs=1, activation_fn=None)
+                    state_score = linear(state_out, 'state_score', 1)
                 action_scores_mean = tf.reduce_mean(action_scores, axis=1)
                 action_scores_centered = action_scores - tf.expand_dims(action_scores_mean, axis=1)
                 q_out = state_score + action_scores_centered

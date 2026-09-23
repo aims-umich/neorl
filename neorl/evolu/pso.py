@@ -77,7 +77,7 @@ class PSO:
         elif self.speed_mech=='globw':
             pass
         else:
-            raise ('only timew, globw, or constric are allowed for speed_mech, the mechanism used is not defined')
+            raise Exception('only timew, globw, or constric are allowed for speed_mech, the mechanism used is not defined')
         
         assert self.ncores >=1, "Number of cores must be more than or equal 1"
         
@@ -269,7 +269,7 @@ class PSO:
                 #print('globw', self.w)
                 new_particle[1][i]=self.w*particle[1][i]+speed_cognitive+speed_social
             else:
-                raise ('only constric, timew, globw, are allowed for speed_mech, the mechanism used is not defined')
+                raise Exception('only constric, timew, globw, are allowed for speed_mech, the mechanism used is not defined')
             
             #***********************************   
             #Update Position based on data type

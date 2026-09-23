@@ -5,7 +5,7 @@ Helpers for scripts like run_atari.py.
 import os
 import warnings
 
-import gym
+import gymnasium as gym
 
 from neorl.rl.baselines.shared import logger
 from neorl.rl.baselines.shared.monitor import Monitor
@@ -49,7 +49,7 @@ def make_vec_env(env_id, n_envs=1, seed=None, start_index=0,
             else:
                 env = env_id(**env_kwargs)
             if seed is not None:
-                env.seed(seed + rank)
+                env.reset(seed=seed + rank)
                 env.action_space.seed(seed + rank)
             # Wrap the env in a Monitor wrapper
             # to have additional training information
@@ -96,7 +96,7 @@ def make_atari_env(env_id, num_env, seed, wrapper_kwargs=None,
     def make_env(rank):
         def _thunk():
             env = make_atari(env_id)
-            env.seed(seed + rank)
+            env.reset(seed=seed + rank)
             env = Monitor(env, logger.get_dir() and os.path.join(logger.get_dir(), str(rank)),
                           allow_early_resets=allow_early_resets)
             return wrap_deepmind(env, **wrapper_kwargs)
@@ -123,7 +123,7 @@ def make_mujoco_env(env_id, seed, allow_early_resets=True):
     set_global_seeds(seed + 10000 * mpi_rank_or_zero())
     env = gym.make(env_id)
     env = Monitor(env, os.path.join(logger.get_dir(), '0'), allow_early_resets=allow_early_resets)
-    env.seed(seed)
+    env.reset(seed=seed)
     return env
 
 
@@ -140,17 +140,11 @@ def make_robotics_env(env_id, seed, rank=0, allow_early_resets=True):
     set_global_seeds(seed)
     env = gym.make(env_id)
     keys = ['observation', 'desired_goal']
-    # TODO: remove try-except once most users are running modern Gym
-    try:  # for modern Gym (>=0.15.4)
-        from gym.wrappers import FilterObservation, FlattenObservation
-        env = FlattenObservation(FilterObservation(env, keys))
-    except ImportError:  # for older gym (<=0.15.3)
-        from gym.wrappers import FlattenDictWrapper  # pytype:disable=import-error
-        env = FlattenDictWrapper(env, keys)
+    env = gym.wrappers.FlattenObservation(gym.wrappers.FilterObservation(env, keys))
     env = Monitor(
         env, logger.get_dir() and os.path.join(logger.get_dir(), str(rank)),
         info_keywords=('is_success',), allow_early_resets=allow_early_resets)
-    env.seed(seed)
+    env.reset(seed=seed)
     return env
 
 

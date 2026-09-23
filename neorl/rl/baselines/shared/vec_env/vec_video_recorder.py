@@ -1,7 +1,5 @@
 import os
 
-from gym.wrappers.monitoring import video_recorder
-
 from neorl.rl.baselines.shared import logger
 from neorl.rl.baselines.shared.vec_env.base_vec_env import VecEnvWrapper
 from neorl.rl.baselines.shared.vec_env.dummy_vec_env import DummyVecEnv
@@ -26,8 +24,17 @@ class VecVideoRecorder(VecEnvWrapper):
 
     def __init__(self, venv, video_folder, record_video_trigger,
                  video_length=200, name_prefix='rl-video'):
-
         VecEnvWrapper.__init__(self, venv)
+
+        # Deferred import: gym.wrappers.monitoring.video_recorder does not exist under gymnasium,
+        # which replaced it with a moviepy-dependent RecordVideo/save_video design (moviepy is not
+        # an installed dependency). There is no direct equivalent, so video recording is currently
+        # broken pending a decision on which video-writing dependency to adopt; deferred here (and
+        # placed after VecEnvWrapper.__init__) so the rest of the vec_env package can still be
+        # imported and used without this feature, and so this object stays in a state its own
+        # close()/__del__ can safely tear down if construction fails here.
+        from gym.wrappers.monitoring import video_recorder
+        self._video_recorder_module = video_recorder
 
         self.env = venv
         # Temp variable to retrieve metadata
@@ -70,7 +77,7 @@ class VecVideoRecorder(VecEnvWrapper):
         video_name = '{}-step-{}-to-step-{}'.format(self.name_prefix, self.step_id,
                                                     self.step_id + self.video_length)
         base_path = os.path.join(self.video_folder, video_name)
-        self.video_recorder = video_recorder.VideoRecorder(
+        self.video_recorder = self._video_recorder_module.VideoRecorder(
                 env=self.env,
                 base_path=base_path,
                 metadata={'step_id': self.step_id}

@@ -25,8 +25,8 @@
 #
 ########################
 
-import gym
-from gym.spaces import Discrete, Box, MultiDiscrete
+import gymnasium as gym
+from gymnasium.spaces import Discrete, Box, MultiDiscrete
 import numpy as np
 import copy
 import matplotlib.pyplot as plt
@@ -84,7 +84,12 @@ class KP(gym.Env):
         title_map += "Sum of the weights : {} \n".format(self._check_weight_cap(optimum_knap_map))
         title_map += "Weight's limit : {} \n".format(self.weight_capacity)
         _plot_knap_map(optimum_knap_map,flag = False, name = "Optimum_knap_map_%d.png"%(len(obj_list)), title_map = title_map, all_objects=np.transpose(obj_list))
-  def step(self, x): 
+
+  def seed(self, seed_id):
+    np.random.seed(seed_id)
+    random.seed(seed_id)
+
+  def step(self, x):
     if self.method in ['ppo', 'a2c', 'acktr', 'neat']:
         self.counter = 0 # initialize the per knapsack counter
         for action in x: 
@@ -164,15 +169,16 @@ class KP(gym.Env):
         self.done = True
         self._iter_episode += 1
         self.subcounter = 0
-    return ([self.state.flatten(),reward, self.done, {'x':individual}])
+    return (self.state.flatten(), reward, self.done, False, {'x':individual})
 
-  def reset(self):
+  def reset(self, seed=None, options=None):
+    super().reset(seed=seed)
     self.done = False
     self.obj_id = copy.deepcopy(list(self.obj_library.keys()))
     self.state[:,0] = - 10**6.0 * np.ones(self.number_of_objects)
     self.state[:,1] = - 10**6.0 * np.ones(self.number_of_objects)
     self.state[:,2] = - 10**6.0 * np.ones(self.number_of_objects)
-    return (self.state.flatten())
+    return self.state.flatten(), {}
 
   def Compute_knap_value(self, knap = None):
     if knap is None:

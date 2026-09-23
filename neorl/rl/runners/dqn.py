@@ -37,7 +37,7 @@ warnings.filterwarnings("ignore")
 
 
 # External dependencies
-import gym
+import gymnasium as gym
 from neorl.rl.baselines.deepq.policies import MlpPolicy
 from neorl.rl.baselines.deepq.dqn import DQN
 from neorl.utils.test_policy import evaluate_policy
@@ -59,8 +59,9 @@ class DQNAgent(InputChecker):
         self.callback=callback 
         self.mode=self.inp.dqn_dict['mode'][0]
         self.log_dir=self.inp.gen_dict['log_dir']
-        self.env = gym.make(self.inp.gen_dict['env'][0], casename=self.inp.dqn_dict['casename'][0], 
-                            log_dir=self.log_dir, exepath=self.inp.gen_dict['exepath'][0], env_data=self.inp.gen_dict['env_data'][0], env_seed=1)
+        self.env = gym.make(self.inp.gen_dict['env'][0], casename=self.inp.dqn_dict['casename'][0],
+                            log_dir=self.log_dir, exepath=self.inp.gen_dict['exepath'][0], env_data=self.inp.gen_dict['env_data'][0], env_seed=1,
+                            disable_env_checker=True).unwrapped
         
     def build (self):
         """
@@ -120,8 +121,9 @@ class DQNAgent(InputChecker):
         if self.mode=='test':
             # load and test the agent. Env is recreated since test mode only works in single core
             print('debug: dqn is running in test mode, single core is used to test the policy')
-            env = gym.make(self.inp.gen_dict['env'][0], casename=self.inp.dqn_dict['casename'][0],  log_dir=self.log_dir, 
-                           exepath=self.inp.gen_dict['exepath'][0], env_data=self.inp.gen_dict['env_data'][0], env_seed=1)
+            env = gym.make(self.inp.gen_dict['env'][0], casename=self.inp.dqn_dict['casename'][0],  log_dir=self.log_dir,
+                           exepath=self.inp.gen_dict['exepath'][0], env_data=self.inp.gen_dict['env_data'][0], env_seed=1,
+                           disable_env_checker=True).unwrapped
             model = DQN.load(self.inp.dqn_dict['model_load_path'][0])
             evaluate_policy(model, env, log_dir=self.log_dir+'dqn', 
                             n_eval_episodes=self.inp.dqn_dict["n_eval_episodes"][0], render=self.inp.dqn_dict["render"][0])            

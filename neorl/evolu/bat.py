@@ -54,7 +54,7 @@ class BAT(object):
     """
     def __init__(self, mode, bounds, fit, nbats=50, fmin=0, 
                  fmax=1, A=0.5, r0=0.5, alpha=1.0, gamma=0.9, 
-                 levy='False', int_transform='nearest_int', ncores=1, seed=None):
+                 levy=False, int_transform='nearest_int', ncores=1, seed=None):
         
         set_neorl_seed(seed)
         

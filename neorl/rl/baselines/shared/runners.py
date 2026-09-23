@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 import typing
 from typing import Union, Optional, Any
 
-import gym
+import gymnasium as gym
 import numpy as np
 
 from neorl.rl.baselines.shared.callbacks import BaseCallback
@@ -86,7 +86,7 @@ def traj_segment_generator(policy, env, horizon, reward_giver=None, gail=False, 
     # Initialize state variables
     step = 0
     action = env.action_space.sample()  # not used, just so we have the datatype
-    observation = env.reset()
+    observation, _ = env.reset()
 
     cur_ep_ret = 0  # return in current episode
     current_it_len = 0  # len of current iteration
@@ -155,10 +155,11 @@ def traj_segment_generator(policy, env, horizon, reward_giver=None, gail=False, 
 
         if gail:
             reward = reward_giver.get_reward(observation, clipped_action[0])
-            observation, true_reward, done, info = env.step(clipped_action[0])
+            observation, true_reward, terminated, truncated, info = env.step(clipped_action[0])
         else:
-            observation, reward, done, info = env.step(clipped_action[0])
+            observation, reward, terminated, truncated, info = env.step(clipped_action[0])
             true_reward = reward
+        done = terminated or truncated
 
         if callback is not None:
             callback.update_locals(locals())
@@ -205,5 +206,5 @@ def traj_segment_generator(policy, env, horizon, reward_giver=None, gail=False, 
             cur_ep_true_ret = 0
             current_ep_len = 0
             if not isinstance(env, VecEnv):
-                observation = env.reset()
+                observation, _ = env.reset()
         step += 1

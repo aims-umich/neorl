@@ -21,8 +21,8 @@ def get_jminus(typ = "wtd"): #wtd, refl or abs
     jm_configB["centers"] -= 4.0677
 
     #center periodic functions on 0
-    jm_configA["centers"][jm_configA["centers"] < -np.pi] += 2*np.pi
-    jm_configB["centers"][jm_configB["centers"] < -np.pi] += 2*np.pi
+    jm_configA.loc[jm_configA["centers"] < -np.pi, "centers"] += 2*np.pi
+    jm_configB.loc[jm_configB["centers"] < -np.pi, "centers"] += 2*np.pi
 
     #add buffer on each side for periodic integral evaluations
     lowcopy = jm_configA.copy()
@@ -69,7 +69,7 @@ def integrate(x, y, lbnd, ubnd):
         return (ubnd - lbnd)*(y_ubnd_approx + y_lbnd_approx)/2
 
     #integrate fully-inclosed blocks
-    full_blocks_integral = np.trapz(y[compl_ind], x[compl_ind])
+    full_blocks_integral = np.trapezoid(y[compl_ind], x[compl_ind])
 
     #integrate lower hanging partial block
     lidx = compl_ind.min()

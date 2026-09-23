@@ -1,6 +1,6 @@
 import argparse
 
-import gym
+import gymnasium as gym
 
 from neorl.rl.baselines.deepq import DQN
 
@@ -15,13 +15,15 @@ def main(args):
     model = DQN.load("cartpole_model.zip", env)
 
     while True:
-        obs, done = env.reset(), False
+        obs, _ = env.reset()
+        done = False
         episode_rew = 0
         while not done:
             if not args.no_render:
                 env.render()
             action, _ = model.predict(obs)
-            obs, rew, done, _ = env.step(action)
+            obs, rew, terminated, truncated, _ = env.step(action)
+            done = terminated or truncated
             episode_rew += rew
         print("Episode reward", episode_rew)
         # No render is only used for automatic testing

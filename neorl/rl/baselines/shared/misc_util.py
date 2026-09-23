@@ -1,8 +1,8 @@
 import random
 
-import gym
+import gymnasium as gym
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 
 def zipsame(*seqs):

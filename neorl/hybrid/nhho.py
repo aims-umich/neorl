@@ -25,7 +25,8 @@ import numpy as np
 import warnings
 warnings.filterwarnings('ignore')
 import joblib
-from neorl.hybrid.nhhocore.nnmodel import NNmodel
+from neorl.hybrid.nhhocore.nnmodel import NNmodel, _fit_nnmodel, _fit_and_predict_nnmodel
+from neorl.hybrid.nhhocore.tf_isolate import run_isolated
 from neorl.hybrid.nhhocore.hho import HHO
 from tensorflow.keras.models import load_model
 import shutil
@@ -49,6 +50,10 @@ class NoDaemonProcess(multiprocessing.Process):
 # because the latter is only a wrapper function, not a proper class.
 class MyPool(multiprocessing.pool.Pool):
     Process = NoDaemonProcess
+
+
+def _load_and_predict_models(model_paths, predict_X):
+    return np.array([load_model(path).predict(predict_X) for path in model_paths])
 
 class NHHO(object):
     """
@@ -183,14 +188,14 @@ class NHHO(object):
         #construct a worker for parallel training
         if self.ncores > 1:
             def startup_worker(index):
-                NNmodel(self.nn_params, gen=0, model_num=index+1, logger_paths=self.paths).fit(self.warmup_hawks[index], self.warmup_fitnesses[index]) # saved as best_models/model1_0000.h5
-            
+                run_isolated(_fit_nnmodel, self.nn_params, 0, index+1, self.paths, self.warmup_hawks[index], self.warmup_fitnesses[index]) # saved as best_models/model1_0000.h5
+
             with joblib.Parallel(n_jobs=self.ncores) as parallel:
-                parallel(joblib.delayed(startup_worker)(i) for i in range(3))    
+                parallel(joblib.delayed(startup_worker)(i) for i in range(3))
         else:
-            NNmodel(self.nn_params, gen=0, model_num=1, logger_paths=self.paths).fit(self.warmup_hawks[0], self.warmup_fitnesses[0]) # saved as best_models/model1_0000.h5
-            NNmodel(self.nn_params, gen=0, model_num=2, logger_paths=self.paths).fit(self.warmup_hawks[1], self.warmup_fitnesses[1])
-            NNmodel(self.nn_params, gen=0, model_num=3, logger_paths=self.paths).fit(self.warmup_hawks[2], self.warmup_fitnesses[2])
+            run_isolated(_fit_nnmodel, self.nn_params, 0, 1, self.paths, self.warmup_hawks[0], self.warmup_fitnesses[0]) # saved as best_models/model1_0000.h5
+            run_isolated(_fit_nnmodel, self.nn_params, 0, 2, self.paths, self.warmup_hawks[1], self.warmup_fitnesses[1])
+            run_isolated(_fit_nnmodel, self.nn_params, 0, 3, self.paths, self.warmup_hawks[2], self.warmup_fitnesses[2])
 
         ##################################
         # Set initial locations of hawks #
@@ -351,25 +356,16 @@ class NHHO(object):
         gen=inp[2]
         errors = abs(self.preds[p[0]] - self.preds[p[1]])
         i = np.argmin(errors)
-        X = np.row_stack((self.warmup_hawks[index], self.hawk_positions[i]))
+        X = np.vstack((self.warmup_hawks[index], self.hawk_positions[i]))
         Y = np.append(self.warmup_fitnesses[index], (self.preds[p[0]][i] + self.preds[p[1]][i])/2)
-        model = NNmodel(self.nn_params, gen=gen, model_num=index+1, logger_paths=self.paths).fit(X, Y)
-        preds=model.predict(self.hawk_positions).flatten()
-        
-        return preds
-            
-    def update_model(self, gen):
-        self.models = [] # list of three models
-        for i in range(3):
-            self.models.append(load_model('model{}_0000.h5'.format(i+1)))
+        preds = run_isolated(_fit_and_predict_nnmodel, self.nn_params, gen, index+1, self.paths, X, Y, self.hawk_positions)
 
-        self.preds = [] # list of prediction arrays
-        for model in self.models:
-            self.preds.append(model.predict(self.hawk_positions))
-        self.preds = np.array(self.preds) # array of prediction arrays
-        
-        del self.models
-                
+        return preds
+
+    def update_model(self, gen):
+        model_paths = ['model{}_0000.h5'.format(i+1) for i in range(3)]
+        self.preds = run_isolated(_load_and_predict_models, model_paths, self.hawk_positions) # array of prediction arrays
+
         core_lst=[[0,(1,2),gen], [1,(2,0),gen], [2,(0,1),gen]]
         
         if self.ncores > 1:

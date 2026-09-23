@@ -81,7 +81,7 @@ class ACO(object):
         #"""
         #Computes the PDF values
         #"""
-        points = np.array(range(self.npop), dtype=np.float)
+        points = np.array(range(self.npop), dtype=float)
         # Solution Weights
         w = 1/(np.sqrt(2*np.pi)*self.q*float(self.npop))*np.square(np.exp(-0.5*((points-1)/(self.q*float(self.npop)))))
         return w

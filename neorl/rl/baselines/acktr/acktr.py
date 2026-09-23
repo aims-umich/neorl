@@ -1,8 +1,7 @@
 import time
 import warnings
 
-import tensorflow as tf
-from gym.spaces import Box, Discrete
+from gymnasium.spaces import Box, Discrete
 
 from neorl.rl.baselines.shared import logger
 from neorl.rl.baselines.a2c.a2c import A2CRunner
@@ -22,7 +21,7 @@ import warnings
 # https://stackoverflow.com/questions/15777951/how-to-suppress-pandas-future-warning
 warnings.simplefilter(action='ignore', category=FutureWarning)
 warnings.simplefilter(action='ignore', category=Warning)
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 tf.get_logger().setLevel('INFO')
 tf.autograph.set_verbosity(0)
 import logging

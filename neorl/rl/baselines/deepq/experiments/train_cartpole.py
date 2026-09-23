@@ -1,6 +1,6 @@
 import argparse
 
-import gym
+import gymnasium as gym
 import numpy as np
 
 from neorl.rl.baselines.deepq import DQN, MlpPolicy

@@ -92,7 +92,7 @@ def get_population(pop, fits=None, grid_flag=False, bounds=None, bounds_map=None
             assert len(fits) == npop, '--error: the size of fits and pop are not equal, pop cannot be constructed'
         df_pop=np.c_[pop, np.array(fits)]
     else:
-        raise ('--warning: population data structure type cannot be identified, the population cannot be reconstructed')
+        raise Exception('--warning: population data structure type cannot be identified, the population cannot be reconstructed')
     
     
     try:    
@@ -104,6 +104,9 @@ def get_population(pop, fits=None, grid_flag=False, bounds=None, bounds_map=None
     
     if grid_flag:
         #convert the categorical value from the discrete space to its orignal grid space
+        #decoded grid values may be non-numeric (e.g. strings), which pandas no longer
+        #silently upcasts a float64 column into during item assignment, so cast explicitly
+        df_pop = df_pop.astype(object)
         for k in range (df_pop.shape[0]):
             xx=list(df_pop.iloc[k,:-1].values)
             yy=decode_discrete_to_grid(xx, bounds, bounds_map)

@@ -6,14 +6,7 @@
 Welcome to NEORL Website!
 =================================
 
-*Latest News*: 
-
-- June 5, 2022: Stable release 1.8 is out.
-- Major features of 1.8 release: ensemble optimizers are added (AEO, EDEV, EPSO, HCLPSO). 
-- November 24, 2021: Stable release 1.7 is out. 
-- September 10, 2021: First NEORL stable release 1.6 is out. 
-
-**Primary contact to report bugs/issues**: Majdi I. Radaideh (radaideh@mit.edu)
+**Primary contact to report bugs/issues**: Majdi I. Radaideh (radaideh@umich.edu)
 
 ------------------------------------------------------------------------------------------------------------------------------
 
