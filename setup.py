@@ -41,7 +41,7 @@ You can read the first successful application of NEORL for nuclear fuel optimisa
 ## Links
 
 Repository:
-https://github.com/mradaideh/neorl
+https://github.com/aims-umich/neorl
 
 Main News Article:
 https://news.mit.edu/2020/want-cheaper-nuclear-energy-turn-design-process-game-1217
@@ -129,7 +129,7 @@ To cite this repository in publications:
   year = {2021},
   publisher = {GitHub},
   journal = {GitHub repository},
-  howpublished = {\url{https://github.com/mradaideh/neorl}},
+  howpublished = {\url{https://github.com/aims-umich/neorl}},
 }
 ```
 

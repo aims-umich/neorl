@@ -20,9 +20,7 @@ The framework paper is available online: [https://doi.org/10.1016/j.nucengdes.20
 
 <img src="docs/copyright.png" align="right" width="40%"/>
 
-This repository and its content are copyright of [Exelon Corporation](https://www.exeloncorp.com/) © in collaboration with [MIT](https://web.mit.edu/nse/) Nuclear Science and Engineering 2021. All rights reserved.
-
-In January 2023, a [University of Michigan team](https://ners.engin.umich.edu/) took over maintaining this repository after its founder, [Majdi Radadideh](https://ners.engin.umich.edu/people/radaideh-majdi/), joined their faculty. Now NEORL is part of the Artificial Intelligence and Multiphysics Simulations (AIMS) Lab at the University of Michigan. 
+This repository and its content are copyright of [Exelon Corporation](https://www.exeloncorp.com/) © in collaboration with [MIT](https://web.mit.edu/nse/) Nuclear Science and Engineering 2021. NEORL is currently maintained by [Artificial Intelligence and Multiphysics Simulations (AIMS) Lab](https://www.aims-umich.com/) at the [University of Michigan NERS](https://ners.engin.umich.edu/) 2023. All rights reserved.
 
 You can read the first successful and the baseline application of NEORL for nuclear fuel optimization in this [News Article](https://news.mit.edu/2020/want-cheaper-nuclear-energy-turn-design-process-game-1217).
 
@@ -58,7 +56,7 @@ https://neorl.readthedocs.io/en/latest/guide/detinstall.html
 
 For Windows, the steps can be found here:
 
-https://neorl.readthedocs.io/en/latest/guide/detinstall.html#windows-10
+https://neorl.readthedocs.io/en/latest/guide/detinstall.html#windows-10-11
 
 ## Quick Installation
 
@@ -236,4 +234,4 @@ See our team here [Contributors](https://neorl.readthedocs.io/en/latest/misc/con
 
 NEORL was established in MIT back to 2020 with feedback, validation, and usage of different colleagues: Issac Wolverton (MIT Quest for Intelligence), Joshua Joseph (MIT Quest for Intelligence), Benoit Forget (MIT Nuclear Science and Engineering), Ugi Otgonbaatar (Exelon Corporation), and James Tusar (Exelon Corporation). We also thank our fellows at [Stable Baselines](https://github.com/hill-a/stable-baselines), [DEAP](https://github.com/DEAP/deap), and [EvoloPy](https://github.com/7ossam81/EvoloPy) for sharing their implementation, which inspired us to leverage our optimization classes.  
 
-In January 2023, a University of Michigan team took over maintaining this repository after its founder, Majdi Radadideh, joined their faculty. Now NEORL is part of the Artificial Intelligence and Multiphysics Simulations (AIMS) Lab at the University of Michigan. 
+In January 2023, a [University of Michigan team](https://ners.engin.umich.edu/) took over maintaining this repository after its founder, [Majdi Radadideh](https://ners.engin.umich.edu/people/radaideh-majdi/), joined their faculty. Now NEORL is part of the [Artificial Intelligence and Multiphysics Simulations (AIMS) Lab](https://www.aims-umich.com/) at the [University of Michigan NERS](https://ners.engin.umich.edu/). 
