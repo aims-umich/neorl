@@ -53,7 +53,7 @@ with open(version_file, 'r') as file_handler:
 # -- Project information -----------------------------------------------------
 
 project = 'NEORL'
-copyright = '2021, Exelon Corp. & MIT'
+copyright = '2026, Exelon Corp., MIT & UM'
 author = 'Majdi I. Radaideh and NEORL Team'
 
 # The short X.Y version
@@ -77,6 +77,7 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
+    'sphinx_rtd_theme',
 ]
 
 if enable_spell_check:
@@ -115,13 +116,7 @@ pygments_style = 'sphinx'
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 
-# Fix for read the docs
-on_rtd = os.environ.get('READTHEDOCS') == 'True'
-if on_rtd:
-    html_theme = 'default'
-else:
-    html_theme = 'sphinx_rtd_theme'
-
+html_theme = 'sphinx_rtd_theme'
 html_logo = '_static/img/logo.png'
 
 

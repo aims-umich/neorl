@@ -6,13 +6,13 @@ Contribution Guide
 Bug Reporting
 -------------
 All bugs or general issues can be reported on the Github issues page:
-https://github.com/mradaideh/neorl/issues
+https://github.com/aims-umich/neorl/issues
 
 Getting Started
 ---------------
 In order to contribute code that may be included in the main NEORL distribution, the following steps can be taken. In general, all contributions should be submitted as a pull request to the main NEORL repository. Specifically, the steps provided below can be used to incorporate code into the NEORL repository.
 
-#. Create a fork of the main NEORL repository. Through Github, this can be done by selecting the "fork" button on the NEORL page found at: https://github.com/mradaideh/neorl
+#. Create a fork of the main NEORL repository. Through Github, this can be done by selecting the "fork" button on the NEORL page found at: https://github.com/aims-umich/neorl
 
 	.. image:: ../images/fork_button_red.png
 	   :scale: 70 %
@@ -28,11 +28,11 @@ In order to contribute code that may be included in the main NEORL distribution,
 Incorporating Changes From the Main Repository
 -------------------------------------------------
 
-Often when making large contributions, it may be necessary to work on the fork for an extended period of time where updates have been pushed to the upstream (`mradaideh/neorl`) repository after you originally created the fork. In order to incorporate these new updates into your local fork:
+Often when making large contributions, it may be necessary to work on the fork for an extended period of time where updates have been pushed to the upstream (`aims-umich/neorl`) repository after you originally created the fork. In order to incorporate these new updates into your local fork:
 
 #. Commit and push all work in your local repository with regular ``git commit`` and ``git push`` commands.
 #. First add the upstream repository into known remote repositories:
-   ``git remote add upstream https://github.com/mradaideh/neorl``
+   ``git remote add upstream https://github.com/aims-umich/neorl``
 #. Fetch changes that have been made to upstream repository:
    ``git fetch upstream``
 #. Merge changes made to upstream repository into your local repository:
@@ -43,10 +43,10 @@ Often when making large contributions, it may be necessary to work on the fork f
 Submitting a Pull Request
 ---------------------------
 Once a major contribution to the NEORL code base has been developed and is ready to be incorporated into 
-the upstream repository (`mradaideh/neorl`), a pull request can be submitted:
+the upstream repository (`aims-umich/neorl`), a pull request can be submitted:
 
 #. While logged into the account with the forked repository containing the changes, navigate to the Github 
-   page for the upstream NEORL repository: https://github.com/mradaideh/neorl
+   page for the upstream NEORL repository: https://github.com/aims-umich/neorl
    
 #. Select the "Pull requests" tab near the top of the page and select "new pull request".
 
@@ -62,7 +62,7 @@ the upstream repository (`mradaideh/neorl`), a pull request can be submitted:
 	   :alt: alternate text
 	   :align: center
    
-#. From here, the "base repository" should be set to `mradaideh/neorl/master` and the "head repository"
+#. From here, the "base repository" should be set to `aims-umich/neorl/master` and the "head repository"
    should point to the repository that is under your name.
    
 #. Press the "Create pull request" button and fill out the submission fields and submit it for review!
